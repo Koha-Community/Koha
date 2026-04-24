@@ -101,6 +101,7 @@ use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::Biblioitems;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Library::Calendar;
+use Koha::Checkins;
 use Koha::Checkouts;
 use Koha::ILL::Requests;
 use Koha::ILL::ISO18626::Requests;
@@ -2303,7 +2304,7 @@ sub GetBranchItemRule {
 
 =head2 AddReturn
 
-  ($doreturn, $messages, $iteminformation, $borrower) =
+  ($doreturn, $messages, $iteminformation, $borrower, $checkin) =
       &AddReturn( $barcode, $branch [,$exemptfine] [,$returndate] [,$skip_localuse ] );
 
 Returns a book.
@@ -2324,7 +2325,7 @@ by the given return date. Optional.
 
 =back
 
-C<&AddReturn> returns a list of four items:
+C<&AddReturn> returns a list of five items:
 
 C<$doreturn> is true iff the return succeeded.
 
@@ -2387,6 +2388,10 @@ returned item from the issues table.
 
 C<$borrower> is a reference-to-hash, giving information about the
 patron who last borrowed the book.
+
+C<$checkin> is a L<Koha::Checkin> object representing the checkin event,
+including who processed it, where, and what outcomes it produced
+(checkout returned, transfer triggered, hold filled).
 
 =cut
 
@@ -2474,6 +2479,21 @@ sub AddReturn {
         $doreturn = 0;
     }
 
+    # Create the checkin record - every scan is an auditable event regardless
+    # of whether the system acts on it
+    my $userenv        = C4::Context->userenv;
+    my $checkin_record = Koha::Checkin->new(
+        {
+            item_id     => $item->itemnumber,
+            user_id     => $userenv ? $userenv->{number} : undef,
+            library_id  => $branch,
+            desk_id     => $userenv    ? $userenv->{desk_id} : undef,
+            exempt_fine => $exemptfine ? 1                   : 0,
+            local_use   => 0,
+            interface   => C4::Context->interface,
+        }
+    )->store;
+
     # Handle BlockedWithdrawn blocker first - this was the earliest early
     # return in the original code, before any status updates ran
     if ( !$availability->available && $availability->blockers->{BlockedWithdrawn} ) {
@@ -2485,9 +2505,12 @@ sub AddReturn {
             $localuse_count++;
             $item->localuse($localuse_count)->store;
             $messages->{'LocalUse'} = 1;
+            $checkin_record->local_use(1)->store;
         }
 
-        return ( 0, $messages, $issue, ( $patron ? $patron->unblessed : {} ) );
+        _attach_messages_to_checkin( $checkin_record, $messages );
+
+        return ( 0, $messages, $issue, ( $patron ? $patron->unblessed : {} ), $checkin_record );
     }
 
     my $itemnumber     = $item->itemnumber;
@@ -2557,7 +2580,8 @@ sub AddReturn {
             $doreturn = 0;
             my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
             $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
-            return ( $doreturn, $messages, $issue, $patron_unblessed );
+            _attach_messages_to_checkin( $checkin_record, $messages );
+            return ( $doreturn, $messages, $issue, $patron_unblessed, $checkin_record );
         }
         if ( $blockers->{BlockedLost} ) {
             $doreturn = 0;
@@ -2942,8 +2966,31 @@ sub AddReturn {
     my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
     $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
 
+    # Update the checkin record with outcomes determined during processing
+    $checkin_record->set(
+        {
+            checkout_id => ( $doreturn && $issue ) ? $issue->id : undef,
+            transfer_id => $messages->{WasTransfered} || undef,
+            hold_id     => $messages->{ResFound} ? $messages->{ResFound}->{reserve_id} : undef,
+            recall_id   => $messages->{RecallFound}
+            ? $messages->{RecallFound}->id
+            : ( $messages->{TransferredRecall} ? $messages->{TransferredRecall}->id : undef ),
+            restriction_id => $messages->{Debarred}
+            ? do {
+                my $restriction =
+                    $patron->restrictions->search( { type => 'SUSPENSION' }, { rows => 1 } )->single;
+                $restriction ? $restriction->borrower_debarment_id : undef;
+                }
+            : undef,
+            claim_id => $messages->{ClaimAutoResolved}
+            ? $messages->{ClaimAutoResolved}->id
+            : ( $messages->{ReturnClaims} ? $messages->{ReturnClaims}->id : undef ),
+            local_use => $messages->{LocalUse} ? 1 : 0,
+        }
+    )->store;
+
     if ( $doreturn and $issue ) {
-        my $checkin = Koha::Old::Checkouts->find( $issue->id );
+        my $old_checkout = Koha::Old::Checkouts->find( $issue->id );
 
         if ($iso18626_request) {
             $iso18626_request->progress_request(
@@ -2956,13 +3003,16 @@ sub AddReturn {
             'after_circ_action',
             {
                 action  => 'checkin',
-                payload => { checkout => $checkin }
+                payload => { checkout => $old_checkout, checkin => $checkin_record }
             }
         );
 
     }
 
-    return ( $doreturn, $messages, $issue, ( $patron ? $patron->unblessed : {} ) );
+    # Attach messages to the checkin object for API consumers
+    _attach_messages_to_checkin( $checkin_record, $messages );
+
+    return ( $doreturn, $messages, $issue, ( $patron ? $patron->unblessed : {} ), $checkin_record );
 }
 
 =head2 MarkIssueReturned
@@ -5309,6 +5359,223 @@ sub _CanBookBeAutoRenewed {
 }
 
 1;
+
+=head2 _attach_messages_to_checkin
+
+    _attach_messages_to_checkin( $checkin, $messages );
+
+Translates the legacy C<$messages> hashref from C<AddReturn> into
+structured C<Koha::Object::Message> instances on the given
+C<Koha::Checkin> object using lower_snake_case coded values.
+
+=cut
+
+sub _attach_messages_to_checkin {
+    my ( $checkin, $messages ) = @_;
+
+    return unless $checkin && $messages && ref $messages eq 'HASH';
+
+    # Transfer messages
+    if ( $messages->{WasTransfered} ) {
+        $checkin->add_message(
+            {
+                message => 'transferred',
+                type    => 'info',
+                payload => {
+                    transfer_id => $messages->{WasTransfered},
+                    to_library  => $messages->{TransferTo},
+                    trigger     => $messages->{TransferTrigger},
+                },
+            }
+        );
+    }
+    if ( $messages->{NeedsTransfer} ) {
+        $checkin->add_message(
+            {
+                message => 'needs_transfer',
+                type    => 'info',
+                payload => {
+                    to_library => $messages->{NeedsTransfer},
+                    trigger    => $messages->{TransferTrigger},
+                },
+            }
+        );
+    }
+    if ( $messages->{WrongTransfer} ) {
+        $checkin->add_message(
+            {
+                message => 'wrong_transfer',
+                type    => 'warning',
+                payload => {
+                    to_library => $messages->{WrongTransfer},
+                    item_id    => $messages->{WrongTransferItem},
+                    trigger    => $messages->{TransferTrigger},
+                },
+            }
+        );
+    }
+    if ( $messages->{TransferArrived} ) {
+        $checkin->add_message(
+            {
+                message => 'transfer_arrived',
+                type    => 'info',
+                payload => { from_library => $messages->{TransferArrived} },
+            }
+        );
+    }
+
+    # Hold messages
+    if ( $messages->{ResFound} ) {
+        my $res = $messages->{ResFound};
+        $checkin->add_message(
+            {
+                message => 'hold_found',
+                type    => 'info',
+                payload => {
+                    status     => lc( $res->{ResFound} // '' ),
+                    reserve_id => $res->{reserve_id},
+                    patron_id  => $res->{borrowernumber},
+                    library_id => $res->{branchcode},
+                },
+            }
+        );
+    }
+
+    # Recall messages
+    if ( $messages->{RecallFound} ) {
+        my $recall = $messages->{RecallFound};
+        $checkin->add_message(
+            {
+                message => 'recall_found',
+                type    => 'info',
+                payload => {
+                    recall_id      => $recall->id,
+                    needs_transfer => $messages->{RecallNeedsTransfer} ? 1 : 0,
+                },
+            }
+        );
+    }
+
+    # Fine/fee messages
+    if ( $messages->{LostItemFeeRefunded} ) {
+        $checkin->add_message( { message => 'lost_item_fee_refunded', type => 'info' } );
+    }
+    if ( $messages->{LostItemFeeCharged} ) {
+        $checkin->add_message( { message => 'lost_item_fee_charged', type => 'info' } );
+    }
+    if ( $messages->{LostItemFeeRestored} ) {
+        $checkin->add_message( { message => 'lost_item_fee_restored', type => 'info' } );
+    }
+    if ( $messages->{LostItemPaymentNotRefunded} ) {
+        $checkin->add_message( { message => 'lost_item_payment_not_refunded', type => 'info' } );
+    }
+    if ( $messages->{ProcessingFeeRefunded} ) {
+        $checkin->add_message( { message => 'processing_fee_refunded', type => 'info' } );
+    }
+
+    # Item status messages
+    if ( $messages->{NotIssued} ) {
+        $checkin->add_message( { message => 'not_issued', type => 'info' } );
+    }
+    if ( $messages->{LocalUse} ) {
+        $checkin->add_message( { message => 'local_use', type => 'info' } );
+    }
+    if ( $messages->{WasLost} ) {
+        $checkin->add_message( { message => 'was_lost', type => 'info' } );
+    }
+    if ( $messages->{withdrawn} ) {
+        $checkin->add_message( { message => 'withdrawn', type => 'warning' } );
+    }
+    if ( $messages->{WasReturned} ) {
+        $checkin->add_message( { message => 'was_returned', type => 'info' } );
+    }
+
+    # Patron restriction messages
+    if ( $messages->{Debarred} ) {
+        $checkin->add_message(
+            { message => 'debarred', type => 'warning', payload => { until => $messages->{Debarred} } } );
+    }
+    if ( $messages->{PrevDebarred} ) {
+        $checkin->add_message(
+            { message => 'previously_debarred', type => 'warning', payload => { until => $messages->{PrevDebarred} } }
+        );
+    }
+    if ( $messages->{ForeverDebarred} ) {
+        $checkin->add_message( { message => 'indefinitely_debarred', type => 'warning' } );
+    }
+
+    # Item update messages
+    if ( defined $messages->{NotForLoanStatusUpdated} ) {
+        $checkin->add_message(
+            {
+                message => 'not_for_loan_status_updated',
+                type    => 'info',
+                payload => $messages->{NotForLoanStatusUpdated},
+            }
+        );
+    }
+    if ( defined $messages->{ItemLocationUpdated} ) {
+        $checkin->add_message(
+            {
+                message => 'item_location_updated',
+                type    => 'info',
+                payload => $messages->{ItemLocationUpdated},
+            }
+        );
+    }
+
+    # Return claim
+    if ( $messages->{ReturnClaims} ) {
+        $checkin->add_message(
+            {
+                message => 'return_claim',
+                type    => 'info',
+                payload => { claim_id => $messages->{ReturnClaims}->id },
+            }
+        );
+    }
+    if ( $messages->{ClaimAutoResolved} ) {
+        $checkin->add_message(
+            {
+                message => 'claim_auto_resolved',
+                type    => 'info',
+                payload => { claim_id => $messages->{ClaimAutoResolved}->id },
+            }
+        );
+    }
+
+    # Branch/policy messages
+    if ( $messages->{Wrongbranch} ) {
+        $checkin->add_message(
+            {
+                message => 'wrong_branch',
+                type    => 'warning',
+                payload => {
+                    wrong_branch => $messages->{Wrongbranch}->{Wrongbranch},
+                    right_branch => $messages->{Wrongbranch}->{Rightbranch},
+                },
+            }
+        );
+    }
+
+    # Recall at holding branch
+    if ( $messages->{RecallPlacedAtHoldingBranch} ) {
+        $checkin->add_message( { message => 'recall_placed_at_holding_branch', type => 'info' } );
+    }
+
+    # Bundle
+    if ( $messages->{InBundle} ) {
+        $checkin->add_message(
+            {
+                message => 'in_bundle',
+                type    => 'info',
+                payload => { host_item_id => $messages->{InBundle}->itemnumber },
+            }
+        );
+    }
+
+    return;
+}
 
 __END__
 

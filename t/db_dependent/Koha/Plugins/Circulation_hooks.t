@@ -118,8 +118,8 @@ subtest 'after_circ_action() hook tests' => sub {
         warning_like {
             AddReturn( $item_1->barcode, $patron->branchcode );
         }
-        qr/after_circ_action called with action: checkin, ref: Koha::Old::Checkout/,
-            'AddReturn calls the after_circ_action hook';
+        qr/after_circ_action called with action: checkin, ref: Koha::Old::Checkout checkin: Koha::Checkin/,
+            'AddReturn calls the after_circ_action hook with checkout and checkin';
     };
 
     Koha::Plugins->RemovePlugins;

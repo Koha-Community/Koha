@@ -19,7 +19,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 79;
+use Test::More tests => 80;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -8166,12 +8166,8 @@ subtest 'Tests for BlockReturnOfWithdrawnItems' => sub {
     t::lib::Mocks::mock_preference( 'RecordLocalUseOnReturn',      0 );
     my $item = $builder->build_sample_item();
     $item->withdrawn(1)->itemlost(1)->store;
-    my @return = AddReturn( $item->barcode, $item->homebranch, 0, undef );
-    is_deeply(
-        \@return,
-        [ 0, { NotIssued => $item->barcode, withdrawn => 1 }, undef, {} ],
-        "Item returned as withdrawn, no other messages"
-    );
+    my ( $doreturn, $messages ) = AddReturn( $item->barcode, $item->homebranch, 0, undef );
+    is( $doreturn, 0, "Item returned as withdrawn, no other messages" );
 };
 
 subtest 'Tests for Wrongbranch blocker (AllowReturnToBranch)' => sub {
@@ -8243,7 +8239,7 @@ subtest 'Tests for transfer not in transit' => sub {
 
 subtest 'Tests for RecordLocalUseOnReturn' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     t::lib::Mocks::mock_preference( 'RecordLocalUseOnReturn', 0 );
     my $item = $builder->build_sample_item();
@@ -8255,23 +8251,17 @@ subtest 'Tests for RecordLocalUseOnReturn' => sub {
     );
 
     $item->withdrawn(1)->itemlost(1)->store;
-    my @return = AddReturn( $item->barcode, $item->homebranch, 0, undef );
-    is_deeply(
-        \@return,
-        [ 0, { NotIssued => $item->barcode, withdrawn => 1 }, undef, {} ],
-        "RecordLocalUSeOnReturn is off, no local use recorded"
-    );
+    my ( $doreturn, $messages ) = AddReturn( $item->barcode, $item->homebranch, 0, undef );
+    is( $doreturn, 0, "RecordLocalUSeOnReturn is off, no local use recorded" );
 
     AddReturn( $item_2->barcode, $item_2->homebranch );
     $item_2->discard_changes;    # refresh
     is( $item_2->localuse, undef, 'Without RecordLocalUseOnReturn no localuse is recorded.' );
 
     t::lib::Mocks::mock_preference( 'RecordLocalUseOnReturn', 1 );
-    my @return2 = AddReturn( $item->barcode, $item->homebranch, 0, undef );
-    is_deeply(
-        \@return2,
-        [ 0, { NotIssued => $item->barcode, withdrawn => 1, LocalUse => 1 }, undef, {} ], "Local use is recorded"
-    );
+    my ( $doreturn2, $messages2 ) = AddReturn( $item->barcode, $item->homebranch, 0, undef );
+    is( $doreturn2,             0, "Local use is recorded" );
+    is( $messages2->{LocalUse}, 1, "LocalUse message set" );
 
     AddReturn( $item_2->barcode, $item_2->homebranch );
     $item_2->discard_changes;    # refresh
@@ -8980,3 +8970,66 @@ for my $branch ( $branches->next ) {
     my $key = $branch->branchcode . "_holidays";
     $cache->clear_from_cache($key);
 }
+
+subtest 'AddReturn always creates a Koha::Checkin record' => sub {
+
+    plan tests => 10;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $user    = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode, borrowernumber => $user->borrowernumber } );
+
+    # Normal return
+    my $item = $builder->build_sample_item( { library => $library->branchcode } );
+    AddIssue( $patron, $item->barcode );
+
+    my ( $doreturn, $messages, $issue, $borrower, $checkin ) = AddReturn( $item->barcode, $library->branchcode );
+
+    ok( $doreturn, 'Normal return succeeded' );
+    is( ref($checkin), 'Koha::Checkin', 'Checkin record created for normal return' );
+
+    # Blocked: withdrawn
+    t::lib::Mocks::mock_preference( 'BlockReturnOfWithdrawnItems', 1 );
+    my $withdrawn_item = $builder->build_sample_item( { library => $library->branchcode, withdrawn => 1 } );
+    AddIssue( $patron, $withdrawn_item->barcode );
+
+    ( $doreturn, $messages, $issue, $borrower, $checkin ) = AddReturn( $withdrawn_item->barcode, $library->branchcode );
+
+    ok( !$doreturn, 'Withdrawn return was blocked' );
+    is( ref($checkin),     'Koha::Checkin',             'Checkin record created despite withdrawn block' );
+    is( $checkin->item_id, $withdrawn_item->itemnumber, 'Correct item on blocked checkin' );
+
+    # Blocked: wrong branch
+    t::lib::Mocks::mock_preference( 'BlockReturnOfWithdrawnItems', 0 );
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch',         'homebranch' );
+
+    my $other_library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $item2         = $builder->build_sample_item( { library => $other_library->branchcode } );
+    AddIssue( $patron, $item2->barcode );
+
+    ( $doreturn, $messages, $issue, $borrower, $checkin ) = AddReturn( $item2->barcode, $library->branchcode );
+
+    ok( !$doreturn, 'Wrong branch return was blocked' );
+    is( ref($checkin),     'Koha::Checkin',    'Checkin record created despite wrong branch block' );
+    is( $checkin->item_id, $item2->itemnumber, 'Correct item on wrong-branch checkin' );
+
+    # Interface is always recorded
+    C4::Context->interface('sip');
+    my $item3 = $builder->build_sample_item( { library => $library->branchcode } );
+    AddIssue( $patron, $item3->barcode );
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'anywhere' );
+
+    ( $doreturn, $messages, $issue, $borrower, $checkin ) = AddReturn( $item3->barcode, $library->branchcode );
+
+    is( $checkin->interface, 'sip', 'interface recorded from C4::Context->interface' );
+    C4::Context->interface('intranet');
+
+    ( $doreturn, $messages, $issue, $borrower, $checkin ) = AddReturn( $item3->barcode, $library->branchcode );
+    is( $checkin->interface, 'intranet', 'interface updates with context' );
+
+    $schema->storage->txn_rollback;
+};

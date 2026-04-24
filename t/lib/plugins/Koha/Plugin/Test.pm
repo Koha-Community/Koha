@@ -249,7 +249,9 @@ sub after_circ_action {
         Koha::Exception->throw(
             "after_circ_action called with action: $action, ref: " . ref($checkout) . " type: $type" );
     } elsif ( $action eq 'checkin' ) {
-        Koha::Exception->throw( "after_circ_action called with action: $action, ref: " . ref($checkout) );
+        my $checkin = $payload->{checkin};
+        Koha::Exception->throw(
+            "after_circ_action called with action: $action, ref: " . ref($checkout) . " checkin: " . ref($checkin) );
     }
 }
 
