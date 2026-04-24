@@ -66,12 +66,12 @@ function delete_provider(id, users) {
         c = confirm(
             __(
                 "Are you sure you want to delete %s? %s patron(s) are using it!"
-            ).format($("#name_" + id).html(), users)
+            ).format($("#name_" + id).text(), users)
         );
     } else {
         c = confirm(
             __("Are you sure you want to delete %s?").format(
-                $("#name_" + id).html()
+                $("#name_" + id).text()
             )
         );
     }
