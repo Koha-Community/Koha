@@ -1,4 +1,4 @@
-/* global __ kohaTable table_settings */
+/* global __ kohaTable table_settings mmtas */
 $(document).ready(function () {
     window.modaction_legend_innerhtml = $("#modaction_legend").text();
     window.action_submit_value = $("#action_submit").val();
@@ -9,6 +9,10 @@ $(document).ready(function () {
     });
     $("span.match_regex_prefix").hide();
     $("span.match_regex_suffix").hide();
+
+    $("#action").on("change", function () {
+        onActionChange(this);
+    });
 
     $("#add_action").submit(function () {
         var action = $("#action").val();
@@ -101,6 +105,11 @@ $(document).ready(function () {
         updateAllEvery();
     });
 
+    $("#cancel_edit").on("click", function (e) {
+        e.preventDefault();
+        cancelEditAction();
+    });
+
     $(".new_action").on("click", function (e) {
         e.preventDefault();
         cancelEditAction();
@@ -132,7 +141,7 @@ $(document).ready(function () {
 
     $(".edit_action").on("click", function () {
         var mmta_id = $(this).data("mmta_id");
-        var mmta = $.grep(mmtas, function (elt, id) {
+        var mmta = $.grep(mmtas, function (elt) {
             return elt["mmta_id"] == mmta_id;
         });
         editAction(mmta[0]);
@@ -149,6 +158,22 @@ $(document).ready(function () {
 
     $(".confirm-delete-template").on("click", function () {
         return confirm(__("Are you sure you wish to delete this template?"));
+    });
+
+    $("#to_field_regex").on("change", function () {
+        onToFieldRegexChange(this);
+    });
+
+    $("#conditional_regex").on("change", function () {
+        onConditionalRegexChange(this);
+    });
+
+    $("#conditional").on("change", function () {
+        onConditionalChange(this);
+    });
+
+    $("#conditional_comparison").on("change", function () {
+        onConditionalComparisonChange(this);
     });
 });
 
@@ -268,18 +293,18 @@ function onConditionalRegexChange(checkboxObj) {
 }
 
 function show(eltId) {
-    elt = document.getElementById(eltId);
+    let elt = document.getElementById(eltId);
     elt.style.display = "inline";
 }
 
 function hide(eltId) {
     clearFormElements(eltId);
-    elt = document.getElementById(eltId);
+    let elt = document.getElementById(eltId);
     elt.style.display = "none";
 }
 
 function clearFormElements(divId) {
-    myBlock = document.getElementById(divId);
+    let myBlock = document.getElementById(divId);
 
     var inputElements = myBlock.getElementsByTagName("input");
     for (var i = 0; i < inputElements.length; i++) {
@@ -294,13 +319,10 @@ function clearFormElements(divId) {
     }
 
     var selectElements = myBlock.getElementsByTagName("select");
-    for (var i = 0; i < selectElements.length; i++) {
-        selectElements[i].selectedIndex = 0;
+    for (var k = 0; k < selectElements.length; k++) {
+        selectElements[k].selectedIndex = 0;
     }
 }
-
-var modaction_legend_innerhtml;
-var action_submit_value;
 
 function editAction(mmta) {
     $("#add_action").show();
@@ -403,9 +425,9 @@ function cancelEditAction() {
 }
 
 function setSelectByValue(selectId, value) {
-    s = document.getElementById(selectId);
+    let s = document.getElementById(selectId);
 
-    for (i = 0; i < s.options.length; i++) {
+    for (let i = 0; i < s.options.length; i++) {
         if (s.options[i].value == value) {
             s.selectedIndex = i;
         }
