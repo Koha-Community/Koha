@@ -242,7 +242,7 @@
                     >
 
                     <div class="action_line">
-                        <select name="action" id="action" onchange="onActionChange(this);">
+                        <select name="action" id="action">
                             <option value="delete_field">Delete</option>
                             <option value="add_field">Add new</option>
                             <option value="update_field">Update existing or add new</option>
@@ -268,7 +268,7 @@
                             <span name="to_field_regex_block" id="to_field_regex_block">
                                 <sup>
                                     <label for="to_field_regex">RegEx</label>
-                                    <input type="checkbox" name="to_field_regex" id="to_field_regex" onchange="onToFieldRegexChange(this);" />
+                                    <input type="checkbox" name="to_field_regex" id="to_field_regex" />
 
                                     <span name="to_field_regex_value_block" id="to_field_regex_value_block" style="display:none;">
                                         s/<input type="text" name="to_regex_search" id="to_regex_search" placeholder="regex pattern" />/<input
@@ -284,7 +284,7 @@
                     </div>
 
                     <div class="action_line">
-                        <select name="conditional" id="conditional" onchange="onConditionalChange(this);">
+                        <select name="conditional" id="conditional">
                             <option value="" selected="selected" />
                             <option value="if">if</option>
                             <option value="unless">unless</option>
@@ -293,7 +293,7 @@
                         <span name="conditional_block" id="conditional_block" style="display:none;">
                             field <input type="text" name="conditional_field" id="conditional_field" size="3" maxlength="3" /> <input type="text" name="conditional_subfield" id="conditional_subfield" size="1" maxlength="1" />
 
-                            <select name="conditional_comparison" id="conditional_comparison" onchange="onConditionalComparisonChange(this);">
+                            <select name="conditional_comparison" id="conditional_comparison">
                                 <option value="" />
                                 <option value="exists">exists</option>
                                 <option value="not_exists">doesn't exist</option>
@@ -306,7 +306,7 @@
 
                                 <sup>
                                     <label for="conditional_regex">RegEx</label>
-                                    <input type="checkbox" name="conditional_regex" id="conditional_regex" onchange="onConditionalRegexChange(this);" />
+                                    <input type="checkbox" name="conditional_regex" id="conditional_regex" />
                                 </sup>
                             </span>
                         </span>
@@ -322,7 +322,7 @@
                         <input type="hidden" name="mmta_id" id="mmta_id" />
                         <input type="hidden" name="op" value="cud-add_action" />
                         <input type="submit" id="action_submit" class="btn btn-primary" value="Add action" />
-                        <a href="#modaction" class="cancel" id="cancel_edit" onclick="cancelEditAction();">Cancel</a>
+                        <a href="#modaction" class="cancel" id="cancel_edit">Cancel</a>
                     </fieldset>
                 </fieldset>
             </form>
@@ -381,8 +381,9 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         table_settings = [% TablesSettings.GetTableSettings('tools', 'marc-modification-templates', 'templatest', 'json') | $raw %];
+        var mmtas;
         [% IF ActionsLoop %]
-            var mmtas = [% ActionsLoop.json | $raw %]
+            mmtas = [% ActionsLoop.json | $raw %]
         [% END %]
     </script>
     [% Asset.js("js/marc_modification_templates.js") | $raw %]
