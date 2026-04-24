@@ -650,6 +650,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 checkins
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Checkin>
+
+=cut
+
+__PACKAGE__->has_many(
+  "checkins",
+  "Koha::Schema::Result::Checkin",
+  { "foreign.item_id" => "self.itemnumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 club_holds
 
 Type: has_many
@@ -1006,8 +1021,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-06-29 14:27:18
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EYVLPzlswV0N5igbI/FbWQ
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-10-29 15:02:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VP3m4Uj0YaMyTy/aRKNm2Q
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 

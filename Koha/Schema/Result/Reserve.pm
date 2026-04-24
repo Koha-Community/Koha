@@ -385,6 +385,21 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+=head2 checkins
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Checkin>
+
+=cut
+
+__PACKAGE__->has_many(
+  "checkins",
+  "Koha::Schema::Result::Checkin",
+  { "foreign.hold_id" => "self.reserve_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 club_holds_to_patron_holds
 
 Type: has_many
@@ -531,8 +546,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-02-23 17:05:32
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WQrlG+Rl+BYHA7poiEiwmA
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-08-24 17:15:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CIkQY9hEouNrIarCV4VBCw
 
 __PACKAGE__->belongs_to(
   "item",

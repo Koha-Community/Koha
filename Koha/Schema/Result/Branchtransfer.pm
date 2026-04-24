@@ -230,6 +230,21 @@ __PACKAGE__->set_primary_key("branchtransfer_id");
 
 =head1 RELATIONS
 
+=head2 checkins
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Checkin>
+
+=cut
+
+__PACKAGE__->has_many(
+  "checkins",
+  "Koha::Schema::Result::Checkin",
+  { "foreign.transfer_id" => "self.branchtransfer_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 frombranch
 
 Type: belongs_to
@@ -276,8 +291,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-02-10 17:39:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nlmBm/HwBA6PQGLdDGRI8A
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-04-17 18:31:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jWq4Ilcwf5lWkZy+W5lgEA
 
 =head2 koha_object_class
 

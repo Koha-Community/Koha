@@ -146,6 +146,21 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+=head2 checkins
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Checkin>
+
+=cut
+
+__PACKAGE__->has_many(
+  "checkins",
+  "Koha::Schema::Result::Checkin",
+  { "foreign.restriction_id" => "self.borrower_debarment_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 type
 
 Type: belongs_to
@@ -162,8 +177,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-08-19 17:53:04
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kDCkA7XrjKXlrFG5lk8Lgg
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-04-17 20:58:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kQvB6QAe27ZYNrMBXc6bvA
 
 =head2 koha_objects_class
 

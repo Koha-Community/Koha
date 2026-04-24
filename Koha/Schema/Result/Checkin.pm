@@ -137,6 +137,14 @@ foreign key from the borrower_debarments table if this checkin triggered a restr
 
 foreign key from the return_claims table if this checkin resolved a claim
 
+=head2 interface
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 16
+
+the interface this checkin was processed from (intranet, api, sip, cron, commandline)
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -173,6 +181,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "claim_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "interface",
+  { data_type => "varchar", is_nullable => 1, size => 16 },
 );
 
 =head1 PRIMARY KEY

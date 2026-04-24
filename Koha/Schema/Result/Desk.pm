@@ -89,6 +89,21 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+=head2 checkins
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Checkin>
+
+=cut
+
+__PACKAGE__->has_many(
+  "checkins",
+  "Koha::Schema::Result::Checkin",
+  { "foreign.desk_id" => "self.desk_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 reserves
 
 Type: has_many
@@ -105,8 +120,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7qeCP25arGQpM4xxnTmWbw
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-04-17 18:31:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NoDhrAeIMtvyz3V3bOk6tQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

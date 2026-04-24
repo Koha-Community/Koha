@@ -500,6 +500,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 checkins
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Checkin>
+
+=cut
+
+__PACKAGE__->has_many(
+  "checkins",
+  "Koha::Schema::Result::Checkin",
+  { "foreign.library_id" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 circulation_rules
 
 Type: has_many
@@ -1081,8 +1096,8 @@ Composing rels: L</z3950servers_branches> -> server
 __PACKAGE__->many_to_many("servers", "z3950servers_branches", "server");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-09-15 15:48:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VumHFb+eVtXjM537JoaWqg
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-10-19 19:46:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jolY8dMEgPfTCtbvW98u8Q
 
 __PACKAGE__->has_many(
     "additional_field_values",

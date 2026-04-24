@@ -250,6 +250,21 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+=head2 checkins
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Checkin>
+
+=cut
+
+__PACKAGE__->has_many(
+  "checkins",
+  "Koha::Schema::Result::Checkin",
+  { "foreign.recall_id" => "self.recall_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 item
 
 Type: belongs_to
@@ -306,8 +321,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-10 17:06:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PHc8RtTZ7G02D0ZW4wrPGQ
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-04-17 20:46:10
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5I0l0Nzf804TubdQ2A1Rxw
 
 __PACKAGE__->add_columns(
     '+completed' => { is_boolean => 1 },

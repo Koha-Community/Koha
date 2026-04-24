@@ -320,6 +320,21 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 checkins
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Checkin>
+
+=cut
+
+__PACKAGE__->has_many(
+  "checkins",
+  "Koha::Schema::Result::Checkin",
+  { "foreign.checkout_id" => "self.issue_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 issuer
 
 Type: belongs_to
@@ -361,8 +376,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-09-05 20:52:04
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0g+Bdh4Fs1JdmeDEsAS0BA
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-04-17 18:31:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wWsN3mW/EWqnOOob5ocX5Q
 
 __PACKAGE__->add_columns(
     '+auto_renew'      => { is_boolean => 1 },
