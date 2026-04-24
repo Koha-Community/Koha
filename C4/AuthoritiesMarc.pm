@@ -1277,6 +1277,15 @@ sub BuildSummary {
     return \%summary;
 }
 
+=head2 _marc21_sort_hierarchy_alpha
+
+  my @sorted = _marc21_sort_hierarchy_alpha(@fields);
+
+sorts 4xx/5xx fields by hierarchy using subfield $w (g=broader, h=narrower,
+anything else between), then alphabetically by subfield $a.
+
+=cut
+
 sub _marc21_sort_hierarchy_alpha {
     my @fields = @_;
     return (
