@@ -271,7 +271,7 @@
                                         [% IF logged_in_user.can_see_patron_infos( guarantor ) %]
                                             <li
                                                 ><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.id | uri %]"
-                                                    >[% guarantor.preferred_name | html %] [% guarantor.surname | html %][% IF gr.relationship %]([% gr.relationship | html %])[% END %]</a
+                                                    >[% guarantor.preferred_name | html %] [% guarantor.surname | html %] [% IF gr.relationship %]([% gr.relationship | html %])[% END %]</a
                                                 ></li
                                             >
                                         [% END %]
