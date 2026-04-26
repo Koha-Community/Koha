@@ -173,7 +173,7 @@
                         <input type="text" name="dateofbirthrequired" id="dateofbirthrequired" value="[% category.dateofbirthrequired | html %]" size="3" maxlength="3" /> years
                     </li>
                     <li>
-                        <label for="upperagelimit">Upperage limit: </label>
+                        <label for="upperagelimit">Upper age limit: </label>
                         <input type="text" name="upperagelimit" id="upperagelimit" size="3" maxlength="3" value="[% category.upperagelimit | html %]" /> years
                     </li>
                     <li>
@@ -567,7 +567,7 @@
                 </tr>
                 <tr><th scope="row">Password expiration: </th><td>[% category.password_expiry_days | html %] days</td></tr>
                 <tr><th scope="row">Age required: </th><td>[% category.dateofbirthrequired | html %] years</td></tr>
-                <tr><th scope="row">Upperage limit: </th><td>[% category.upperagelimit | html %] years</td></tr>
+                <tr><th scope="row">Upper age limit: </th><td>[% category.upperagelimit | html %] years</td></tr>
                 <tr><th scope="row">Enrollment fee: </th><td>[% category.enrolmentfee | $Price %]</td></tr>
                 <tr><th scope="row">Receives overdue notices: </th><td>[% IF category. overduenoticerequired %]Yes[% ELSE %]No[% END %]</td></tr>
                 <tr><th scope="row">Lost items in staff interface:</th><td>[% IF category.hidelostitems %]Hidden by default[% ELSE %]Shown[% END %]</td></tr>
