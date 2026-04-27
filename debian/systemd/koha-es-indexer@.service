@@ -1,6 +1,7 @@
 [Unit]
 Description=Koha Elasticsearch indexer daemon for %i
 PartOf=koha@%i.target
+Requires=koha-create-dirs@%i.service
 After=koha@%i.target
 
 [Service]
@@ -11,7 +12,6 @@ WorkingDirectory=/var/lib/koha/%i
 Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
 Environment=KOHA_HOME=/usr/share/koha
 Environment=PERL5LIB=/usr/share/koha/lib
-ExecStartPre=+/usr/sbin/koha-create-dirs %i
 ExecStart=/usr/share/koha/bin/workers/es_indexer_daemon.pl
 Restart=on-failure
 RestartSec=30s

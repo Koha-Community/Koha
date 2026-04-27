@@ -1,0 +1,12 @@
+[Unit]
+Description=Create directories for Koha instance %i
+PartOf=koha@%i.target
+Before=koha-plack@%i.service koha-zebra@%i.service koha-indexer@%i.service koha-es-indexer@%i.service koha-worker@%i.service koha-worker-long_tasks@%i.service koha-sip@%i.service koha-z3950@%i.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=+/usr/sbin/koha-create-dirs %i
+
+[Install]
+WantedBy=koha@%i.target
