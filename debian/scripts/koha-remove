@@ -85,6 +85,7 @@ eof
     fi
     # Stop the worker daemons if needed
     koha-worker --all-queues --stop $name || /bin/true
+    koha-worker --all-queues --disable $name || /bin/true
     # Stop the Plack server if needed
     if is_plack_running $name; then
         koha-plack --stop $name || /bin/true

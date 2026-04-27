@@ -121,6 +121,11 @@ enable_z3950()
     chmod 600 ${configdir}/*
 
     [ "${quiet}" != "yes" ] && warn "Z39.50/SRU enabled for $name - edit files in ${configdir} to configure"
+
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl enable z3950 "$instancename"
+    fi
+
     return 0
 }
 
@@ -132,6 +137,11 @@ disable_z3950()
         local configdir=/etc/koha/sites/${instancename}/z3950
         mv ${configdir} ${configdir}.`date +%F_%T`
         [ "${quiet}" != "yes" ] && warn "Z39.50/SRU disabled for ${instancename}"
+
+        if [ "$(koha_init_backend)" = "systemd" ]; then
+            koha_service_ctl disable z3950 "$instancename"
+        fi
+
         return 0
     else
         [ "${quiet}" != "yes" ] && warn "Z39.50/SRU already disabled for ${instancename}"
