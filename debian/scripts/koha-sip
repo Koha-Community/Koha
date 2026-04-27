@@ -128,7 +128,7 @@ disable_sip()
     local libdir=/var/lib/koha/${name}
 
     if [ "$(koha_init_backend)" = "systemd" ]; then
-        koha_service_ctl enable sip "$name"
+        koha_service_ctl disable sip "$name"
     fi
 
     if is_sip_enabled ${name}; then
