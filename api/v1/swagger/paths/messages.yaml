@@ -1,0 +1,248 @@
+---
+/messages:
+  get:
+    x-mojo-to: Messages#list
+    operationId: listMessages
+    tags:
+      - messages
+    summary: List messages
+    produces:
+      - application/json
+    parameters:
+      - name: patron_id
+        in: query
+        description: Search on patron id
+        required: false
+        type: integer
+      - name: library_id
+        in: query
+        description: Case insensitive search on library id
+        required: false
+        type: string
+      - name: message_type
+        in: query
+        description: Case insensitive search on message type
+        required: false
+        type: string
+      - name: message
+        in: query
+        description: Case insensitive search on message content
+        required: false
+        type: string
+      - name: message_date
+        in: query
+        description: Case insensitive search on message date
+        required: false
+        type: string
+      - name: manager_id
+        in: query
+        description: Case insensitive search on manager patron id
+        required: false
+        type: integer
+      - name: patron_read_date
+        in: query
+        description: Case insensitive search on patron read date
+        required: false
+        type: string
+    responses:
+      "200":
+        description: A list of messages
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/message"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        borrowers:
+          - list_borrowers
+          - view_borrower_infos_from_any_libraries
+  post:
+    x-mojo-to: Messages#add
+    operationId: addMessage
+    tags:
+      - messages
+    summary: Add message
+    parameters:
+      - name: body
+        in: body
+        description: A JSON object containing informations about the new message
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/message"
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: Message added
+        schema:
+          $ref: "../swagger.yaml#/definitions/message"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: Conflict in creating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        borrowers: edit_borrowers
+/messages/{message_id}:
+  get:
+    x-mojo-to: Messages#get
+    operationId: getMessage
+    tags:
+      - messages
+    summary: Get message
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/message_id_pp"
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A message
+        schema:
+          $ref: "../swagger.yaml#/definitions/message"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Message not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        borrowers:
+          - list_borrowers
+          - view_borrower_infos_from_any_libraries
+  put:
+    x-mojo-to: Messages#update
+    operationId: updateMessage
+    tags:
+      - messages
+    summary: Update message
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/message_id_pp"
+      - name: body
+        in: body
+        description: A JSON object containing information on the message
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/message"
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A message
+        schema:
+          $ref: "../swagger.yaml#/definitions/message"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Message not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        borrowers: edit_borrowers
+  delete:
+    x-mojo-to: Messages#delete
+    operationId: deleteMessage
+    tags:
+      - messages
+    summary: Delete message
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/message_id_pp"
+    produces:
+      - application/json
+    responses:
+      "204":
+        description: Message deleted
+        schema:
+          type: string
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Message not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        borrowers: edit_borrowers

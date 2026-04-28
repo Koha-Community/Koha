@@ -1,0 +1,41 @@
+---
+type: object
+properties:
+  message_id:
+    type: integer
+    description: Internal message identifier
+  patron_id:
+    type: integer
+    description: Internal patron identifier
+  library_id:
+    type: string
+    description: Internal library identifier
+    maxLength: 10
+    minLength: 1
+  message_type:
+    type: string
+    description: "One of the following values: L = for Librarians, B = for Patrons"
+    maxLength: 1
+  message:
+    type: string
+    description: Message content
+  message_date:
+    type:
+      - string
+      - "null"
+    description: Message date
+    format: date-time
+  manager_id:
+    type: integer
+    description: Internal manager identifier
+  patron_read_date:
+    type:
+      - string
+      - "null"
+    description: Patron read date
+    format: date-time
+additionalProperties: false
+required:
+  - patron_id
+  - message_type
+  - message

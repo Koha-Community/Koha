@@ -98,6 +98,26 @@ sub message_without_newlines {
     return $message;
 }
 
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Patron::Message object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        message_id       => 'message_id',
+        borrowernumber   => 'patron_id',
+        branchcode       => 'library_id',
+        message_type     => 'message_type',
+        message          => 'message',
+        message_date     => 'message_date',
+        manager_id       => 'manager_id',
+        patron_read_date => 'patron_read_date',
+    };
+}
+
 =head3 _type
 
 =cut

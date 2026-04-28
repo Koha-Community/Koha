@@ -168,6 +168,8 @@ definitions:
     $ref: ./definitions/list.yaml
   merge_biblios:
     $ref: ./definitions/merge_biblios.yaml
+  message:
+    $ref: ./definitions/message.yaml
   order:
     $ref: ./definitions/order.yaml
   order_claim:
@@ -545,6 +547,10 @@ paths:
     $ref: "./paths/libraries.yaml#/~1libraries~1{library_id}~1desks"
   "/libraries/{library_id}/closed_dates":
     $ref: "./paths/libraries.yaml#/~1libraries~1{library_id}~1closed_dates"
+  "/messages":
+    $ref: "./paths/messages.yaml#/~1messages"
+  "/messages/{message_id}":
+    $ref: "./paths/messages.yaml#/~1messages~1{message_id}"
   "/oauth/login/{provider_code}/{interface}":
     $ref: ./paths/oauth.yaml#/~1oauth~1login~1{provider_code}~1{interface}
   /oauth/token:
@@ -978,6 +984,12 @@ parameters:
     description: License internal identifier
     in: path
     name: license_id
+    required: true
+    type: integer
+  message_id_pp:
+    description: Message internal identifier
+    in: path
+    name: message_id
     required: true
     type: integer
   match:
