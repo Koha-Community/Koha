@@ -272,6 +272,15 @@ sub get_elasticsearch_mappings {
             $mappings->{properties}{'match-heading'}             = _get_elasticsearch_field_config( 'search', 'text' );
             $mappings->{properties}{'subject-heading-thesaurus'} = _get_elasticsearch_field_config( 'search', 'text' );
         }
+
+        # Disable date and numeric detection to prevent Elasticsearch from
+        # auto-detecting field types in marc_data_array. Without this, a
+        # subfield value that looks like a date (e.g. "2024-01-15") causes
+        # ES to lock that subfield to type "date", and subsequent non-date
+        # values fail to index. (Bug 42485)
+        $mappings->{date_detection}    = JSON::PP::false;
+        $mappings->{numeric_detection} = JSON::PP::false;
+
         $all_mappings{ $self->index } = $mappings;
     }
     $self->sort_fields( \%{ $sort_fields{ $self->index } } );
