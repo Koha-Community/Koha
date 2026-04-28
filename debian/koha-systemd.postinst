@@ -6,7 +6,35 @@ case "$1" in
         # Reload systemd daemon
         systemctl daemon-reload || true
 
-        # on upgrade, restart running Koha services so they pick up new code/unit files
+        # On first install (no previous version), enable units for all existing instances
+        # This handles migration from SysV init to systemd
+        if [ -z "$2" ]; then
+            for instance in $(koha-list --enabled 2>/dev/null); do
+                # Core services: always enable
+                systemctl enable koha-zebra@${instance}.service 2>/dev/null || true
+                systemctl enable koha-plack@${instance}.service 2>/dev/null || true
+                systemctl enable koha-worker@${instance}.service 2>/dev/null || true
+                systemctl enable koha-worker-long_tasks@${instance}.service 2>/dev/null || true
+                systemctl enable koha-create-dirs@${instance}.service 2>/dev/null || true
+                systemctl enable koha@${instance}.target 2>/dev/null || true
+
+                # Conditional services
+                if koha-list --enabled --sip 2>/dev/null | grep -qx "$instance"; then
+                    systemctl enable koha-sip@${instance}.service 2>/dev/null || true
+                fi
+                if koha-list --enabled --z3950 2>/dev/null | grep -qx "$instance"; then
+                    systemctl enable koha-z3950@${instance}.service 2>/dev/null || true
+                fi
+                if koha-list --enabled --elasticsearch 2>/dev/null | grep -qx "$instance"; then
+                    systemctl enable koha-es-indexer@${instance}.service 2>/dev/null || true
+                else
+                    systemctl enable koha-indexer@${instance}.service 2>/dev/null || true
+                fi
+            done
+            systemctl enable koha.target 2>/dev/null || true
+        fi
+
+        # On upgrade, restart running Koha services so they pick up new code/unit files
         if [ -n "$2" ]; then
             deb-systemd-invoke try-restart \
                 'koha-*@*.service' \
