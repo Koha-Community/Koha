@@ -415,6 +415,10 @@ $(document).ready(function () {
                             data: function (oObj) {
                                 holds[oObj.reserve_id] = oObj; //Store holds for later use
 
+                                if (!SuspendHoldsIntranet) {
+                                    return "";
+                                }
+
                                 if (oObj.found) {
                                     return "";
                                 } else if (oObj.suspend == 1) {
