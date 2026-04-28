@@ -713,7 +713,7 @@
             });
 
             //Modified holds table and failed holds table share table settings
-            var table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holds', 'modified_holds', 'json' ) | $raw %];
+            var table_settings = [% TablesSettings.GetTableSettings( 'tools', 'batch_hold_modification', 'modified_holds', 'json' ) | $raw %];
             [% IF updated_holds_obj  %]
                 $("#modified_holds").kohaTable({
                     pagingType: "full",
