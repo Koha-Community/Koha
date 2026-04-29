@@ -419,11 +419,33 @@ function buildApiFilters(params) {
         filters.user = params.user;
     }
 
-    if (params.object) {
+    // Cataloguing modification log: object_type=biblio means we should
+    // surface biblio-level changes ("biblio%") on the biblionumber AND
+    // item-level changes ("item%") on each of the biblio's itemnumbers
+    // (computed server-side and passed in via biblio_itemnumbers).
+    var biblio_expansion = false;
+    if (
+        params.object &&
+        params.object_type === "biblio" &&
+        params.modules &&
+        params.modules.length === 1 &&
+        params.modules[0] === "CATALOGUING"
+    ) {
+        var itemnumbers = params.biblio_itemnumbers || [];
+        var or_clauses = [{ object: params.object, info: { like: "biblio%" } }];
+        if (itemnumbers.length) {
+            or_clauses.push({
+                object: itemnumbers,
+                info: { like: "item%" },
+            });
+        }
+        filters["-or"] = or_clauses;
+        biblio_expansion = true;
+    } else if (params.object) {
         filters.object = params.object;
     }
 
-    if (params.info) {
+    if (params.info && !biblio_expansion) {
         filters.info = { like: "%" + params.info + "%" };
     }
 

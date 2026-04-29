@@ -30,6 +30,7 @@ use C4::Serials qw( CountSubscriptionFromBiblionumber );
 use C4::Search  qw( enabled_staff_search_views );
 
 use Koha::ActionLogs;
+use Koha::Biblios;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
@@ -91,18 +92,34 @@ $template->param(
 if ($do_it) {
     if ( $output eq "screen" ) {
 
+        # Cataloguing modification log opens with modules=CATALOGUING and
+        # object_type=biblio: surface item-level changes alongside the
+        # biblio ones by collecting the biblio's itemnumbers and asking
+        # the JS to filter on either object set. Mirrors the CSV export
+        # branch below. The biblio object is also exposed so that the
+        # biblio-view-menu sidebar can render its links.
+        my $biblio;
+        my @biblio_itemnumbers;
+        if ( @modules == 1 && $object_type eq 'biblio' && $object ) {
+            $biblio             = Koha::Biblios->find($object);
+            @biblio_itemnumbers = $biblio->items->get_column('itemnumber') if $biblio;
+        }
+
         # Screen output: pass search params to template, DataTable loads via REST API
         $template->param(
-            logview    => 1,
-            do_it      => 1,
-            datefrom   => $datefrom,
-            dateto     => $dateto,
-            user       => $user,
-            info       => $info,
-            src        => $src,
-            modules    => \@modules,
-            actions    => \@actions,
-            interfaces => \@interfaces
+            logview            => 1,
+            do_it              => 1,
+            datefrom           => $datefrom,
+            dateto             => $dateto,
+            user               => $user,
+            info               => $info,
+            src                => $src,
+            modules            => \@modules,
+            actions            => \@actions,
+            interfaces         => \@interfaces,
+            object_type        => $object_type,
+            biblio             => $biblio,
+            biblio_itemnumbers => \@biblio_itemnumbers,
         );
 
         # Used modules
