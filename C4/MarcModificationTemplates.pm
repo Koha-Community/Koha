@@ -640,7 +640,7 @@ sub ModifyRecordWithTemplate {
                             {
                                 record   => $record,
                                 field    => $from_field,
-                                subfield => $from_subfield,
+                                subfield => $from_field < 10 ? undef : $from_subfield,
                             }
                         );
                     }
