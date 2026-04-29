@@ -309,26 +309,25 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         function check_currency(val) {
-            if ( val == 1.0 ) {
-                $("#active").prop('disabled', false);
+            if (val == 1.0) {
+                $("#active").prop("disabled", false);
                 $("#hint").html("");
             } else {
-                $("#active").prop('checked', false);
-                $("#active").prop('disabled', true);
+                $("#active").prop("checked", false);
+                $("#active").prop("disabled", true);
                 $("#hint").html(_("The active currency must have a rate of 1.0"));
             }
         }
 
-        $(document).ready(function() {
-            let table_settings = [% TablesSettings.GetTableSettings( 'admin', 'currency', 'currencies-table', 'json' ) | $raw %]
+        $(document).ready(function () {
             $("#currencies-table").kohaTable({}, table_settings);
 
             // prevents users to check active with a currency != 1
-            $("#rate").keyup(function() {
-                check_currency( $(this).val() );
+            $("#rate").keyup(function () {
+                check_currency($(this).val());
             });
-            check_currency( $("#rate").val() );
-            $("#currency_code").on("blur",function(){
+            check_currency($("#rate").val());
+            $("#currency_code").on("blur", function () {
                 toUC(this);
             });
         });
