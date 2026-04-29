@@ -3,7 +3,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 134;
+use Test::More tests => 135;
 
 use Koha::Database;
 use Koha::SimpleMARC;
@@ -326,6 +326,18 @@ is(
     'Add eleventh action: add additional field existent 007'
 );
 
+is(
+    AddModificationTemplateAction(
+        $template_id, 'update_field', 0,
+        '008',        '35',           'eng', '', '',
+        '',           '',             '',
+        'if',         '041',          'a', 'equals', '^eng$', '1',
+        'Update existent field 008$35 with "eng"'
+    ),
+    1,
+    'Add twelfth action: update field 008 character position 35-37 with "eng" if 041$a =~ /^eng$/'
+);
+
 my $record = new_record();
 is( ModifyRecordWithTemplate( $template_id, $record ), undef, "The ModifyRecordWithTemplate returns undef" );
 
@@ -586,6 +598,11 @@ sub new_record {
     my $record = MARC::Record->new;
     $record->leader('03174nam a2200445 a 4500');
     my @fields = (
+        MARC::Field->new( '008', '231124s2023    en ||||       |0| 0||||| ' ),
+        MARC::Field->new(
+            '041', ' ', ' ',
+            a => 'eng',
+        ),
         MARC::Field->new(
             100, '1', ' ',
             a => 'Knuth, Donald Ervin',
@@ -629,6 +646,11 @@ sub expected_record_1 {
     my @fields = (
         MARC::Field->new(
             '007', 'vxcdq',
+        ),
+        MARC::Field->new( '008', '231124s2023    en ||||       |0| 0|eng| ' ),
+        MARC::Field->new(
+            '041', ' ', ' ',
+            a => 'eng',
         ),
         MARC::Field->new(
             100, '1', ' ',
@@ -677,6 +699,11 @@ sub expected_record_2 {
     my $record = MARC::Record->new;
     $record->leader('03174nam a2200445 a 4500');
     my @fields = (
+        MARC::Field->new( '008', '231124s2023    en ||||       |0| 0||||| ' ),
+        MARC::Field->new(
+            '041', ' ', ' ',
+            a => 'eng',
+        ),
         MARC::Field->new(
             100, '1', ' ',
             a => 'Knuth, Donald Ervin',
@@ -718,6 +745,11 @@ sub expected_record_3 {
     my $record = MARC::Record->new;
     $record->leader('03174nam a2200445 a 4500');
     my @fields = (
+        MARC::Field->new( '008', '231124s2023    en ||||       |0| 0||||| ' ),
+        MARC::Field->new(
+            '041', ' ', ' ',
+            a => 'eng',
+        ),
         MARC::Field->new(
             100, '1', ' ',
             a => 'Knuth, Donald Ervin',
@@ -757,6 +789,11 @@ sub expected_record_4 {
     my $record = MARC::Record->new;
     $record->leader('03174nam a2200445 a 4500');
     my @fields = (
+        MARC::Field->new( '008', '231124s2023    en ||||       |0| 0||||| ' ),
+        MARC::Field->new(
+            '041', ' ', ' ',
+            a => 'eng',
+        ),
         MARC::Field->new(
             100, '1', ' ',
             a => 'Knuth, Donald Ervin',
