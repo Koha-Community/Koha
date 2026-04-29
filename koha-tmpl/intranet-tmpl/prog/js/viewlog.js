@@ -63,12 +63,22 @@ function renderObject(data, type, row) {
         mod == "FINES" ||
         mod == "APIKEYS"
     ) {
+        var patron = row.patron;
+        var name;
+        if (patron && (patron.firstname || patron.surname)) {
+            name = escapeHtml(
+                [patron.firstname, patron.surname].filter(Boolean).join(" ")
+            );
+        }
         if (mod == "APIKEYS") {
+            var label = name
+                ? __("API keys for %s (%s)").format(name, escapeHtml(obj))
+                : __("API keys for patron %s").format(escapeHtml(obj));
             return (
                 '<a href="/cgi-bin/koha/members/apikeys.pl?patron_id=' +
                 encodeURIComponent(obj) +
                 '">' +
-                __("API keys for patron %s").format(escapeHtml(obj)) +
+                label +
                 "</a>"
             );
         }
@@ -76,7 +86,7 @@ function renderObject(data, type, row) {
             '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' +
             encodeURIComponent(obj) +
             '">' +
-            escapeHtml(obj) +
+            (name ? name + " (" + escapeHtml(obj) + ")" : escapeHtml(obj)) +
             "</a>"
         );
     }
@@ -87,8 +97,8 @@ function renderObject(data, type, row) {
             return (
                 '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' +
                 encodeURIComponent(obj) +
-                '">Bibliographic record ' +
-                escapeHtml(obj) +
+                '">' +
+                __("Bibliographic record %s").format(escapeHtml(obj)) +
                 "</a>"
             );
         }
@@ -99,8 +109,8 @@ function renderObject(data, type, row) {
         return (
             '<a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=' +
             encodeURIComponent(obj) +
-            '">Subscription ' +
-            escapeHtml(obj) +
+            '">' +
+            __("Subscription %s").format(escapeHtml(obj)) +
             "</a>"
         );
     }
@@ -109,8 +119,8 @@ function renderObject(data, type, row) {
         return (
             '<a href="/cgi-bin/koha/authorities/detail.pl?authid=' +
             encodeURIComponent(obj) +
-            '">Authority ' +
-            escapeHtml(obj) +
+            '">' +
+            __("Authority %s").format(escapeHtml(obj)) +
             "</a>"
         );
     }
@@ -121,15 +131,15 @@ function renderObject(data, type, row) {
 
     if (mod == "ACQUISITIONS" && row.action == "ACQUISITION ORDER" && obj) {
         if (CAN_user_acquisition_order_manage) {
-            return (
-                'Basket <a href="/cgi-bin/koha/acqui/basket.pl?basketno=' +
-                encodeURIComponent(obj) +
-                '">' +
-                escapeHtml(obj) +
-                "</a>"
+            return __("Basket %s").format(
+                '<a href="/cgi-bin/koha/acqui/basket.pl?basketno=' +
+                    encodeURIComponent(obj) +
+                    '">' +
+                    escapeHtml(obj) +
+                    "</a>"
             );
         }
-        return "Basket " + escapeHtml(obj);
+        return __("Basket %s").format(escapeHtml(obj));
     }
 
     if (mod == "SUGGESTION") {
@@ -336,6 +346,7 @@ $(document).ready(function () {
                 ajax: {
                     url: "/api/v1/action_logs",
                 },
+                embed: ["librarian", "patron"],
                 order: [[0, "desc"]],
                 pagingType: "full",
                 autoWidth: false,
@@ -358,16 +369,34 @@ $(document).ready(function () {
                         searchable: true,
                         orderable: true,
                         render: function (data, type, row) {
-                            if (data) {
-                                return (
-                                    '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' +
-                                    encodeURIComponent(data) +
-                                    '">' +
+                            if (!data) return "";
+                            var librarian = row.librarian;
+                            var label;
+                            if (
+                                librarian &&
+                                (librarian.firstname || librarian.surname)
+                            ) {
+                                label =
+                                    escapeHtml(
+                                        [librarian.firstname, librarian.surname]
+                                            .filter(Boolean)
+                                            .join(" ")
+                                    ) +
+                                    " (" +
                                     escapeHtml(data) +
-                                    "</a>"
-                                );
+                                    ")";
+                            } else {
+                                label = escapeHtml(data);
                             }
-                            return escapeHtml(data);
+                            return (
+                                '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' +
+                                encodeURIComponent(data) +
+                                '" title="' +
+                                __("Display detail for this librarian") +
+                                '">' +
+                                label +
+                                "</a>"
+                            );
                         },
                     },
                     {

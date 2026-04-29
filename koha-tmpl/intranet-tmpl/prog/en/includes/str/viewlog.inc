@@ -32,6 +32,7 @@
         ADD: _("Add"),
         DELETE: _("Delete"),
         MODIFY: _("Modify"),
+        RESTORE: _("Restore"),
         REVOKE: _("Revoke"),
         ISSUE: _("Checkout"),
         RETURN: _("Return"),
