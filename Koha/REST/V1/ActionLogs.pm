@@ -29,6 +29,15 @@ use Try::Tiny qw( catch try );
 
 =head3 list
 
+    GET /api/v1/action_logs
+
+Returns a list of action_log entries.
+
+Filtering, ordering, pagination and embeds (C<librarian>, C<patron>) are
+all driven by the standard Koha REST query parameters and the
+C<x-koha-embed> header. Authorisation requires the C<tools.view_system_logs>
+permission.
+
 =cut
 
 sub list {
