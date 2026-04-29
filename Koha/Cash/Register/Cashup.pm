@@ -184,7 +184,11 @@ sub summary {
         my $typed_income = $income_transactions->total( { payment_type => $type->authorised_value } );
         my $typed_payout = $payout_transactions->total( { payment_type => $type->authorised_value } );
         my $typed_total  = ( $typed_income + $typed_payout );
-        push @total_grouped, { payment_type => $type->lib, total => $typed_total };
+
+        # Flip sign to match the convention used for `total` above:
+        # positive = net amount collected (i.e. removed from register at cashup),
+        # negative = net amount paid out (i.e. needed to be added to register).
+        push @total_grouped, { payment_type => $type->lib, total => $typed_total * -1 };
     }
 
     # Check for reconciliation lines separately (for footer display only)

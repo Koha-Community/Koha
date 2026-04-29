@@ -142,7 +142,7 @@ $(document).ready(function () {
                     "<tr class='reconciliation-separator'><td colspan='2'><hr></td></tr>"
                 );
 
-                // 2. Cash collected (amount recorded as removed from register)
+                // 2. Cash removed from register (positive = collected and removed at cashup)
                 var cashCollected = null;
                 for (type of data.summary.total_grouped) {
                     if (
@@ -155,9 +155,9 @@ $(document).ready(function () {
                 }
                 if (cashCollected !== null) {
                     var cashLabel =
-                        cashCollected < 0
-                            ? __("Cash added to register")
-                            : __("Cash collected");
+                        cashCollected >= 0
+                            ? __("Cash removed from register")
+                            : __("Cash added to register");
 
                     tfoot.append(
                         "<tr><td><strong>" +
@@ -176,13 +176,13 @@ $(document).ready(function () {
                         type.payment_type !== "CASH"
                     ) {
                         var paymentTypeLabel =
-                            type.total < 0
-                                ? __x("{payment_type} to add", {
+                            type.total >= 0
+                                ? __x("{payment_type} collected", {
                                       payment_type: escape_str(
                                           type.payment_type
                                       ),
                                   })
-                                : __x("{payment_type} collected", {
+                                : __x("{payment_type} to add", {
                                       payment_type: escape_str(
                                           type.payment_type
                                       ),
