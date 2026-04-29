@@ -154,6 +154,41 @@ __PACKAGE__->set_primary_key("action_id");
 # Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-05-02 14:28:43
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8ZJaG4iJAbay93LAg5xPsQ
 
+# Both relations below are pseudo-relations: action_logs.user and
+# action_logs.object have no SQL foreign-key constraint on borrowers,
+# so we set is_foreign_key_constraint => 0 to keep TestBuilder from
+# trying to materialise a Borrower row when building action_logs
+# fixtures.
+__PACKAGE__->belongs_to(
+    "librarian",
+    "Koha::Schema::Result::Borrower",
+    { borrowernumber => "user" },
+    {
+        is_foreign_key_constraint => 0,
+        join_type                 => "LEFT",
+    },
+);
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+# `object` is polymorphic across modules (borrowernumber, biblionumber,
+# subscriptionid, ...). The relation is only meaningful for MEMBERS,
+# CIRCULATION, FINES and APIKEYS rows; other modules may produce a
+# coincidentally-matching borrowernumber row that callers must ignore.
+__PACKAGE__->belongs_to(
+    "patron",
+    "Koha::Schema::Result::Borrower",
+    { borrowernumber => "object" },
+    {
+        is_foreign_key_constraint => 0,
+        join_type                 => "LEFT",
+    },
+);
+
+sub koha_object_class {
+    'Koha::ActionLog';
+}
+
+sub koha_objects_class {
+    'Koha::ActionLogs';
+}
+
 1;

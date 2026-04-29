@@ -21,6 +21,11 @@ use Modern::Perl;
 
 use C4::Context;
 
+# Avoid `use Koha::Patrons` here: Koha::ActionLog is loaded transitively by
+# C4::Log very early in the dependency chain, before Koha::Patron has been
+# fully defined. The accessors below reach for Koha::Patron at call time,
+# by which point it is reliably available.
+
 use base qw(Koha::Object);
 
 =head1 NAME
@@ -31,7 +36,39 @@ Koha::ActionLog - Koha ActionLog Object class
 
 =head2 Class methods
 
+=head3 librarian
+
+    my $librarian = $log->librarian;
+
+Returns the related I<Koha::Patron> object for the librarian who performed
+the action, or I<undef> if the C<user> column was not set (e.g. cron jobs).
+
 =cut
+
+sub librarian {
+    my ($self) = @_;
+    my $rs = $self->_result->librarian;
+    return unless $rs;
+    return Koha::Patron->_new_from_dbic($rs);
+}
+
+=head3 patron
+
+    my $patron = $log->patron;
+
+Returns the related I<Koha::Patron> object joined on the C<object> column.
+Only meaningful for rows where C<object> is a borrowernumber (MEMBERS,
+CIRCULATION, FINES and APIKEYS modules); for other modules the join may
+match an unrelated patron and the caller must filter by C<module>.
+
+=cut
+
+sub patron {
+    my ($self) = @_;
+    my $rs = $self->_result->patron;
+    return unless $rs;
+    return Koha::Patron->_new_from_dbic($rs);
+}
 
 =head2 Internal methods
 
