@@ -184,6 +184,8 @@ $(document).ready(function () {
 function toggleCharacterPositionField() {
     if ($("#from_field").val().length > 0 && $("#from_field").val() < 10) {
         if ($("#action").val() === "update_field") {
+            $("#from_subfield").attr("size", 2);
+            $("#from_subfield").attr("maxlength", 2);
             $("#from_subfield").show();
             $("#character_position").show();
         } else {
@@ -192,6 +194,8 @@ function toggleCharacterPositionField() {
             $("#character_position").hide();
         }
     } else {
+        $("#from_subfield").attr("size", 1);
+        $("#from_subfield").attr("maxlength", 1);
         $("#from_subfield").show();
         $("#character_position").hide();
     }
