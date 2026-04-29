@@ -94,5 +94,52 @@
         CRON: _("Cron job"),
         UPGRADE: _("Upgrade"),
     };
+
+    /*
+     * Translation map for circulation override codes that appear in the
+     * `forced` and `confirmations` arrays of a CIRCULATION info column
+     * JSON payload (see C4::Circulation::CanBookBeIssued and friends).
+     */
+    var override_labels = {
+        HOLD_POLICY_OVERRIDE: _("Hold policy override"),
+        INVALID_DATE: _("Invalid date confirmed"),
+        DEBT_GUARANTEES: _("Guarantees had debts"),
+        DEBT_GUARANTORS: _("Guarantors had debts"),
+        DEBT: _("Patron had debt"),
+        USERBLOCKEDOVERDUE: _("Patron had overdues"),
+        USERBLOCKEDNOENDDATE: _("Patron had an indefinite restriction"),
+        ADDITIONAL_MATERIALS: _("Additional materials were confirmed"),
+        RENEW_ISSUE: _("Renewal"),
+        ISSUED_TO_ANOTHER: _("Item was issued to another patron prior to this checkout"),
+        PATRON_CANT: _("Max renewals reached"),
+        TOO_MANY: _("Too many checkouts"),
+        PREVISSUE: _("Patron was notified of previous issues"),
+        NOT_FOR_LOAN: _("Item was not for loan"),
+        NOT_FOR_LOAN_FORCING: _("Item was not for loan"),
+        ITEM_LOST: _("Item was reported lost"),
+        BORRNOTSAMEBRANCH: _("Patron does not belong to this library"),
+        RENTALCHARGE: _("Item had a rental charge"),
+        RECALLED: _("Item was recalled"),
+        RESERVE_WAITING: _("Hold waiting on item"),
+        RESERVED: _("Hold placed on item"),
+        TRANSFERRED: _("Item was transferred"),
+        PROCESSING: _("Item was in processing"),
+        BOOKED_EARLY: _("Item was booked and checked out early"),
+        BOOKED_TO_ANOTHER: _("Item was booked to another patron"),
+        AGE_RESTRICTION: _("Item has an age restriction"),
+        HIGHHOLDS: _("Item had high holds"),
+        BIBLIO_ALREADY_ISSUED: _("An item from this bibliographic record is already checked out"),
+        DEBARRED: _("Patron is restricted"),
+        RENEWAL_LIMIT: _("Renewal limit override"),
+        UNSEEN_LIMIT: _("Override unseen item restriction"),
+        AUTO_TOO_SOON: _("Override auto-renew too soon restriction"),
+        AUTO_TOO_LATE: _("Override auto-renew too late restriction"),
+        ACCOUNT_EXPIRED: _("Account expired override"),
+        ON_RESERVE: _("Override renew hold for another"),
+        TOO_MUCH: _("Override auto-renew too much owing restriction"),
+        CURRENTISSUE: _("Item is currently checked out to this patron"),
+        UNSEEN: _("Unseen renewal"),
+        SEEN: _("Seen renewal"),
+    };
 </script>
 <!-- / str/viewlog.inc -->
