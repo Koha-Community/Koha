@@ -24,10 +24,15 @@ use Test::More tests => 6;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 my $builder = t::lib::TestBuilder->new;
 my $schema  = Koha::Database->new->schema;
+
+# Ensure tests do not depend on the site CashupReconciliationNoteRequired
+# preference; this test exercises summary/accountlines, not note enforcement.
+t::lib::Mocks::mock_preference( 'CashupReconciliationNoteRequired', 0 );
 
 subtest 'manager' => sub {
     plan tests => 2;

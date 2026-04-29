@@ -285,6 +285,21 @@ sub _get_session_boundaries {
     return ( $session_start, $session_end );
 }
 
+=head3 _get_session_end
+
+Internal method to determine the effective end timestamp of the session
+this cashup closes.
+
+For a one-phase cashup, the session ends at C<< $self->timestamp >>.
+For a two-phase workflow (a preceding C<CASHUP_START> with no intervening
+C<CASHUP>), the session ends at the C<CASHUP_START> timestamp so that
+transactions made between C<CASHUP_START> and C<CASHUP> are excluded
+from this cashup's summary.
+
+Returns the session end timestamp.
+
+=cut
+
 sub _get_session_end {
     my ($self) = @_;
 

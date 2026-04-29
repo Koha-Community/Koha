@@ -23,7 +23,7 @@
                     <tfoot> </tfoot>
                 </table>
 
-                <style>
+                <style nonce="[% Koha.CSPNonce | $raw %]">
                     #cashupSummaryModal .reconciliation-separator hr {
                         margin: 0.5rem 0;
                         border-color: #dee2e6;
