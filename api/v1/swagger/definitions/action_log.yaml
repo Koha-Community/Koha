@@ -52,4 +52,19 @@ properties:
       - string
       - "null"
     description: A diff of the changed object
+  librarian:
+    type:
+      - object
+      - "null"
+    description: |
+      The patron object for the librarian who performed the action
+      (only present if requested via x-koha-embed)
+  patron:
+    type:
+      - object
+      - "null"
+    description: |
+      Patron object joined on `object` (only meaningful for MEMBERS,
+      CIRCULATION, FINES and APIKEYS rows; only present if requested
+      via x-koha-embed)
 additionalProperties: false
