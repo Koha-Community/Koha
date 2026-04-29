@@ -13,7 +13,20 @@ Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
 Environment=KOHA_HOME=/usr/share/koha
 Environment=PERL5LIB=/usr/share/koha/lib
 PIDFile=/var/run/koha/%i/plack.pid
-ExecStart=/usr/bin/plackup -s Starman --daemonize --pid /var/run/koha/%i/plack.pid --listen /var/run/koha/%i/plack.sock /etc/koha/plack.psgi
+ExecStartPre=+/usr/sbin/koha-generate-env plack %i
+EnvironmentFile=-/run/koha/%i/plack.env
+ExecStart=/usr/bin/starman \
+    -M FindBin \
+    --max-requests ${PLACK_MAX_REQUESTS} \
+    --workers ${PLACK_WORKERS} \
+    --user %i-koha --group %i-koha \
+    --pid /var/run/koha/%i/plack.pid \
+    --daemonize \
+    --access-log /var/log/koha/%i/plack.log \
+    --error-log /var/log/koha/%i/plack-error.log \
+    -E ${PLACK_ENVIRONMENT} \
+    --listen /var/run/koha/%i/plack.sock \
+    ${PLACK_PSGIFILE}
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=on-failure
 RestartSec=5s

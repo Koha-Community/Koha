@@ -12,7 +12,9 @@ WorkingDirectory=/var/lib/koha/%i
 Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
 Environment=KOHA_HOME=/usr/share/koha
 Environment=PERL5LIB=/usr/share/koha/lib
-ExecStart=/usr/share/koha/bin/workers/es_indexer_daemon.pl
+ExecStartPre=+/usr/sbin/koha-generate-env es-indexer %i
+EnvironmentFile=-/run/koha/%i/es-indexer.env
+ExecStart=/usr/share/koha/bin/workers/es_indexer_daemon.pl --batch_size ${ES_BATCH_SIZE}
 Restart=on-failure
 RestartSec=30s
 

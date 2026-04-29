@@ -3,7 +3,6 @@ Description=Koha Z39.50/SRU server for %i
 PartOf=koha@%i.target
 Requires=koha-create-dirs@%i.service
 After=koha@%i.target
-ConditionPathExists=/etc/koha/sites/%i/z3950/config.xml
 
 [Service]
 Type=forking
@@ -14,7 +13,16 @@ Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
 Environment=KOHA_HOME=/usr/share/koha
 Environment=PERL5LIB=/usr/share/koha/lib
 PIDFile=/var/run/koha/%i/z3950-responder.pid
-ExecStart=/usr/share/koha/bin/z3950_responder.pl -c /etc/koha/sites/%i/z3950 -u %i-koha -p /var/run/koha/%i/z3950-responder.pid -D -d %i-koha-z3950 -l /var/log/koha/%i/z3950.log
+ExecStartPre=+/usr/sbin/koha-generate-env z3950 %i
+EnvironmentFile=-/run/koha/%i/z3950.env
+ExecStart=/usr/share/koha/bin/z3950_responder.pl \
+    ${Z3950_ADDITIONAL_OPTS} \
+    -c ${Z3950_CONFIGDIR} \
+    -u %i-koha \
+    -p /var/run/koha/%i/z3950-responder.pid \
+    -D \
+    -d %i-koha-z3950 \
+    -l /var/log/koha/%i/z3950.log
 Restart=on-failure
 RestartSec=30s
 

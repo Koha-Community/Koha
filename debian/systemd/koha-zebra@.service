@@ -12,7 +12,15 @@ WorkingDirectory=/var/lib/koha/%i
 Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
 Environment=KOHA_HOME=/usr/share/koha
 PIDFile=/var/run/koha/%i/zebra.pid
-ExecStart=/usr/bin/zebrasrv -f /etc/koha/sites/%i/koha-conf.xml -p /var/run/koha/%i/zebra.pid -D
+ExecStartPre=+/usr/sbin/koha-generate-env zebra %i
+EnvironmentFile=-/run/koha/%i/zebra.env
+ExecStart=/usr/bin/zebrasrv \
+    -v ${ZEBRA_LOGLEVELS} \
+    -k ${ZEBRA_MAX_RECORD_SIZE} \
+    -f /etc/koha/sites/%i/koha-conf.xml \
+    -m '%%FT%%T' \
+    -p /var/run/koha/%i/zebra.pid \
+    -D
 Restart=on-failure
 RestartSec=30s
 

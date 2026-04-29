@@ -1,0 +1,110 @@
+#!/bin/sh
+# koha-generate-env -- Generate EnvironmentFile for systemd units
+# Usage: koha-generate-env <service> <instance>
+#
+# Reads koha-conf.xml and writes /run/koha/<instance>/<service>.env
+# with the parameters that the corresponding systemd unit needs.
+
+set -e
+
+SERVICE="$1"
+INSTANCE="$2"
+
+if [ -z "$SERVICE" ] || [ -z "$INSTANCE" ]; then
+    echo "Usage: koha-generate-env <service> <instance>" >&2
+    exit 1
+fi
+
+CONF="/etc/koha/sites/${INSTANCE}/koha-conf.xml"
+ENVDIR="/run/koha/${INSTANCE}"
+ENVFILE="${ENVDIR}/${SERVICE}.env"
+
+if [ ! -f "$CONF" ]; then
+    echo "Error: $CONF not found" >&2
+    exit 1
+fi
+
+# Safe xmlstarlet wrapper: returns empty string if key not found
+xml_val() {
+    xmlstarlet sel -t -v "yazgfs/config/$1" "$CONF" 2>/dev/null || true
+}
+
+mkdir -p "$ENVDIR"
+
+case "$SERVICE" in
+    plack)
+        WORKERS=$(xml_val plack_workers)
+        MAX_REQUESTS=$(xml_val plack_max_requests)
+        DEBUG_MODE=$(xml_val debug_mode)
+
+        PSGIFILE="/etc/koha/plack.psgi"
+        if [ -f "/etc/koha/sites/${INSTANCE}/plack.psgi" ]; then
+            PSGIFILE="/etc/koha/sites/${INSTANCE}/plack.psgi"
+        fi
+
+        if [ "$DEBUG_MODE" = "1" ] || [ "$DEBUG_MODE" = "true" ]; then
+            ENVIRONMENT="development"
+        else
+            ENVIRONMENT="deployment"
+        fi
+
+        cat > "$ENVFILE" <<EOF
+PLACK_WORKERS=${WORKERS:-2}
+PLACK_MAX_REQUESTS=${MAX_REQUESTS:-50}
+PLACK_ENVIRONMENT=${ENVIRONMENT}
+PLACK_PSGIFILE=${PSGIFILE}
+EOF
+        ;;
+
+    zebra)
+        LOGLEVELS=$(xml_val zebra_loglevels)
+        MAX_RECORD_SIZE=$(xml_val zebra_max_record_size)
+
+        cat > "$ENVFILE" <<EOF
+ZEBRA_LOGLEVELS=${LOGLEVELS:-none,fatal,warn}
+ZEBRA_MAX_RECORD_SIZE=${MAX_RECORD_SIZE:-1024}
+EOF
+        ;;
+
+    es-indexer)
+        BATCH_SIZE=$(xml_val es_indexer_batch_size)
+
+        cat > "$ENVFILE" <<EOF
+ES_BATCH_SIZE=${BATCH_SIZE:-10}
+EOF
+        ;;
+
+    indexer)
+        # Read from /etc/default/koha-common if available
+        INDEXER_TIMEOUT=5
+        if [ -f /etc/default/koha-common ]; then
+            . /etc/default/koha-common
+        fi
+
+        cat > "$ENVFILE" <<EOF
+INDEXER_TIMEOUT=${INDEXER_TIMEOUT:-5}
+EOF
+        ;;
+
+    z3950)
+        # Determine config dir: per-instance or global
+        CONFIGDIR="/etc/koha/z3950"
+        if [ -d "/etc/koha/sites/${INSTANCE}/z3950" ]; then
+            CONFIGDIR="/etc/koha/sites/${INSTANCE}/z3950"
+        fi
+
+        # Read additional options from config
+        Z3950_OPTS=""
+        if [ -f "${CONFIGDIR}/config.xml" ]; then
+            Z3950_OPTS=$(xmlstarlet sel -t -v "//z3950_responder_options" "${CONFIGDIR}/config.xml" 2>/dev/null || true)
+        fi
+
+        cat > "$ENVFILE" <<EOF
+Z3950_CONFIGDIR=${CONFIGDIR}
+Z3950_ADDITIONAL_OPTS=${Z3950_OPTS}
+EOF
+        ;;
+esac
+
+chmod 640 "$ENVFILE"
+chown root:"${INSTANCE}-koha" "$ENVFILE"

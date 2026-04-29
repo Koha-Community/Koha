@@ -12,7 +12,9 @@ WorkingDirectory=/var/lib/koha/%i
 Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
 Environment=KOHA_HOME=/usr/share/koha
 Environment=PERL5LIB=/usr/share/koha/lib
-ExecStart=/usr/share/koha/bin/migration_tools/rebuild_zebra.pl -daemon -sleep 5
+ExecStartPre=+/usr/sbin/koha-generate-env indexer %i
+EnvironmentFile=-/run/koha/%i/indexer.env
+ExecStart=/usr/share/koha/bin/migration_tools/rebuild_zebra.pl -daemon -sleep ${INDEXER_TIMEOUT}
 Restart=on-failure
 RestartSec=30s
 
