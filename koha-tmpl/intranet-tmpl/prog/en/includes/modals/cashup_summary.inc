@@ -1,3 +1,4 @@
+[% USE raw %]
 <!-- Cashup summary modal -->
 <div class="modal printable" id="cashupSummaryModal" tabindex="-1" role="dialog" aria-labelledby="cashupSummaryLabel">
     <div class="modal-dialog modal-lg">
