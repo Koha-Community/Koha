@@ -23,7 +23,6 @@ $(document).ready(function () {
             headers: {
                 "x-koha-embed": "summary",
             },
-            async: false,
             success: function (data) {
                 let from_date = $datetime(data.summary.from_date);
                 summary_modal.find("#from_date").text(from_date);
@@ -142,7 +141,10 @@ $(document).ready(function () {
                     "<tr class='reconciliation-separator'><td colspan='2'><hr></td></tr>"
                 );
 
-                // 2. Cash removed from register (positive = collected and removed at cashup)
+                // cashCollected = expected cash from session transactions (excludes
+                // CASHUP_SURPLUS/DEFICIT). actualAmount = cash recorded at cashup. When
+                // they differ we display both so the surplus/deficit row below is the
+                // visible difference.
                 var cashCollected = null;
                 for (type of data.summary.total_grouped) {
                     if (
@@ -154,18 +156,46 @@ $(document).ready(function () {
                     }
                 }
                 if (cashCollected !== null) {
-                    var cashLabel =
-                        cashCollected >= 0
-                            ? __("Cash removed from register")
-                            : __("Cash added to register");
+                    var hasReconciliation = !!(surplus || deficit);
 
-                    tfoot.append(
-                        "<tr><td><strong>" +
-                            cashLabel +
-                            "</strong></td><td><strong>" +
-                            cashCollected.format_price() +
-                            "</strong></td></tr>"
-                    );
+                    if (hasReconciliation && !inProgress) {
+                        var expectedLabel =
+                            cashCollected >= 0
+                                ? __("Expected cash total")
+                                : __("Expected cash to add to register");
+                        tfoot.append(
+                            "<tr><td><strong>" +
+                                expectedLabel +
+                                "</strong></td><td><strong>" +
+                                cashCollected.format_price() +
+                                "</strong></td></tr>"
+                        );
+
+                        var actualLabel =
+                            actualAmount >= 0
+                                ? __("Cash removed from register")
+                                : __("Cash added to register");
+                        tfoot.append(
+                            "<tr><td><strong>" +
+                                actualLabel +
+                                "</strong></td><td><strong>" +
+                                actualAmount.format_price() +
+                                "</strong></td></tr>"
+                        );
+                    } else {
+                        var cashLabel =
+                            cashCollected >= 0
+                                ? __("Cash removed from register")
+                                : __("Cash added to register");
+
+                        tfoot.append(
+                            "<tr><td><strong>" +
+                                cashLabel +
+                                "</strong></td><td><strong>" +
+                                cashCollected.format_price() +
+                                "</strong></td></tr>"
+                        );
+                    }
                 }
 
                 // 3. Other payment types collected (excluding CASH)
