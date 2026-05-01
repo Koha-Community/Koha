@@ -1102,10 +1102,11 @@ subtest "Test Local Holds Priority - Bib level" => sub {
 };
 
 subtest "Test Local Holds Priority - Item level" => sub {
-    plan tests => 2;
+    plan tests => 4;
 
     Koha::Biblios->delete();
     t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              'GiveLibrary' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityScope',         'checkin_and_queue' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl',   'homebranch' );
     my $branch   = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -1171,6 +1172,21 @@ subtest "Test Local Holds Priority - Item level" => sub {
         $local_patron->borrowernumber,
         "We should pick the local hold over the next available"
     );
+
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityScope', 'checkin_only' );
+    C4::HoldsQueue::CreateQueue();
+
+    my $queue_rs2 = $schema->resultset('TmpHoldsqueue');
+    my $q2        = $queue_rs2->next;
+    is(
+        $queue_rs2->count(), 1,
+        "Hold queue contains one hold"
+    );
+    is(
+        $q2->borrowernumber->borrowernumber,
+        $other_patron->borrowernumber,
+        "We should not pick the local hold over the next available"
+    );
 };
 
 subtest "Test Local Holds Priority - Item level hold over Record level hold (Bug 23934)" => sub {
@@ -1180,6 +1196,7 @@ subtest "Test Local Holds Priority - Item level hold over Record level hold (Bug
     t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              'GiveLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl',   'homebranch' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityScope', 'checkin_and_queue' );
     my $branch   = $builder->build_object( { class => 'Koha::Libraries' } );
     my $branch2  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $category = $builder->build_object(
