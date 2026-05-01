@@ -878,7 +878,7 @@ if ( $op eq "cud-addbiblio" ) {
 
     if ( $biblio && C4::Context->preference('marcflavour') eq 'MARC21' ) {
         my $fixed_length_info =
-            Koha::Biblio::Metadata::Extractor::MARC->new( { biblio => $biblio } )->check_fixed_length;
+            Koha::Biblio::Metadata::Extractor::MARC->new( { metadata => $record } )->check_fixed_length;
         $template->param( marc21_fixlen => $fixed_length_info ) if @{ $fixed_length_info->{failed} };
     }
 
