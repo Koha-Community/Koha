@@ -1115,6 +1115,11 @@ Circulation:
               choices:
                   homebranch: "home library"
                   holdingbranch: "holding library"
+            - when
+            - pref: LocalHoldsPriorityScope
+              choices:
+                  checkin_and_queue: "checking items in and building the holds queue"
+                  checkin_only: "checking items in"
             - <br/><strong>Note:</strong> If a group option is selected, LocalHoldsPriorityPatronControl and LocalHoldsPriorityItemControl will use the <a href="/cgi-bin/koha/admin/library_groups.pl">library hold group</a> of the selected libraries.
         -
             - For
