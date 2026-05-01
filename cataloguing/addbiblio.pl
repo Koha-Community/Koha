@@ -710,6 +710,7 @@ if ( $op eq "cud-addbiblio" ) {
 
     # check for a duplicate
     my $duplicate;
+    my ( $duplicatebiblionumber, $duplicatetitle );
     if ( !$is_a_modif ) {
         ($duplicate) = C4::Search::FindDuplicateWithMatchingRules( $record, $frameworkcode );
     }
@@ -810,7 +811,7 @@ if ( $op eq "cud-addbiblio" ) {
         build_tabs( $template, $record, $dbh, $encoding, $input );
 
         my $duplicate_additional_info = q{};
-        my $dup_biblio                = Koha::Biblios->find($duplicatebiblionumber);
+        my $dup_biblio                = Koha::Biblios->find($duplicate);
         if ($dup_biblio) {
             my $lang           = C4::Languages::getlanguage();
             my $branch         = C4::Context->userenv ? C4::Context->userenv->{branch} : q{};

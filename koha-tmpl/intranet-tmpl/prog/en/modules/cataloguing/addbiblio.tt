@@ -917,9 +917,9 @@
                             >[% duplicate.title | html %] <i class="fa-solid fa-window-restore"></i
                         ></a>
                     </p>
-                        [% IF ( duplicateadditionalinfo ) %]
+                    [% IF ( duplicateadditionalinfo ) %]
                         <p class="duplicate-additional-info">[% duplicateadditionalinfo | $raw %]</p>
-                        [% END %]
+                    [% END %]
                     [% IF ( CAN_user_editcatalogue_edit_items ) %]
                         <form action="/cgi-bin/koha/cataloguing/additem.pl" method="get">
                             [% IF ( circborrowernumber ) # It is possible we have come from fast cataloging - include the fields %]
@@ -955,9 +955,9 @@
                         ?</p
                     >
                     [% IF ( duplicateadditionalinfo ) %]
-                    <p class="duplicate-additional-info">[% duplicateadditionalinfo | $raw %]</p>
+                        <p class="duplicate-additional-info">[% duplicateadditionalinfo | $raw %]</p>
                     [% END %]
-                [% IF ( CAN_user_editcatalogue_edit_items ) %]
+                    [% IF ( CAN_user_editcatalogue_edit_items ) %]
                         <form action="/cgi-bin/koha/cataloguing/additem.pl" method="get">
                             [% IF ( circborrowernumber ) # It is possible we have come from fast cataloging - include the fields %]
                                 <input type="hidden" name="barcode" value="[% barcode | html %]" />
