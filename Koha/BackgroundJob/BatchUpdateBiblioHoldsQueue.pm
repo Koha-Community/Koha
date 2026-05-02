@@ -70,6 +70,7 @@ sub process {
     my $use_transport_cost_matrix = C4::Context->preference("UseTransportCostMatrix");
     my $transport_cost_matrix     = $use_transport_cost_matrix ? TransportCostMatrix() : undef;
     my $branches_to_use           = load_branches_to_pull_from($use_transport_cost_matrix);
+    my $unallocated               = C4::Context->preference('RealTimeHoldsQueueUnallocated');
 
     my @messages;
 
@@ -82,8 +83,9 @@ sub process {
                 {
                     biblio_id             => $biblio_id,
                     branches_to_use       => $branches_to_use,
-                    delete                => 1,
-                    transport_cost_matrix => $transport_cost_matrix
+                    delete                => $unallocated ? 0 : 1,
+                    transport_cost_matrix => $transport_cost_matrix,
+                    unallocated           => $unallocated,
                 }
             );
             push @messages,
