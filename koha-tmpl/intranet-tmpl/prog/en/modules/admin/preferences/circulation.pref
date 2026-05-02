@@ -839,6 +839,13 @@ Circulation:
                   0: Disable
             - updating the holds queue in real time.
         -
+            - "When RealTimeHoldsQueue is enabled:"
+            - pref: RealTimeHoldsQueueUnallocated
+              choices:
+                  1: only process unallocated holds
+                  0: rebuild the entire queue for the affected biblio
+            - ". Processing only unallocated holds is faster but will not recalculate existing allocations."
+        -
             - pref: AllowHoldItemTypeSelection
               choices:
                   1: Allow

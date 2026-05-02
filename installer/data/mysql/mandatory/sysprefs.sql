@@ -692,6 +692,7 @@ INSERT INTO systempreferences ( `variable`, `value` ) VALUES
 ('QuoteOfTheDay',''),
 ('RandomizeHoldsQueueWeight','0'),
 ('RealTimeHoldsQueue', '0'),
+('RealTimeHoldsQueueUnallocated', '0'),
 ('RecallsLog','1'),
 ('RecallsMaxPickUpDelay','7'),
 ('RecordLocalUseOnReturn','0'),
