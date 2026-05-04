@@ -873,7 +873,7 @@ sub elasticsearch_check {
             my $es = Search::Elasticsearch->new($es_conf);
 
             foreach my $index (@indexes) {
-                my $index_count;
+                my $index_count = 0;
                 try {
                     $index_count = $es->indices->stats( index => $index )->{_all}{primaries}{docs}{count};
                 } catch {
