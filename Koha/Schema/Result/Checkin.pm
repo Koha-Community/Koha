@@ -199,6 +199,21 @@ __PACKAGE__->set_primary_key("checkin_id");
 
 =head1 RELATIONS
 
+=head2 accountlines
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Accountline>
+
+=cut
+
+__PACKAGE__->has_many(
+  "accountlines",
+  "Koha::Schema::Result::Accountline",
+  { "foreign.checkin_id" => "self.checkin_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 checkout
 
 Type: belongs_to
@@ -390,8 +405,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-10-29 15:14:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:twQU5xG2ZVV2qnvct0hGxg
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-10-29 16:36:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WuuHtfl6uQkVyHJysGtWsA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
@@ -399,6 +414,44 @@ __PACKAGE__->belongs_to(
 __PACKAGE__->add_columns(
     '+exempt_fine' => { is_boolean => 1 },
     '+local_use'   => { is_boolean => 1 },
+);
+
+=head2 debits
+
+Type: has_many
+
+Filtered relationship returning only debit accountlines linked to this checkin.
+
+=cut
+
+__PACKAGE__->has_many(
+    "debits",
+    "Koha::Schema::Result::Accountline",
+    { "foreign.checkin_id" => "self.checkin_id" },
+    {
+        cascade_copy   => 0,
+        cascade_delete => 0,
+        where          => { credit_type_code => undef },
+    },
+);
+
+=head2 credits
+
+Type: has_many
+
+Filtered relationship returning only credit accountlines linked to this checkin.
+
+=cut
+
+__PACKAGE__->has_many(
+    "credits",
+    "Koha::Schema::Result::Accountline",
+    { "foreign.checkin_id" => "self.checkin_id" },
+    {
+        cascade_copy   => 0,
+        cascade_delete => 0,
+        where          => { credit_type_code => { '!=' => undef } },
+    },
 );
 
 1;

@@ -151,6 +151,14 @@ optional authorised value PAYMENT_TYPE
 
 the branchcode of the library where a payment was made, a manual invoice created, etc.
 
+=head2 checkin_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+foreign key from the checkins table if this accountline was created during a checkin
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -203,6 +211,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 0, size => 16 },
   "branchcode",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
+  "checkin_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -296,6 +306,26 @@ __PACKAGE__->belongs_to(
   "branchcode",
   "Koha::Schema::Result::Branch",
   { branchcode => "branchcode" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
+=head2 checkin
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Checkin>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "checkin",
+  "Koha::Schema::Result::Checkin",
+  { checkin_id => "checkin_id" },
   {
     is_deferrable => 1,
     join_type     => "LEFT",
@@ -445,8 +475,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-08 14:18:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aVLdvK1lek01lZ0mbaCwZQ
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-04-21 13:10:11
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+IHlGAd/QB9tCPBBl8RJ7Q
 
 =head2 patron
 
