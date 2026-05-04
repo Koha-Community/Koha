@@ -173,3 +173,19 @@ describe("CSRF", () => {
         });
     });
 });
+
+describe("Regressions", () => {
+    it("should allow login after sco", () => {
+        cy.visitOpac("/cgi-bin/koha/sco/sco-main.pl");
+        cy.get("input[name='csrf_token']").then($input => {
+            const csrf_sco = $input.val();
+            cy.visitOpac("/cgi-bin/koha/opac-main.pl");
+            cy.get("input[name='csrf_token']").then($input => {
+                const csrf_main = $input.val();
+                expect(csrf_main).to.exist;
+                expect(csrf_main).to.not.be.empty;
+                expect(csrf_sco).to.not.equal(csrf_main);
+            });
+        });
+    });
+});
