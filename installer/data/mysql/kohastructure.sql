@@ -4704,7 +4704,7 @@ CREATE TABLE `marc_modification_template_actions` (
   `action` enum('delete_field','add_field','update_field','move_field','copy_field','copy_and_replace_field') NOT NULL,
   `field_number` smallint(6) NOT NULL DEFAULT 0,
   `from_field` varchar(3) NOT NULL,
-  `from_subfield` varchar(1) DEFAULT NULL,
+  `from_subfield` varchar(2) DEFAULT NULL,
   `field_value` text DEFAULT NULL,
   `to_field` varchar(3) DEFAULT NULL,
   `to_subfield` varchar(1) DEFAULT NULL,
