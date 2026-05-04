@@ -19,10 +19,11 @@
 
 use Modern::Perl;
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 use Test::NoWarnings;
 
 use C4::Circulation qw( AddIssue AddReturn );
+use Koha::Account;
 use Koha::Checkins;
 use Koha::Database;
 
@@ -33,7 +34,9 @@ my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'item() tests' => sub {
+
     plan tests => 3;
+
     $schema->storage->txn_begin;
 
     my $item    = $builder->build_sample_item;
@@ -60,7 +63,9 @@ subtest 'item() tests' => sub {
 };
 
 subtest 'user() tests' => sub {
+
     plan tests => 3;
+
     $schema->storage->txn_begin;
 
     my $item    = $builder->build_sample_item;
@@ -114,7 +119,9 @@ subtest 'library() tests' => sub {
 };
 
 subtest 'desk() tests' => sub {
+
     plan tests => 3;
+
     $schema->storage->txn_begin;
 
     my $item    = $builder->build_sample_item;
@@ -144,7 +151,9 @@ subtest 'desk() tests' => sub {
 };
 
 subtest 'checkout() tests' => sub {
+
     plan tests => 3;
+
     $schema->storage->txn_begin;
 
     my $item    = $builder->build_sample_item;
@@ -186,7 +195,9 @@ subtest 'checkout() tests' => sub {
 };
 
 subtest 'transfer() tests' => sub {
+
     plan tests => 2;
+
     $schema->storage->txn_begin;
 
     my $item    = $builder->build_sample_item;
@@ -217,7 +228,9 @@ subtest 'transfer() tests' => sub {
 };
 
 subtest 'hold() tests' => sub {
+
     plan tests => 2;
+
     $schema->storage->txn_begin;
 
     my $item    = $builder->build_sample_item;
@@ -252,7 +265,9 @@ subtest 'hold() tests' => sub {
 };
 
 subtest 'recall() tests' => sub {
+
     plan tests => 2;
+
     $schema->storage->txn_begin;
 
     my $item    = $builder->build_sample_item;
@@ -287,7 +302,9 @@ subtest 'recall() tests' => sub {
 };
 
 subtest 'restriction() tests' => sub {
+
     plan tests => 2;
+
     $schema->storage->txn_begin;
 
     my $item    = $builder->build_sample_item;
@@ -322,7 +339,9 @@ subtest 'restriction() tests' => sub {
 };
 
 subtest 'claim() tests' => sub {
+
     plan tests => 2;
+
     $schema->storage->txn_begin;
 
     my $item    = $builder->build_sample_item;
@@ -353,7 +372,9 @@ subtest 'claim() tests' => sub {
 };
 
 subtest 'AddReturn creates a Koha::Checkin' => sub {
+
     plan tests => 9;
+
     $schema->storage->txn_begin;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -381,7 +402,9 @@ subtest 'AddReturn creates a Koha::Checkin' => sub {
 };
 
 subtest 'AddReturn sets local_use for non-issued items' => sub {
+
     plan tests => 3;
+
     $schema->storage->txn_begin;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -397,6 +420,75 @@ subtest 'AddReturn sets local_use for non-issued items' => sub {
     is( ref($checkin),         'Koha::Checkin', 'Checkin created for non-issued item' );
     is( $checkin->local_use,   1,               'local_use set to true' );
     is( $checkin->checkout_id, undef,           'checkout_id is undef (not checked out)' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'debits() and credits() tests' => sub {
+
+    plan tests => 7;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item    = $builder->build_sample_item( { library => $library->branchcode } );
+
+    my $checkin = Koha::Checkin->new(
+        {
+            item_id    => $item->itemnumber,
+            library_id => $library->branchcode,
+            local_use  => 0,
+        }
+    )->store;
+
+    # No accountlines yet
+    is( $checkin->debits->count,  0, 'No debits linked initially' );
+    is( $checkin->credits->count, 0, 'No credits linked initially' );
+
+    # Add debits
+    my $account = Koha::Account->new( { patron_id => $patron->borrowernumber } );
+    my $debit1  = $account->add_debit(
+        {
+            amount    => 5.00,
+            type      => 'OVERDUE',
+            item_id   => $item->itemnumber,
+            interface => 'commandline',
+        }
+    );
+    $debit1->checkin_id( $checkin->id )->store;
+
+    my $debit2 = $account->add_debit(
+        {
+            amount    => 10.00,
+            type      => 'LOST',
+            item_id   => $item->itemnumber,
+            interface => 'commandline',
+        }
+    );
+    $debit2->checkin_id( $checkin->id )->store;
+
+    # Add a credit
+    my $credit = $account->add_credit(
+        {
+            amount    => 5.00,
+            type      => 'LOST_FOUND',
+            interface => 'commandline',
+        }
+    );
+    $credit->checkin_id( $checkin->id )->store;
+
+    # Test accessors
+    my $debits = $checkin->debits;
+    is( ref($debits),   'Koha::Account::Debits', 'debits() returns Koha::Account::Debits' );
+    is( $debits->count, 2,                       'Two debits linked' );
+
+    my $credits = $checkin->credits;
+    is( ref($credits),   'Koha::Account::Credits', 'credits() returns Koha::Account::Credits' );
+    is( $credits->count, 1,                        'One credit linked' );
+
+    # Verify the right lines are in each set
+    is( $debits->total_outstanding, 15.00, 'Debits total is correct' );
 
     $schema->storage->txn_rollback;
 };

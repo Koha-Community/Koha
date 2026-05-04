@@ -18,6 +18,8 @@ package Koha::Checkin;
 use Modern::Perl;
 
 use Koha::Database;
+use Koha::Account::Credits;
+use Koha::Account::Debits;
 use Koha::Desks;
 use Koha::Holds;
 use Koha::Items;
@@ -187,6 +189,34 @@ sub claim {
     my $rs = $self->_result->claim;
     return unless $rs;
     return Koha::Checkouts::ReturnClaim->_new_from_dbic($rs);
+}
+
+=head3 debits
+
+    my $debits = $checkin->debits;
+
+Returns the debit L<Koha::Account::Debits> linked to this checkin.
+
+=cut
+
+sub debits {
+    my ($self) = @_;
+    my $rs = $self->_result->debits;
+    return Koha::Account::Debits->_new_from_dbic($rs);
+}
+
+=head3 credits
+
+    my $credits = $checkin->credits;
+
+Returns the credit L<Koha::Account::Credits> linked to this checkin.
+
+=cut
+
+sub credits {
+    my ($self) = @_;
+    my $rs = $self->_result->credits;
+    return Koha::Account::Credits->_new_from_dbic($rs);
 }
 
 =head2 Internal methods
