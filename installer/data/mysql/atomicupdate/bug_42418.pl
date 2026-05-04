@@ -69,6 +69,7 @@ return {
                 FROM old_issues oi
                 WHERE oi.returndate IS NOT NULL
                   AND oi.itemnumber IS NOT NULL
+                  AND (oi.checkin_library IS NOT NULL OR oi.branchcode IS NOT NULL)
             }
             );
 
