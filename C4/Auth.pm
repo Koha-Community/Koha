@@ -275,15 +275,18 @@ sub get_template_and_user {
         }
 
         if ($kick_out) {
+            $session  = get_session("");
             $template = C4::Templates::gettemplate(
                 'opac-auth.tt', 'opac',
                 $in->{query}
             );
+            $template->param( sessionID => $session->id );
+
             $cookie = $cookie_mgr->replace_in_list(
                 $cookie,
                 $in->{query}->cookie(
                     -name     => 'CGISESSID',
-                    -value    => '',
+                    -value    => $session->id,
                     -HttpOnly => 1,
                     -secure   => ( C4::Context->https_enabled() ? 1 : 0 ),
                     -sameSite => 'Lax',
