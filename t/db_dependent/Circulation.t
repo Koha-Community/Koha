@@ -19,7 +19,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 80;
+use Test::More tests => 81;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -46,6 +46,7 @@ use C4::Members::Messaging qw( SetMessagingPreference );
 use Koha::DateUtils        qw( dt_from_string output_pref );
 use Koha::Database;
 use Koha::Bookings;
+use Koha::Checkins;
 use Koha::Items;
 use Koha::Item::Transfers;
 use Koha::Checkouts;
@@ -3153,7 +3154,7 @@ subtest 'AddReturn + TransferLimits' => sub {
             }
         }
     );
-    t::lib::Mocks::mock_userenv( { branchcode => $holdingbranch->{branchcode} } );
+    t::lib::Mocks::mock_userenv( { patron => $patron, branchcode => $holdingbranch->{branchcode} } );
 
     # Each transfer from returnbranch is forbidden
     my $limit = Koha::Item::Transfer::Limit->new(
@@ -3270,9 +3271,9 @@ subtest 'Statistic patrons "X"' => sub {
     is( $stat->categorycode,   $patron->categorycode,            'Recorded a categorycode' );
     is( $stat->location,       $item_1->location,                'Recorded a location' );
 
-    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
     my $patron_2 = $builder->build_object(
         { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
+    t::lib::Mocks::mock_userenv( { patron => $patron_2, branchcode => $library->branchcode } );
     my $item_2 = $builder->build_sample_item( { library => $library->branchcode } );
     my $issue  = AddIssue( $patron_2, $item_2->barcode );
     $item_2->discard_changes;
@@ -4018,7 +4019,7 @@ subtest 'CanBookBeIssued + AutoReturnCheckedOutItems' => sub {
         }
     );
 
-    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
+    t::lib::Mocks::mock_userenv( { patron => $patron1, branchcode => $library->branchcode } );
 
     my $item = $builder->build_sample_item(
         {
@@ -7317,7 +7318,7 @@ subtest 'Checkout should correctly terminate a transfer' => sub {
         }
     );
 
-    t::lib::Mocks::mock_userenv( { branchcode => $library_1->branchcode } );
+    t::lib::Mocks::mock_userenv( { patron => $patron_1, branchcode => $library_1->branchcode } );
     my $reserve_id = AddReserve(
         {
             branchcode     => $library_2->branchcode,
@@ -7341,7 +7342,7 @@ subtest 'Checkout should correctly terminate a transfer' => sub {
     is( $transfer->tobranch,   $library_2->branchcode );
     is( $transfer->reason,     'Reserve' );
 
-    t::lib::Mocks::mock_userenv( { branchcode => $library_2->branchcode } );
+    t::lib::Mocks::mock_userenv( { patron => $patron_2, branchcode => $library_2->branchcode } );
     AddIssue( $patron_1, $item->barcode );
     $transfer = $transfer->get_from_storage;
     isnt( $transfer->datearrived, undef );
@@ -8220,7 +8221,7 @@ subtest 'Tests for transfer not in transit' => sub {
     );
     my @return = AddReturn( $item->barcode, $item->homebranch, 0, undef );
     is_deeply(
-        \@return,
+        [ @return[ 0 .. 3 ] ],
         [
             0,
             {
@@ -8961,6 +8962,45 @@ subtest 'Bug 41728: AddReturn marks the linked ISO18626 request as LoanCompleted
     $iso18626_request->discard_changes;
     is( $iso18626_request->status, 'LoanCompleted', 'AddReturn marks the linked ISO18626 request as LoanCompleted' );
     ok( $iso18626_request->messages->count > 0, 'AddReturn sends a supplyingAgencyMessage for the completed loan' );
+};
+
+subtest 'AddReturn checkin record user_id' => sub {
+    plan tests => 6;
+
+    # Restore real userenv (top-level $module may have mocked it)
+    $module->unmock('userenv');
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library->branchcode } } );
+    my $staff = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library->branchcode } } );
+
+    # Case 1: valid userenv — user_id should be set
+    t::lib::Mocks::mock_userenv( { patron => $staff, branchcode => $library->branchcode } );
+    my $item_1 = $builder->build_sample_item( { library => $library->branchcode } );
+    AddIssue( $patron, $item_1->barcode );
+    my ( undef, undef, undef, undef, $checkin_1 ) = AddReturn( $item_1->barcode, $library->branchcode );
+    ok( $checkin_1, 'Checkin record created with valid userenv' );
+    is( $checkin_1->user_id, $staff->borrowernumber, 'user_id set to logged-in staff borrowernumber' );
+
+    # Case 2: userenv without number — user_id should be undef
+    my $item_2 = $builder->build_sample_item( { library => $library->branchcode } );
+    AddIssue( $patron, $item_2->barcode );
+    $module->mock( 'userenv', sub { { branch => $library->branchcode } } );
+    my ( undef, undef, undef, undef, $checkin_2 ) = AddReturn( $item_2->barcode, $library->branchcode );
+    $module->unmock('userenv');
+    ok( $checkin_2, 'Checkin record created with userenv missing number' );
+    is( $checkin_2->user_id, undef, 'user_id is undef when userenv has no number key' );
+
+    # Case 3: userenv with explicit undef number — user_id should be undef
+    my $item_3 = $builder->build_sample_item( { library => $library->branchcode } );
+    t::lib::Mocks::mock_userenv( { patron => $staff, branchcode => $library->branchcode } );
+    AddIssue( $patron, $item_3->barcode );
+    $module->mock( 'userenv', sub { { branch => $library->branchcode, number => undef } } );
+    my ( undef, undef, undef, undef, $checkin_3 ) = AddReturn( $item_3->barcode, $library->branchcode );
+    $module->unmock('userenv');
+    ok( $checkin_3, 'Checkin record created with userenv but undef number' );
+    is( $checkin_3->user_id, undef, 'user_id is undef when userenv number is undef' );
 };
 
 $schema->storage->txn_rollback;
