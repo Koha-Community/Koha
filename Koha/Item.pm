@@ -151,7 +151,7 @@ sub store {
 
         # refund lost fee if a return claim has been made on an item previously marked as lost
         if ( $params->{refund_lost_fee} ) {
-            $self->_set_found_trigger( $self->get_from_storage );
+            $self->_set_found_trigger( $self->get_from_storage, { checkin_id => $params->{checkin_id} } );
         }
 
         my %updated_columns = $self->_result->get_dirty_columns;
@@ -230,7 +230,7 @@ sub store {
         {
             # item found
             # reverse any list item charges if necessary
-            $self->_set_found_trigger($pre_mod_item);
+            $self->_set_found_trigger( $pre_mod_item, { checkin_id => $params->{checkin_id} } );
             $self->_add_statistic('item_found');
         } elsif ( exists $updated_columns{itemlost}
             && ( $updated_columns{itemlost} && $updated_columns{itemlost} > 0 )
@@ -1843,7 +1843,9 @@ Internal function, not exported, called only by Koha::Item->store.
 =cut
 
 sub _set_found_trigger {
-    my ( $self, $pre_mod_item ) = @_;
+    my ( $self, $pre_mod_item, $params ) = @_;
+
+    my $checkin_id = $params->{checkin_id};
 
     # Reverse any lost item charges if necessary.
     my $no_refund_after_days = C4::Context->preference('NoRefundOnLostReturnedItemsAge');
@@ -1960,6 +1962,7 @@ sub _set_found_trigger {
                             library_id  => $branchcode,
                             item_id     => $self->itemnumber,
                             issue_id    => $lost_charge->checkout ? $lost_charge->checkout->issue_id : undef,
+                            checkin_id  => $checkin_id,
                         }
                     );
 
@@ -2119,7 +2122,8 @@ sub _set_found_trigger {
                             interface   => C4::Context->interface,
                             library_id  => $branchcode,
                             item_id     => $self->itemnumber,
-                            issue_id => $processing_charge->checkout ? $processing_charge->checkout->issue_id : undef,
+                            issue_id   => $processing_charge->checkout ? $processing_charge->checkout->issue_id : undef,
+                            checkin_id => $checkin_id,
                         }
                     );
 

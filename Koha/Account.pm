@@ -174,6 +174,7 @@ This method allows adding credits to a patron's account
 my $credit_line = Koha::Account->new({ patron_id => $patron_id })->add_credit(
     {
         amount       => $amount,
+        checkin_id   => $checkin_id,
         description  => $description,
         interface    => $interface,
         issue_id     => $checkout->id,
@@ -185,6 +186,8 @@ my $credit_line = Koha::Account->new({ patron_id => $patron_id })->add_credit(
         user_id      => $user_id,
     }
 );
+
+C<checkin_id> is optional. It links the credit to the check-in that created it.
 
 $credit_type can be any of:
   - 'CREDIT'
@@ -226,6 +229,7 @@ sub add_credit {
     my $credit_type   = $params->{type} || 'PAYMENT';
     my $item_id       = $params->{item_id};
     my $issue_id      = $params->{issue_id};
+    my $checkin_id    = $params->{checkin_id};
 
     my $old_issue_id;
     if ($issue_id) {
@@ -275,6 +279,7 @@ sub add_credit {
                             ? ( old_issue_id => $old_issue_id )
                             : ()
                         ),
+                        checkin_id => $checkin_id,
                     }
                 )->store();
 
@@ -437,9 +442,12 @@ This method allows adding debits to a patron's account
             transaction_type => $transaction_type,
             cash_register    => $register_id,
             item_id          => $item_id,
-            issue_id         => $issue_id
+            issue_id         => $issue_id,
+            checkin_id       => $checkin_id
         }
     );
+
+C<checkin_id> is optional. It links the debit to the check-in that created it.
 
 $debit_type can be any of:
   - ACCOUNT
@@ -494,6 +502,7 @@ sub add_debit {
     my $transaction_type = $params->{transaction_type};
     my $item_id          = $params->{item_id};
     my $issue_id         = $params->{issue_id};
+    my $checkin_id       = $params->{checkin_id};
 
     my $old_issue_id;
     if ($issue_id) {
@@ -542,6 +551,7 @@ sub add_debit {
                             ? ( status => 'UNRETURNED' )
                             : ()
                         ),
+                        checkin_id => $checkin_id,
                     }
                 )->store();
 
@@ -699,12 +709,15 @@ sub add_lost_replacement_fee {
             interface  => $interface,
             user_id    => $user_id,     # optional
             library_id => $library_id,  # optional
+            checkin_id => $checkin_id,  # optional
         }
     );
 
 Forgive the outstanding amount on C<$debit_line> by creating a C<FORGIVEN>
 credit equal to its C<amountoutstanding> and applying it to the line. Returns
 the created credit, or C<undef> when there is nothing outstanding to forgive.
+
+C<checkin_id> links the credit to the check-in that triggered the forgiveness.
 
 =cut
 
@@ -728,6 +741,7 @@ sub forgive_debit {
             interface  => $params->{interface},
             type       => 'FORGIVEN',
             item_id    => $debit->itemnumber,
+            checkin_id => $params->{checkin_id},
         }
     );
     $credit->apply( { debits => [$debit] } );

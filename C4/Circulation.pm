@@ -2612,8 +2612,8 @@ sub AddReturn {
                 {
                     _CalculateAndUpdateFine(
                         {
-                            issue       => $issue, item => $item->unblessed, borrower => $patron_unblessed,
-                            return_date => $return_date
+                            issue       => $issue,       item       => $item->unblessed, borrower => $patron_unblessed,
+                            return_date => $return_date, checkin_id => $checkin_record->id
                         }
                     );
                 }
@@ -2658,9 +2658,11 @@ sub AddReturn {
 
     my $item_was_lost   = $item->itemlost;
     my $leave_item_lost = C4::Context->preference("BlockReturnOfLostItems") ? 1 : 0;
-    my $updated_item =
-        ModDateLastSeen( $item->itemnumber, $leave_item_lost, { skip_record_index => 1, skip_holds_queue => 1 } )
-        ;    # will unset itemlost if needed
+
+    my $updated_item = ModDateLastSeen(
+        $item->itemnumber, $leave_item_lost,
+        { skip_record_index => 1, skip_holds_queue => 1, checkin_id => $checkin_record->id }
+    );    # will unset itemlost if needed
 
     # fix up the accounts.....
     if ($item_was_lost) {
@@ -2695,12 +2697,13 @@ sub AddReturn {
                                 issue       => $issue,
                                 item        => $item->unblessed,
                                 borrower    => $patron_unblessed,
-                                return_date => $return_date
+                                return_date => $return_date,
+                                checkin_id  => $checkin_record->id
                             }
                         );
                         _FixOverduesOnReturn(
                             $patron_unblessed->{borrowernumber},
-                            $item->itemnumber, undef, 'RETURNED'
+                            $item->itemnumber, undef, 'RETURNED', $checkin_record->id
                         );
                         $messages->{'LostItemFeeCharged'} = 1;
                     }
@@ -2750,7 +2753,8 @@ sub AddReturn {
 
     # fix up the overdues in accounts...
     if ($borrowernumber) {
-        my $fix = _FixOverduesOnReturn( $borrowernumber, $item->itemnumber, $exemptfine, 'RETURNED' );
+        my $fix =
+            _FixOverduesOnReturn( $borrowernumber, $item->itemnumber, $exemptfine, 'RETURNED', $checkin_record->id );
         defined($fix)
             or warn "_FixOverduesOnReturn($borrowernumber, "
             . $item->itemnumber
@@ -3263,7 +3267,7 @@ Internal function
 =cut
 
 sub _FixOverduesOnReturn {
-    my ( $borrowernumber, $item, $exemptfine, $status ) = @_;
+    my ( $borrowernumber, $item, $exemptfine, $status, $checkin_id ) = @_;
     unless ($borrowernumber) {
         warn "_FixOverduesOnReturn() not supplied valid borrowernumber";
         return;
@@ -3308,6 +3312,7 @@ sub _FixOverduesOnReturn {
                         interface  => C4::Context->interface,
                         user_id    => $userenv ? $userenv->{'number'} : undef,
                         library_id => $userenv ? $userenv->{'branch'} : undef,
+                        checkin_id => $checkin_id,
                     }
                 );
 
@@ -5167,6 +5172,7 @@ sub _CalculateAndUpdateFine {
     my $item        = $params->{item};
     my $issue       = $params->{issue};
     my $return_date = $params->{return_date};
+    my $checkin_id  = $params->{checkin_id};
 
     unless ($borrower) { carp "No borrower passed in!" && return; }
     unless ($item)     { carp "No item passed in!"     && return; }
@@ -5197,6 +5203,7 @@ sub _CalculateAndUpdateFine {
                     borrowernumber => $issue->borrowernumber,
                     amount         => $amount,
                     due            => $datedue,
+                    checkin_id     => $checkin_id,
                 }
             );
         } elsif ($return_date) {
@@ -5211,6 +5218,7 @@ sub _CalculateAndUpdateFine {
                     borrowernumber => $issue->borrowernumber,
                     amount         => 0,
                     due            => $datedue,
+                    checkin_id     => $checkin_id,
                 }
             );
         }

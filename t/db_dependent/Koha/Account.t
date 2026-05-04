@@ -190,7 +190,7 @@ subtest 'outstanding_credits() tests' => sub {
 
 subtest 'add_credit() tests' => sub {
 
-    plan tests => 22;
+    plan tests => 24;
 
     $schema->storage->txn_begin;
 
@@ -332,12 +332,24 @@ subtest 'add_credit() tests' => sub {
 
     is( $line_4->issue_id, $checkout->id, 'The issue ID matches the checkout ID' );
 
+    my $checkin = $builder->build_object( { class => q{Koha::Checkins} } );
+    my $line_5  = $account->add_credit(
+        {
+            amount     => 5,
+            type       => q{FORGIVEN},
+            interface  => q{commandline},
+            checkin_id => $checkin->id,
+        }
+    );
+    is( $line_5->checkin_id, $checkin->id, q{checkin_id is stored on the credit} );
+    is( $line_4->checkin_id, undef,        q{checkin_id is undef when not passed} );
+
     $schema->storage->txn_rollback;
 };
 
 subtest 'add_debit() tests' => sub {
 
-    plan tests => 15;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
 
@@ -462,6 +474,21 @@ subtest 'add_debit() tests' => sub {
     is( $offset_1->credit_id, undef,       'credit_id is not set for debit 1' );
     is( $offset_2->debit_id,  $line_2->id, 'debit_id is set for debit 2' );
     is( $offset_2->credit_id, undef,       'credit_id is not set for debit 2' );
+
+    my $checkin = $builder->build_object( { class => q{Koha::Checkins} } );
+    my $line_3  = $account->add_debit(
+        {
+            amount     => 3,
+            type       => q{OVERDUE},
+            interface  => q{commandline},
+            checkin_id => $checkin->id,
+        }
+    );
+    is( $line_3->checkin_id, $checkin->id, q{checkin_id is stored on the debit} );
+
+    $checkin->delete;
+    $line_3->discard_changes;
+    is( $line_3->checkin_id, undef, q{checkin_id is set to NULL when the checkin is deleted} );
 
     $schema->storage->txn_rollback;
 };
@@ -1697,7 +1724,7 @@ subtest 'add_lost_replacement_fee() tests' => sub {
 
 subtest 'forgive_debit() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -1726,6 +1753,14 @@ subtest 'forgive_debit() tests' => sub {
     $pay->apply( { debits => [$partial] } );
     my $forgive = $account->forgive_debit( $partial, { interface => 'cron', library_id => $branchcode } );
     is( $forgive->amount + 0, -6, 'forgives only the remaining outstanding amount' );
+
+    my $checkin       = $builder->build_object( { class => q{Koha::Checkins} } );
+    my $linked        = $account->add_debit( { amount => 1, interface => q{commandline}, type => q{OVERDUE} } );
+    my $linked_credit = $account->forgive_debit(
+        $linked,
+        { interface => q{cron}, library_id => $branchcode, checkin_id => $checkin->id }
+    );
+    is( $linked_credit->checkin_id, $checkin->id, q{checkin_id is passed to the FORGIVEN credit} );
 
     $schema->storage->txn_rollback;
 };

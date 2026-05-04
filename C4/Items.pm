@@ -450,7 +450,8 @@ sub ModDateLastSeen {
     $item->store(
         {
             log_action       => $log, skip_record_index => $params->{skip_record_index},
-            skip_holds_queue => $params->{skip_holds_queue}
+            skip_holds_queue => $params->{skip_holds_queue},
+            checkin_id       => $params->{checkin_id},
         }
     );
 }

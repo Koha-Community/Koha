@@ -19,7 +19,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 82;
+use Test::More tests => 83;
 use Test::Exception;
 use Test::MockModule;
 use Test::MockObject;
@@ -9202,6 +9202,151 @@ subtest 'AddReturn always creates a Koha::Checkin record' => sub {
 
     ( $doreturn, $messages, $issue, $borrower, $checkin ) = AddReturn( $item3->barcode, $library->branchcode );
     is( $checkin->interface, 'intranet', 'interface updates with context' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'AddReturn populates checkin_id on accountlines' => sub {
+
+    plan tests => 11;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'finesMode',              'production' );
+    t::lib::Mocks::mock_preference( 'CalculateFinesOnReturn', 1 );
+    t::lib::Mocks::mock_preference( 'BlockReturnOfLostItems', 0 );
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item    = $builder->build_sample_item( { library => $library->branchcode, replacementprice => 42 } );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => $library->branchcode,
+            categorycode => $patron->categorycode,
+            itemtype     => $item->effective_itemtype,
+            rules        => {
+                fine         => 1.00,
+                finedays     => 0,
+                firstremind  => 0,
+                chargeperiod => 1,
+                lengthunit   => 'days',
+            }
+        }
+    );
+
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode => $library->branchcode,
+            rule_name  => 'lostreturn',
+            rule_value => 'refund',
+        }
+    );
+
+    # Scenario 1: Overdue fine gets checkin_id
+    my $due_date = dt_from_string->subtract( days => 14 );
+    AddIssue( $patron, $item->barcode, $due_date );
+
+    my ( $doreturn, $messages, $issue, $borrower, $checkin ) = AddReturn(
+        $item->barcode, $library->branchcode,
+    );
+
+    ok( $checkin, 'Scenario 1: Checkin record created' );
+
+    my $overdue_line = Koha::Account::Lines->search(
+        {
+            borrowernumber  => $patron->borrowernumber,
+            itemnumber      => $item->itemnumber,
+            debit_type_code => 'OVERDUE',
+        }
+    )->single;
+
+    ok( $overdue_line, 'Scenario 1: OVERDUE debit was created' );
+    is( $overdue_line->checkin_id, $checkin->id, 'Scenario 1: OVERDUE debit has checkin_id' );
+
+    # Scenario 2: Exempt fine FORGIVEN credit gets checkin_id
+    AddIssue( $patron, $item->barcode, $due_date );
+
+    ( $doreturn, $messages, $issue, $borrower, $checkin ) = AddReturn(
+        $item->barcode, $library->branchcode, 1,    # exemptfine
+    );
+
+    ok( $checkin, 'Scenario 2: Checkin record created (exempt)' );
+
+    my $forgiven = Koha::Account::Lines->search(
+        {
+            borrowernumber   => $patron->borrowernumber,
+            itemnumber       => $item->itemnumber,
+            credit_type_code => 'FORGIVEN',
+        }
+    )->single;
+
+    ok( $forgiven, 'Scenario 2: FORGIVEN credit was created' );
+    is( $forgiven->checkin_id, $checkin->id, 'Scenario 2: FORGIVEN credit has checkin_id' );
+
+    # Scenario 3: Lost item refund (LOST_FOUND) gets checkin_id
+    AddIssue( $patron, $item->barcode );
+    LostItem( $item->itemnumber, 'cli', 0 );
+    $item->_result->itemlost(1);
+    $item->_result->itemlost_on(dt_from_string);
+    $item->_result->update();
+
+    ( $doreturn, $messages, $issue, $borrower, $checkin ) = AddReturn(
+        $item->barcode, $library->branchcode, undef, dt_from_string,
+    );
+
+    ok( $checkin, 'Scenario 3: Checkin record created (lost return)' );
+
+    my $lost_found = Koha::Account::Lines->search(
+        {
+            itemnumber       => $item->itemnumber,
+            credit_type_code => 'LOST_FOUND',
+        }
+    )->single;
+
+    ok( $lost_found, 'Scenario 3: LOST_FOUND credit was created' );
+    is( $lost_found->checkin_id, $checkin->id, 'Scenario 3: LOST_FOUND credit has checkin_id' );
+
+    # Scenario 4: Lost item processing fee refund (PROCESSING_FOUND) gets checkin_id
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode => $library->branchcode,
+            rule_name  => q{processingreturn},
+            rule_value => q{refund},
+        }
+    );
+
+    AddIssue( $patron, $item->barcode );
+    LostItem( $item->itemnumber, q{cli}, 0 );
+    $item->discard_changes;
+    $item->_result->itemlost(1);
+    $item->_result->itemlost_on(dt_from_string);
+    $item->_result->update();
+
+    $patron->account->add_debit(
+        {
+            amount    => 2,
+            type      => q{PROCESSING},
+            item_id   => $item->itemnumber,
+            interface => q{intranet},
+        }
+    );
+
+    ( $doreturn, $messages, $issue, $borrower, $checkin ) = AddReturn(
+        $item->barcode, $library->branchcode, undef, dt_from_string,
+    );
+
+    my $processing_found = Koha::Account::Lines->search(
+        {
+            itemnumber       => $item->itemnumber,
+            credit_type_code => q{PROCESSING_FOUND},
+        }
+    )->single;
+
+    ok( $processing_found, q{Scenario 4: PROCESSING_FOUND credit was created} );
+    is( $processing_found->checkin_id, $checkin->id, q{Scenario 4: PROCESSING_FOUND credit has checkin_id} );
 
     $schema->storage->txn_rollback;
 };
