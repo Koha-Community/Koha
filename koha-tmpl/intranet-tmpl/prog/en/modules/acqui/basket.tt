@@ -1460,7 +1460,7 @@
         modify_column.force_visibility = 1;
 
         let cancel_column = orders_table_settings.columns.find(c => c.columnname == 'cancel');
-        const cancel_column_available = [% !closedate || Koha.Preference('CancelOrdersInClosedBaskets') ? 1 : 0 %]
+        const cancel_column_available = [% !closedate || Koha.Preference('CancelOrdersInClosedBaskets') ? 1 : 0 | html %]
         cancel_column.visibility_condition = cancel_column_available;
         cancel_column.force_visibility = 1;
 
