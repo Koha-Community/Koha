@@ -190,8 +190,7 @@
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
-
-            let item_type_column = table_settings.columns.find(c => c.columnname == 'itemtype');
+            let item_type_column = table_settings.columns.find(c => c.columnname == "itemtype");
             item_type_column.force_visibility = 1;
             item_type_column.visibility_condition = show_itemtype_column;
 
