@@ -287,6 +287,24 @@ export default {
                     hideIn: ["List"],
                 },
                 {
+                    name: "biblio_id",
+                    type: "text",
+                    label: $__("Bibliographic record"),
+                    showElement: {
+                        type: "text",
+                        value: "biblio_id",
+                        link: {
+                            href: "/cgi-bin/koha/catalogue/detail.pl",
+                            params: {
+                                biblionumber: "biblio_id",
+                            },
+                        },
+                    },
+                    hideIn: ["List", "Form"],
+                    hidden: title => !!title.biblio_id,
+                },
+
+                {
                     name: "resources",
                     type: "relationshipWidget",
                     group: $__("Packages"),
