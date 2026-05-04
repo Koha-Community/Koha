@@ -115,7 +115,7 @@ $suggestion_only->{STATUS} = $suggestion_ref->{STATUS};
 
 delete $$suggestion_ref{$_}
     foreach
-    qw( suggestedbyme op displayby tabcode notify filter_archived koha_login_context auth_forwarded_hash password userid );
+    qw( suggestedbyme displayby tabcode notify filter_archived koha_login_context auth_forwarded_hash login_op login_password login_userid );
 
 foreach my $key ( keys %$suggestion_ref ) {
     delete $suggestion_ref->{$key} if ( !$suggestion_ref->{$key} && ( $op eq 'else' ) );
