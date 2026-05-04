@@ -172,7 +172,7 @@ sub copy_and_replace_field {
 
 =head2 update_field
 
-Missing POD for update_field.
+Updates the value of a field.
 
 When parameter C<field> is a control field (000-009), parameter C<subfield> is
 used to indicate character position. Defaults to position C<0>.
@@ -252,6 +252,12 @@ sub add_field {
     }
 }
 
+=head2 _update_field
+
+Updates the value of a field.
+
+=cut
+
 sub _update_field {
     my ($params)  = @_;
     my $record    = $params->{record};
@@ -277,6 +283,12 @@ sub _update_field {
         }
     }
 }
+
+=head3 _update_subfield
+
+Updates the value of a subfield
+
+=cut
 
 sub _update_subfield {
     my ($params)      = @_;
@@ -317,6 +329,12 @@ sub _update_subfield {
         }
     }
 }
+
+=head3 _update_controlfield
+
+Updates the value of a controlfield at a specified position.
+
+=cut
 
 sub _update_controlfield {
     my ($params)  = @_;
@@ -380,6 +398,12 @@ sub read_field {
     }
 }
 
+=head3 _read_field
+
+Returns the value of a field
+
+=cut
+
 sub _read_field {
     my ($params)      = @_;
     my $record        = $params->{record};
@@ -412,6 +436,12 @@ sub _read_field {
 
     return @values;
 }
+
+=head3 _read_subfield
+
+Returns the value of a subfield
+
+=cut
 
 sub _read_subfield {
     my ($params)      = @_;
@@ -643,6 +673,12 @@ sub _delete_field {
     }
 }
 
+=head3 _delete_subfield
+
+Deletes the given subfield.
+
+=cut
+
 sub _delete_subfield {
     my ($params)      = @_;
     my $record        = $params->{record};
@@ -661,6 +697,12 @@ sub _delete_subfield {
         $record->delete_field($field) unless $field->subfields();
     }
 }
+
+=head3 _copy_move_field
+
+Copies a value from one field and moves it to another.
+
+=cut
 
 sub _copy_move_field {
     my ($params)      = @_;
@@ -699,6 +741,12 @@ sub _copy_move_field {
     }
     $record->insert_fields_ordered(@new_fields);
 }
+
+=head3 _copy_move_subfield
+
+Copies a value from one subfield and moves it to another.
+
+=cut
 
 sub _copy_move_subfield {
     my ($params)         = @_;
@@ -759,6 +807,12 @@ sub _copy_move_subfield {
         );
     }
 }
+
+=head3 _modify_values
+
+Performs a regex substitution to modify values
+
+=cut
 
 sub _modify_values {
     my ($params) = @_;
