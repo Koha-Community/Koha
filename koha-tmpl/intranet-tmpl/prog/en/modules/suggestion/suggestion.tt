@@ -1364,7 +1364,7 @@
                                         searchable: false,
                                         orderable: false,
                                         render: function (data, type, row, meta) {
-                                            return '<input type="checkbox" value="%s" name="suggestionid" />'.format(row.suggestion_id);
+                                            return '<input type="checkbox" value="%s" name="suggestionid" />'.format(escape_str(row.suggestion_id));
                                         }
                                     },
                                     {
@@ -1372,19 +1372,19 @@
                                         searchable: true,
                                         orderable: true,
                                         render: function (data, type, row, meta) {
-                                            let a = '<a href="suggestion.pl?suggestionid=%s&amp;op=show" title="%s">'.format(row.suggestion_id, _("suggestion"));
-                                            let node = a + ( row.author ? a + _("%s, by %s").format(row.title.escapeHtml(), row.author.escapeHtml()) : row.title.escapeHtml());
-                                            node += '</a><br />';
-                                            if(row.copyright_date) node += ' &copy; <span class="suggestion_copyrightdate">%s</span>'.format(row.copyright_date);
-                                            if(row.volume_desc) node += '; <span class="suggestion_volume">%s:<em>%s</em></span>'.format(_("Volume"), row.volume_desc);
-                                            if(row.isbn) node += '; <span class="suggestion_isbn">%s:<em>%s</em></span>'.format(_("ISBN"), row.isbn);
-                                            if(row.publisher_code) node += '; <span class="suggestion_publishercode">%s %s</span>'.format(_("Published by"), row.publisher_code);
-                                            if(row.publication_year && row.publication_year != 0) node += '; <span class="suggestion_publicationyear"><em>%s</em></span>'.format(row.publication_year);
-                                            if(row.publication_place) node += '; <span class="suggestion_place"><em>%s</em></span>'.format(row.publication_place);
-                                            if(row.collection_title) node += '; <span class="suggestion_collectiontitle"><em>%s</em></span>'.format(row.collection_title);
-                                            if(row.item_type && row._strings.item_type.str) node += '; <span class="suggestion_itype"><em>%s</em></span>'.format(row._strings.item_type.str);
-                                            if(row.note) node += '<div class="suggestion_note">%s</div>'.format(row.note);
-                                            if(row.archived) node += '<br /><i class="fa fa-archive"></i> %s'.format(_("Archived"));
+                                            let node = '<a href="suggestion.pl?suggestionid=%s&amp;op=show" title="%s">%s'.format(escape_str(row.suggestion_id), escape_str(_("suggestion")), escape_str(row.title));
+                                            if (row.author) node += ", by %s".format(escape_str(row.author));
+                                            node += "</a><br />";
+                                            if (row.copyright_date) node += ' &copy; <span class="suggestion_copyrightdate">%s</span>'.format(escape_str(row.copyright_date));
+                                            if (row.volume_desc) node += '; <span class="suggestion_volume">%s:<em>%s</em></span>'.format(escape_str(_("Volume")), escape_str(row.volume_desc));
+                                            if (row.isbn) node += '; <span class="suggestion_isbn">%s:<em>%s</em></span>'.format(escape_str(_("ISBN")), escape_str(row.isbn));
+                                            if (row.publisher_code) node += '; <span class="suggestion_publishercode">%s %s</span>'.format(escape_str(_("Published by")), escape_str(row.publisher_code));
+                                            if (row.publication_year && row.publication_year != 0) node += '; <span class="suggestion_publicationyear"><em>%s</em></span>'.format(escape_str(row.publication_year));
+                                            if (row.publication_place) node += '; <span class="suggestion_place"><em>%s</em></span>'.format(escape_str(row.publication_place));
+                                            if (row.collection_title) node += '; <span class="suggestion_collectiontitle"><em>%s</em></span>'.format(escape_str(row.collection_title));
+                                            if (row.item_type && row._strings.item_type.str) node += '; <span class="suggestion_itype"><em>%s</em></span>'.format(escape_str(row._strings.item_type.str));
+                                            if (row.note) node += '<div class="suggestion_note">%s</div>'.format(escape_str(row.note));
+                                            if (row.archived) node += '<br /><i class="fa fa-archive"></i> %s'.format(escape_str(_("Archived")));
                                             return node;
                                         }
                                     },
@@ -1394,11 +1394,11 @@
                                         orderable: true,
                                         render: function (data, type, row, meta) {
                                             let suggester = row.suggester;
-                                            if(suggester) {
-                                                let node = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=%s">%s'.format(suggester.patron_id, suggester.surname);
-                                                if(suggester.firstname) node += ', %s'.format(suggester.firstname);
-                                                if(suggester.cardnumber) node += ' (%s)'.format(suggester.cardnumber);
-                                                node += '</a>';
+                                            if (suggester) {
+                                                let node = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=%s">%s'.format(escape_str(suggester.patron_id), escape_str(suggester.surname));
+                                                if (suggester.firstname) node += ", %s".format(escape_str(suggester.firstname));
+                                                if (suggester.cardnumber) node += " (%s)".format(escape_str(suggester.cardnumber));
+                                                node += "</a>";
                                                 return node;
                                             }
                                             return ''
@@ -1433,10 +1433,10 @@
                                         searchable: true,
                                         orderable: true,
                                         render: function (data, type, row, meta) {
-                                            if(row.manager) {
-                                                let node = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=%s">%s'.format(row.manager?.patron_id, row.manager?.surname);
-                                                if(row.manager?.firstname) node += ', %s'.format(row.manager?.firstname);
-                                                node += '</a>';
+                                            if (row.manager) {
+                                                let node = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=%s">%s'.format(escape_str(row.manager?.patron_id), escape_str(row.manager?.surname));
+                                                if (row.manager?.firstname) node += ", %s".format(escape_str(row.manager?.firstname));
+                                                node += "</a>";
                                                 return node;
                                             }
                                             return ''
@@ -1455,10 +1455,10 @@
                                         searchable: true,
                                         orderable: true,
                                         render: function (data, type, row, meta) {
-                                            if(row.last_modifier) {
-                                                let node = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=%s">%s'.format(row.last_modifier?.patron_id, row.last_modifier?.surname);
-                                                if(row.last_modifier?.firstname) node += ', %s'.format(row.last_modifier?.firstname);
-                                                node += '</a>';
+                                            if (row.last_modifier) {
+                                                let node = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=%s">%s'.format(escape_str(row.last_modifier?.patron_id), escape_str(row.last_modifier?.surname));
+                                                if (row.last_modifier?.firstname) node += ", %s".format(escape_str(row.last_modifier?.firstname));
+                                                node += "</a>";
                                                 return node;
                                             }
                                             return ''
@@ -1509,17 +1509,17 @@
                                         searchable: true,
                                         orderable: true,
                                         render: function (data, type, row, meta) {
-                                            let node = '';
-                                            if(row.status === 'ASKED') node += '<span class="status asked">%s</span>'.format(_("Pending"));
-                                            else if(row.status === 'ACCEPTED') node += '<span class="status accepted">%s</span>'.format(_("Accepted"));
-                                            else if(row.status === 'ORDERED') node += '<span class="status ordered">%s</span>'.format(_("Ordered"));
-                                            else if(row.status === 'REJECTED') node += '<span class="status rejected">%s</span>'.format(_("Rejected"));
-                                            else if(row.status === 'CHECKED') node += '<span class="status checked">%s</span>'.format(_("Checked"));
-                                            else if(row.status === 'AVAILABLE') node += '<span class="status available">%s</span>'.format(_("Available"));
-                                            else if(row._strings.status.str) node += '<span class="status '+ row.status +'">%s</span>'.format(row._strings.status.str);
-                                            else node += '<span class="status unknown">%s</span>'.format(_("Status unknown"));
-                                            if ( row.reason ) {
-                                                node += '<div class="reason" data-reason="'+row.reason+'">('+ row.reason +')</div>';
+                                            let node = "";
+                                            if (row.status === "ASKED") node += '<span class="status asked">%s</span>'.format(escape_str(_("Pending")));
+                                            else if (row.status === "ACCEPTED") node += '<span class="status accepted">%s</span>'.format(escape_str(_("Accepted")));
+                                            else if (row.status === "ORDERED") node += '<span class="status ordered">%s</span>'.format(escape_str(_("Ordered")));
+                                            else if (row.status === "REJECTED") node += '<span class="status rejected">%s</span>'.format(escape_str(_("Rejected")));
+                                            else if (row.status === "CHECKED") node += '<span class="status checked">%s</span>'.format(escape_str(_("Checked")));
+                                            else if (row.status === "AVAILABLE") node += '<span class="status available">%s</span>'.format(escape_str(_("Available")));
+                                            else if (row._strings.status.str) node += '<span class="status ' + escape_str(row.status) + '">%s</span>'.format(escape_str(row._strings.status.str));
+                                            else node += '<span class="status unknown">%s</span>'.format(escape_str(_("Status unknown")));
+                                            if (row.reason) {
+                                                node += '<div class="reason" data-reason="' + escape_str(row.reason) + '">(' + escape_str(row.reason) + ")</div>";
                                             }
                                             return node;
                                         },
@@ -1531,21 +1531,21 @@
                                         render: function (data, type, row, meta) {
                                             [% IF CAN_user_suggestions_suggestions_manage %]
                                                 let node = '<div class="btn-group dropup">'
-                                                node += '<a class="btn btn-default btn-xs" role="button" href="suggestion.pl?suggestionid=%s&amp;op=edit_form"><i class="fa-solid fa-pencil" aria-hidden="true"></i> %s</a>'.format(row.suggestion_id, _("Edit"))
-                                                node += '<a class="btn btn-default btn-xs dropdown-toggle" id="more_actions_%s" role="button" data-bs-toggle="dropdown" href="#"><b class="caret"></b></a>'.format(row.suggestion_id)
-                                                node += '<ul class="dropdown-menu" role="menu" aria-labelledby="more_actions_%s">'.format(row.suggestion_id)
+                                                node += '<a class="btn btn-default btn-xs" role="button" href="suggestion.pl?suggestionid=%s&amp;op=edit_form"><i class="fa-solid fa-pencil" aria-hidden="true"></i> %s</a>'.format( escape_str(row.suggestion_id),escape_str(_("Edit")))
+                                                node += '<a class="btn btn-default btn-xs dropdown-toggle" id="more_actions_%s" role="button" data-bs-toggle="dropdown" href="#"><b class="caret"></b></a>'.format(escape_str(row.suggestion_id))
+                                                node += '<ul class="dropdown-menu" role="menu" aria-labelledby="more_actions_%s">'.format(escape_str(row.suggestion_id))
                                                 [% IF CAN_user_suggestions_suggestions_delete %]
-                                                    node += '<li><a href="#" data-op="cud-delete" data-suggestionid="%s" class="dropdown-item trigger_action">%s</a></li>'.format(row.suggestion_id, _("Delete"))
+                                                    node += '<li><a href="#" data-op="cud-delete" data-suggestionid="%s" class="dropdown-item trigger_action">%s</a></li>'.format(escape_str(row.suggestion_id), escape_str(_("Delete")))
                                                 [% END %]
                                                 if (!row.archived){
-                                                    node += '<li><a href="#" class="dropdown-item trigger_action" data-op="cud-archive" data-suggestionid="%s">%s</a></li>'.format(row.suggestion_id, _("Archive"))
+                                                    node += '<li><a href="#" class="dropdown-item trigger_action" data-op="cud-archive" data-suggestionid="%s">%s</a></li>'.format(escape_str(row.suggestion_id), escape_str(_("Archive")))
                                                 } else {
-                                                    node += '<li><a href="#" class="dropdown-item trigger_action" data-op="cud-unarchive" data-suggestionid="%s">%s</a></li>'.format(row.suggestion_id, _("Unarchive"))
+                                                    node += '<li><a href="#" class="dropdown-item trigger_action" data-op="cud-unarchive" data-suggestionid="%s">%s</a></li>'.format(escape_str(row.suggestion_id), escape_str(_("Unarchive")));
                                                 }
                                                 node += '</ul></div>'
                                                 return node
                                             [% ELSIF CAN_user_suggestions_suggestions_delete %]
-                                                return '<button data-op="cud-delete" data-suggestionid="%s" class="btn btn-xs btn-default trigger_action"><i class="fa fa-trash-can"></i> %s</button>'.format(row.suggestion_id, _("Delete"))
+                                                return '<button data-op="cud-delete" data-suggestionid="%s" class="btn btn-xs btn-default trigger_action"><i class="fa fa-trash-can"></i> %s</button>'.format(escape_str(row.suggestion_id), escape_str(_("Delete")))
                                             [% END %]
                                         },
                                         createdCell: function (cell, cellData, rowData, rowIndex, colIndex) {
