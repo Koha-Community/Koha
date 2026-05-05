@@ -19,6 +19,11 @@ package Koha::Result::Availability;
 
 use Modern::Perl;
 
+use Koha::Exceptions;
+use Koha::Token;
+
+use Try::Tiny qw( catch try );
+
 =head1 NAME
 
 Koha::Result::Availability - Base class for availability check results
@@ -208,6 +213,78 @@ Returns the context hashref.
 sub context {
     my ($self) = @_;
     return $self->{context};
+}
+
+=head3 token_params
+
+Abstract method. Subclasses override to return an arrayref of context
+keys used for token generation.
+
+=cut
+
+sub token_params {
+    Koha::Exception->throw("Subclass must implement token_params");
+}
+
+=head3 as_token
+
+Generates a JWT confirmation token.
+
+=cut
+
+sub as_token {
+    my ($self) = @_;
+    return Koha::Token->new->generate_jwt( { id => $self->_token_id } );
+}
+
+=head3 check_token
+
+Validates a JWT confirmation token.
+
+=cut
+
+sub check_token {
+    my ( $self, $token ) = @_;
+    return try {
+        Koha::Token->new->check_jwt( { id => $self->_token_id, token => $token } );
+    } catch {
+        return 0;
+    };
+}
+
+=head3 _token_id
+
+=cut
+
+sub _token_id {
+    my ($self) = @_;
+    my @parts;
+    for my $key ( sort @{ $self->token_params } ) {
+        my $obj = $self->{context}->{$key} // Koha::Exception->throw("Missing context for token: $key");
+        push @parts, $obj->id;
+    }
+    push @parts, sort keys %{ $self->{confirmations} };
+    return join( ':', @parts );
+}
+
+=head3 to_api
+
+    my $hashref = $result->to_api;
+
+Returns a hashref suitable for API responses. Includes a
+C<confirmation_token> when confirmations exist.
+
+=cut
+
+sub to_api {
+    my ($self) = @_;
+
+    return {
+        blockers           => $self->{blockers},
+        confirms           => $self->{confirmations},
+        warnings           => $self->{warnings},
+        confirmation_token => $self->needs_confirmation ? $self->as_token : undef,
+    };
 }
 
 =head3 to_hashref

@@ -19,10 +19,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 12;
 use Test::NoWarnings;
+use Test::Exception;
+use Test::MockObject;
 
 use Koha::Result::Availability;
+use Koha::Item::Availability::Checkin::Result;
 
 subtest 'new() creates empty result' => sub {
 
@@ -138,4 +141,62 @@ subtest 'to_hashref()' => sub {
     is( $hashref->{warnings}->{warning1}, 'w1',          'warnings included' );
     is( $hashref->{item},                 'test_item',   'context item included at top level' );
     is( $hashref->{patron},               'test_patron', 'context patron included at top level' );
+};
+
+subtest 'to_api()' => sub {
+
+    plan tests => 5;
+
+    my $result = Koha::Item::Availability::Checkin::Result->new();
+
+    my $api = $result->to_api;
+
+    is( ref($api), 'HASH', 'returns hashref' );
+    is_deeply( $api->{blockers}, {}, 'blockers empty' );
+    is_deeply( $api->{confirms}, {}, 'confirms empty' );
+    is_deeply( $api->{warnings}, {}, 'warnings empty' );
+    is( $api->{confirmation_token}, undef, 'no token when no confirmations' );
+};
+
+subtest 'to_api() with confirmations generates token' => sub {
+
+    plan tests => 2;
+
+    my $result = Koha::Item::Availability::Checkin::Result->new();
+    $result->add_confirmation( NotIssued => 'ABC123' );
+
+    # Need context for token generation
+    my $mock_item = Test::MockObject->new();
+    $mock_item->mock( 'id', sub { 42 } );
+    my $mock_user = Test::MockObject->new();
+    $mock_user->mock( 'id', sub { 7 } );
+
+    $result->set_context( item => $mock_item );
+    $result->set_context( user => $mock_user );
+
+    my $api = $result->to_api;
+
+    ok( $api->{confirmation_token}, 'token present when confirmations exist' );
+    like( $api->{confirmation_token}, qr/^eyJ/, 'token looks like a JWT' );
+};
+
+subtest 'as_token() / check_token() round-trip' => sub {
+
+    plan tests => 3;
+
+    my $result = Koha::Item::Availability::Checkin::Result->new();
+    $result->add_confirmation( NotIssued => 'ABC123' );
+
+    my $mock_item = Test::MockObject->new();
+    $mock_item->mock( 'id', sub { 99 } );
+    my $mock_user = Test::MockObject->new();
+    $mock_user->mock( 'id', sub { 5 } );
+
+    $result->set_context( item => $mock_item );
+    $result->set_context( user => $mock_user );
+
+    my $token = $result->as_token;
+    ok( $token,                                     'as_token generates a token' );
+    ok( $result->check_token($token),               'check_token validates the token' );
+    ok( !$result->check_token('totally-not-a-jwt'), 'check_token rejects invalid token' );
 };

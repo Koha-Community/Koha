@@ -20,7 +20,7 @@ package Koha::Item::Availability::Checkin;
 use Modern::Perl;
 
 use C4::Context;
-use Koha::Result::Availability;
+use Koha::Item::Availability::Checkin::Result;
 
 =head1 NAME
 
@@ -107,7 +107,7 @@ sub check {
     my $to_library       = $params->{to_library};
     my $no_short_circuit = $params->{no_short_circuit} // 0;
 
-    my $result = Koha::Result::Availability->new();
+    my $result = Koha::Item::Availability::Checkin::Result->new();
 
     # Always check checkout status first so context is available to callers
     # even when blockers prevent the check-in
