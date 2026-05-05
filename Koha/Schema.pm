@@ -38,7 +38,8 @@ sub connection {
         sub {
             my ($msg) = @_;
 
-            # Don't re-wrap Koha exceptions that DBIC is re-throwing (e.g. from txn_do)
+            # Pass through any pre-thrown exception object (Koha exceptions, DBIx::Class::Exception
+            # re-thrown from txn_do, etc.). Translation only applies to plain error message strings.
             die $msg if ref($msg);
 
             # Attempt translation — throws a Koha exception on match
