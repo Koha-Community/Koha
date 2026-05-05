@@ -26,8 +26,8 @@
             [% END %]
             [% FOREACH PAGE_NUMBER IN PAGE_NUMBERS %]
                 [% IF ( PAGE_NUMBER.highlight ) %]
-                    <li class="page-item active" aria-current="active">
-                        <a class="page-link" href="#" aria-label="Current page: Page [% PAGE_NUMBER.pg | html %]" aria-current="true">[% PAGE_NUMBER.pg | html %]</a>
+                    <li class="page-item active">
+                        <a class="page-link" href="#" aria-label="Current page: Page [% PAGE_NUMBER.pg | html %]" aria-current="page">[% PAGE_NUMBER.pg | html %]</a>
                     </li>
                 [% ELSE %]
                     <li class="page-item">
