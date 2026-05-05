@@ -23,6 +23,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Circulation;
+use Koha::Policy::Circulation;
 use C4::Letters;
 use Koha::Checkouts;
 use Koha::Items;
@@ -153,7 +154,7 @@ if ( $code eq 'CHECKIN' ) {
     my $checkout = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
     if ($checkout) {
         my $patron     = Koha::Patrons->find( $checkout->borrowernumber );
-        my $branchcode = C4::Circulation::_GetCircControlBranch( $item, $patron );
+        my $branchcode = Koha::Policy::Circulation->circ_control_library( $item, $patron );
         $letter_params = {
             tables => {
                 issues      => $item->itemnumber,
@@ -174,7 +175,7 @@ if ( $code eq 'CHECKIN' ) {
     my $item   = Koha::Items->find( { barcode => $barcode } );
     my $patron = Koha::Patrons->find($borrowernumber);
     if ( $item and $patron ) {
-        my $branchcode = C4::Circulation::_GetCircControlBranch( $item, $patron );
+        my $branchcode = Koha::Policy::Circulation->circ_control_library( $item, $patron );
         $letter_params = {
             tables => {
                 issues      => $item->itemnumber,

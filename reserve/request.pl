@@ -37,7 +37,8 @@ use C4::Reserves
 use C4::Items       qw( get_hostitemnumbers_of );
 use C4::Koha        qw( getitemtypeimagelocation );
 use C4::Serials     qw( CountSubscriptionFromBiblionumber );
-use C4::Circulation qw( _GetCircControlBranch GetBranchItemRule );
+use C4::Circulation qw( GetBranchItemRule );
+use Koha::Policy::Circulation;
 use Koha::DateUtils qw( dt_from_string );
 use C4::Search      qw( enabled_staff_search_views );
 
@@ -544,7 +545,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                 }
 
                 if ($patron) {
-                    my $branch = _GetCircControlBranch( $item_object, $patron );
+                    my $branch = Koha::Policy::Circulation->circ_control_library( $item_object, $patron );
 
                     my $branchitemrule = GetBranchItemRule( $branch, $item->{'itype'} );
 

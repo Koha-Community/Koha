@@ -26,6 +26,7 @@ use Koha::DateUtils qw( dt_from_string output_pref );
 
 use C4::Context;
 use C4::Circulation qw( barcodedecode GetBranchItemRule );
+use Koha::Policy::Circulation;
 use C4::Reserves;
 use C4::ClassSource qw( GetClassSort );
 use C4::Log         qw( logaction );
@@ -2664,7 +2665,7 @@ sub can_be_recalled {
 
     my $branchcode = C4::Context->userenv->{'branch'};
     if ($patron) {
-        $branchcode = C4::Circulation::_GetCircControlBranch( $self, $patron );
+        $branchcode = Koha::Policy::Circulation->circ_control_library( $self, $patron );
     }
 
     # Check the circulation rule for each relevant itemtype for this item
