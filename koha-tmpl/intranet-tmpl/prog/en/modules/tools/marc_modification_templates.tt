@@ -381,7 +381,7 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         table_settings = [% TablesSettings.GetTableSettings('tools', 'marc-modification-templates', 'templatest', 'json') | $raw %];
-        var mmtas;
+        var mmtas = [];
         [% IF ActionsLoop %]
             mmtas = [% ActionsLoop.json | $raw %]
         [% END %]
