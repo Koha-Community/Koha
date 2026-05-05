@@ -20,7 +20,6 @@ package Koha::Item;
 use Modern::Perl;
 
 use List::MoreUtils qw( any );
-use Try::Tiny       qw( catch try );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
