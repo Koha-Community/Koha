@@ -19,7 +19,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 91;
+use Test::More tests => 78;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -194,89 +194,6 @@ my $borrower = $builder->build_object(
 );
 
 t::lib::Mocks::mock_preference( 'AutoReturnCheckedOutItems', 0 );
-
-# No userenv, PickupLibrary
-t::lib::Mocks::mock_preference( 'IndependentBranches', '0' );
-t::lib::Mocks::mock_preference( 'CircControl',         'PickupLibrary' );
-is(
-    C4::Context->preference('CircControl'),
-    'PickupLibrary',
-    'CircControl changed to PickupLibrary'
-);
-is(
-    C4::Circulation::_GetCircControlBranch( $item, $borrower ),
-    $item->get_column($HomeOrHoldingBranch),
-    '_GetCircControlBranch returned item branch (no userenv defined)'
-);
-
-# No userenv, PatronLibrary
-t::lib::Mocks::mock_preference( 'CircControl', 'PatronLibrary' );
-is(
-    C4::Context->preference('CircControl'),
-    'PatronLibrary',
-    'CircControl changed to PatronLibrary'
-);
-is(
-    C4::Circulation::_GetCircControlBranch( $item, $borrower ),
-    $borrower->branchcode,
-    '_GetCircControlBranch returned borrower branch'
-);
-
-# No userenv, ItemHomeLibrary
-t::lib::Mocks::mock_preference( 'CircControl', 'ItemHomeLibrary' );
-is(
-    C4::Context->preference('CircControl'),
-    'ItemHomeLibrary',
-    'CircControl changed to ItemHomeLibrary'
-);
-is(
-    $item->get_column($HomeOrHoldingBranch),
-    C4::Circulation::_GetCircControlBranch( $item, $borrower ),
-    '_GetCircControlBranch returned item branch'
-);
-
-# Now, set a userenv
-t::lib::Mocks::mock_userenv( { branchcode => $library2->{branchcode} } );
-is( C4::Context->userenv->{branch}, $library2->{branchcode}, 'userenv set' );
-
-# Userenv set, PickupLibrary
-t::lib::Mocks::mock_preference( 'CircControl', 'PickupLibrary' );
-is(
-    C4::Context->preference('CircControl'),
-    'PickupLibrary',
-    'CircControl changed to PickupLibrary'
-);
-is(
-    C4::Circulation::_GetCircControlBranch( $item, $borrower ),
-    $library2->{branchcode},
-    '_GetCircControlBranch returned current branch'
-);
-
-# Userenv set, PatronLibrary
-t::lib::Mocks::mock_preference( 'CircControl', 'PatronLibrary' );
-is(
-    C4::Context->preference('CircControl'),
-    'PatronLibrary',
-    'CircControl changed to PatronLibrary'
-);
-is(
-    C4::Circulation::_GetCircControlBranch( $item, $borrower ),
-    $borrower->branchcode,
-    '_GetCircControlBranch returned borrower branch'
-);
-
-# Userenv set, ItemHomeLibrary
-t::lib::Mocks::mock_preference( 'CircControl', 'ItemHomeLibrary' );
-is(
-    C4::Context->preference('CircControl'),
-    'ItemHomeLibrary',
-    'CircControl changed to ItemHomeLibrary'
-);
-is(
-    C4::Circulation::_GetCircControlBranch( $item, $borrower ),
-    $item->get_column($HomeOrHoldingBranch),
-    '_GetCircControlBranch returned item branch'
-);
 
 # Reset initial configuration
 t::lib::Mocks::mock_preference( 'CircControl', $CircControl );

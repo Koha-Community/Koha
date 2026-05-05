@@ -72,7 +72,6 @@ BEGIN {
         ProcessOfflinePayment
         ProcessOfflineIssue
     );
-    push @EXPORT_OK, '_GetCircControlBranch';    # This is wrong!
 }
 
 use DateTime;
@@ -861,7 +860,8 @@ sub CanBookBeIssued {
     my $dbh                = C4::Context->dbh;
     my $patron_unblessed   = $patron->unblessed;
 
-    my $circ_library = Koha::Libraries->find( Koha::Policy::Circulation->circ_control_library( $item_object, $patron ) );
+    my $circ_library =
+        Koha::Libraries->find( Koha::Policy::Circulation->circ_control_library( $item_object, $patron ) );
 
     my $now = dt_from_string();
 
@@ -3306,44 +3306,6 @@ sub _FixOverduesOnReturn {
     return $result;
 }
 
-=head2 _GetCircControlBranch
-
-   my $circ_control_branch = _GetCircControlBranch($item, $patron);
-
-Internal function :
-
-Return the library code to be used to determine which circulation
-policy applies to a transaction.  Looks up the CircControl and
-HomeOrHoldingBranch system preferences.
-
-C<$item> is an item object.
-
-C<$patron> is a patron object.
-
-=cut
-
-sub _GetCircControlBranch {
-    my ( $item, $patron ) = @_;
-    my $circcontrol = C4::Context->preference('CircControl');
-    my $branch;
-
-    if ( $circcontrol eq 'PickupLibrary' and ( C4::Context->userenv and C4::Context->userenv->{'branch'} ) ) {
-        $branch = C4::Context->userenv->{'branch'};
-    } elsif ( $circcontrol eq 'PatronLibrary' ) {
-        $branch = $patron->branchcode;
-    } else {
-        my $branchfield = C4::Context->preference('HomeOrHoldingBranch') || 'homebranch';
-        $branch = $item->get_column($branchfield);
-
-        # default to item home branch if holdingbranch is used
-        # and is not defined
-        if ( !defined($branch) && $branchfield eq 'holdingbranch' ) {
-            $branch = $item->homebranch;
-        }
-    }
-    return $branch;
-}
-
 =head2 GetUpcomingDueIssues
 
   my $upcoming_dues = GetUpcomingDueIssues( { days_in_advance => 4 } );
@@ -3709,7 +3671,8 @@ sub AddRenewal {
     my $patron           = Koha::Patrons->find($borrowernumber) or return;    # FIXME Should do more than just return
     my $patron_unblessed = $patron->unblessed;
 
-    my $circ_library = Koha::Libraries->find( Koha::Policy::Circulation->circ_control_library( $item_object, $patron ) );
+    my $circ_library =
+        Koha::Libraries->find( Koha::Policy::Circulation->circ_control_library( $item_object, $patron ) );
 
     my $schema = Koha::Database->schema;
     $schema->txn_do(
