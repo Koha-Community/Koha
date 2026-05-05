@@ -1500,7 +1500,11 @@
                                             else if (row._strings.status.str) node += '<span class="status ' + escape_str(row.status) + '">%s</span>'.format(escape_str(row._strings.status.str));
                                             else node += '<span class="status unknown">%s</span>'.format(escape_str(_("Status unknown")));
                                             if (row.reason) {
-                                                node += '<div class="reason" data-reason="' + escape_str(row.reason) + '">(' + escape_str(row.reason) + ")</div>";
+                                                const reason_el = document.createElement("div");
+                                                reason_el.classList.add("reason");
+                                                reason_el.dataset.reason = row.reason;
+                                                reason_el.textContent = "(" + row.reason + ")";
+                                                node += reason_el.outerHTML;
                                             }
                                             return node;
                                         },
