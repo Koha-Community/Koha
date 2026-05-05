@@ -4,7 +4,7 @@
     <input type="hidden" name="op" value="cud-pay" />
     [% IF ( ACCOUNT_LINES ) %]
         <table class="table table-bordered table-striped finestable" id="finestable">
-            <caption class="sr-only">Your charges</caption>
+            <caption class="visually-hidden">Your charges</caption>
             <thead>
                 <tr>
                     [% IF ENABLE_OPAC_PAYMENTS %]<th>&nbsp;</th>[% END %]

@@ -144,7 +144,7 @@
                         <div id="new_checkins" class="sci_entry">
                             <form id="scan_form" name="scan_form" method="post" action="/cgi-bin/koha/sci/sci-main.pl">
                                 [% INCLUDE 'csrf-token.inc' %]
-                                <legend class="sr-only">Scan</legend>
+                                <legend class="visually-hidden">Scan</legend>
                                 <div class="row mb-1">
                                     <div class="col">
                                         <label for="barcode_input">Scan the item or enter its barcode:</label>
@@ -165,7 +165,7 @@
                                     <div class="col">
                                         <div class="sci_input_append">
                                             <table id="sci_barcodes_table" class="table table-bordered table-striped dataTable no-footer" style="display: none;">
-                                                <caption class="sr-only">Barcodes</caption>
+                                                <caption class="visually-hidden">Barcodes</caption>
                                                 <thead>
                                                     <th class="barcodes_column">Barcode</th>
                                                 </thead>

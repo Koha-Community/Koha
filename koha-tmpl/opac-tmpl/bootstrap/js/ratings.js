@@ -72,7 +72,7 @@ $(document).ready(function () {
             var data_rating = $(this).attr("data-rating-value");
             if (data_rating) {
                 $(this).append(
-                    '<span class="sr-only">' + data_rating + "</span>"
+                    '<span class="visually-hidden">' + data_rating + "</span>"
                 );
             }
         }

@@ -174,7 +174,7 @@
 
 <fieldset>
     <legend>Picture</legend>
-    <label for="graphics-type" class="sr-only">Graphics type</label>
+    <label for="graphics-type" class="visually-hidden">Graphics type</label>
     <select id="graphics-type" name="limit" class="subtype">
         <option value="">Any</option>
         <option value="Graphics-type:a">collage</option>
@@ -188,7 +188,7 @@
         <option value="Graphics-type:k">technical drawing</option>
         <option value="Graphics-type:z">other non-projected graphic type</option>
     </select>
-    <label for="graphics-support" class="sr-only">Graphics support</label>
+    <label for="graphics-support" class="visually-hidden">Graphics support</label>
     <select id="graphics-support" name="limit" class="subtype">
         <option value="">Any</option>
         <option value="Graphics-support:a">canvas</option>

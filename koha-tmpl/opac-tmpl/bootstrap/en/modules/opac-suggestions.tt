@@ -369,7 +369,7 @@
                                 [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) %]
                                     [% IF loggedinusername %]
                                         <div class="col-auto gx-2 my-1">
-                                            <label class="sr-only" for="suggested_by_anyone">Suggested by:</label>
+                                            <label class="visually-hidden" for="suggested_by_anyone">Suggested by:</label>
                                             <select class="form-select form-select-sm" name="suggested_by_anyone" id="suggested_by_anyone">
                                                 [% IF suggested_by_anyone %]
                                                     <option value="0">Suggested by me</option>
@@ -419,7 +419,7 @@
 
                                 [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 || loggedinusername %]
                                     <table id="suggestt" class="table table-bordered tabled">
-                                        <caption class="sr-only">Your purchase suggestions</caption>
+                                        <caption class="visually-hidden">Your purchase suggestions</caption>
                                         <thead>
                                             <tr>
                                                 [% IF ( loggedinusername ) %]

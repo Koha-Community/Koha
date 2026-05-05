@@ -260,7 +260,7 @@
                         [% IF ( loggedinusername ) %]
                             <form id="tagform[% biblio.biblionumber | html %]" method="post" action="/cgi-bin/koha/opac-tags.pl" style="display:none;">
                                 [% INCLUDE 'csrf-token.inc' %]
-                                <legend class="sr-only">Tags</legend>
+                                <legend class="visually-hidden">Tags</legend>
                                 <div class="form-row">
                                     <div class="col-3">
                                         <label for="newtag[% biblio.biblionumber | html %]">New tag(s), separated by a comma:</label>
@@ -340,7 +340,7 @@
                     [% IF ( OpacStarRatings != 'disable' ) %]
                         <form method="post" action="/cgi-bin/koha/opac-ratings.pl">
                             [% INCLUDE 'csrf-token.inc' %]
-                            <legend class="sr-only">Star ratings</legend>
+                            <legend class="visually-hidden">Star ratings</legend>
                             <div class="results_summary ratings" id="rating-[% biblio.biblionumber | html %]">
                                 [% SET rating_avg = ratings.get_avg_rating() %]
                                 [% rating_avg_int = BLOCK %][% rating_avg | format("%.0f") %][% END %]
@@ -549,7 +549,7 @@
                         [% IF ( serialcollection ) %]
                             [% WRAPPER tab_panel tabname="serialcollection" %]
                                 <table id="serialcollectiont" class="table table-bordered table-striped">
-                                    <caption class="sr-only">Serial collections</caption>
+                                    <caption class="visually-hidden">Serial collections</caption>
                                     <thead>
                                         <tr>
                                             <th id="serial_library">Library</th>
@@ -794,7 +794,7 @@
                                         [% IF ( subscription.latestserials ) %]
                                             <p class="subscription_latestissues"> The [% subscription.opacdisplaycount | html %] latest issues for this subscription:</p>
                                             <table class="table table-bordered table-striped subscriptionst">
-                                                <caption class="sr-only">Latest serials</caption>
+                                                <caption class="visually-hidden">Latest serials</caption>
                                                 <thead>
                                                     <tr>
                                                         <th id="serial_serialseq" data-colname="serial_serialseq">Issue #</th>
@@ -920,7 +920,7 @@
                             [% WRAPPER tab_panel tabname="editions" %]
                                 <h2>Other editions of this work</h2>
                                 <table class="table table-bordered table-striped">
-                                    <caption class="sr-only">Other editions</caption>
+                                    <caption class="visually-hidden">Other editions</caption>
                                     [% FOREACH XISBN IN XISBNS %]
                                         <tr>
                                             <td>
@@ -1271,7 +1271,7 @@
 [% BLOCK items_table %]
     [% SET hidden_columns_force.$table_id = [] %]
     <table class="table table-bordered table-striped" id="[% table_id | html %]">
-        <caption class="sr-only">Holdings</caption>
+        <caption class="visually-hidden">Holdings</caption>
         <thead>
             <tr>
                 <th id="item_cover" data-colname="item_cover">Cover image</th>
@@ -1407,13 +1407,13 @@
                                             class="close_shelf"
                                             href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber | html %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber | html %]#[% tab | html %]"
                                             aria-label="Browse the shelf for items near [% title | html %]"
-                                            >Browse shelf<span class="sr-only">(Opens below)</span></a
+                                            >Browse shelf<span class="visually-hidden">(Opens below)</span></a
                                         >)
                                     [% ELSE %]
                                         (<a
                                             href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber | uri %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber | uri %]#[% tab | uri %]"
                                             aria-label="Browse the shelf for items near [% title | html %]"
-                                            >Browse shelf<span class="sr-only">(Opens below)</span></a
+                                            >Browse shelf<span class="visually-hidden">(Opens below)</span></a
                                         >)
                                     [% END %]
                                 [% END %]

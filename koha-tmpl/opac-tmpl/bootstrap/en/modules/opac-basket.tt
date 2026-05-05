@@ -138,7 +138,7 @@
                                 [% ELSE %]
                                     [% check_title = BIBLIO_RESULT.biblionumber %]
                                 [% END %]
-                                <label for="bib[% BIBLIO_RESULT.biblionumber | html %]" class="sr-only">[% check_title | html %]</label>
+                                <label for="bib[% BIBLIO_RESULT.biblionumber | html %]" class="visually-hidden">[% check_title | html %]</label>
                                 <h2>
                                     <input type="checkbox" class="cb" value="[% BIBLIO_RESULT.biblionumber | html %]" name="bib[% BIBLIO_RESULT.biblionumber | html %]" id="bib[% BIBLIO_RESULT.biblionumber | html %]" />
                                     [% INCLUDE 'biblio-title.inc' biblio=BIBLIO_RESULT %]
@@ -338,7 +338,7 @@
                     [% ELSE %]
                         <form action="/cgi-bin/koha/opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form">
                             <table id="itemst" class="table table-bordered table-striped">
-                                <caption class="sr-only">Items in your cart</caption>
+                                <caption class="visually-hidden">Items in your cart</caption>
                                 <thead>
                                     <tr>
                                         <th class="noprint no-sort">&nbsp;</th>
@@ -357,7 +357,7 @@
                                                 [% ELSE %]
                                                     [% check_title = BIBLIO_RESULT.biblionumber %]
                                                 [% END %]
-                                                <label for="bib[% BIBLIO_RESULT.biblionumber | html %]" class="sr-only">[% check_title | html %]</label>
+                                                <label for="bib[% BIBLIO_RESULT.biblionumber | html %]" class="visually-hidden">[% check_title | html %]</label>
                                                 <input type="checkbox" class="cb" value="[% BIBLIO_RESULT.biblionumber | html %]" name="bib[% BIBLIO_RESULT.biblionumber | html %]" id="bib[% BIBLIO_RESULT.biblionumber | html %]" />
                                             </td>
                                             <td>
