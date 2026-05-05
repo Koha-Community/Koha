@@ -1,0 +1,18 @@
+---
+type: object
+properties:
+  blockers:
+    type: object
+    description: Blocking issues that prevent checkin
+  confirms:
+    type: object
+    description: Issues requiring confirmation
+  warnings:
+    type: object
+    description: Informational issues
+  confirmation_token:
+    type:
+      - string
+      - "null"
+    description: JWT token for confirming the checkin
+additionalProperties: false

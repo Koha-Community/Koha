@@ -44,6 +44,10 @@ definitions:
     $ref: ./definitions/checkouts.yaml
   checkout_availability:
     $ref: ./definitions/checkout_availability.yaml
+  checkin:
+    $ref: ./definitions/checkin.yaml
+  checkin_availability:
+    $ref: ./definitions/checkin_availability.yaml
   circ-rule-kind:
     $ref: ./definitions/circ-rule-kind.yaml
   city:
@@ -365,6 +369,10 @@ paths:
     $ref: "./paths/cash_registers.yaml#/~1cash_registers~1{cash_register_id}~1cashups"
   "/cashups/{cashup_id}":
     $ref: "./paths/cash_registers.yaml#/~1cashups~1{cashup_id}"
+  /checkins:
+    $ref: ./paths/checkins.yaml#/~1checkins
+  "/checkins/availability":
+    $ref: "./paths/checkins.yaml#/~1checkins~1availability"
   /checkouts:
     $ref: ./paths/checkouts.yaml#/~1checkouts
   "/checkouts/{checkout_id}":
@@ -1398,6 +1406,9 @@ tags:
   - description: "Manage categories\n"
     name: categories
     x-displayName: Categories
+  - description: "Manage checkins\n"
+    name: checkins
+    x-displayName: Checkins
   - description: "Manage checkouts\n"
     name: checkouts
     x-displayName: Checkouts

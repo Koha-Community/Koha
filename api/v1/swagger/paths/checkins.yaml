@@ -1,0 +1,159 @@
+---
+"/checkins/availability":
+  get:
+    x-mojo-to: Checkins#get_availability
+    operationId: availabilityCheckins
+    tags:
+      - checkins
+    summary: Get checkin availability
+    parameters:
+      - name: item_id
+        in: query
+        description: Internal item identifier
+        required: true
+        type: integer
+      - name: library_id
+        in: query
+        description: Internal library identifier
+        required: false
+        type: string
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: Checkin availability information
+        schema:
+          $ref: "../swagger.yaml#/definitions/checkin_availability"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Item not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        circulate: circulate_remaining_permissions
+/checkins:
+  post:
+    x-mojo-to: Checkins#add
+    operationId: addCheckin
+    tags:
+      - checkins
+    summary: Check in (return) an item
+    parameters:
+      - name: body
+        in: body
+        description: A JSON object containing checkin information
+        required: true
+        schema:
+          type: object
+          properties:
+            item_id:
+              type: integer
+              description: Internal item identifier
+            external_id:
+              type: string
+              description: Item barcode
+            library_id:
+              type: string
+              description: Library where the return takes place
+            exempt_fine:
+              type: boolean
+              description: Exempt fines on this return
+          additionalProperties: false
+      - name: confirmation
+        in: query
+        description: A JWT confirmation token
+        required: false
+        type: string
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - checkout
+            - claim
+            - credits
+            - debits
+            - desk
+            - hold
+            - item
+            - item.biblio
+            - library
+            - recall
+            - restriction
+            - transfer
+            - user
+        collectionFormat: csv
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: Item checked in
+        schema:
+          $ref: "../swagger.yaml#/definitions/checkin"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+          * `MISSING_OR_WRONG_PARAMETERS`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: |
+          Checkin not authorized. Possible `error_code` attribute values:
+
+          * `CHECKIN_NOT_AUTHORIZED`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Item not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "412":
+        description: |
+          Confirmation required. Possible `error_code` attribute values:
+
+          * `CONFIRMATION_REQUIRED`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        circulate: circulate_remaining_permissions

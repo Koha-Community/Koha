@@ -1,0 +1,122 @@
+---
+type: object
+properties:
+  checkin_id:
+    type: integer
+    description: Internal checkin identifier
+  item_id:
+    type: integer
+    description: Internal item identifier
+  user_id:
+    type:
+      - integer
+      - "null"
+    description: Staff member who processed the checkin
+  library_id:
+    type: string
+    description: Library where the checkin took place
+  desk_id:
+    type:
+      - integer
+      - "null"
+    description: Desk where the checkin took place
+  timestamp:
+    type: string
+    description: Date and time the checkin was processed
+  exempt_fine:
+    type: boolean
+    description: Whether fines were exempted
+  local_use:
+    type: boolean
+    description: Whether this was recorded as a local use
+  checkout_id:
+    type:
+      - integer
+      - "null"
+    description: The returned checkout
+  transfer_id:
+    type:
+      - integer
+      - "null"
+    description: Transfer triggered by this checkin
+  hold_id:
+    type:
+      - integer
+      - "null"
+    description: Hold filled by this checkin
+  recall_id:
+    type:
+      - integer
+      - "null"
+    description: Recall filled by this checkin
+  restriction_id:
+    type:
+      - integer
+      - "null"
+    description: Restriction triggered by this checkin
+  claim_id:
+    type:
+      - integer
+      - "null"
+    description: Return claim resolved by this checkin
+  item:
+    type:
+      - object
+      - "null"
+    description: The checked-in item (embeddable)
+  checkout:
+    type:
+      - object
+      - "null"
+    description: The returned checkout (embeddable)
+  library:
+    type:
+      - object
+      - "null"
+    description: The checkin library (embeddable)
+  user:
+    type:
+      - object
+      - "null"
+    description: The staff member (embeddable)
+  desk:
+    type:
+      - object
+      - "null"
+    description: The desk (embeddable)
+  transfer:
+    type:
+      - object
+      - "null"
+    description: The transfer triggered (embeddable)
+  hold:
+    type:
+      - object
+      - "null"
+    description: The hold filled (embeddable)
+  recall:
+    type:
+      - object
+      - "null"
+    description: The recall filled (embeddable)
+  restriction:
+    type:
+      - object
+      - "null"
+    description: The restriction triggered (embeddable)
+  claim:
+    type:
+      - object
+      - "null"
+    description: The return claim resolved (embeddable)
+  debits:
+    type:
+      - array
+      - "null"
+    description: Debit account lines (embeddable)
+  credits:
+    type:
+      - array
+      - "null"
+    description: Credit account lines (embeddable)
+additionalProperties: false
