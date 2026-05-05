@@ -7,7 +7,7 @@
                 [%- IF ( starting_location ) %]<span>Shelving location:</span> [%- starting_location | html -%][% END -%]
                 [%- IF ( starting_homebranch && starting_ccode ) %],[% END %]
                 [%- IF ( starting_ccode ) %]<span>Collection: [%- starting_ccode | html -%]</span>[% END -%]
-                <a style="font-size: 75%;" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]" class="close_shelf">Close shelf browser <span class="sr-only">(Hides shelf browser)</span></a>
+                <a style="font-size: 75%;" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]" class="close_shelf">Close shelf browser <span class="visually-hidden">(Hides shelf browser)</span></a>
             </h2>
 
             <table class="table" role="presentation ">

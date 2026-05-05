@@ -115,7 +115,7 @@
 
                 <form action="/cgi-bin/koha/opac-reserve.pl" method="post" id="hold-request-form">
                     [% INCLUDE 'csrf-token.inc' %]
-                    <legend class="sr-only">Hold requests</legend>
+                    <legend class="visually-hidden">Hold requests</legend>
                     <input type="hidden" name="op" value="cud-place_reserve" />
                     [% IF ( Koha.Preference('DisplayAddHoldGroups') && ( multi_hold || Koha.Preference('DisplayMultiItemHolds') ) ) %]
                         <div id="hold_group">

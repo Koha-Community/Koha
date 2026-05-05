@@ -182,7 +182,7 @@
                     [% IF ( total ) %]
                         <div class="searchresults">
                             <form action="/cgi-bin/koha/opac-search.pl" method="get" name="bookbag_form" id="bookbag_form">
-                                <legend class="sr-only">Sort</legend>
+                                <legend class="visually-hidden">Sort</legend>
                                 [% IF ( searchdesc ) %]
                                     [% FOREACH QUERY_INPUT IN QUERY_INPUTS %]
                                         <input type="hidden" name="[% QUERY_INPUT.input_name | html %]" value="[% QUERY_INPUT.input_value | html %]" />
@@ -198,7 +198,7 @@
                                         [% UNLESS tag %]
                                             <div class="sort_by col-sm-auto">
                                                 <label for="sort_by">Sort results by:</label>
-                                                <label for="sort_by" class="sr-only">Sort by:</label>
+                                                <label for="sort_by" class="visually-hidden">Sort by:</label>
                                                 <select id="sort_by" class="resort form-select form-select-sm" name="sort_by">
                                                     [% INCLUDE 'resort_form.inc' %]
                                                 </select>
@@ -236,7 +236,7 @@
 
                                 <!-- TABLE RESULTS START -->
                                 <table class="table table-striped" role="presentation">
-                                    <span class="sr-only">Results</span>
+                                    <span class="visually-hidden">Results</span>
 
                                     <!-- Actual Search Results -->
                                     [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
@@ -390,7 +390,7 @@
                                                     [% INCLUDE "openlibrary-readapi.inc" bib = SEARCH_RESULT %]
 
                                                     [% IF ( OpacStarRatings == 'all' ) %]
-                                                        <span class="sr-only"> star rating </span>
+                                                        <span class="visually-hidden"> star rating </span>
                                                         <div class="results_summary ratings">
                                                             [% SET rating_avg = SEARCH_RESULT.ratings.get_avg_rating() %]
                                                             [% rating_avg_int = BLOCK %][% rating_avg | format("%.0f") %][% END %]
@@ -407,7 +407,7 @@
                                                                     [% END %]
                                                                 </div>
                                                             </div>
-                                                            <span class="sr-only"> Average : [% rating_avg | html %] out of 5 stars</span>
+                                                            <span class="visually-hidden"> Average : [% rating_avg | html %] out of 5 stars</span>
                                                             [% IF SEARCH_RESULT.ratings.count > 0 %]
                                                                 <span id="rating_total_[% SEARCH_RESULT.biblionumber | html %]">&nbsp;&nbsp;([% SEARCH_RESULT.ratings.count | html %] votes)</span>
                                                             [% ELSE %]

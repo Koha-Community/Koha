@@ -62,12 +62,12 @@
                 [% column_class = "col-12 col-lg-10 order-md-1 maincontent" %]
             [% END %]
             <div class="[% column_class | html %]">
-                <h1 class="sr-only">Koha home</h1>
+                <h1 class="visually-hidden">Koha home</h1>
 
                 [% IF Koha.Preference( 'OpacNewsLibrarySelect' ) && AllPublicBranches.size > 1 %]
                     [% UNLESS news_id %]
                         <form id="news-branch-select" class="form-inline" name="news-branch-select" method="get" action="/cgi-bin/koha/opac-main.pl">
-                            <legend class="sr-only">News</legend>
+                            <legend class="visually-hidden">News</legend>
                             <label for="news-branch">Display news for: </label>
                             <select id="news-branch" name="branch">
                                 [% IF ( branchcode == "" ) %]
@@ -172,7 +172,7 @@
                                     <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth" autocomplete="off">
                                         [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" name="koha_login_context" value="opac" />
-                                        <h2 class="sr-only">Login form</h2>
+                                        <h2 class="visually-hidden">Login form</h2>
                                         <fieldset class="brief">
                                             <legend>Log in to your account:</legend>
                                             [% IF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]
