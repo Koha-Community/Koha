@@ -37,7 +37,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'store() tests' => sub {
 
-    plan tests => 14;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -111,14 +111,9 @@ subtest 'store() tests' => sub {
         }
     );
 
-    warning_like(
-        sub {
-            throws_ok { $relationship_2->store; }
-            'Koha::Exceptions::Patron::Relationship::DuplicateRelationship',
-                'Exception is thrown for duplicated relationship';
-        },
-        qr{Duplicate entry.* for key '(borrower_relationships\.)?guarantor_guarantee_idx'}
-    );
+    throws_ok { $relationship_2->store; }
+    'Koha::Exceptions::Patron::Relationship::DuplicateRelationship',
+        'Exception is thrown for duplicated relationship';
 
     is(
         "$@",

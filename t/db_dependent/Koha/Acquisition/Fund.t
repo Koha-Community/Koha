@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Test::NoWarnings;
 use Test::More tests => 4;
+use Test::Exception;
 use Test::Warn;
 
 use t::lib::TestBuilder;
@@ -77,11 +78,9 @@ subtest 'budget' => sub {
     );
 
     # Cannot set aqbudgets.budget_period_id as NULL
-    warning_like {
-        eval { $fund->budget_period_id(undef)->store }
-    }
-    qr{.*DBD::mysql::st execute failed: Column 'budget_period_id' cannot be null.*},
-        'DBD should have raised an error about budget_period_id that cannot be null';
+    throws_ok { $fund->budget_period_id(undef)->store }
+    'Koha::Exceptions::Object::NotNull',
+        'Storing a fund with NULL budget_period_id should throw a NotNull exception';
 
     $schema->storage->txn_rollback;
 };

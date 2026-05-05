@@ -39,7 +39,7 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'claim_returned() tests' => sub {
 
-    plan tests => 9;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -85,18 +85,15 @@ subtest 'claim_returned() tests' => sub {
     my $claim_id = $t->tx->res->json->{claim_id};
 
     ## Duplicate id
-    warning_like {
-        $t->post_ok(
-            "//$userid:$password@/api/v1/return_claims" => json => {
-                item_id         => $item->itemnumber,
-                charge_lost_fee => Mojo::JSON->false,
-                refund_lost_fee => Mojo::JSON->false,
-                created_by      => $librarian->id,
-                notes           => "This is a test note."
-            }
-        )->status_is(409)
-    }
-    qr/DBD::mysql::st execute failed: Duplicate entry/;
+    $t->post_ok(
+        "//$userid:$password@/api/v1/return_claims" => json => {
+            item_id         => $item->itemnumber,
+            charge_lost_fee => Mojo::JSON->false,
+            refund_lost_fee => Mojo::JSON->false,
+            created_by      => $librarian->id,
+            notes           => "This is a test note."
+        }
+    )->status_is(409);
 
     $issue->delete;
 

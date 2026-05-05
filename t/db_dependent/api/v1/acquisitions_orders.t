@@ -292,7 +292,7 @@ subtest 'get() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 17;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -371,13 +371,10 @@ subtest 'add() tests' => sub {
     # Authorized attempt to create with existing id
     $order->{order_id} = $order_id;
 
-    warning_like {
-        $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/orders" => json => $order )
-            ->status_is(409)
-            ->json_has( '/error' => "Fails when trying to add an existing order_id" )
-            ->json_like( '/conflict' => qr/(aqorders\.)?PRIMARY/ );
-    }
-    qr/DBD::mysql::st execute failed: Duplicate entry '(.*)' for key '(aqorders\.)?PRIMARY'/;
+    $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/orders" => json => $order )
+        ->status_is(409)
+        ->json_has( '/error' => "Fails when trying to add an existing order_id" )
+        ->json_like( '/conflict' => qr/(aqorders\.)?PRIMARY/ );
 
     $schema->storage->txn_rollback;
 };

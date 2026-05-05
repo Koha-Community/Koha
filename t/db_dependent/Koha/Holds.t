@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Test::NoWarnings;
 use Test::More tests => 15;
+use Test::Exception;
 use Test::Warn;
 
 use C4::Circulation qw( AddIssue );
@@ -57,11 +58,9 @@ subtest 'DB constraints' => sub {
     my $reserve_id = C4::Reserves::AddReserve($hold_info);
     my $hold       = Koha::Holds->find($reserve_id);
 
-    warning_like {
-        eval { $hold->priority(undef)->store }
-    }
-    qr{.*DBD::mysql::st execute failed: Column 'priority' cannot be null.*},
-        'DBD should have raised an error about priority that cannot be null';
+    throws_ok { $hold->priority(undef)->store }
+    'Koha::Exceptions::Object::NotNull',
+        'Storing a hold with NULL priority should throw a NotNull exception';
 };
 
 subtest 'cancel' => sub {
@@ -510,11 +509,9 @@ subtest 'cancel' => sub {
         # Add a row with the same id to make the cancel fails
         Koha::Old::Hold->new( $hold->unblessed )->store;
 
-        warning_like {
-            eval { $hold->cancel( { charge_cancel_fee => 1 } ) };
-        }
-        qr{.*DBD::mysql::st execute failed: Duplicate entry.*},
-            'DBD should have raised an error about dup primary key';
+        throws_ok { $hold->cancel( { charge_cancel_fee => 1 } ) }
+        'Koha::Exceptions::Object::DuplicateID',
+            'Cancelling a hold whose id already exists in old_reserves should throw a DuplicateID exception';
 
         $hold = Koha::Holds->find($reserve_id);
         is( ref($hold), 'Koha::Hold', 'The hold should not have been deleted' );

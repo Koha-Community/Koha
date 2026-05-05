@@ -309,11 +309,8 @@ subtest 'Handle ids duplication' => sub {
         ( $doreturn, $messages, $new_checkout, $borrower ) =
             AddReturn( $item->barcode, undef, undef, undef, dt_from_string );
     }
-    [
-        qr{.*DBD::mysql::st execute failed: Duplicate entry.*},
-        { carped => qr{The checkin for the following issue failed.*Duplicate ID.*} }
-    ],
-        'DBD should have raised an error about dup primary key';
+    { carped => qr{The checkin for the following issue failed.*Duplicate ID.*} },
+        'AddReturn should have carped about the duplicate id';
 
     is( $doreturn,                  0,              'Return should not have been done' );
     is( $messages->{WasReturned},   0,              'messages should have the WasReturned flag set to 0' );

@@ -196,7 +196,7 @@ subtest 'get() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 16;
+    plan tests => 15;
 
     $schema->storage->txn_begin;
 
@@ -277,12 +277,9 @@ subtest 'add() tests' => sub {
     $booking->{booking_id} = $booking_id;
     $booking->{start_date} = output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 10 ) } );
     $booking->{end_date}   = output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 14 ) } );
-    warnings_like {
-        $t->post_ok( "//$userid:$password@/api/v1/bookings" => json => $booking )
-            ->status_is(409)
-            ->json_is( "/error" => "Duplicate booking_id" );
-    }
-    qr/DBD::mysql::st execute failed: Duplicate entry '(.*?)' for key '(.*\.?)PRIMARY'/;
+    $t->post_ok( "//$userid:$password@/api/v1/bookings" => json => $booking )
+        ->status_is(409)
+        ->json_is( "/error" => "Duplicate booking_id" );
 
     # TODO: Test bookings clashes
     # TODO: Test item auto-assignment
