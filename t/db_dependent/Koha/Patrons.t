@@ -1587,6 +1587,9 @@ subtest 'anonymize items_last_borrower' => sub {
     t::lib::Mocks::mock_preference( 'StoreLastBorrower',     1 );
     t::lib::Mocks::mock_preference( 'AnonymizeLastBorrower', 1 );
 
+    my $anon_library = $builder->build_object( { class => 'Koha::Libraries' } );
+    t::lib::Mocks::mock_userenv( { branchcode => $anon_library->branchcode } );
+
     subtest 'anonymize items_last_borrower by days' => sub {
         plan tests => 4;
 
