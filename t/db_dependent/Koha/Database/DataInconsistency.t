@@ -346,7 +346,7 @@ subtest 'errors_in_marc' => sub {
         my $errors = Koha::Database::DataInconsistency->errors_in_marc($biblios);
         is_deeply(
             $errors->{item_fields_in_marc},
-            [ sprintf q{Biblionumber %s has item fields (%s) in the marc record}, $biblio_ko->biblionumber, $item_tag ]
+            [ sprintf q{Biblionumber %s has item fields (%s) in the MARC record}, $biblio_ko->biblionumber, $item_tag ]
         );
 
         $schema->storage->txn_rollback();
