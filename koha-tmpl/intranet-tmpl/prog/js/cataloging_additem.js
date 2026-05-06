@@ -76,7 +76,7 @@ $(document).ready(function () {
 
     multiCopyControl.hide();
     $("#add_multiple_copies").on("click", function (e) {
-        e.preventDefault;
+        e.preventDefault();
         addMultipleBlock.toggle();
         saveTemplateBlock.toggle();
         addSingleBlock.toggle();
@@ -93,7 +93,7 @@ $(document).ready(function () {
 
     saveAsTemplateControl.hide();
     $("#save_as_template").on("click", function (e) {
-        e.preventDefault;
+        e.preventDefault();
         saveTemplateBlock.toggle();
         saveAsTemplateControl.toggle();
         $("#template_name").focus();
