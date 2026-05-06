@@ -342,9 +342,10 @@ sub days_between {
     my $end_dt   = shift;
 
     # Change time zone for date math and swap if needed
-    $start_dt = $start_dt->clone->set_time_zone('floating');
-    $end_dt   = $end_dt->clone->set_time_zone('floating');
+    $start_dt = $start_dt->clone->set_time_zone('floating')->truncate( to => 'day' );
+    $end_dt   = $end_dt->clone->set_time_zone('floating')->truncate( to => 'day' );
     if ( $start_dt->compare($end_dt) > 0 ) {
+
         ( $start_dt, $end_dt ) = ( $end_dt, $start_dt );
     }
 
