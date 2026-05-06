@@ -11,7 +11,7 @@ return {
         # Add new PAYOUT letter template for POS
         $dbh->do(
             q{
-            INSERT INTO letter (module, code, branchcode, name, is_html, title, content, message_transport_type, lang, updated_on)
+            INSERT IGNORE INTO letter (module, code, branchcode, name, is_html, title, content, message_transport_type, lang, updated_on)
             VALUES (
                 'pos', 'PAYOUT', '', 'Point of sale payout receipt', 1, 'Payout receipt',
                 "[% USE KohaDates %]
