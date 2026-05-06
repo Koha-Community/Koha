@@ -747,7 +747,7 @@ $(document).ready(function () {
     // Confirm cancellation of hold
     let cancel_link;
     $(document).on("click", ".cancel-hold", function (e) {
-        e.preventDefault;
+        e.preventDefault();
         cancel_link = $(this);
         $("#cancel_modal_form #inputs").empty();
         let reserve_id = cancel_link.data("id");
@@ -2009,7 +2009,7 @@ async function load_patron_holds_table(biblio_id, split_data) {
             $(this).parent().parent().toggleClass("selected");
         });
         $(".cancel-hold." + table_class).on("click", function (e) {
-            e.preventDefault;
+            e.preventDefault();
             cancel_link = $(this);
             $("#cancel_modal_form #inputs").empty();
             let reserve_id = cancel_link.data("id");
