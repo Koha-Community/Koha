@@ -1247,7 +1247,7 @@ _sysv_start_z3950()
         warn "Not a test system, disabling debugger"
     fi
 
-    Z3950OPTS="-c ${CONFIGDIR} \
+    Z3950OPTS="--config-dir ${CONFIGDIR} \
                -u ${instance_user} \
                -p ${PIDFILE} ${daemonize} ${logging}"
 

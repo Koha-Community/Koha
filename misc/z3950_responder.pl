@@ -29,7 +29,7 @@ use Koha::Z3950Responder;
 =head1 SYNOPSIS
 
    z3950_responder.pl [-h|--help] [--man] [-a <pdufile>] [-v <loglevel>] [-l <logfile>] [-u <user>]
-                      [-c <config>] [-t <minutes>] [-k <kilobytes>] [-d <daemon>] [-p <pidfile>]
+                      [--config-dir <config>] [-t <minutes>] [-k <kilobytes>] [-d <daemon>] [-p <pidfile>]
                       [-C certfile] [-zKiDST1] [-m <time-format>] [-w <directory>] [--debug]
                       [--add-item-status=SUBFIELD] [--prefetch=NUM_RECORDS] [--config-dir=<directory>]
                       [<listener-addr>... ]

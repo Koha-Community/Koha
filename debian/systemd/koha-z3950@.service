@@ -17,7 +17,7 @@ ExecStartPre=+/usr/sbin/koha-generate-env z3950 %i
 EnvironmentFile=-/run/koha/%i/z3950.env
 ExecStart=/usr/share/koha/bin/z3950_responder.pl \
     ${Z3950_ADDITIONAL_OPTS} \
-    -c ${Z3950_CONFIGDIR} \
+    --config-dir ${Z3950_CONFIGDIR} \
     -u %i-koha \
     -p /var/run/koha/%i/z3950-responder.pid \
     -D \
