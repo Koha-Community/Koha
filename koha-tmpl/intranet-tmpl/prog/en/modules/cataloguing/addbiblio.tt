@@ -97,247 +97,258 @@
 [% Asset.js("js/browser.js") | $raw %]
 <script nonce="[% Koha.CSPNonce | $raw %]">
     var browser = KOHA.browser(searchid, biblio_id);
-        browser.show();
+    browser.show();
 
-        $(window).load(function(){
-            $("#loading").hide();
-        });
+    $(window).load(function () {
+        $("#loading").hide();
+    });
 
-        function changeEditor() {
+    function changeEditor() {
+        if (!confirm(breedingid ? _("This record cannot be transferred to the advanced editor. Continue?") : _("Any changes will not be saved. Continue?"))) return false;
 
-            if ( !confirm( breedingid ? _("This record cannot be transferred to the advanced editor. Continue?") : _("Any changes will not be saved. Continue?") ) ) return false;
+        Cookies.set(`catalogue_editor_${logged_in_user_borrowernumber}`, "advanced", { expires: 365, path: "/", sameSite: "Lax" });
 
-            Cookies.set( `catalogue_editor_${logged_in_user_borrowernumber}`, 'advanced', { expires: 365, path: '/', sameSite: 'Lax'  } );
-
-            if ( biblionumber ) {
-                window.location = '/cgi-bin/koha/cataloguing/editor.pl#catalog/' + biblionumber;
-            } else {
-                window.location = '/cgi-bin/koha/cataloguing/editor.pl';
-            }
-
-            return false;
+        if (biblionumber) {
+            window.location = "/cgi-bin/koha/cataloguing/editor.pl#catalog/" + biblionumber;
+        } else {
+            window.location = "/cgi-bin/koha/cataloguing/editor.pl";
         }
 
-        $(document).ready(function() {
+        return false;
+    }
 
-            if (bib_doesnt_exist){
-                $("#addbibliotabs").hide();
-                $("#toolbar").hide();
-            }
+    $(document).ready(function () {
+        if (bib_doesnt_exist) {
+            $("#addbibliotabs").hide();
+            $("#toolbar").hide();
+        }
 
-            $("a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
-                $( e.target.hash + " .input_marceditor:visible:eq(0)").focus();
-            });
+        $("a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
+            $(e.target.hash + " .input_marceditor:visible:eq(0)").focus();
+        });
 
-            /* On page load, check for location.hash in the page URL */
-            /* If present the location hash will be used to activate the correct tab */
-            var hash = location.hash;
-            var hashPieces = hash.split('?');
-            if( hashPieces[0] !== "" ){
-                selectTab( hashPieces[0] );
-                window.scrollTo( 0, 0 );
-            } else {
-                selectTab( "#tab0XX_panel" );
-            }
+        /* On page load, check for location.hash in the page URL */
+        /* If present the location hash will be used to activate the correct tab */
+        var hash = location.hash;
+        var hashPieces = hash.split("?");
+        if (hashPieces[0] !== "") {
+            selectTab(hashPieces[0]);
+            window.scrollTo(0, 0);
+        } else {
+            selectTab("#tab0XX_panel");
+        }
 
-            initializeSortable("#addbibliotabs ul.sortable_field");
-            initializeSortable("#addbibliotabs ul.sortable_subfield");
+        initializeSortable("#addbibliotabs ul.sortable_field");
+        initializeSortable("#addbibliotabs ul.sortable_subfield");
 
-            if(tab){
-                hash = `#${tab}`;
-                selectTab( hash );
-            }
+        if (tab) {
+            hash = `#${tab}`;
+            selectTab(hash);
+        }
 
-            /* check cookie to hide/show marcdocs*/
-            if( Cookies.get(`marcdocs_${logged_in_user_borrowernumber}`) == 'hide'){
-                toggleMARCdocLinks(false);
-            } else {
+        /* check cookie to hide/show marcdocs*/
+        if (Cookies.get(`marcdocs_${logged_in_user_borrowernumber}`) == "hide") {
+            toggleMARCdocLinks(false);
+        } else {
+            toggleMARCdocLinks(true);
+        }
+
+        $("#marcDocsSelect").click(function () {
+            if (Cookies.get(`marcdocs_${logged_in_user_borrowernumber}`) == "hide") {
                 toggleMARCdocLinks(true);
-            }
-
-            $("#marcDocsSelect").click(function(){
-                if( Cookies.get(`marcdocs_${logged_in_user_borrowernumber}`) == 'hide'){
-                    toggleMARCdocLinks(true);
-                } else {
-                    toggleMARCdocLinks(false);
-                }
-            });
-
-            /* check cookie to hide/show marc tags*/
-            var marctags_cookie = Cookies.get(`marctags_${logged_in_user_borrowernumber}`);
-            if( marctags_cookie == 'hide'){
-                toggleMARCTagLinks(false);
-            } else if( marctags_cookie == 'show'){
-                toggleMARCTagLinks(true)
             } else {
-                if (Koha.prefs.hide_marc){
-                    toggleMARCTagLinks(true)
-                } else {
-                    toggleMARCTagLinks(false);
-                }
+                toggleMARCdocLinks(false);
             }
-
-            $("#marcTagsSelect").click(function(){
-                if( Cookies.get(`marctags_${logged_in_user_borrowernumber}`) == 'hide'){
-                    toggleMARCTagLinks(true)
-                } else {
-                    toggleMARCTagLinks(false);
-                }
-            });
-
-            $("#z3950search").click(function(){
-                PopupZ3950();
-            });
-
-            $("#linkerbutton").click(function(){
-                AutomaticLinker();
-            });
-
-            $("#saverecord").click(function(e){
-                e.preventDefault();
-                onOption();
-            });
-
-            $("#saveandview").click(function(e){
-                e.preventDefault();
-                redirect("view");
-            });
-
-            $("#saveanditems").click(function(e){
-                e.preventDefault();
-                redirect("items");
-            });
-
-            $("#saveandcontinue").click(function(e){
-                e.preventDefault();
-                var tab = $("#addbibliotabs div.active:first").attr('id');
-                $("#current_tab").val(tab);
-                redirect("just_save", tab);
-            });
-
-            $( '#toggleEditor' ).change( function() {
-                changeEditor();
-            } );
-
-            $( '#switcheditor' ).click( function() {
-                changeEditor();
-            } );
-
-            $(".change-framework").on("click", function(){
-                var frameworkcode = $(this).data("frameworkcode");
-                $("#frameworkcode").val( frameworkcode );
-                Changefwk();
-            });
-
-            $(".toolbar-tabs-container .nav-tabs a").on("click",function(e){
-                e.preventDefault();
-                selectTab( this.hash );
-            });
-
-            $(".tag_anchor").on("click", function(e){
-                e.preventDefault();
-                $(".tag_anchor").removeClass("selected");
-                $(this).addClass("selected");
-                var link = this.href;
-                var linkid = link.substring( link.indexOf("#") + 1 );
-                window.scrollTo( 0, getScrollto( linkid, "toolbar" ) );
-            });
-
-            $("body").on("click", ".linkfield", function(e){
-                e.preventDefault();
-                var tab = $(this).data("tab");
-                var field = $(this).data("field");
-                var tablink = $("a[data-tabname='tab" + tab + "XX']" ).get(0).hash;
-                selectTab( tablink );
-                window.scrollTo( 0, getScrollto( field, "toolbar" ) );
-            });
-
-            $("body").on("click", ".show-errors", function(e){
-                document.getElementById("form-errors").scrollIntoView();
-            });
-
         });
 
-        function selectTab( tablink ){
-            /* return if no tabs displayed (BIG_LOOP.size <= 1) */
-            if ($(".toolbar-tabs-container .nav-tabs li").length === 0){
-                return;
+        /* check cookie to hide/show marc tags*/
+        var marctags_cookie = Cookies.get(`marctags_${logged_in_user_borrowernumber}`);
+        if (marctags_cookie == "hide") {
+            toggleMARCTagLinks(false);
+        } else if (marctags_cookie == "show") {
+            toggleMARCTagLinks(true);
+        } else {
+            if (Koha.prefs.hide_marc) {
+                toggleMARCTagLinks(true);
+            } else {
+                toggleMARCTagLinks(false);
             }
-            let a = $("a[href='" + tablink + "']");
-            $(".toolbar-tabs-container .nav-tabs li").removeClass("selected");
-            a.tab("show").parent().addClass("selected");
-            /* Get number from string like "tab9XX" */
-            var tabid = a.data("tabname").substring(3, 4);
-            $(".tag_anchors").removeClass("tab_selected").hide();
-            $(".tag_anchors_" + tabid ).addClass("tab_selected").show();
         }
 
-        function redirect(dest){
-            $("#redirect").attr("value",dest);
+        $("#marcTagsSelect").click(function () {
+            if (Cookies.get(`marctags_${logged_in_user_borrowernumber}`) == "hide") {
+                toggleMARCTagLinks(true);
+            } else {
+                toggleMARCTagLinks(false);
+            }
+        });
+
+        $("#z3950search").click(function () {
+            PopupZ3950();
+        });
+
+        $("#linkerbutton").click(function () {
+            AutomaticLinker();
+        });
+
+        $("#saverecord").click(function (e) {
+            e.preventDefault();
+            onOption();
+        });
+
+        $("#saveandview").click(function (e) {
+            e.preventDefault();
+            redirect("view");
+        });
+
+        $("#saveanditems").click(function (e) {
+            e.preventDefault();
+            redirect("items");
+        });
+
+        $("#saveandcontinue").click(function (e) {
+            e.preventDefault();
+            var tab = $("#addbibliotabs div.active:first").attr("id");
+            $("#current_tab").val(tab);
+            redirect("just_save", tab);
+        });
+
+        $("#toggleEditor").change(function () {
+            changeEditor();
+        });
+
+        $("#switcheditor").click(function () {
+            changeEditor();
+        });
+
+        $(".change-framework").on("click", function () {
+            var frameworkcode = $(this).data("frameworkcode");
+            $("#frameworkcode").val(frameworkcode);
+            Changefwk();
+        });
+
+        $(".toolbar-tabs-container .nav-tabs a").on("click", function (e) {
+            e.preventDefault();
+            selectTab(this.hash);
+        });
+
+        $(".tag_anchor").on("click", function (e) {
+            e.preventDefault();
+            $(".tag_anchor").removeClass("selected");
+            $(this).addClass("selected");
+            var link = this.href;
+            var linkid = link.substring(link.indexOf("#") + 1);
+            window.scrollTo(0, getScrollto(linkid, "toolbar"));
+        });
+
+        $("body").on("click", ".linkfield", function (e) {
+            e.preventDefault();
+            var tab = $(this).data("tab");
+            var field = $(this).data("field");
+            var tablink = $("a[data-tabname='tab" + tab + "XX']").get(0).hash;
+            selectTab(tablink);
+            window.scrollTo(0, getScrollto(field, "toolbar"));
+        });
+
+        $("body").on("click", ".show-errors", function (e) {
+            document.getElementById("form-errors").scrollIntoView();
+        });
+    });
+
+    function selectTab(tablink) {
+        /* return if no tabs displayed (BIG_LOOP.size <= 1) */
+        if ($(".toolbar-tabs-container .nav-tabs li").length === 0) {
+            return;
+        }
+        let a = $("a[href='" + tablink + "']");
+        $(".toolbar-tabs-container .nav-tabs li").removeClass("selected");
+        a.tab("show").parent().addClass("selected");
+        /* Get number from string like "tab9XX" */
+        var tabid = a.data("tabname").substring(3, 4);
+        $(".tag_anchors").removeClass("tab_selected").hide();
+        $(".tag_anchors_" + tabid)
+            .addClass("tab_selected")
+            .show();
+    }
+
+    function redirect(dest) {
+        $("#redirect").attr("value", dest);
+        return Check();
+    }
+
+    if (Koha.permissions.CAN_user_editcatalogue_edit_items) {
+        var onOption = function () {
             return Check();
-        }
-
-        if (Koha.permissions.CAN_user_editcatalogue_edit_items){
-            var onOption = function () {
-                return Check();
-            }
-        }
+        };
+    }
 
     /**
-    * this function append button for create new authority if not found
-    */
+     * this function append button for create new authority if not found
+     */
 
     function addCreateAuthorityButton(tag_subfield_line, heading, tag_index) {
         var title = _("Create authority");
         var elem = $('<a href="#" title="' + title + '"><i class="fa fa-plus-circle"></i></a>');
         tag_subfield_line.append(elem);
-        var tag_subfield_line_a = $('.subfield_line[id^=subfield' + heading.tag + 'a]').eq(tag_index);
-        var subfield_a = tag_subfield_line_a.find('.input_marceditor').eq(0);
-        var index = subfield_a.attr('id');
-        elem.click(function() {
-            var popup = window.open("", "new_auth_popup",'fullscreen,toolbar=false,scrollbars=yes');
-            if(popup !== null) {
+        var tag_subfield_line_a = $(".subfield_line[id^=subfield" + heading.tag + "a]").eq(tag_index);
+        var subfield_a = tag_subfield_line_a.find(".input_marceditor").eq(0);
+        var index = subfield_a.attr("id");
+        elem.click(function () {
+            var popup = window.open("", "new_auth_popup", "fullscreen,toolbar=false,scrollbars=yes");
+            if (popup !== null) {
                 // Create a new form that will be POSTed in the new window
-                var form = $('<form>').attr({
-                method: 'get',
-                action: "/cgi-bin/koha/authorities/authorities.pl",
-                target: "new_auth_popup"
+                var form = $("<form>").attr({
+                    method: "get",
+                    action: "/cgi-bin/koha/authorities/authorities.pl",
+                    target: "new_auth_popup",
                 });
                 //add the authtypecode
-                form.append($('<input>').attr({
-                    type: 'hidden',
-                    name: 'authtypecode',
-                    value: heading.auth_type
-                }));
-                form.append($('<input>').attr({
-                    type: 'hidden',
-                    name: 'tagreport',
-                    value: heading.tag_to_report
-                }));
-                form.append($('<input>').attr({
-                    type: 'hidden',
-                    name: 'tagbiblio',
-                    value: heading.tag
-                }));
-                form.append($('<input>').attr({
-                    type: 'hidden',
-                    name: 'index',
-                    value: index
-                }));
-                $('.tag[id^=tag_' + heading.tag + '_]').eq(tag_index).find(':input').each(function(){
-                    form.append($('<input>').attr({
-                        type: 'hidden',
-                        name: this.name.split('_',4).join(''),
-                        value: $(this).val()
-                    }));
-                });
-                $('body').append(form);
+                form.append(
+                    $("<input>").attr({
+                        type: "hidden",
+                        name: "authtypecode",
+                        value: heading.auth_type,
+                    })
+                );
+                form.append(
+                    $("<input>").attr({
+                        type: "hidden",
+                        name: "tagreport",
+                        value: heading.tag_to_report,
+                    })
+                );
+                form.append(
+                    $("<input>").attr({
+                        type: "hidden",
+                        name: "tagbiblio",
+                        value: heading.tag,
+                    })
+                );
+                form.append(
+                    $("<input>").attr({
+                        type: "hidden",
+                        name: "index",
+                        value: index,
+                    })
+                );
+                $(".tag[id^=tag_" + heading.tag + "_]")
+                    .eq(tag_index)
+                    .find(":input")
+                    .each(function () {
+                        form.append(
+                            $("<input>").attr({
+                                type: "hidden",
+                                name: this.name.split("_", 4).join(""),
+                                value: $(this).val(),
+                            })
+                        );
+                    });
+                $("body").append(form);
                 form.submit();
                 form.remove();
             }
             return false;
         });
-
     }
 
     /**
@@ -345,38 +356,38 @@
      * Adds visual feedback for the changes made on the form.
      */
     function updateHeadingLinks(links) {
-        var current_tag = '';
+        var current_tag = "";
         var tag_index = 0;
 
         // Delete the old message dialog and create a new one
-        $('#autolinker_dialog').remove();
-        var message_dialog = $('<div id="autolinker_dialog" class="alert alert-info"><strong>' + _("Automatic authority link results:") + '</strong><ul></ul></div>');
-        var message_dialog_ul = message_dialog.find('ul');
+        $("#autolinker_dialog").remove();
+        var message_dialog = $('<div id="autolinker_dialog" class="alert alert-info"><strong>' + _("Automatic authority link results:") + "</strong><ul></ul></div>");
+        var message_dialog_ul = message_dialog.find("ul");
 
-        $.each(links, function(index, heading) {
-            if(current_tag == heading.tag) {
+        $.each(links, function (index, heading) {
+            if (current_tag == heading.tag) {
                 tag_index++;
-            }
-            else {
+            } else {
                 current_tag = heading.tag;
                 tag_index = 0;
             }
 
             // Find the $9 field to update
-            var tag_subfield_line = $('.subfield_line[id^=subfield' + heading.tag + '9]').eq(tag_index);
-            if( tag_subfield_line.length < 1 ){ return; }
-
-            var subfield = tag_subfield_line.find('.input_marceditor').eq(0);
-            subfield.removeClass("matching_authority_field no_matching_authority_field");
-
-            // Delete the old status if one exists
-            tag_subfield_line.children('.subfield_status').remove();
-
-            // If the field wasn't modified. Skip it.
-            if(heading.status == 'UNCHANGED') {
+            var tag_subfield_line = $(".subfield_line[id^=subfield" + heading.tag + "9]").eq(tag_index);
+            if (tag_subfield_line.length < 1) {
                 return;
             }
 
+            var subfield = tag_subfield_line.find(".input_marceditor").eq(0);
+            subfield.removeClass("matching_authority_field no_matching_authority_field");
+
+            // Delete the old status if one exists
+            tag_subfield_line.children(".subfield_status").remove();
+
+            // If the field wasn't modified. Skip it.
+            if (heading.status == "UNCHANGED") {
+                return;
+            }
 
             // Make the subfield line visible and update its value
             tag_subfield_line.show();
@@ -384,23 +395,23 @@
 
             // Add the new status
             var image = '<i class="fa fa-xmark subfield_status no_matching_authority" </i> ';
-            var message = '';
-            var field_class = 'no_matching_authority_field';
-            switch(heading.status) {
-                case 'LOCAL_FOUND':
+            var message = "";
+            var field_class = "no_matching_authority_field";
+            switch (heading.status) {
+                case "LOCAL_FOUND":
                     image = '<i class="fa fa-check subfield_status matching_authority"</i> ';
                     message = _("A matching authority was found in the local database.");
-                    field_class = 'matching_authority_field';
+                    field_class = "matching_authority_field";
                     break;
-                case 'CREATED':
+                case "CREATED":
                     image = '<i class="fa fa-check subfield_status matching_authority"></i> ';
                     message = _("No matching authority found. A new authority was created automatically.");
-                    field_class = 'matching_authority_field';
+                    field_class = "matching_authority_field";
                     break;
-                case 'MULTIPLE_MATCH':
+                case "MULTIPLE_MATCH":
                     message = _("More than one local match found. Possibly a duplicate authority!");
                     break;
-                case 'NONE_FOUND':
+                case "NONE_FOUND":
                     message = _("No matching authority found.");
                     break;
                 default:
@@ -409,24 +420,24 @@
             }
 
             subfield[0].classList.add(field_class);
-            tag_subfield_line.find('i').each(function() {
+            tag_subfield_line.find("i").each(function () {
                 this.remove();
             });
             tag_subfield_line.append(image);
 
             // Add the message to the dialog
-            message_dialog_ul.append('<li><strong>' + heading.tag + '</strong> - ' + message + '</li>');
+            message_dialog_ul.append("<li><strong>" + heading.tag + "</strong> - " + message + "</li>");
 
             // Add a link to create a new authority if none was found
-            if(heading.status == 'NONE_FOUND' && tag_subfield_line.find('i').length == 1) {
-                addCreateAuthorityButton(tag_subfield_line, heading , tag_index);
+            if (heading.status == "NONE_FOUND" && tag_subfield_line.find("i").length == 1) {
+                addCreateAuthorityButton(tag_subfield_line, heading, tag_index);
             }
         });
 
-        if(message_dialog.find('li').length == 0) {
+        if (message_dialog.find("li").length == 0) {
             message_dialog_ul.append("<li>" + _("No authority link was changed.") + "</li>");
         }
-        $('#addbibliotabs').before(message_dialog);
+        $("#addbibliotabs").before(message_dialog);
     }
 
     /**
@@ -437,360 +448,392 @@
         $("#loading").show();
 
         // Remove fields that are completely empty
-        $('#f').find('.tag').each(function() {
-            var empty = true;
-            $(this).find('.input_marceditor').each(function() {
-                if($(this).val() != '') {
-                    empty = false;
-                    return false;
+        $("#f")
+            .find(".tag")
+            .each(function () {
+                var empty = true;
+                $(this)
+                    .find(".input_marceditor")
+                    .each(function () {
+                        if ($(this).val() != "") {
+                            empty = false;
+                            return false;
+                        }
+                    });
+                if (empty) {
+                    UnCloneField($(this).attr("id"));
                 }
             });
-            if(empty) {
-                UnCloneField($(this).attr('id'));
-            }
-        });
 
         // Get all the form values to post via AJAX
         var form_data = {};
-        $('#f').find(':input').each(function(){
-            form_data[this.name] = $(this).val();
-        });
-        delete form_data[''];
+        $("#f")
+            .find(":input")
+            .each(function () {
+                form_data[this.name] = $(this).val();
+            });
+        delete form_data[""];
 
         // Send the data to automatic_linker.pl
         $.ajax({
-            url:'/cgi-bin/koha/svc/cataloguing/automatic_linker.pl',
-            type:'post',
+            url: "/cgi-bin/koha/svc/cataloguing/automatic_linker.pl",
+            type: "post",
             data: form_data,
-            dataType: 'json',
-            error: function(xhr) {
+            dataType: "json",
+            error: function (xhr) {
                 alert("Error : \n" + xhr.responseText);
             },
-            success: function(json) {
-                switch(json.status) {
-                    case 'UNAUTHORIZED':
+            success: function (json) {
+                switch (json.status) {
+                    case "UNAUTHORIZED":
                         alert(_("Error : You do not have the permissions necessary to use this functionality."));
                         break;
-                    case 'OK':
+                    case "OK":
                         updateHeadingLinks(json.links);
                         break;
                 }
             },
-            complete: function() {
+            complete: function () {
                 $("#loading").hide();
-            }
+            },
         });
     }
 
-
     function PopupMARCFieldDoc() {
         let field = this.dataset.tag;
-        if (Koha.prefs.MarcFieldDocURL){
-            var docurl = Koha.prefs.MarcFieldDocURL.replace('"','&quot;');
+        if (Koha.prefs.MarcFieldDocURL) {
+            var docurl = Koha.prefs.MarcFieldDocURL.replace('"', "&quot;");
             docurl = docurl.replace("{MARC}", Koha.prefs.marcflavour);
-            docurl = docurl.replace("{FIELD}", ""+field);
+            docurl = docurl.replace("{FIELD}", "" + field);
             docurl = docurl.replace("{LANG}", lang);
             window.open(docurl);
-        } else if (marcflavour == 'MARC21'){
+        } else if (marcflavour == "MARC21") {
             _MARC21FieldDoc(field);
-        } else if( marcflavour == 'UNIMARC'){
+        } else if (marcflavour == "UNIMARC") {
             _UNIMARCFieldDoc(field);
         }
         return false;
     }
     /* Attach to body, so that cloned nodes will still have the event listener */
-    $(document).ready(function(){
-        $('body').on('click','.marcdocs',PopupMARCFieldDoc);
+    $(document).ready(function () {
+        $("body").on("click", ".marcdocs", PopupMARCFieldDoc);
     });
 
-        function confirmnotdup(redirect){
-            $("#confirm_not_duplicate").attr("value","1");
-            $("#redirect").attr("value",redirect);
-            Check();
-        }
+    function confirmnotdup(redirect) {
+        $("#confirm_not_duplicate").attr("value", "1");
+        $("#redirect").attr("value", redirect);
+        Check();
+    }
 
-        function Dopop(link,i) {
-            defaultvalue = document.getElementById(i).value;
-            window.open(link+"&result="+defaultvalue,"valuebuilder",'width=700,height=550,toolbar=false,scrollbars=yes');
-        }
+    function Dopop(link, i) {
+        defaultvalue = document.getElementById(i).value;
+        window.open(link + "&result=" + defaultvalue, "valuebuilder", "width=700,height=550,toolbar=false,scrollbars=yes");
+    }
 
-        /**
-         * this function open a popup to search on z3950 server.
-         */
-        function PopupZ3950() {
-            var strQuery = GetZ3950Terms();
-            if(strQuery){
-                window.open(`/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=${biblionumber}`+strQuery,"z3950search",'width=800,height=550,location=yes,toolbar=no,scrollbars=yes,resize=yes');
-            }
+    /**
+     * this function open a popup to search on z3950 server.
+     */
+    function PopupZ3950() {
+        var strQuery = GetZ3950Terms();
+        if (strQuery) {
+            window.open(`/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=${biblionumber}` + strQuery, "z3950search", "width=800,height=550,location=yes,toolbar=no,scrollbars=yes,resize=yes");
         }
+    }
 
-        function _MARC21FieldDoc(field) {
-            if(field == 0) {
-                window.open("https://www.loc.gov/marc/bibliographic/bdleader.html");
-            } else if (field >= 90 && field <= 99 ){
-                window.open("https://www.loc.gov/marc/bibliographic/bd09x.html");
-            } else if (field >= 590 && field <= 599 ){
-                window.open("https://www.loc.gov/marc/bibliographic/bd59x.html");
-            } else if (field >= 690 && field <= 699 ){
-                window.open("https://www.loc.gov/marc/bibliographic/bd69x.html");
-            } else if (field < 900) {
-                window.open("https://www.loc.gov/marc/bibliographic/bd" + ("000"+field).slice(-3) + ".html");
-            } else {
-                window.open("https://www.loc.gov/marc/bibliographic/bd9xx.html");
-            }
+    function _MARC21FieldDoc(field) {
+        if (field == 0) {
+            window.open("https://www.loc.gov/marc/bibliographic/bdleader.html");
+        } else if (field >= 90 && field <= 99) {
+            window.open("https://www.loc.gov/marc/bibliographic/bd09x.html");
+        } else if (field >= 590 && field <= 599) {
+            window.open("https://www.loc.gov/marc/bibliographic/bd59x.html");
+        } else if (field >= 690 && field <= 699) {
+            window.open("https://www.loc.gov/marc/bibliographic/bd69x.html");
+        } else if (field < 900) {
+            window.open("https://www.loc.gov/marc/bibliographic/bd" + ("000" + field).slice(-3) + ".html");
+        } else {
+            window.open("https://www.loc.gov/marc/bibliographic/bd9xx.html");
         }
+    }
 
-        function _UNIMARCFieldDoc(field) {
-            /* IFLA no longer provides field-level pages for the UNIMARC format
+    function _UNIMARCFieldDoc(field) {
+        /* IFLA no longer provides field-level pages for the UNIMARC format
                (as at December 2024).
             */
-            window.open("https://www.ifla.org/g/unimarc-rg/unimarc-updates/");
+        window.open("https://www.ifla.org/g/unimarc-rg/unimarc-updates/");
+    }
+
+    /*
+     * Functions to hide/show marc docs and tags links
+     */
+
+    function toggleMARCdocLinks(flag) {
+        if (flag === true) {
+            $(".marcdocs").show();
+            Cookies.set(`marcdocs_${logged_in_user_borrowernumber}`, "show", { path: "/", expires: 365, sameSite: "Lax" });
+            $("#marcDocsSelect i").addClass("fa-check-square").removeClass("fa-square");
+        } else {
+            $(".marcdocs").hide();
+            Cookies.set(`marcdocs_${logged_in_user_borrowernumber}`, "hide", { path: "/", expires: 365, sameSite: "Lax" });
+            $("#marcDocsSelect i").removeClass("fa-check-square").addClass("fa-square");
         }
+    }
 
-        /*
-         * Functions to hide/show marc docs and tags links
-         */
-
-        function toggleMARCdocLinks(flag){
-            if( flag === true ){
-                $(".marcdocs").show();
-                Cookies.set(`marcdocs_${logged_in_user_borrowernumber}`,'show', { path: "/", expires: 365, sameSite: 'Lax'  });
-                $("#marcDocsSelect i").addClass('fa-check-square').removeClass('fa-square');
-            } else {
-                $(".marcdocs").hide();
-                Cookies.set(`marcdocs_${logged_in_user_borrowernumber}`,'hide', { path: "/", expires: 365, sameSite: 'Lax'  });
-                $("#marcDocsSelect i").removeClass('fa-check-square').addClass('fa-square');
-            }
+    function toggleMARCTagLinks(flag) {
+        if (flag === true) {
+            $(".tagnum").show();
+            $(".subfieldcode").show();
+            Cookies.set(`marctags_${logged_in_user_borrowernumber}`, "show", { path: "/", expires: 365, sameSite: "Lax" });
+            $("#marcTagsSelect i").addClass("fa-check-square").removeClass("fa-square");
+        } else {
+            $(".tagnum").hide();
+            $(".subfieldcode").hide();
+            Cookies.set(`marctags_${logged_in_user_borrowernumber}`, "hide", { path: "/", expires: 365, sameSite: "Lax" });
+            $("#marcTagsSelect i").removeClass("fa-check-square").addClass("fa-square");
         }
+    }
 
-        function toggleMARCTagLinks(flag){
-            if( flag === true ){
-                $(".tagnum").show();
-                $(".subfieldcode").show();
-                Cookies.set(`marctags_${logged_in_user_borrowernumber}`,'show', { path: "/", expires: 365, sameSite: 'Lax'  });
-                $("#marcTagsSelect i").addClass('fa-check-square').removeClass('fa-square');
-            } else {
-                $(".tagnum").hide();
-                $(".subfieldcode").hide();
-                Cookies.set(`marctags_${logged_in_user_borrowernumber}`,'hide', { path: "/", expires: 365, sameSite: 'Lax'  });
-                $("#marcTagsSelect i").removeClass('fa-check-square').addClass('fa-square');
-            }
+    /**
+     * check if mandatory/important subfields are written
+     * @param mandatory true to check for mandatories, false for importants
+     */
+    function AreFieldsNotOk(mandatory = true) {
+        var fields = new Array();
+        var subfields = new Array();
+        var flag = false;
+        var tabflag = new Array();
+        var StrAlert = "<div id='form-errors' class='alert alert-warning list'>";
+        var notFilledClass = "subfield_not_filled";
+
+        if (mandatory) {
+            fields = mandatory_fields;
+            subfields = mandatory_subfields;
+            StrAlert += "<h4>" + _("The following mandatory subfields aren't filled:") + "</h4>";
+        } else {
+            fields = important_fields;
+            subfields = important_subfields;
+            StrAlert += "<h4>" + _("The following important subfields aren’t filled:") + "</h4>";
+            notFilledClass = "important_subfield_not_filled";
         }
-
-        /**
-         * check if mandatory/important subfields are written
-         * @param mandatory true to check for mandatories, false for importants
-         */
-        function AreFieldsNotOk (mandatory = true) {
-            var fields = new Array();
-            var subfields = new Array();
-            var flag = false;
-            var tabflag= new Array();
-            var StrAlert = "<div id='form-errors' class='alert alert-warning list'>";
-            var notFilledClass = "subfield_not_filled";
-
-            if (mandatory) {
-                fields = mandatory_fields;
-                subfields = mandatory_subfields;
-                StrAlert += "<h4>" + _("The following mandatory subfields aren't filled:") + "</h4>";
-            } else {
-                fields = important_fields;
-                subfields = important_subfields;
-                StrAlert += "<h4>" + _("The following important subfields aren’t filled:") + "</h4>";
-                notFilledClass = "important_subfield_not_filled";
+        StrAlert += "<ul>";
+        subfields.forEach(sf => {
+            var id = sf.id;
+            var tag = id.substr(4, 3);
+            var subfield = id.substr(17, 1);
+            var tagnumber = id.substr(19, id.lastIndexOf("_") - 19);
+            if (tabflag[tag + subfield + tagnumber] == null) {
+                tabflag[tag + subfield + tagnumber] = new Array();
+                tabflag[tag + subfield + tagnumber][0] = 0;
             }
-            StrAlert += "<ul>";
-            subfields.forEach(sf => {
-                var id = sf.id;
-                var tag = id.substr(4,3);
-                var subfield=id.substr(17,1);
-                var tagnumber=id.substr(19,id.lastIndexOf("_")-19);
-                if (tabflag[tag+subfield+tagnumber] ==  null) {
-                    tabflag[tag+subfield+tagnumber]=new Array();
-                    tabflag[tag+subfield+tagnumber][0]=0;
-                }
-                if( tabflag[tag+subfield+tagnumber][0] != 1 && (document.getElementById(id) != null && ! document.getElementById(id).value ) ){
-                    tabflag[tag+subfield+tagnumber][0] = 0 + tabflag[tag+subfield+tagnumber] ;
+            if (tabflag[tag + subfield + tagnumber][0] != 1 && document.getElementById(id) != null && !document.getElementById(id).value) {
+                tabflag[tag + subfield + tagnumber][0] = 0 + tabflag[tag + subfield + tagnumber];
 
-                    var elt = document.getElementById(id);
-                    if ( elt.nodeName == 'SELECT' ) {
-                        $(elt).siblings('.select2').find("span[role='combobox']").addClass(notFilledClass);
-                    } else {
-                        elt.setAttribute('class','input_marceditor noEnterSubmit framework_plugin ' + notFilledClass);
-                    }
-                    $('#' + id).focus();
-                    tabflag[tag+subfield+tagnumber][1]=sf.label;
-                    tabflag[tag+subfield+tagnumber][2]=sf.tab;
+                var elt = document.getElementById(id);
+                if (elt.nodeName == "SELECT") {
+                    $(elt).siblings(".select2").find("span[role='combobox']").addClass(notFilledClass);
                 } else {
-                    tabflag[tag+subfield+tagnumber][0] = 1;
+                    elt.setAttribute("class", "input_marceditor noEnterSubmit framework_plugin " + notFilledClass);
                 }
-                tabflag[tag+subfield+tagnumber][3] = id;
-            });
+                $("#" + id).focus();
+                tabflag[tag + subfield + tagnumber][1] = sf.label;
+                tabflag[tag + subfield + tagnumber][2] = sf.tab;
+            } else {
+                tabflag[tag + subfield + tagnumber][0] = 1;
+            }
+            tabflag[tag + subfield + tagnumber][3] = id;
+        });
 
-            for (var tagsubfieldid in tabflag){
-                if (tabflag[tagsubfieldid][0]==0){
-                    var tag=tagsubfieldid.substr(0,3);
-                    var subfield=tagsubfieldid.substr(3,1);
-                    StrAlert += "<li>"+_("Tag %s subfield %s %s in tab %s").format(tag, subfield, formatFieldName( tabflag[tagsubfieldid][1] ), tabflag[tagsubfieldid][2]) + ' <a class="linkfield btn btn-link" href="#" data-tab="' + tabflag[tagsubfieldid][2] + '" data-field="' + tabflag[tagsubfieldid][3] + '"><i class="fa fa-arrow-right" aria-hidden="true"></i> ' + _("Go to field") + '</a></li>';
-                    flag = true;
+        for (var tagsubfieldid in tabflag) {
+            if (tabflag[tagsubfieldid][0] == 0) {
+                var tag = tagsubfieldid.substr(0, 3);
+                var subfield = tagsubfieldid.substr(3, 1);
+                StrAlert +=
+                    "<li>" +
+                    _("Tag %s subfield %s %s in tab %s").format(tag, subfield, formatFieldName(tabflag[tagsubfieldid][1]), tabflag[tagsubfieldid][2]) +
+                    ' <a class="linkfield btn btn-link" href="#" data-tab="' +
+                    tabflag[tagsubfieldid][2] +
+                    '" data-field="' +
+                    tabflag[tagsubfieldid][3] +
+                    '"><i class="fa fa-arrow-right" aria-hidden="true"></i> ' +
+                    _("Go to field") +
+                    "</a></li>";
+                flag = true;
+            }
+        }
+        StrAlert += "</ul>";
+        /* Check for mandatories/importants field(not subfields) */
+        /* Loop over array of fields identified as mandatory or
+               important to see if at least one subfield is filled */
+        mandatoryFields = new Object();
+
+        fields.forEach(field => {
+            isempty = true;
+            divid = "tag_" + field.tag + "_" + field.id;
+            varegexp = new RegExp("^tag_" + field.tag + "_code_");
+
+            if (parseInt(field.tag) >= 10) {
+                elem = document.getElementById(divid);
+                if (!elem) {
+                    return;
+                }
+                eleminputs = elem.getElementsByTagName("input");
+
+                for (var j = 0, len2 = eleminputs.length; j < len2; j++) {
+                    if (eleminputs[j].name.match(varegexp) && eleminputs[j].value) {
+                        inputregexp = new RegExp("^tag_" + field.tag + "_subfield_" + eleminputs[j].value + "_" + field.index);
+
+                        for (var k = 0; k < len2; k++) {
+                            if (eleminputs[k].id.match(inputregexp)) {
+                                if (eleminputs[k].value) {
+                                    isempty = false;
+                                }
+                            }
+                        }
+
+                        elemselect = elem.getElementsByTagName("select");
+                        for (var k = 0; k < elemselect.length; k++) {
+                            if (elemselect[k].id.match(inputregexp) && elemselect[k].value) {
+                                isempty = false;
+                            }
+                        }
+                    }
+                }
+
+                elemtextareas = elem.getElementsByTagName("textarea");
+                for (var j = 0, len2 = elemtextareas.length; j < len2; j++) {
+                    // this bit assumes that the only textareas in this context would be for subfields
+                    if (elemtextareas[j].value) {
+                        isempty = false;
+                    }
+                }
+            } else {
+                isempty = false;
+            }
+
+            if (isempty) {
+                flag = true;
+                if (mandatory) {
+                    mandatoryFields[field.tag] = {
+                        importance: "mandatory",
+                        elemid: "div_indicator_" + divid,
+                        tab: field.tab,
+                    };
+                } else {
+                    mandatoryFields[field.tag] = {
+                        importance: "important",
+                        elemid: "div_indicator_" + divid,
+                        tab: field.tab,
+                    };
+                }
+            }
+        });
+
+        if (Object.entries(mandatoryFields).length > 0) {
+            StrAlert += "<h4>" + _("The following fields aren't filled:") + "</h4>";
+            StrAlert += "<ul>";
+            for (var prop in mandatoryFields) {
+                if (mandatoryFields[prop]["importance"] == "mandatory") {
+                    StrAlert +=
+                        "<li>" +
+                        _("Field %s is mandatory, at least one of its subfields must be filled.").format(prop) +
+                        ' <a class="linkfield btn btn-link" href="#" data-tab="' +
+                        mandatoryFields[prop]["tab"] +
+                        '" data-field="' +
+                        mandatoryFields[prop]["elemid"] +
+                        '"><i class="fa fa-arrow-right" aria-hidden="true"></i> ' +
+                        _("Go to field") +
+                        "</a></li>";
+                } else {
+                    StrAlert +=
+                        "<li>" +
+                        _("Field %s is important, at least one of its subfields must be filled.").format(prop) +
+                        ' <a class="linkfield btn btn-link" href="#" data-tab="' +
+                        mandatoryFields[prop]["tab"] +
+                        '" data-field="' +
+                        mandatoryFields[prop]["elemid"] +
+                        '"><i class="fa fa-arrow-right" aria-hidden="true"></i> ' +
+                        _("Go to field") +
+                        "</a></li>";
                 }
             }
             StrAlert += "</ul>";
-            /* Check for mandatories/importants field(not subfields) */
-            /* Loop over array of fields identified as mandatory or
-               important to see if at least one subfield is filled */
-            mandatoryFields = new Object();
-
-            fields.forEach(field => {
-                isempty  = true;
-                divid    = "tag_" + field.tag + "_" + field.id;
-                varegexp = new RegExp("^tag_" + field.tag + "_code_");
-
-                if(parseInt(field.tag) >= 10){
-                    elem = document.getElementById(divid);
-                    if( !elem ){ return; }
-                    eleminputs = elem.getElementsByTagName('input');
-
-                    for(var j=0,len2=eleminputs.length; j<len2; j++){
-
-                        if(eleminputs[j].name.match(varegexp) && eleminputs[j].value){
-                            inputregexp = new RegExp("^tag_" + field.tag + "_subfield_" + eleminputs[j].value + "_" + field.index);
-
-                            for( var k=0; k<len2; k++){
-                                if( eleminputs[k].id.match(inputregexp) ){
-                                    if( eleminputs[k].value ){
-                                        isempty = false
-                                    }
-                                }
-                            }
-
-                            elemselect = elem.getElementsByTagName('select');
-                            for( var k=0; k<elemselect.length; k++){
-                                if(elemselect[k].id.match(inputregexp) && elemselect[k].value){
-                                    isempty = false
-                                }
-                            }
-                        }
-                    }
-
-                    elemtextareas = elem.getElementsByTagName('textarea');
-                    for(var j=0,len2=elemtextareas.length; j<len2; j++){
-                        // this bit assumes that the only textareas in this context would be for subfields
-                        if (elemtextareas[j].value) {
-                            isempty = false;
-                        }
-                    }
-
-                } else {
-                    isempty = false;
-                }
-
-                if(isempty){
-                    flag = true;
-                    if (mandatory) {
-                        mandatoryFields[ field.tag ] = {
-                            importance: "mandatory",
-                            elemid: "div_indicator_" + divid,
-                            tab: field.tab
-                        }
-                    } else {
-                        mandatoryFields[ field.tag ] = {
-                            importance: "important",
-                            elemid: "div_indicator_" + divid,
-                            tab: field.tab
-                        }
-                    }
-                }
-            });
-
-            if( Object.entries(mandatoryFields).length > 0 ){
-                StrAlert += "<h4>" + _("The following fields aren't filled:") + "</h4>";
-                StrAlert += "<ul>";
-                for( var prop in mandatoryFields ){
-                    if( mandatoryFields[prop]["importance"] == "mandatory" ){
-                        StrAlert += "<li>" + _("Field %s is mandatory, at least one of its subfields must be filled.").format( prop ) + ' <a class="linkfield btn btn-link" href="#" data-tab="' + mandatoryFields[prop]["tab"] + '" data-field="' + mandatoryFields[prop]["elemid"] + '"><i class="fa fa-arrow-right" aria-hidden="true"></i> ' + _("Go to field") + '</a></li>';
-                    } else {
-                        StrAlert += "<li>" + _("Field %s is important, at least one of its subfields must be filled.").format(prop) + ' <a class="linkfield btn btn-link" href="#" data-tab="' + mandatoryFields[prop]["tab"] + '" data-field="' + mandatoryFields[prop]["elemid"] + '"><i class="fa fa-arrow-right" aria-hidden="true"></i> ' + _("Go to field") + '</a></li>';
-                    }
-                }
-                StrAlert += "</ul>";
-            }
-
-            StrAlert += "</div>";
-            if ( flag ) {
-                $("#show-errors").html('<button type="button" class="btn btn-danger show-errors"><i class="fa-solid fa-triangle-exclamation"></i> ' + _("Errors") + '</span>');
-                return StrAlert;
-            } else {
-                return flag;
-            }
         }
 
-        /**
-         * Run checks for mandatory and important fields
-         * Output errors if necessary, or submit the form
-         */
-        function Check(){
-            var StrAlert = AreFieldsNotOk();
-            var StrWarning = AreFieldsNotOk( false );
-            if ( $('.plugin-blocks-submit').length > 0 ) {
-                // This class can be set by framework plugins to block submittal temporarily (e.g. during ajax call)
-                return false;
-            } else if( !StrAlert && StrWarning ) {
-                // Check important fields
-                $("#check_errors").html( StrWarning );
-                $('html, body').animate({ scrollTop: 0 }, 'fast');
+        StrAlert += "</div>";
+        if (flag) {
+            $("#show-errors").html('<button type="button" class="btn btn-danger show-errors"><i class="fa-solid fa-triangle-exclamation"></i> ' + _("Errors") + "</span>");
+            return StrAlert;
+        } else {
+            return flag;
+        }
+    }
 
-                var r=confirm( _("Important fields(s) are not filled. Are you sure you want to save?" ) );
-                if (! r){
-                    return false;
-                } else {
-                    document.f.submit();
-                    return true;
-                }
-            } else if( StrAlert ){
-                var strAll = StrAlert;
-                if( StrWarning ){
-                    strAll += StrWarning;
-                }
-                $("#check_errors").html( strAll );
-                $('html, body').animate({ scrollTop: 0 }, 'fast');
+    /**
+     * Run checks for mandatory and important fields
+     * Output errors if necessary, or submit the form
+     */
+    function Check() {
+        var StrAlert = AreFieldsNotOk();
+        var StrWarning = AreFieldsNotOk(false);
+        if ($(".plugin-blocks-submit").length > 0) {
+            // This class can be set by framework plugins to block submittal temporarily (e.g. during ajax call)
+            return false;
+        } else if (!StrAlert && StrWarning) {
+            // Check important fields
+            $("#check_errors").html(StrWarning);
+            $("html, body").animate({ scrollTop: 0 }, "fast");
+
+            var r = confirm(_("Important fields(s) are not filled. Are you sure you want to save?"));
+            if (!r) {
                 return false;
-            } else if( !StrAlert && !StrWarning ){
+            } else {
                 document.f.submit();
                 return true;
             }
+        } else if (StrAlert) {
+            var strAll = StrAlert;
+            if (StrWarning) {
+                strAll += StrWarning;
+            }
+            $("#check_errors").html(strAll);
+            $("html, body").animate({ scrollTop: 0 }, "fast");
+            return false;
+        } else if (!StrAlert && !StrWarning) {
+            document.f.submit();
+            return true;
         }
+    }
 
-        /**
-         * check if z3950 mandatories are set or not
-         */
-        function GetZ3950Terms(){
-            var frameworkcode = document.getElementById("frameworkcode").value;
-            var strQuery = "&frameworkcode=" + encodeURIComponent(frameworkcode);
-            z3950_mandatory_subfields.forEach(sf => {
-                var field_value = document.getElementById(sf.id).value;
-                if( field_value ){
-                    strQuery += "&"+encodeURIComponent(sf.label)+"="+encodeURIComponent(field_value);
-                }
-            });
-            return strQuery;
-        }
-
-        function Changefwk() {
-            var f = document.f;
-            f.op.value = "cud-change-framework";
-            f.biblionumber.value = biblionumberdata;
-            f.submit();
-        }
-
-        /* Wrap a value in HTML without putting HTML in translatable string */
-        function formatFieldName( string ){
-            return "<strong><em>" + string + "</em></strong>";
-        }
-
-        $(document).ready(function(){
-            $('body').on('click','.expandfield',ExpandField);
+    /**
+     * check if z3950 mandatories are set or not
+     */
+    function GetZ3950Terms() {
+        var frameworkcode = document.getElementById("frameworkcode").value;
+        var strQuery = "&frameworkcode=" + encodeURIComponent(frameworkcode);
+        z3950_mandatory_subfields.forEach(sf => {
+            var field_value = document.getElementById(sf.id).value;
+            if (field_value) {
+                strQuery += "&" + encodeURIComponent(sf.label) + "=" + encodeURIComponent(field_value);
+            }
         });
+        return strQuery;
+    }
+
+    function Changefwk() {
+        var f = document.f;
+        f.op.value = "cud-change-framework";
+        f.biblionumber.value = biblionumberdata;
+        f.submit();
+    }
+
+    /* Wrap a value in HTML without putting HTML in translatable string */
+    function formatFieldName(string) {
+        return "<strong><em>" + string + "</em></strong>";
+    }
+
+    $(document).ready(function () {
+        $("body").on("click", ".expandfield", ExpandField);
+    });
 </script>
 [% Asset.css("css/addbiblio.css") | $raw %]
 </head>

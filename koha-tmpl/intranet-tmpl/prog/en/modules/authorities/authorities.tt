@@ -57,66 +57,65 @@
 [% Asset.js( "lib/sortable/Sortable.min.js" ) | $raw %]
 [% Asset.js("js/cataloging.js") | $raw %]
 <script nonce="[% Koha.CSPNonce | $raw %]">
-    $(window).load(function(){
+    $(window).load(function () {
         $("#loading").hide();
     });
-    $(document).ready(function() {
-
+    $(document).ready(function () {
         $("a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
-            $( e.target.hash + " .input_marceditor:visible:eq(0)").focus();
+            $(e.target.hash + " .input_marceditor:visible:eq(0)").focus();
         });
 
         /* On page load, check for location.hash in the page URL */
         /* If present the location hash will be used to activate the correct tab */
         var hash = location.hash;
-        var hashPieces = hash.split('?');
-        if( hashPieces[0] !== "" ){
-            selectTab( hashPieces[0] );
-            window.scrollTo( 0, 0 );
+        var hashPieces = hash.split("?");
+        if (hashPieces[0] !== "") {
+            selectTab(hashPieces[0]);
+            window.scrollTo(0, 0);
         } else {
-            selectTab( "#tab0XX_panel" );
+            selectTab("#tab0XX_panel");
         }
 
         initializeSortable("#authoritytabs ul.sortable_field");
         initializeSortable("#authoritytabs ul.sortable_subfield");
 
-        $("#addauth").click(function(){
-            if(Check()){
+        $("#addauth").click(function () {
+            if (Check()) {
                 $("#f").submit();
             }
         });
-        $("#z3950submit").click(function(){
+        $("#z3950submit").click(function () {
             var strQuery = GetZ3950Terms();
-            if(strQuery){
-                window.open(`/cgi-bin/koha/cataloguing/z3950_auth_search.pl?authid=${authid}${strQuery}&${index}`,"z3950search",'width=800,height=500,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+            if (strQuery) {
+                window.open(`/cgi-bin/koha/cataloguing/z3950_auth_search.pl?authid=${authid}${strQuery}&${index}`, "z3950search", "width=800,height=500,location=yes,toolbar=no,scrollbars=yes,resize=yes");
             }
             return false;
         });
 
-        $(".toolbar-tabs-container .nav-tabs a").on("click",function(e){
+        $(".toolbar-tabs-container .nav-tabs a").on("click", function (e) {
             e.preventDefault();
-            selectTab( this.hash );
+            selectTab(this.hash);
         });
 
-        $(".tag_anchor").on("click", function(e){
+        $(".tag_anchor").on("click", function (e) {
             e.preventDefault();
             $(".tag_anchor").removeClass("selected");
             $(this).addClass("selected");
             var link = this.href;
-            var linkid = link.substring( link.indexOf("#") + 1 );
-            window.scrollTo( 0, getScrollto( linkid, "toolbar" ) );
+            var linkid = link.substring(link.indexOf("#") + 1);
+            window.scrollTo(0, getScrollto(linkid, "toolbar"));
         });
 
-        $("body").on("click", ".linkfield", function(e){
+        $("body").on("click", ".linkfield", function (e) {
             e.preventDefault();
             var tab = $(this).data("tab");
             var field = $(this).data("field");
-            var tablink = $("a[data-tabname='tab" + tab + "XX']" ).get(0).hash;
-            selectTab( tablink );
-            window.scrollTo( 0, getScrollto( field, "toolbar" ) );
+            var tablink = $("a[data-tabname='tab" + tab + "XX']").get(0).hash;
+            selectTab(tablink);
+            window.scrollTo(0, getScrollto(field, "toolbar"));
         });
 
-        $(".change-authtype").on("click", function(){
+        $(".change-authtype").on("click", function () {
             var authtypecode = $(this).data("authtypecode");
             var f = document.f;
             f.op.value = "cud-change-framework";
@@ -125,77 +124,92 @@
             f.submit();
         });
 
-        $("body").on("click", ".linkfield", function(e){
+        $("body").on("click", ".linkfield", function (e) {
             e.preventDefault();
             var tab = $(this).data("tab");
             var field = $(this).data("field");
-            var tablink = $("a[data-tabname='tab" + tab + "XX']" ).get(0).hash;
-            selectTab( tablink );
-            window.scrollTo( 0, getScrollto( field, "toolbar" ) );
+            var tablink = $("a[data-tabname='tab" + tab + "XX']").get(0).hash;
+            selectTab(tablink);
+            window.scrollTo(0, getScrollto(field, "toolbar"));
         });
 
-        $("body").on("click", ".show-errors", function(e){
+        $("body").on("click", ".show-errors", function (e) {
             document.getElementById("form-errors").scrollIntoView();
         });
 
         $("#preview").click(function () {
             var content = "<h3>" + _("Authority number") + ": " + authid + "</h3><hr>";
-            content += "<div style=\"color:#004d99;\">";
+            content += '<div style="color:#004d99;">';
             var line = 1;
             var has_input = 0;
             var sf_has_input = 0;
-            $("#authoritytabs").find("[id^=tag_]").each(function () {
-                //check if tag has content
-                has_input = 0;
-                $(this).find(".input_marceditor").each(function () {
-                    if ($(this).val()) has_input = 1;
-                });
-
-                if (has_input) {
-                    line = 1;
-                    //tag
-                    var $tag = $(this).find(".tagnum").text();
-                    content += $tag.replace("*", "") + "&nbsp;&nbsp;";
-                    //indicators
-                    $(this).find(".indicator").each(function () {
-                        if ($(this).val()) content += $(this).val();
-                        else content += "_";
-                    });
-                    content += "&nbsp;&nbsp;";
-                    //subfields
-                    $(this).find(".subfield_line").each(function () {
-                        //check if subfield has content
-                        sf_has_input = 0;
-                        $(this).find(".input_marceditor").each(function () {
-                            if ($(this).val()) sf_has_input = 1;
+            $("#authoritytabs")
+                .find("[id^=tag_]")
+                .each(function () {
+                    //check if tag has content
+                    has_input = 0;
+                    $(this)
+                        .find(".input_marceditor")
+                        .each(function () {
+                            if ($(this).val()) has_input = 1;
                         });
-                        if (sf_has_input) {
-                            if (line > 1) content += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-                            //code
-                            $(this).find(".subfieldcode").each(function () {
-                                $(this).find(".flat").each(function () {
-                                    if ($(this).val() != "00")
-                                        content += "\$" + $(this).val() + "&nbsp;&nbsp;";
-                                });
+
+                    if (has_input) {
+                        line = 1;
+                        //tag
+                        var $tag = $(this).find(".tagnum").text();
+                        content += $tag.replace("*", "") + "&nbsp;&nbsp;";
+                        //indicators
+                        $(this)
+                            .find(".indicator")
+                            .each(function () {
+                                if ($(this).val()) content += $(this).val();
+                                else content += "_";
                             });
-                            //value
-                            $(this).find(".input_marceditor").each(function () {
-                                content += "<span style=\"color:#000;\">" + $(this).val() + "</span>";
+                        content += "&nbsp;&nbsp;";
+                        //subfields
+                        $(this)
+                            .find(".subfield_line")
+                            .each(function () {
+                                //check if subfield has content
+                                sf_has_input = 0;
+                                $(this)
+                                    .find(".input_marceditor")
+                                    .each(function () {
+                                        if ($(this).val()) sf_has_input = 1;
+                                    });
+                                if (sf_has_input) {
+                                    if (line > 1) content += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                                    //code
+                                    $(this)
+                                        .find(".subfieldcode")
+                                        .each(function () {
+                                            $(this)
+                                                .find(".flat")
+                                                .each(function () {
+                                                    if ($(this).val() != "00") content += "\$" + $(this).val() + "&nbsp;&nbsp;";
+                                                });
+                                        });
+                                    //value
+                                    $(this)
+                                        .find(".input_marceditor")
+                                        .each(function () {
+                                            content += '<span style="color:#000;">' + $(this).val() + "</span>";
+                                        });
+                                    content += "</br>";
+                                    line += 1;
+                                }
                             });
-                            content += "</br>";
-                            line += 1;
-                        }
-                    });
-                }
-            });
-            $("#auloadpreview").html( content );
+                    }
+                });
+            $("#auloadpreview").html(content);
             $("#auEditPreview").modal("show");
         });
     });
 
-    function selectTab( tablink ){
+    function selectTab(tablink) {
         /* return if no tabs displayed (BIG_LOOP.size <= 1) */
-        if ($(".toolbar-tabs-container .nav-tabs li").length === 0){
+        if ($(".toolbar-tabs-container .nav-tabs li").length === 0) {
             return;
         }
         let a = $("a[href='" + tablink + "']");
@@ -204,33 +218,35 @@
         /* Get number from string like "tab9XX" */
         var tabid = a.data("tabname").substring(3, 4);
         $(".tag_anchors").removeClass("tab_selected").hide();
-        $(".tag_anchors_" + tabid ).addClass("tab_selected").show();
+        $(".tag_anchors_" + tabid)
+            .addClass("tab_selected")
+            .show();
     }
 
     /**
-    * check if z3950 mandatories are set or not
-    */
-    function GetZ3950Terms(){
-        var strQuery="&authtypecode="+document.forms['f'].authtypecode.value;
+     * check if z3950 mandatories are set or not
+     */
+    function GetZ3950Terms() {
+        var strQuery = "&authtypecode=" + document.forms["f"].authtypecode.value;
         z3950_mandatory_subfields.forEach(sf => {
             var field_value = document.getElementById(sf.id).value;
-            if( field_value ){
-                strQuery += "&"+encodeURIComponent(sf.label)+"="+encodeURIComponent(field_value);
+            if (field_value) {
+                strQuery += "&" + encodeURIComponent(sf.label) + "=" + encodeURIComponent(field_value);
             }
         });
         return strQuery;
     }
 
     /**
-    * check if mandatory subfields are written
-    */
-    function AreMandatoriesNotOk(){
+     * check if mandatory subfields are written
+     */
+    function AreMandatoriesNotOk() {
         var fields = new Array();
         var subfields = new Array();
-        var   tab = new Array();
+        var tab = new Array();
         var label = new Array();
         var flag = false;
-        var tabflag= new Array();
+        var tabflag = new Array();
         var StrAlert = "<div id='form-errors' class='alert alert-warning list'>";
         var notFilledClass = "subfield_not_filled";
 
@@ -241,36 +257,45 @@
 
         subfields.forEach(sf => {
             var id = sf.id;
-            var tag = id.substr(4,3);
-            var subfield=id.substr(17,1);
-            var tagnumber=id.substr(19,id.lastIndexOf("_")-19);
-            if (tabflag[tag+subfield+tagnumber] ==  null) {
-                tabflag[tag+subfield+tagnumber]=new Array();
-                tabflag[tag+subfield+tagnumber][0]=0;
+            var tag = id.substr(4, 3);
+            var subfield = id.substr(17, 1);
+            var tagnumber = id.substr(19, id.lastIndexOf("_") - 19);
+            if (tabflag[tag + subfield + tagnumber] == null) {
+                tabflag[tag + subfield + tagnumber] = new Array();
+                tabflag[tag + subfield + tagnumber][0] = 0;
             }
-            if( tabflag[tag+subfield+tagnumber][0] != 1 && (document.getElementById(id) != null && ! document.getElementById(id).value || document.getElementById(id) == null)){
-                tabflag[tag+subfield+tagnumber][0] = 0 + tabflag[tag+subfield+tagnumber] ;
+            if (tabflag[tag + subfield + tagnumber][0] != 1 && ((document.getElementById(id) != null && !document.getElementById(id).value) || document.getElementById(id) == null)) {
+                tabflag[tag + subfield + tagnumber][0] = 0 + tabflag[tag + subfield + tagnumber];
 
                 var elt = document.getElementById(id);
-                if ( elt.nodeName == 'SELECT' ) {
-                    $(elt).siblings('.select2').find("span[role='combobox']").addClass(notFilledClass);
+                if (elt.nodeName == "SELECT") {
+                    $(elt).siblings(".select2").find("span[role='combobox']").addClass(notFilledClass);
                 } else {
-                    elt.setAttribute('class','input_marceditor noEnterSubmit framework_plugin ' + notFilledClass);
+                    elt.setAttribute("class", "input_marceditor noEnterSubmit framework_plugin " + notFilledClass);
                 }
-                $('#' + id).focus();
-                tabflag[tag+subfield+tagnumber][1]=sf.label;
-                tabflag[tag+subfield+tagnumber][2]=sf.tab;
+                $("#" + id).focus();
+                tabflag[tag + subfield + tagnumber][1] = sf.label;
+                tabflag[tag + subfield + tagnumber][2] = sf.tab;
             } else {
-                tabflag[tag+subfield+tagnumber][0] = 1;
+                tabflag[tag + subfield + tagnumber][0] = 1;
             }
-            tabflag[tag+subfield+tagnumber][3] = id;
+            tabflag[tag + subfield + tagnumber][3] = id;
         });
 
-        for (var tagsubfieldid in tabflag){
-            if (tabflag[tagsubfieldid][0]==0){
-                var tag=tagsubfieldid.substr(0,3);
-                var subfield=tagsubfieldid.substr(3,1);
-                StrAlert += "<li>"+_("Tag %s subfield %s %s in tab %s").format(tag, subfield, formatFieldName( tabflag[tagsubfieldid][1] ), tabflag[tagsubfieldid][2]) + ' <a class="linkfield btn btn-link" href="#" data-tab="' + tabflag[tagsubfieldid][2] + '" data-field="' + tabflag[tagsubfieldid][3] + '"><i class="fa fa-arrow-right" aria-hidden="true"></i> ' + _("Go to field") + '</a></li>';
+        for (var tagsubfieldid in tabflag) {
+            if (tabflag[tagsubfieldid][0] == 0) {
+                var tag = tagsubfieldid.substr(0, 3);
+                var subfield = tagsubfieldid.substr(3, 1);
+                StrAlert +=
+                    "<li>" +
+                    _("Tag %s subfield %s %s in tab %s").format(tag, subfield, formatFieldName(tabflag[tagsubfieldid][1]), tabflag[tagsubfieldid][2]) +
+                    ' <a class="linkfield btn btn-link" href="#" data-tab="' +
+                    tabflag[tagsubfieldid][2] +
+                    '" data-field="' +
+                    tabflag[tagsubfieldid][3] +
+                    '"><i class="fa fa-arrow-right" aria-hidden="true"></i> ' +
+                    _("Go to field") +
+                    "</a></li>";
                 flag = true;
             }
         }
@@ -280,119 +305,134 @@
 
         /* Check for mandatories field(not subfields) */
         fields.forEach(field => {
-            isempty  = true;
-            divid    = "tag_" + field.tag + "_" + field.id;
+            isempty = true;
+            divid = "tag_" + field.tag + "_" + field.id;
             varegexp = new RegExp("^tag_" + field.tag + "_code_");
 
-            if(parseInt(field.tag) >= 10){
+            if (parseInt(field.tag) >= 10) {
                 elem = document.getElementById(divid);
-                eleminputs = elem.getElementsByTagName('input');
+                eleminputs = elem.getElementsByTagName("input");
 
-                for(var j=0,len2=eleminputs.length; j<len2; j++){
-
-                    if(eleminputs[j].name.match(varegexp) && eleminputs[j].value){
+                for (var j = 0, len2 = eleminputs.length; j < len2; j++) {
+                    if (eleminputs[j].name.match(varegexp) && eleminputs[j].value) {
                         inputregexp = new RegExp("^tag_" + field.tag + "_subfield_" + eleminputs[j].value + "_" + field.index);
 
-                        for( var k=0; k<len2; k++){
-                            if( eleminputs[k].id.match(inputregexp) ){
-                                if( eleminputs[k].value ){
-                                    isempty = false
+                        for (var k = 0; k < len2; k++) {
+                            if (eleminputs[k].id.match(inputregexp)) {
+                                if (eleminputs[k].value) {
+                                    isempty = false;
                                 }
                             }
                         }
 
-                        elemselect = elem.getElementsByTagName('select');
-                        for( var k=0; k<elemselect.length; k++){
-                            if(elemselect[k].id.match(inputregexp) && elemselect[k].value){
-                                isempty = false
+                        elemselect = elem.getElementsByTagName("select");
+                        for (var k = 0; k < elemselect.length; k++) {
+                            if (elemselect[k].id.match(inputregexp) && elemselect[k].value) {
+                                isempty = false;
                             }
                         }
                     }
                 }
 
-                elemtextareas = elem.getElementsByTagName('textarea');
-                for(var j=0,len2=elemtextareas.length; j<len2; j++){
+                elemtextareas = elem.getElementsByTagName("textarea");
+                for (var j = 0, len2 = elemtextareas.length; j < len2; j++) {
                     // this bit assumes that the only textareas in this context would be for subfields
                     if (elemtextareas[j].value) {
                         isempty = false;
                     }
                 }
-
             } else {
                 isempty = false;
             }
 
-            if(isempty){
+            if (isempty) {
                 flag = true;
-                mandatoryFields[ field.tag ] = {
+                mandatoryFields[field.tag] = {
                     importance: "mandatory",
                     elemid: "div_indicator_" + divid,
-                    tab: field.tab
-                }
+                    tab: field.tab,
+                };
             }
-
         });
 
-        if( Object.entries(mandatoryFields).length > 0 ){
+        if (Object.entries(mandatoryFields).length > 0) {
             StrAlert += "<h4>" + _("The following fields aren't filled:") + "</h4>";
             StrAlert += "<ul>";
-            for( var prop in mandatoryFields ){
-                if( mandatoryFields[prop]["importance"] == "mandatory" ){
-                    StrAlert += "<li>" + _("Field %s is mandatory, at least one of its subfields must be filled.").format( prop ) + ' <a class="linkfield btn btn-link" href="#" data-tab="' + mandatoryFields[prop]["tab"] + '" data-field="' + mandatoryFields[prop]["elemid"] + '"><i class="fa fa-arrow-right" aria-hidden="true"></i> ' + _("Go to field") + '</a></li>';
+            for (var prop in mandatoryFields) {
+                if (mandatoryFields[prop]["importance"] == "mandatory") {
+                    StrAlert +=
+                        "<li>" +
+                        _("Field %s is mandatory, at least one of its subfields must be filled.").format(prop) +
+                        ' <a class="linkfield btn btn-link" href="#" data-tab="' +
+                        mandatoryFields[prop]["tab"] +
+                        '" data-field="' +
+                        mandatoryFields[prop]["elemid"] +
+                        '"><i class="fa fa-arrow-right" aria-hidden="true"></i> ' +
+                        _("Go to field") +
+                        "</a></li>";
                 } else {
-                    StrAlert += "<li>" + _("Field %s is important, at least one of its subfields must be filled.").format(prop) + ' <a class="linkfield btn btn-link" href="#" data-tab="' + mandatoryFields[prop]["tab"] + '" data-field="' + mandatoryFields[prop]["elemid"] + '"><i class="fa fa-arrow-right" aria-hidden="true"></i> ' + _("Go to field") + '</a></li>';
+                    StrAlert +=
+                        "<li>" +
+                        _("Field %s is important, at least one of its subfields must be filled.").format(prop) +
+                        ' <a class="linkfield btn btn-link" href="#" data-tab="' +
+                        mandatoryFields[prop]["tab"] +
+                        '" data-field="' +
+                        mandatoryFields[prop]["elemid"] +
+                        '"><i class="fa fa-arrow-right" aria-hidden="true"></i> ' +
+                        _("Go to field") +
+                        "</a></li>";
                 }
             }
             StrAlert += "</ul>";
         }
         StrAlert += "</div>";
-        if ( flag ) {
-            $("#show-errors").html('<button type="button" class="btn btn-danger show-errors"><i class="fa-solid fa-triangle-exclamation"></i> ' + _("Errors") + '</span>');
+        if (flag) {
+            $("#show-errors").html('<button type="button" class="btn btn-danger show-errors"><i class="fa-solid fa-triangle-exclamation"></i> ' + _("Errors") + "</span>");
             return StrAlert;
         } else {
             return flag;
         }
     }
 
-    function Check(){
+    function Check() {
         var StrAlert = AreMandatoriesNotOk();
-        if( ! StrAlert ){
+        if (!StrAlert) {
             document.f.submit();
             return true;
         } else {
-            $("#check_errors").html( StrAlert );
-            $('html, body').animate({ scrollTop: 0 }, 'fast');
+            $("#check_errors").html(StrAlert);
+            $("html, body").animate({ scrollTop: 0 }, "fast");
             return false;
         }
     }
 
-    function AddField(field,cntrepeatfield) {
-        document.forms['f'].op.value = "addfield";
-        document.forms['f'].addfield_field.value=field;
-        document.forms['f'].repeat_field.value=cntrepeatfield;
+    function AddField(field, cntrepeatfield) {
+        document.forms["f"].op.value = "addfield";
+        document.forms["f"].addfield_field.value = field;
+        document.forms["f"].repeat_field.value = cntrepeatfield;
         document.f.submit();
     }
 
     function addauthority() {
         X = document.forms[0].authtype.value;
-        window.location="/cgi-bin/koha/authorities/authorities.pl?authtypecode="+X;
+        window.location = "/cgi-bin/koha/authorities/authorities.pl?authtypecode=" + X;
     }
     function searchauthority() {
         X = document.forms[0].authtype2.value;
         Y = document.forms[0].value.value;
-        window.location="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&authtypecode="+X+"&value="+Y+"&marclist=&and_or=and&excluding=&operator=contains";
+        window.location = "/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&authtypecode=" + X + "&value=" + Y + "&marclist=&and_or=and&excluding=&operator=contains";
     }
-    function confirmnotdup(redirect){
-        $("#confirm_not_duplicate").attr("value","1");
+    function confirmnotdup(redirect) {
+        $("#confirm_not_duplicate").attr("value", "1");
         Check();
     }
     /* Wrap a value in HTML without putting HTML in translatable string */
-    function formatFieldName( string ){
+    function formatFieldName(string) {
         return "<strong><em>" + string + "</em></strong>";
     }
 
-    $(document).ready(function(){
-        $('body').on('click','.expandfield',ExpandField);
+    $(document).ready(function () {
+        $("body").on("click", ".expandfield", ExpandField);
     });
 </script>
 [% Asset.css("css/addbiblio.css") | $raw %]
