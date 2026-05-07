@@ -1750,7 +1750,7 @@ subtest 'revert_found() tests' => sub {
     };
 };
 subtest 'move_hold() tests' => sub {
-    plan tests => 21;
+    plan tests => 24;
     $schema->storage->txn_begin;
 
     my $patron = Koha::Patron->new(
@@ -1785,11 +1785,14 @@ subtest 'move_hold() tests' => sub {
         }
     )->store;
 
+    my $pickup_branch = $builder->build( { source => 'Branch', value => { pickup_location => 1 } } );
+
     my $biblio1 = $builder->build_sample_biblio();
     my $item_1  = $builder->build_sample_item( { biblionumber => $biblio1->biblionumber } );
 
     my $biblio2 = $builder->build_sample_biblio();
-    my $item_2  = $builder->build_sample_item( { biblionumber => $biblio2->biblionumber } );
+    my $item_2  = $builder->build_sample_item(
+        { biblionumber => $biblio2->biblionumber, homebranch => $pickup_branch->{branchcode}, } );
 
     my $biblio3 = $builder->build_sample_biblio();
     my $item_3  = $builder->build_sample_item( { biblionumber => $biblio3->biblionumber } );
@@ -1965,6 +1968,53 @@ subtest 'move_hold() tests' => sub {
 
     my $result_5 = $hold_7->move_hold( { new_biblionumber => $biblio1->biblionumber } );
     is( $result_5->{error}, 'Cannot move a hold in transit', 'Correct error for hold instransit' );
+
+    #mock the preference
+    t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'ItemHomeLibrary' );
+
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode => $item_2->homebranch,
+            itemtype   => undef,
+            rule_name  => 'hold_fulfillment_policy',
+            rule_value => 'homebranch',
+        }
+    );
+
+    my $hold_8 = Koha::Hold->new(
+        {
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $biblio1->biblionumber,
+            itemnumber     => $item_1->itemnumber,
+            branchcode     => 'CPL',
+        }
+    )->store;
+
+    my $result_6 = $hold_8->move_hold( { new_itemnumber => $item_2->itemnumber } );
+    is(
+        $result_6->{error}, 'invalidPickupBranch',
+        'Item level move fails when pickup branch does not match fulfillment policy'
+    );
+
+    # Test fulfillment policy - biblio level
+    my $result_7 = $hold_8->move_hold( { new_biblionumber => $biblio2->biblionumber } );
+    is(
+        $result_7->{error}, 'invalidPickupBranch',
+        'Biblio level move fails when no items on target bib allow pickup branch'
+    );
+
+    # Test that move succeeds when pickup branch matches
+    my $hold_9 = Koha::Hold->new(
+        {
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $biblio1->biblionumber,
+            itemnumber     => $item_1->itemnumber,
+            branchcode     => $item_2->homebranch,
+        }
+    )->store;
+
+    my $result_8 = $hold_9->move_hold( { new_itemnumber => $item_2->itemnumber } );
+    ok( $result_8->{success}, 'Item level move succeeds when pickup branch matches fulfillment policy' );
 
     $schema->storage->txn_rollback;
 };
