@@ -214,6 +214,16 @@ sub move_hold {
         $new_itemnumber   = $item->itemnumber;
         $new_biblionumber = $item->biblionumber;
 
+        my $branchitemrule = C4::Circulation::GetBranchItemRule(
+            Koha::Policy::Holds->holds_control_library( $item, $patron ),
+            $item->effective_itemtype
+        );
+
+        my $policy = $branchitemrule->{hold_fulfillment_policy};
+        if ( ( $policy eq 'homebranch' || $policy eq 'holdingbranch' ) && $self->branchcode ne $item->$policy ) {
+            return { success => 0, error => 'invalidPickupBranch' };
+        }
+
         $canReserve = C4::Reserves::CanItemBeReserved( $patron, $item, $self->branchcode, { ignore_hold_counts => 1 } );
     } elsif ( $args->{new_biblionumber} ) {
         $new_biblionumber = $args->{new_biblionumber};
@@ -222,6 +232,9 @@ sub move_hold {
             $patron->borrowernumber, $new_biblionumber, $self->branchcode,
             { ignore_hold_counts => 1 }
         );
+
+        # for record level holds we must check to make sure there is an item on the record that can fufill the new hold
+
     } else {
         return { success => 0, error => 'Missing itemnumber or biblionumber' };
     }
