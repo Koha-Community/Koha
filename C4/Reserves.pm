@@ -631,9 +631,10 @@ sub CanItemBeReserved {
         }
         if ( !$params->{ignore_hold_counts} ) {
 
-            # we retrieve count
+            # we retrieve count, treating each hold group as a single unit
             my $querycount = q{
-                SELECT count(*) AS count
+                SELECT COUNT( CASE WHEN reserves . hold_group_id IS NULL THEN 1 END ) +
+                    COUNT( DISTINCT reserves.hold_group_id ) AS count
                   FROM reserves
              LEFT JOIN items USING (itemnumber)
              LEFT JOIN biblioitems ON (reserves.biblionumber=biblioitems.biblionumber)
