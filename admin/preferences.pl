@@ -28,6 +28,7 @@ use C4::ClassSource qw( GetClassSources GetClassSource );
 use C4::Output      qw( output_html_with_http_headers output_and_exit_if_error );
 use C4::Templates;
 use Koha::Acquisition::Currencies;
+use Koha::AuthorisedValues;
 use Koha::Database::Columns;
 use Koha::ILL::Request::Config;
 use IO::File;
@@ -201,6 +202,16 @@ sub _get_chunk {
                 keys %{ $options{multiple} }
         ];
     } elsif ( $options{'multiple_sortable'} ) {
+        if ( ref( $options{'multiple_sortable'} ) eq '' ) {
+            if ( $options{'multiple_sortable'} eq 'authval' && $options{'source'} ) {
+                $options{'multiple_sortable'} = {
+                    map { $_->authorised_value => $_->lib }
+                        Koha::AuthorisedValues->search( { category => $options{'source'} } )->as_list
+                };
+            } else {
+                die 'Unrecognized source for multiple_sortable: ' . $options{'multiple_sortable'};
+            }
+        }
         my @values;
         @values        = split /,/, $value if defined($value);
         $chunk->{type} = 'multiple_sortable';
