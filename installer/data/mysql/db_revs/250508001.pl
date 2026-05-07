@@ -7,12 +7,10 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        # Do you stuffs here
-        $dbh->do(q{update serial set planneddate=null where planneddate='0000-00-00';});
-        $dbh->do(q{update serial set publisheddate=null where publisheddate='0000-00-00';});
+        # sanitize both columns as they could be filled with invalid dates
+        sanitize_zero_date( 'serial', 'planneddate' );
+        sanitize_zero_date( 'serial', 'publisheddate' );
 
-        # Print useful stuff here
-        # sysprefs
-        say $out "incorrect date inplanneddate and publisheddate fixed";
+        say $out "Incorrect date planneddate and publisheddate fixed";
     },
 };
