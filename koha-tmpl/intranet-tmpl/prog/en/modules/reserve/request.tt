@@ -225,6 +225,8 @@
                             <span>Target item is not for loan</span>
                         [% CASE 'damaged' %]
                             <span>Target item is damaged</span>
+                        [% CASE 'invalidPickupBranch' %]
+                            <span>Target item is an invalid pickup location</span>
                         [% CASE %]
                             <span>Error: [% fail.error | html %]</span>
                         [% END %]
