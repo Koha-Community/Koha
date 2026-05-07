@@ -81,7 +81,7 @@
                         [% CASE 'Languages' %]
                             <a [% attrs | $raw %] id="facet-languages">Languages</a>
                         [% CASE %]
-                            <a [% attrs | $raw %] id="facet-[% facets_loo.type_link_value | html %]">[% facets_loo.type_id | html %]</a>
+                            <a [% attrs | $raw %] id="facet-[% facets_loo.type_link_value | html %]">[% facets_loo.label | html %]</a>
                         [% END %]
                         <div class="facet-collapse collapse show" id="[% facets_loo.type_id | html %]_collapse">
                             <ul>
