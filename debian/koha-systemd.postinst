@@ -36,7 +36,15 @@ case "$1" in
                 systemctl enable koha@${instance}.target 2>/dev/null || true
 
                 # Conditional services
-                if koha-list --enabled --sip 2>/dev/null | grep -qx "$instance"; then
+                # SIP: read the SysV-era flag file DIRECTLY here, not via
+                # koha-list --sip / is_sip_enabled. The latter now consults
+                # systemctl is-enabled on systemd hosts (see follow-up 1/3),
+                # which would return "disabled" for every instance during this
+                # very first install -- the migration we are about to perform.
+                # The flag file is the only reliable signal for "did this
+                # instance have SIP enabled in the SysV-era state we are
+                # migrating from?".
+                if [ -e "/var/lib/koha/${instance}/sip.enabled" ]; then
                     systemctl enable koha-sip@${instance}.service 2>/dev/null || true
                 fi
                 if koha-list --enabled --z3950 2>/dev/null | grep -qx "$instance"; then

@@ -139,6 +139,16 @@ is_sip_enabled()
 {
     local instancename=$1
 
+    # Backend dispatch:
+    # - On systemd hosts, the systemctl enable state is the source of truth.
+    #   /var/lib/koha/<inst>/sip.enabled is a SysV-era flag that becomes
+    #   vestigial after migration; nothing on systemd reads it.
+    # - On SysV hosts, the flag file is the only signal there is.
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        systemctl is-enabled --quiet "koha-sip@${instancename}.service" 2>/dev/null
+        return $?
+    fi
+
     if [ -e /var/lib/koha/$instancename/sip.enabled ]; then
         return 0
     else

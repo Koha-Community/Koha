@@ -101,24 +101,30 @@ enable_sip()
 {
     local name=$1
     local libdir=/var/lib/koha/${name}
-
-    if [ "$(koha_init_backend)" = "systemd" ]; then
-        koha_service_ctl enable sip "$name"
-    fi
-
-    sipfile=/etc/koha/sites/${name}/SIPconfig.xml
+    local sipfile=/etc/koha/sites/${name}/SIPconfig.xml
 
     if is_sip_enabled ${name}; then
         echo "Warning: SIP server already enabled for ${name}"
+        return
+    fi
+
+    # Backend-specific signal:
+    # - On systemd, systemctl enable IS the opt-in. The flag file is
+    #   no longer read on systemd hosts and is left alone.
+    # - On SysV, the flag file IS the opt-in.
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl enable sip "$name"
     else
-        echo "Enabling SIP server for ${name} - edit ${sipfile} to configure"
-        touch $libdir/sip.enabled
-        if [[ ! -f "/etc/koha/sites/${name}/SIPconfig.xml" ]]; then
-            cp -v /etc/koha/SIPconfig.xml ${sipfile}
-            chown ${name}-koha:${name}-koha ${sipfile}
-            chmod 600 ${sipfile}
-            echo "This is the first time SIP has been enabled. Please check the configurations in /etc/koha/sites/${name}/SIPconfig.xml"
-        fi
+        touch ${libdir}/sip.enabled
+    fi
+
+    echo "Enabling SIP server for ${name} - edit ${sipfile} to configure"
+
+    if [[ ! -f "${sipfile}" ]]; then
+        cp -v /etc/koha/SIPconfig.xml ${sipfile}
+        chown ${name}-koha:${name}-koha ${sipfile}
+        chmod 600 ${sipfile}
+        echo "This is the first time SIP has been enabled. Please check the configurations in ${sipfile}"
     fi
 }
 
@@ -127,19 +133,21 @@ disable_sip()
     local name=$1
     local libdir=/var/lib/koha/${name}
 
-    if [ "$(koha_init_backend)" = "systemd" ]; then
-        koha_service_ctl disable sip "$name"
+    if ! is_sip_enabled ${name}; then
+        echo " SIP server for ${name} not enabled - use koha-sip --enable <instance> to enable."
+        return
     fi
 
-    if is_sip_enabled ${name}; then
-        # SIP is enabled, we should disable it
-        echo "Stopping running SIP"
-        stop_sip ${name}
-        rm ${libdir}/sip.enabled
-        echo "Information: SIP server disabled for ${name}"
+    echo "Stopping running SIP"
+    stop_sip ${name}
+
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl disable sip "$name"
     else
-        echo " SIP server for ${name} not enabled - use koha-sip --enable <instance> to enable."
+        rm -f ${libdir}/sip.enabled
     fi
+
+    echo "Information: SIP server disabled for ${name}"
 }
 
 
