@@ -47,7 +47,11 @@ sub get_configuration {
     if ($sip2_resource_last_modified) {
         $cache->set_in_cache( 'sip2_config_read_timestamp', $sip2_resource_last_modified );
     } else {
-        $cache->set_in_cache( 'sip2_config_read_timestamp', dt_from_string()->epoch );
+
+        # Set sip2_resource_last_modified so config won't be read from db on each request
+        my $now = dt_from_string()->epoch;
+        $cache->set_in_cache( 'sip2_resource_last_modified', $now );
+        $cache->set_in_cache( 'sip2_config_read_timestamp',  $now );
     }
 
     my $cfg;

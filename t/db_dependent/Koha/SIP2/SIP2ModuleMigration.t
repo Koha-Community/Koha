@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::NoWarnings;
 use Test::MockModule;
 
@@ -176,6 +176,34 @@ subtest 'config_timestamp is updated when database configuration changes' => sub
     is(
         $cfg->{accounts}->{ $sip_account->login_id }->{allow_fields}, $sip_account->allow_fields,
         '$cfg->{accounts}->{$sip_account->login_id}->{allow_fields} should now return the new value'
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_configuration() reseeds sip2_resource_last_modified when missing from cache' => sub {
+
+    plan tests => 4;
+
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
+    my $cache = Koha::Caches->get_instance();
+    $cache->clear_from_cache('sip2_resource_last_modified');
+    $cache->clear_from_cache('sip2_config_read_timestamp');
+
+    is( $cache->get_from_cache('sip2_resource_last_modified'), undef, 'sip2_resource_last_modified cleared' );
+
+    C4::SIP::Sip::Configuration->get_configuration( undef, { listeners => {} } );
+
+    my $resource_last_modified = $cache->get_from_cache('sip2_resource_last_modified');
+    my $config_read_timestamp  = $cache->get_from_cache('sip2_config_read_timestamp');
+
+    ok( $resource_last_modified, 'sip2_resource_last_modified is repopulated' );
+    ok( $config_read_timestamp,  'sip2_config_read_timestamp is set' );
+    is(
+        $config_read_timestamp, $resource_last_modified,
+        'sip2_config_read_timestamp matches sip2_resource_last_modified so subsequent requests skip a full reload'
     );
 
     $schema->storage->txn_rollback;
