@@ -145,6 +145,7 @@ Architecture: all
 Depends: ${misc:Depends}, systemd, koha-core
 Provides: koha-init
 Conflicts: koha-sysv
+Replaces: koha-sysv
 Description: systemd units for Koha ILS
  Koha is an Integrated Library Management system for real-world libraries
  (the kinds with books).
@@ -162,7 +163,7 @@ Architecture: all
 Depends: ${misc:Depends}, daemon, koha-core
 Provides: koha-init
 Conflicts: koha-systemd
-Replaces: koha-common (<< 25.11)
+Replaces: koha-common (<< 25.11), koha-systemd
 Breaks: koha-common (<< 25.11)
 Description: SysV init scripts for Koha ILS
  Koha is an Integrated Library Management system for real-world libraries
