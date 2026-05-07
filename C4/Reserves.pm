@@ -686,7 +686,7 @@ sub CanItemBeReserved {
         }
     );
     if ( !$params->{ignore_hold_counts} && $rule && defined( $rule->rule_value ) && $rule->rule_value ne '' ) {
-        my $total_holds_count = Koha::Holds->search( { borrowernumber => $patron->borrowernumber } )->count();
+        my $total_holds_count = Koha::Holds->count_holds( { borrowernumber => $patron->borrowernumber } );
 
         return _cache { status => 'tooManyReserves', limit => $rule->rule_value }
             if $total_holds_count >= $rule->rule_value;
