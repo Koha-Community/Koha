@@ -195,7 +195,8 @@ if ( !$registers->count ) {
                     my $redirect_to = $input->param('redirect_to') || 'register';
 
                     if ( $redirect_to eq 'registers' ) {
-                        print $input->redirect("/cgi-bin/koha/pos/registers.pl?cashup_complete_success=1");
+                        print $input->redirect(
+                            "/cgi-bin/koha/pos/registers.pl?cashup_complete_success=1#cashup-" . $cashup->id );
                     } else {
                         print $input->redirect(
                             "/cgi-bin/koha/pos/register.pl?registerid=" . $registerid . "#cashup-" . $cashup->id );
