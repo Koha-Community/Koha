@@ -64,7 +64,7 @@ my $patron = Koha::Patrons->find($borrowernumber);
 if ($patron) {
     my $checkouts = Koha::Checkouts->search( { borrowernumber => $borrowernumber } )->count;
     my ( $overdues_count, $overdues ) = checkoverdues($borrowernumber);
-    my $holds_pending   = Koha::Holds->search( { borrowernumber => $borrowernumber, found => undef } )->count;
+    my $holds_pending   = Koha::Holds->count_holds( { borrowernumber => $borrowernumber, found => undef } );
     my $holds_waiting   = Koha::Holds->search( { borrowernumber => $borrowernumber } )->waiting->count;
     my $patron_messages = Koha::Patron::Messages->search(
         {
