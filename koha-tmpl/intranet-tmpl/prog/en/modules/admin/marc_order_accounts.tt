@@ -114,7 +114,7 @@
                     </li>
                     <li>
                         <label for="description">Description: </label>
-                        <input type="text" name="description" id="description" size="20" value="[% account.description | html %]" />
+                        <input type="text" name="description" id="description" size="20" maxlength="250" value="[% account.description | html %]" />
                     </li>
                     <li>
                         <label for="download_directory">Download directory: </label>
@@ -123,7 +123,7 @@
                     </li>
                     <li>
                         <label for="match_field">Match field: </label>
-                        <input type="text" name="match_field" id="match_field" size="20" value="[% account.match_field | html %]" />
+                        <input type="text" name="match_field" id="match_field" size="10" maxlength="10" value="[% account.match_field | html %]" />
                         <div class="hint"
                             >(Optional): If you have files from multiple vendors in the same file directory, the match field is the field in the MARC record that will be checked to see if the file should be processed by this account.</div
                         >
@@ -131,12 +131,12 @@
                     </li>
                     <li>
                         <label for="match_value">Match value: </label>
-                        <input type="text" name="match_value" id="match_value" size="20" value="[% account.match_value | html %]" />
+                        <input type="text" name="match_value" id="match_value" size="20" maxlength="50" value="[% account.match_value | html %]" />
                         <div class="hint">(Optional): This is the value that will be checked against the match field to see if the file matches this account. If it does it will be processed by this account, if not it will be skipped.</div>
                     </li>
                     <li>
                         <label for="basket_name_field">Basket name field: </label>
-                        <input type="text" name="basket_name_field" id="basket_name_field" size="20" value="[% account.basket_name_field | html %]" />
+                        <input type="text" name="basket_name_field" id="basket_name_field" size="10" maxlength="10" value="[% account.basket_name_field | html %]" />
                         <div class="hint">(Optional): If you want the basket name to be dynamic based on a value in the MARC file, you can set a field here that will be read on import and used for the basket name.</div>
                         <div class="hint">The format for this field is the same as MARCFieldsToOrder - the field and the subfield separated by a dollar sign e.g. 245$a</div>
                         <div class="hint">The first record in the file must be the record to contain this field, others will be ignored. If a value is not found the filename will be used for the basket name.</div>
