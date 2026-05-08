@@ -235,12 +235,12 @@ unless ( CanUserManageBasket( $loggedinuser, $basket, $userflags ) ) {
 # FIXME : the query->param('booksellerid') below is probably useless. The bookseller is always known from the basket
 # if no booksellerid in parameter, get it from basket
 # warn "=>".$basket->{booksellerid};
-my $op = $query->param('op') // 'list';
+our $op = $query->param('op') // 'list';
 
 our $confirm_pref = C4::Context->preference("BasketConfirmations") || '1';
 $template->param( skip_confirm_reopen => 1 ) if $confirm_pref eq '2';
 
-my @messages;
+our @messages = ();
 
 if ( $op eq 'cud-delete-order' ) {
     output_and_exit( $query, $cookie, $template, 'insufficient_permission' )
