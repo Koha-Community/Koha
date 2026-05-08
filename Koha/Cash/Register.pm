@@ -25,6 +25,7 @@ use Koha::Account::Line;
 use Koha::Account::Lines;
 use Koha::Account::Offset;
 use Koha::Account::Offsets;
+use Koha::AuthorisedValues;
 use Koha::Cash::Register::Actions;
 use Koha::Cash::Register::Cashups;
 use Koha::Database;
@@ -142,8 +143,12 @@ sub outstanding_accountlines {
 
 =head3 cashup_in_progress
 
-Check if there is currently a cashup in progress (CASHUP_START without corresponding CASHUP).
-Returns the CASHUP_START action if in progress, undef otherwise.
+Check if there is currently a cashup in progress (CASHUP_START without
+corresponding CASHUP). Returns a L<Koha::Cash::Register::Cashup> wrapping the
+CASHUP_START action if in progress, undef otherwise. Cashup ISA Action, so all
+Action attributes (id, timestamp, manager_id, amount, ...) remain available;
+the richer Cashup interface (e.g. C<accountlines>, C<summary>) lets callers
+work with the in-progress session as a first-class object.
 
 =cut
 
@@ -168,7 +173,7 @@ sub cashup_in_progress {
         || DateTime->compare( dt_from_string( $last_start->timestamp ), dt_from_string( $last_completion->timestamp ) )
         > 0 )
     {
-        return Koha::Cash::Register::Action->_new_from_dbic($last_start);
+        return Koha::Cash::Register::Cashup->_new_from_dbic($last_start);
     }
 
     return;
@@ -292,7 +297,8 @@ sub start_cashup {
         Koha::Exceptions::Object::DuplicateID->throw( error => "A cashup is already in progress for this register" );
     }
 
-    my $expected_amount = $self->outstanding_accountlines->total( { payment_type => [ 'CASH', 'SIP00' ] } ) * -1;
+    my $expected_amount =
+        $self->outstanding_accountlines->total( { payment_type => $self->cashup_payment_types } ) * -1;
 
     # Prevent starting a cashup when there are no transactions at all
     my $total_transactions = $self->outstanding_accountlines->total() * -1;
@@ -323,19 +329,87 @@ sub start_cashup {
     return Koha::Cash::Register::Cashup->_new_from_dbic($rs);
 }
 
+=head3 cashup_payment_types
+
+    my $payment_types = $cash_register->cashup_payment_types;
+
+Returns an arrayref of PAYMENT_TYPE authorised value codes that participate
+in the cashup reconciliation workflow, in the order listed by the
+CashupPaymentTypes system preference. Falls back to ['CASH', 'SIP00'] (the
+previously hardcoded set) if the preference is empty or missing.
+
+=cut
+
+sub cashup_payment_types {
+    my ($self) = @_;
+
+    my $pref  = C4::Context->preference('CashupPaymentTypes') // '';
+    my @types = grep { length $_ } split /\s*,\s*/, $pref;
+    return @types ? \@types : [ 'CASH', 'SIP00' ];
+}
+
+=head3 cashup_payment_types_breakdown
+
+    my $rows = $cash_register->cashup_payment_types_breakdown;
+
+Returns an arrayref of C<{ payment_type => ..., label => ..., expected => ... }>
+hashes, one per type listed in CashupPaymentTypes, in that order. The expected
+amount is taken from the in-progress cashup if one exists, otherwise from the
+register's outstanding accountlines. Labels come from the PAYMENT_TYPE
+authorised value category, falling back to the code itself if no label is
+defined.
+
+=cut
+
+sub cashup_payment_types_breakdown {
+    my ($self) = @_;
+
+    my $configured = $self->cashup_payment_types;
+
+    # When a two-phase cashup is in progress, scope to that session's
+    # accountlines explicitly. Otherwise fall back to the register's
+    # outstanding accountlines (everything since the last completed CASHUP).
+    my $in_progress = $self->cashup_in_progress;
+    my $source =
+          $in_progress
+        ? $in_progress->accountlines
+        : $self->outstanding_accountlines;
+
+    my $av_labels = { map { $_->authorised_value => $_->lib }
+            Koha::AuthorisedValues->search( { category => 'PAYMENT_TYPE' } )->as_list };
+
+    return [
+        map {
+            my $code = $_;
+            {
+                payment_type => $code,
+                label        => $av_labels->{$code} // $code,
+                expected     => $source->total( { payment_type => $code } ) * -1,
+            }
+        } @$configured
+    ];
+}
+
 =head3 add_cashup
 
     my $cashup = $cash_register->add_cashup(
         {
-            manager_id            => $logged_in_user->id,
-            amount                => $amount_removed_from_register,
-            [ reconciliation_note => $reconciliation_note ]
+            manager_id      => $logged_in_user->id,
+            reconciliations => [
+                { payment_type => 'CASH',   actual_amount => 102.00 },
+                { payment_type => 'CHEQUE', actual_amount =>  20.00, note => 'Drawer short' },
+            ],
         }
     );
 
-Complete a cashup period started with start_cashup(). This performs the actual
-reconciliation against the amount counted and creates surplus/deficit accountlines
-if needed. Returns the completed CASHUP action.
+Complete a cashup period started with start_cashup(). Each entry in
+B<reconciliations> is reconciled against the expected total for that payment
+type alone. A non-zero discrepancy creates a CASHUP_SURPLUS or CASHUP_DEFICIT
+accountline tagged with the relevant C<payment_type>. Balanced types create
+no reconciliation line. Each entry may carry its own C<note>, which is stored
+on that discrepancy's accountline.
+
+Returns the completed CASHUP action.
 
 =cut
 
@@ -343,26 +417,37 @@ sub add_cashup {
     my ( $self, $params ) = @_;
 
     # check for mandatory params
-    my @mandatory = ( 'manager_id', 'amount' );
-    for my $param (@mandatory) {
-        unless ( defined( $params->{$param} ) ) {
-            Koha::Exceptions::MissingParameter->throw( error => "The $param parameter is mandatory" );
-        }
+    unless ( defined $params->{manager_id} ) {
+        Koha::Exceptions::MissingParameter->throw( error => "The manager_id parameter is mandatory" );
+    }
+    unless ( ref( $params->{reconciliations} ) eq 'ARRAY' && @{ $params->{reconciliations} } ) {
+        Koha::Exceptions::MissingParameter->throw(
+            error => "The 'reconciliations' parameter is mandatory and must be a non-empty arrayref" );
     }
     my $manager_id = $params->{manager_id};
 
-    # Validate amount is a valid number
-    my $amount = $params->{amount};
-    unless ( looks_like_number($amount) ) {
-        Koha::Exceptions::Account::AmountNotPositive->throw( error => 'Cashup amount must be a valid number' );
-    }
+    my $payment_types = $self->cashup_payment_types;
+    my %valid_pt      = map { $_ => 1 } @$payment_types;
 
-    # Sanitize reconciliation note - treat empty/whitespace-only as undef
-    my $reconciliation_note = $params->{reconciliation_note};
-    if ( defined $reconciliation_note ) {
-        $reconciliation_note = substr( $reconciliation_note, 0, 1000 );    # Limit length
-        $reconciliation_note =~ s/^\s+|\s+$//g;                            # Trim whitespace
-        $reconciliation_note = undef if $reconciliation_note eq '';        # Empty after trim = undef
+    my @reconciliations;
+    for my $entry ( @{ $params->{reconciliations} } ) {
+        unless ( defined $entry->{payment_type} && defined $entry->{actual_amount} ) {
+            Koha::Exceptions::MissingParameter->throw(
+                error => "Each reconciliation entry requires payment_type and actual_amount" );
+        }
+        unless ( looks_like_number( $entry->{actual_amount} ) ) {
+            Koha::Exceptions::Account::AmountNotPositive->throw(
+                error => "actual_amount for $entry->{payment_type} must be a valid number" );
+        }
+        unless ( $valid_pt{ $entry->{payment_type} } ) {
+            Koha::Exceptions::Object::BadValue->throw(
+                error => "Payment type '$entry->{payment_type}' is not in CashupPaymentTypes" );
+        }
+        push @reconciliations, {
+            payment_type  => $entry->{payment_type},
+            actual_amount => $entry->{actual_amount} + 0,
+            note          => _sanitize_note( $entry->{note} ),
+        };
     }
 
     # Find the most recent CASHUP_START to determine if we're in two-phase mode
@@ -391,21 +476,27 @@ sub add_cashup {
 
     }
 
-    # Calculate expected amount from session accountlines
-    my $expected_amount = (
-          $cashup_start
-        ? $cashup_start->accountlines->total( { payment_type => [ 'CASH', 'SIP00' ] } )
-        : $self->outstanding_accountlines->total( { payment_type => [ 'CASH', 'SIP00' ] } )
-    ) * -1;
+    # Compute expected and difference per reconciliation entry
+    for my $r (@reconciliations) {
+        my $filter = { payment_type => $r->{payment_type} };
 
-    # Calculate difference (actual - expected)
-    my $difference = $amount - $expected_amount;
+        my $expected = (
+              $cashup_start
+            ? $cashup_start->accountlines->total($filter)
+            : $self->outstanding_accountlines->total($filter)
+        ) * -1;
 
-    # Validate reconciliation note requirement if there's a discrepancy
-    if ( $difference != 0 ) {
-        my $note_required = C4::Context->preference('CashupReconciliationNoteRequired') // 0;
+        $r->{expected_amount} = $expected;
+        $r->{difference}      = $r->{actual_amount} - $expected;
+    }
 
-        if ( $note_required && !defined $reconciliation_note ) {
+    # Validate reconciliation note requirement: every discrepant row must have
+    # its own note when the preference is enabled.
+    my $note_required = C4::Context->preference('CashupReconciliationNoteRequired') // 0;
+    if ($note_required) {
+        for my $r (@reconciliations) {
+            next if $r->{difference} == 0;
+            next if defined $r->{note};
             Koha::Exceptions::MissingParameter->throw(
                 error => "Reconciliation note is required when cashup amount differs from expected amount" );
         }
@@ -414,22 +505,29 @@ sub add_cashup {
         # that isn't one of the allowed values (the UI only offers a matching
         # select, but the API/form param isn't otherwise constrained server-side)
         my $note_av_category = C4::Context->preference('CashupReconciliationNoteAuthorisedValue');
-        if ( $note_av_category && defined $reconciliation_note ) {
+        if ($note_av_category) {
             require Koha::AuthorisedValues;
-            my $valid = Koha::AuthorisedValues->search(
-                {
-                    category         => $note_av_category,
-                    authorised_value => $reconciliation_note,
+            for my $r (@reconciliations) {
+                next unless defined $r->{note};
+                my $valid = Koha::AuthorisedValues->search(
+                    {
+                        category         => $note_av_category,
+                        authorised_value => $r->{note},
+                    }
+                )->count;
+                unless ($valid) {
+                    Koha::Exceptions::BadParameter->throw(
+                        error     => "Reconciliation note is not a valid authorised value for this category",
+                        parameter => 'reconciliation_note',
+                    );
                 }
-            )->count;
-            unless ($valid) {
-                Koha::Exceptions::BadParameter->throw(
-                    error     => "Reconciliation note is not a valid authorised value for this category",
-                    parameter => 'reconciliation_note',
-                );
             }
         }
     }
+
+    # Total amount across all reconciliations — stored on the CASHUP action row
+    my $total_amount = 0;
+    $total_amount += $_->{actual_amount} for @reconciliations;
 
     # Use database transaction to ensure consistency
     my $schema = $self->_result->result_source->schema;
@@ -443,79 +541,79 @@ sub add_cashup {
                     {
                         code       => 'CASHUP',
                         manager_id => $manager_id,
-                        amount     => $amount
+                        amount     => $total_amount
                     }
                 )->discard_changes;
                 $cashup = Koha::Cash::Register::Cashup->_new_from_dbic($rs);
 
-                # Create reconciliation accountline if there's a difference
-                if ( $difference != 0 ) {
+                # Determine reconciliation date once — applies to all surplus/deficit lines
+                my $reconciliation_date;
+                if ($cashup_start) {
 
-                    # Determine reconciliation date based on mode
-                    my $reconciliation_date;
-                    if ($cashup_start) {
+                    # Two-phase mode: Backdate reconciliation lines to just before the CASHUP_START timestamp
+                    # This ensures they belong to the previous session, not the current one
+                    $reconciliation_date = \[ 'DATE_SUB(?, INTERVAL 1 SECOND)', $cashup_start->timestamp ];
+                } else {
 
-                        # Two-phase mode: Backdate reconciliation lines to just before the CASHUP_START timestamp
-                        # This ensures they belong to the previous session, not the current one
-                        $reconciliation_date = \[ 'DATE_SUB(?, INTERVAL 1 SECOND)', $cashup_start->timestamp ];
-                    } else {
+                    # Legacy mode: Use the original backdating approach
+                    $reconciliation_date = \'DATE_SUB(NOW(), INTERVAL 1 SECOND)';
+                }
 
-                        # Legacy mode: Use the original backdating approach
-                        $reconciliation_date = \'DATE_SUB(NOW(), INTERVAL 1 SECOND)';
-                    }
+                # Create per-type reconciliation accountlines for non-zero discrepancies
+                for my $r (@reconciliations) {
+                    next if $r->{difference} == 0;
 
-                    if ( $difference > 0 ) {
+                    if ( $r->{difference} > 0 ) {
 
-                        # Surplus: more cash found than expected (credits are negative amounts)
+                        # Surplus: more found than expected (credits are negative amounts)
                         my $surplus = Koha::Account::Line->new(
                             {
                                 date              => $reconciliation_date,
-                                amount            => -abs($difference),      # Credits are negative
+                                amount            => -abs( $r->{difference} ),
                                 amountoutstanding => 0,
                                 credit_type_code  => 'CASHUP_SURPLUS',
                                 manager_id        => $manager_id,
                                 interface         => 'intranet',
                                 branchcode        => $self->branch,
                                 register_id       => $self->id,
-                                payment_type      => 'CASH',
-                                note              => $reconciliation_note
+                                payment_type      => $r->{payment_type},
+                                note              => $r->{note}
                             }
                         )->store();
 
-                        # Record the account offset
-                        my $account_offset = Koha::Account::Offset->new(
+                        Koha::Account::Offset->new(
                             {
                                 credit_id => $surplus->id,
                                 type      => 'CREATE',
-                                amount    => -abs($difference)    # Offsets match the line amount
+                                amount    => -abs( $r->{difference} )
                             }
                         )->store();
 
                     } else {
 
-                        # Deficit: less cash found than expected
+                        # Deficit: less found than expected
                         my $deficit = Koha::Account::Line->new(
                             {
                                 date              => $reconciliation_date,
-                                amount            => abs($difference),
+                                amount            => abs( $r->{difference} ),
                                 amountoutstanding => 0,
                                 debit_type_code   => 'CASHUP_DEFICIT',
                                 manager_id        => $manager_id,
                                 interface         => 'intranet',
                                 branchcode        => $self->branch,
                                 register_id       => $self->id,
-                                payment_type      => 'CASH',
-                                note              => $reconciliation_note
-                            }
-                        )->store();
-                        my $account_offset = Koha::Account::Offset->new(
-                            {
-                                debit_id => $deficit->id,
-                                type     => 'CREATE',
-                                amount   => abs($difference)    # Debits have positive offsets
+                                payment_type      => $r->{payment_type},
+                                note              => $r->{note}
                             }
                         )->store();
 
+                        Koha::Account::Offset->new(
+                            {
+                                debit_id => $deficit->id,
+                                type     => 'CREATE',
+                                amount   => abs( $r->{difference} )
+                            }
+                        )->store();
                     }
                 }
             } catch {
@@ -641,6 +739,27 @@ sub to_api_mapping {
 
 sub _type {
     return 'CashRegister';
+}
+
+=head3 _sanitize_note
+
+    my $clean = Koha::Cash::Register::_sanitize_note($note);
+
+Trim whitespace, cap at 1000 characters, and treat an empty result as
+undef. Used internally by C<add_cashup> for both the cashup-wide note
+and per-row notes.
+
+=cut
+
+sub _sanitize_note {
+    my ($note) = @_;
+
+    # Explicit `undef` (not bare `return`) so that the value remains a
+    # single element when the helper is interpolated into a hash literal.
+    return undef unless defined $note;      ## no critic (Subroutines::ProhibitExplicitReturnUndef)
+    $note = substr( $note, 0, 1000 );
+    $note =~ s/^\s+|\s+$//g;
+    return length $note ? $note : undef;    ## no critic (Subroutines::ProhibitExplicitReturnUndef)
 }
 
 1;

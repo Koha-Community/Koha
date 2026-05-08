@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 11;
+use Test::More tests => 16;
 
 use Test::Exception;
 
@@ -185,7 +185,12 @@ subtest 'cashup' => sub {
         plan tests => 6;
 
         ok(
-            $cashup1 = $register->add_cashup( { manager_id => $patron->id, amount => '12.00' } ),
+            $cashup1 = $register->add_cashup(
+                {
+                    manager_id      => $patron->id,
+                    reconciliations => [ { payment_type => 'CASH', actual_amount => '12.00' } ]
+                }
+            ),
             'call successfull'
         );
 
@@ -215,7 +220,8 @@ subtest 'cashup' => sub {
     subtest 'last_cashup' => sub {
         plan tests => 3;
 
-        my $cashup2 = $register->add_cashup( { manager_id => $patron->id, amount => '6.00' } );
+        my $cashup2 = $register->add_cashup(
+            { manager_id => $patron->id, reconciliations => [ { payment_type => 'CASH', actual_amount => '6.00' } ] } );
 
         my $last_cashup = $register->last_cashup;
         is(
@@ -246,7 +252,8 @@ subtest 'cashup' => sub {
             'Koha::Cash::Register->cashups should always return the correct number of cashups'
         );
 
-        my $cashup3 = $register->add_cashup( { manager_id => $patron->id, amount => '6.00' } );
+        my $cashup3 = $register->add_cashup(
+            { manager_id => $patron->id, reconciliations => [ { payment_type => 'CASH', actual_amount => '6.00' } ] } );
 
         $cashups = $register->cashups;
         is(
@@ -308,7 +315,12 @@ subtest 'cashup' => sub {
         # Calculate expected amount for this cashup
         my $expected_amount =
             ( $test_register->outstanding_accountlines->total( { payment_type => [ 'CASH', 'SIP00' ] } ) ) * -1;
-        my $cashup3 = $test_register->add_cashup( { manager_id => $test_patron->id, amount => $expected_amount } );
+        my $cashup3 = $test_register->add_cashup(
+            {
+                manager_id      => $test_patron->id,
+                reconciliations => [ { payment_type => 'CASH', actual_amount => $expected_amount } ]
+            }
+        );
 
         $accountlines = $test_register->outstanding_accountlines;
         is( $accountlines->count, 0, 'Cashup added, no accountlines returned' );
@@ -398,8 +410,8 @@ subtest 'cashup_reconciliation' => sub {
 
         my $cashup = $register->add_cashup(
             {
-                manager_id => $patron->id,
-                amount     => $amount
+                manager_id      => $patron->id,
+                reconciliations => [ { payment_type => 'CASH', actual_amount => $amount } ]
             }
         );
 
@@ -449,8 +461,8 @@ subtest 'cashup_reconciliation' => sub {
 
         my $cashup = $register2->add_cashup(
             {
-                manager_id => $patron->id,
-                amount     => $actual
+                manager_id      => $patron->id,
+                reconciliations => [ { payment_type => 'CASH', actual_amount => $actual } ]
             }
         );
 
@@ -497,9 +509,13 @@ subtest 'cashup_reconciliation' => sub {
 
         my $cashup_with_note = $register_with_note->add_cashup(
             {
-                manager_id          => $patron->id,
-                amount              => 15.00,                                           # 5.00 surplus
-                reconciliation_note => 'Found extra \x{00A3}5 under the till drawer'    # £5 in UTF-8
+                manager_id      => $patron->id,
+                reconciliations => [
+                    {
+                        payment_type => 'CASH', actual_amount => 15.00,
+                        note         => 'Found extra \x{00A3}5 under the till drawer'
+                    }
+                ],    # 5.00 surplus, note in £5 UTF-8
             }
         );
 
@@ -549,8 +565,8 @@ subtest 'cashup_reconciliation' => sub {
 
         my $cashup = $register3->add_cashup(
             {
-                manager_id => $patron->id,
-                amount     => $actual
+                manager_id      => $patron->id,
+                reconciliations => [ { payment_type => 'CASH', actual_amount => $actual } ]
             }
         );
 
@@ -597,9 +613,14 @@ subtest 'cashup_reconciliation' => sub {
 
         my $cashup_deficit_note = $register_deficit_note->add_cashup(
             {
-                manager_id          => $patron->id,
-                amount              => 15.00,                                                     # 5.00 deficit
-                reconciliation_note => 'Till was short, possibly due to incorrect change given'
+                manager_id      => $patron->id,
+                reconciliations => [
+                    {
+                        payment_type  => 'CASH',
+                        actual_amount => 15.00,
+                        note          => 'Till was short, possibly due to incorrect change given',
+                    }
+                ],    # 5.00 deficit
             }
         );
 
@@ -649,8 +670,8 @@ subtest 'cashup_reconciliation' => sub {
         # Test successful transaction
         my $cashup = $register4->add_cashup(
             {
-                manager_id => $patron->id,
-                amount     => 15.00          # Creates surplus
+                manager_id      => $patron->id,
+                reconciliations => [ { payment_type => 'CASH', actual_amount => 15.00 } ]    # Creates surplus
             }
         );
 
@@ -698,9 +719,14 @@ subtest 'cashup_reconciliation' => sub {
         # Test balanced cashup with note (should not create surplus/deficit)
         my $balanced_cashup = $register_note_test->add_cashup(
             {
-                manager_id          => $patron->id,
-                amount              => 10.00,                                              # Balanced
-                reconciliation_note => 'This note should be ignored for balanced cashup'
+                manager_id      => $patron->id,
+                reconciliations => [
+                    {
+                        payment_type  => 'CASH',
+                        actual_amount => 10.00,
+                        note          => 'This note should be ignored for balanced cashup',
+                    }
+                ],    # Balanced
             }
         );
 
@@ -737,9 +763,10 @@ subtest 'cashup_reconciliation' => sub {
 
         my $empty_note_cashup = $register_empty_note->add_cashup(
             {
-                manager_id          => $patron->id,
-                amount              => 12.00,         # 2.00 surplus
-                reconciliation_note => '   '          # Whitespace only
+                manager_id      => $patron->id,
+                reconciliations => [
+                    { payment_type => 'CASH', actual_amount => 12.00, note => '   ' },    # whitespace-only note
+                ],    # 2.00 surplus
             }
         );
 
@@ -873,8 +900,8 @@ subtest 'two_phase_cashup_workflow' => sub {
     my $expected_cashup_amount = 5.00;                    # CASH PAYMENT prior to CASHUP_START
     my $cashup_complete        = $register->add_cashup(
         {
-            manager_id => $manager->id,
-            amount     => $expected_cashup_amount
+            manager_id      => $manager->id,
+            reconciliations => [ { payment_type => 'CASH', actual_amount => $expected_cashup_amount } ]
         }
     );
 
@@ -948,7 +975,9 @@ subtest 'cashup_in_progress' => sub {
         );
 
         # Add a quick cashup
-        my $quick_cashup = $register->add_cashup( { manager_id => $manager->id, amount => '10.00' } );
+        my $quick_cashup = $register->add_cashup(
+            { manager_id => $manager->id, reconciliations => [ { payment_type => 'CASH', actual_amount => '10.00' } ] }
+        );
         $quick_cashup->timestamp( \'NOW() - INTERVAL 30 MINUTE' )->store();
 
         my $in_progress = $register->cashup_in_progress;
@@ -969,7 +998,9 @@ subtest 'cashup_in_progress' => sub {
         );
 
         # Add another quick cashup
-        my $quick_cashup2 = $register->add_cashup( { manager_id => $manager->id, amount => '5.00' } );
+        my $quick_cashup2 = $register->add_cashup(
+            { manager_id => $manager->id, reconciliations => [ { payment_type => 'CASH', actual_amount => '5.00' } ] }
+        );
 
         $in_progress = $register->cashup_in_progress;
         is( $in_progress, undef, 'cashup_in_progress returns undef after multiple quick cashups' );
@@ -1001,7 +1032,9 @@ subtest 'cashup_in_progress' => sub {
         $start1->timestamp( \'NOW() - INTERVAL 60 MINUTE' )->store();
 
         # Complete the first one
-        my $complete1 = $register2->add_cashup( { manager_id => $manager->id, amount => '1.00' } );
+        my $complete1 = $register2->add_cashup(
+            { manager_id => $manager->id, reconciliations => [ { payment_type => 'CASH', actual_amount => '1.00' } ] }
+        );
         $complete1->timestamp( \'NOW() - INTERVAL 50 MINUTE' )->store();
 
         # Add more cash for second cashup
@@ -1022,7 +1055,7 @@ subtest 'cashup_in_progress' => sub {
         my $start2 = $register2->start_cashup( { manager_id => $manager->id } );
 
         my $in_progress = $register2->cashup_in_progress;
-        is( ref($in_progress), 'Koha::Cash::Register::Action', 'Returns most recent CASHUP_START when multiple exist' );
+        is( ref($in_progress), 'Koha::Cash::Register::Cashup', 'Returns most recent CASHUP_START when multiple exist' );
         is( $in_progress->id,  $start2->id, 'Returns the correct (most recent) CASHUP_START action' );
     };
 
@@ -1048,7 +1081,9 @@ subtest 'cashup_in_progress' => sub {
         );
 
         # Quick cashup first
-        my $quick = $register3->add_cashup( { manager_id => $manager->id, amount => '5.00' } );
+        my $quick = $register3->add_cashup(
+            { manager_id => $manager->id, reconciliations => [ { payment_type => 'CASH', actual_amount => '5.00' } ] }
+        );
         $quick->timestamp( \'NOW() - INTERVAL 40 MINUTE' )->store();
 
         # Add cash for two-phase cashup
@@ -1070,11 +1105,13 @@ subtest 'cashup_in_progress' => sub {
         $start->timestamp( \'NOW() - INTERVAL 30 MINUTE' )->store();
 
         my $in_progress = $register3->cashup_in_progress;
-        is( ref($in_progress), 'Koha::Cash::Register::Action', 'Detects two-phase in progress after quick cashup' );
+        is( ref($in_progress), 'Koha::Cash::Register::Cashup', 'Detects two-phase in progress after quick cashup' );
         is( $in_progress->id,  $start->id,                     'Returns correct CASHUP_START after mixed workflow' );
 
         # Complete two-phase
-        my $complete = $register3->add_cashup( { manager_id => $manager->id, amount => '3.00' } );
+        my $complete = $register3->add_cashup(
+            { manager_id => $manager->id, reconciliations => [ { payment_type => 'CASH', actual_amount => '3.00' } ] }
+        );
 
         $in_progress = $register3->cashup_in_progress;
         is( $in_progress, undef, 'Returns undef after completing two-phase in mixed workflow' );
@@ -1106,7 +1143,9 @@ subtest 'cashup_in_progress' => sub {
         my $start_time = $start->timestamp;
 
         # Create CASHUP with exactly the same timestamp (edge case)
-        my $complete = $register4->add_cashup( { manager_id => $manager->id, amount => '1.00' } );
+        my $complete = $register4->add_cashup(
+            { manager_id => $manager->id, reconciliations => [ { payment_type => 'CASH', actual_amount => '1.00' } ] }
+        );
         $complete->timestamp($start_time)->store();
 
         my $in_progress = $register4->cashup_in_progress;
@@ -1131,12 +1170,14 @@ subtest 'cashup_in_progress' => sub {
 
         my $start2 = $register5->start_cashup( { manager_id => $manager->id } );
 
-        my $complete2 = $register5->add_cashup( { manager_id => $manager->id, amount => '1.00' } );
+        my $complete2 = $register5->add_cashup(
+            { manager_id => $manager->id, reconciliations => [ { payment_type => 'CASH', actual_amount => '1.00' } ] }
+        );
         $complete2->timestamp( \'NOW() - INTERVAL 1 MINUTE' )->store();
 
         $in_progress = $register5->cashup_in_progress;
         is(
-            ref($in_progress), 'Koha::Cash::Register::Action',
+            ref($in_progress), 'Koha::Cash::Register::Cashup',
             'Correctly identifies active cashup when completion is backdated'
         );
     };
@@ -1166,7 +1207,12 @@ subtest 'cashup_in_progress' => sub {
 
         # Create many quick cashups
         for my $i ( 1 .. 10 ) {
-            my $cashup    = $register6->add_cashup( { manager_id => $manager->id, amount => '1.00' } );
+            my $cashup = $register6->add_cashup(
+                {
+                    manager_id      => $manager->id,
+                    reconciliations => [ { payment_type => 'CASH', actual_amount => '1.00' } ]
+                }
+            );
             my $timestamp = "NOW() - INTERVAL $i MINUTE";
             $cashup->timestamp( \$timestamp )->store();
         }
@@ -1189,7 +1235,7 @@ subtest 'cashup_in_progress' => sub {
         my $start = $register6->start_cashup( { manager_id => $manager->id } );
 
         my $in_progress = $register6->cashup_in_progress;
-        is( ref($in_progress), 'Koha::Cash::Register::Action', 'Performs correctly with many previous cashups' );
+        is( ref($in_progress), 'Koha::Cash::Register::Cashup', 'Performs correctly with many previous cashups' );
     };
 
     $schema->storage->txn_rollback;
@@ -1361,7 +1407,9 @@ subtest 'add_cashup' => sub {
 
         my $register1 = $builder->build_object( { class => 'Koha::Cash::Registers' } );
 
-        my $cashup = $register1->add_cashup( { manager_id => $manager->id, amount => '10.00' } );
+        my $cashup = $register1->add_cashup(
+            { manager_id => $manager->id, reconciliations => [ { payment_type => 'CASH', actual_amount => '10.00' } ] }
+        );
 
         is( ref($cashup),        'Koha::Cash::Register::Cashup', 'add_cashup returns correct object type' );
         is( $cashup->manager_id, $manager->id,                   'manager_id set correctly' );
@@ -1375,7 +1423,9 @@ subtest 'add_cashup' => sub {
         my $register2 = $builder->build_object( { class => 'Koha::Cash::Registers' } );
 
         # Missing manager_id
-        eval { $register2->add_cashup( { amount => '10.00' } ); };
+        eval {
+            $register2->add_cashup( { reconciliations => [ { payment_type => 'CASH', actual_amount => '10.00' } ] } );
+        };
         ok( $@, 'add_cashup fails when manager_id is missing' );
 
         # Missing amount
@@ -1396,7 +1446,12 @@ subtest 'add_cashup' => sub {
         # Zero amount is now valid (for non-cash transaction scenarios)
         my $zero_cashup;
         lives_ok {
-            $zero_cashup = $register3->add_cashup( { manager_id => $manager->id, amount => '0.00' } );
+            $zero_cashup = $register3->add_cashup(
+                {
+                    manager_id      => $manager->id,
+                    reconciliations => [ { payment_type => 'CASH', actual_amount => '0.00' } ]
+                }
+            );
         }
         'Zero amount is accepted for non-cash transaction scenarios';
         is( $zero_cashup->amount + 0, 0, 'Zero amount stored correctly' );
@@ -1404,21 +1459,33 @@ subtest 'add_cashup' => sub {
         # Negative amount is now valid (for float deficits)
         my $negative_cashup;
         lives_ok {
-            $negative_cashup = $register3->add_cashup( { manager_id => $manager->id, amount => '-5.00' } );
+            $negative_cashup = $register3->add_cashup(
+                {
+                    manager_id      => $manager->id,
+                    reconciliations => [ { payment_type => 'CASH', actual_amount => '-5.00' } ]
+                }
+            );
         }
         'Negative amount is accepted for float deficit scenarios';
         is( $negative_cashup->amount + 0, -5, 'Negative amount stored correctly' );
 
         # Non-numeric amount
         throws_ok {
-            $register3->add_cashup( { manager_id => $manager->id, amount => 'invalid' } );
+            $register3->add_cashup(
+                {
+                    manager_id      => $manager->id,
+                    reconciliations => [ { payment_type => 'CASH', actual_amount => 'invalid' } ]
+                }
+            );
         }
         'Koha::Exceptions::Account::AmountNotPositive',
             'Non-numeric amount throws AmountNotPositive exception';
 
         # Empty string amount
         throws_ok {
-            $register3->add_cashup( { manager_id => $manager->id, amount => '' } );
+            $register3->add_cashup(
+                { manager_id => $manager->id, reconciliations => [ { payment_type => 'CASH', actual_amount => '' } ] }
+            );
         }
         'Koha::Exceptions::Account::AmountNotPositive',
             'Empty string amount throws AmountNotPositive exception';
@@ -1454,9 +1521,10 @@ subtest 'add_cashup' => sub {
         # Test normal note
         my $cashup1 = $register4->add_cashup(
             {
-                manager_id          => $manager->id,
-                amount              => '15.00',                        # Creates surplus
-                reconciliation_note => 'Found extra money in drawer'
+                manager_id      => $manager->id,
+                reconciliations =>
+                    [ { payment_type => 'CASH', actual_amount => '15.00', note => 'Found extra money in drawer' } ]
+                ,    # Creates surplus
             }
         );
 
@@ -1492,9 +1560,8 @@ subtest 'add_cashup' => sub {
 
         my $cashup2 = $register5->add_cashup(
             {
-                manager_id          => $manager->id,
-                amount              => '15.00',
-                reconciliation_note => $long_note
+                manager_id      => $manager->id,
+                reconciliations => [ { payment_type => 'CASH', actual_amount => '15.00', note => $long_note } ],
             }
         );
 
@@ -1529,9 +1596,10 @@ subtest 'add_cashup' => sub {
 
         my $cashup3 = $register6->add_cashup(
             {
-                manager_id          => $manager->id,
-                amount              => '15.00',
-                reconciliation_note => '   '           # Whitespace only
+                manager_id      => $manager->id,
+                reconciliations => [
+                    { payment_type => 'CASH', actual_amount => '15.00', note => '   ' },    # whitespace-only note
+                ],
             }
         );
 
@@ -1566,9 +1634,10 @@ subtest 'add_cashup' => sub {
 
         my $cashup4 = $register7->add_cashup(
             {
-                manager_id          => $manager->id,
-                amount              => '15.00',
-                reconciliation_note => ''              # Empty string
+                manager_id      => $manager->id,
+                reconciliations => [
+                    { payment_type => 'CASH', actual_amount => '15.00', note => '' },    # empty-string note
+                ],
             }
         );
 
@@ -1588,7 +1657,9 @@ subtest 'add_cashup' => sub {
         my $register9 = $builder->build_object( { class => 'Koha::Cash::Registers' } );
 
         throws_ok {
-            $register9->add_cashup( { manager_id => 99999999, amount => '10.00' } );
+            $register9->add_cashup(
+                { manager_id => 99999999, reconciliations => [ { payment_type => 'CASH', actual_amount => '10.00' } ] }
+            );
         }
         'Koha::Exceptions::Object::FKConstraint', 'add_cashup throws FK constraint exception with invalid manager_id';
     };
@@ -1632,8 +1703,8 @@ subtest 'required_reconciliation_note' => sub {
     throws_ok {
         $register->add_cashup(
             {
-                manager_id => $manager->id,
-                amount     => '15.00'         # Creates discrepancy
+                manager_id      => $manager->id,
+                reconciliations => [ { payment_type => 'CASH', actual_amount => '15.00' } ]    # Creates discrepancy
             }
         );
     }
@@ -1645,9 +1716,9 @@ subtest 'required_reconciliation_note' => sub {
     lives_ok {
         $cashup1 = $register->add_cashup(
             {
-                manager_id          => $manager->id,
-                amount              => '15.00',
-                reconciliation_note => 'Found extra money'
+                manager_id      => $manager->id,
+                reconciliations =>
+                    [ { payment_type => 'CASH', actual_amount => '15.00', note => 'Found extra money' } ],
             }
         );
     }
@@ -1677,8 +1748,9 @@ subtest 'required_reconciliation_note' => sub {
     lives_ok {
         $cashup2 = $register2->add_cashup(
             {
-                manager_id => $manager->id,
-                amount     => '20.00'         # Exact amount, no discrepancy
+                manager_id      => $manager->id,
+                reconciliations =>
+                    [ { payment_type => 'CASH', actual_amount => '20.00' } ]    # Exact amount, no discrepancy
             }
         );
     }
@@ -1710,12 +1782,413 @@ subtest 'required_reconciliation_note' => sub {
     lives_ok {
         $cashup3 = $register3->add_cashup(
             {
-                manager_id => $manager->id,
-                amount     => '15.00'         # Creates discrepancy
+                manager_id      => $manager->id,
+                reconciliations => [ { payment_type => 'CASH', actual_amount => '15.00' } ]    # Creates discrepancy
             }
         );
     }
     'Missing note with discrepancy succeeds when preference disabled';
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'cashup_payment_types' => sub {
+    plan tests => 5;
+
+    my $register = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+
+    t::lib::Mocks::mock_preference( 'CashupPaymentTypes', 'CASH,SIP00' );
+    is_deeply(
+        $register->cashup_payment_types, [ 'CASH', 'SIP00' ],
+        'Reads ordered list from CashupPaymentTypes'
+    );
+
+    t::lib::Mocks::mock_preference( 'CashupPaymentTypes', 'CHEQUE, CARD , CASH' );
+    is_deeply(
+        $register->cashup_payment_types, [ 'CHEQUE', 'CARD', 'CASH' ],
+        'Trims whitespace and preserves order'
+    );
+
+    t::lib::Mocks::mock_preference( 'CashupPaymentTypes', '' );
+    is_deeply(
+        $register->cashup_payment_types, [ 'CASH', 'SIP00' ],
+        'Falls back to [CASH, SIP00] when preference is empty'
+    );
+
+    t::lib::Mocks::mock_preference( 'CashupPaymentTypes', undef );
+    is_deeply(
+        $register->cashup_payment_types, [ 'CASH', 'SIP00' ],
+        'Falls back to [CASH, SIP00] when preference is undefined'
+    );
+
+    t::lib::Mocks::mock_preference( 'CashupPaymentTypes', ',,CASH,, CHEQUE,' );
+    is_deeply(
+        $register->cashup_payment_types, [ 'CASH', 'CHEQUE' ],
+        'Skips empty fragments from a malformed list'
+    );
+};
+
+subtest 'cashup_payment_types_breakdown' => sub {
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'CashupReconciliationNoteRequired', 0 );
+    t::lib::Mocks::mock_preference( 'CashupPaymentTypes',               'CASH,CHEQUE' );
+
+    my $register = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => {
+                register_id      => $register->id,
+                borrowernumber   => $patron->id,
+                amount           => -10.00,
+                credit_type_code => 'PAYMENT',
+                debit_type_code  => undef,
+                payment_type     => 'CASH',
+                date             => \'SYSDATE() - INTERVAL 1 MINUTE',
+                timestamp        => \'SYSDATE() - INTERVAL 1 MINUTE',
+            }
+        }
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => {
+                register_id      => $register->id,
+                borrowernumber   => $patron->id,
+                amount           => -5.00,
+                credit_type_code => 'PAYMENT',
+                debit_type_code  => undef,
+                payment_type     => 'CHEQUE',
+                date             => \'SYSDATE() - INTERVAL 1 MINUTE',
+                timestamp        => \'SYSDATE() - INTERVAL 1 MINUTE',
+            }
+        }
+    );
+
+    my $rows = $register->cashup_payment_types_breakdown;
+    is( scalar @$rows,                             2,       'One row per configured payment type' );
+    is( $rows->[0]->{payment_type},                'CASH',  'First row matches first configured type' );
+    is( sprintf( '%.2f', $rows->[0]->{expected} ), '10.00', 'CASH expected total reflects outstanding accountlines' );
+    is( sprintf( '%.2f', $rows->[1]->{expected} ), '5.00',  'CHEQUE expected total reflects outstanding accountlines' );
+
+    # Regression: starting a two-phase cashup (CASHUP_START) used to make the
+    # helper crash because cashup_in_progress returned a Koha::Cash::Register::Action
+    # which has no accountlines method. Confirm cashup_in_progress now returns a
+    # Cashup with accountlines, and the breakdown stays callable.
+    $register->start_cashup( { manager_id => $patron->id } );
+
+    my $in_progress = $register->cashup_in_progress;
+    isa_ok( $in_progress, 'Koha::Cash::Register::Cashup', 'cashup_in_progress returns a Cashup' );
+    ok( $in_progress->can('accountlines'), 'returned object can accountlines' );
+
+    my $rows_after_start;
+    eval { $rows_after_start = $register->cashup_payment_types_breakdown };
+    ok( !$@, 'breakdown callable while a CASHUP_START is in progress' )
+        or diag $@;
+    is( scalar @{ $rows_after_start || [] }, 2, 'Still returns one row per configured type after start_cashup' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'start_cashup_respects_configured_payment_types' => sub {
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'CashupPaymentTypes', 'CASH,CHEQUE' );
+
+    my $manager  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $register = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+
+    $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => {
+                register_id      => $register->id,
+                amount           => -10.00,
+                credit_type_code => 'PAYMENT',
+                debit_type_code  => undef,
+                payment_type     => 'CASH',
+                date             => \'SYSDATE() - INTERVAL 1 MINUTE',
+                timestamp        => \'SYSDATE() - INTERVAL 1 MINUTE',
+            }
+        }
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => {
+                register_id      => $register->id,
+                amount           => -5.00,
+                credit_type_code => 'PAYMENT',
+                debit_type_code  => undef,
+                payment_type     => 'CHEQUE',
+                date             => \'SYSDATE() - INTERVAL 1 MINUTE',
+                timestamp        => \'SYSDATE() - INTERVAL 1 MINUTE',
+            }
+        }
+    );
+
+    # Regression: start_cashup used to filter expected_amount on a hardcoded
+    # ['CASH','SIP00'] list regardless of CashupPaymentTypes, so the
+    # CASHUP_START snapshot amount silently dropped any other configured type.
+    my $cashup_start = $register->start_cashup( { manager_id => $manager->id } );
+
+    is(
+        sprintf( '%.2f', $cashup_start->amount ), '15.00',
+        'CASHUP_START amount reflects all configured payment types, not just CASH/SIP00'
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'cashup_per_payment_type' => sub {
+    plan tests => 14;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'CashupReconciliationNoteRequired', 0 );
+    t::lib::Mocks::mock_preference( 'CashupPaymentTypes',               'CASH,CHEQUE' );
+
+    my $register = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    # Outstanding: CASH 10.00 + CHEQUE 5.00
+    $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => {
+                register_id      => $register->id,
+                borrowernumber   => $patron->id,
+                amount           => -10.00,
+                credit_type_code => 'PAYMENT',
+                debit_type_code  => undef,
+                payment_type     => 'CASH',
+                date             => \'SYSDATE() - INTERVAL 1 MINUTE',
+                timestamp        => \'SYSDATE() - INTERVAL 1 MINUTE',
+            }
+        }
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => {
+                register_id      => $register->id,
+                borrowernumber   => $patron->id,
+                amount           => -5.00,
+                credit_type_code => 'PAYMENT',
+                debit_type_code  => undef,
+                payment_type     => 'CHEQUE',
+                date             => \'SYSDATE() - INTERVAL 1 MINUTE',
+                timestamp        => \'SYSDATE() - INTERVAL 1 MINUTE',
+            }
+        }
+    );
+
+    # Mixed: cash deficit £1 + cheque surplus £2
+    my $cashup = $register->add_cashup(
+        {
+            manager_id      => $patron->id,
+            reconciliations => [
+                { payment_type => 'CASH',   actual_amount => 9.00 },
+                { payment_type => 'CHEQUE', actual_amount => 7.00 },
+            ],
+        }
+    );
+
+    ok( $cashup, 'Per-type cashup created' );
+    is( sprintf( '%.2f', $cashup->amount ), '16.00', 'CASHUP action stores total of all actual_amounts' );
+
+    my $surplus =
+        Koha::Account::Lines->search( { register_id => $register->id, credit_type_code => 'CASHUP_SURPLUS' } )->next;
+    ok( $surplus, 'Surplus accountline created for cheque overage' );
+    is( $surplus->payment_type,                     'CHEQUE', 'Surplus tagged with cheque payment type' );
+    is( sprintf( '%.2f', abs( $surplus->amount ) ), '2.00',   'Cheque surplus is £2.00' );
+
+    my $deficit =
+        Koha::Account::Lines->search( { register_id => $register->id, debit_type_code => 'CASHUP_DEFICIT' } )->next;
+    ok( $deficit, 'Deficit accountline created for cash shortfall' );
+    is( $deficit->payment_type,              'CASH', 'Deficit tagged with cash payment type' );
+    is( sprintf( '%.2f', $deficit->amount ), '1.00', 'Cash deficit is £1.00' );
+
+    # Balanced types create no lines — verify no PAYMENT_TYPE='CARD' surplus/deficit was emitted
+    my $card_lines = Koha::Account::Lines->search(
+        {
+            register_id  => $register->id,
+            payment_type => 'CARD',
+            -or          => [
+                { credit_type_code => 'CASHUP_SURPLUS' },
+                { debit_type_code  => 'CASHUP_DEFICIT' }
+            ]
+        }
+    );
+    is( $card_lines->count, 0, 'No reconciliation lines for unconfigured payment types' );
+
+    # Reject unknown payment type
+    throws_ok {
+        $register->add_cashup(
+            {
+                manager_id      => $patron->id,
+                reconciliations => [ { payment_type => 'GIFTCARD', actual_amount => 5.00 } ],
+            }
+        );
+    }
+    'Koha::Exceptions::Object::BadValue', 'Rejects payment type not in CashupPaymentTypes';
+
+    # Reject missing actual_amount
+    throws_ok {
+        $register->add_cashup(
+            {
+                manager_id      => $patron->id,
+                reconciliations => [ { payment_type => 'CASH' } ],
+            }
+        );
+    }
+    'Koha::Exceptions::MissingParameter', 'Rejects entry missing actual_amount';
+
+    # Reject non-numeric actual_amount
+    throws_ok {
+        $register->add_cashup(
+            {
+                manager_id      => $patron->id,
+                reconciliations => [ { payment_type => 'CASH', actual_amount => 'abc' } ],
+            }
+        );
+    }
+    'Koha::Exceptions::Account::AmountNotPositive', 'Rejects non-numeric actual_amount';
+
+    # Missing 'reconciliations' parameter
+    throws_ok {
+        $register->add_cashup( { manager_id => $patron->id } );
+    }
+    'Koha::Exceptions::MissingParameter', "Rejects when 'reconciliations' is not provided";
+
+    # Empty reconciliations arrayref
+    throws_ok {
+        $register->add_cashup( { manager_id => $patron->id, reconciliations => [] } );
+    }
+    'Koha::Exceptions::MissingParameter', 'Rejects an empty reconciliations arrayref';
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'cashup_per_payment_type_notes' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'CashupReconciliationNoteRequired', 0 );
+    t::lib::Mocks::mock_preference( 'CashupPaymentTypes',               'CASH,CHEQUE' );
+
+    my $register = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    # Outstanding: CASH 10.00 + CHEQUE 5.00
+    for my $pt (qw(CASH CHEQUE)) {
+        my $amt = $pt eq 'CASH' ? -10.00 : -5.00;
+        $builder->build_object(
+            {
+                class => 'Koha::Account::Lines',
+                value => {
+                    register_id      => $register->id,
+                    borrowernumber   => $patron->id,
+                    amount           => $amt,
+                    credit_type_code => 'PAYMENT',
+                    debit_type_code  => undef,
+                    payment_type     => $pt,
+                    date             => \'SYSDATE() - INTERVAL 1 MINUTE',
+                    timestamp        => \'SYSDATE() - INTERVAL 1 MINUTE',
+                }
+            }
+        );
+    }
+
+    # Per-row notes — each discrepant row gets its own reason.
+    $register->add_cashup(
+        {
+            manager_id      => $patron->id,
+            reconciliations => [
+                { payment_type => 'CASH',   actual_amount => 9.00, note => 'Cash short - change kept' },
+                { payment_type => 'CHEQUE', actual_amount => 7.00, note => 'Cheque overage - counted twice' },
+            ],
+        }
+    );
+
+    my $surplus =
+        Koha::Account::Lines->search( { register_id => $register->id, credit_type_code => 'CASHUP_SURPLUS' } )->next;
+    is( $surplus->note, 'Cheque overage - counted twice', 'Surplus line carries its own per-row note' );
+
+    my $deficit =
+        Koha::Account::Lines->search( { register_id => $register->id, debit_type_code => 'CASHUP_DEFICIT' } )->next;
+    is( $deficit->note, 'Cash short - change kept', 'Deficit line carries its own per-row note' );
+
+    # Note required: a discrepant row missing its own note throws.
+    t::lib::Mocks::mock_preference( 'CashupReconciliationNoteRequired', 1 );
+
+    my $register3 = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+    for my $pt (qw(CASH CHEQUE)) {
+        my $amt = $pt eq 'CASH' ? -10.00 : -5.00;
+        $builder->build_object(
+            {
+                class => 'Koha::Account::Lines',
+                value => {
+                    register_id      => $register3->id,
+                    borrowernumber   => $patron->id,
+                    amount           => $amt,
+                    credit_type_code => 'PAYMENT',
+                    debit_type_code  => undef,
+                    payment_type     => $pt,
+                    date             => \'SYSDATE() - INTERVAL 1 MINUTE',
+                    timestamp        => \'SYSDATE() - INTERVAL 1 MINUTE',
+                }
+            }
+        );
+    }
+
+    throws_ok {
+        $register3->add_cashup(
+            {
+                manager_id      => $patron->id,
+                reconciliations => [
+                    { payment_type => 'CASH',   actual_amount => 9.00, note => 'Drawer short' },
+                    { payment_type => 'CHEQUE', actual_amount => 7.00 },    # missing
+                ],
+            }
+        );
+    }
+    'Koha::Exceptions::MissingParameter', 'Note-required throws when a discrepant row lacks its own note';
+
+    # Whitespace-only entry note is treated as undef.
+    my $register5 = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+    $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => {
+                register_id      => $register5->id,
+                borrowernumber   => $patron->id,
+                amount           => -10.00,
+                credit_type_code => 'PAYMENT',
+                debit_type_code  => undef,
+                payment_type     => 'CASH',
+                date             => \'SYSDATE() - INTERVAL 1 MINUTE',
+                timestamp        => \'SYSDATE() - INTERVAL 1 MINUTE',
+            }
+        }
+    );
+    throws_ok {
+        $register5->add_cashup(
+            {
+                manager_id      => $patron->id,
+                reconciliations => [ { payment_type => 'CASH', actual_amount => 9.00, note => '   ' } ],
+            }
+        );
+    }
+    'Koha::Exceptions::MissingParameter', 'Whitespace-only entry note does not satisfy the note-required check';
 
     $schema->storage->txn_rollback;
 };
