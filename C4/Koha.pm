@@ -34,7 +34,6 @@ BEGIN {
         getitemtypeimagelocation
         GetAuthorisedValues
         GetNormalizedISBN
-        GetNormalizedEAN
         xml_escape
 
         GetVariationsOfISBN
@@ -634,37 +633,6 @@ sub GetNormalizedISBN {
             $isbn = $field->subfield('a');
             if ($isbn) {
                 return _isbn_cleanup($isbn);
-            }
-        }
-    }
-}
-
-=head2 GetNormalizedEAN
-
-Missing POD for GetNormalizedEAN.
-
-=cut
-
-sub GetNormalizedEAN {
-    my ( $marcrecord, $marcflavour ) = @_;
-
-    return unless $marcrecord;
-
-    if ( $marcflavour eq 'UNIMARC' ) {
-        my @fields = $marcrecord->field('073');
-        foreach my $field (@fields) {
-            my $ean = _normalize_match_point( $field->subfield('a') );
-            if ($ean) {
-                return $ean;
-            }
-        }
-    } else {    # assume marc21 if not unimarc
-        my @fields = $marcrecord->field('024');
-        foreach my $field (@fields) {
-            my $indicator = $field->indicator(1);
-            my $ean       = _normalize_match_point( $field->subfield('a') );
-            if ( $ean && $indicator eq '3' ) {
-                return $ean;
             }
         }
     }

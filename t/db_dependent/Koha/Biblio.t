@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 43;
+use Test::More tests => 44;
 use Test::Exception;
 use Test::Warn;
 
@@ -2032,6 +2032,28 @@ subtest 'normalized_upc() tests' => sub {
         $biblio->normalized_upc, $biblio->metadata_extractor->get_normalized_upc,
         'normalized_upc delegates to the metadata extractor'
     );
+
+    $schema->storage->txn_rollback;
+
+};
+
+subtest 'normalized_ean() tests' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
+
+    my $biblio = $builder->build_sample_biblio();
+    my $record = $biblio->metadata->record;
+    $record->append_fields( MARC::Field->new( '024', '3', ' ', a => '978-3-16-148410-0' ) );
+    C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
+    $biblio = $biblio->get_from_storage;
+
+    is( $biblio->normalized_ean, '9783161484100', 'normalized_ean returns EAN from 024 ind1=3' );
+
+    my $biblio_no_ean = $builder->build_sample_biblio();
+    is( $biblio_no_ean->normalized_ean, undef, 'normalized_ean returns undef when no EAN' );
 
     $schema->storage->txn_rollback;
 

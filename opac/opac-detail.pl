@@ -26,7 +26,6 @@ use C4::Acquisition qw( SearchOrders );
 use C4::Auth        qw( get_template_and_user get_session );
 use C4::Koha        qw(
     getitemtypeimagelocation
-    GetNormalizedEAN
     GetNormalizedISBN
 );
 use C4::Search  qw( new_record_from_zebra searchResults getRecords );
@@ -159,7 +158,7 @@ if ( $query->cookie("bib_list") ) {
 
 SetUTF8Flag($record);
 my $marcflavour = C4::Context->preference("marcflavour");
-my $ean         = GetNormalizedEAN( $record, $marcflavour );
+my $ean         = $biblio->normalized_ean;
 
 my $OpacBrowseResults = C4::Context->preference("OpacBrowseResults");
 

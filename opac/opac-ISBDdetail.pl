@@ -54,7 +54,6 @@ use C4::Record   qw( marc2cites );
 use C4::Reserves qw( IsAvailableForItemLevelRequest );
 use C4::Serials  qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
 use C4::Koha     qw(
-    GetNormalizedEAN
     GetNormalizedISBN
 );
 use Koha::CirculationRules;
@@ -131,7 +130,7 @@ my $marcflavour = C4::Context->preference("marcflavour");
 # in each case, we're grabbing the first value we find in
 # the record and normalizing it
 my $upc  = $biblio->normalized_upc;
-my $ean  = GetNormalizedEAN( $record, $marcflavour );
+my $ean  = $extractor->get_normalized_ean;
 my $oclc = $extractor->get_normalized_oclc;
 my $isbn = GetNormalizedISBN( undef, $record, $marcflavour );
 my $content_identifier_exists;

@@ -23,7 +23,6 @@ use CGI        qw ( -utf8 );
 use C4::Auth   qw( get_template_and_user );
 use C4::Biblio qw( GetBiblioData GetFrameworkCode );
 use C4::Koha   qw(
-    GetNormalizedEAN
     GetNormalizedISBN
 );
 use C4::Members;
@@ -388,12 +387,11 @@ if ( $op eq 'view' ) {
                     $this_item->{description} = $itemtype->description;  #FIXME Should not it be translated_description?
                     $this_item->{notforloan}  = $itemtype->notforloan;
                 }
-                $this_item->{'coins'} = $biblio->get_coins;
-                $this_item->{'normalized_upc'} =
-                    Koha::Biblio::Metadata::Extractor->new( { metadata => $record } )->get_normalized_upc;
-                $this_item->{'normalized_ean'} = GetNormalizedEAN( $record, $marcflavour );
-                $this_item->{'normalized_oclc'} =
-                    Koha::Biblio::Metadata::Extractor->new( { metadata => $record } )->get_normalized_oclc;
+                my $extractor = Koha::Biblio::Metadata::Extractor->new( { metadata => $record } );
+                $this_item->{'coins'}           = $biblio->get_coins;
+                $this_item->{'normalized_upc'}  = $extractor->get_normalized_upc;
+                $this_item->{'normalized_ean'}  = $extractor->get_normalized_ean;
+                $this_item->{'normalized_oclc'} = $extractor->get_normalized_oclc;
                 $this_item->{'normalized_isbn'} = GetNormalizedISBN( undef, $record, $marcflavour );
 
                 # BZ17530: 'Intelligent' guess if result can be article requested

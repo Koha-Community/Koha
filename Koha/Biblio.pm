@@ -1703,6 +1703,19 @@ sub normalized_upc {
     return $self->metadata_extractor->get_normalized_upc;
 }
 
+=head3 normalized_ean
+
+    my $normalized_ean = $biblio->normalized_ean
+
+Normalizes and returns the EAN found in the MARC record.
+
+=cut
+
+sub normalized_ean {
+    my ($self) = @_;
+    return $self->metadata_extractor->get_normalized_ean;
+}
+
 =head3 normalized_oclc
 
     my $normalized_oclc = $biblio->normalized_oclc

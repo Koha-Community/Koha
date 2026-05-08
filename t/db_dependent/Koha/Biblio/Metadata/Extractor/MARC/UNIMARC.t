@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Exception;
 
 use t::lib::TestBuilder;
@@ -75,4 +75,26 @@ subtest 'get_normalized_upc() tests' => sub {
 
     $schema->storage->txn_rollback;
 
+};
+
+subtest 'get_normalized_ean() tests' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'marcflavour', 'UNIMARC' );
+
+    my $record = MARC::Record->new();
+    $record->append_fields(
+        MARC::Field->new( '073', ' ', ' ', a => '978-2-07-036822-8' ),
+    );
+
+    my $extractor = Koha::Biblio::Metadata::Extractor::MARC->new( { metadata => $record } );
+    is( $extractor->get_normalized_ean, '9782070368228', 'EAN extracted from 073$a and normalized' );
+
+    $record    = MARC::Record->new();
+    $extractor = Koha::Biblio::Metadata::Extractor::MARC->new( { metadata => $record } );
+    is( $extractor->get_normalized_ean, undef, 'Returns undef for empty record' );
+
+    $schema->storage->txn_rollback;
 };

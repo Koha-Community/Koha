@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Exception;
 
 use t::lib::TestBuilder;
@@ -137,6 +137,34 @@ subtest 'check_fixed_length' => sub {
     is( $result->{passed}->[2], '007', 'Check third passed field' );
     is( $result->{failed}->[0], '006', 'Check first failed field' );
     is( $result->{failed}->[1], '007', 'Check second failed field' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_normalized_ean() tests' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $record = MARC::Record->new();
+    $record->append_fields(
+        MARC::Field->new( '024', '1', ' ', a => '123456789' ),            # UPC (ind1=1), not EAN
+        MARC::Field->new( '024', '3', ' ', a => '978-3-16-148410-0' ),    # EAN (ind1=3)
+    );
+
+    my $extractor = Koha::Biblio::Metadata::Extractor->new( { metadata => $record } );
+    is( $extractor->get_normalized_ean, '9783161484100', 'EAN extracted and normalized (dashes removed)' );
+
+    $record = MARC::Record->new();
+    $record->append_fields(
+        MARC::Field->new( '024', '1', ' ', a => '123456789' ),            # UPC only
+    );
+    $extractor = Koha::Biblio::Metadata::Extractor->new( { metadata => $record } );
+    is( $extractor->get_normalized_ean, undef, 'Returns undef when no EAN (ind1=3) present' );
+
+    $record    = MARC::Record->new();
+    $extractor = Koha::Biblio::Metadata::Extractor->new( { metadata => $record } );
+    is( $extractor->get_normalized_ean, undef, 'Returns undef for empty record' );
 
     $schema->storage->txn_rollback;
 };

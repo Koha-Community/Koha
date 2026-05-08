@@ -72,6 +72,28 @@ sub get_normalized_upc {
     }
 }
 
+=head2 get_normalized_ean
+
+    my $normalized_ean = $extractor->get_normalized_ean();
+
+Returns a normalized EAN from 073$a.
+
+=cut
+
+sub get_normalized_ean {
+    my ($self) = @_;
+
+    my $record = $self->metadata;
+    my @fields = $record->field('073');
+    foreach my $field (@fields) {
+        my $ean = $self->_normalize_string( $field->subfield('a') );
+        if ($ean) {
+            return $ean;
+        }
+    }
+    return;
+}
+
 =head1 AUTHOR
 
 Tomas Cohen Arazi, E<lt>tomascohen@theke.ioE<gt>

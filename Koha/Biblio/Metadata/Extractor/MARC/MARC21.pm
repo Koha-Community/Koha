@@ -74,6 +74,29 @@ sub get_normalized_upc {
     }
 }
 
+=head2 get_normalized_ean
+
+    my $normalized_ean = $extractor->get_normalized_ean();
+
+Returns a normalized EAN from 024$a with indicator 1 = 3.
+
+=cut
+
+sub get_normalized_ean {
+    my ($self) = @_;
+
+    my $record = $self->metadata;
+    my @fields = $record->field('024');
+    foreach my $field (@fields) {
+        my $indicator = $field->indicator(1);
+        my $ean       = $self->_normalize_string( $field->subfield('a') );
+        if ( $ean && $indicator eq '3' ) {
+            return $ean;
+        }
+    }
+    return;
+}
+
 =head2 check_fixed_length
 
     my $info = $extractor->check_fixed_length;

@@ -23,7 +23,6 @@ use C4::Context;
 use C4::Koha qw(
     GetAuthorisedValues
     getitemtypeimagelocation
-    GetNormalizedEAN
     GetNormalizedISBN
 );
 use C4::Serials qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
@@ -168,7 +167,7 @@ $template->param( ocoins => !$invalid_marc_record ? $biblio->get_coins : undef )
 # in each case, we're grabbing the first value we find in
 # the record and normalizing it
 my $upc  = $biblio->normalized_upc;
-my $ean  = GetNormalizedEAN( $marc_record, $marcflavour );
+my $ean  = $biblio->normalized_ean;
 my $oclc = $biblio->normalized_oclc;
 my $isbn = GetNormalizedISBN( undef, $marc_record, $marcflavour );
 my $content_identifier_exists;

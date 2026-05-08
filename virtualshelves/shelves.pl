@@ -23,7 +23,6 @@ use C4::Auth        qw( get_template_and_user haspermission );
 use C4::Circulation qw( barcodedecode );
 use C4::Context;
 use C4::Koha qw(
-    GetNormalizedEAN
     GetNormalizedISBN
 );
 use C4::Members;
@@ -352,7 +351,7 @@ if ( $op eq 'view' ) {
                 $this_item->{notforloan}        = $itemtype->notforloan if $itemtype;
                 $this_item->{'coins'}           = $biblio->get_coins;
                 $this_item->{'normalized_upc'}  = $biblio->normalized_upc;
-                $this_item->{'normalized_ean'}  = GetNormalizedEAN( $record, $marcflavour );
+                $this_item->{'normalized_ean'}  = $biblio->normalized_ean;
                 $this_item->{'normalized_oclc'} = $biblio->normalized_oclc;
                 $this_item->{'normalized_isbn'} = GetNormalizedISBN( undef, $record, $marcflavour );
 
