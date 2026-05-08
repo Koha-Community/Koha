@@ -450,7 +450,7 @@ subtest "CanBookBeRenewed AllowRenewalIfOtherItemsAvailable multiple borrowers a
 };
 
 subtest "GetIssuingCharges tests" => sub {
-    plan tests => 4;
+    plan tests => 5;
     my $branch_discount    = $builder->build_object( { class => 'Koha::Libraries' } );
     my $branch_no_discount = $builder->build_object( { class => 'Koha::Libraries' } );
     Koha::CirculationRules->set_rule(
@@ -474,19 +474,28 @@ subtest "GetIssuingCharges tests" => sub {
             value => { rentalcharge => 0 }
         }
     );
+    my $itype_null_charge = $builder->build_object(
+        {
+            class => 'Koha::ItemTypes',
+            value => { rentalcharge => undef }
+        }
+    );
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $item_1 = $builder->build_sample_item( { itype => $itype_charge->itemtype } );
     my $item_2 = $builder->build_sample_item( { itype => $itype_no_charge->itemtype } );
+    my $item_3 = $builder->build_sample_item( { itype => $itype_null_charge->itemtype } );
 
-    t::lib::Mocks::mock_userenv( { branchcode => $branch_no_discount->branchcode } );
+    t::lib::Mocks::mock_userenv( { patron => $patron, branchcode => $branch_no_discount->branchcode } );
 
     # For now the sub always uses the env branch, this should follow CircControl instead
     my ( $charge, $itemtype ) = GetIssuingCharges( $item_1->itemnumber, $patron->borrowernumber );
     is( $charge + 0, 10.00, "Charge fetched correctly when no discount exists" );
     ( $charge, $itemtype ) = GetIssuingCharges( $item_2->itemnumber, $patron->borrowernumber );
     is( $charge + 0, 0.00, "Charge fetched correctly when no discount exists and no charge" );
+    ( $charge, $itemtype ) = GetIssuingCharges( $item_3->itemnumber, $patron->borrowernumber );
+    is( $charge, 0, "NULL rentalcharge returns 0, not undef" );
 
-    t::lib::Mocks::mock_userenv( { branchcode => $branch_discount->branchcode } );
+    t::lib::Mocks::mock_userenv( { patron => $patron, branchcode => $branch_discount->branchcode } );
 
     # For now the sub always uses the env branch, this should follow CircControl instead
     ( $charge, $itemtype ) = GetIssuingCharges( $item_1->itemnumber, $patron->borrowernumber );

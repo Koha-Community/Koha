@@ -1888,7 +1888,7 @@ sub AddIssue {
 
             # If it costs to borrow this book, charge it to the patron's account.
             my ( $charge, $itemtype ) = GetIssuingCharges( $item_object->itemnumber, $patron->borrowernumber );
-            if ( $charge && $charge > 0 ) {
+            if ( $charge > 0 ) {
                 AddIssuingCharge( $issue, $charge, 'RENT' );
             }
 
@@ -3892,7 +3892,7 @@ sub GetIssuingCharges {
     my $patron;
     if ( my $item_data = $sth->fetchrow_hashref ) {
         $item_type = $item_data->{itemtype};
-        $charge    = $item_data->{rentalcharge};
+        $charge    = $item_data->{rentalcharge} || 0;
         if ($charge) {
 
             # FIXME This should follow CircControl
