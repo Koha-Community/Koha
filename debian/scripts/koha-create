@@ -922,6 +922,14 @@ then
         koha-indexer --start "$name"
     fi
 
+    # systemd-only: enable the per-instance target and the
+    # create-dirs oneshot so the instance comes back up on reboot.
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        systemctl enable koha-create-dirs@${name}.service 2>/dev/null || true
+        systemctl enable koha@${name}.target               2>/dev/null || true
+        systemctl start  koha.target                       2>/dev/null || true
+    fi
+
     if [ "$CLO_LETSENCRYPT" = "yes" ]; then
         # Get letsencrypt certificates
         letsencrypt_instance
