@@ -170,23 +170,48 @@ sub summary {
     my $payout_total = $payout_transactions->total;
     my $total        = ( $income_total + $payout_total );
 
-    my $payment_types = Koha::AuthorisedValues->search(
-        { category => 'PAYMENT_TYPE' },
-        {
-            order_by => ['lib'],
-        }
-    );
+    # Group by payment_type in a single query per direction, rather than
+    # issuing a pair of ->total() queries per configured type.
+    my $income_by_type = {
+        map { ( $_->get_column('payment_type') // '' ) => $_->get_column('total') + 0 } $income_transactions->search(
+            {},
+            {
+                select   => [ 'payment_type', { sum => 'amount' } ],
+                as       => [ 'payment_type', 'total' ],
+                group_by => ['payment_type'],
+            }
+        )->as_list
+    };
+    my $payout_by_type = {
+        map { ( $_->get_column('payment_type') // '' ) => $_->get_column('total') + 0 } $payout_transactions->search(
+            {},
+            {
+                select   => [ 'payment_type', { sum => 'amount' } ],
+                as       => [ 'payment_type', 'total' ],
+                group_by => ['payment_type'],
+            }
+        )->as_list
+    };
 
+    my $av_labels = { map { $_->authorised_value => $_->lib }
+            Koha::AuthorisedValues->search( { category => 'PAYMENT_TYPE' } )->as_list };
+
+    # Scoped to CashupPaymentTypes (not every PAYMENT_TYPE authorised value)
+    # so this matches the set the register's expected/actual breakdown and
+    # the confirm-cashup modal are built from.
     my @total_grouped;
-    for my $type ( $payment_types->as_list ) {
-        my $typed_income = $income_transactions->total( { payment_type => $type->authorised_value } );
-        my $typed_payout = $payout_transactions->total( { payment_type => $type->authorised_value } );
-        my $typed_total  = ( $typed_income + $typed_payout );
+    for my $code ( @{ $self->register->cashup_payment_types } ) {
+        my $typed_total = ( $income_by_type->{$code} // 0 ) + ( $payout_by_type->{$code} // 0 );
 
         # Flip sign to match the convention used for `total` above:
         # positive = net amount collected (i.e. removed from register at cashup),
         # negative = net amount paid out (i.e. needed to be added to register).
-        push @total_grouped, { payment_type => $type->lib, total => $typed_total * -1 };
+        push @total_grouped,
+            {
+            payment_type => $code,
+            label        => $av_labels->{$code} // $code,
+            total        => $typed_total * -1,
+            };
     }
 
     # Check for reconciliation lines separately (for footer display only)
@@ -195,31 +220,44 @@ sub summary {
     my $deficit_lines =
         $self->register->accountlines->search( { %{$conditions}, debit_type_code => 'CASHUP_DEFICIT' } );
 
-    my $surplus_total = $surplus_lines->count ? $surplus_lines->total : undef;
-    my $deficit_total = $deficit_lines->count ? $deficit_lines->total : undef;
-
-    # Extract notes from reconciliation lines
-    my ($surplus_record) = $surplus_lines->_resultset->search( {}, { rows => 1 } )->all;
-    my $surplus_note = $surplus_record ? $surplus_record->note : undef;
-
-    my ($deficit_record) = $deficit_lines->_resultset->search( {}, { rows => 1 } )->all;
-    my $deficit_note = $deficit_record ? $deficit_record->note : undef;
+    # Per-payment-type reconciliation breakdown, built from the surplus/deficit
+    # lines themselves. Each entry carries its own per-row note. Aggregate
+    # totals (and "any reconciliation?" boolean checks) are derived by
+    # consumers from the grouped breakdown.
+    my @reconciliations_grouped;
+    my %recon_index;
+    for my $line ( $surplus_lines->as_list ) {
+        my $pt = $line->payment_type // 'CASH';
+        $recon_index{$pt} //= {};
+        $recon_index{$pt}->{surplus_total} = ( $recon_index{$pt}->{surplus_total} // 0 ) + ( $line->amount * 1 );
+        $recon_index{$pt}->{note} //= $line->note;
+    }
+    for my $line ( $deficit_lines->as_list ) {
+        my $pt = $line->payment_type // 'CASH';
+        $recon_index{$pt} //= {};
+        $recon_index{$pt}->{deficit_total} = ( $recon_index{$pt}->{deficit_total} // 0 ) + ( $line->amount * 1 );
+        $recon_index{$pt}->{note} //= $line->note;
+    }
+    for my $pt ( sort keys %recon_index ) {
+        push @reconciliations_grouped,
+            {
+            payment_type  => $pt,
+            surplus_total => $recon_index{$pt}->{surplus_total},
+            deficit_total => $recon_index{$pt}->{deficit_total},
+            note          => $recon_index{$pt}->{note},
+            };
+    }
 
     $summary = {
-        from_date      => $session_start,
-        to_date        => $session_end,
-        income_grouped => \@income,
-        income_total   => abs($income_total),
-        payout_grouped => \@payout,
-        payout_total   => abs($payout_total),
-        total          => $total * -1,
-        total_grouped  => \@total_grouped,
-
-        # Reconciliation data for footer display
-        surplus_total => $surplus_total ? $surplus_total * 1 : undef,
-        deficit_total => $deficit_total ? $deficit_total * 1 : undef,
-        surplus_note  => $surplus_note,
-        deficit_note  => $deficit_note
+        from_date               => $session_start,
+        to_date                 => $session_end,
+        income_grouped          => \@income,
+        income_total            => abs($income_total),
+        payout_grouped          => \@payout,
+        payout_total            => abs($payout_total),
+        total                   => $total * -1,
+        total_grouped           => \@total_grouped,
+        reconciliations_grouped => \@reconciliations_grouped,
     };
 
     return $summary;

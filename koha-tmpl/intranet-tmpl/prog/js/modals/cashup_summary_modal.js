@@ -51,11 +51,34 @@ $(document).ready(function () {
                     summary_modal.find(".preview-notice").remove();
                 }
 
-                // Check for reconciliation (surplus or deficit) from dedicated fields
-                var surplus = data.summary.surplus_total;
-                var deficit = data.summary.deficit_total;
+                // The presence of any per-type entry in reconciliations_grouped
+                // tells us a CASHUP_SURPLUS / CASHUP_DEFICIT line was created
+                // for this cashup — equivalent to the old surplus_total /
+                // deficit_total scalars.
+                var grouped = data.summary.reconciliations_grouped || [];
+                var hasReconciliation = grouped.length > 0;
                 var expectedAmount = data.summary.total;
-                var actualAmount = data.amount;
+
+                // The CASHUP action's `amount` is the actual total counted
+                // across *every* configured payment type, not cash alone —
+                // don't use it as "actual cash". Instead derive the cash-only
+                // actual as expected-cash + the CASH-specific discrepancy
+                // recorded in reconciliations_grouped (there is none when the
+                // cashup balanced).
+                function actualForPaymentType(expected, paymentType) {
+                    var entry = grouped.find(function (g) {
+                        return g.payment_type === paymentType;
+                    });
+                    if (!entry) {
+                        return expected;
+                    }
+                    var difference = entry.surplus_total
+                        ? -entry.surplus_total
+                        : entry.deficit_total
+                          ? -entry.deficit_total
+                          : 0;
+                    return expected + difference;
+                }
 
                 var tbody = summary_modal.find("tbody");
                 tbody.empty();
@@ -142,22 +165,23 @@ $(document).ready(function () {
                 );
 
                 // cashCollected = expected cash from session transactions (excludes
-                // CASHUP_SURPLUS/DEFICIT). actualAmount = cash recorded at cashup. When
-                // they differ we display both so the surplus/deficit row below is the
-                // visible difference.
+                // CASHUP_SURPLUS/DEFICIT). actualCash = cash actually recorded at
+                // cashup, derived below from the CASH-specific discrepancy (if
+                // any) rather than the cashup's all-payment-types total. When
+                // they differ we display both so the surplus/deficit row below is
+                // the visible difference.
                 var cashCollected = null;
                 for (type of data.summary.total_grouped) {
-                    if (
-                        type.payment_type === "Cash" ||
-                        type.payment_type === "CASH"
-                    ) {
+                    if (type.payment_type === "CASH") {
                         cashCollected = type.total;
                         break;
                     }
                 }
                 if (cashCollected !== null) {
-                    var hasReconciliation = !!(surplus || deficit);
-
+                    var actualCash = actualForPaymentType(
+                        cashCollected,
+                        "CASH"
+                    );
                     if (hasReconciliation && !inProgress) {
                         var expectedLabel =
                             cashCollected >= 0
@@ -172,14 +196,14 @@ $(document).ready(function () {
                         );
 
                         var actualLabel =
-                            actualAmount >= 0
+                            actualCash >= 0
                                 ? __("Cash removed from register")
                                 : __("Cash added to register");
                         tfoot.append(
                             "<tr><td><strong>" +
                                 actualLabel +
                                 "</strong></td><td><strong>" +
-                                actualAmount.format_price() +
+                                actualCash.format_price() +
                                 "</strong></td></tr>"
                         );
                     } else {
@@ -200,22 +224,15 @@ $(document).ready(function () {
 
                 // 3. Other payment types collected (excluding CASH)
                 for (type of data.summary.total_grouped) {
-                    if (
-                        type.total !== 0 &&
-                        type.payment_type !== "Cash" &&
-                        type.payment_type !== "CASH"
-                    ) {
+                    if (type.total !== 0 && type.payment_type !== "CASH") {
+                        var label = type.label || type.payment_type;
                         var paymentTypeLabel =
                             type.total >= 0
                                 ? __x("{payment_type} collected", {
-                                      payment_type: escape_str(
-                                          type.payment_type
-                                      ),
+                                      payment_type: escape_str(label),
                                   })
                                 : __x("{payment_type} to add", {
-                                      payment_type: escape_str(
-                                          type.payment_type
-                                      ),
+                                      payment_type: escape_str(label),
                                   });
 
                         tfoot.append(
@@ -228,66 +245,69 @@ $(document).ready(function () {
                     }
                 }
 
-                // 4. Cashup surplus OR deficit (highlighted)
-                if (surplus || deficit) {
-                    // Add separator before reconciliation
+                // 4. Per-payment-type cashup surplus / deficit rows.
+                if (hasReconciliation) {
                     tfoot.append(
                         "<tr class='reconciliation-separator'><td colspan='2'><hr></td></tr>"
                     );
 
-                    var reconciliationClass,
-                        reconciliationLabel,
-                        reconciliationAmount,
-                        reconciliationNote;
+                    grouped.forEach(function (entry) {
+                        var entrySurplus = entry.surplus_total;
+                        var entryDeficit = entry.deficit_total;
+                        var pt = entry.payment_type || "";
+                        var label;
+                        var amountText;
+                        var rowClass;
 
-                    if (surplus) {
-                        reconciliationClass =
-                            "reconciliation-result text-warning";
-                        reconciliationLabel = __("Cashup surplus");
-                        reconciliationAmount =
-                            "+" + Math.abs(surplus).format_price();
-                        reconciliationNote = data.summary.surplus_note;
-                    } else if (deficit) {
-                        reconciliationClass =
-                            "reconciliation-result text-danger";
-                        reconciliationLabel = __("Cashup deficit");
-                        reconciliationAmount =
-                            "-" + Math.abs(deficit).format_price();
-                        reconciliationNote = data.summary.deficit_note;
-                    }
-
-                    tfoot.append(
-                        "<tr class='" +
-                            reconciliationClass +
-                            "'><td><strong>" +
-                            reconciliationLabel +
-                            "</strong></td><td><strong>" +
-                            reconciliationAmount +
-                            "</strong></td></tr>"
-                    );
-
-                    // Add note if present
-                    if (reconciliationNote) {
-                        // Check if note is an authorized value code and use description if available
-                        var noteDisplay = reconciliationNote;
-                        if (
-                            typeof reconciliation_note_avs !== "undefined" &&
-                            reconciliation_note_avs[reconciliationNote]
-                        ) {
-                            noteDisplay =
-                                reconciliation_note_avs[reconciliationNote];
+                        if (entrySurplus) {
+                            rowClass = "reconciliation-result text-warning";
+                            label = __x("{payment_type} surplus", {
+                                payment_type: escape_str(pt),
+                            });
+                            amountText =
+                                "+" + Math.abs(entrySurplus).format_price();
+                        } else if (entryDeficit) {
+                            rowClass = "reconciliation-result text-danger";
+                            label = __x("{payment_type} deficit", {
+                                payment_type: escape_str(pt),
+                            });
+                            amountText =
+                                "-" + Math.abs(entryDeficit).format_price();
+                        } else {
+                            return;
                         }
 
                         tfoot.append(
                             "<tr class='" +
-                                reconciliationClass +
-                                "'><td colspan='2'><em>" +
-                                __("Note:") +
-                                " " +
-                                escape_str(noteDisplay) +
-                                "</em></td></tr>"
+                                rowClass +
+                                "'><td><strong>" +
+                                label +
+                                "</strong></td><td><strong>" +
+                                amountText +
+                                "</strong></td></tr>"
                         );
-                    }
+
+                        if (entry.note) {
+                            var noteDisplay = entry.note;
+                            if (
+                                typeof reconciliation_note_avs !==
+                                    "undefined" &&
+                                reconciliation_note_avs[entry.note]
+                            ) {
+                                noteDisplay =
+                                    reconciliation_note_avs[entry.note];
+                            }
+                            tfoot.append(
+                                "<tr class='" +
+                                    rowClass +
+                                    "'><td colspan='2'><em>" +
+                                    __("Note:") +
+                                    " " +
+                                    escape_str(noteDisplay) +
+                                    "</em></td></tr>"
+                            );
+                        }
+                    });
                 }
             },
         });
