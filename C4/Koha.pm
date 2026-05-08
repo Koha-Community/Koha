@@ -33,7 +33,6 @@ BEGIN {
         getitemtypeimagesrc
         getitemtypeimagelocation
         GetAuthorisedValues
-        GetNormalizedUPC
         GetNormalizedISBN
         GetNormalizedEAN
         xml_escape
@@ -598,39 +597,6 @@ sub display_marc_indicators {
         $indicators =~ s/ /#/g;
     }
     return $indicators;
-}
-
-=head2 GetNormalizedUPC
-
-Missing POD for GetNormalizedUPC.
-
-=cut
-
-sub GetNormalizedUPC {
-    my ( $marcrecord, $marcflavour ) = @_;
-
-    $marcflavour ||= C4::Context->preference('marcflavour');
-
-    return unless $marcrecord;
-    if ( $marcflavour eq 'UNIMARC' ) {
-        my @fields = $marcrecord->field('072');
-        foreach my $field (@fields) {
-            my $upc = _normalize_match_point( $field->subfield('a') );
-            if ($upc) {
-                return $upc;
-            }
-        }
-
-    } else {    # assume marc21 if not unimarc
-        my @fields = $marcrecord->field('024');
-        foreach my $field (@fields) {
-            my $indicator = $field->indicator(1);
-            my $upc       = _normalize_match_point( $field->subfield('a') );
-            if ( $upc && $indicator eq '1' ) {
-                return $upc;
-            }
-        }
-    }
 }
 
 # Normalizes and returns the first valid ISBN found in the record

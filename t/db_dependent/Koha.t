@@ -173,7 +173,7 @@ subtest 'Authorized Values Tests' => sub {
 };
 
 subtest 'isbn tests' => sub {
-    plan tests => 32;
+    plan tests => 31;
 
     my $isbn13  = "9780330356473";
     my $isbn13D = "978-0-330-35647-3";
@@ -279,7 +279,6 @@ subtest 'isbn tests' => sub {
     my $test_isbn10 = Business::ISBN->new($test_normalized_isbn10);
     is( $test_isbn10->type, 'ISBN10', 'ISBN not starting with 979 is normalized to valid ISBN-10 format' );
 
-    is( C4::Koha::GetNormalizedUPC(), undef, 'GetNormalizedUPC should return undef if no record is passed' );
     is(
         C4::Koha::GetNormalizedISBN(), undef,
         'GetNormalizedISBN should return undef if no record and no isbn are passed'

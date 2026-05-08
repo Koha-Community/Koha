@@ -25,7 +25,6 @@ use C4::Context;
 use C4::Koha qw(
     GetNormalizedEAN
     GetNormalizedISBN
-    GetNormalizedUPC
 );
 use C4::Members;
 use C4::Output qw( pagination_bar output_html_with_http_headers output_and_exit_if_error );
@@ -352,7 +351,7 @@ if ( $op eq 'view' ) {
                     $itemtype ? $itemtype->description : q{};    #FIXME Should this be translated_description ?
                 $this_item->{notforloan}        = $itemtype->notforloan if $itemtype;
                 $this_item->{'coins'}           = $biblio->get_coins;
-                $this_item->{'normalized_upc'}  = GetNormalizedUPC( $record, $marcflavour );
+                $this_item->{'normalized_upc'}  = $biblio->normalized_upc;
                 $this_item->{'normalized_ean'}  = GetNormalizedEAN( $record, $marcflavour );
                 $this_item->{'normalized_oclc'} = $biblio->normalized_oclc;
                 $this_item->{'normalized_isbn'} = GetNormalizedISBN( undef, $record, $marcflavour );

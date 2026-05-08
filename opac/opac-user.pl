@@ -25,7 +25,6 @@ use C4::Auth qw( get_template_and_user );
 use C4::Koha qw(
     getitemtypeimagelocation
     GetNormalizedISBN
-    GetNormalizedUPC
 );
 use C4::Circulation qw( CanBookBeRenewed GetRenewCount GetIssuingCharges );
 use C4::Reserves    qw( GetReserveStatus );
@@ -33,6 +32,7 @@ use C4::Members;
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Account::Lines;
 use Koha::Biblios;
+use Koha::Biblio::Metadata::Extractor;
 use Koha::Libraries;
 use Koha::DateUtils qw( output_pref );
 use Koha::Holds;
@@ -306,9 +306,9 @@ if ( $pending_checkouts->count ) {    # Useless test
                     patron      => $patron
                 }
             );
-            $issue->{normalized_upc} = GetNormalizedUPC( $marcrecord, C4::Context->preference('marcflavour') );
-            $issue->{normalized_oclc} =
-                Koha::Biblio::Metadata::Extractor->new( { metadata => $marcrecord } )->get_normalized_oclc;
+            my $extractor = Koha::Biblio::Metadata::Extractor->new( { metadata => $marcrecord } );
+            $issue->{normalized_upc}  = $extractor->get_normalized_upc;
+            $issue->{normalized_oclc} = $extractor->get_normalized_oclc;
         }
 
         if ( C4::Context->preference('UseRecalls') ) {

@@ -2027,12 +2027,10 @@ subtest 'normalized_upc() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    # We will move the tests from GetNormalizedUPC here when it will get replaced
-    # Note that only a single test exist and it's not really meaningful...
     my $biblio = $builder->build_sample_biblio();
     is(
-        $biblio->normalized_upc, C4::Koha::GetNormalizedUPC( $biblio->metadata->record ),
-        'normalized_upc is a wrapper around C4::Koha::GetNormalizedUPC'
+        $biblio->normalized_upc, $biblio->metadata_extractor->get_normalized_upc,
+        'normalized_upc delegates to the metadata extractor'
     );
 
     $schema->storage->txn_rollback;

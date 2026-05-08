@@ -25,7 +25,6 @@ use C4::Biblio qw( GetBiblioData GetFrameworkCode );
 use C4::Koha   qw(
     GetNormalizedEAN
     GetNormalizedISBN
-    GetNormalizedUPC
 );
 use C4::Members;
 use C4::Output qw( pagination_bar output_with_http_headers );
@@ -43,6 +42,7 @@ use Koha::Patrons;
 use Koha::Virtualshelfshares;
 use Koha::Virtualshelves;
 use Koha::RecordProcessor;
+use Koha::Biblio::Metadata::Extractor;
 
 use constant ANYONE    => 2;
 use constant STAFF     => 3;
@@ -388,8 +388,9 @@ if ( $op eq 'view' ) {
                     $this_item->{description} = $itemtype->description;  #FIXME Should not it be translated_description?
                     $this_item->{notforloan}  = $itemtype->notforloan;
                 }
-                $this_item->{'coins'}          = $biblio->get_coins;
-                $this_item->{'normalized_upc'} = GetNormalizedUPC( $record, $marcflavour );
+                $this_item->{'coins'} = $biblio->get_coins;
+                $this_item->{'normalized_upc'} =
+                    Koha::Biblio::Metadata::Extractor->new( { metadata => $record } )->get_normalized_upc;
                 $this_item->{'normalized_ean'} = GetNormalizedEAN( $record, $marcflavour );
                 $this_item->{'normalized_oclc'} =
                     Koha::Biblio::Metadata::Extractor->new( { metadata => $record } )->get_normalized_oclc;

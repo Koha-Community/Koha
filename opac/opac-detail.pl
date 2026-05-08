@@ -28,7 +28,6 @@ use C4::Koha        qw(
     getitemtypeimagelocation
     GetNormalizedEAN
     GetNormalizedISBN
-    GetNormalizedUPC
 );
 use C4::Search  qw( new_record_from_zebra searchResults getRecords );
 use C4::Serials qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
@@ -874,7 +873,7 @@ foreach ( keys %{$dat} ) {
 # some useful variables for enhanced content;
 # in each case, we're grabbing the first value we find in
 # the record and normalizing it
-my $upc  = GetNormalizedUPC( $record, $marcflavour );
+my $upc  = $extractor->get_normalized_upc;
 my $oclc = $extractor->get_normalized_oclc;
 my $isbn = GetNormalizedISBN( undef, $record, $marcflavour );
 my $content_identifier_exists;

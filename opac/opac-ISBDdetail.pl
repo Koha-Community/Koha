@@ -56,7 +56,6 @@ use C4::Serials  qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLa
 use C4::Koha     qw(
     GetNormalizedEAN
     GetNormalizedISBN
-    GetNormalizedUPC
 );
 use Koha::CirculationRules;
 use Koha::ItemTypes;
@@ -131,7 +130,7 @@ my $marcflavour = C4::Context->preference("marcflavour");
 # some useful variables for enhanced content;
 # in each case, we're grabbing the first value we find in
 # the record and normalizing it
-my $upc  = GetNormalizedUPC( $record, $marcflavour );
+my $upc  = $biblio->normalized_upc;
 my $ean  = GetNormalizedEAN( $record, $marcflavour );
 my $oclc = $extractor->get_normalized_oclc;
 my $isbn = GetNormalizedISBN( undef, $record, $marcflavour );

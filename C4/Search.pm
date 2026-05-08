@@ -35,8 +35,7 @@ BEGIN {
 
 use C4::Context;
 use C4::Biblio qw( TransformMarcToKoha GetMarcFromKohaField GetFrameworkCode GetAuthorisedValueDesc GetBiblioData );
-use C4::Koha
-    qw( getFacets GetVariationsOfISBN GetNormalizedUPC GetNormalizedEAN GetNormalizedISBN getitemtypeimagelocation );
+use C4::Koha   qw( getFacets GetVariationsOfISBN GetNormalizedEAN GetNormalizedISBN getitemtypeimagelocation );
 use Koha::Biblio::Metadata::Extractor;
 use Koha::DateUtils;
 use Koha::Libraries;
@@ -1769,10 +1768,10 @@ sub searchResults {
         my $oldbiblio = TransformMarcToKoha( { record => $marcrecord, limit_table => 'no_items' } );
         $oldbiblio->{result_number} = $i + 1;
 
-        $oldbiblio->{normalized_upc} = GetNormalizedUPC( $marcrecord, $marcflavour );
-        $oldbiblio->{normalized_ean} = GetNormalizedEAN( $marcrecord, $marcflavour );
-        $oldbiblio->{normalized_oclc} =
-            Koha::Biblio::Metadata::Extractor->new( { metadata => $marcrecord } )->get_normalized_oclc;
+        my $extractor = Koha::Biblio::Metadata::Extractor->new( { metadata => $marcrecord } );
+        $oldbiblio->{normalized_upc}  = $extractor->get_normalized_upc;
+        $oldbiblio->{normalized_ean}  = GetNormalizedEAN( $marcrecord, $marcflavour );
+        $oldbiblio->{normalized_oclc} = $extractor->get_normalized_oclc;
         $oldbiblio->{normalized_isbn} = GetNormalizedISBN( $oldbiblio->{isbn}, $marcrecord, $marcflavour )
             ;    # Use existing ISBN from record if we got one
         $oldbiblio->{content_identifier_exists} = 1
