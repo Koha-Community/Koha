@@ -154,6 +154,7 @@ INSERT INTO systempreferences ( `variable`, `value` ) VALUES
 ('CardnumberLength', ''),
 ('CardnumberLog','1'),
 ('casAuthentication','0'),
+('CashupPaymentTypes', 'CASH,SIP00'),
 ('CashupReconciliationNoteAuthorisedValue', ''),
 ('CashupReconciliationNoteRequired', '0'),
 ('casLogout','0'),
