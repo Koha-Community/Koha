@@ -13,6 +13,8 @@ Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
 Environment=KOHA_HOME=/usr/share/koha
 PIDFile=/var/run/koha/%i/zebra.pid
 ExecStartPre=+/usr/sbin/koha-generate-env zebra %i
+# Clean up leftover Zebra socket files so Zebra can rebind on startup.
+ExecStartPre=+/bin/rm -f /var/run/koha/%i/bibliosocket /var/run/koha/%i/authoritysocket
 EnvironmentFile=-/run/koha/%i/zebra.env
 ExecStart=/usr/bin/zebrasrv \
     -v ${ZEBRA_LOGLEVELS} \
