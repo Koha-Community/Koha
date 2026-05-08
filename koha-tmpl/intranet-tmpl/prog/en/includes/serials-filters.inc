@@ -8,7 +8,7 @@
     <form action="claims.pl" id="filter_claims_form">
         <fieldset class="brief">
             <h4>Filter missing issues</h4>
-            <legend class="sr-only">Filter missing issues</legend>
+            <legend class="visually-hidden">Filter missing issues</legend>
             <ol>
                 <li>
                     <label for="from">From:</label>

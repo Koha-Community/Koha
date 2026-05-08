@@ -9,7 +9,7 @@
                 [% INCLUDE 'csrf-token.inc' %]
                 <div class="modal-body">
                     <fieldset class="rows">
-                        <legend class="sr-only">Multi receiving</legend>
+                        <legend class="visually-hidden">Multi receiving</legend>
                         <ol>
                             <li>
                                 <label for="nbissues" class="required">How many issues do you want to receive?</label>

@@ -1,3 +1,12 @@
+@use "~@fortawesome/fontawesome-free/scss/variables" with (
+    // customizing $font-path
+    $font-path: "../../lib/fontawesome/webfonts"
+);
+@use "~@fortawesome/fontawesome-free/scss/fontawesome";
+@use "~@fortawesome/fontawesome-free/scss/fa" as fa;
+@use "~@fortawesome/fontawesome-free/scss/solid" as fa-solid;
+@use "~@fortawesome/fontawesome-free/scss/brands" as fa-brands;
+
 @import "~bootstrap/scss/mixins/_banner";
 @include bsBanner("");
 
@@ -3210,7 +3219,7 @@ nav {
 
             &::before {
                 content: "\f015";
-                font-family: "Font Awesome 6 Free";
+                font-family: "Font Awesome 7 Free";
                 font-size: 12px;
                 font-style: normal;
                 padding-right: .3em;
@@ -3309,7 +3318,7 @@ button,
         &::before {
             content: "\f0d7";
             display: inline-block;
-            font-family: "Font Awesome 6 Free";
+            font-family: "Font Awesome 7 Free";
             width: 1em;
         }
 
@@ -3323,7 +3332,7 @@ button,
             &::before {
                 content: "\f0da";
                 display: inline-block;
-                font-family: "Font Awesome 6 Free";
+                font-family: "Font Awesome 7 Free";
                 width: 1em;
             }
 
@@ -4897,7 +4906,7 @@ div .suggestion_note {
             border: 1px solid #408540;
 
             &::before {
-                font-family: 'Font Awesome 6 Free';
+                font-family: 'Font Awesome 7 Free';
                 content: "\f058";
                 color: #408540;
                 position: absolute;

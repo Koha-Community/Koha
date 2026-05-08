@@ -95,7 +95,7 @@
         <form action="/cgi-bin/koha/admin/systempreferences.pl" name="Aform" method="post" [% IF type_upload %]enctype="multipart/form-data"[% END %]>
             [% INCLUDE 'csrf-token.inc' %]
             <fieldset class="rows">
-                <legend class="sr-only">System preference details</legend>
+                <legend class="visually-hidden">System preference details</legend>
                 <ol>
                     <li><label for="explanation">Explanation: </label><input type="text" name="explanation" id="explanation" size="60" value="[% explanation | html %]" /><input type="hidden" name="op" value="cud-add_validate" /></li>
                     <li

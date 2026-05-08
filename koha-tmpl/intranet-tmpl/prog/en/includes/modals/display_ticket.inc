@@ -52,7 +52,7 @@
                         <button type="button" class="btn btn-primary updateSubmit" id="updateTicket">Update <i id="comment-spinner" class="fa fa-spinner fa-pulse fa-fw" style="display:none"></i></button>
                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="caret"></span>
-                            <span class="sr-only">Select status</span>
+                            <span class="visually-hidden">Select status</span>
                         </button>
                         <ul class="dropdown-menu">
                             [% FOR st IN status %]
