@@ -314,16 +314,35 @@
                 [% WRAPPER tab_panels %]
                     [% FOR language IN languages %]
                         [% SET translated_content = translated_contents.item(language.lang) %]
+                        [% SET required = category == 'news' && language.lang == 'default' ? 1 : 0 %]
                         [% WRAPPER tab_panel tabname="lang_${language.lang}" %]
                             <fieldset>
                                 <ol>
                                     <li>
-                                        <label for="title_[% language.lang | html %]">Title: </label>
-                                        <input id="title_[% language.lang| html %]" size="100" maxlength="250" type="text" name="title_[% language.lang | html %]" value="[% translated_content.title | html %]" />
+                                        <label for="title_[% language.lang | html %]" [% IF required %]class="required"[% END %]>Title: </label>
+                                        <input
+                                            id="title_[% language.lang| html %]"
+                                            size="100"
+                                            maxlength="250"
+                                            type="text"
+                                            name="title_[% language.lang | html %]"
+                                            value="[% translated_content.title | html %]"
+                                            [% IF required %]class="required" required="required"[% END %]
+                                        />
+                                        [% IF required %]<span class="required">Required</span>[% END %]
                                     </li>
                                     <li>
-                                        <label for="content_[% language.lang | html %]">Content: </label>
-                                        <textarea name="content_[% language.lang | html %]" id="content_[% language.lang | html %]" data-lang="[% language.lang | html %]" cols="75" rows="10">
+                                        <label for="content_[% language.lang | html %]" [% IF required %]class="required"[% END %]>Content: </label>[% IF required %]
+                                            <span id="content_default_required" class="required">Required</span>
+                                        [% END %]
+                                        <textarea
+                                            name="content_[% language.lang | html %]"
+                                            id="content_[% language.lang | html %]"
+                                            data-lang="[% language.lang | html %]"
+                                            cols="75"
+                                            rows="10"
+                                            [% IF required %]class="required" required="required"[% END %]
+                                        >
 [% translated_content.content | html %]</textarea
                                         >
                                         <input type="hidden" name="id_[% language.lang | html %]" value="[% translated_content.id | html %]" />
@@ -690,33 +709,44 @@
                 $( "#" + location + "_notes" ).show();
             }
 
-            $(document).ready(function() {
-                [% IF category == 'news' %]
+            const category = "[% category | html %]";
+            const wysiwyg = [% wysiwyg ? 1 : 0 | html %];
+
+            if (category == "news") {
                 $("#add_additional_content").validate({
-                    submitHandler: function(form){
-                        if ( ! $("#title_default").val().length > 0 ) {
-                            alert(_("Please specify a title for 'Default'"));
+                    submitHandler: function (form) {
+                        // catch an empty title_default when default tab is not visible
+                        if (!document.querySelector("#lang_default_panel.show") && !$("#title_default").val().length > 0) {
+                            const defaultTab = document.querySelector("#lang_default-tab");
+                            const tab = new bootstrap.Tab(defaultTab);
+                            tab.show();
+                            $("#title_default").focus();
                             return false;
                         }
-                        else {
-                            [% UNLESS wysiwyg %]
-                                let content = $('#content_default').siblings(".CodeMirror")[0].CodeMirror.getValue();
-                            [% ELSE %]
-                                let content = tinyMCE.get('content_default').getContent();
-                            [% END %]
 
-                            if ( ! content.length > 0 ) {
-                                alert(_("Please specify a content for 'Default'"));
-                                return false;
+                        let content = wysiwyg ? tinyMCE.get("content_default").getContent() : $("#content_default").siblings(".CodeMirror")[0].CodeMirror.getValue();
+                        if (!content.length > 0) {
+                            // catch an empty content_default when default tab is not visible
+                            if (!document.querySelector("#lang_default_panel.show")) {
+                                const defaultTab = document.querySelector("#lang_default-tab");
+                                const tab = new bootstrap.Tab(defaultTab);
+                                tab.show();
                             }
+                            // focus editor
+                            if (wysiwyg) {
+                                tinyMCE.get("content_default").focus();
+                            } else {
+                                $("#content_default").siblings(".CodeMirror")[0].CodeMirror.focus();
+                            }
+                            return false;
                         }
-
                         form.submit();
-                    }
+                    },
                 });
-                [% END %]
+            }
 
-                showLocationNotes( $("#location").val() );
+            $(document).ready(function () {
+                showLocationNotes($("#location").val());
 
                 $("#location").on("change", function(){
                     showLocationNotes( $(this).val() );
