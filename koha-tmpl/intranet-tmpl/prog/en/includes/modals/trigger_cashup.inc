@@ -10,7 +10,7 @@
 <div class="modal" id="[% modal_id | html %]" tabindex="-1" role="dialog" aria-labelledby="[% modal_id | html %]Label">
     <form method="post" class="validated trigger-cashup-form" [% IF form_action %]action="[% form_action | html %]"[% END %]>
         [% INCLUDE 'csrf-token.inc' %]
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title" id="[% modal_id | html %]Label">
@@ -35,7 +35,6 @@
                 <div class="modal-footer">
                     <input type="hidden" name="registerid" class="register-id-field" value="[% IF register_id %][% register_id | html %][% END %]" />
                     <input type="hidden" name="op" value="cud-cashup_start" />
-                    <input type="hidden" name="amount" value="" />
                     [% IF redirect_to %]
                         <input type="hidden" name="redirect_to" value="[% redirect_to | html %]" />
                     [% END %]

@@ -126,16 +126,12 @@ function initTriggerCashupModal(modalSelector, options) {
     $(modalSelector + " .quick-cashup-btn").on("click", function (e) {
         e.preventDefault();
         var form = $(this).closest("form");
-        var modal = $(this).closest(".modal");
-        var bankableAmount = modal.data("bankable-amount");
 
-        // Change operation to cud-cashup (quick cashup)
+        // Change operation to cud-cashup. The controller will build a
+        // balanced per-payment-type reconciliations array from the register's
+        // expected totals because no actual_amount_* fields are present.
         form.find('input[name="op"]').val("cud-cashup");
 
-        // Set the amount to the expected bankable amount
-        form.find('input[name="amount"]').val(bankableAmount);
-
-        // Submit the form
         form.submit();
     });
 }
@@ -153,76 +149,250 @@ function initConfirmCashupModal(modalSelector, options) {
     var noteRequired = options.noteRequired || false;
     var hasAuthorisedValues = options.hasAuthorisedValues || false;
     var isInProgress = options.isInProgress || false;
+    var paymentTypes = options.paymentTypes || [];
 
-    // Real-time reconciliation calculation
-    $(modalSelector + " .cashup-amount-input").on("input", function () {
-        var modal = $(this).closest(".modal");
-        var actualAmount = parseFloat($(this).val()) || 0;
-        var expectedText = modal.find(".expected-amount").text();
-        var expectedAmount = parseFloat(expectedText.unformat_price()) || 0;
-        var difference = actualAmount - expectedAmount;
+    // Build the note input for a single row. Each input name carries the
+    // payment_type as a suffix (e.g. reconciliation_note_CASH) so that the
+    // controller can look each value up by type instead of relying on
+    // positional alignment. That means we can disable balanced rows for the
+    // proper "not interactive" look without dropping anything from the
+    // payload — disabled inputs simply produce no value for that suffix.
+    function buildNoteInput(paymentType, noteAvs, label) {
+        var inputName = "reconciliation_note_" + paymentType;
+        var ariaLabel =
+            __("Reconciliation note for") + " " + (label || paymentType);
+        if (Array.isArray(noteAvs) && noteAvs.length) {
+            var $select = $(
+                '<select class="reconciliation-note-input form-select form-select-sm" disabled></select>'
+            )
+                .attr("name", inputName)
+                .attr("aria-label", ariaLabel);
+            $select.append(
+                '<option value="">' + __("-- Select a reason --") + "</option>"
+            );
+            noteAvs.forEach(function (av) {
+                $("<option></option>")
+                    .attr("value", av.value)
+                    .text(av.label || av.value)
+                    .appendTo($select);
+            });
+            return $select;
+        }
+        return $(
+            '<input type="text" class="reconciliation-note-input form-control form-control-sm" maxlength="1000" placeholder="" disabled>'
+        )
+            .attr("name", inputName)
+            .attr("aria-label", ariaLabel);
+    }
 
-        if ($(this).val() && !isNaN(actualAmount)) {
-            var reconciliationText = "";
-            var reconciliationClass = "";
-            var hasDiscrepancy = false;
+    // Build a single row of the per-payment-type reconciliation table
+    function buildRow(pt, noteAvs) {
+        var label = pt.label || pt.payment_type;
+        var $tr = $('<tr class="cashup-row"></tr>')
+            .attr("data-payment-type", pt.payment_type)
+            .data("expected", Number(pt.expected || 0));
 
-            if (difference > 0) {
-                reconciliationText = __("Surplus: %s").format(
-                    difference.format_price()
-                );
-                reconciliationClass = "success";
-                hasDiscrepancy = true;
-            } else if (difference < 0) {
-                reconciliationText = __("Deficit: %s").format(
-                    Math.abs(difference).format_price()
-                );
-                reconciliationClass = "warning";
-                hasDiscrepancy = true;
-            } else {
-                reconciliationText = __("Balanced - no surplus or deficit");
-                reconciliationClass = "success";
-                hasDiscrepancy = false;
+        $("<td></td>").text(label).appendTo($tr);
+
+        $('<td class="text-end expected-cell"></td>')
+            .text(Number(pt.expected || 0).format_price())
+            .appendTo($tr);
+
+        $("<td></td>")
+            .append(
+                $(
+                    '<input type="text" inputmode="decimal" pattern="^-?\\d+(\\.\\d{1,2})?$" required="required" data-msg-required="' +
+                        __("Required").replace(/"/g, "&quot;") +
+                        '" class="cashup-amount-input form-control form-control-sm">'
+                )
+                    .attr("name", "actual_amount_" + pt.payment_type)
+                    .attr("aria-label", __("Actual counted for") + " " + label)
+            )
+            .appendTo($tr);
+
+        $('<td class="text-end discrepancy-cell"></td>').appendTo($tr);
+
+        $('<td class="note-cell"></td>')
+            .append(buildNoteInput(pt.payment_type, noteAvs, label))
+            .appendTo($tr);
+
+        return $tr;
+    }
+
+    // Render rows for all configured payment types into the modal's tbody
+    function renderRows(modal, rowsData) {
+        var $tbody = modal.find(".cashup-rows");
+        $tbody.empty();
+        var noteAvs = modal.data("note-avs") || [];
+        if (typeof noteAvs === "string") {
+            try {
+                noteAvs = JSON.parse(noteAvs);
+            } catch (err) {
+                noteAvs = [];
+            }
+        }
+        rowsData.forEach(function (pt) {
+            $tbody.append(buildRow(pt, noteAvs));
+        });
+        // Reset totals
+        modal.find(".expected-total").text(
+            rowsData
+                .reduce(function (s, r) {
+                    return s + Number(r.expected || 0);
+                }, 0)
+                .format_price()
+        );
+        modal.find(".actual-total").text("");
+        modal.find(".discrepancy-total").text("");
+    }
+
+    // Recalculate per-row discrepancies + totals, show/hide note field
+    function recalculate(modal) {
+        var anyEntered = false;
+        var allEntered = true;
+        var anyDiscrepancy = false;
+        var totalExpected = 0;
+        var totalActual = 0;
+
+        modal.find(".cashup-row").each(function () {
+            var $row = $(this);
+            var expected = Number($row.data("expected") || 0);
+            var actualVal = $row.find(".cashup-amount-input").val();
+            var $cell = $row.find(".discrepancy-cell");
+            var $note = $row.find(".reconciliation-note-input");
+
+            totalExpected += expected;
+
+            // Reset row state on every recalc — re-applied below if discrepant.
+            // Note inputs use suffixed names (reconciliation_note_<TYPE>), so
+            // disabling them is safe: the controller looks values up per-type
+            // rather than relying on positional alignment between parallel arrays.
+            $note
+                .prop("disabled", true)
+                .attr("disabled", "disabled")
+                .removeAttr("required");
+            $row.find(".note-cell").removeClass("required");
+
+            if (actualVal === "" || actualVal === undefined) {
+                allEntered = false;
+                $cell.text("").removeClass("text-warning text-success");
+                $note.val("");
+                return;
             }
 
-            modal
-                .find(".reconciliation-text")
-                .text(reconciliationText)
-                .removeClass("success warning")
-                .addClass(reconciliationClass);
-            modal.find(".reconciliation-display").show();
-
-            // Show/hide note field based on whether there's a discrepancy
-            if (hasDiscrepancy) {
-                modal.find(".reconciliation-note-field").show();
-
-                // Update required attribute and label based on system preference
-                if (noteRequired) {
-                    modal
-                        .find(".reconciliation-note-input")
-                        .attr("required", "required");
-                    modal
-                        .find(".reconciliation-note-label")
-                        .addClass("required");
-                } else {
-                    modal
-                        .find(".reconciliation-note-input")
-                        .removeAttr("required");
-                    modal
-                        .find(".reconciliation-note-label")
-                        .removeClass("required");
-                }
-            } else {
-                modal.find(".reconciliation-note-field").hide();
-                modal.find(".reconciliation-note-input").val(""); // Clear note when balanced
-                modal.find(".reconciliation-note-input").removeAttr("required");
-                modal
-                    .find(".reconciliation-note-label")
-                    .removeClass("required");
+            var actual = parseFloat(actualVal);
+            if (isNaN(actual)) {
+                allEntered = false;
+                $cell.text("").removeClass("text-warning text-success");
+                $note.val("");
+                return;
             }
-        } else {
+
+            anyEntered = true;
+            totalActual += actual;
+            var diff = actual - expected;
+
+            if (diff > 0) {
+                $cell
+                    .text("+" + diff.format_price())
+                    .addClass("text-success")
+                    .removeClass("text-warning");
+                anyDiscrepancy = true;
+            } else if (diff < 0) {
+                $cell
+                    .text(diff.format_price())
+                    .addClass("text-warning")
+                    .removeClass("text-success");
+                anyDiscrepancy = true;
+            } else {
+                $cell
+                    .text(__("Balanced"))
+                    .removeClass("text-warning text-success");
+                $note.val("");
+                return;
+            }
+
+            // Discrepant row: enable the note input and apply required when
+            // the preference says so.
+            $note.prop("disabled", false).removeAttr("disabled");
+            if (noteRequired) {
+                $note.attr("required", "required");
+                $row.find(".note-cell").addClass("required");
+            }
+        });
+
+        modal.find(".expected-total").text(totalExpected.format_price());
+        modal
+            .find(".actual-total")
+            .text(allEntered ? totalActual.format_price() : "");
+        modal
+            .find(".discrepancy-total")
+            .text(
+                allEntered ? (totalActual - totalExpected).format_price() : ""
+            );
+
+        if (!anyEntered) {
             modal.find(".reconciliation-display").hide();
-            modal.find(".reconciliation-note-field").hide();
+            return;
+        }
+
+        // Surface a one-line summary
+        var summary;
+        var summaryClass;
+        if (anyDiscrepancy) {
+            summary = __("Reconciliation needed - see discrepancies above");
+            summaryClass = "warning";
+        } else {
+            summary = __("Balanced - no surplus or deficit");
+            summaryClass = "success";
+        }
+        modal
+            .find(".reconciliation-text")
+            .text(summary)
+            .removeClass("success warning")
+            .addClass(summaryClass);
+        modal.find(".reconciliation-display").show();
+    }
+
+    // Recalculate on every input
+    $(modalSelector).on("input", ".cashup-amount-input", function () {
+        recalculate($(this).closest(".modal"));
+    });
+
+    // jQuery Validate (loaded via the form's class="validated") aggregates
+    // inputs that share a name and only enforces the first one. Our per-row
+    // inputs all share name="actual_amount" / name="reconciliation_note", so
+    // we must validate every required row ourselves on submit. If any row is
+    // missing a required value, block the submit and focus the offender.
+    $(modalSelector + " form").on("submit", function (e) {
+        var modal = $(this).closest(".modal");
+        var $offender = null;
+        modal.find(".cashup-row").each(function () {
+            var $row = $(this);
+            var $amount = $row.find(".cashup-amount-input");
+            if ($amount.is(":visible") && !$amount.val()) {
+                $offender = $offender || $amount;
+                return;
+            }
+            var $note = $row.find(".reconciliation-note-input");
+            if (
+                $note.is("[required]") &&
+                !$note.prop("disabled") &&
+                !$note.val()
+            ) {
+                $offender = $offender || $note;
+            }
+        });
+        if ($offender) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            $offender.trigger("focus");
+            try {
+                $offender[0].reportValidity();
+            } catch (err) {
+                /* older browsers may not implement reportValidity */
+            }
+            return false;
         }
     });
 
@@ -231,47 +401,57 @@ function initConfirmCashupModal(modalSelector, options) {
         var button = $(e.relatedTarget);
         var modal = $(this);
 
-        // For registers.tt: populate from button data
+        // Determine the row data:
+        // - registers.tt: button supplies per-type breakdown via data-payment-types
+        //   (also data-register, data-registerid for the modal title and form field)
+        // - register.tt: paymentTypes pre-computed and passed via options
+        // - legacy fallback: single Cash row from data-expected
+        var rowsData = null;
         if (button.length && button.data("register")) {
             var register = button.data("register");
             modal.find(".register-name").text(register);
 
-            var expected = button.data("expected");
-            modal.find(".expected-amount").text(expected);
-
             var rid = button.data("registerid");
             modal.find(".register-id-field").val(rid);
 
-            // Parse expected amount to check if negative
-            // Convert to string first in case jQuery's .data() parsed it as a number
-            var expectedAmount = String(expected || "").replace(
-                /[^0-9.-]/g,
-                ""
-            );
-            var isNegative = parseFloat(expectedAmount) < 0;
+            var pt = button.data("payment-types");
+            if (Array.isArray(pt) && pt.length) {
+                rowsData = pt;
+            } else if (pt && typeof pt === "string") {
+                try {
+                    var parsed = JSON.parse(pt);
+                    if (Array.isArray(parsed) && parsed.length) {
+                        rowsData = parsed;
+                    }
+                } catch (err) {
+                    /* fall through to legacy */
+                }
+            }
 
-            // Update labels based on sign
-            if (isNegative) {
-                modal
-                    .find(".expected-amount-label")
-                    .text(__("Expected amount to add:"));
-                modal
-                    .find(".actual-amount-label")
-                    .text(__("Actual amount added to register:"));
-            } else {
-                modal
-                    .find(".expected-amount-label")
-                    .text(__("Expected cashup amount:"));
-                modal
-                    .find(".actual-amount-label")
-                    .text(__("Actual cashup amount counted:"));
+            if (!rowsData) {
+                var expected = button.data("expected");
+                var expectedAmount = String(expected || "").replace(
+                    /[^0-9.-]/g,
+                    ""
+                );
+                rowsData = [
+                    {
+                        payment_type: "CASH",
+                        label: __("Cash"),
+                        expected: parseFloat(expectedAmount) || 0,
+                    },
+                ];
             }
         }
+        if (!rowsData) {
+            rowsData = paymentTypes;
+        }
 
-        // Reset fields
-        modal.find(".cashup-amount-input").val("").focus();
+        renderRows(modal, rowsData || []);
+
         modal.find(".reconciliation-display").hide();
-        modal.find(".reconciliation-note-field").hide();
-        modal.find(".reconciliation-note-input").val("");
+
+        // Focus first input
+        modal.find(".cashup-amount-input").first().trigger("focus");
     });
 }

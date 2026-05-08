@@ -1,4 +1,6 @@
 [% USE raw %]
+[% USE To %]
+[% USE Koha %]
 <!-- Confirm cashup modal -->
 <!-- Parameters:
      - modal_id: ID for the modal (required)
@@ -8,10 +10,35 @@
      - form_action: Form action URL (optional, defaults to current page)
      - redirect_to: Where to redirect after completion (optional: 'register' or 'registers')
 -->
-<div class="modal" id="[% modal_id | html %]" tabindex="-1" role="dialog" aria-labelledby="[% modal_id | html %]Label">
+[% SET note_av_options = [] %]
+[% FOREACH av IN reconciliation_note_avs %]
+    [% note_av_options.push({ value => av.authorised_value, label => av.lib }) %]
+[% END %]
+<style nonce="[% Koha.CSPNonce | $raw %]">
+    /* Bootstrap form-control / form-select inherit a transparent background from
+     * Koha's _forms styling, which makes them look greyed out inside the modal's
+     * tabular layout. Force a white background on enabled inputs so the
+     * Reconciliation note input matches the Actual counted column. */
+    .cashup-reconciliation-grid input.form-control:not(:disabled),
+    .cashup-reconciliation-grid select.form-select:not(:disabled),
+    .cashup-reconciliation-grid input.cashup-amount-input:not(:disabled),
+    .cashup-reconciliation-grid input.reconciliation-note-input:not(:disabled),
+    .cashup-reconciliation-grid select.reconciliation-note-input:not(:disabled) {
+        background-color: #fff !important;
+    }
+</style>
+<div
+    class="modal"
+    id="[% modal_id | html %]"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="[% modal_id | html %]Label"
+    data-note-avs="[% To.json(note_av_options) | html %]"
+    data-note-required="[% reconciliation_note_required ? 1 : 0 | html %]"
+>
     <form method="post" enctype="multipart/form-data" class="validated confirm-cashup-form" [% IF form_action %]action="[% form_action | html %]"[% END %]>
         [% INCLUDE 'csrf-token.inc' %]
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title" id="[% modal_id | html %]Label">
@@ -26,66 +53,34 @@
                 <div class="modal-body">
                     <fieldset class="rows">
                         <ol>
-                            <li>
-                                <span class="label expected-amount-label">
-                                    [% IF cashup_in_progress %]
-                                        [% IF cashup_in_progress.amount < 0 %]
-                                            Expected amount to add:
-                                        [% ELSE %]
-                                            Expected cashup amount:
-                                        [% END %]
-                                    [% ELSE %]
-                                        Expected cashup amount:
-                                    [% END %]
-                                </span>
-                                <span class="expected-amount">[% IF cashup_in_progress %][% cashup_in_progress.amount | $Price %][% END %]</span>
-                            </li>
-                            <li>
-                                <label class="required actual-amount-label" for="cashup_amount">
-                                    [% IF cashup_in_progress %]
-                                        [% IF cashup_in_progress.amount < 0 %]
-                                            Actual amount added to register:
-                                        [% ELSE %]
-                                            Actual cashup amount counted:
-                                        [% END %]
-                                    [% ELSE %]
-                                        Actual cashup amount counted:
-                                    [% END %]
-                                </label>
-                                <input type="text" inputmode="decimal" pattern="^-?\d+(\.\d{2})?$" id="cashup_amount" name="amount" class="cashup-amount-input" required="required" />
-                                <span class="required">Required</span>
+                            <li class="cashup-per-type-rows">
+                                <table class="cashup-reconciliation-grid table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Payment type</th>
+                                            <th scope="col" class="text-end">Expected</th>
+                                            <th scope="col">Actual counted <span class="required">*</span></th>
+                                            <th scope="col" class="text-end">Discrepancy</th>
+                                            <th scope="col">Reconciliation note [% IF reconciliation_note_required %]<span class="required reconciliation-note-required-marker">*</span>[% END %]</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="cashup-rows">
+                                        <!-- Populated by initConfirmCashupModal from paymentTypes config -->
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="cashup-totals-row">
+                                            <th scope="row">Total</th>
+                                            <th class="text-end expected-total"></th>
+                                            <th class="text-end actual-total"></th>
+                                            <th class="text-end discrepancy-total"></th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
                             </li>
                             <li class="reconciliation-display" style="display: none;">
                                 <span class="label">Reconciliation:</span>
                                 <span class="reconciliation-text"></span>
-                            </li>
-                            <li class="reconciliation-note-field" style="display: none;">
-                                <label class="reconciliation-note-label" for="cashup_reconciliation_note"> Note[% IF reconciliation_note_required %](required)[% ELSE %](optional)[% END %]: </label>
-                                [% IF reconciliation_note_avs %]
-                                    <select id="cashup_reconciliation_note" class="reconciliation-note-input" name="reconciliation_note">
-                                        <option value="">-- Select a reason --</option>
-                                        [% FOREACH av IN reconciliation_note_avs %]
-                                            <option value="[% av.authorised_value | html %]">[% av.lib | html %]</option>
-                                        [% END %]
-                                    </select>
-                                    [% IF reconciliation_note_required %]
-                                        <span class="required">Required</span>
-                                    [% END %]
-                                [% ELSE %]
-                                    <textarea
-                                        id="cashup_reconciliation_note"
-                                        class="reconciliation-note-input"
-                                        name="reconciliation_note"
-                                        rows="3"
-                                        cols="40"
-                                        maxlength="1000"
-                                        placeholder="Enter a note explaining the surplus or deficit..."
-                                    ></textarea>
-                                    [% IF reconciliation_note_required %]
-                                        <span class="required">Required</span>
-                                    [% END %]
-                                    <div class="hint">Maximum 1000 characters</div>
-                                [% END %]
                             </li>
                         </ol>
                     </fieldset>

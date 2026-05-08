@@ -79,11 +79,13 @@ if ( !$registers->count ) {
     }
 
     $template->param(
-        register                     => $cash_register,
-        accountlines                 => $accountlines,
-        cashup_in_progress           => $cashup_in_progress,
-        reconciliation_note_avs      => $reconciliation_note_avs,
-        reconciliation_note_required => C4::Context->preference('CashupReconciliationNoteRequired'),
+        register                       => $cash_register,
+        accountlines                   => $accountlines,
+        cashup_in_progress             => $cashup_in_progress,
+        reconciliation_note_avs        => $reconciliation_note_avs,
+        reconciliation_note_required   => C4::Context->preference('CashupReconciliationNoteRequired'),
+        cashup_payment_types_breakdown => $cash_register->cashup_payment_types_breakdown,
+        cashup_payment_type_codes      => $cash_register->cashup_payment_types,
     );
 
     my $transactions_range_from = $input->param('trange_f');
@@ -152,23 +154,33 @@ if ( !$registers->count ) {
         }
     } elsif ( $op eq 'cud-cashup' ) {
         if ( $logged_in_user->has_permission( { cash_management => 'cashup' } ) ) {
-            my $amount = $input->param('amount');
 
-            # add_cashup() sanitizes (trims, limits length, empty-to-undef) the note itself
-            my $reconciliation_note = $input->param('reconciliation_note');
+            # The Complete cashup modal posts actual_amount_<TYPE> +
+            # reconciliation_note_<TYPE> for every configured payment type.
+            my $configured_types = $cash_register->cashup_payment_types;
+            my @reconciliations;
+            for my $type (@$configured_types) {
+                my $amt = $input->param( 'actual_amount_' . $type );
+                next unless defined $amt;
+                push @reconciliations, {
+                    payment_type  => $type,
+                    actual_amount => $amt,
+                    note          => $input->param( 'reconciliation_note_' . $type ),
+                };
+            }
 
-            if ( defined $amount && $amount =~ /^-?\d+(?:\.\d{1,2})?$/ ) {
+            my $valid_amounts = @reconciliations
+                && !grep { $_->{actual_amount} !~ /^-?\d+(?:\.\d{1,2})?$/ } @reconciliations;
+
+            if ($valid_amounts) {
+
+                my %cashup_params = (
+                    manager_id      => $logged_in_user->id,
+                    reconciliations => \@reconciliations,
+                );
 
                 my $cashup;
-                eval {
-                    $cashup = $cash_register->add_cashup(
-                        {
-                            manager_id          => $logged_in_user->id,
-                            amount              => $amount,
-                            reconciliation_note => $reconciliation_note
-                        }
-                    );
-                };
+                eval { $cashup = $cash_register->add_cashup( \%cashup_params ); };
                 if ($@) {
                     if ( $@->isa('Koha::Exceptions::Object::BadValue') ) {
                         $template->param( error_no_cashup_start => 1 );
