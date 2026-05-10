@@ -68,17 +68,11 @@ sub new {
     my $class = shift;
 
     unless ( defined $bib_heading_fields ) {
-        my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare(
-            "SELECT tagfield, authtypecode
-             FROM marc_subfield_structure
-             WHERE frameworkcode = '' AND authtypecode <> ''"
-        );
-        $sth->execute();
+        my $types = C4::Heading::_load_authority_types_from_frameworks('unimarc');
         $bib_heading_fields = {};
-        while ( my ( $tag, $auth_type ) = $sth->fetchrow ) {
+        foreach my $tag ( keys %$types ) {
             $bib_heading_fields->{$tag} = {
-                auth_type => $auth_type,
+                auth_type => $types->{$tag},
                 subfields => 'abcdefghjklmnopqrstvxyz',
             };
         }

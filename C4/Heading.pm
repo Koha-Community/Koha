@@ -31,6 +31,9 @@ use C4::Context;
 use Module::Load qw( load );
 use List::Util   qw( none first );
 
+# Package-level cache for authority types from frameworks
+my %authority_type_cache;
+
 =head1 NAME
 
 C4::Heading
@@ -71,7 +74,11 @@ sub new_from_field {
     my $frameworkcode = shift;                                    #FIXME this is not used?
     my $auth          = shift;
     my $marcflavour   = C4::Context->preference('marcflavour');
-    my $marc_handler  = _marc_format_handler($marcflavour);
+
+    # Enable framework lookup for MARC21 if LinkerUseFrameworkAuthTypes is enabled
+    my $use_frameworks = $marcflavour eq 'MARC21'
+        && C4::Context->preference('LinkerUseFrameworkAuthTypes');
+    my $marc_handler = _marc_format_handler( $marcflavour, { use_frameworks => $use_frameworks } );
 
     return unless $field;
     my $tag = $field->tag();
@@ -304,6 +311,35 @@ sub _filter_diacritics {
 
 =head1 INTERNAL FUNCTIONS
 
+=head2 _load_authority_types_from_frameworks
+
+Load authority type mappings from marc_subfield_structure.
+Shared by both MARC21 and UNIMARC implementations.
+Results are cached at package level.
+
+=cut
+
+sub _load_authority_types_from_frameworks {
+    my $cache_key = shift // 'default';
+
+    unless ( exists $authority_type_cache{$cache_key} ) {
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare(
+            "SELECT DISTINCT tagfield, authtypecode
+             FROM marc_subfield_structure
+             WHERE frameworkcode = '' AND authtypecode <> ''"
+        );
+        $sth->execute();
+
+        $authority_type_cache{$cache_key} = {};
+        while ( my ( $tag, $auth_type ) = $sth->fetchrow ) {
+            $authority_type_cache{$cache_key}->{$tag} = $auth_type;
+        }
+    }
+
+    return $authority_type_cache{$cache_key};
+}
+
 =head2 _marc_format_handler
 
 Returns a C4::Heading::MARC21 or C4::Heading::UNIMARC object
@@ -313,9 +349,10 @@ depending on the selected MARC flavour.
 
 sub _marc_format_handler {
     my $marcflavour = uc shift;
+    my $params      = shift // {};
     my $pname       = "C4::Heading::$marcflavour";
     load $pname;
-    return $pname->new();
+    return $pname->new($params);
 }
 
 =head1 AUTHOR

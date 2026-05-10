@@ -245,13 +245,40 @@ my %subdivisions = (
 
 =head2 new
 
-  my $marc_handler = C4::Heading::MARC21->new();
+        my $marc_handler = C4::Heading::MARC21->new();
+        my $marc_handler = C4::Heading::MARC21->new( { use_frameworks => 1 } );
+
+Creates a new MARC21 heading handler.
+
+If use_frameworks is true, authority types are loaded from marc_subfield_structure
+instead of using the hardcoded defaults. This allows local customization of
+authority types per tag via MARC bibliographic frameworks.
 
 =cut
 
 sub new {
-    my $class = shift;
-    return bless {}, $class;
+    my $class  = shift;
+    my $params = shift // {};
+
+    my $self = bless {}, $class;
+
+    if ( $params->{use_frameworks} ) {
+        $self->_load_from_frameworks();
+    }
+
+    return $self;
+}
+
+=head2 _load_from_frameworks
+
+Load authority type mappings from marc_subfield_structure.
+Uses shared method from C4::Heading with package-level caching.
+
+=cut
+
+sub _load_from_frameworks {
+    my $self = shift;
+    $self->{_framework_overrides} = C4::Heading::_load_authority_types_from_frameworks('marc21');
 }
 
 =head2 valid_heading_tag
@@ -331,7 +358,10 @@ sub parse_heading {
     my $heading_fields = $auth ? {%$auth_heading_fields} : {%$bib_heading_fields};
 
     my $field_info = $heading_fields->{$tag};
-    my $auth_type  = $field_info->{'auth_type'};
+
+    # Use framework override if available, otherwise use hardcoded default
+    my $auth_type = $self->{_framework_overrides}->{$tag} // $field_info->{'auth_type'};
+
     my $thesaurus =
         $tag =~ m/6../
         ? _get_subject_thesaurus($field)
