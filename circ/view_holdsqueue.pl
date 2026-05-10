@@ -22,12 +22,10 @@ This script displays items in the tmp_holdsqueue table
 =cut
 
 use Modern::Perl;
-use CGI            qw ( -utf8 );
-use C4::Auth       qw( get_template_and_user );
-use C4::Output     qw( output_html_with_http_headers );
-use C4::HoldsQueue qw( GetHoldsQueueItems );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
 use Koha::BiblioFrameworks;
-use Koha::ItemTypes;
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
@@ -40,38 +38,18 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
 );
 
 my $params          = $query->Vars;
-my $run_report      = $params->{'run_report'};
-my $branchlimit     = $params->{'branchlimit'};
-my $itemtypeslimit  = $params->{'itemtypeslimit'};
-my @locationslimits = $query->multi_param('locationslimit');
 my @ccodeslimits    = $query->multi_param('ccodeslimit');
+my @locationslimits = $query->multi_param('locationslimit');
 
-my $locationslimit = @locationslimits ? \@locationslimits : undef;
-my $ccodeslimit    = @ccodeslimits    ? \@ccodeslimits    : undef;
-
-if ($run_report) {
-    my $items = GetHoldsQueueItems(
-        {
-            branchlimit    => $branchlimit,
-            itemtypeslimit => $itemtypeslimit,
-            ccodeslimit    => $ccodeslimit,
-            locationslimit => $locationslimit,
-        }
-    );
-
-    $template->param(
-        branchlimit    => $branchlimit,
-        itemtypeslimit => $itemtypeslimit,
-        ccodeslimit    => $ccodeslimit,
-        locationslimit => $locationslimit,
-        total          => $items->count,
-        itemsloop      => $items,
-        run_report     => $run_report,
-    );
-}
+$template->param(
+    branchlimit    => $params->{'branchlimit'},
+    itemtypeslimit => $params->{'itemtypeslimit'},
+    ccodeslimit    => \@ccodeslimits,
+    locationslimit => \@locationslimits,
+    run_report     => $params->{'run_report'},
+);
 
 # Checking if there is a Fast Cataloging Framework
 $template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find('FA');
 
-# writing the template
 output_html_with_http_headers $query, $cookie, $template->output;
