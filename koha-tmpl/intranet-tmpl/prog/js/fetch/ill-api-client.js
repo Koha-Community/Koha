@@ -5,14 +5,6 @@ export class ILLAPIClient {
         });
     }
 
-    get config() {
-        return {
-            get: () => {
-                ILLModule: 1;
-            }, // TODO: Fetch from API
-        };
-    }
-
     get supplying() {
         return {
             get: id =>
