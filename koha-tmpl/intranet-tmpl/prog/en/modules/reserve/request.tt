@@ -1744,7 +1744,6 @@
                 return false;
             });
 
-            //Write handling of supply ILL params here ? before submit?
             if (!multi_hold) {
                 $("#hold-request-form").on("submit", function (e) {
                     return check(e, $(this));
@@ -1860,22 +1859,6 @@
                     msg = _("- Please select a pickup location for this hold") + "\n";
                 }
             }
-            // var supplyillID = Cookies.get("holdforsupplyill") || null;
-            // if (supplyillID) {
-            //     const client = APIClient.ill;
-            //     client.supplying.patch({
-            //         expectedDeliveryDate: null,
-            //         messageInfoNote: "my message",
-            //         status : "ExpectToSupply"
-            //     }, supplyillID).then(
-            //         success => {
-            //             //alert(_("Successfully saved configuration"));
-            //         },
-            //         error => {
-            //             console.warn("Something wrong happened: %s".format(error));
-            //         }
-            //     );
-            // }
 
             if (msg == "") {
                 $("#hold-request-form").preventDoubleFormSubmit();
