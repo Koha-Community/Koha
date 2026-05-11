@@ -1,4 +1,4 @@
-<div class="results_summary ratings" id="rating-[% item.itemnumber | html %]">
+<div class="results_summary ratings no-export" id="rating-[% item.itemnumber | html %]">
     [% SET rating_avg = item.ratings.get_avg_rating() %]
     [% rating_avg_int = BLOCK %][% rating_avg | format("%.0f") %][% END %]
 
