@@ -1450,7 +1450,7 @@
     <script nonce="[% Koha.CSPNonce | $raw %]">
         var orders_table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'basket', 'orders', 'json' ) | $raw %];
         let supplier_report_column = orders_table_settings.columns.find(c => c.columnname == 'supplier_report');
-        const editfact_available = [% Koha.Preference('EDIFACT') && ediaccount ? 1 : 0 | html %];
+        const edifact_available = [% Koha.Preference('EDIFACT') && ediaccount ? 1 : 0 | html %];
         supplier_report_column.visibility_condition = edifact_available;
         supplier_report_column.force_visibility = 1;
 
