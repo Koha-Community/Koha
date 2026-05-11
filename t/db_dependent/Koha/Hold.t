@@ -27,7 +27,7 @@ use Test::MockModule;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
-use t::lib::Mocks;
+use t::lib::Dates;
 
 use C4::Reserves qw(AddReserve);
 
@@ -1370,8 +1370,12 @@ subtest 'revert_found() tests' => sub {
 
         my $log =
             Koha::ActionLogs->search( { module => 'HOLDS', action => 'MODIFY', object => $hold->reserve_id } )->next;
-        my $expected = sprintf q{'timestamp' => '%s'}, $hold->timestamp;
-        like( $log->info, qr{$expected}, 'Timestamp logged is the current one' );
+        if ( $log && $log->info =~ m{'timestamp' => '([^']*)'} ) {
+            my $timestamp = $1;
+            is( t::lib::Dates::compare( $timestamp, $hold->timestamp ), 0, 'Timestamp logged is the current one' );
+        } else {
+            fail('Log entry for hold modification not found or malformed');
+        }
         my $log_count =
             Koha::ActionLogs->search( { module => 'HOLDS', action => 'MODIFY', object => $hold->reserve_id } )->count;
 
