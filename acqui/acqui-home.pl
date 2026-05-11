@@ -134,7 +134,7 @@ my $bp_loop       = $budgetperiods;
 for my $bp ( @{$budgetperiods} ) {
     my $hierarchy = C4::Budgets::GetBudgetHierarchy( $$bp{budget_period_id}, undef, undef, 1 );
     for my $budget ( @{$hierarchy} ) {
-        $$budget{budget_display_name} = sprintf( "%s", ">" x $$budget{depth} . $$budget{budget_name} );
+        $$budget{budget_display_name} = sprintf( "%s", ">" x $$budget{budget_level} . $$budget{budget_name} );
     }
     $$bp{hierarchy} = $hierarchy;
 }
