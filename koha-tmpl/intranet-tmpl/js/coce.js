@@ -28,30 +28,42 @@ KOHA.coce = {
         }
         ids = ids.join(",");
         var coceURL = host + "/cover?id=" + ids + "&provider=" + provider;
+        const loadRequests = [];
+
         $.ajax({
             url: coceURL,
             dataType: "jsonp",
             success: function (urlPerID) {
                 for (var id in urlPerID) {
                     var url = urlPerID[id];
+
                     $("[id^=coce-thumbnail]." + id).each(function () {
-                        var img = document.createElement("img");
-                        img.src = url;
-                        img.alt = "Cover image";
-                        img.onload = function () {
-                            // image dimensions can't be known until image has loaded
-                            if (img.height == 1 && img.width == 1) {
-                                $(this).closest(".coce-coverimg").remove();
-                            }
-                        };
-                        $(this).attr("href", url);
-                        $(this).append(img);
+                        loadRequests.push(
+                            new Promise(resolve => {
+                                var img = document.createElement("img");
+                                img.src = url;
+                                img.alt = "Cover image";
+                                img.onload = function () {
+                                    // image dimensions can't be known until image has loaded
+                                    if (img.height == 1 && img.width == 1) {
+                                        $(this)
+                                            .closest(".coce-coverimg")
+                                            .remove();
+                                    }
+                                    resolve();
+                                };
+                                $(this).attr("href", url);
+                                $(this).append(img);
+                            })
+                        );
                     });
                 }
             },
         }).then(function () {
-            // Cannot access 'this' from here
-            KOHA.coce.done = 1;
+            Promise.allSettled(loadRequests).then(function () {
+                // Cannot access 'this' from here
+                KOHA.coce.done = 1;
+            });
         });
     },
 };
