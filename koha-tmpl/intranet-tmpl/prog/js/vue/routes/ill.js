@@ -1,7 +1,6 @@
 import { markRaw } from "vue";
 
 import Home from "../components/ILL/Home.vue";
-import ProgressRequest from "../components/ILL/ProgressRequest.vue";
 import ResourceWrapper from "../components/ResourceWrapper.vue";
 
 import { $__ } from "@koha-vue/i18n";
@@ -66,14 +65,6 @@ export const routes = [
                                 name: "SupplyingShow",
                                 component: markRaw(ResourceWrapper),
                                 title: "{iso18626_request_id}",
-                            },
-                            {
-                                path: "progress-request/:iso18626_request_id",
-                                name: "ProgressRequest",
-                                component: markRaw(ProgressRequest),
-                                title: $__(
-                                    "Progress request {iso18626_request_id}"
-                                ),
                             },
                         ],
                     },
