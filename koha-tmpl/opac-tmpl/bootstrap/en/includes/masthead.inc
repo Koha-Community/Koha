@@ -128,6 +128,9 @@
             </ul>
             <!-- / .navbar-nav -->
         [% END # /IF OpacPublic %]
+
+        [% SET ExtraContent = AdditionalContents.get( location => "OPACMastHeadExtraContent", lang => lang, library => logged_in_user.branchcode || default_branch ) %][% IF ExtraContent.content %][% FOREACH elt IN ExtraContent.content %][% elt.content | $raw %][% END %][% END %]
+
         [% IF Koha.Preference( 'opacuserlogin' ) == 1 ||  Koha.Preference( 'EnableOpacSearchHistory') || Koha.Preference( 'opaclanguagesdisplay' ) %]
             [%# Following on one line for translatability %]
             [% IF ( ( opaclanguagesdisplay ) && ( ! one_language_enabled ) && ( languages_loop ) && ( OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'top') ) %]
