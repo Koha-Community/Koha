@@ -3,6 +3,8 @@ Description=Koha Zebra indexer daemon for %i
 PartOf=koha@%i.target
 Requires=koha-create-dirs@%i.service
 After=koha@%i.target koha-zebra@%i.service
+StartLimitIntervalSec=60
+StartLimitBurst=3
 
 [Service]
 Type=simple

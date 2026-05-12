@@ -3,6 +3,8 @@ Description=Koha Z39.50/SRU server for %i
 PartOf=koha@%i.target
 Requires=koha-create-dirs@%i.service
 After=koha@%i.target
+StartLimitIntervalSec=60
+StartLimitBurst=3
 
 [Service]
 Type=forking

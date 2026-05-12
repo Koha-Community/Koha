@@ -5,6 +5,9 @@ Requires=koha-create-dirs@%i.service
 After=koha@%i.target
 AssertPathExists=/etc/koha/sites/%i/SIPconfig.xml
 
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
 [Service]
 Type=simple
 User=%i-koha
