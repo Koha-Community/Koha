@@ -297,23 +297,23 @@ export default {
                                     options: [
                                         {
                                             value: "USD",
-                                            description: __("USD"),
+                                            description: $__("USD"),
                                         },
                                         {
                                             value: "EUR",
-                                            description: __("EUR"),
+                                            description: $__("EUR"),
                                         },
                                         {
                                             value: "GBP",
-                                            description: __("GBP"),
+                                            description: $__("GBP"),
                                         },
                                         {
                                             value: "AUD",
-                                            description: __("AUD"),
+                                            description: $__("AUD"),
                                         },
                                         {
                                             value: "SEK",
-                                            description: __("SEK"),
+                                            description: $__("SEK"),
                                         },
                                     ],
                                     requiredKey: "value",
@@ -525,15 +525,15 @@ export default {
                                         //TODO: Only show the 2 options that dont match current resource's service_type
                                         {
                                             value: "Copy",
-                                            description: __("Copy"),
+                                            description: $__("Copy"),
                                         },
                                         {
                                             value: "CopyOrLoan",
-                                            description: __("CopyOrLoan"),
+                                            description: $__("CopyOrLoan"),
                                         },
                                         {
                                             value: "Loan",
-                                            description: __("Loan"),
+                                            description: $__("Loan"),
                                         },
                                     ],
                                     requiredKey: "value",
@@ -929,10 +929,10 @@ export default {
             },
             showGroupsDisplayMode: "splitScreen",
             splitScreenGroupings: [
-                { name: "Request details", pane: 1 },
-                { name: "ISO18626 Messages", pane: 1 },
-                { name: "Circulation information", pane: 2 },
-                { name: "Specified by the requesting agency", pane: 2 },
+                { name: $__("Request details"), pane: 1 },
+                { name: $__("ISO18626 Messages"), pane: 1 },
+                { name: $__("Circulation information"), pane: 2 },
+                { name: $__("Specified by the requesting agency"), pane: 2 },
             ],
             resourceAttrs: [
                 {

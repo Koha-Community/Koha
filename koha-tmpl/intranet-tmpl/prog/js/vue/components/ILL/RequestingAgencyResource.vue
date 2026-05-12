@@ -60,8 +60,8 @@ export default {
                 {
                     name: "patron_id",
                     type: "patronAutoComplete",
-                    label: __("ILL partner"),
-                    placeholder: __("Search for an ILL partner"),
+                    label: $__("ILL partner"),
+                    placeholder: $__("Search for an ILL partner"),
                     patronAutoCompleteOptions: {
                         "additional-filters": {
                             "me.category_id": config.settings.ILLPartnerCode,
@@ -86,15 +86,15 @@ export default {
                     options: [
                         {
                             value: "DNUCNI",
-                            description: __("DNUCNI"),
+                            description: $__("DNUCNI"),
                         },
                         {
                             value: "ICOLC",
-                            description: __("ICOLC"),
+                            description: $__("ICOLC"),
                         },
                         {
                             value: "ISIL",
-                            description: __("ISIL"),
+                            description: $__("ISIL"),
                         },
                     ],
                     requiredKey: "value",

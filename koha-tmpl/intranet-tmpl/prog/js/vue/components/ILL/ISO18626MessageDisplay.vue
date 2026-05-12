@@ -2,7 +2,7 @@
     <FormElement
         :resource="messageFilterOptions"
         :attr="{
-            label: 'Show confirmations',
+            label: $__('Show confirmations'),
             name: 'showConfirmationRows',
             type: 'checkbox',
         }"
@@ -10,10 +10,10 @@
     <table id="iso18626_messages">
         <thead>
             <tr>
-                <th>Type</th>
-                <th>Information</th>
-                <th>Timestamp</th>
-                <th>Content</th>
+                <th>{{ $__("Type") }}</th>
+                <th>{{ $__("Information") }}</th>
+                <th>{{ $__("Timestamp") }}</th>
+                <th>{{ $__("Content") }}</th>
             </tr>
         </thead>
         <tbody>
@@ -43,7 +43,7 @@
                         @click="openModal(message.content)"
                     >
                         <i class="fas fa-envelope" aria-hidden="true"></i>
-                        &nbsp; View message
+                        &nbsp; {{ $__("View message") }}
                     </button>
                 </td>
             </tr>
@@ -54,6 +54,7 @@
 <script>
 import FormElement from "../FormElement.vue";
 import { inject, ref, computed } from "vue";
+import { $__ } from "@koha-vue/i18n";
 
 export default {
     props: {
@@ -93,10 +94,10 @@ export default {
                         ? parsedMessage?.messageInfo?.reasonForMessage
                         : null;
                 if (message_data !== null) {
-                    message_data = "Reason: " + message_data;
+                    message_data = $__("Reason: %s").format(message_data);
                 }
             } else {
-                message_data = "Action: " + message_data;
+                message_data = $__("Action: %s").format(message_data);
             }
             return message_data;
         };
@@ -108,7 +109,7 @@ export default {
             generateCollapsibleTabs(messageObj, container);
             const message_type = Object.keys(JSON.parse(message))[0];
             setConfirmationDialog({
-                title: `ISO18626 message: ${message_type}`,
+                title: $__("ISO18626 message: %s").format(message_type),
                 message: container.outerHTML,
                 size: "modal-lg",
             });
