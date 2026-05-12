@@ -38,6 +38,6 @@ $(document).ready(function () {
     });
 
     function isEnabled(id) {
-        return services[0].enabled.indexOf(id.toString()) > -1;
+        return services[0]?.enabled.indexOf(id.toString()) > -1;
     }
 });
