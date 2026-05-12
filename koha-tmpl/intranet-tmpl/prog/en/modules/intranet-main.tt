@@ -338,14 +338,6 @@
 </div>
 <!-- /#container-main.container-fluid -->
 [% MACRO jsinclude BLOCK %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
-        var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this news item? This cannot be undone.");
-        $(document).ready(function () {
-            $(".news_delete").on("click", function () {
-                return confirmDelete(MSG_CONFIRM_DELETE);
-            });
-        });
-    </script>
 [% END %]
 <!-- the main div is closed in intranet-bottom.inc -->
 [% INCLUDE 'intranet-bottom.inc' %]
