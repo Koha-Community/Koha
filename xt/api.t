@@ -33,6 +33,7 @@ my $t    = Test::Mojo->new('Koha::REST::V1');
 my $spec = $t->get_ok( '/api/v1/', 'Correctly fetched the spec' )->tx->res->json;
 
 my $paths = $spec->{paths};
+delete @{$paths}{ grep { m{^/contrib/} } keys %$paths };    # Skip routes injected by plugins
 
 my @missing_additionalProperties = ();
 
