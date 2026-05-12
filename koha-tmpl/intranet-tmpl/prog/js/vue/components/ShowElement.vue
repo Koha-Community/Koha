@@ -126,7 +126,12 @@
     </template>
     <template v-else-if="attribute.type == 'patronAutoComplete'">
         <label>{{ attribute.label }}:</label>
-        <span v-html="patronHTML(resource, attr)"></span>
+        <span v-if="resource[attribute.patronEmbedName]">
+            <a
+                :href="`/cgi-bin/koha/members/moremember.pl?borrowernumber=${resource[attribute.patronEmbedName].patron_id}`"
+                >{{ formatPatronHTML(resource[attribute.patronEmbedName]) }}</a
+            >
+        </span>
     </template>
     <template
         v-else-if="attribute.type == 'relationship' && attribute.componentPath"
@@ -196,18 +201,9 @@ export default {
             return props.attr;
         });
 
-        const patronHTML = (resource, attr) => {
-            if (resource[attr.patronEmbedName]) {
-                const patron = resource[attr.patronEmbedName];
-                if (patron) {
-                    return (
-                        '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' +
-                        patron.patron_id +
-                        '">' +
-                        $patron_to_html(patron) +
-                        "</a>"
-                    );
-                }
+        const formatPatronHTML = patron => {
+            if (typeof $patron_to_html === "function") {
+                return $patron_to_html(patron);
             }
             return "";
         };
@@ -265,7 +261,7 @@ export default {
             formatValue,
             radioOptionText,
             tableColumns,
-            patronHTML,
+            formatPatronHTML,
         };
     },
     props: {
