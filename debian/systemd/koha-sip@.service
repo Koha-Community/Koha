@@ -17,6 +17,10 @@ Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
 Environment=KOHA_HOME=/usr/share/koha
 Environment=PERL5LIB=/usr/share/koha/lib
 ExecStart=/usr/bin/perl /usr/share/koha/lib/C4/SIP/SIPServer.pm /etc/koha/sites/%i/SIPconfig.xml
+ProtectSystem=full
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes
 Restart=on-failure
 RestartSec=5s
 

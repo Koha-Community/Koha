@@ -17,6 +17,10 @@ Environment=PERL5LIB=/usr/share/koha/lib
 ExecStartPre=+/usr/sbin/koha-generate-env es-indexer %i
 EnvironmentFile=-/run/koha/%i/es-indexer.env
 ExecStart=/usr/share/koha/bin/workers/es_indexer_daemon.pl --batch_size ${ES_BATCH_SIZE}
+ProtectSystem=full
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes
 Restart=on-failure
 RestartSec=5s
 

@@ -25,6 +25,10 @@ ExecStart=/usr/bin/zebrasrv \
     -m '%%FT%%T' \
     -p /var/run/koha/%i/zebra.pid \
     -D
+ProtectSystem=full
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes
 Restart=on-failure
 RestartSec=30s
 

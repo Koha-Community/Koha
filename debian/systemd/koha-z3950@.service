@@ -25,6 +25,10 @@ ExecStart=/usr/share/koha/bin/z3950_responder.pl \
     -D \
     -d %i-koha-z3950 \
     -l /var/log/koha/%i/z3950.log
+ProtectSystem=full
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes
 Restart=on-failure
 RestartSec=5s
 

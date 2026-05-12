@@ -17,6 +17,10 @@ Environment=PERL5LIB=/usr/share/koha/lib
 ExecStartPre=+/usr/sbin/koha-generate-env indexer %i
 EnvironmentFile=-/run/koha/%i/indexer.env
 ExecStart=/usr/share/koha/bin/migration_tools/rebuild_zebra.pl -daemon -sleep ${INDEXER_TIMEOUT}
+ProtectSystem=full
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes
 Restart=on-failure
 RestartSec=30s
 

@@ -30,6 +30,10 @@ ExecStart=/usr/bin/starman \
     --listen /var/run/koha/%i/plack.sock \
     ${PLACK_PSGIFILE}
 ExecReload=/bin/kill -HUP $MAINPID
+ProtectSystem=full
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes
 Restart=on-failure
 RestartSec=5s
 
