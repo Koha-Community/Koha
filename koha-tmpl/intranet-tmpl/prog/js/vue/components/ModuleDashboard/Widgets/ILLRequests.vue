@@ -13,7 +13,7 @@
                     type="button"
                     @click="visitOldILLModule"
                 >
-                    {{ visitOldILLModuleText }}
+                    {{ $__("Visit ILL requests (previously ILL Module)") }}
                 </button>
             </div>
         </template>
@@ -42,9 +42,6 @@ export default {
             status: [], //["NEW", "UNAUTH"],
             per_page: 5,
         };
-        const visitOldILLModuleText = $__(
-            "Visit ILL requests (previously ILL Module)"
-        );
         const settings = ref(default_settings);
         const settings_definitions = ref([
             {
@@ -192,7 +189,6 @@ export default {
             table,
             tableOptions,
             viewILLRequest,
-            visitOldILLModuleText,
             visitOldILLModule,
         };
     },
