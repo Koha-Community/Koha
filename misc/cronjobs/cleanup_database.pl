@@ -32,6 +32,7 @@ use constant DEFAULT_JOBS_PURGETYPES              => qw{ update_elastic_index };
 use constant DEFAULT_JOBS_UNFINISHED_PURGEDAYS    => 365;
 use constant DEFAULT_JOBS_UNFINISHED_PURGETYPES   => qw{ update_elastic_index };
 use constant DEFAULT_EDIFACT_MSG_PURGEDAYS        => 365;
+use constant DEFAULT_ILLREQUESTS_PURGEDAYS        => 30;
 
 use Getopt::Long qw( GetOptions );
 use Try::Tiny;
@@ -65,7 +66,7 @@ Usage: $0
    -h --help          prints this help message, and exits, ignoring all
                       other options
    --confirm          Confirmation flag, the script will be running in dry-run mode is not set.
-   --sessions         purge the sessions table.  If you use this while users 
+   --sessions         purge the sessions table.  If you use this while users
                       are logged into Koha, they will have to reconnect.
    --sessdays DAYS    purge only sessions older than DAYS days.
    -v --verbose       will cause the script to give you a bit more information
@@ -134,6 +135,9 @@ Usage: $0
    --reports DAYS          Purge reports data saved more than DAYS days ago. The data is created by running runreport.pl with the --store-results option.
    --edifact-messages DAYS   Purge process and failed EDIFACT messages handled more than DAYS days.
                              Defaults to 365 days if no days specified.
+   --illrequests-status STATUS Specify which ILL request statuses to remove. Repeatable.
+   --illrequests-days DAYS   Purge ILL requests older than DAYS days.
+                             Defaults to 30 days if omitted. Requires at least one --illrequests-status.
 USAGE
     exit $_[0];
 }
@@ -184,6 +188,12 @@ my $jobs_days;
 my @jobs_types;
 my $reports;
 my $edifact_msg_days;
+my $illrequests_days;
+my @illrequests_statuses;
+
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
+
 GetOptions(
     'h|help'                     => \$help,
     'confirm'                    => \$confirm,
@@ -232,6 +242,8 @@ GetOptions(
     'jobs-days:i'                => \$jobs_days,
     'reports:i'                  => \$reports,
     'edifact-messages:i'         => \$edifact_msg_days,
+    'illrequests-days:i'         => \$illrequests_days,
+    'illrequests-status:s'       => \@illrequests_statuses,
 ) || usage(1);
 
 # Use default values
@@ -249,6 +261,7 @@ $jobs_unfinished_days = DEFAULT_JOBS_UNFINISHED_PURGEDAYS
 $jobs_days             = DEFAULT_JOBS_PURGEDAYS               if defined($jobs_days)   && $jobs_days == 0;
 @jobs_types            = (DEFAULT_JOBS_PURGETYPES)            if $jobs_days            && @jobs_types == 0;
 $edifact_msg_days      = DEFAULT_EDIFACT_MSG_PURGEDAYS        if defined($edifact_msg_days) && $edifact_msg_days == 0;
+$illrequests_days      = DEFAULT_ILLREQUESTS_PURGEDAYS        if defined($illrequests_days) && $illrequests_days == 0;
 
 @statistics_types = ( @statistics_types, @Koha::Statistic::pseudonymization_types ) if defined($statistics_type_pseudo);
 @statistics_types = keys %{ { map { $_, 1 } @statistics_types } };    # remove duplicate types
@@ -304,7 +317,9 @@ unless ( $sessions
     || $jobs_days
     || $jobs_unfinished_days
     || $reports
-    || $edifact_msg_days )
+    || $edifact_msg_days
+    || $illrequests_days
+    || @illrequests_statuses )
 {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
@@ -312,6 +327,15 @@ unless ( $sessions
 
 if ( $pDebarments && $allDebarments ) {
     print "You can not specify both --restrictions and --all-restrictions.\n\n";
+    usage(1);
+}
+
+if ( @illrequests_statuses && !$illrequests_days ) {
+    $illrequests_days = DEFAULT_ILLREQUESTS_PURGEDAYS;
+}
+
+if ( $illrequests_days && !@illrequests_statuses ) {
+    print "You must specify at least one --illrequests-status when using --illrequests-days.\n\n";
     usage(1);
 }
 
@@ -858,6 +882,21 @@ if ($edifact_msg_days) {
     }
 }
 
+if ($illrequests_days) {
+    print "Purging ILL requests with statuses "
+        . join( ', ', @illrequests_statuses )
+        . " older than $illrequests_days days.\n"
+        if $verbose;
+    my $count = PurgeIllRequests( $illrequests_days, \@illrequests_statuses, $confirm );
+    if ($verbose) {
+        say $confirm
+            ? sprintf( "Done with purging %d ILL requests.",      $count )
+            : sprintf( "%d ILL requests would have been removed", $count );
+    }
+}
+
+cronlogaction( { action => 'End', info => "COMPLETED" } );
+
 exit(0);
 
 sub RemoveOldSessions {
@@ -1011,6 +1050,37 @@ sub PurgeEdifactMessages {
     my $count = $resultset->count;
 
     $resultset->delete if $doit;
+
+    return $count;
+}
+
+sub PurgeIllRequests {
+    my ( $days, $statuses, $doit ) = @_;
+
+    my $count = 0;
+    $sth = $dbh->prepare(
+        q{
+            DELETE FROM illrequests
+            WHERE updated < date_sub(curdate(), INTERVAL ? DAY)
+            AND status IN (}
+            . join( ',', ('?') x @$statuses ) . q{)
+        }
+    );
+    if ($doit) {
+        $sth->execute( $days, @$statuses ) or die $dbh->errstr;
+        $count = $sth->rows;
+    } else {
+        my $count_sth = $dbh->prepare(
+            q{
+                SELECT COUNT(*) FROM illrequests
+                WHERE updated < date_sub(curdate(), INTERVAL ? DAY)
+                AND status IN (}
+                . join( ',', ('?') x @$statuses ) . q{)
+            }
+        );
+        $count_sth->execute( $days, @$statuses ) or die $dbh->errstr;
+        ($count) = $count_sth->fetchrow_array;
+    }
 
     return $count;
 }
