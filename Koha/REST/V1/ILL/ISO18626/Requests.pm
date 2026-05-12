@@ -89,7 +89,9 @@ sub edit {
         my $body   = $c->req->json;
         my $status = $body->{status};
 
-        $request->progress_request( 'supplyingAgency', $body );    #TODO: Rethink this but good enough for now
+        my $result = $request->progress_request( 'supplyingAgency', $body );
+        return $c->render( status => 500, json => { error => "Request could not be progressed" } )
+            unless $result;
 
         return $c->render(
             status  => 200,

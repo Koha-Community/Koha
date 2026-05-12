@@ -355,6 +355,47 @@ describe("Supplying ILL Requests operations", () => {
         cy.contains("label", "Active checkout").next().should("contain", "Yes");
     });
 
+    it("Shows error banner when progressing status fails", () => {
+        let request = get_supplying_request();
+
+        cy.intercept("GET", "/api/v1/ill/iso18626_requests*", {
+            statusCode: 200,
+            body: [request],
+            headers: {
+                "X-Base-Total-Count": "1",
+                "X-Total-Count": "1",
+            },
+        }).as("getRequests");
+        cy.intercept("GET", "/api/v1/ill/iso18626_requests/*", {
+            ...request,
+            hold: null,
+            messages: [],
+        }).as("getRequest");
+
+        cy.visit("/cgi-bin/koha/ill/iso18626_requests");
+        cy.wait("@getRequests");
+        cy.get(
+            "#iso18626_requests_list table tbody tr:first td:first a"
+        ).click();
+        cy.wait("@getRequest");
+
+        cy.intercept("PATCH", "/api/v1/ill/iso18626_requests/*", {
+            statusCode: 500,
+            body: { error: "Request could not be progressed" },
+        }).as("patchRequest");
+
+        cy.get("#iso18626_requests_show").contains("Unfilled").click();
+        cy.get("#confirmation #reasonUnfilled .vs__search").type(
+            "Not held{enter}",
+            { force: true }
+        );
+        cy.get("#accept_modal").click();
+        cy.wait("@patchRequest");
+        cy.get("main div[class='alert alert-warning']").contains(
+            "Something went wrong: Error: Request could not be progressed"
+        );
+    });
+
     it("Progresses status via the RetryPossible modal", () => {
         let request = get_supplying_request();
 

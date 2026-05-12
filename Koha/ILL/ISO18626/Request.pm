@@ -433,13 +433,12 @@ sub progress_request {
     my @errors = $schema->validate($json);
 
     if (@errors) {
-
-        #TODO: Throw exception
-        use Data::Dumper;
-        $Data::Dumper::Maxdepth = 4;
-        warn Dumper( '##### 2 #######################################################line: ' . __LINE__ );
-        warn Dumper( \@errors );
-        warn Dumper('##### end2 #######################################################');
+        warn sprintf(
+            "ISO18626: Schema validation failed for request %s: %s",
+            $self->iso18626_request_id,
+            join( ', ', map { "$_" } @errors )
+        );
+        return 0;
     }
     $self->status($resulting_status)->store;
     $self->send_message( 'supplyingAgencyMessage', $json );

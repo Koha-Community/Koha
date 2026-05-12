@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use Test::MockModule;
 use Test::MockObject;
@@ -263,6 +263,41 @@ XML
         qr{<errorType>UnrecognizedDataValue</errorType>},
         'Cant find this supplyingAgencyRequestId'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'edit() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**22 }    # 22 => ill
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $request = $builder->build_object(
+        {
+            class => 'Koha::ILL::ISO18626::Requests',
+            value => { status => 'RequestReceived' }
+        }
+    );
+
+    my $mock_request = Test::MockModule->new('Koha::ILL::ISO18626::Request');
+    $mock_request->mock( 'progress_request', sub { return 0 } );
+
+    $t->patch_ok(
+        "//$userid:$password@/api/v1/ill/iso18626_requests/" . $request->iso18626_request_id =>
+            json => { status => 'ExpectToSupply' }
+        )->status_is(500)
+        ->json_is( '/error' => 'Request could not be progressed' );
 
     $schema->storage->txn_rollback;
 };

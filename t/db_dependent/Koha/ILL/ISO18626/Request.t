@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::MockModule;
 use Test::MockObject;
 
@@ -368,6 +368,36 @@ subtest 'Koha::Hold::progress_iso18626_request() state machine' => sub {
         !$hold_no_ill->progress_iso18626_request('hold_cancelled'),
         'progress_iso18626_request is a no-op when hold has no linked ISO18626 request'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'progress_request() returns 0 and does not update status on schema validation failure' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $request = $builder->build_object(
+        {
+            class => 'Koha::ILL::ISO18626::Requests',
+            value => { status => 'RequestReceived' }
+        }
+    );
+
+    my $mock_validator = Test::MockModule->new('JSON::Validator::Schema::OpenAPIv2');
+    $mock_validator->mock( 'validate', sub { return ('fake validation error') } );
+
+    my $result;
+    {
+        local $SIG{__WARN__} = sub { };
+        $result = $request->progress_request( 'supplyingAgency', { status => 'ExpectToSupply' } );
+    }
+
+    is( $result, 0, 'progress_request returns 0 when schema validation fails' );
+
+    $request->discard_changes;
+    is( $request->status, 'RequestReceived', 'Request status is not updated when validation fails' );
 
     $schema->storage->txn_rollback;
 };
