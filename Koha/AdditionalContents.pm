@@ -194,7 +194,8 @@ sub get_html_customizations_options {
         return [
             'IntranetmainUserblock', 'StaffReportsHome',     'RoutingListNote', 'StaffAcquisitionsHome',
             'StaffAuthoritiesHome',  'StaffCataloguingHome', 'StaffListsHome',  'StaffLoginInstructions',
-            'StaffPatronsHome',      'StaffPOSHome',         'StaffSerialsHome'
+            'StaffMastHeadExtraContent',
+            'StaffPatronsHome', 'StaffPOSHome', 'StaffSerialsHome'
         ];
     }
 
