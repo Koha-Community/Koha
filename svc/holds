@@ -114,7 +114,6 @@ while ( my $h = $holds_rs->next() ) {
         reservenotes         => $h->reservenotes(),
         itemtype_limit       => $itemtype_limit,
         hold_group_id        => $h->hold_group_id,
-        visual_hold_group_id => $h->hold_group ? $h->hold_group->visual_hold_group_id : q{},
         is_hold_group_target => $h->is_hold_group_target,
         iso18626_request     => $h->iso18626_request
         ? {
