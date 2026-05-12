@@ -799,7 +799,7 @@ return the current holds placed on this record
 sub holds {
     my ( $self, $params, $attributes ) = @_;
     $attributes->{order_by} = 'priority' unless exists $attributes->{order_by};
-    my $hold_rs = $self->_result->reserves->search( $params, $attributes );
+    my $hold_rs = $self->_result->holds->search( $params, $attributes );
     return Koha::Holds->_new_from_dbic($hold_rs);
 }
 

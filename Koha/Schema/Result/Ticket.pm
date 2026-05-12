@@ -267,5 +267,11 @@ __PACKAGE__->has_many(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8bWiSb7hXPFYRzRzrVG3kw
 
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+__PACKAGE__->has_many(
+  "updates",
+  "Koha::Schema::Result::TicketUpdate",
+  { "foreign.ticket_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 1;

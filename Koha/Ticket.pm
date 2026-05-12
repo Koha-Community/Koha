@@ -94,9 +94,7 @@ Return any updates attached to this ticket
 
 sub updates {
     my ($self) = @_;
-    my $rs = $self->_result->ticket_updates;
-    return unless $rs;
-    return Koha::Ticket::Updates->_new_from_dbic($rs) if $rs;
+    return Koha::Ticket::Updates->_new_from_dbic( scalar $self->_result->updates );
 }
 
 =head2 Actions

@@ -1728,8 +1728,7 @@ my $checkouts = $patron->checkouts
 
 sub checkouts {
     my ($self) = @_;
-    my $checkouts = $self->_result->issues;
-    return Koha::Checkouts->_new_from_dbic($checkouts);
+    return Koha::Checkouts->_new_from_dbic( scalar $self->_result->checkouts );
 }
 
 =head3 ill_requests

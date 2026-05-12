@@ -253,4 +253,11 @@ sub koha_objects_class {
     'Koha::ERM::EHoldings::Packages';
 }
 
+__PACKAGE__->has_many(
+  "resources",
+  "Koha::Schema::Result::ErmEholdingsResource",
+  { "foreign.package_id" => "self.package_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 1;

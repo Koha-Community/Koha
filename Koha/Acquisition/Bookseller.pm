@@ -46,8 +46,7 @@ Returns the list of baskets for the vendor
 
 sub baskets {
     my ($self) = @_;
-    my $baskets_rs = $self->_result->aqbaskets;
-    return Koha::Acquisition::Baskets->_new_from_dbic($baskets_rs);
+    return Koha::Acquisition::Baskets->_new_from_dbic( scalar $self->_result->baskets );
 }
 
 =head3 contacts
@@ -112,8 +111,7 @@ Returns the list of subscriptions for the vendor
 
 sub subscriptions {
     my ($self) = @_;
-    my $rs = $self->_result->subscriptions;
-    return Koha::Subscriptions->_new_from_dbic($rs);
+    return Koha::Subscriptions->_new_from_dbic( scalar $self->_result->subscriptions );
 }
 
 =head3 aliases
@@ -198,8 +196,7 @@ Returns the list of invoices for the vendor
 
 sub invoices {
     my ($self) = @_;
-    my $invoices_rs = $self->_result->aqinvoices;
-    return Koha::Acquisition::Invoices->_new_from_dbic($invoices_rs);
+    return Koha::Acquisition::Invoices->_new_from_dbic( scalar $self->_result->invoices );
 }
 
 =head3 to_api_mapping

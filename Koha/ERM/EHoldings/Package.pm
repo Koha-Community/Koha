@@ -67,8 +67,7 @@ Returns the resources from this package
 
 sub resources {
     my ($self) = @_;
-    my $rs = $self->_result->erm_eholdings_resources;
-    return Koha::ERM::EHoldings::Resources->_new_from_dbic($rs);
+    return Koha::ERM::EHoldings::Resources->_new_from_dbic( scalar $self->_result->resources );
 }
 
 =head3 vendor

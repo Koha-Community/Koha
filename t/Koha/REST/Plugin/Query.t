@@ -209,11 +209,11 @@ get '/dbic_merge_prefetch_count_sorted' => sub {
 
 get '/dbic_merge_prefetch_count_unsortable' => sub {
     my $c          = shift;
-    my $attributes = { order_by => [ { '-desc' => 'me.checkouts_count' } ] };
+    my $attributes = { order_by => [ { '-desc' => 'me.no_dbic_rel_count' } ] };
     my $result_set = Koha::Patrons->new;
 
-    # checkouts is a Koha-only method, not a DBIC relationship
-    $c->stash( 'koha.embed', { "checkouts_count" => { "is_count" => 1 } } );
+    # no_dbic_rel is not a DBIC relationship
+    $c->stash( 'koha.embed', { "no_dbic_rel_count" => { "is_count" => 1 } } );
 
     try {
         $c->dbic_merge_prefetch(
@@ -237,8 +237,8 @@ get '/dbic_merge_prefetch_count_unsortable_display' => sub {
     my $attributes = {};
     my $result_set = Koha::Patrons->new;
 
-    # checkouts is a Koha-only method — no order_by, so no error
-    $c->stash( 'koha.embed', { "checkouts_count" => { "is_count" => 1 } } );
+    # no_dbic_rel is not a DBIC relationship — no order_by, so no error
+    $c->stash( 'koha.embed', { "no_dbic_rel_count" => { "is_count" => 1 } } );
 
     $c->dbic_merge_prefetch(
         {
@@ -281,13 +281,13 @@ get '/dbic_merge_prefetch_nested_count' => sub {
 
 get '/dbic_merge_prefetch_nested_count_unsortable' => sub {
     my $c          = shift;
-    my $attributes = { order_by => [ { '-desc' => 'guarantee.checkouts_count' } ] };
+    my $attributes = { order_by => [ { '-desc' => 'guarantee.no_dbic_rel_count' } ] };
     my $result_set = Koha::Patron::Relationship->new;
 
-    # checkouts is NOT in Patron's prefetch_whitelist
+    # no_dbic_rel is NOT in Patron's prefetch_whitelist
     $c->stash(
         'koha.embed',
-        { "guarantee" => { "children" => { "checkouts_count" => { "is_count" => 1 } } } }
+        { "guarantee" => { "children" => { "no_dbic_rel_count" => { "is_count" => 1 } } } }
     );
 
     try {
@@ -628,7 +628,7 @@ subtest '/dbic_merge_prefetch' => sub {
     $t->get_ok('/dbic_merge_prefetch_count_unsortable')
         ->status_is(400)
         ->json_is( '/error_code' => 'bad_parameter' )
-        ->json_like( '/error' => qr/Cannot sort on checkouts_count/ );
+        ->json_like( '/error' => qr/Cannot sort on no_dbic_rel_count/ );
 
     # Top-level unsortable +count without order_by: no error (display-only fallback)
     $t->get_ok('/dbic_merge_prefetch_count_unsortable_display')
@@ -647,7 +647,7 @@ subtest '/dbic_merge_prefetch' => sub {
     $t->get_ok('/dbic_merge_prefetch_nested_count_unsortable')
         ->status_is(400)
         ->json_is( '/error_code' => 'bad_parameter' )
-        ->json_like( '/error' => qr/Cannot sort on guarantee\.checkouts_count/ );
+        ->json_like( '/error' => qr/Cannot sort on guarantee\.no_dbic_rel_count/ );
 };
 
 subtest '/merge_q_params' => sub {

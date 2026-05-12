@@ -2311,4 +2311,11 @@ sub koha_object_class {
     'Koha::Patron';
 }
 
+__PACKAGE__->has_many(
+  "checkouts",
+  "Koha::Schema::Result::Issue",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 1;

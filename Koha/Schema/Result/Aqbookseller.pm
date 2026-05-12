@@ -627,4 +627,18 @@ sub koha_objects_class {
     'Koha::Acquisition::Booksellers';
 }
 
+__PACKAGE__->has_many(
+  "baskets",
+  "Koha::Schema::Result::Aqbasket",
+  { "foreign.booksellerid" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+__PACKAGE__->has_many(
+  "invoices",
+  "Koha::Schema::Result::Aqinvoice",
+  { "foreign.booksellerid" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 1;

@@ -87,8 +87,7 @@ Return the I<Koha::ILL::Requests> for this batch
 
 sub requests {
     my ($self) = @_;
-    my $requests = $self->_result->requests;
-    return Koha::ILL::Requests->_new_from_dbic($requests);
+    return Koha::ILL::Requests->_new_from_dbic( scalar $self->_result->requests );
 }
 
 =head3 create_and_log

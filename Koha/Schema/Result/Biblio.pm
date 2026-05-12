@@ -692,4 +692,11 @@ __PACKAGE__->add_columns(
     "+serial"          => { is_boolean => 1 },
 );
 
+__PACKAGE__->has_many(
+  "holds",
+  "Koha::Schema::Result::Reserve",
+  { "foreign.biblionumber" => "self.biblionumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 1;
