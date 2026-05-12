@@ -15,9 +15,7 @@
     >
         <slot />
     </a>
-    <template v-else v-html>
-        <slot />
-    </template>
+    <slot v-else />
 </template>
 
 <script>
