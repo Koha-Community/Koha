@@ -102,6 +102,16 @@ eof
         koha-es-indexer --disable $name || /bin/true
     fi
 
+    # Under systemd, disable the per-instance target and create-dirs
+    # oneshot so we don't leave dangling symlinks under
+    # /etc/systemd/system/koha.target.wants/ once the instance is gone.
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        systemctl stop    "koha@${name}.target"             2>/dev/null || true
+        systemctl disable "koha@${name}.target"             2>/dev/null || true
+        systemctl stop    "koha-create-dirs@${name}.service" 2>/dev/null || true
+        systemctl disable "koha-create-dirs@${name}.service" 2>/dev/null || true
+    fi
+
     instancefile=$(get_apache_config_for $name)
     le_opacdomain=$(letsencrypt_get_opacdomain_for $name)
 
