@@ -2,7 +2,7 @@
 Description=Koha SIP server for %i
 PartOf=koha@%i.target
 Requires=koha-create-dirs@%i.service
-After=koha@%i.target
+After=koha@%i.target koha-create-dirs@%i.service
 AssertPathExists=/etc/koha/sites/%i/SIPconfig.xml
 
 StartLimitIntervalSec=60
