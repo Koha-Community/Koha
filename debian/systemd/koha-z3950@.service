@@ -26,7 +26,7 @@ ExecStart=/usr/share/koha/bin/z3950_responder.pl \
     -d %i-koha-z3950 \
     -l /var/log/koha/%i/z3950.log
 Restart=on-failure
-RestartSec=30s
+RestartSec=5s
 
 [Install]
 WantedBy=koha@%i.target

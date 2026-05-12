@@ -18,7 +18,7 @@ ExecStartPre=+/usr/sbin/koha-generate-env es-indexer %i
 EnvironmentFile=-/run/koha/%i/es-indexer.env
 ExecStart=/usr/share/koha/bin/workers/es_indexer_daemon.pl --batch_size ${ES_BATCH_SIZE}
 Restart=on-failure
-RestartSec=30s
+RestartSec=5s
 
 [Install]
 WantedBy=koha@%i.target
