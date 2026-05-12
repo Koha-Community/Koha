@@ -3,6 +3,7 @@
 [% USE Desks %]
 [% USE Registers %]
 [% USE Koha %]
+[% USE AdditionalContents %]
 [% PROCESS 'i18n.inc' %]
 [% IF Koha.Preference( 'CookieConsent' ) %]
     [% USE JSConsents %]
@@ -94,6 +95,7 @@
                     </li>
                 [% END %]
             </ul>
+            [% SET ExtraContent = AdditionalContents.get( location => "StaffMastHeadExtraContent", lang => lang, library => logged_in_user.branchcode || default_branch ) %][% IF ExtraContent.content %][% FOREACH elt IN ExtraContent.content %][% elt.content | $raw %][% END %][% END %]
 
             <ul id="user-menu" class="nav navbar-nav">
                 [% IF ( loggedinusername ) %]
