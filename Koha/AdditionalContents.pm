@@ -182,9 +182,10 @@ sub get_html_customizations_options {
             'OpacNavRight',                  'opacheader',       'OpacCustomSearch', 'OpacMainUserBlock', 'opaccredits',
             'OpacLoginInstructions',         'OpacNav',          'OpacNavBottom',     'OpacSuggestionInstructions',
             'ArticleRequestsDisclaimerText', 'OpacMoreSearches', 'OpacMySummaryNote', 'OpacLibraryInfo',
-            'OpacMaintenanceNotice',         'OPACResultsSidebar',   'OpacSuppressionMessage', 'SCOMainUserBlock',
-            'SelfCheckInMainUserBlock',      'SelfCheckHelpMessage', 'CatalogConcernHelp',     'CatalogConcernTemplate',
-            'CookieConsentBar',              'CookieConsentPopup',   'PatronSelfRegistrationAdditionalInstructions',
+            'OpacMaintenanceNotice',         'OPACMastHeadExtraContent',
+            'OPACResultsSidebar',            'OpacSuppressionMessage', 'SCOMainUserBlock',
+            'SelfCheckInMainUserBlock',      'SelfCheckHelpMessage',   'CatalogConcernHelp', 'CatalogConcernTemplate',
+            'CookieConsentBar',              'CookieConsentPopup',     'PatronSelfRegistrationAdditionalInstructions',
             'ILLModuleCopyrightClearance'
         ];
     }
