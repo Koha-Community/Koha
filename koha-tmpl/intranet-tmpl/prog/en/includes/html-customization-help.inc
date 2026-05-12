@@ -72,6 +72,8 @@
 
 <div id="StaffLoginInstructions_notes" class="hint customization_note"> Show this content on the staff interface login page. </div>
 
+<div id="StaffNavbarExtraContent_notes" class="hint customization_note"> Show this content in the staff interface navbar, separate from the main navigation menu. </div>
+
 <div id="StaffPatronsHome_notes" class="hint customization_note"> Show this content on the patrons home page in the staff interface. </div>
 
 <div id="StaffPOSHome_notes" class="hint customization_note"> Show this content on the point of sale home page in the staff interface. </div>
