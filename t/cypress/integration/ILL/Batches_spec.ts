@@ -194,10 +194,11 @@ describe("ILL Batches", () => {
     });
     it("ILL requests batch modal", function () {
         cy.visit("/cgi-bin/koha/mainpage.pl");
-        cy.get("a.icon_ill").contains("ILL requests");
+        cy.get("a.icon_ill").contains("Interlibrary loans");
         cy.get("a.icon_ill").click();
 
         // Open batch modal
+        cy.get(".sidebar_menu").contains("Requests").click();
         cy.get("#ill-batch-backend-dropdown")
             .contains("New ILL requests batch")
             .click();
