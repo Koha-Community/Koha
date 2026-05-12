@@ -7,6 +7,7 @@ After=koha.target
 [Service]
 Type=oneshot
 RemainAfterExit=yes
+ExecStartPre=+/bin/sh -c 'for i in $(koha-list --enabled --elasticsearch 2>/dev/null); do systemctl enable --now "koha-es-indexer@$i.service" 2>/dev/null || true; done'
 ExecStart=/bin/systemctl start koha.target
 ExecStop=/bin/systemctl stop koha.target
 
