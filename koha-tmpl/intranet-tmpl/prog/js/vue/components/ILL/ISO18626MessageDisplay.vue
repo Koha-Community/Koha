@@ -35,7 +35,7 @@
                     {{ getMessageData(message.content) }}
                 </td>
                 <td>
-                    {{ new Date(message.timestamp).toLocaleString() }}
+                    {{ format_datetime(message.timestamp) }}
                 </td>
                 <td>
                     <button
@@ -61,6 +61,8 @@ export default {
         iso18626_request: Object,
     },
     setup(props) {
+        const format_datetime = $datetime;
+
         const modalVisible = ref(false);
         const messageFilterOptions = ref({
             showConfirmationRows: false,
@@ -229,6 +231,7 @@ export default {
             filteredMessages,
             messageFilterOptions,
             getMessageData,
+            format_datetime,
         };
     },
     components: {
