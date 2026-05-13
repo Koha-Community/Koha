@@ -66,7 +66,8 @@ subtest 'normal staff user test' => sub {
         'CAN_user_reports_delete_own_reports'                => 1,
         'CAN_user_reports_delete_all_reports'                => 1,
         'CAN_user_reports_edit_all_reports'                  => 1,
-        'CAN_user_reports_execute_reports'                   => 1,
+        'CAN_user_reports_execute_reports_foreground'                   => 1,
+        'CAN_user_reports_execute_reports_background'                   => 1,
         'CAN_user_reports_manage_report_limits'              => 1,
     };
     is_deeply( $authz, $expected, 'Expected permissions generated for normal staff user' );
@@ -248,7 +249,8 @@ subtest 'superlibrarian tests' => sub {
         'CAN_user_reports_delete_own_reports'                       => 1,
         'CAN_user_reports_delete_all_reports'                       => 1,
         'CAN_user_reports_edit_all_reports'                         => 1,
-        'CAN_user_reports_execute_reports'                          => 1,
+        'CAN_user_reports_execute_reports_foreground'                          => 1,
+        'CAN_user_reports_execute_reports_background'                          => 1,
         'CAN_user_reports_manage_report_limits'                     => 1,
         'CAN_user_reports'                                          => 1,
         'CAN_user_reserveforothers_modify_holds_priority'           => 1,

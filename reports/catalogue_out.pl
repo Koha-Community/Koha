@@ -73,7 +73,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         template_name => "reports/catalogue_out.tt",
         query         => $input,
         type          => "intranet",
-        flagsrequired => { reports => 'execute_reports' },
+        flagsrequired => { reports => 'execute_reports_foreground' },
     }
 );
 

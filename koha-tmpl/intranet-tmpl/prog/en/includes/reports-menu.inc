@@ -6,7 +6,7 @@
         [% IF ( CAN_user_reports_create_reports ) %]
             <li><a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form">Build new</a></li>
         [% END %]
-        [% IF ( CAN_user_reports_execute_reports ) %]
+        [% IF ( CAN_user_reports_execute_reports_foreground || CAN_user_reports_execute_reports_background ) %]
             <li><a href="/cgi-bin/koha/reports/guided_reports.pl?op=list">View saved</a></li>
         [% END %]
         [% IF ( CAN_user_reports_create_reports ) %]

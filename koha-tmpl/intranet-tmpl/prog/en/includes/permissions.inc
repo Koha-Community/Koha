@@ -526,8 +526,11 @@
     [%- CASE 'edit_all_reports' -%]
         <span class="sub_permission edit_all_reports_subpermission"> Edit SQL reports created by other librarians </span>
         <span class="permissioncode">([% name | html %])</span>
-    [%- CASE 'execute_reports' -%]
-        <span class="sub_permission execute_reports_subpermission"> Execute SQL reports </span>
+    [%- CASE 'execute_reports_foreground' -%]
+        <span class="sub_permission execute_reports_foreground_subpermission"> Execute SQL reports in the foreground </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'execute_reports_background' -%]
+        <span class="sub_permission execute_reports_background_subpermission"> Execute SQL reports as a background job </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'manage_report_limits' -%]
         <span class="sub_permission manage_report_limits_subpermission"> Manage Report Limits </span>

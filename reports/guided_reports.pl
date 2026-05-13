@@ -82,11 +82,17 @@ if (
 {
     $flagsrequired = 'create_reports';
 } elsif ( $op eq 'list' || $op eq 'show' ) {
-    $flagsrequired = [ 'create_reports', 'execute_reports', 'delete_reports' ];    #NOTE: "or" permissions
+    $flagsrequired = [
+        'create_reports',     'execute_reports_foreground', 'execute_reports_background',
+        'delete_own_reports', 'delete_all_reports'
+    ];          #NOTE: "or" permissions
 } elsif ( $op eq 'run' || $op eq 'export' || $op eq 'retrieve_results' ) {
-    $flagsrequired = 'execute_reports';
+    $flagsrequired = [ 'execute_reports_foreground', 'execute_reports_background' ];
 } elsif ( $op eq 'cud-update_and_run_sql' ) {
-    $flagsrequired = { 'create_reports' => 1, 'execute_reports' => 1 };            #NOTE: "and" permissions
+    $flagsrequired = [
+        { 'create_reports' => 1, 'execute_reports_foreground' => 1 },
+        { 'create_reports' => 1, 'execute_reports_background' => 1 },
+    ];          #NOTE: create_reports AND (fg OR bg)
 } elsif ( $op eq 'cud-delete' ) {
     $flagsrequired = [ 'delete_all_reports', 'delete_own_reports' ];
 } else {
