@@ -129,7 +129,7 @@
             <!-- / .navbar-nav -->
         [% END # /IF OpacPublic %]
 
-        [% SET ExtraContent = AdditionalContents.get( location => "OPACMastHeadExtraContent", lang => lang, library => logged_in_user.branchcode || default_branch ) %][% IF ExtraContent.content %][% FOREACH elt IN ExtraContent.content %][% elt.content | $raw %][% END %][% END %]
+        [% SET ExtraContent = AdditionalContents.get( location => "OPACNavbarExtraContent", lang => lang, library => logged_in_user.branchcode || default_branch ) %][% IF ExtraContent.content %][% FOREACH elt IN ExtraContent.content %][% elt.content | $raw %][% END %][% END %]
 
         [% IF Koha.Preference( 'opacuserlogin' ) == 1 ||  Koha.Preference( 'EnableOpacSearchHistory') || Koha.Preference( 'opaclanguagesdisplay' ) %]
             [%# Following on one line for translatability %]

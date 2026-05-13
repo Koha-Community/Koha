@@ -38,6 +38,8 @@
 
 <div id="OpacNav_notes" class="hint customization_note"> Show this content on the left hand column of the main page and patron account on the OPAC (generally navigation links). </div>
 
+<div id="OPACNavbarExtraContent_notes" class="hint customization_note"> Show this content in the OPAC interface navbar. </div>
+
 <div id="OpacNavBottom_notes" class="hint customization_note"> Show this content on the left hand column of the main page and patron account on the OPAC, after OpacNav, and before patron account links if available. </div>
 
 <div id="OpacNavRight_notes" class="hint customization_note"> Show this content in the right hand column of the main page under the main login form. </div>
