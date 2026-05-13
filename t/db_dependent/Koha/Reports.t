@@ -63,7 +63,7 @@ $retrieved_report_1->delete;
 is( Koha::Reports->search->count, $nb_of_reports + 1, 'Delete should have deleted the report' );
 
 subtest 'prep_report' => sub {
-    plan tests => 4;
+    plan tests => 7;
 
     t::lib::Mocks::mock_config( 'total_running_reports_per_instance_limit', 0 );
 
@@ -80,7 +80,7 @@ subtest 'prep_report' => sub {
     my ( $sql, undef ) = $report->prep_report( ['Test|list'], ["1\n12\n\r243"] );
     is(
         $sql,
-        qq{SELECT * FROM items WHERE itemnumber IN ('1','12','243') /* { saved_sql.id: $id } { user_id: $user_id } */},
+        qq{SELECT * FROM items WHERE itemnumber IN ('1','12','243') /* { saved_sql.id: $id } { user_id: $user_id } { run_type: foreground } */},
         'Expected sql generated correctly with single param and name'
     );
 
@@ -89,14 +89,14 @@ subtest 'prep_report' => sub {
     ( $sql, undef ) = $report->prep_report( [ 'Test|list', 'Another' ], [ "1\n12\n\r243", 'the other' ] );
     is(
         $sql,
-        qq{SELECT * FROM items WHERE itemnumber IN ('1','12','243') AND 'the other' AND ('1','12','243') /* { saved_sql.id: $id } { user_id: $user_id } */},
+        qq{SELECT * FROM items WHERE itemnumber IN ('1','12','243') AND 'the other' AND ('1','12','243') /* { saved_sql.id: $id } { user_id: $user_id } { run_type: foreground } */},
         'Expected sql generated correctly with multiple params and names'
     );
 
     ( $sql, undef ) = $report->prep_report( [], [ "1\n12\n\r243", 'the other' ] );
     is(
         $sql,
-        qq{SELECT * FROM items WHERE itemnumber IN ('1','12','243') AND 'the other' AND ('1','12','243') /* { saved_sql.id: $id } { user_id: $user_id } */},
+        qq{SELECT * FROM items WHERE itemnumber IN ('1','12','243') AND 'the other' AND ('1','12','243') /* { saved_sql.id: $id } { user_id: $user_id } { run_type: foreground } */},
         'Expected sql generated correctly with multiple params and no names'
     );
 
@@ -106,6 +106,27 @@ subtest 'prep_report' => sub {
     my $headers;
     ( $sql, $headers ) = $report->prep_report( [], [] );
     is_deeply( $headers, { 'itemnumber for batch' => 'itemnumber' } );
+
+    # run_type marker
+    $report->savedsql('SELECT 1')->store;
+
+    ( $sql, undef ) = $report->prep_report( [], [], { run_type => 'foreground' } );
+    is(
+        $sql,
+        qq{SELECT 1 /* { saved_sql.id: $id } { user_id: $user_id } { run_type: foreground } */},
+        'run_type=foreground is appended to the marker'
+    );
+
+    ( $sql, undef ) = $report->prep_report( [], [], { run_type => 'background' } );
+    is(
+        $sql,
+        qq{SELECT 1 /* { saved_sql.id: $id } { user_id: $user_id } { run_type: background } */},
+        'run_type=background is appended to the marker'
+    );
+
+    throws_ok { $report->prep_report( [], [], { run_type => 'bogus' } ) }
+    'Koha::Exceptions::BadParameter',
+        'invalid run_type throws BadParameter';
 };
 
 subtest 'prep_report throws when duplicate-running limit is exceeded' => sub {

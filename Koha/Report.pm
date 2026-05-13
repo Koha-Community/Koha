@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use C4::Context;
 use Koha::Database;
+use Koha::Exceptions;
 use Koha::Exceptions::Report;
 use Koha::Patrons;
 use Koha::Reports;
@@ -230,12 +231,16 @@ for building batch action links in the template.
 
 The returned SQL is suffixed with a tracking comment of the form
 
-    /* { saved_sql.id: <id> } { user_id: <borrowernumber> } */
+    /* { saved_sql.id: <id> } { user_id: <borrowernumber> } { run_type: <type> } */
 
-L<Koha::Reports/running> parses this comment out of
+L<Koha::Reports/check_limits> parses this comment out of
 C<information_schema.processlist> to detect concurrent runs of the same
 report. External log/audit tooling that consumes Koha SQL should treat
 this format as part of the public contract.
+
+C<$params-E<gt>{run_type}> defaults to C<foreground>; if set explicitly
+it must be C<foreground> or C<background>. Any other value throws
+L<Koha::Exceptions::BadParameter>.
 
 If C<duplicate_running_reports_per_user_limit> is set in C<koha-conf.xml>
 to a non-zero value and the current userenv already has at least that many
@@ -362,7 +367,11 @@ sub prep_report {
         }
     }
 
-    $sql .= " /* { saved_sql.id: $report_id } { user_id: $user_id } */";
+    my $run_type = $params->{run_type} // 'foreground';
+    Koha::Exceptions::BadParameter->throw( parameter => 'run_type' )
+        unless $run_type =~ /^(foreground|background)$/;
+
+    $sql .= " /* { saved_sql.id: $report_id } { user_id: $user_id } { run_type: $run_type } */";
 
     return $sql, $headers;
 }
