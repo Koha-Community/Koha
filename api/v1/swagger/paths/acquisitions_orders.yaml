@@ -8,6 +8,9 @@
     summary: List orders
     produces:
       - application/json
+    x-koha-unsortable-embeds:
+      - biblio.uncancelled_orders+count
+      - current_item_level_holds+count
     parameters:
       - name: biblio_id
         in: query

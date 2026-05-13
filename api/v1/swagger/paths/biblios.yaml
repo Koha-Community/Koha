@@ -538,6 +538,9 @@
     tags:
       - biblios
     summary: Get items for a biblio
+    x-koha-unsortable-embeds:
+      - bundle_items_lost+count
+      - bundle_items_not_lost+count
     parameters:
       - $ref: "../swagger.yaml#/parameters/biblio_id_pp"
       - name: x-koha-embed

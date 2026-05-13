@@ -8,6 +8,8 @@
     summary: List patrons
     produces:
       - application/json
+    x-koha-unsortable-embeds:
+      - overdues+count
     parameters:
       - name: patron_id
         in: query
