@@ -238,19 +238,9 @@ C<information_schema.processlist> to detect concurrent runs of the same
 report. External log/audit tooling that consumes Koha SQL should treat
 this format as part of the public contract.
 
-C<$params-E<gt>{run_type}> defaults to C<foreground>; if set explicitly
-it must be C<foreground> or C<background>. Any other value throws
-L<Koha::Exceptions::BadParameter>.
-
-If C<duplicate_running_reports_per_user_limit> is set in C<koha-conf.xml>
-to a non-zero value and the current userenv already has at least that many
-runs of the same report in flight, this method throws
-L<Koha::Exceptions::Report::DuplicateRunning> instead of returning. If
-C<total_running_reports_per_user_limit> is set and the userenv already has
-at least that many reports of any kind in flight, it throws
-L<Koha::Exceptions::Report::TotalRunning>. All report-execution entry
-points (the staff guided-reports UI, C<svc/report> and C<opac/svc/report>)
-go through here so the limits are enforced uniformly.
+C<$params-E<gt>{run_type}> is required and must be C<foreground> or
+C<background>. Missing throws L<Koha::Exceptions::MissingParameter>; any
+other value throws L<Koha::Exceptions::BadParameter>.
 
 =cut
 
@@ -336,7 +326,7 @@ sub prep_report {
     my $report_id = $self->id;
     my $user_id   = C4::Context->userenv ? C4::Context->userenv->{number} : 0;
 
-    my $run_type = $params->{run_type} // 'foreground';
+    my $run_type = $params->{run_type} // Koha::Exceptions::MissingParameter->throw( parameter => 'run_type' );
     Koha::Exceptions::BadParameter->throw( parameter => 'run_type' )
         unless $run_type =~ /^(foreground|background)$/;
 
