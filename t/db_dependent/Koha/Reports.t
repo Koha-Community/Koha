@@ -20,7 +20,7 @@ use Modern::Perl;
 use Test::Exception;
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 21;
+use Test::More tests => 22;
 
 use C4::Context;
 use Koha::BackgroundJob;
@@ -865,7 +865,7 @@ subtest 'check_limits() tests' => sub {
     t::lib::Mocks::mock_config( 'duplicate_running_reports_per_user_limit', 2 );
     $r = Koha::Reports->check_limits(
         { report_id => $report_id, borrowernumber => $borrowernumber, run_type => 'foreground' } );
-    is( $r->{any_exceeded}, 1, 'duplicate limit met by 2 threads' );
+    is( $r->{any_exceeded}, 1, 'duplicate limit met by 2 queries' );
     is(
         ( keys %{ $r->{errors}[0] } )[0],
         'duplicate_running_reports_per_user_limit_exceeded',
@@ -988,6 +988,104 @@ subtest 'check_edit_permission() and store enforcement' => sub {
     t::lib::Mocks::mock_userenv( { patron => $editor } );
     lives_ok { $ownerless->savedsql('SELECT 3')->store }
     'a patron with edit_all_reports can edit an ownerless report';
+};
+
+subtest 'check_limits() per-run-type override tests' => sub {
+    plan tests => 7;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $report = $builder->build_object( { class => 'Koha::Reports' } );
+
+    t::lib::Mocks::mock_userenv( { patron => $patron } );
+    for my $key (
+        qw(
+        duplicate_running_reports_per_user_limit
+        total_running_reports_per_user_limit
+        total_running_reports_per_instance_limit
+        foreground_duplicate_running_reports_per_user_limit
+        background_duplicate_running_reports_per_user_limit
+        foreground_total_running_reports_per_user_limit
+        background_total_running_reports_per_user_limit
+        foreground_total_running_reports_per_instance_limit
+        background_total_running_reports_per_instance_limit
+        )
+        )
+    {
+        t::lib::Mocks::mock_config( $key, 0 );
+    }
+
+    my $borrowernumber = $patron->borrowernumber;
+    my $report_id      = $report->id;
+
+    # 2 foreground queries + 1 background query for this user/report
+    my $reports_mock = Test::MockModule->new('Koha::Reports');
+    $reports_mock->mock(
+        '_processlist_rows',
+        sub {
+            return [
+                {
+                    info =>
+                        "SELECT 1 /* { saved_sql.id: $report_id } { user_id: $borrowernumber } { run_type: foreground } */"
+                },
+                {
+                    info =>
+                        "SELECT 1 /* { saved_sql.id: $report_id } { user_id: $borrowernumber } { run_type: foreground } */"
+                },
+                {
+                    info =>
+                        "SELECT 1 /* { saved_sql.id: $report_id } { user_id: $borrowernumber } { run_type: background } */"
+                },
+            ];
+        }
+    );
+
+    # Foreground override counts only foreground queries
+    t::lib::Mocks::mock_config( 'foreground_total_running_reports_per_instance_limit', 2 );
+    my $r = Koha::Reports->check_limits( { run_type => 'foreground' } );
+    is( $r->{any_exceeded}, 1, 'fg override exceeded by 2 fg queries at fg cap 2' );
+    $r = Koha::Reports->check_limits( { run_type => 'background' } );
+    is( $r->{any_exceeded}, 0, 'fg override does not affect background run_type' );
+    t::lib::Mocks::mock_config( 'foreground_total_running_reports_per_instance_limit', 0 );
+
+    # Background override counts only background queries plus queued jobs
+    Koha::BackgroundJob->new(
+        {
+            type           => 'run_report',
+            status         => 'new',
+            borrowernumber => $borrowernumber,
+            report_id      => $report_id,
+            data           => qq({"report_id":$report_id}),
+        }
+    )->store;
+    t::lib::Mocks::mock_config( 'background_total_running_reports_per_instance_limit', 2 );
+    $r = Koha::Reports->check_limits( { run_type => 'background' } );
+    is( $r->{any_exceeded}, 1, 'bg override exceeded by 1 bg query + 1 queued at bg cap 2' );
+    $r = Koha::Reports->check_limits( { run_type => 'foreground' } );
+    is( $r->{any_exceeded}, 0, 'bg override does not affect foreground run_type' );
+    t::lib::Mocks::mock_config( 'background_total_running_reports_per_instance_limit', 0 );
+
+    # When the override is set, the combined key is ignored for that run_type.
+    # Combined cap of 1 would normally trigger. fg override of 99 lets fg through.
+    t::lib::Mocks::mock_config( 'total_running_reports_per_instance_limit',            1 );
+    t::lib::Mocks::mock_config( 'foreground_total_running_reports_per_instance_limit', 99 );
+    $r = Koha::Reports->check_limits( { run_type => 'foreground' } );
+    is( $r->{any_exceeded}, 0, 'fg override replaces (not stacks with) the combined cap' );
+
+    # Background still hits the combined cap when no bg override is set.
+    $r = Koha::Reports->check_limits( { run_type => 'background' } );
+    is( $r->{any_exceeded}, 1, 'background falls back to the combined cap when no bg override' );
+    t::lib::Mocks::mock_config( 'total_running_reports_per_instance_limit',            0 );
+    t::lib::Mocks::mock_config( 'foreground_total_running_reports_per_instance_limit', 0 );
+
+    # Per-user duplicate override works the same way.
+    t::lib::Mocks::mock_config( 'foreground_duplicate_running_reports_per_user_limit', 2 );
+    $r = Koha::Reports->check_limits(
+        { report_id => $report_id, borrowernumber => $borrowernumber, run_type => 'foreground' } );
+    is(
+        ( keys %{ $r->{errors}[0] } )[0],
+        'duplicate_running_reports_per_user_limit_exceeded',
+        'override hits emit the canonical (un-prefixed) error key'
+    );
 };
 
 $schema->storage->txn_rollback;

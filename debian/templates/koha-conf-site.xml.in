@@ -346,9 +346,17 @@ __END_SRU_PUBLICSERVER__
  <plack_workers>2</plack_workers>
 
  <!-- SQL report limits, 0 means the feature is disabled -->
+ <!-- Combined caps apply to all run types (foreground + background) -->
  <duplicate_running_reports_per_user_limit>0</duplicate_running_reports_per_user_limit>
  <total_running_reports_per_user_limit>0</total_running_reports_per_user_limit>
  <total_running_reports_per_instance_limit>0</total_running_reports_per_instance_limit>
+ <!-- Per-run-type overrides, when set they replace the combined cap for that run type -->
+ <foreground_duplicate_running_reports_per_user_limit>0</foreground_duplicate_running_reports_per_user_limit>
+ <background_duplicate_running_reports_per_user_limit>0</background_duplicate_running_reports_per_user_limit>
+ <foreground_total_running_reports_per_user_limit>0</foreground_total_running_reports_per_user_limit>
+ <background_total_running_reports_per_user_limit>0</background_total_running_reports_per_user_limit>
+ <foreground_total_running_reports_per_instance_limit>0</foreground_total_running_reports_per_instance_limit>
+ <background_total_running_reports_per_instance_limit>0</background_total_running_reports_per_instance_limit>
 
  <!-- Configuration for X-Forwarded-For -->
  <!-- Set enable_trusted_proxy_for_headers to 0 to never trust proxy headers, always use given REMOTE_ADDRESS -->

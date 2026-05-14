@@ -64,6 +64,13 @@ jobs. C<run_type> ('foreground' or 'background') is required. Returns:
 
 Error hashrefs appear only for limits that are set and reached.
 
+For each cap, a run-type-specific override key (eg.
+C<foreground_total_running_reports_per_instance_limit>) replaces the
+combined key when set. The override caps only same-run-type threads,
+so a foreground cap counts only foreground processlist threads and a
+background cap counts background threads plus queued
+C<run_report> jobs.
+
     my $limits = Koha::Reports->check_limits({
         report_id      => $report->id,
         borrowernumber => $patron->borrowernumber,
@@ -86,44 +93,45 @@ sub check_limits {
     my @threads = $class->_active_report_runs;
     my $result  = { any_exceeded => 0, errors => [] };
 
+    my $check = sub {
+        my ( $key, $thread_filter, $queue_filter ) = @_;
+
+        my $override = C4::Context->config("${run_type}_${key}");
+        my $limit    = $override || C4::Context->config($key);
+        return unless $limit;
+
+        my @scoped = grep { $thread_filter->($_) } @threads;
+        @scoped = grep { ( $_->{run_type} // '' ) eq $run_type } @scoped if $override;
+
+        my $count = scalar @scoped;
+        $count += $class->_queued_count($queue_filter)
+            if !$override || $run_type eq 'background';
+
+        if ( $count >= $limit ) {
+            $result->{any_exceeded} = 1;
+            push @{ $result->{errors} }, { "${key}_exceeded" => $count };
+        }
+    };
+
     if ( $borrowernumber && $report_id ) {
-        my $limit = C4::Context->config('duplicate_running_reports_per_user_limit');
-        if ($limit) {
-            my $count =
-                ( grep { $_->{report_id} == $report_id && ( $_->{user_id} // 0 ) == $borrowernumber } @threads ) +
-                $class->_queued_count( { report_id => $report_id, user_id => $borrowernumber } );
-            if ( $count >= $limit ) {
-                $result->{any_exceeded} = 1;
-                push @{ $result->{errors} },
-                    { duplicate_running_reports_per_user_limit_exceeded => $count };
-            }
-        }
+        $check->(
+            'duplicate_running_reports_per_user_limit',
+            sub { $_[0]->{report_id} == $report_id && ( $_[0]->{user_id} // 0 ) == $borrowernumber },
+            { report_id => $report_id, user_id => $borrowernumber },
+        );
     }
-
     if ($borrowernumber) {
-        my $limit = C4::Context->config('total_running_reports_per_user_limit');
-        if ($limit) {
-            my $count = ( grep { ( $_->{user_id} // 0 ) == $borrowernumber } @threads ) +
-                $class->_queued_count( { user_id => $borrowernumber } );
-            if ( $count >= $limit ) {
-                $result->{any_exceeded} = 1;
-                push @{ $result->{errors} },
-                    { total_running_reports_per_user_limit_exceeded => $count };
-            }
-        }
+        $check->(
+            'total_running_reports_per_user_limit',
+            sub { ( $_[0]->{user_id} // 0 ) == $borrowernumber },
+            { user_id => $borrowernumber },
+        );
     }
-
-    {
-        my $limit = C4::Context->config('total_running_reports_per_instance_limit');
-        if ($limit) {
-            my $count = scalar(@threads) + $class->_queued_count;
-            if ( $count >= $limit ) {
-                $result->{any_exceeded} = 1;
-                push @{ $result->{errors} },
-                    { total_running_reports_per_instance_limit_exceeded => $count };
-            }
-        }
-    }
+    $check->(
+        'total_running_reports_per_instance_limit',
+        sub { 1 },
+        undef,
+    );
 
     return $result;
 }
