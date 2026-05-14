@@ -17,8 +17,9 @@ package Koha::Reports;
 
 use Modern::Perl;
 
+use Koha::BackgroundJobs;
 use Koha::Database;
-use Koha::Logger;
+use Koha::Exceptions;
 
 use Koha::Report;
 
@@ -34,109 +35,6 @@ Koha::Reports - Koha Report Object set class
 
 =cut
 
-=head3 running
-
-Returns a Koha::Reports resultset of reports currently being executed,
-optionally filtered by the patron that started them and/or by report id.
-
-    my $running = Koha::Reports->running(
-        {
-            user_id   => $patron->borrowernumber,
-            report_id => $report->id,
-        }
-    );
-
-    if ( $running->count ) { ... }
-
-Both C<user_id> (a borrowernumber) and C<report_id> are optional. The lookup
-relies on the SQL comment embedded by L<Koha::Report/prep_report> being
-visible in C<information_schema.processlist>.
-
-The query is always scoped to the current connection's MySQL user via
-C<user = SUBSTRING_INDEX(CURRENT_USER(), '@', 1)>. Without C<PROCESS>
-privilege MariaDB/MySQL already restricts C<information_schema.processlist>
-to the caller's own threads, but if a site has granted broader privileges
-this filter ensures we never count threads belonging to other database
-users (eg. another Koha instance sharing the server, or an unrelated
-application using the same MariaDB).
-
-If the database user lacks the privileges needed to query
-C<information_schema.processlist>, the failure is logged via C<warn> and
-an empty resultset is returned so that callers degrade gracefully rather
-than aborting the operation they were guarding.
-
-=cut
-
-sub running {
-    my ( $class, $params ) = @_;
-
-    return $class->search( { id => { -in => [ $class->_running_report_ids($params) ] } } );
-}
-
-=head3 running_count
-
-Returns the number of saved report queries currently being executed. Takes
-the same optional parameters as L</running>, but a report running more than
-once is counted once per run.
-
-    my $count = Koha::Reports->running_count( { user_id => $patron->borrowernumber } );
-
-=cut
-
-sub running_count {
-    my ( $class, $params ) = @_;
-
-    my @report_ids = $class->_running_report_ids($params);
-    return scalar @report_ids;
-}
-
-=head3 _running_report_ids
-
-Used internally to find the saved report queries currently being executed.
-Returns a list of report ids, one per running query.
-
-=cut
-
-sub _running_report_ids {
-    my ( $class, $params ) = @_;
-
-    my $user_id   = $params->{user_id};
-    my $report_id = $params->{report_id};
-
-    my @where = (
-        q{user = SUBSTRING_INDEX(CURRENT_USER(), '@', 1)},
-        'command != ?',
-        'info LIKE ?',
-    );
-    my @binds = ( 'Sleep', '%saved_sql.id:%' );
-
-    if ($user_id) {
-        push @where, 'info LIKE ?';
-        push @binds, sprintf( '%%{ user_id: %d }%%', $user_id );
-    }
-    if ($report_id) {
-        push @where, 'info LIKE ?';
-        push @binds, sprintf( '%%{ saved_sql.id: %d }%%', $report_id );
-    }
-
-    my $sql = 'SELECT info FROM information_schema.processlist WHERE ' . join( ' AND ', @where );
-
-    my $rows;
-    eval { $rows = $class->_processlist_rows( $sql, @binds ); };
-    if ($@) {
-        Koha::Logger->get->warn("Koha::Reports->running: unable to query information_schema.processlist: $@");
-        $rows = [];
-    }
-
-    my @report_ids;
-    for my $row (@$rows) {
-        next if $row->{info} =~ /^SELECT info FROM information_schema.processlist/;
-        push @report_ids, $1 if $row->{info} =~ /saved_sql\.id:\s*(\d+)/;
-    }
-
-    return @report_ids;
-}
-
 =head3 _processlist_rows
 
 Used internally to query the database process list.
@@ -147,6 +45,145 @@ Returns an arrayref of hashrefs, one per row.
 sub _processlist_rows {
     my ( $class, $sql, @binds ) = @_;
     return Koha::Database->new->schema->storage->dbh->selectall_arrayref( $sql, { Slice => {} }, @binds );
+}
+
+=head3 check_limits
+
+Counts running and queued reports against the C<koha-conf.xml> limits.
+Counts include processlist threads plus queued C<run_report> background
+jobs. C<run_type> ('foreground' or 'background') is required. Returns:
+
+    {
+        any_exceeded => 0|1,
+        errors       => [
+            { duplicate_running_reports_per_user_limit_exceeded    => $count },
+            { total_running_reports_per_user_limit_exceeded        => $count },
+            { total_running_reports_per_instance_limit_exceeded    => $count },
+        ],
+    }
+
+Error hashrefs appear only for limits that are set and reached.
+
+    my $limits = Koha::Reports->check_limits({
+        report_id      => $report->id,
+        borrowernumber => $patron->borrowernumber,
+        run_type       => 'foreground',
+    });
+    return if $limits->{any_exceeded};
+
+=cut
+
+sub check_limits {
+    my ( $class, $params ) = @_;
+
+    my $report_id      = $params->{report_id};
+    my $borrowernumber = $params->{borrowernumber};
+    my $run_type       = $params->{run_type} // Koha::Exceptions::MissingParameter->throw( parameter => 'run_type' );
+
+    Koha::Exceptions::BadParameter->throw( parameter => 'run_type' )
+        unless $run_type =~ /^(foreground|background)$/;
+
+    my @threads = $class->_active_report_runs;
+    my $result  = { any_exceeded => 0, errors => [] };
+
+    if ( $borrowernumber && $report_id ) {
+        my $limit = C4::Context->config('duplicate_running_reports_per_user_limit');
+        if ($limit) {
+            my $count =
+                ( grep { $_->{report_id} == $report_id && ( $_->{user_id} // 0 ) == $borrowernumber } @threads ) +
+                $class->_queued_count( { report_id => $report_id, user_id => $borrowernumber } );
+            if ( $count >= $limit ) {
+                $result->{any_exceeded} = 1;
+                push @{ $result->{errors} },
+                    { duplicate_running_reports_per_user_limit_exceeded => $count };
+            }
+        }
+    }
+
+    if ($borrowernumber) {
+        my $limit = C4::Context->config('total_running_reports_per_user_limit');
+        if ($limit) {
+            my $count = ( grep { ( $_->{user_id} // 0 ) == $borrowernumber } @threads ) +
+                $class->_queued_count( { user_id => $borrowernumber } );
+            if ( $count >= $limit ) {
+                $result->{any_exceeded} = 1;
+                push @{ $result->{errors} },
+                    { total_running_reports_per_user_limit_exceeded => $count };
+            }
+        }
+    }
+
+    {
+        my $limit = C4::Context->config('total_running_reports_per_instance_limit');
+        if ($limit) {
+            my $count = scalar(@threads) + $class->_queued_count;
+            if ( $count >= $limit ) {
+                $result->{any_exceeded} = 1;
+                push @{ $result->{errors} },
+                    { total_running_reports_per_instance_limit_exceeded => $count };
+            }
+        }
+    }
+
+    return $result;
+}
+
+=head3 _active_report_runs
+
+Returns one hashref per running report thread from
+C<information_schema.processlist>, each with C<report_id>, C<user_id>,
+C<run_type>. Scoped to the current MySQL user. Dies on processlist
+read failure.
+
+=cut
+
+sub _active_report_runs {
+    my ($class) = @_;
+
+    my $sql = q{
+        SELECT info
+          FROM information_schema.processlist
+         WHERE user = SUBSTRING_INDEX(CURRENT_USER(), '@', 1)
+           AND command != 'Sleep'
+           AND info LIKE ?
+    };
+
+    my $rows = $class->_processlist_rows( $sql, '%saved_sql.id:%' );
+
+    my @threads;
+    for my $row ( @{ $rows || [] } ) {
+        my $info        = $row->{info} // '';
+        my ($report_id) = $info =~ /saved_sql\.id:\s*(\d+)/;
+        my ($user_id)   = $info =~ /user_id:\s*(\d+)/;
+        my ($run_type)  = $info =~ /run_type:\s*(foreground|background)/;
+        next unless defined $report_id;
+        push @threads,
+            {
+            report_id => $report_id,
+            user_id   => $user_id,
+            run_type  => $run_type,
+            };
+    }
+    return @threads;
+}
+
+=head3 _queued_count
+
+Returns the count of queued C<run_report> background jobs. Optional
+C<user_id> filters by C<background_jobs.borrowernumber>; optional
+C<report_id> filters by C<background_jobs.report_id>.
+
+=cut
+
+sub _queued_count {
+    my ( $class, $params ) = @_;
+    $params //= {};
+
+    my $where = { type => 'run_report', status => 'new' };
+    $where->{borrowernumber} = $params->{user_id}   if $params->{user_id};
+    $where->{report_id}      = $params->{report_id} if $params->{report_id};
+
+    return Koha::BackgroundJobs->search($where)->count;
 }
 
 =head3 _type

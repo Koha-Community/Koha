@@ -336,37 +336,6 @@ sub prep_report {
     my $report_id = $self->id;
     my $user_id   = C4::Context->userenv ? C4::Context->userenv->{number} : 0;
 
-    my $duplicate_limit = C4::Context->config('duplicate_running_reports_per_user_limit');
-    if ( $duplicate_limit && $user_id ) {
-        my $running_count = Koha::Reports->running_count( { report_id => $report_id, user_id => $user_id } );
-        if ( $running_count >= $duplicate_limit ) {
-            Koha::Exceptions::Report::DuplicateRunning->throw(
-                report_id => $report_id,
-                user_id   => $user_id,
-                limit     => $duplicate_limit,
-            );
-        }
-    }
-
-    my $total_limit = C4::Context->config('total_running_reports_per_user_limit');
-    if ( $total_limit && $user_id ) {
-        my $running_count = Koha::Reports->running_count( { user_id => $user_id } );
-        if ( $running_count >= $total_limit ) {
-            Koha::Exceptions::Report::TotalRunning->throw(
-                user_id => $user_id,
-                limit   => $total_limit,
-            );
-        }
-    }
-
-    my $instance_limit = C4::Context->config('total_running_reports_per_instance_limit');
-    if ($instance_limit) {
-        my $running_count = Koha::Reports->running_count();
-        if ( $running_count >= $instance_limit ) {
-            Koha::Exceptions::Report::InstanceTotalRunning->throw( limit => $instance_limit );
-        }
-    }
-
     my $run_type = $params->{run_type} // 'foreground';
     Koha::Exceptions::BadParameter->throw( parameter => 'run_type' )
         unless $run_type =~ /^(foreground|background)$/;

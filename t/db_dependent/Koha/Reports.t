@@ -20,9 +20,10 @@ use Modern::Perl;
 use Test::Exception;
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 24;
+use Test::More tests => 21;
 
 use C4::Context;
+use Koha::BackgroundJob;
 use Koha::Library::Group;
 use Koha::Report;
 use Koha::Reports;
@@ -127,126 +128,6 @@ subtest 'prep_report' => sub {
     throws_ok { $report->prep_report( [], [], { run_type => 'bogus' } ) }
     'Koha::Exceptions::BadParameter',
         'invalid run_type throws BadParameter';
-};
-
-subtest 'prep_report throws when duplicate-running limit is exceeded' => sub {
-    plan tests => 7;
-
-    my $report = Koha::Report->new( { report_name => 'duplicate_running_test', savedsql => 'SELECT 1' } )->store;
-
-    # Pretend a real user is logged in so prep_report's user_id check fires.
-    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
-    t::lib::Mocks::mock_userenv( { patron => $patron } );
-
-    t::lib::Mocks::mock_config( 'duplicate_running_reports_per_user_limit', 0 );
-    lives_ok { $report->prep_report( [], [] ) } 'limit=0 disables the guard';
-
-    t::lib::Mocks::mock_config( 'duplicate_running_reports_per_user_limit', 5 );
-    lives_ok { $report->prep_report( [], [] ) } 'limit not yet reached, prep_report returns normally';
-
-    t::lib::Mocks::mock_config( 'duplicate_running_reports_per_user_limit', 1 );
-    lives_ok { $report->prep_report( [], [] ) } 'limit not yet reached, prep_report returns normally';
-
-    # Pretend a copy of this report is already in flight.
-    my $running_query    = sprintf( 'SELECT 1 /* { saved_sql.id: %d } { user_id: %d } */', $report->id, $patron->id );
-    my $processlist_rows = [ { info => $running_query } ];
-    my $reports_mock     = Test::MockModule->new('Koha::Reports');
-    $reports_mock->mock( '_processlist_rows', sub { return $processlist_rows } );
-
-    my $exception;
-    eval { $report->prep_report( [], [] ); };
-    $exception = $@;
-    isa_ok(
-        $exception, 'Koha::Exceptions::Report::DuplicateRunning',
-        'limit reached -> DuplicateRunning exception'
-    );
-    is( $exception->limit, 1, 'exception carries the configured limit' );
-
-    t::lib::Mocks::mock_config( 'duplicate_running_reports_per_user_limit', 2 );
-    lives_ok { $report->prep_report( [], [] ) } 'one copy running, limit of 2 not yet reached';
-
-    # Pretend a second copy of this report is in flight.
-    push @$processlist_rows, { info => $running_query };
-    throws_ok { $report->prep_report( [], [] ) }
-    'Koha::Exceptions::Report::DuplicateRunning',
-        'two copies running, limit of 2 reached -> DuplicateRunning exception';
-};
-
-subtest 'prep_report throws when total-running limit is exceeded' => sub {
-    plan tests => 3;
-
-    my $report = Koha::Report->new( { report_name => 'total_running_test', savedsql => 'SELECT 1' } )->store;
-
-    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
-    t::lib::Mocks::mock_userenv( { patron => $patron } );
-
-    # The duplicate-limit check runs first, so neutralise it for these
-    # assertions and only exercise the total-limit branch.
-    t::lib::Mocks::mock_config( 'duplicate_running_reports_per_user_limit', 0 );
-
-    # Pretend the user has three reports of various ids in flight whenever
-    # running_count() is called without a report_id filter (ie. the "total" check).
-    my $reports_mock = Test::MockModule->new('Koha::Reports');
-    $reports_mock->mock(
-        'running_count',
-        sub {
-            my ( $class, $params ) = @_;
-            return $params->{report_id} ? 0 : 1;
-        }
-    );
-
-    t::lib::Mocks::mock_config( 'total_running_reports_per_user_limit', 5 );
-    lives_ok { $report->prep_report( [], [] ) } 'total limit not yet reached, prep_report returns normally';
-
-    t::lib::Mocks::mock_config( 'total_running_reports_per_user_limit', 1 );
-    my $exception;
-    eval { $report->prep_report( [], [] ); };
-    $exception = $@;
-    isa_ok(
-        $exception, 'Koha::Exceptions::Report::TotalRunning',
-        'total limit reached -> TotalRunning exception'
-    );
-    is( $exception->limit, 1, 'exception carries the configured total limit' );
-};
-
-subtest 'prep_report() total_running_reports_per_instance_limit' => sub {
-
-    plan tests => 3;
-
-    my $report = Koha::Report->new( { report_name => 'total_running_test', savedsql => 'SELECT 1' } )->store;
-
-    # Pretend two reports belonging to other users are in flight whenever
-    # running_count() is called without any filter
-    my $reports_mock = Test::MockModule->new('Koha::Reports');
-    $reports_mock->mock(
-        'running_count',
-        sub {
-            my ( $class, $params ) = @_;
-            return 0 if $params && ( $params->{report_id} || $params->{user_id} );
-            return 2;
-        }
-    );
-
-    # Turn the other 2 off
-    t::lib::Mocks::mock_config( 'duplicate_running_reports_per_user_limit', 0 );
-    t::lib::Mocks::mock_config( 'total_running_reports_per_user_limit',     0 );
-
-    # Test no limit
-    t::lib::Mocks::mock_config( 'total_running_reports_per_instance_limit', 0 );
-    lives_ok { $report->prep_report( [], [] ) }
-    'no limit enforced when total_running_reports_per_instance_limit is disabled, AKA 0';
-
-    # Test running while staying under the limit
-    t::lib::Mocks::mock_config( 'total_running_reports_per_instance_limit', 5 );
-    lives_ok { $report->prep_report( [], [] ) }
-    'report runs while under the total_running_reports_per_instance_limit';
-
-    # Test going over the limit
-    t::lib::Mocks::mock_config( 'total_running_reports_per_instance_limit', 2 );
-    throws_ok { $report->prep_report( [], [] ) }
-    'Koha::Exceptions::Report::InstanceTotalRunning',
-        'exception thrown if total_running_reports_per_instance_limit is reached';
-
 };
 
 subtest 'is_sql_valid' => sub {
@@ -926,76 +807,117 @@ subtest 'prep_report enforces library parameter limits' => sub {
     'report with no limits: any branchcode passes';
 };
 
-subtest 'running' => sub {
-    plan tests => 9;
+subtest 'check_limits() tests' => sub {
+    plan tests => 11;
 
-    my $running = Koha::Reports->running;
-    isa_ok( $running, 'Koha::Reports', 'running() returns a Koha::Reports resultset' );
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $report = $builder->build_object( { class => 'Koha::Reports' } );
 
-    # No saved-report SQL is in flight in the test process; processlist may show
-    # this very test connection but its current statement carries no saved_sql.id
-    # marker, so the result must be empty.
-    is( Koha::Reports->running->count, 0, 'no running reports => empty resultset' );
+    t::lib::Mocks::mock_userenv( { patron => $patron } );
+    t::lib::Mocks::mock_config( 'duplicate_running_reports_per_user_limit', 0 );
+    t::lib::Mocks::mock_config( 'total_running_reports_per_user_limit',     0 );
+    t::lib::Mocks::mock_config( 'total_running_reports_per_instance_limit', 0 );
 
-    is(
-        Koha::Reports->running( { user_id => 999_999_999 } )->count, 0,
-        'unknown user_id => empty resultset'
-    );
-    is(
-        Koha::Reports->running( { report_id => 999_999_999 } )->count, 0,
-        'unknown report_id => empty resultset'
-    );
+    my $borrowernumber  = $patron->borrowernumber;
+    my $borrowernumber2 = $builder->build_object( { class => 'Koha::Patrons' } )->borrowernumber;
+    my $report_id       = $report->id;
+    my $report_id2      = $builder->build_object( { class => 'Koha::Reports' } )->id;
 
-    # Capture the SQL bindings and feed synthetic rows back; this exercises the
-    # WHERE-clause assembly and the saved_sql.id parser without relying on a
-    # real long-running query in the database.
     my $reports_mock = Test::MockModule->new('Koha::Reports');
-    my @captured_binds;
-    my $captured_sql;
-    my $synthetic_rows = [];
     $reports_mock->mock(
         '_processlist_rows',
         sub {
-            my ( $class, $sql, @binds ) = @_;
-            $captured_sql = $sql;
-            push @captured_binds, [@binds];
-            return $synthetic_rows;
+            return [
+                {
+                    info =>
+                        "SELECT 1 /* { saved_sql.id: $report_id } { user_id: $borrowernumber } { run_type: foreground } */"
+                },
+                {
+                    info =>
+                        "SELECT 1 /* { saved_sql.id: $report_id } { user_id: $borrowernumber } { run_type: background } */"
+                },
+                {
+                    info =>
+                        "SELECT 1 /* { saved_sql.id: $report_id2 } { user_id: $borrowernumber2 } { run_type: foreground } */"
+                },
+            ];
         }
     );
 
-    my $report_a = $builder->build_object( { class => 'Koha::Reports' } );
-    my $report_b = $builder->build_object( { class => 'Koha::Reports' } );
-    my ( $a_id, $b_id ) = ( $report_a->id, $report_b->id );
+    # Required-param tests
+    throws_ok { Koha::Reports->check_limits( {} ) } 'Koha::Exceptions::MissingParameter',
+        'missing run_type => MissingParameter';
+    throws_ok { Koha::Reports->check_limits( { run_type => 'bogus' } ) } 'Koha::Exceptions::BadParameter',
+        'invalid run_type => BadParameter';
 
-    $synthetic_rows = [
-        { info => "SELECT 1 /* { saved_sql.id: $a_id } { user_id: 17 } */" },
-        { info => "SELECT 1 /* { saved_sql.id: $a_id } { user_id: 17 } */" },
-        { info => "SELECT 1 /* { saved_sql.id: $b_id } { user_id: 18 } */" },
-        { info => "SELECT 1 /* no marker, should be ignored */" },
-    ];
-    is( Koha::Reports->running->count, 2, 'parses saved_sql.id markers and returns matching reports' );
-    is( Koha::Reports->running_count,  3, 'running_count() counts each run of a report' );
+    # No limits test
+    my $r = Koha::Reports->check_limits(
+        { report_id => $report_id, borrowernumber => $borrowernumber, run_type => 'foreground' } );
+    is( $r->{any_exceeded}, 0, 'no limits configured => not exceeded' );
 
-    @captured_binds = ();
-    Koha::Reports->running( { user_id => 17 } );
-    is_deeply(
-        $captured_binds[0],
-        [ 'Sleep', '%saved_sql.id:%', '%{ user_id: 17 }%' ],
-        'user_id contributes a parameterised LIKE bind'
-    );
-
-    like(
-        $captured_sql,
-        qr/user\s*=\s*SUBSTRING_INDEX\(CURRENT_USER\(\),\s*'\@',\s*1\)/,
-        'query is scoped to the current connection user'
-    );
-
-    # Graceful degradation when the underlying DB call dies (eg. PROCESS denied).
-    $reports_mock->mock( '_processlist_rows', sub { die "Access denied for user\n"; } );
+    # duplicate_running_reports_per_user
+    t::lib::Mocks::mock_config( 'duplicate_running_reports_per_user_limit', 2 );
+    $r = Koha::Reports->check_limits(
+        { report_id => $report_id, borrowernumber => $borrowernumber, run_type => 'foreground' } );
+    is( $r->{any_exceeded}, 1, 'duplicate limit met by 2 threads' );
     is(
-        Koha::Reports->running->count, 0,
-        'DB failure => empty resultset (caller is not aborted)'
+        ( keys %{ $r->{errors}[0] } )[0],
+        'duplicate_running_reports_per_user_limit_exceeded',
+        'duplicate error key emitted'
     );
+
+    # total_running_reports_per_user
+    t::lib::Mocks::mock_config( 'duplicate_running_reports_per_user_limit', 0 );
+    t::lib::Mocks::mock_config( 'total_running_reports_per_user_limit',     2 );
+    $r = Koha::Reports->check_limits( { borrowernumber => $borrowernumber, run_type => 'foreground' } );
+    is(
+        ( keys %{ $r->{errors}[0] } )[0],
+        'total_running_reports_per_user_limit_exceeded',
+        'per-user total error key emitted'
+    );
+
+    # total_running_reports_per_instance
+    t::lib::Mocks::mock_config( 'total_running_reports_per_user_limit',     0 );
+    t::lib::Mocks::mock_config( 'total_running_reports_per_instance_limit', 3 );
+    $r = Koha::Reports->check_limits( { run_type => 'foreground' } );
+    is(
+        ( keys %{ $r->{errors}[0] } )[0],
+        'total_running_reports_per_instance_limit_exceeded',
+        'per-instance total error key emitted'
+    );
+
+    # Queued background jobs add to the count
+    Koha::BackgroundJob->new(
+        {
+            type           => 'run_report',
+            status         => 'new',
+            borrowernumber => $borrowernumber,
+            report_id      => $report_id,
+            data           => qq({"report_id":$report_id}),
+        }
+    )->store;
+
+    t::lib::Mocks::mock_config( 'total_running_reports_per_instance_limit', 4 );
+    $r = Koha::Reports->check_limits( { run_type => 'foreground' } );
+    is( $r->{any_exceeded}, 1, 'queued run_report job counts toward per-instance' );
+
+    t::lib::Mocks::mock_config( 'total_running_reports_per_instance_limit', 0 );
+    t::lib::Mocks::mock_config( 'total_running_reports_per_user_limit',     3 );
+    $r = Koha::Reports->check_limits( { borrowernumber => $borrowernumber, run_type => 'foreground' } );
+    is( $r->{any_exceeded}, 1, 'queued run_report job counts toward per-user' );
+
+    t::lib::Mocks::mock_config( 'total_running_reports_per_user_limit',     0 );
+    t::lib::Mocks::mock_config( 'duplicate_running_reports_per_user_limit', 3 );
+    $r = Koha::Reports->check_limits(
+        { report_id => $report_id, borrowernumber => $borrowernumber, run_type => 'foreground' } );
+    is( $r->{any_exceeded}, 1, 'queued run_report job counts toward duplicate-per-user' );
+
+    # Processlist read failure is fatal. Limit checks cannot run without it.
+    $reports_mock->mock( '_processlist_rows', sub { die "Access denied\n"; } );
+    t::lib::Mocks::mock_config( 'duplicate_running_reports_per_user_limit', 0 );
+    t::lib::Mocks::mock_config( 'total_running_reports_per_instance_limit', 1 );
+    throws_ok { Koha::Reports->check_limits( { run_type => 'foreground' } ) } qr/Access denied/,
+        'processlist read failure propagates';
 };
 
 subtest 'check_edit_permission() and store enforcement' => sub {
