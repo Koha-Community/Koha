@@ -330,8 +330,22 @@ sub days_forward {
 
     my $base_dt = $start_dt->clone();
 
+    # Advance one open day at a time, skipping any closed days encountered
+    # along the way. days_mode is deliberately not consulted here: this
+    # method's purpose is to count open days forward (e.g. for a hold
+    # pickup window), not to align a recurring due-date to the same
+    # weekday, which is what next_open_days does under 'Dayweek'.
     while ( $num_days-- ) {
-        $base_dt = $self->next_open_days( $base_dt, 1 );
+        $base_dt->add( days => 1 );
+        my $i = 0;
+        while ( $self->is_holiday($base_dt) && $i < OPEN_DAYS_SEARCH_MAX_ITERATIONS ) {
+            $base_dt->add( days => 1 );
+            ++$i;
+        }
+        if ( $self->is_holiday($base_dt) ) {
+            Koha::Exceptions::Calendar::NoOpenDays->throw(
+                sprintf( 'Unable to find an open day for library %s', $self->{branchcode} ) );
+        }
     }
 
     return $base_dt;
@@ -761,10 +775,16 @@ syspref is set to either 'Datedue', 'Calendar' or 'Dayweek'.
 
 $datetime = $calendar->days_forward($start_dt, $to_add)
 
-Passed a Datetime and number of days, returns another Datetime representing
-the next open day after adding the passed number of days. It is intended for
-use to calculate the due date when useDaysMode syspref is set to either
-'Datedue', 'Calendar' or 'Dayweek'.
+Passed a DateTime and a number of days, returns a DateTime representing that
+many open days after the starting date. Closed days (weekly closures and
+holidays) are skipped without being counted toward $to_add, so the result is
+always $to_add open days on from $start_dt.
+
+Unlike L</next_open_days>, this method does not consult C<useDaysMode>: it
+always advances one calendar day at a time. It is intended for windows that
+should give the patron a fixed number of open days, such as a hold's pickup
+shelf expiration -- not for aligning a recurring due-date to a particular
+weekday.
 
 =head2 set_daysmode
 

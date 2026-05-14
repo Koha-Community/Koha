@@ -20,6 +20,7 @@ use Modern::Perl;
 use t::lib::Mocks;
 use C4::Context;
 use C4::Biblio qw( AddBiblio );
+use Koha::Caches;
 use Koha::Database;
 use Koha::Libraries;
 use C4::Calendar;
@@ -317,7 +318,7 @@ subtest "store() tests" => sub {
 
 subtest "set_waiting() tests" => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin();
 
@@ -330,6 +331,76 @@ subtest "set_waiting() tests" => sub {
     $hold->waitingdate(undef)->store;
     $hold->set_waiting();
     isnt( $hold->waitingdate, undef, "Setting waiting when not waiting already should update waitingdate" );
+
+    subtest 'expirationdate over a Bank Holiday with useDaysMode=Dayweek' => sub {
+
+        # Bug 42608: when ExcludeHolidaysFromMaxPickUpDelay is on and
+        # useDaysMode=Dayweek, intermediate Bank Holiday Mondays should
+        # not cause the pickup window to jump a whole week forward. The
+        # patron should always get ReservesMaxPickUpDelay open days.
+        plan tests => 5;
+
+        t::lib::Mocks::mock_preference( 'ReservesMaxPickUpDelay',            6 );
+        t::lib::Mocks::mock_preference( 'ExcludeHolidaysFromMaxPickUpDelay', 1 );
+        t::lib::Mocks::mock_preference( 'ExpireReservesOnHolidays',          1 );
+        t::lib::Mocks::mock_preference( 'useDaysMode',                       'Dayweek' );
+
+        my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+        my $branch  = $library->branchcode;
+
+        # Sundays weekly closed, single holiday on Mon 4 May 2026.
+        $schema->resultset('RepeatableHoliday')->create(
+            {
+                branchcode  => $branch,
+                weekday     => 0,
+                description => q{Sunday},
+                title       => q{Sunday},
+            }
+        );
+        $schema->resultset('SpecialHoliday')->create(
+            {
+                branchcode  => $branch,
+                day         => 4,
+                month       => 5,
+                year        => 2026,
+                isexception => 0,
+                title       => q{May Bank Holiday},
+                description => q{May Bank Holiday},
+            }
+        );
+        Koha::Caches->get_instance->clear_from_cache( $branch . '_holidays' );
+
+        my %expected = (
+            '2026-04-27' => '2026-05-05',    # Mon trapped, skip Sun + BH -> Tue
+            '2026-04-28' => '2026-05-06',    # Tue trapped, skip Sun + BH -> Wed
+            '2026-04-29' => '2026-05-07',    # Wed trapped -> Thu
+            '2026-04-30' => '2026-05-08',    # Thu trapped -> Fri
+            '2026-05-01' => '2026-05-09',    # Fri trapped -> Sat
+        );
+
+        for my $waitingdate ( sort keys %expected ) {
+            my $h = $builder->build_object(
+                {
+                    class => 'Koha::Holds',
+                    value => {
+                        branchcode             => $branch,
+                        found                  => undef,
+                        waitingdate            => undef,
+                        expirationdate         => undef,
+                        patron_expiration_date => undef,
+                    }
+                }
+            );
+            $h->waitingdate($waitingdate)->store;
+            $h->set_waiting;
+            is(
+                $h->expirationdate, $expected{$waitingdate},
+                "waitingdate=$waitingdate => expirationdate=$expected{$waitingdate} (no week-jump)"
+            );
+        }
+
+        Koha::Caches->get_instance->clear_from_cache( $branch . '_holidays' );
+    };
 
     $schema->storage->txn_rollback();
 };
