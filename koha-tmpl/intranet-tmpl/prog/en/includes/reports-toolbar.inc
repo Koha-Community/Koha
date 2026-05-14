@@ -137,65 +137,88 @@
                 [%- FOREACH param_name IN param_names %]&amp;param_name=[% param_name | uri %][% END %]
             [%- END %]
 
-            <div class="btn-group">
-                <button class="btn btn-default dropdown-toggle" aria-haspopup="menu" aria-label="Select format and download report results" data-bs-toggle="dropdown" id="format"><i class="fa fa-download"></i> Download</button>
-                <ul class="dropdown-menu">
-                    <li
-                        ><a class="dropdown-item" id="csv" href="/cgi-bin/koha/reports/guided_reports.pl?op=export&amp;format=csv&amp;id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]"
-                            >[% PROCESS 'delimiter_text.inc' %]</a
-                        ></li
-                    >
-                    <li><a class="dropdown-item" id="tab" href="/cgi-bin/koha/reports/guided_reports.pl?op=export&amp;format=tab&amp;id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">Tab separated text</a></li>
-                    [% IF Koha.Preference('ReportsExportFormatODS') %]
+            [% UNLESS viewing_stored_results %]
+                <div class="btn-group">
+                    <button class="btn btn-default dropdown-toggle" aria-haspopup="menu" aria-label="Select format and download report results" data-bs-toggle="dropdown" id="format"><i class="fa fa-download"></i> Download</button>
+                    <ul class="dropdown-menu">
                         <li
-                            ><a class="dropdown-item" id="ods" href="/cgi-bin/koha/reports/guided_reports.pl?op=export&amp;format=ods&amp;id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]"
-                                >Open Document Spreadsheet</a
+                            ><a class="dropdown-item" id="csv" href="/cgi-bin/koha/reports/guided_reports.pl?op=export&amp;format=csv&amp;id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]"
+                                >[% PROCESS 'delimiter_text.inc' %]</a
                             ></li
                         >
-                    [% END %]
-                    [% IF processed_notice_title %]
-                        <li
-                            ><a
-                                class="dropdown-item"
-                                id="template"
-                                href="/cgi-bin/koha/reports/guided_reports.pl?op=export&amp;format=template&amp;id=[% id | html %]&amp;template=[% template_id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]"
-                                >Rendered template ([% processed_notice_title | html %])</a
-                            ></li
-                        >
-                    [% END %]
-                    [% IF (results.json) %]
+                        <li><a class="dropdown-item" id="tab" href="/cgi-bin/koha/reports/guided_reports.pl?op=export&amp;format=tab&amp;id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">Tab separated text</a></li>
+                        [% IF Koha.Preference('ReportsExportFormatODS') %]
+                            <li
+                                ><a class="dropdown-item" id="ods" href="/cgi-bin/koha/reports/guided_reports.pl?op=export&amp;format=ods&amp;id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]"
+                                    >Open Document Spreadsheet</a
+                                ></li
+                            >
+                        [% END %]
+                        [% IF processed_notice_title %]
+                            <li
+                                ><a
+                                    class="dropdown-item"
+                                    id="template"
+                                    href="/cgi-bin/koha/reports/guided_reports.pl?op=export&amp;format=template&amp;id=[% id | html %]&amp;template=[% template_id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]"
+                                    >Rendered template ([% processed_notice_title | html %])</a
+                                ></li
+                            >
+                        [% END %]
+                        [% IF (results.json) %]
+                            <li><a class="dropdown-item" id="download-chart" href="#">Chart (.svg)</a></li>
+                        [% END %]
+                    </ul>
+                </div>
+            [% ELSIF (results.json) %]
+                <div class="btn-group">
+                    <button class="btn btn-default dropdown-toggle" aria-haspopup="menu" aria-label="Download chart" data-bs-toggle="dropdown" id="format"><i class="fa fa-download"></i> Download</button>
+                    <ul class="dropdown-menu">
                         <li><a class="dropdown-item" id="download-chart" href="#">Chart (.svg)</a></li>
-                    [% END %]
-                </ul>
-            </div>
+                    </ul>
+                </div>
+            [% END %]
+            [% IF sql %]
+                <div class="btn-group">
+                    <button
+                        type="button"
+                        id="toggle_sql"
+                        class="btn btn-default toggle_sql"
+                        data-complete-text="<i class='fa-solid fa-eye-slash'></i> [% t('Hide SQL code') | html %]"
+                        data-bs-toggle="button"
+                        aria-pressed="false"
+                        autocomplete="off"
+                    >
+                        <i class="fa-solid fa-eye"></i> Show SQL code
+                    </button>
+                </div>
+            [% END %]
             <div class="btn-group">
-                <button
-                    type="button"
-                    id="toggle_sql"
-                    class="btn btn-default toggle_sql"
-                    data-complete-text="<i class='fa-solid fa-eye-slash'></i> [% t('Hide SQL code') | html %]"
-                    data-bs-toggle="button"
-                    aria-pressed="false"
-                    autocomplete="off"
-                >
-                    <i class="fa-solid fa-eye"></i> Show SQL code
-                </button>
-            </div>
-            <div class="btn-group">
-                [% IF allresults.size %]
+                [% IF viewing_stored_results || allresults.size %]
                     <a class="btn btn-default" href="#" data-bs-toggle="modal" data-bs-target="#chartModal"><i class="fa fa-chart-bar"></i> Create chart</a>
                 [% ELSE %]
                     <a class="btn btn-default" href="#" data-bs-toggle="modal" data-bs-target="#chartModal"><i class="fa fa-chart-bar"></i> Create chart</a>
-                    <a class="btn btn-default fetch_chart_data" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% id | html %]&amp;op=run&amp;reportname=[% name |uri %][% PROCESS params %]&amp;want_full_chart=1"
+                    <a
+                        class="btn btn-default fetch_chart_data"
+                        href="/cgi-bin/koha/reports/guided_reports.pl?id=[% id | html %]&amp;op=run&amp;reportname=[% name |uri %][% PROCESS params %]&amp;want_full_chart=1&amp;run_in_background_chosen=1&amp;run_in_background=0"
                         ><i class="fa fa-chart-bar"></i> Fetch all data for chart</a
                     >
                 [% END %]
             </div>
             <div class="btn-group">
-                [% IF open_in_dt %]
-                    <a class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% id | html %]&amp;op=run&amp;reportname=[% name |uri %][% PROCESS params %]"><i class="fa fa-table"></i> Back to the normal view</a>
+                [% IF viewing_stored_results %]
+                    [% IF open_in_dt %]
+                        <a class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?op=view_stored_results&amp;id=[% saved_results_id | html %]"><i class="fa fa-table"></i> Back to the normal view</a>
+                    [% ELSE %]
+                        <a class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?op=view_stored_results&amp;id=[% saved_results_id | html %]&amp;open_in_dt=1"><i class="fa fa-table"></i> Open in DataTables</a>
+                    [% END %]
+                [% ELSIF open_in_dt %]
+                    <a class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% id | html %]&amp;op=run&amp;reportname=[% name |uri %][% PROCESS params %]&amp;run_in_background_chosen=1&amp;run_in_background=0"
+                        ><i class="fa fa-table"></i> Back to the normal view</a
+                    >
                 [% ELSE %]
-                    <a class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% id | html %]&amp;op=run&amp;reportname=[% name |uri %][% PROCESS params %]&amp;limit=100000&amp;open_in_dt=1"
+                    <a
+                        class="btn btn-default"
+                        href="/cgi-bin/koha/reports/guided_reports.pl?id=[% id | html %]&amp;op=run&amp;reportname=[% name |uri %][% PROCESS params %]&amp;limit=100000&amp;open_in_dt=1&amp;run_in_background_chosen=1&amp;run_in_background=0"
                         ><i class="fa fa-table"></i> Open in DataTables</a
                     >
                 [% END %]

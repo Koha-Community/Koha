@@ -38,7 +38,7 @@
                                 <label for="include-all">Include all rows (ignore pagination):</label>
                                 <input id="include-all" name="chart-include-all" type="checkbox" checked="checked" />
                             </li>
-                        [% ELSE %]
+                        [% ELSIF !viewing_stored_results %]
                             <li>
                                 <p>This chart will use only visible rows, click 'Fetch all data' to chart the full report</p>
                             </li>

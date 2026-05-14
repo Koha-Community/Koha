@@ -64,7 +64,7 @@ unless ($json_text) {
     my $limit = C4::Context->preference("SvcMaxReportRows") || 10;
 
     my ( $sql, undef );
-    eval { ( $sql, undef ) = $report_rec->prep_report( \@param_names, \@sql_params ); };
+    eval { ( $sql, undef ) = $report_rec->prep_report( \@param_names, \@sql_params, { run_type => 'foreground' } ); };
     if ( my $e = $@ ) {
         my $error_key;
         if ( ref($e) eq 'Koha::Exceptions::Report::DuplicateRunning' ) {

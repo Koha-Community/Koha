@@ -458,6 +458,7 @@ sub core_types_to_classes {
         patron_import                       => 'Koha::BackgroundJob::PatronImport',
         file_transport_test                 => 'Koha::BackgroundJob::TestTransport',
         batch_patron_deletion               => 'Koha::BackgroundJob::BatchDeletePatron',
+        run_report                          => 'Koha::BackgroundJob::RunReport',
     };
 }
 

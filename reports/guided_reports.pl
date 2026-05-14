@@ -25,6 +25,7 @@ use URI::Escape;
 use File::Temp;
 use C4::Reports::Guided
     qw( delete_report get_report_areas convert_sql update_sql get_saved_reports get_results ValidateSQLParameters format_results get_report_types get_columns get_from_dictionary get_criteria build_query save_report execute_query nb_rows get_report_groups );
+use Koha::BackgroundJob::RunReport;
 use Koha::Reports;
 use C4::Auth   qw( get_template_and_user get_session );
 use C4::Output qw( pagination_bar output_and_exit output_html_with_http_headers );
@@ -86,7 +87,7 @@ if (
         'create_reports',     'execute_reports_foreground', 'execute_reports_background',
         'delete_own_reports', 'delete_all_reports'
     ];          #NOTE: "or" permissions
-} elsif ( $op eq 'run' || $op eq 'export' || $op eq 'retrieve_results' ) {
+} elsif ( $op eq 'run' || $op eq 'export' || $op eq 'retrieve_results' || $op eq 'view_stored_results' ) {
     $flagsrequired = [ 'execute_reports_foreground', 'execute_reports_background' ];
 } elsif ( $op eq 'cud-update_and_run_sql' ) {
     $flagsrequired = [
@@ -363,6 +364,40 @@ if ( !$op ) {
         notes         => $result->{notes},
         saved_results => $result->{results},
         date_run      => $result->{date_run},
+    );
+
+} elsif ( $op eq 'view_stored_results' ) {
+    my $id     = $input->param('id');
+    my $result = format_results($id);
+    my $report = $result->{report_id} ? Koha::Reports->find( $result->{report_id} ) : undef;
+
+    my @header_row;
+    if ( $result->{headers} ) {
+        @header_row = map { { cell => $_ } } @{ $result->{headers} };
+    }
+
+    my @rows;
+    for my $row ( @{ $result->{results} } ) {
+        my @cells = map { { cell => $_ } } @$row;
+        push @rows, { cells => \@cells };
+    }
+
+    $template->param(
+        execute                => 1,
+        viewing_stored_results => 1,
+        saved_results_id       => $id,
+        open_in_dt             => scalar $input->param('open_in_dt'),
+        id                     => $result->{report_id},
+        name                   => $result->{report_name},
+        notes                  => $result->{notes},
+        date_run               => $result->{date_run},
+        sql                    => $report ? $report->savedsql       : undef,
+        original_sql           => $report ? $report->savedsql       : undef,
+        report_creator         => $report ? $report->borrowernumber : undef,
+        header_row             => \@header_row,
+        results                => \@rows,
+        allresults             => \@rows,
+        unlimited_total        => scalar @rows,
     );
 
 } elsif ( $op eq 'cud-report' ) {
@@ -737,7 +772,10 @@ if ( !$op ) {
             $reportname ? "$report_id-$reportname-reportresults.$format" : "$report_id-reportresults.$format";
         my $scrubber = C4::Scrubber->new();
 
-        eval { ( $sql, undef ) = $report->prep_report( \@param_names, \@sql_params, { export => 1 } ); };
+        eval {
+            ( $sql, undef ) =
+                $report->prep_report( \@param_names, \@sql_params, { export => 1, run_type => 'foreground' } );
+        };
         if ( my $e = $@ ) {
             if ( ref($e) eq 'Koha::Exceptions::Report::DuplicateRunning' ) {
                 print $input->header(
@@ -904,15 +942,31 @@ if ( $op eq 'run' ) {
     my $template_id     = $input->param('template');
     my $want_full_chart = $input->param('want_full_chart') || 0;
 
+    # Decide whether to run as a background job
+    my $run_in_background_pref   = C4::Context->preference('ReportsRunInBackground') || 'user_choice';
+    my $run_in_background_chosen = defined $input->param('run_in_background_chosen');
+    my $run_in_background;
+    if ( $run_in_background_pref eq 'always' ) {
+        $run_in_background = 1;
+    } elsif ( $run_in_background_pref eq 'never' ) {
+        $run_in_background = 0;
+    } else {
+
+        # user_choice, honor any selection on this request
+        $run_in_background = $input->param('run_in_background') ? 1 : 0;
+    }
+
     # offset algorithm
     if ( $input->param('page') ) {
         $offset = ( $input->param('page') - 1 ) * $limit;
     }
 
     $template->param(
-        limit      => $limit,
-        id         => $report_id,
-        open_in_dt => scalar $input->param('open_in_dt'),
+        limit                  => $limit,
+        id                     => $report_id,
+        open_in_dt             => scalar $input->param('open_in_dt'),
+        run_in_background_pref => $run_in_background_pref,
+        run_in_background      => $run_in_background,
     );
 
     my ( $sql, $original_sql, $type, $name, $notes );
@@ -1098,9 +1152,29 @@ if ( $op eq 'run' ) {
                 'id'              => $report_id,
                 'template_id'     => $template_id,
             );
+        } elsif ($run_in_background) {
+
+            # Enqueue the report as a background job
+            my $job_id = Koha::BackgroundJob::RunReport->new->enqueue(
+                {
+                    report_id   => $report_id,
+                    sql_params  => \@sql_params,
+                    param_names => \@param_names,
+                }
+            );
+            $template->param(
+                job_enqueued => 1,
+                job_id       => $job_id,
+                id           => $report_id,
+                name         => $name,
+                notes        => $notes,
+            );
         } else {
             my ( $sql, $header_types );
-            eval { ( $sql, $header_types ) = $report->prep_report( \@param_names, \@sql_params ); };
+            eval {
+                ( $sql, $header_types ) =
+                    $report->prep_report( \@param_names, \@sql_params, { run_type => 'foreground' } );
+            };
             if ( my $e = $@ ) {
                 my $error_key;
                 if ( ref($e) eq 'Koha::Exceptions::Report::DuplicateRunning' ) {
@@ -1166,7 +1240,7 @@ if ( $op eq 'run' ) {
 
                 my $totpages = int( $total / $limit ) + ( ( $total % $limit ) > 0 ? 1 : 0 );
                 my $url =
-                    "/cgi-bin/koha/reports/guided_reports.pl?id=$report_id&op=run&limit=$limit&want_full_chart=$want_full_chart";
+                    "/cgi-bin/koha/reports/guided_reports.pl?id=$report_id&op=run&limit=$limit&want_full_chart=$want_full_chart&run_in_background_chosen=1&run_in_background=0";
                 if (@param_names) {
                     $url = join( '&param_name=', $url, map { URI::Escape::uri_escape_utf8($_) } @param_names );
                 }

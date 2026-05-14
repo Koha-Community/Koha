@@ -1079,6 +1079,7 @@ CREATE TABLE `background_jobs` (
   `progress` int(11) DEFAULT NULL,
   `size` int(11) DEFAULT NULL,
   `borrowernumber` int(11) DEFAULT NULL,
+  `report_id` int(11) DEFAULT NULL COMMENT 'foreign key to saved_sql.id for run_report jobs',
   `type` varchar(64) DEFAULT NULL,
   `queue` varchar(191) NOT NULL DEFAULT 'default' COMMENT 'Name of the queue the job is sent to',
   `data` longtext DEFAULT NULL,
@@ -1089,7 +1090,9 @@ CREATE TABLE `background_jobs` (
   PRIMARY KEY (`id`),
   KEY `borrowernumber` (`borrowernumber`),
   KEY `queue` (`queue`),
-  KEY `status` (`status`)
+  KEY `status` (`status`),
+  KEY `report_id` (`report_id`),
+  CONSTRAINT `background_jobs_report_id_fk` FOREIGN KEY (`report_id`) REFERENCES `saved_sql` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

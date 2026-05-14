@@ -1,4 +1,5 @@
 use Modern::Perl;
+use C4::Installer           qw(column_exists foreign_key_exists);
 use Koha::Installer::Output qw(say_warning say_success say_info);
 
 return {
@@ -45,5 +46,24 @@ return {
         $dbh->do(q{ DELETE FROM user_permissions WHERE code = 'execute_reports' });
         $dbh->do(q{ DELETE FROM permissions      WHERE code = 'execute_reports' });
         say $out "Migrated 'execute_reports' permission to new foreground/background permissions";
+
+        unless ( column_exists( 'background_jobs', 'report_id' ) ) {
+            $dbh->do(
+                q{ ALTER TABLE background_jobs
+                     ADD COLUMN report_id INT(11) DEFAULT NULL
+                     COMMENT 'foreign key to saved_sql.id for run_report jobs' }
+            );
+            $dbh->do(q{ ALTER TABLE background_jobs ADD KEY report_id (report_id) });
+            say $out "Added column 'report_id' to background_jobs";
+        }
+
+        unless ( foreign_key_exists( 'background_jobs', 'background_jobs_report_id_fk' ) ) {
+            $dbh->do(
+                q{ ALTER TABLE background_jobs
+                     ADD CONSTRAINT background_jobs_report_id_fk
+                     FOREIGN KEY (report_id) REFERENCES saved_sql (id) ON DELETE SET NULL }
+            );
+            say $out "Added foreign key 'background_jobs_report_id_fk' to background_jobs";
+        }
     },
 };

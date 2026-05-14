@@ -788,6 +788,7 @@ sub store_results {
         INSERT INTO saved_reports ( report_id, report, date_run ) VALUES ( ?, ?, NOW() );
     |, undef, $id, $json
     );
+    return $dbh->last_insert_id( undef, undef, 'saved_reports', 'id' );
 }
 
 =head2 format_results
@@ -799,18 +800,33 @@ Missing POD for format_results.
 sub format_results {
     my ($id) = @_;
     my $dbh = C4::Context->dbh();
-    my ( $report_name, $notes, $json, $date_run ) = $dbh->selectrow_array(
+    my ( $report_name, $notes, $json, $date_run, $report_id ) = $dbh->selectrow_array(
         q|
-       SELECT ss.report_name, ss.notes, sr.report, sr.date_run
+       SELECT ss.report_name, ss.notes, sr.report, sr.date_run, sr.report_id
        FROM saved_sql ss
        LEFT JOIN saved_reports sr ON sr.report_id = ss.id
        WHERE sr.id = ?
     |, undef, $id
     );
+    my $decoded = from_json($json);
+
+    # The background-job worker stores results as { headers => [...], rows => [[...], ...] }.
+    # Legacy results are bare arrays of arrays with no header information.
+    my ( $headers, $rows );
+    if ( ref $decoded eq 'HASH' && exists $decoded->{headers} ) {
+        $headers = $decoded->{headers};
+        $rows    = $decoded->{rows};
+    } else {
+        $headers = undef;
+        $rows    = $decoded;
+    }
+
     return {
         report_name => $report_name,
+        report_id   => $report_id,
         notes       => $notes,
-        results     => from_json($json),
+        headers     => $headers,
+        results     => $rows,
         date_run    => $date_run,
     };
 }
