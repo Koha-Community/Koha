@@ -679,7 +679,7 @@
                 .click(function () {
                     var ids = Object.keys(selected_rows);
                     if (!ids.length) return;
-                    location.href = "orderreceive.pl?multiple_orders=" + ids.join(",") + "&invoiceid=" + invoiceid;
+                    location.href = "orderreceive.pl?multiple_orders=" + ids.join(",") + "&invoiceid=" + invoice_id;
                 })
                 .html(PENDING_MULTI_SELECTION.format("0"));
             options.order = [[1, "asc"]];
