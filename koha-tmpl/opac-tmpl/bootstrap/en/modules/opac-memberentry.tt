@@ -554,34 +554,19 @@
                                             [% END %]
 
                                             [% UNLESS hidden.defined('sex') %]
-                                                <li class="lradio">
-                                                    <div class="label">Gender:</div>
-                                                    <label for="sex-female" class="radio inline"><span class="patronsex-female">Female:</span></label>
-                                                    [% IF borrower.sex == 'F' %]
-                                                        <input type="radio" name="borrower_sex" id="sex-female" value="F" checked="checked" />
-                                                    [% ELSE %]
-                                                        <input type="radio" name="borrower_sex" id="sex-female" value="F" />
-                                                    [% END %]
+                                                <li>
+                                                    <label for="sex" class="[% required.sex | html %]">Gender:</label>
 
-                                                    <label for="sex-male" class="radio inline"><span class="patronsex-male">Male:</span></label>
-                                                    [% IF borrower.sex == 'M' %]
-                                                        <input type="radio" name="borrower_sex" id="sex-male" value="M" checked="checked" />
-                                                    [% ELSE %]
-                                                        <input type="radio" name="borrower_sex" id="sex-male" value="M" />
-                                                    [% END %]
+                                                    <select id="sex" name="borrower_sex" class="[% required.sex | html %] [% IF mandatory.sex && !borrower.sex %]missing_required[% END %]" [% IF mandatory.sex %]required[% END %]>
+                                                        <option value="">None specified</option>
 
-                                                    <label for="sex-other" class="radio inline"><span class="patronsex-other">[% tp('gender','Other:') | html %]</span></label>
-                                                    [% IF borrower.sex == 'O' %]
-                                                        <input type="radio" name="borrower_sex" id="sex-other" value="O" checked="checked" />
-                                                    [% ELSE %]
-                                                        <input type="radio" name="borrower_sex" id="sex-other" value="O" />
-                                                    [% END %]
+                                                        <option value="F" [% IF borrower.sex == 'F' %]selected="selected"[% END %]>Female</option>
+                                                        <option value="M" [% IF borrower.sex == 'M' %]selected="selected"[% END %]>Male</option>
+                                                        <option value="O" [% IF borrower.sex == 'O' %]selected="selected"[% END %]>Other</option>
+                                                    </select>
 
-                                                    <label for="sex-none" class="radio inline"><span class="patronsex-none">None specified:</span></label>
-                                                    [% IF borrower.sex == '' %]
-                                                        <input type="radio" name="borrower_sex" id="sex-none" value="" checked="checked" />
-                                                    [% ELSE %]
-                                                        <input type="radio" name="borrower_sex" id="sex-none" value="" />
+                                                    [% IF mandatory.sex %]
+                                                        <div class="required_label required" style="margin-top: 0.4em;">Required</div>
                                                     [% END %]
                                                 </li>
                                             [% END %]
