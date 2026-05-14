@@ -772,6 +772,24 @@ if ( !$op ) {
             $reportname ? "$report_id-$reportname-reportresults.$format" : "$report_id-reportresults.$format";
         my $scrubber = C4::Scrubber->new();
 
+        my $limit_check = C4::Context->userenv
+            ? Koha::Reports->check_limits(
+            {
+                report_id      => $report_id,
+                borrowernumber => C4::Context->userenv->{number},
+                run_type       => 'foreground',
+            }
+            )
+            : { any_exceeded => 0 };
+        if ( $limit_check->{any_exceeded} ) {
+            print $input->header(
+                -status => '429 Too Many Requests',
+                -type   => 'text/plain; charset=UTF-8',
+            );
+            print "Too many reports are currently running. Please wait for some to finish before running this report.\n";
+            exit;
+        }
+
         eval {
             ( $sql, undef ) =
                 $report->prep_report( \@param_names, \@sql_params, { export => 1, run_type => 'foreground' } );
@@ -955,6 +973,16 @@ if ( $op eq 'run' ) {
         # user_choice, honor any selection on this request
         $run_in_background = $input->param('run_in_background') ? 1 : 0;
     }
+
+    my $limit_check = C4::Context->userenv
+        ? Koha::Reports->check_limits(
+        {
+            report_id      => $report_id,
+            borrowernumber => C4::Context->userenv->{number},
+            run_type       => $run_in_background ? 'background' : 'foreground',
+        }
+        )
+        : { any_exceeded => 0, errors => [] };
 
     # offset algorithm
     if ( $input->param('page') ) {
@@ -1152,6 +1180,30 @@ if ( $op eq 'run' ) {
                 'id'              => $report_id,
                 'template_id'     => $template_id,
             );
+        } elsif ( $run_in_background_pref eq 'user_choice' && !$run_in_background_chosen ) {
+
+            # User needs to pick foreground vs background for this run.
+            $template->param(
+                'name'                   => $name,
+                'notes'                  => $notes,
+                'id'                     => $report_id,
+                'sql_params'             => \@sql_params,
+                'param_names'            => \@param_names,
+                'choose_run_mode'        => 1,
+                'run_in_background_pref' => $run_in_background_pref,
+            );
+        } elsif ( $limit_check->{any_exceeded} ) {
+            $template->param(
+                'sql'          => $sql,
+                'original_sql' => $original_sql,
+                'id'           => $report_id,
+                'execute'      => 1,
+                'name'         => $name,
+                'notes'        => $notes,
+                'errors'       => $limit_check->{errors},
+                'sql_params'   => \@sql_params,
+                'param_names'  => \@param_names,
+            );
         } elsif ($run_in_background) {
 
             # Enqueue the report as a background job
@@ -1178,7 +1230,7 @@ if ( $op eq 'run' ) {
             if ( my $e = $@ ) {
                 my $error_key;
                 if ( ref($e) eq 'Koha::Exceptions::Report::DuplicateRunning' ) {
-                    $error_key = 'duplicate_running_report';
+                    $error_key = 'duplicate_running_reports_per_user_limit_exceeded';
                 } elsif ( ref($e) eq 'Koha::Exceptions::Report::TotalRunning' ) {
                     $error_key = 'total_running_reports_limit_exceeded';
                 } elsif ( ref($e) eq 'Koha::Exceptions::Report::InstanceTotalRunning' ) {

@@ -1796,9 +1796,9 @@
             <div class="alert alert-warning">
                 <h1>The following error was encountered:</h1>
                 [% FOREACH error IN errors %]
-                    [% IF ( error.duplicate_running_report ) %]
+                    [% IF ( error.duplicate_running_reports_per_user_limit_exceeded ) %]
                         <p>This report is already running. Please wait for it to finish before running it again.</p>
-                    [% ELSIF ( error.total_running_reports_limit_exceeded ) %]
+                    [% ELSIF ( error.total_running_reports_per_user_limit_exceeded ) %]
                         <p>You have too many reports running at the moment. Please wait for some of them to finish before running this report again.</p>
                     [% ELSIF ( error.total_running_reports_per_instance_limit_exceeded ) %]
                         <p>There are too many total reports running at the moment. Please wait for some of them to finish before running this report again.</p>
