@@ -17,8 +17,9 @@
 
 use Modern::Perl;
 
+use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Mojo;
 
 use JSON qw( encode_json );
@@ -175,6 +176,52 @@ subtest 'cancel as superlibrarian and non-owner' => sub {
         Koha::BackgroundJobs->find( $job2->id )->status, 'cancelled',
         'super cancelled a job owned by another librarian'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'running endpoint' => sub {
+    plan tests => 7;
+    $schema->storage->txn_begin;
+
+    my $runner = make_patron( 2**16 );
+    grant_reports_perm( $runner, 'execute_reports_foreground' );
+    my $other = make_patron( 2**16 );
+    grant_reports_perm( $other, 'execute_reports_background' );
+
+    my $report   = $builder->build_object( { class => 'Koha::Reports' } );
+    my $rid      = $report->id;
+    my $bnum     = $runner->borrowernumber;
+    my $other_id = $other->borrowernumber;
+
+    my $reports_mock = Test::MockModule->new('Koha::Reports');
+    $reports_mock->mock(
+        '_processlist_rows',
+        sub {
+            return [
+                {
+                    id   => 101,
+                    time => 12,
+                    info => "SELECT 1 /* { saved_sql.id: $rid } { user_id: $bnum } { run_type: foreground } */"
+                },
+                {
+                    id   => 102,
+                    time => 30,
+                    info => "SELECT 1 /* { saved_sql.id: $rid } { user_id: $other_id } { run_type: background } */"
+                },
+            ];
+        }
+    );
+
+    my $body =
+        $t->get_ok("//${\$runner->userid}:$password@/api/v1/reports/jobs/running")->status_is(200)->tx->res->json;
+
+    is( scalar @{$body}, 2, 'foreground and background threads both returned' );
+    my @by_pid = sort { $a->{process_id} <=> $b->{process_id} } @{$body};
+    is( $by_pid[0]{run_type}, 'foreground', 'first row is foreground' );
+    is( $by_pid[0]{seconds},  12,           'seconds surfaced from processlist' );
+    is( $by_pid[1]{run_type}, 'background', 'second row is background' );
+    is( $by_pid[1]{seconds},  30,           'seconds for the BG worker thread' );
 
     $schema->storage->txn_rollback;
 };

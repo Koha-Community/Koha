@@ -140,8 +140,9 @@ sub check_limits {
 
 Returns one hashref per running report thread from
 C<information_schema.processlist>, each with C<report_id>, C<user_id>,
-C<run_type>. Scoped to the current MySQL user. Dies on processlist
-read failure.
+C<run_type>, C<process_id> (the processlist row id) and C<seconds>
+(how long the thread has been running). Scoped to the current MySQL
+user. Dies on processlist read failure.
 
 =cut
 
@@ -149,7 +150,7 @@ sub _active_report_runs {
     my ($class) = @_;
 
     my $sql = q{
-        SELECT info
+        SELECT id, time, info
           FROM information_schema.processlist
          WHERE user = SUBSTRING_INDEX(CURRENT_USER(), '@', 1)
            AND command != 'Sleep'
@@ -167,9 +168,11 @@ sub _active_report_runs {
         next unless defined $report_id;
         push @threads,
             {
-            report_id => $report_id,
-            user_id   => $user_id,
-            run_type  => $run_type,
+            report_id  => $report_id,
+            user_id    => $user_id,
+            run_type   => $run_type,
+            process_id => $row->{id},
+            seconds    => $row->{time},
             };
     }
     return @threads;

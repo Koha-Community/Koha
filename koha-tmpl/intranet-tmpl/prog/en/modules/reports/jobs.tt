@@ -54,29 +54,63 @@
         <div class="alert alert-info"> Your report has been queued as job #[% new_job_id | html %]. It is highlighted below. </div>
     [% END %]
 
-    <fieldset class="rows">
-        <ol>
-            <li>
-                <label for="time_range">Time range:</label>
-                <select id="time_range">
-                    <option value="today" selected="selected">Today (since midnight)</option>
-                    <option value="1h">Last 1 hour</option>
-                    <option value="8h">Last 8 hours</option>
-                    <option value="24h">Last 24 hours</option>
-                    <option value="custom">Custom...</option>
-                </select>
-            </li>
-            <li id="custom_range" style="display:none">
-                <label for="custom_after">From:</label>
-                <input type="text" id="custom_after" class="flatpickr" data-flatpickr-enable-time="true" />
-                <label for="custom_before">To:</label>
-                <input type="text" id="custom_before" class="flatpickr" data-flatpickr-enable-time="true" />
-                <button type="button" id="apply_custom" class="btn btn-default btn-sm">Apply</button>
-            </li>
-        </ol>
-    </fieldset>
+    <form method="get" class="refresh-form" onsubmit="return false">
+        <p>
+            <button type="button" id="refresh_now" class="btn btn-default"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Refresh</button>
+
+            <label>
+                <input type="checkbox" id="auto_refresh" name="auto_refresh" />
+                Refresh automatically every <input type="text" inputmode="numeric" pattern="[0-9]*" id="refresh_delay" name="refresh_delay" value="60" size="3" /> seconds.
+            </label>
+
+            <span id="refresh_info"></span>
+        </p>
+    </form>
+
+    <div class="page-section" id="running_section">
+        <h2>Currently running</h2>
+        <p id="running_empty" style="display:none" class="text-muted">No reports are running right now.</p>
+        <table id="table_running_reports" style="display:none">
+            <thead>
+                <tr>
+                    <th>Report</th>
+                    <th>Type</th>
+                    <th>Owner</th>
+                    <th>Running for</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
 
     <div class="page-section">
+        <h2>Background jobs</h2>
+        <fieldset class="rows">
+            <ol>
+                <li>
+                    <label for="time_range">Time range:</label>
+                    <select id="time_range">
+                        <option value="today" selected="selected">Today</option>
+                        <option value="1h">Last 1 hour</option>
+                        <option value="8h">Last 8 hours</option>
+                        <option value="24h">Last 24 hours</option>
+                        <option value="custom">Choose range</option>
+                    </select>
+                </li>
+                <li class="custom_range" style="display:none">
+                    <label for="custom_after">From:</label>
+                    <input type="text" id="custom_after" data-date_to="custom_before" class="flatpickr" data-flatpickr-enable-time="true" />
+                </li>
+                <li class="custom_range" style="display:none">
+                    <label for="custom_before">To:</label>
+                    <input type="text" id="custom_before" class="flatpickr" data-flatpickr-enable-time="true" />
+                </li>
+                <li class="custom_range" style="display:none">
+                    <label>&nbsp;</label>
+                    <button type="button" id="apply_custom" class="btn btn-default btn-sm">Apply</button>
+                </li>
+            </ol>
+        </fieldset>
+
         <table id="table_report_jobs">
             <thead>
                 <tr>
@@ -116,6 +150,7 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'js-date-format.inc' %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'calendar.inc' %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
         const loggedinusernumber = [% logged_in_user.borrowernumber | html %];
         const can_see_all = [% CAN_user_superlibrarian ? 1 : 0 | html %];
@@ -136,10 +171,21 @@
             'internal_error':   _("The worker encountered an unexpected error"),
         };
 
-        function iso_local(d) {
+        function rfc3339(d) {
             const pad = n => String(n).padStart(2, "0");
+            const off = -d.getTimezoneOffset();
+            const sign = off >= 0 ? "+" : "-";
+            const abs = Math.abs(off);
             return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) +
-                "T" + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+                "T" + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds()) +
+                sign + pad(Math.floor(abs / 60)) + ":" + pad(abs % 60);
+        }
+
+        function flatpickr_to_rfc3339(s) {
+            if (!s) return "";
+            const m = s.match(/^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})$/);
+            if (!m) return s;
+            return rfc3339(new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], 0));
         }
 
         function range_params() {
@@ -155,14 +201,14 @@
             } else if (range === "24h") {
                 after = new Date(now.getTime() - 24 * 3600 * 1000);
             } else if (range === "custom") {
-                const a = $("#custom_after").val();
-                const b = $("#custom_before").val();
+                const a = flatpickr_to_rfc3339($("#custom_after").val());
+                const b = flatpickr_to_rfc3339($("#custom_before").val());
                 const params = {};
                 if (a) params.after = a;
                 if (b) params.before = b;
                 return params;
             }
-            return { after: iso_local(after) };
+            return { after: rfc3339(after) };
         }
 
         function api_url() {
@@ -193,8 +239,8 @@
                         },
                         {
                             data: "report_name",
-                            searchable: true,
-                            orderable: true,
+                            searchable: false,
+                            orderable: false,
                             render: function (data, type, row) {
                                 if (!row.report_id) return _("(report deleted)").escapeHtml();
                                 const name = (row.report_name || _("Report #%s").format(row.report_id)).escapeHtml();
@@ -212,11 +258,10 @@
                         },
                         {
                             data: "patron_name",
-                            searchable: true,
-                            orderable: true,
+                            searchable: false,
+                            orderable: false,
                             render: function (data, type, row) {
                                 if (!row.patron_id) return "";
-                                if (row.patron_id == loggedinusernumber) return _("(me)").escapeHtml();
                                 const name = (row.patron_name || _("Patron #%s").format(row.patron_id)).escapeHtml();
                                 return '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' +
                                     encodeURIComponent(row.patron_id) + '">' + name + '</a>';
@@ -287,7 +332,7 @@
             );
 
             $("#time_range").on("change", function () {
-                $("#custom_range").toggle( $(this).val() === "custom" );
+                $(".custom_range").toggle( $(this).val() === "custom" );
                 if ( $(this).val() !== "custom" ) {
                     jobs_table.DataTable().ajax.url(api_url()).load();
                 }
@@ -318,6 +363,102 @@
                 $("#errorModalMessage").text($(this).data("error"));
                 errorModal.show();
             });
+
+            function format_seconds(s) {
+                if (s == null) return "";
+                if (s < 60)   return _("%s sec").format(s);
+                if (s < 3600) return _("%sm %ss").format(Math.floor(s / 60), s % 60);
+                return _("%sh %sm").format(Math.floor(s / 3600), Math.floor((s % 3600) / 60));
+            }
+
+            let running_table = $("#table_running_reports").kohaTable(
+                {
+                    paging: false,
+                    searching: false,
+                    info: false,
+                    columns: [
+                        {
+                            data: "report_name",
+                            render: function (data, type, row) {
+                                if (!row.report_id) return _("(report deleted)").escapeHtml();
+                                const name = (row.report_name || _("Report #%s").format(row.report_id)).escapeHtml();
+                                return '<a href="/cgi-bin/koha/reports/guided_reports.pl?op=show&id=' +
+                                    encodeURIComponent(row.report_id) + '">' + name + '</a>';
+                            },
+                        },
+                        {
+                            data: "run_type",
+                            render: function (data) {
+                                return data === "background"
+                                    ? _("Background").escapeHtml()
+                                    : _("Foreground").escapeHtml();
+                            },
+                        },
+                        {
+                            data: "patron_name",
+                            render: function (data, type, row) {
+                                if (!row.patron_id) return "";
+                                const name = (row.patron_name || _("Patron #%s").format(row.patron_id)).escapeHtml();
+                                return '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' +
+                                    encodeURIComponent(row.patron_id) + '">' + name + '</a>';
+                            },
+                        },
+                        {
+                            data: "seconds",
+                            render: function (data) {
+                                return format_seconds(data).escapeHtml();
+                            },
+                        },
+                    ],
+                },
+                null,
+                1
+            );
+
+            function reload_running() {
+                $.get("/api/v1/reports/jobs/running", function (rows) {
+                    running_table.DataTable().clear().rows.add(rows).draw();
+                    $("#table_running_reports").toggle(rows.length > 0);
+                    $("#running_empty").toggle(rows.length === 0);
+                });
+            }
+
+            function reload_all() {
+                reload_running();
+                jobs_table.DataTable().ajax.reload(null, false);
+            }
+
+            reload_running();
+
+            let refresh_timer  = null;
+            let countdown_timer = null;
+            function clear_timers() {
+                if (refresh_timer)  { clearInterval(refresh_timer);  refresh_timer  = null; }
+                if (countdown_timer) { clearInterval(countdown_timer); countdown_timer = null; }
+                $("#refresh_info").text("");
+            }
+            function start_refresh() {
+                clear_timers();
+                if (!$("#auto_refresh").is(":checked")) return;
+                const delay_seconds = parseInt($("#refresh_delay").val(), 10);
+                if (!delay_seconds || delay_seconds < 1) return;
+
+                let next_refresh = new Date().getTime() + delay_seconds * 1000;
+                refresh_timer = setInterval(function () {
+                    reload_all();
+                    next_refresh = new Date().getTime() + delay_seconds * 1000;
+                }, delay_seconds * 1000);
+                countdown_timer = setInterval(function () {
+                    const remaining = Math.max(0, Math.round((next_refresh - new Date().getTime()) / 1000));
+                    $("#refresh_info").text(_("Refresh in %s seconds").format(remaining));
+                }, 1000);
+            }
+            $("#auto_refresh, #refresh_delay").on("change", start_refresh);
+            $("#refresh_now").on("click", function () {
+                reload_all();
+                start_refresh();
+            });
+            start_refresh();
         });
     </script>
 [% END %]

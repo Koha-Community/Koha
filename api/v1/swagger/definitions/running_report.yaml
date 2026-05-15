@@ -1,0 +1,36 @@
+---
+type: object
+properties:
+  process_id:
+    type: integer
+    description: MariaDB process id from information_schema.processlist
+  seconds:
+    type:
+      - integer
+      - "null"
+    description: How long the thread has been running, in seconds
+  run_type:
+    type: string
+    enum: [foreground, background]
+    description: Whether the thread was started in the foreground or by a background worker
+  report_id:
+    type:
+      - integer
+      - "null"
+    description: The saved-report id this thread is running
+  report_name:
+    type:
+      - string
+      - "null"
+    description: Display name of the saved report this thread is running
+  patron_id:
+    type:
+      - integer
+      - "null"
+    description: Borrowernumber of the librarian who started the run
+  patron_name:
+    type:
+      - string
+      - "null"
+    description: Display name of the librarian who started the run
+additionalProperties: false

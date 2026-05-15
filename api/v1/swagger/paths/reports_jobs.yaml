@@ -60,6 +60,51 @@
       permissions:
         - reports: "execute_reports_foreground"
         - reports: "execute_reports_background"
+/reports/jobs/running:
+  get:
+    x-mojo-to: Reports::Jobs#list_running
+    operationId: listRunningReportJobs
+    tags:
+      - reports
+    summary: List currently-running foreground report threads
+    description: |
+      Returns one row per foreground report SQL currently executing in
+      MariaDB. Sourced from information_schema.processlist, not from
+      background_jobs. Background runs are not included; use
+      /reports/jobs for those.
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/request_id_header"
+    responses:
+      "200":
+        description: A list of currently-running foreground report threads
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/running_report"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal server error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        - reports: "execute_reports_foreground"
+        - reports: "execute_reports_background"
 "/reports/jobs/{job_id}/cancel":
   post:
     x-mojo-to: Reports::Jobs#cancel
