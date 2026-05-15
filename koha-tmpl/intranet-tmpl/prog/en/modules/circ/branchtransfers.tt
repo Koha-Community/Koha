@@ -138,6 +138,19 @@
                             </form>
                         </div>
 
+                        [% IF ( reserved && hold.branchcode != tobranchcd ) %]
+                            <div>
+                                <form method="post" action="branchtransfers.pl">
+                                    [% INCLUDE 'csrf-token.inc' %]
+                                    [% PROCESS transfer_hidden_fields %]
+                                    <input type="hidden" name="tobranchcd" value="[% tobranchcd | html %]" />
+                                    <input type="hidden" name="barcode" value="[% barcode | html %]" />
+                                    <input type="hidden" name="op" value="cud-IgnoreHold" />
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-ban"></i> Ignore hold and transfer to [% Branches.GetName( tobranchcd ) | html %]</button>
+                                </form>
+                            </div>
+                        [% END %]
+
                         [% IF ( reserved ) %]
                             <div>
                                 <form method="post" action="branchtransfers.pl">

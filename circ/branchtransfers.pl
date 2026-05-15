@@ -98,6 +98,10 @@ if ( $op eq "cud-KillWaiting" ) {
         $cancelled  = 1;
         $reqmessage = 1;
     }    # FIXME else?
+} elsif ( $op eq "cud-IgnoreHold" ) {
+    $ignoreRs   = 1;
+    $settransit = 1;
+    $op         = 'cud-transfer';
 } elsif ( $op eq "cud-SetTransit" ) {
     my $item       = $query->param('itemnumber');
     my $reserve_id = $query->param('reserve_id');
