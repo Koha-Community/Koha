@@ -408,7 +408,7 @@
                 >
                     <a
                         :ref="el => templateRefs.push(el)"
-                        href="/cgi-bin/koha/admin/edi_accounts.pl"
+                        href="/cgi-bin/koha/admin/marc_order_accounts.pl"
                         >{{ $__("MARC ordering accounts") }}</a
                     >
                 </li>
