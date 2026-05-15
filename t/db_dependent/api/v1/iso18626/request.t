@@ -293,10 +293,9 @@ subtest 'edit() tests' => sub {
     my $mock_request = Test::MockModule->new('Koha::ILL::ISO18626::Request');
     $mock_request->mock( 'progress_request', sub { return 0 } );
 
-    $t->patch_ok(
-        "//$userid:$password@/api/v1/ill/iso18626_requests/" . $request->iso18626_request_id =>
-            json => { status => 'ExpectToSupply' }
-        )->status_is(500)
+    $t->patch_ok( "//$userid:$password@/api/v1/ill/iso18626_requests/"
+            . $request->iso18626_request_id => json => { status => 'ExpectToSupply' } )
+        ->status_is(500)
         ->json_is( '/error' => 'Request could not be progressed' );
 
     $schema->storage->txn_rollback;
