@@ -1,5 +1,5 @@
 use Modern::Perl;
-use C4::Installer           qw(column_exists foreign_key_exists);
+use C4::Installer           qw(index_exists column_exists foreign_key_exists);
 use Koha::Installer::Output qw(say_warning say_success say_info);
 
 return {
@@ -46,6 +46,16 @@ return {
         $dbh->do(q{ DELETE FROM user_permissions WHERE code = 'execute_reports' });
         $dbh->do(q{ DELETE FROM permissions      WHERE code = 'execute_reports' });
         say $out "Migrated 'execute_reports' permission to new foreground/background permissions";
+
+        unless ( index_exists( 'background_jobs', 'type_enqueued_on' ) ) {
+            $dbh->do(q{ ALTER TABLE background_jobs ADD KEY type_enqueued_on (type, enqueued_on) });
+            say $out "Added index 'type_enqueued_on' to background_jobs";
+        }
+
+        unless ( index_exists( 'background_jobs', 'type_status' ) ) {
+            $dbh->do(q{ ALTER TABLE background_jobs ADD KEY type_status (type, status) });
+            say $out "Added index 'type_status' to background_jobs";
+        }
 
         unless ( column_exists( 'background_jobs', 'report_id' ) ) {
             $dbh->do(

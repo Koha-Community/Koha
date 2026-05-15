@@ -1094,7 +1094,9 @@
                     </div>
                 [% END # /IF choose_run_mode %]
 
-                [% IF job_enqueued %]
+                [% IF processed_notice %]
+                    [% processed_notice | $raw %]
+                [% ELSIF ( execute ) %]
                     <h1
                         >[% name | html %] <span class="report_heading_id"><span class="report_label">Report ID:</span> <span class="report_number">[% id | html %]</span></span></h1
                     >
@@ -1102,22 +1104,6 @@
                         [% IF ( notes ) %]
                             <p><span class="label">Notes:</span> [% notes | scrub_html type => 'note' | $raw %]</p>
                         [% END %]
-                        <div class="alert alert-info">
-                            <p>The report has been queued and will run shortly.</p>
-                            <p><a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=[% job_id | uri %]">View job details</a></p>
-                            <div id="job_callback"></div>
-                        </div>
-                    </div>
-                [% ELSIF processed_notice %]
-        [% processed_notice | $raw %]
-    [% ELSIF ( execute ) %]
-        <h1
-            >[% name | html %] <span class="report_heading_id"><span class="report_label">Report ID:</span> <span class="report_number">[% id | html %]</span></span></h1
-        >
-        <div class="page-section">
-            [% IF ( notes ) %]
-                <p><span class="label">Notes:</span> [% notes | scrub_html type => 'note' | $raw %]</p>
-            [% END %]
                         [% IF viewing_stored_results %]
                             <p><span class="label">Date run:</span> [% date_run | html %]</p>
                         [% END %]

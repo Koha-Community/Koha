@@ -1,0 +1,102 @@
+---
+/reports/jobs:
+  get:
+    x-mojo-to: Reports::Jobs#list
+    operationId: listReportJobs
+    tags:
+      - reports
+    summary: List report jobs
+    description: |
+      Lists run_report background jobs. Optional `after` and `before`
+      query parameters bound the search on the job's enqueued time.
+      Authorisation only requires permission to run reports; ownership
+      rules are enforced on the cancel endpoint.
+    produces:
+      - application/json
+    parameters:
+      - name: after
+        in: query
+        required: false
+        type: string
+        format: date-time
+        description: Only return jobs enqueued at or after this ISO-8601 datetime
+      - name: before
+        in: query
+        required: false
+        type: string
+        format: date-time
+        description: Only return jobs enqueued at or before this ISO-8601 datetime
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/request_id_header"
+    responses:
+      "200":
+        description: A list of report jobs
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/report_job"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal server error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        - reports: "execute_reports_foreground"
+        - reports: "execute_reports_background"
+"/reports/jobs/{job_id}/cancel":
+  post:
+    x-mojo-to: Reports::Jobs#cancel
+    operationId: cancelReportJob
+    tags:
+      - reports
+    summary: Cancel a queued report job
+    description: |
+      Cancels a run_report background job. Only the librarian who
+      enqueued the job, or a superlibrarian, may cancel it. Only jobs
+      whose status is 'new' can be cancelled.
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/job_id_pp"
+    produces:
+      - application/json
+    responses:
+      "204":
+        description: Job cancelled
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Job not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: |
+          Conflict. Possible error_code values:
+            * `not_cancellable` (job has already started or finished)
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal server error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        - reports: "execute_reports_foreground"
+        - reports: "execute_reports_background"

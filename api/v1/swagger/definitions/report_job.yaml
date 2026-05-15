@@ -1,0 +1,72 @@
+---
+type: object
+properties:
+  job_id:
+    type: integer
+    description: Background job id
+    readOnly: true
+  type:
+    type: string
+    description: Job type (always run_report for this endpoint)
+  status:
+    type: string
+    description: Job status
+  enqueued_date:
+    type:
+      - string
+      - "null"
+    format: date-time
+    description: When the job was enqueued
+  started_date:
+    type:
+      - string
+      - "null"
+    format: date-time
+    description: When the worker picked up the job
+  ended_date:
+    type:
+      - string
+      - "null"
+    format: date-time
+    description: When the worker finished the job
+  patron_id:
+    type:
+      - integer
+      - "null"
+    description: Borrowernumber of the librarian who enqueued the job
+  patron_name:
+    type:
+      - string
+      - "null"
+    description: Display name of the librarian who enqueued the job
+  report_id:
+    type:
+      - integer
+      - "null"
+    description: The saved-report id this job ran
+  report_name:
+    type:
+      - string
+      - "null"
+    description: Display name of the saved report this job ran
+  saved_report_id:
+    type:
+      - integer
+      - "null"
+    description: Saved-results row id, populated for finished jobs
+  row_count:
+    type:
+      - integer
+      - "null"
+    description: Number of rows the report returned, populated for finished jobs
+  error_code:
+    type:
+      - string
+      - "null"
+    description: Short error code when the job failed (e.g. execute_error, report_not_found, internal_error)
+  error_message:
+    type:
+      - string
+      - "null"
+    description: Human-readable error from the worker when the job failed
+additionalProperties: false

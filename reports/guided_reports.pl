@@ -1206,7 +1206,8 @@ if ( $op eq 'run' ) {
             );
         } elsif ($run_in_background) {
 
-            # Enqueue the report as a background job
+            # Enqueue the report as a background job, then land on the
+            # report-jobs dashboard so the user can see the queue.
             my $job_id = Koha::BackgroundJob::RunReport->new->enqueue(
                 {
                     report_id   => $report_id,
@@ -1214,13 +1215,8 @@ if ( $op eq 'run' ) {
                     param_names => \@param_names,
                 }
             );
-            $template->param(
-                job_enqueued => 1,
-                job_id       => $job_id,
-                id           => $report_id,
-                name         => $name,
-                notes        => $notes,
-            );
+            print $input->redirect("/cgi-bin/koha/reports/jobs.pl?new_job_id=$job_id");
+            exit;
         } else {
             my ( $sql, $header_types );
             eval {

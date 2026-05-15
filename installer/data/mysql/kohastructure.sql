@@ -1091,6 +1091,8 @@ CREATE TABLE `background_jobs` (
   KEY `borrowernumber` (`borrowernumber`),
   KEY `queue` (`queue`),
   KEY `status` (`status`),
+  KEY `type_enqueued_on` (`type`,`enqueued_on`),
+  KEY `type_status` (`type`,`status`),
   KEY `report_id` (`report_id`),
   CONSTRAINT `background_jobs_report_id_fk` FOREIGN KEY (`report_id`) REFERENCES `saved_sql` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

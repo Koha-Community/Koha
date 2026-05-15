@@ -210,6 +210,8 @@ definitions:
     $ref: ./definitions/recall.yaml
   recalls:
     $ref: ./definitions/recalls.yaml
+  report_job:
+    $ref: ./definitions/report_job.yaml
   renewal:
     $ref: ./definitions/renewal.yaml
   renewals:
@@ -695,6 +697,10 @@ paths:
     $ref: ./paths/record_sources.yaml#/~1record_sources
   "/record_sources/{record_source_id}":
     $ref: ./paths/record_sources.yaml#/~1record_sources~1{record_source_id}
+  /reports/jobs:
+    $ref: ./paths/reports_jobs.yaml#/~1reports~1jobs
+  "/reports/jobs/{job_id}/cancel":
+    $ref: "./paths/reports_jobs.yaml#/~1reports~1jobs~1{job_id}~1cancel"
   /return_claims:
     $ref: ./paths/return_claims.yaml#/~1return_claims
   "/return_claims/{claim_id}":

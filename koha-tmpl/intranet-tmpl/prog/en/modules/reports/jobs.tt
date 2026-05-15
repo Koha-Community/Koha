@@ -1,0 +1,325 @@
+[% USE raw %]
+[% USE Koha %]
+[% USE Asset %]
+[% USE KohaDates %]
+[% PROCESS 'i18n.inc' %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>[% FILTER collapse %][% t("Report jobs") | html %] &rsaquo; [% t("Reports") | html %] &rsaquo; [% t("Koha") | html %][% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="reports_jobs" class="reports">
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'cat-search.inc' %]
+[% END %]
+
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Report jobs</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
+
+[% WRAPPER 'main-container.inc' aside='reports-menu' %]
+    <style nonce="[% Koha.CSPNonce | $raw %]">
+        #table_report_jobs tr.job-status-new {
+            background-color: #e0f0ff;
+        }
+        #table_report_jobs tr.job-status-started,
+        #table_report_jobs tr.job-status-running {
+            background-color: #fff5cc;
+        }
+        #table_report_jobs tr.job-status-finished {
+            background-color: #e2f5e2;
+        }
+        #table_report_jobs tr.job-status-cancelled {
+            background-color: #ececec;
+        }
+        #table_report_jobs tr.job-status-failed {
+            background-color: #f8d7da;
+        }
+        #table_report_jobs tr.highlight {
+            outline: 2px solid #ff9900;
+        }
+    </style>
+
+    <h1>Report jobs</h1>
+
+    [% IF new_job_id %]
+        <div class="alert alert-info"> Your report has been queued as job #[% new_job_id | html %]. It is highlighted below. </div>
+    [% END %]
+
+    <fieldset class="rows">
+        <ol>
+            <li>
+                <label for="time_range">Time range:</label>
+                <select id="time_range">
+                    <option value="today" selected="selected">Today (since midnight)</option>
+                    <option value="1h">Last 1 hour</option>
+                    <option value="8h">Last 8 hours</option>
+                    <option value="24h">Last 24 hours</option>
+                    <option value="custom">Custom...</option>
+                </select>
+            </li>
+            <li id="custom_range" style="display:none">
+                <label for="custom_after">From:</label>
+                <input type="text" id="custom_after" class="flatpickr" data-flatpickr-enable-time="true" />
+                <label for="custom_before">To:</label>
+                <input type="text" id="custom_before" class="flatpickr" data-flatpickr-enable-time="true" />
+                <button type="button" id="apply_custom" class="btn btn-default btn-sm">Apply</button>
+            </li>
+        </ol>
+    </fieldset>
+
+    <div class="page-section">
+        <table id="table_report_jobs">
+            <thead>
+                <tr>
+                    <th>Job ID</th>
+                    <th>Report</th>
+                    <th>Status</th>
+                    <th>Owner</th>
+                    <th>Queued</th>
+                    <th>Started</th>
+                    <th>Ended</th>
+                    <th class="no-export">Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <div class="modal" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="errorModalLabel">Report job error</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="errorModalCode" class="text-muted"></p>
+                    <pre id="errorModalMessage" style="white-space:pre-wrap;"></pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+[% END #/ WRAPPER main-container.inc %]
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
+    [% INCLUDE 'js-date-format.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    <script nonce="[% Koha.CSPNonce | $raw %]">
+        const loggedinusernumber = [% logged_in_user.borrowernumber | html %];
+        const can_see_all = [% CAN_user_superlibrarian ? 1 : 0 | html %];
+        const new_job_id  = [% new_job_id ? new_job_id : 'null' | html %];
+
+        const job_status_labels = {
+            'new':       _("Queued"),
+            'started':   _("Running"),
+            'running':   _("Running"),
+            'finished':  _("Finished"),
+            'cancelled': _("Cancelled"),
+            'failed':    _("Failed"),
+        };
+
+        const error_code_labels = {
+            'report_not_found': _("The saved report this job referenced no longer exists"),
+            'execute_error':    _("The report's SQL could not be executed"),
+            'internal_error':   _("The worker encountered an unexpected error"),
+        };
+
+        function iso_local(d) {
+            const pad = n => String(n).padStart(2, "0");
+            return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) +
+                "T" + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+        }
+
+        function range_params() {
+            const range = $("#time_range").val();
+            const now = new Date();
+            let after;
+            if (range === "today") {
+                after = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+            } else if (range === "1h") {
+                after = new Date(now.getTime() - 1 * 3600 * 1000);
+            } else if (range === "8h") {
+                after = new Date(now.getTime() - 8 * 3600 * 1000);
+            } else if (range === "24h") {
+                after = new Date(now.getTime() - 24 * 3600 * 1000);
+            } else if (range === "custom") {
+                const a = $("#custom_after").val();
+                const b = $("#custom_before").val();
+                const params = {};
+                if (a) params.after = a;
+                if (b) params.before = b;
+                return params;
+            }
+            return { after: iso_local(after) };
+        }
+
+        function api_url() {
+            const base = "/api/v1/reports/jobs";
+            const params = range_params();
+            const qs = $.param(params);
+            return qs ? base + "?" + qs : base;
+        }
+
+        $(document).ready(function () {
+            let jobs_table = $("#table_report_jobs").kohaTable(
+                {
+                    ajax: { url: api_url() },
+                    order: [[4, "desc"]],
+                    rowCallback: function (row, data) {
+                        if (data.status) {
+                            $(row).addClass("job-status-" + data.status);
+                        }
+                        if (new_job_id && data.job_id == new_job_id) {
+                            $(row).addClass("highlight");
+                        }
+                    },
+                    columns: [
+                        {
+                            data: "job_id",
+                            searchable: true,
+                            orderable: true,
+                        },
+                        {
+                            data: "report_name",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row) {
+                                if (!row.report_id) return _("(report deleted)").escapeHtml();
+                                const name = (row.report_name || _("Report #%s").format(row.report_id)).escapeHtml();
+                                return '<a href="/cgi-bin/koha/reports/guided_reports.pl?op=show&id=' +
+                                    encodeURIComponent(row.report_id) + '">' + name + '</a>';
+                            },
+                        },
+                        {
+                            data: "status",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data) {
+                                return (job_status_labels[data] || data || "").escapeHtml();
+                            },
+                        },
+                        {
+                            data: "patron_name",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row) {
+                                if (!row.patron_id) return "";
+                                if (row.patron_id == loggedinusernumber) return _("(me)").escapeHtml();
+                                const name = (row.patron_name || _("Patron #%s").format(row.patron_id)).escapeHtml();
+                                return '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' +
+                                    encodeURIComponent(row.patron_id) + '">' + name + '</a>';
+                            },
+                        },
+                        {
+                            data: "enqueued_date",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data) {
+                                return data ? $datetime(data) : "";
+                            },
+                        },
+                        {
+                            data: "started_date",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data) {
+                                return data ? $datetime(data) : "";
+                            },
+                        },
+                        {
+                            data: "ended_date",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data) {
+                                return data ? $datetime(data) : "";
+                            },
+                        },
+                        {
+                            data: function (row) {
+                                let actions = [];
+                                const is_mine = row.patron_id == loggedinusernumber;
+
+                                if (row.status === "finished" && row.saved_report_id) {
+                                    actions.push(
+                                        '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/reports/guided_reports.pl?op=view_stored_results&id=' +
+                                        encodeURIComponent(row.saved_report_id) +
+                                        '"><i class="fa fa-eye" aria-hidden="true"></i> ' + _("View results") + '</a>'
+                                    );
+                                } else if (row.status === "failed" && row.error_message) {
+                                    actions.push(
+                                        '<button type="button" class="btn btn-outline-danger btn-xs view-error" ' +
+                                        'data-error="' + row.error_message.escapeHtml() + '" ' +
+                                        'data-error-code="' + (row.error_code || "").escapeHtml() + '">' +
+                                        '<i class="fa fa-triangle-exclamation" aria-hidden="true"></i> ' +
+                                        _("View error") + '</button>'
+                                    );
+                                }
+
+                                if (row.status === "new" && (is_mine || can_see_all)) {
+                                    actions.push(
+                                        '<button class="btn btn-default btn-xs cancel-job" data-job-id="' +
+                                        encodeURIComponent(row.job_id) +
+                                        '"><i class="fa fa-trash-can" aria-hidden="true"></i> ' + _("Cancel") + '</button>'
+                                    );
+                                }
+
+                                return actions.join(" ");
+                            },
+                            searchable: false,
+                            orderable: false,
+                        },
+                    ],
+                },
+                null,
+                1
+            );
+
+            $("#time_range").on("change", function () {
+                $("#custom_range").toggle( $(this).val() === "custom" );
+                if ( $(this).val() !== "custom" ) {
+                    jobs_table.DataTable().ajax.url(api_url()).load();
+                }
+            });
+
+            $("#apply_custom").on("click", function () {
+                jobs_table.DataTable().ajax.url(api_url()).load();
+            });
+
+            $("#table_report_jobs").on("click", ".cancel-job", function () {
+                const job_id = $(this).data("job-id");
+                if (!confirm(_("Cancel this queued report?"))) return;
+
+                $.ajax({
+                    url: "/api/v1/reports/jobs/" + encodeURIComponent(job_id) + "/cancel",
+                    method: "POST",
+                }).done(function () {
+                    jobs_table.DataTable().ajax.reload(null, false);
+                }).fail(function (xhr) {
+                    alert(_("Could not cancel the job: %s").format(xhr.responseJSON && xhr.responseJSON.error || xhr.statusText));
+                });
+            });
+
+            const errorModal = new bootstrap.Modal(document.getElementById("errorModal"));
+            $("#table_report_jobs").on("click", ".view-error", function () {
+                const code = $(this).data("error-code");
+                $("#errorModalCode").text(code ? (error_code_labels[code] || code) : "");
+                $("#errorModalMessage").text($(this).data("error"));
+                errorModal.show();
+            });
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]
