@@ -21,11 +21,11 @@
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI             qw ( -utf8 );
+use CGI qw ( -utf8 );
 use C4::Circulation qw( transferbook barcodedecode );
-use C4::Output      qw( output_html_with_http_headers );
-use C4::Reserves    qw( ModReserve ModReserveAffect );
-use C4::Auth        qw( get_session get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
+use C4::Reserves qw( ModReserve ModReserveAffect );
+use C4::Auth qw( get_session get_template_and_user );
 use C4::Members;
 use Koha::BiblioFrameworks;
 use Koha::AuthorisedValues;
@@ -102,10 +102,13 @@ if ( $op eq "cud-KillWaiting" ) {
     my $item       = $query->param('itemnumber');
     my $reserve_id = $query->param('reserve_id');
     ModReserveAffect( $item, $borrowernumber, 1, $reserve_id );
+    my $hold = Koha::Holds->find( { reserve_id => $reserve_id } );
     $ignoreRs   = 1;
     $settransit = 1;
     $reqmessage = 1;
     $trigger    = 'Reserve';
+    $op         = 'cud-transfer';
+    $tobranchcd = $hold->branchcode;
 } elsif ( $op eq 'cud-KillReserved' ) {
     my $biblionumber = $query->param('biblionumber');
     my $reserve_id   = $query->param('reserve_id');
