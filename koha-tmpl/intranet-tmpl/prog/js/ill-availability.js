@@ -15,16 +15,6 @@ $(document).ready(function () {
     };
 
     window.doSearch = function () {
-        // In case the source doesn't supply data required for DT to calculate
-        // pagination, we need to do it ourselves
-        var ownPagination = false;
-        var directionSet = false;
-        var start = 0;
-        var forward = true; // true == forward, false == backwards
-        // Arbitrary starting value, it will be corrected by the first
-        // page of results
-        var pageSize = 20;
-
         var tableTmpl = {
             ajax: {
                 cache: true, // Prevent DT appending a "_" cache param
@@ -104,23 +94,18 @@ $(document).ready(function () {
             tableDef.ajax.dataSrc = function (json) {
                 let data = json.data;
                 var results = data.results.search_results;
-                // The source appears to be returning it's own pagination
-                // data
-                if (
-                    data.hasOwnProperty("recordsFiltered") ||
-                    data.hasOwnProperty("recordsTotal")
-                ) {
-                    return results;
+                if (data.hasOwnProperty("recordsFiltered")) {
+                    json.recordsFiltered = data.recordsFiltered;
                 }
-                // Set up our own pagination values based on what we just
-                // got back
-                ownPagination = true;
-                directionSet = false;
-                pageSize = results.length;
-                // These values are completely arbitrary, but they enable
-                // us to display pagination links
-                ((data.recordsFiltered = 5000), (data.recordsTotal = 5000));
-
+                if (data.hasOwnProperty("recordsTotal")) {
+                    json.recordsTotal = data.recordsTotal;
+                }
+                if (json.recordsFiltered === undefined) {
+                    json.recordsFiltered = results.length;
+                }
+                if (json.recordsTotal === undefined) {
+                    json.recordsTotal = results.length;
+                }
                 return results;
             };
             tableDef.ajax.data = function (data) {
@@ -138,13 +123,6 @@ $(document).ready(function () {
                 }
                 if (data.hasOwnProperty("search")) {
                     delete data.search;
-                }
-                // If we're handling our own pagination, set the properties
-                // that DT will send in the request
-                if (ownPagination) {
-                    start = forward ? start + pageSize : start - pageSize;
-                    data.start = start;
-                    data["length"] = pageSize;
                 }
                 // We may need to restrict the service IDs being queries, this
                 // needs to be handled in the plugin's API module
@@ -178,27 +156,6 @@ $(document).ready(function () {
                     }
                 }
             }
-            // Create event watchers for the "next" and "previous" pagination
-            // links, this enables us to set the direction the next request is
-            // going in when we're doing our own pagination. We use "hover"
-            // because the click event is caught after the request has been
-            // sent
-            tableDef.drawCallback = function () {
-                $(
-                    ".dt-paging-button.next:not(.disabled)",
-                    this.api().table().container()
-                ).on("hover", function () {
-                    forward = true;
-                    directionSet = true;
-                });
-                $(
-                    ".dt-paging-button.previous:not(.disabled)",
-                    this.api().table().container()
-                ).on("hover", function () {
-                    forward = false;
-                    directionSet = true;
-                });
-            };
             // Initialise the table
             // Since we're not able to use the columns settings in core,
             // we need to mock the object that it would return
