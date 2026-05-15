@@ -691,13 +691,47 @@ sub _process_params {
     }
 }
 
+=head3 _validate_params
+
+Verify is the input provided with _status is valid.
+
+Since we have to tweak the search for researches involving the _status parameter, if the search involves a _status, we need to check that the provided hashref is compatible with the use case.
+An hashref is compatible if it is not nested or if the lonely level of nesting is under a "-and" parameter
+
+=cut
+
+sub _validate_params {
+    my ( $clean_params, $custom_attrs ) = @_;
+
+    return 1 unless exists $custom_attrs->{_status};
+
+    if ( ref($clean_params) eq 'HASH' ) {
+        if ( grep { $_ eq '-and' } keys %$clean_params ) {
+            my $and_hashref = $clean_params->{'-and'};
+            if ( ref($and_hashref) eq 'HASH' && !grep { ref( $and_hashref->{$_} ) eq 'HASH' } keys %$and_hashref ) {
+                return 1;
+            }
+        }
+        return 1 unless grep { ref( $clean_params->{$_} ) eq 'HASH' } keys %$clean_params;
+    }
+
+    return 0;
+}
+
 sub search {
     my ( $self, $params, $attributes ) = @_;
 
     my ( $custom_attrs, $clean_params ) = _extract_custom_attrs($params);
-    $params = $clean_params;
 
+    unless ( _validate_params( $clean_params, $custom_attrs ) ) {
+        Koha::Exceptions::BadParameter->throw(
+            error => "Filtering on status is only implemented for -and search",
+        );
+    }
+
+    $params = $clean_params;
     my $status = $custom_attrs->{_status};
+
     if ($status) {
         if ( $status eq 'checked_out' ) {
             $self = $self->filter_by_checked_out( { onsite_checkout => 0 } );

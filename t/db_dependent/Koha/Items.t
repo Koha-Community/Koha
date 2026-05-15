@@ -75,7 +75,7 @@ is( $retrieved_item_1->barcode, $new_item_1->barcode, 'Find a item by id should 
 
 subtest 'search' => sub {
 
-    plan tests => 16;
+    plan tests => 18;
     $schema->storage->txn_begin;
 
     my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -102,6 +102,29 @@ subtest 'search' => sub {
         { -and => { _status => 'available', biblionumber => $biblio->biblionumber } },
     );
     is( $available_items->count, 2, "Filtered to 2 available items - works when _status is in nested structure" );
+    throws_ok {
+        $available_items = Koha::Items->search(
+            { -or => { _status => 'available', biblionumber => $biblio->biblionumber } },
+        );
+    }
+    'Koha::Exceptions::BadParameter',
+        "Filtered to 3 available items - returns an error when _status is in nested structure using or";
+
+    throws_ok {
+        $available_items = Koha::Items->search(
+            {
+                -and => {
+                    _status => 'available',
+                    -and    => {
+                        biblionumber => $biblio->biblionumber,
+                        biblionumber => $biblio->biblionumber
+                    }
+                },
+            }
+        );
+    }
+    'Koha::Exceptions::BadParameter',
+        "Filtered to 3 available items - returns an error when _status is in nested structure with more than one level";
 
     my $item_3 = $builder->build_sample_item(
         {
