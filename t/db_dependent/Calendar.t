@@ -513,7 +513,7 @@ subtest 'hours_between | days_between' => sub {
     };
 
     subtest 'With holiday' => sub {
-        plan tests => 2;
+        plan tests => 3;
 
         my $library = $builder->build_object( { class => 'Koha::Libraries' } );
 
@@ -619,6 +619,35 @@ subtest 'hours_between | days_between' => sub {
             is( $diff_hours, 10 * 24 - 2 * 24 - 3, 'hours: 237 hours, 2 holidays' );
             $diff_days = $calendar->days_between( $now, $nov_15->clone->subtract( hours => 3 ) )->delta_days;
             is( $diff_days, 10 - 2, 'days: 237 hours, 2 holidays' );
+        };
+
+        subtest 'Bug 42545: holiday on end_dt correctly subtracted when return time is before due time' => sub {
+            plan tests => 4;
+
+            # Scenario: daily loan (due time 23:59), patron returns/renews before 23:59 on a holiday.
+            # Before the fix, days_between did not truncate datetimes, so the loop exited before
+            # reaching the end date when due_time > return_time on the same calendar day.
+
+            # Nov 13 is a Wednesday (holiday). Due at end-of-day, returned early morning.
+            my $due_endofday   = dt_from_string('2019-11-05 23:59:00');
+            my $return_on_holiday_early = dt_from_string('2019-11-13 09:34:56');
+
+            my $diff_days = $calendar->days_between( $due_endofday, $return_on_holiday_early )->delta_days;
+            is( $diff_days, 8 - 2, 'holiday on end_dt subtracted when return time is before due time (23:59)' );
+
+            # Same range but returned late (after 23:59 would be next day, so use 23:58) - no regression
+            my $return_on_holiday_late = dt_from_string('2019-11-13 23:58:00');
+            $diff_days = $calendar->days_between( $due_endofday, $return_on_holiday_late )->delta_days;
+            is( $diff_days, 8 - 2, 'holiday on end_dt subtracted when return time is just before due time' );
+
+            # Open end date is unaffected either way
+            my $return_open_early = dt_from_string('2019-11-14 09:34:56');
+            $diff_days = $calendar->days_between( $due_endofday, $return_open_early )->delta_days;
+            is( $diff_days, 9 - 2, 'open end_dt unaffected, 2 holidays still subtracted (early return)' );
+
+            my $return_open_late = dt_from_string('2019-11-14 23:58:00');
+            $diff_days = $calendar->days_between( $due_endofday, $return_open_late )->delta_days;
+            is( $diff_days, 9 - 2, 'open end_dt unaffected, 2 holidays still subtracted (late return)' );
         };
 
     };
