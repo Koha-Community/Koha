@@ -449,6 +449,20 @@ Koha::Calendar - Object containing a branches calendar
 
 =head1 METHODS
 
+=head2 _init
+
+    $calendar->_init();
+
+Populates the object with repeatable closed days (weekly and day/month) for the
+branch. Called automatically by C<new>.
+
+=head2 _holidays
+
+    my $holidays = $calendar->_holidays();
+
+Returns a hashref of special (one-off) holidays for the branch, keyed by
+C<YYYYMMDD> date strings. Results are cached.
+
 =head2 new : Create a calendar object
 
 my $calendar = Koha::Calendar->new( branchcode => 'MAIN' );
