@@ -582,6 +582,18 @@ const deleteSampleObjects = async allObjects => {
             whereColumn: "categorycode",
             idField: "patron_category_id",
         },
+        invoice: {
+            plural: "invoices",
+            table: "aqinvoices",
+            whereColumn: "invoiceid",
+            idField: "invoice_id",
+        },
+        invoice_file: {
+            plural: "invoice_files",
+            table: "misc_files",
+            whereColumn: "file_id",
+            idField: "file_id",
+        },
     };
     // Merge by type
     const mergedObjects = {};
@@ -604,7 +616,9 @@ const deleteSampleObjects = async allObjects => {
         "holds",
         "checkouts",
         "old_checkouts",
+        "invoice_files",
         "baskets",
+        "invoices",
         "vendors",
         "patrons",
         "items",
@@ -921,6 +935,27 @@ const insertObject = async ({ type, object, baseUrl, authHeader }) => {
             body: object,
             baseUrl,
             authHeader,
+        });
+    } else if (type == "invoice_file") {
+        let content = object.file_content;
+        content = `UNHEX('${content.substring(4)}')`;
+        return query({
+            sql: `INSERT INTO misc_files (table_tag, record_id, file_name, file_type, file_description, file_content)
+                      VALUES ('aqinvoices', ?, ?, ?, ?, ${content})`,
+            values: [
+                object.invoice_id,
+                object.file_name,
+                object.file_type,
+                object.file_description,
+            ],
+        }).then(result => {
+            return {
+                file_id: result.insertId,
+                invoice_id: object.invoice_id,
+                file_name: object.file_name,
+                file_type: object.file_type,
+                file_description: object.file_description,
+            };
         });
     } else {
         throw Error(`Unsupported object type '${type}' to insert`);
