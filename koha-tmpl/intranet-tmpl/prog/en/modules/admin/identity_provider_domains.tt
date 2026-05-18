@@ -321,6 +321,27 @@
                 </thead>
             </table>
         </div>
+
+        <div id="delete_confirm_modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="delete_confirm_modal_label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title" id="delete_confirm_modal_label">Confirm deletion of identity provider domain</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="delete_confirm_dialog"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-danger" id="delete_confirm_modal_button" role="button">Delete</a>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- #delete_confirm_modal -->
     [% END %]
 [% END %]
 
@@ -462,7 +483,7 @@
                                 "</a>" +
                                 "\n";
                             result +=
-                                '<a class="btn btn-default btn-xs delete_identity_provider_domain" role="button" href="#" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal" data-auth-provider-domain-id="' +
+                                '<a class="btn btn-default btn-xs delete_identity_provider_domain" role="button" href="#" data-auth-provider-domain-id="' +
                                 encodeURIComponent(row.identity_provider_domain_id) +
                                 '" data-auth-provider-domain="' +
                                 encodeURIComponent((row.domain || "").escapeHtml()) +
@@ -489,6 +510,7 @@
                 $("#delete_confirm_dialog").html(_("You are about to delete the '%s' identity provider domain.").format(identity_provider_domain));
                 $("#delete_confirm_modal_button").data("auth-provider-domain-id", identity_provider_domain_id);
                 $("#delete_confirm_modal_button").data("auth-provider-domain", identity_provider_domain);
+                $("#delete_confirm_modal").modal("show");
             });
 
             $("#delete_confirm_modal_button").on("click", function () {
@@ -501,12 +523,12 @@
                 })
                     .success(function () {
                         window.identity_provider_domains.api().ajax.reload(function (data) {
-                            $("#smtp_action_result_dialog").hide();
-                            $("#smtp_delete_success").html(_("Server '%s' deleted successfully.").format(identity_provider_domain)).show();
+                            $("#identity_provider_domain_action_result_dialog").hide();
+                            $("#identity_provider_domain_delete_success").html(_("Domain '%s' deleted successfully.").format(identity_provider_domain)).show();
                         });
                     })
                     .fail(function () {
-                        $("#smtp_delete_error").html(_("Error deleting server '%s'. Check the logs for details.").format(identity_provider_domain)).show();
+                        $("#smtp_delete_error").html(_("Error deleting domain '%s'. Check the logs for details.").format(identity_provider_domain)).show();
                     })
                     .done(function () {
                         $("#delete_confirm_modal").modal("hide");
