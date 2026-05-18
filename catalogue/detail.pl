@@ -90,18 +90,7 @@ if ( C4::Context->config('enable_plugins') ) {
 my $activetab    = $query->param('activetab');
 my $biblionumber = $query->param('biblionumber');
 $biblionumber = HTML::Entities::encode($biblionumber);
-my $biblio        = Koha::Biblios->find($biblionumber);
-my $frameworkcode = $biblio->frameworkcode;
-my $is_fast_add =
-    $frameworkcode eq ''
-    ? 0
-    : Koha::BiblioFrameworks->find($frameworkcode)->is_fast_add;
-
-$template->param(
-    biblio      => $biblio,
-    activetab   => $activetab,
-    is_fast_add => $is_fast_add,
-);
+my $biblio = Koha::Biblios->find($biblionumber);
 
 unless ($biblio) {
 
@@ -113,6 +102,18 @@ unless ($biblio) {
     output_html_with_http_headers $query, $cookie, $template->output;
     exit;
 }
+
+my $frameworkcode = $biblio->frameworkcode;
+my $is_fast_add =
+    $frameworkcode eq ''
+    ? 0
+    : Koha::BiblioFrameworks->find($frameworkcode)->is_fast_add;
+
+$template->param(
+    biblio      => $biblio,
+    activetab   => $activetab,
+    is_fast_add => $is_fast_add,
+);
 
 my $marc_record         = eval { $biblio->metadata->record };
 my $invalid_marc_record = $@ || !$marc_record;
