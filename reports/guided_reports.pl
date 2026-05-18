@@ -78,7 +78,7 @@ if (
     )
 {
     $flagsrequired = 'create_reports';
-} elsif ( $op eq 'list' | $op eq 'show' ) {
+} elsif ( $op eq 'list' || $op eq 'show' ) {
     $flagsrequired = [ 'create_reports', 'execute_reports', 'delete_reports' ];    #NOTE: "or" permissions
 } elsif ( $op eq 'run' || $op eq 'export' || $op eq 'retrieve_results' ) {
     $flagsrequired = 'execute_reports';
