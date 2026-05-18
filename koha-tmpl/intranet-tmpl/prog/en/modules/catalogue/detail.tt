@@ -1850,7 +1850,7 @@
             // bundlesEnabled is defined in catalogue_detail.inc
             if (bundlesEnabled) {
                 // Add event listener for opening and closing bundle details
-                $("#" + tab_id + "_table tbody").on("click", "button.details-control", function () {
+                $(document).on("click", `#${tab_id}_table tbody button.details-control`, function () {
                     var button = $(this);
                     var tr = button.closest("tr");
                     var dTable = button.closest("table").DataTable({ retrieve: true });
