@@ -1005,12 +1005,14 @@ function _dt_force_visibility(table_settings, table_dt, state) {
                         c.columnname ==
                         this.header().getAttribute("data-colname")
                 );
-                if (
-                    !column.visibility_condition ||
-                    (column.is_hidden && column.cannot_be_toggled)
-                ) {
-                    state.columns[this.index()].visible = false;
-                    state.columns[this.index()].cannot_be_toggled = true;
+                let index = this.index();
+                if (column.visibility_condition !== undefined) {
+                    state.columns[index].visible =
+                        !!column.visibility_condition;
+                    state.columns[index].cannot_be_toggled = true;
+                } else if (column.is_hidden && column.cannot_be_toggled) {
+                    state.columns[index].visible = false;
+                    state.columns[index].cannot_be_toggled = true;
                 }
             });
     } else {
