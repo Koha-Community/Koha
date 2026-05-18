@@ -612,7 +612,7 @@ subtest 'hours_between | days_between' => sub {
             $diff_hours = $calendar->hours_between( $now, $nov_13->clone->subtract( hours => 3 ) )->hours;
             is( $diff_hours, 8 * 24 - 2 * 24 - 3, 'hours: 289 hours, 2 holidays ' );
             $diff_days = $calendar->days_between( $now, $nov_13->clone->subtract( hours => 3 ) )->delta_days;
-            is( $diff_days, 8 - 1, 'days: 289 hours, 2 holidays' );
+            is( $diff_days, 8 - 2, 'days: 289 hours, 2 holidays' );
 
             # Between 5th and 15th
             $diff_hours = $calendar->hours_between( $now, $nov_15->clone->subtract( hours => 3 ) )->hours;
