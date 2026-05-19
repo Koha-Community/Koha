@@ -29,6 +29,8 @@ use Koha::Patrons;
 use C4::Biblio qw( GetMarcFromKohaField );
 use Koha::Database::DataInconsistency;
 
+binmode STDOUT, ":encoding(UTF-8)";
+
 {
     my $items  = Koha::Items->search;
     my @errors = Koha::Database::DataInconsistency->invalid_item_library($items);
