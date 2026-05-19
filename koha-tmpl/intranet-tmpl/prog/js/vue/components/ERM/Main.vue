@@ -26,7 +26,8 @@
 </template>
 
 <script>
-import { inject, nextTick, onBeforeMount, ref } from "vue";
+import { inject, onBeforeMount } from "vue";
+import { useVueModule } from "../../composables/vueModule.js";
 import Breadcrumbs from "../Breadcrumbs.vue";
 import Help from "../Help.vue";
 import LeftMenu from "../LeftMenu.vue";
@@ -40,16 +41,13 @@ export default {
     setup() {
         const vendorStore = inject("vendorStore");
 
-        const mainStore = inject("mainStore");
-
-        const { loading, loaded, setError } = mainStore;
+        const { loading, loaded, setError, initialized, onModuleReady } =
+            useVueModule("erm");
 
         const ERMStore = inject("ERMStore");
 
         const { config, authorisedValues } = storeToRefs(ERMStore);
         const { loadAuthorisedValues } = ERMStore;
-
-        const initialized = ref(false);
 
         const filterProviders = navigationTree => {
             const eHoldings = navigationTree.find(
@@ -76,17 +74,7 @@ export default {
                     error => {}
                 );
                 loadAuthorisedValues(authorisedValues.value, ERMStore).then(
-                    () => {
-                        loaded();
-                        initialized.value = true;
-                        nextTick(() => {
-                            document.dispatchEvent(
-                                new CustomEvent("koha:vue-loaded", {
-                                    detail: { module: "erm" },
-                                })
-                            );
-                        });
-                    }
+                    onModuleReady
                 );
             };
 

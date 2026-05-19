@@ -23,7 +23,8 @@
 </template>
 
 <script>
-import { inject, nextTick, onBeforeMount, ref } from "vue";
+import { inject, onBeforeMount } from "vue";
+import { useVueModule } from "../../composables/vueModule.js";
 import Breadcrumbs from "../Breadcrumbs.vue";
 import Help from "../Help.vue";
 import LeftMenu from "../LeftMenu.vue";
@@ -39,10 +40,8 @@ export default {
             storeToRefs(vendorStore);
         const { loadAuthorisedValues } = vendorStore;
 
-        const mainStore = inject("mainStore");
-        const { loading, loaded, setError } = mainStore;
-
-        const initialized = ref(false);
+        const { loading, loaded, setError, initialized, onModuleReady } =
+            useVueModule("acquisitions");
 
         onBeforeMount(() => {
             loading();
@@ -63,15 +62,7 @@ export default {
                                 value: gv.option,
                             };
                         });
-                        loaded();
-                        initialized.value = true;
-                        nextTick(() => {
-                            document.dispatchEvent(
-                                new CustomEvent("koha:vue-loaded", {
-                                    detail: { module: "acquisitions" },
-                                })
-                            );
-                        });
+                        onModuleReady();
                     });
                 }
             );

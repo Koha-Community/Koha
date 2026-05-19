@@ -23,7 +23,8 @@
 </template>
 
 <script>
-import { inject, nextTick, onBeforeMount, ref } from "vue";
+import { inject, onBeforeMount } from "vue";
+import { useVueModule } from "../../composables/vueModule.js";
 import Breadcrumbs from "../Breadcrumbs.vue";
 import Help from "../Help.vue";
 import LeftMenu from "../LeftMenu.vue";
@@ -35,16 +36,13 @@ import { $__ } from "@koha-vue/i18n";
 
 export default {
     setup() {
-        const mainStore = inject("mainStore");
-
-        const { loading, loaded, setError } = mainStore;
+        const { loading, loaded, setError, initialized, onModuleReady } =
+            useVueModule("preservation");
 
         const PreservationStore = inject("PreservationStore");
 
         const { config, authorisedValues } = storeToRefs(PreservationStore);
         const { loadAuthorisedValues } = PreservationStore;
-
-        const initialized = ref(false);
 
         onBeforeMount(() => {
             loading();
@@ -64,17 +62,7 @@ export default {
                 loadAuthorisedValues(
                     authorisedValues.value,
                     PreservationStore
-                ).then(() => {
-                    loaded();
-                    initialized.value = true;
-                    nextTick(() => {
-                        document.dispatchEvent(
-                            new CustomEvent("koha:vue-loaded", {
-                                detail: { module: "preservation" },
-                            })
-                        );
-                    });
-                });
+                ).then(onModuleReady);
             });
         });
 
