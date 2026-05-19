@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use DateTime::Duration;
 use Test::NoWarnings;
-use Test::More tests => 49;
+use Test::More tests => 51;
 use Test::Warn;
 
 use t::lib::Mocks;
@@ -283,6 +283,48 @@ $messages = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber2
 is(
     $messages->[0]->{message_transport_type}, 'email',
     'When FallbackToSMSIfNoEmail syspref is enabled the suggestion message_transport_type is email if the borrower has an email'
+);
+
+# Check that FallbackToSMSIfNoEmail respects notice_email_address, i.e. consults
+# EmailFieldPrimary / EmailFieldPrecedence rather than only borrowers.email.
+# A patron with no raw email but a populated alternate field must not fall back to SMS.
+my $emailpro_patron = Koha::Patron->new(
+    {
+        firstname      => 'Test',
+        surname        => 'Emailpro',
+        categorycode   => $patron_category->{categorycode},
+        branchcode     => 'CPL',
+        smsalertnumber => 99999,
+        emailpro       => 'emailpro@example.com',
+    }
+)->store;
+my $suggestion_for_emailpro_patron = Koha::Suggestion->new(
+    {
+        title        => 'emailpro suggestion',
+        author       => 'test author',
+        suggestedby  => $emailpro_patron->borrowernumber,
+        biblionumber => $biblio_1->biblionumber,
+        branchcode   => 'CPL',
+        note         => 'test',
+    }
+)->store;
+
+t::lib::Mocks::mock_preference( 'FallbackToSMSIfNoEmail', 1 );
+t::lib::Mocks::mock_preference( 'EmailFieldPrimary',      'emailpro' );
+ModSuggestion( { STATUS => 'CHECKED', suggestionid => $suggestion_for_emailpro_patron->id } );
+my $emailpro_messages = C4::Letters::GetQueuedMessages( { borrowernumber => $emailpro_patron->borrowernumber } );
+is(
+    $emailpro_messages->[0]->{message_transport_type}, 'email',
+    'FallbackToSMSIfNoEmail does not fall back to SMS when patron has emailpro set and EmailFieldPrimary=emailpro'
+);
+
+t::lib::Mocks::mock_preference( 'EmailFieldPrimary',    '' );
+t::lib::Mocks::mock_preference( 'EmailFieldPrecedence', 'emailpro|email|B_email' );
+ModSuggestion( { STATUS => 'ORDERED', suggestionid => $suggestion_for_emailpro_patron->id } );
+$emailpro_messages = C4::Letters::GetQueuedMessages( { borrowernumber => $emailpro_patron->borrowernumber } );
+is(
+    $emailpro_messages->[1]->{message_transport_type}, 'email',
+    'FallbackToSMSIfNoEmail does not fall back to SMS when patron has emailpro set and EmailFieldPrecedence includes emailpro'
 );
 
 # changing STATUS from ORDERED to CHECKED should generate a message
