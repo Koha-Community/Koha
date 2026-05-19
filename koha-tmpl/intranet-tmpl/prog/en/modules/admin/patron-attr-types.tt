@@ -425,31 +425,36 @@
         }
 
         function updateCheckboxes() {
-            if (!opac_display.checked) {
-                setDisabled(opac_editable, true);
-            } else {
-                setDisabled(opac_editable, false);
+            if (opac_display && opac_editable) {
+                if (!opac_display.checked) {
+                    setDisabled(opac_editable, true);
+                } else {
+                    setDisabled(opac_editable, false);
+                }
             }
-            if (opac_editable.checked) {
-                setDisabled(opac_mandatory, false);
-            } else {
-                setDisabled(opac_mandatory, true);
+            if (opac_editable && opac_mandatory) {
+                if (opac_editable.checked) {
+                    setDisabled(opac_mandatory, false);
+                } else {
+                    setDisabled(opac_mandatory, true);
+                }
             }
         }
 
-        opac_display.addEventListener("change", updateCheckboxes);
-        opac_editable.addEventListener("change", updateCheckboxes);
+        function toggle_search_default() {
+            if ($("#staff_searchable").is(":checked")) {
+                $("#searched_by_default").prop("disabled", false);
+            } else {
+                $("#searched_by_default").prop("disabled", true).prop("checked", false);
+            }
+        }
+
+        opac_display?.addEventListener("change", updateCheckboxes);
+        opac_editable?.addEventListener("change", updateCheckboxes);
 
         updateCheckboxes();
 
         $(document).ready(function () {
-            function toggle_search_default() {
-                if ($("#staff_searchable").is(":checked")) {
-                    $("#searched_by_default").prop("disabled", false);
-                } else {
-                    $("#searched_by_default").prop("disabled", true).prop("checked", false);
-                }
-            }
             $("#staff_searchable").on("change", function () {
                 toggle_search_default();
             });
@@ -490,7 +495,7 @@
                 );
             });
 
-            $("#library_limitation")[0].style.minWidth = "450px";
+            $("#library_limitation").css("min-width", "450px");
             $("#library_limitation").select2();
         });
     </script>
