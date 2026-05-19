@@ -26,6 +26,9 @@ use Koha::Holds;
 use Koha::Biblios;
 use Koha::Patrons;
 use Koha::Patron::Relationship;
+use Koha::ILL::Requests;
+use Koha::Database;
+use t::lib::TestBuilder;
 
 app->log->level('error');
 
@@ -506,10 +509,29 @@ sub to_model {
     return $args;
 }
 
+get '/ill_requests_count_sort_correctness' => sub {
+    my $c = shift;
+
+    my $borrowernumber = $c->param('borrowernumber');
+    my $dir            = $c->param('dir') // 'desc';
+
+    my $attributes = { order_by => [ { "-$dir" => 'me.comments_count' } ] };
+    my $result_set = Koha::ILL::Requests->new;
+
+    $c->stash( 'koha.embed', { comments_count => { is_count => 1 } } );
+
+    $c->dbic_merge_prefetch( { attributes => $attributes, result_set => $result_set } );
+
+    my @results = map { { id => $_->illrequest_id, comments_count => $_->_result->get_column('comments_count') } }
+        Koha::ILL::Requests->new->search( { borrowernumber => $borrowernumber }, $attributes )->as_list;
+
+    $c->render( json => \@results, status => 200 );
+};
+
 # The tests
 
 use Test::NoWarnings;
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::Mojo;
 
 subtest 'extract_reserved_params() tests' => sub {
@@ -920,4 +942,65 @@ subtest 'dbic_extended_attributes_join() tests' => sub {
             }
         ]
     );
+};
+
+subtest '+count embed sorting correctness (db_dependent)' => sub {
+
+    plan tests => 20;
+
+    my $schema  = Koha::Database->new->schema;
+    my $builder = t::lib::TestBuilder->new;
+    my $t       = Test::Mojo->new;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    # Four ILL requests for the same patron, with 3 / 0 / 2 / 1 comments each.
+    # Expected DESC order: index 0 (3), index 2 (2), index 3 (1), index 1 (0).
+    my @comment_counts = ( 3, 0, 2, 1 );
+    my @requests;
+    for my $count (@comment_counts) {
+        my $req = $builder->build_object(
+            { class => 'Koha::ILL::Requests', value => { borrowernumber => $patron->borrowernumber } } );
+        push @requests, $req;
+        for my $i ( 1 .. $count ) {
+            $builder->build_object(
+                {
+                    class => 'Koha::ILL::Comments',
+                    value => {
+                        illrequest_id  => $req->illrequest_id,
+                        borrowernumber => $patron->borrowernumber,
+                        comment        => "comment $i",
+                    }
+                }
+            );
+        }
+    }
+
+    my $base_url = '/ill_requests_count_sort_correctness?borrowernumber=' . $patron->borrowernumber;
+
+    $t->get_ok("$base_url&dir=desc")
+        ->status_is(200)
+        ->json_is( '/0/id'             => $requests[0]->illrequest_id, 'DESC: 3 comments comes first' )
+        ->json_is( '/0/comments_count' => 3,                           'DESC: 3 comments count correct' )
+        ->json_is( '/1/id'             => $requests[2]->illrequest_id, 'DESC: 2 comments comes second' )
+        ->json_is( '/1/comments_count' => 2,                           'DESC: 2 comments count correct' )
+        ->json_is( '/2/id'             => $requests[3]->illrequest_id, 'DESC: 1 comment comes third' )
+        ->json_is( '/2/comments_count' => 1,                           'DESC: 1 comment count correct' )
+        ->json_is( '/3/id'             => $requests[1]->illrequest_id, 'DESC: 0 comments comes last' )
+        ->json_is( '/3/comments_count' => 0,                           'DESC: 0 comments count correct' );
+
+    $t->get_ok("$base_url&dir=asc")
+        ->status_is(200)
+        ->json_is( '/0/id'             => $requests[1]->illrequest_id, 'ASC: 0 comments comes first' )
+        ->json_is( '/0/comments_count' => 0,                           'ASC: 0 comments count correct' )
+        ->json_is( '/1/id'             => $requests[3]->illrequest_id, 'ASC: 1 comment comes second' )
+        ->json_is( '/1/comments_count' => 1,                           'ASC: 1 comment count correct' )
+        ->json_is( '/2/id'             => $requests[2]->illrequest_id, 'ASC: 2 comments comes third' )
+        ->json_is( '/2/comments_count' => 2,                           'ASC: 2 comments count correct' )
+        ->json_is( '/3/id'             => $requests[0]->illrequest_id, 'ASC: 3 comments comes last' )
+        ->json_is( '/3/comments_count' => 3,                           'ASC: 3 comments count correct' );
+
+    $schema->storage->txn_rollback;
 };
