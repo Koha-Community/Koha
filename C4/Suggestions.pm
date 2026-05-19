@@ -106,7 +106,7 @@ sub ModSuggestion {
         my $transport =
                ( C4::Context->preference("FallbackToSMSIfNoEmail") )
             && ( $patron->smsalertnumber )
-            && ( !$patron->email ) ? 'sms' : 'email';
+            && ( !$patron->notice_email_address ) ? 'sms' : 'email';
 
         if (
             my $letter = C4::Letters::GetPreparedLetter(
