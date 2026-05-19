@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use DateTime::Duration;
 use Test::NoWarnings;
-use Test::More tests => 51;
+use Test::More tests => 52;
 use Test::Warn;
 
 use t::lib::Mocks;
@@ -71,6 +71,12 @@ $dbh->do(q|INSERT INTO letter(module, code, content) VALUES ('suggestions', 'CHE
 $dbh->do(q|INSERT INTO letter(module, code, content) VALUES ('suggestions', 'ORDERED', 'my content')|);
 $dbh->do(
     q|INSERT INTO letter(module, code, content) VALUES ('suggestions', 'NEW_SUGGESTION', 'Content for new suggestion')|
+);
+$dbh->do(
+    q|INSERT INTO letter(module, code, content, message_transport_type) VALUES ('suggestions', 'CHECKED', 'my sms content', 'sms')|
+);
+$dbh->do(
+    q|INSERT INTO letter(module, code, content, message_transport_type) VALUES ('suggestions', 'ORDERED', 'my sms content', 'sms')|
 );
 
 # Add CPL if missing.
@@ -267,6 +273,10 @@ is(
     $messages->[1]->{message_transport_type}, 'sms',
     'When FallbackToSMSIfNoEmail syspref is enabled the suggestion message_transport_type is sms if the borrower has no email'
 );
+is(
+    $messages->[1]->{content}, 'my sms content',
+    'When transport is sms the SMS letter template variant is fetched, not the email variant'
+);
 
 #Make a new suggestion for a borrower with defined email and no smsalertnumber
 my $my_suggestion_2_object = Koha::Suggestion->new($my_suggestion_with_budget2)->store();
@@ -407,6 +417,7 @@ is(
 
 subtest 'GetUnprocessedSuggestions' => sub {
     plan tests => 11;
+    t::lib::Mocks::mock_preference( 'FallbackToSMSIfNoEmail', 0 );
     $dbh->do(q|DELETE FROM suggestions|);
     my $my_suggestionid         = Koha::Suggestion->new($my_suggestion)->store->id;
     my $unprocessed_suggestions = C4::Suggestions::GetUnprocessedSuggestions;
