@@ -110,11 +110,12 @@ sub ModSuggestion {
 
         if (
             my $letter = C4::Letters::GetPreparedLetter(
-                module      => 'suggestions',
-                letter_code => $full_suggestion->{STATUS},
-                branchcode  => $full_suggestion->{branchcode},
-                lang        => $patron->lang,
-                tables      => {
+                module                 => 'suggestions',
+                letter_code            => $full_suggestion->{STATUS},
+                branchcode             => $full_suggestion->{branchcode},
+                message_transport_type => $transport,
+                lang                   => $patron->lang,
+                tables                 => {
                     'branches'    => $full_suggestion->{branchcode},
                     'borrowers'   => $full_suggestion->{suggestedby},
                     'suggestions' => $full_suggestion,
