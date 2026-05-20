@@ -4159,7 +4159,8 @@ sub identify_updated_extended_attributes {
             my $changes = 0;
             foreach my $attr ( grep { $_->code eq $attribute_type } @patron_attributes ) {
                 $changes = 1
-                    unless any { $_->{attribute} eq $attr->attribute } @{$entered_attributes};
+                    unless any { $_->{code} eq $attribute_type && $_->{attribute} eq $attr->attribute }
+                    @{$entered_attributes};
                 last if $changes;
             }
 

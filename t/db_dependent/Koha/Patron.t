@@ -3938,7 +3938,7 @@ subtest "create_expiry_notice_parameters" => sub {
 };
 
 subtest "identify_updated_extended_attributes" => sub {
-    plan tests => 2;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -4058,6 +4058,61 @@ subtest "identify_updated_extended_attributes" => sub {
 
     $updated_attributes = $patron->identify_updated_extended_attributes($changed_attributes);
     is( scalar(@$updated_attributes), 3, "Two have now been updated, one of which is repeatable and has two values" );
+
+    # Bug 42161 - the stored value of an attribute must only be compared with the entered
+    # values of the same attribute type
+    my $attr_type_a = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attribute::Types',
+            value => { unique_id => 0, repeatable => 0, is_date => 0, opac_editable => 1 }
+        }
+    );
+    my $attr_type_b = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attribute::Types',
+            value => { unique_id => 0, repeatable => 0, is_date => 0, opac_editable => 1 }
+        }
+    );
+
+    # The stored value of A is the same as the entered value of B
+    my $patron2 = $builder->build_object( { class => 'Koha::Patrons' } );
+    $patron2->extended_attributes(
+        [
+            { code => $attr_type_a->code(), attribute => 'shared value' },
+            { code => $attr_type_b->code(), attribute => 'shared value' },
+        ]
+    );
+    $updated_attributes = $patron2->identify_updated_extended_attributes(
+        [
+            { code => $attr_type_a->code(), attribute => 'new value' },
+            { code => $attr_type_b->code(), attribute => 'shared value' },
+        ]
+    );
+    is_deeply(
+        $updated_attributes,
+        [ { code => $attr_type_a->code(), attribute => 'new value' } ],
+        "Change to an attribute is detected when its old value is the entered value of another attribute"
+    );
+
+    # Both attributes are stored with an empty value, as when they were left blank at self-registration
+    my $patron3 = $builder->build_object( { class => 'Koha::Patrons' } );
+    $patron3->extended_attributes(
+        [
+            { code => $attr_type_a->code(), attribute => '' },
+            { code => $attr_type_b->code(), attribute => '' },
+        ]
+    );
+    $updated_attributes = $patron3->identify_updated_extended_attributes(
+        [
+            { code => $attr_type_a->code(), attribute => 'new value' },
+            { code => $attr_type_b->code(), attribute => '' },
+        ]
+    );
+    is_deeply(
+        $updated_attributes,
+        [ { code => $attr_type_a->code(), attribute => 'new value' } ],
+        "Change to one empty attribute is detected even when another attribute is also empty"
+    );
 
     $schema->storage->txn_rollback;
 };
