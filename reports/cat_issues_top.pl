@@ -44,7 +44,6 @@ my @filters        = $input->multi_param("Filter");
 my $output   = $input->param("output");
 my $basename = $input->param("basename");
 
-#warn "calcul : ".$calc;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name => $fullreportname,
@@ -286,7 +285,6 @@ sub calculate {
             push @loopcol, \%cell;
         }
 
-        #    warn "fin des titres colonnes";
     }
 
     my $i = 0;
@@ -297,11 +295,9 @@ sub calculate {
     #Initialization of cell values.....
     my @table;
 
-    #    warn "init table";
     for ( my $i = 1 ; $i <= $line ; $i++ ) {
         foreach my $col (@loopcol) {
 
-            #            warn " init table : $row->{rowtitle} / $col->{coltitle} ";
             $table[$i]->{ ( $col->{coltitle} ) ? $col->{coltitle} : "total" }->{'name'} = 0;
         }
     }
