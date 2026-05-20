@@ -184,15 +184,48 @@ subtest 'get_type_disclaimer_date() tests' => sub {
 
 subtest 'get_backend_plugin() tests' => sub {
 
-    plan tests => 1;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
     my $request = $builder->build_object( { class => 'Koha::ILL::Requests' } );
     t::lib::Mocks::mock_config( 'enable_plugins', 0 );
     is(
-        $request->get_backend_plugin, undef,
+        $request->get_backend_plugin('SomeBackend'), undef,
         'get_backend_plugin returns undef if plugins are disabled'
+    );
+
+    t::lib::Mocks::mock_config( 'enable_plugins', 1 );
+
+    my $plugin_a = bless { name => 'BackendA' }, 'Koha::Plugin::BackendA';
+    my $plugin_b = bless { name => 'BackendB' }, 'Koha::Plugin::BackendB';
+
+    my $plugins_mock = Test::MockModule->new('Koha::Plugins');
+    $plugins_mock->mock( 'new', sub { return bless {}, 'Koha::Plugins' } );
+    $plugins_mock->mock(
+        'GetPlugins',
+        sub {
+            my ( $self, $params ) = @_;
+            return $params->{metadata}{name} eq 'BackendA' ? ($plugin_a) : ($plugin_b);
+        }
+    );
+
+    my $request2 = $builder->build_object( { class => 'Koha::ILL::Requests' } );
+
+    is(
+        $request2->get_backend_plugin('BackendA'),
+        $plugin_a,
+        'get_backend_plugin returns correct plugin for BackendA'
+    );
+    is(
+        $request2->get_backend_plugin('BackendB'),
+        $plugin_b,
+        'get_backend_plugin returns correct plugin for BackendB, not the cached BackendA result'
+    );
+    is(
+        $request2->get_backend_plugin('BackendA'),
+        $plugin_a,
+        'get_backend_plugin returns cached plugin for BackendA on second call'
     );
 
     $schema->storage->txn_rollback;
