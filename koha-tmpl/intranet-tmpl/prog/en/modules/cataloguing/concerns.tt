@@ -250,9 +250,9 @@
             var txtInactivefilter = _("Filter resolved");
             function adjust_filter_label() {
                 if ($("#hide_resolved_concerns").is(":checked")) {
-                    $("#resolved_filter").html('<i class="fa fa-filter"></i> ' + txtActivefilter);
+                    $("#resolved_filter").html('<i class="fa fa-bars"></i> ' + txtActivefilter);
                 } else {
-                    $("#resolved_filter").html('<i class="fa fa-bars"></i> ' + txtInactivefilter);
+                    $("#resolved_filter").html('<i class="fa fa-filter"></i> ' + txtInactivefilter);
                 }
             }
             $("#resolved_filter").on("click", function () {

@@ -25,7 +25,7 @@
 [% Asset.css("css/addbiblio.css") | $raw %]
 [% INCLUDE 'datatables.inc' %]
 <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
-    var auth_values_creation = [% IF Koha.Preference('CreateAVFromCataloguing') && CAN_user_parameters_manage_auth_values %]1[% ELSE %]0[% END %];
+    var auth_values_creation = [% Koha.Preference('CreateAVFromCataloguing') && CAN_user_parameters_manage_auth_values ? 1 : 0 | html %];
     var has_item_groups = "[% item_groups.size | html %]";
 </script>
 [% INCLUDE 'select2.inc' %]
