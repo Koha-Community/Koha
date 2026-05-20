@@ -58,8 +58,8 @@ subtest 'get_backend_plugin(), new_ill_backend() and load_backend() tests' => su
     is( ref($backend), 'Koha::Plugin::ILL::TestClass', 'Returns the right object class' );
 
     my $request = Koha::ILL::Request->new->load_backend('BackendClass');
-    ok( $request->{_plugin}, 'Instantiated plugin stored for later use' );
-    is( ref( $request->{_plugin} ), 'Koha::Plugin::BackendClass', 'Class is correct' );
+    ok( $request->{_plugin}{'BackendClass'}, 'Instantiated plugin stored for later use' );
+    is( ref( $request->{_plugin}{'BackendClass'} ), 'Koha::Plugin::BackendClass', 'Class is correct' );
 
     ok( $request->{_my_backend}, 'Instantiated backend stored for later use' );
     is( ref( $request->{_my_backend} ), 'Koha::Plugin::ILL::TestClass', 'Returns the right object class' );
