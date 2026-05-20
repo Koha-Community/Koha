@@ -629,7 +629,7 @@ subtest 'hours_between | days_between' => sub {
             # reaching the end date when due_time > return_time on the same calendar day.
 
             # Nov 13 is a Wednesday (holiday). Due at end-of-day, returned early morning.
-            my $due_endofday   = dt_from_string('2019-11-05 23:59:00');
+            my $due_endofday            = dt_from_string('2019-11-05 23:59:00');
             my $return_on_holiday_early = dt_from_string('2019-11-13 09:34:56');
 
             my $diff_days = $calendar->days_between( $due_endofday, $return_on_holiday_early )->delta_days;
