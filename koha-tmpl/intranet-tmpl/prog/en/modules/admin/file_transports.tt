@@ -567,10 +567,10 @@
                             let render = "";
                             if (data) {
                                 if (data.status == "ok") {
-                                    render += '<i class="text-success fa-solid fa-circle-check"></i> ';
+                                    render += '<div><i class="text-success fa-solid fa-circle-check"></i> ';
                                     render += '<span class="text-success">';
                                     render += _("Tests passing");
-                                    render += "</span>";
+                                    render += "</span></div>";
                                 } else if (data.status == "errors") {
                                     data.operations.forEach(operation => {
                                         render += "<div>";
@@ -590,10 +590,14 @@
                                         render += "</div>";
                                     });
                                 } else {
-                                    render += "<em>" + _("Never used") + "</em>";
+                                    render += "<em>" + _("No test results stored") + "</em>";
+                                }
+                                if (data.background_job_id) {
+                                    render += '<i class="fa-solid fa-info-circle"></i> ';
+                                    render += '<a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=' + data.background_job_id + '">' + _("Test job details") + "</a>";
                                 }
                             } else {
-                                render += "<em>" + _("Never used") + "</em>";
+                                render += "<em>" + _("No test results stored") + "</em>";
                             }
                             return render;
                         },
