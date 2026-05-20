@@ -53,7 +53,10 @@ sub process {
 
     my $transport = Koha::File::Transports->find( $args->{transport_id} );
     $transport->test_connection;
-    my $status   = { status => 'ok' };
+    my $status = {
+        status            => 'ok', transport_id => $transport->id, transport_name => $transport->name,
+        background_job_id => $self->id
+    };
     my $messages = $transport->object_messages;
     for my $message (@$messages) {
         $status->{status} = 'errors' if $message->{type} eq 'error';

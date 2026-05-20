@@ -157,7 +157,7 @@ sub _change_directory {
     my ( $self, $remote_directory ) = @_;
     my $operation = "change_directory";
 
-    $self->{connection}->cwd($remote_directory) or return $self->_abort_operation($operation);
+    $self->{connection}->cwd($remote_directory) or return $self->_abort_operation( $operation, $remote_directory );
 
     $self->add_message(
         {
@@ -396,15 +396,16 @@ C<return $self-E<gt>_abort_operation($operation)> on failure.
 =cut
 
 sub _abort_operation {
-    my ( $self, $operation ) = @_;
+    my ( $self, $operation, $operation_params ) = @_;
 
     $self->add_message(
         {
             message => $operation || 'operation',
             type    => 'error',
             payload => {
-                detail => $self->{connection} ? $self->{connection}->status  : '',
-                error  => $self->{connection} ? $self->{connection}->message : $@
+                detail           => $self->{connection} ? $self->{connection}->status  : '',
+                error            => $self->{connection} ? $self->{connection}->message : $@,
+                operation_params => $operation_params
             }
         }
     );
