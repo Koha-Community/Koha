@@ -44,7 +44,7 @@ my @filters = $input->multi_param("Filter");
 
 my $output = $input->param("output");
 my $basename = $input->param("basename");
-#warn "calcul : ".$calc;
+
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => $fullreportname,
                 query => $input,
@@ -201,8 +201,7 @@ sub calculate {
         $colfilter[0] = @$filters[9] if ($column =~ /issuedate/ ) ;
         $colfilter[0] = @$filters[10] if ($column =~ /issuedate/ ) ;
         $colfilter[0] = @$filters[11] if ($column =~ /issuedate/ ) ;
-    #warn "filtre col ".$colfilter[0]." ".$colfilter[1];
-                                                
+
     # loop cols.
         if ($column eq "Day") {
             #Display by day
@@ -261,7 +260,7 @@ sub calculate {
             $cell{coltitle} = ($celvalue?$celvalue:"NULL");
             push @loopcol, \%cell;
         }
-    #	warn "fin des titres colonnes";
+
     }
     
     my $i=0;
@@ -271,10 +270,8 @@ sub calculate {
     #Initialization of cell values.....
     my @table;
     
-#	warn "init table";
     for (my $i=1;$i<=$line;$i++) {
         foreach my $col ( @loopcol ) {
-#			warn " init table : $row->{rowtitle} / $col->{coltitle} ";
             $table[$i]->{($col->{coltitle})?$col->{coltitle}:"total"}->{'name'}=0;
         }
     }
