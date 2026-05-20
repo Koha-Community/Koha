@@ -450,7 +450,7 @@ Returns the installed I<Koha::Plugin> corresponding to the given backend_id or u
 sub get_backend_plugin {
     my ( $self, $backend_id ) = @_;
 
-    if ( !$self->{_plugin} ) {
+    if ( !$self->{_plugin}{$backend_id} ) {
         my $koha_plugins    = Koha::Plugins->new();
         my @backend_plugins = $koha_plugins
             ? Koha::Plugins->new()->GetPlugins(
@@ -462,11 +462,11 @@ sub get_backend_plugin {
             )
             : ();
 
-        $self->{_plugin} = $backend_plugins[0]
+        $self->{_plugin}{$backend_id} = $backend_plugins[0]
             if scalar @backend_plugins;
     }
 
-    return $self->{_plugin};
+    return $self->{_plugin}{$backend_id};
 }
 
 =head3 load_backend
