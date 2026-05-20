@@ -219,8 +219,6 @@ sub calculate {
         $colfilter[0] = @$filters[10] if ( $column =~ /issuedate/ );
         $colfilter[0] = @$filters[11] if ( $column =~ /issuedate/ );
 
-        #warn "filtre col ".$colfilter[0]." ".$colfilter[1];
-
         # loop cols.
         if ( $column eq "Day" ) {
 
@@ -228,6 +226,12 @@ sub calculate {
             $column = "old_issues.issuedate";
             $colfield .= "dayname($column)";
             $colorder .= "weekday($column)";
+        } elsif ( $column eq "Week" ) {
+
+            #Display by Week
+            $column = "old_issues.issuedate";
+            $colfield .= "week($column)";
+            $colorder .= "week($column)";
         } elsif ( $column eq "Month" ) {
 
             #Display by Month
@@ -254,15 +258,15 @@ sub calculate {
                      WHERE 1";
         if ( ( $column =~ /issuedate/ ) or ( $column =~ /returndate/ ) ) {
             if ( $colfilter[1] and ( $colfilter[0] ) ) {
-                $strsth2 .= " and $column between '$colfilter[0]' and '$colfilter[1]' ";
+                $strsth2 .= " and $column between ? and ? ";
             } elsif ( $colfilter[1] ) {
-                $strsth2 .= " and $column < '$colfilter[1]' ";
+                $strsth2 .= " and $column < ? ";
             } elsif ( $colfilter[0] ) {
-                $strsth2 .= " and $column > '$colfilter[0]' ";
+                $strsth2 .= " and $column > ? ";
             }
         } elsif ( $colfilter[0] ) {
             $colfilter[0] =~ s/\*/%/g;
-            $strsth2 .= " and $column LIKE '$colfilter[0]' ";
+            $strsth2 .= " and $column LIKE ? ";
         }
         $strsth2 .= " group by $colfield";
         $strsth2 .= " order by $colorder";
@@ -359,7 +363,7 @@ sub calculate {
     $dbcalc->execute;
     my %indice;
     while ( my @data = $dbcalc->fetchrow ) {
-        my ( $row, $rank, $id, $callnum, $ccode, $loc, $col ) = @data;
+        my ( $row, $rank, $id, $col ) = @data;
         $col                                       = "zzEMPTY" if ( !defined($col) );
         $indice{$col}                              = 1         if ( not( $indice{$col} ) );
         $table[ $indice{$col} ]->{$col}->{'name'}  = $row;
