@@ -69,6 +69,7 @@ subtest 'normal staff user test' => sub {
         'CAN_user_reports_create_reports'                    => 1,
         'CAN_user_reports_delete_own_reports'                => 1,
         'CAN_user_reports_delete_all_reports'                => 1,
+        'CAN_user_reports_edit_all_reports'                  => 1,
         'CAN_user_reports_execute_reports'                   => 1,
         'CAN_user_reports_manage_report_limits'              => 1,
     };
@@ -244,6 +245,7 @@ subtest 'superlibrarian tests' => sub {
         'CAN_user_reports_create_reports'                           => 1,
         'CAN_user_reports_delete_own_reports'                       => 1,
         'CAN_user_reports_delete_all_reports'                       => 1,
+        'CAN_user_reports_edit_all_reports'                         => 1,
         'CAN_user_reports_execute_reports'                          => 1,
         'CAN_user_reports_manage_report_limits'                     => 1,
         'CAN_user_reports'                                          => 1,

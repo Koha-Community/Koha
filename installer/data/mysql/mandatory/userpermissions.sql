@@ -148,6 +148,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (15, 'superserials', 'Manage subscriptions from any branch (only applies when IndependentBranches is used)'),
    (16, 'execute_reports', 'Execute SQL reports'),
    (16, 'create_reports', 'Create SQL reports'),
+   (16, 'edit_all_reports', 'Edit SQL reports created by other librarians'),
    (16, 'delete_own_reports', 'Delete SQL reports you have created'),
    (16, 'delete_all_reports', 'Delete SQL reports created by anyone'),
    (16, 'manage_report_limits', 'Manage report limits'),
