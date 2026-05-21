@@ -39,7 +39,7 @@ return {
         $seed //= 0;
 
         $dbh->do(
-            q{INSERT IGNORE INTO systempreferences (variable, value) VALUES ('autoMemberNumValue', ?)},
+            q{INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type) VALUES ('autoMemberNumValue', ?, NULL, 'Stores the last auto-generated cardnumber to prevent re-issuance', 'Integer')},
             undef, $seed
         );
 
