@@ -75,9 +75,13 @@ EOF
         ;;
 
     indexer)
-        # Read from /etc/default/koha-common if available
+        # Read from /etc/default/koha-core (fall back to the legacy
+        # /etc/default/koha-common name on systems upgrading from the
+        # pre-split packaging).
         INDEXER_TIMEOUT=5
-        if [ -f /etc/default/koha-common ]; then
+        if [ -f /etc/default/koha-core ]; then
+            . /etc/default/koha-core
+        elif [ -f /etc/default/koha-common ]; then
             . /etc/default/koha-common
         fi
 
