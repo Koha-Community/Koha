@@ -46,8 +46,9 @@ This is the base class for SIP2 objects in the Koha library system.
 sub store {
     my ($self) = @_;
 
+    my $result = $self->SUPER::store;
     _update_config_timestamp();
-    return $self->SUPER::store;
+    return $result;
 }
 
 =head3 delete
@@ -59,8 +60,9 @@ sub store {
 sub delete {
     my ($self) = @_;
 
+    my $result = $self->SUPER::delete;
     _update_config_timestamp();
-    return $self->SUPER::delete;
+    return $result;
 }
 
 =head3 _update_config_timestamp
