@@ -2,18 +2,19 @@
 
 set -e
 
-#DEBHELPER#
+case "$1" in
+    configure)
+        # Bug 18250: Correct startup order of koha-common and memcached.
+        # On non-systemd systems only: force the rc.d ordering.
+        # On systemd, dh_installsystemd (via #DEBHELPER# below) enables and
+        # starts koha-sysv.service automatically; no manual enable needed.
+        if [ ! -d /run/systemd/system ]; then
+            update-rc.d koha-common disable
+            update-rc.d koha-common enable
+        fi
+        ;;
+esac
 
-# Enable and start the service on systemd systems
-if [ -d /run/systemd/system ]; then
-    deb-systemd-helper enable koha-common.service >/dev/null || true
-    deb-systemd-invoke start koha-common.service >/dev/null || true
-else
-    # Bug 18250: Correct startup order of koha-common and memcached
-    # Since the init script has been updated, we can force the order in rc.d
-    # by disabling and enabling again.
-    update-rc.d koha-common disable
-    update-rc.d koha-common enable
-fi
+#DEBHELPER#
 
 exit 0
