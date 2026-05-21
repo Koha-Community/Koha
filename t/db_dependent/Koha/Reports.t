@@ -20,10 +20,11 @@ use Modern::Perl;
 use Test::Exception;
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 17;
+use Test::More tests => 18;
 
 use Koha::Report;
 use Koha::Reports;
+use Koha::Patrons;
 use Koha::Database;
 
 use t::lib::Mocks;
@@ -564,6 +565,59 @@ subtest 'running' => sub {
         Koha::Reports->running->count, 0,
         'DB failure => empty resultset (caller is not aborted)'
     );
+};
+
+subtest 'check_edit_permission() and store enforcement' => sub {
+    plan tests => 6;
+
+    my $owner  = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+    my $editor = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+
+    my $report = Koha::Report->new(
+        {
+            report_name    => 'permission_test',
+            savedsql       => 'SELECT 1',
+            borrowernumber => $owner->borrowernumber,
+        }
+    )->store;
+
+    my $context = Test::MockModule->new('C4::Context');
+    $context->mock( 'userenv', sub { undef } );
+    lives_ok { $report->savedsql('SELECT 2')->store }
+    'no logged-in user, store of an existing report is allowed';
+    $context->unmock('userenv');
+
+    t::lib::Mocks::mock_userenv( { patron => $owner } );
+    lives_ok { $report->savedsql('SELECT 3')->store }
+    'report creator can edit their own report';
+
+    t::lib::Mocks::mock_userenv( { patron => $editor } );
+    throws_ok { $report->savedsql('SELECT 4')->store }
+    'Koha::Exceptions::Report::EditPermission',
+        'a non-owner without edit_all_reports cannot edit the report';
+
+    my $shared = Koha::Reports->find( $report->id );
+    lives_ok { $shared->mana_id(12345)->store }
+    'a mana_id-only change is exempt from the edit check';
+
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $editor->borrowernumber,
+                module_bit     => 16,
+                code           => 'edit_all_reports',
+            },
+        }
+    );
+    lives_ok { $report->savedsql('SELECT 5')->store }
+    'a non-owner with edit_all_reports can edit the report';
+
+    lives_ok {
+        Koha::Report->new(
+            { report_name => 'new_one', savedsql => 'SELECT 1', borrowernumber => $owner->borrowernumber } )->store;
+    }
+    'creating a new report is not subject to the edit check';
 };
 
 $schema->storage->txn_rollback;

@@ -17,8 +17,10 @@ package Koha::Report;
 
 use Modern::Perl;
 
+use C4::Context;
 use Koha::Database;
 use Koha::Exceptions::Report;
+use Koha::Patrons;
 use Koha::Reports;
 
 use Koha::Object;
@@ -165,6 +167,59 @@ sub new_from_mana {
     delete $data->{language};
 
     Koha::Report->new($data)->store;
+}
+
+=head3 check_edit_permission
+
+    $report->check_edit_permission;
+
+Throws L<Koha::Exceptions::Report::EditPermission> when the patron in the
+current userenv may not edit this report. A patron may edit a report
+they created; editing a report owned by another librarian, or an
+ownerless report, requires the C<edit_all_reports> permission. When
+there is no logged-in user (eg. a cron job) no check is performed.
+
+=cut
+
+sub check_edit_permission {
+    my ($self) = @_;
+
+    my $userenv = C4::Context->userenv;
+    return 1 unless $userenv && $userenv->{number};
+
+    my $borrowernumber = $userenv->{number};
+    return 1 if $self->borrowernumber && $self->borrowernumber == $borrowernumber;
+
+    my $patron = Koha::Patrons->find($borrowernumber);
+    return 1 if $patron && $patron->has_permission( { reports => 'edit_all_reports' } );
+
+    Koha::Exceptions::Report::EditPermission->throw( report_id => $self->id );
+}
+
+=head3 store
+
+    $report->store;
+
+Overridden to enforce edit permissions. Updating an existing report
+runs L</check_edit_permission> first, so a librarian cannot modify a
+report owned by someone else without the C<edit_all_reports>
+permission. Creating a new report is not checked.
+
+Changing only C<mana_id> is exempt: recording a Mana identifier when
+a report is shared is not a change to the report's contents.
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    if ( $self->in_storage ) {
+        my %dirty = $self->_result->get_dirty_columns;
+        delete $dirty{mana_id};
+        $self->check_edit_permission if %dirty;
+    }
+
+    return $self->SUPER::store;
 }
 
 =head3 prep_report
