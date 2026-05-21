@@ -41,17 +41,13 @@ my $parser = XML::Simple->new(
 sub get_configuration {
     my ( $class, $config_file, $current_config ) = @_;
 
-    my $cache                       = Koha::Caches->get_instance();
-    my $sip2_resource_last_modified = $cache->get_from_cache("sip2_resource_last_modified");
+    my $cache = Koha::Caches->get_instance();
 
-    if ($sip2_resource_last_modified) {
-        $cache->set_in_cache( 'sip2_config_read_timestamp', $sip2_resource_last_modified );
-    } else {
+    unless ( $cache->get_from_cache("sip2_resource_last_modified") ) {
 
-        # Set sip2_resource_last_modified so config won't be read from db on each request
-        my $now = dt_from_string()->epoch;
-        $cache->set_in_cache( 'sip2_resource_last_modified', $now );
-        $cache->set_in_cache( 'sip2_config_read_timestamp',  $now );
+        # Seed sip2_resource_last_modified so the configuration is not re-read
+        # from the database on every request while the value is missing.
+        $cache->set_in_cache( 'sip2_resource_last_modified', dt_from_string()->epoch );
     }
 
     my $cfg;
