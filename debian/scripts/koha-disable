@@ -69,20 +69,20 @@ do
             fi
             if is_plack_running $name; then
                 koha-plack --stop $name
-                koha-plack --disable $name
             fi
+            koha-plack --disable $name
             if is_zebra_running $name; then
                 koha-zebra --stop $name
-                koha-zebra --disable $name
             fi
+            koha-zebra --disable $name
             if is_indexer_running $name; then
                 koha-indexer --stop $name
-                koha-indexer --disable $name
             fi
+            koha-indexer --disable $name
             if is_es_indexer_running $name; then
                 koha-es-indexer --stop $name
-                koha-es-indexer --disable $name
             fi
+            koha-es-indexer --disable $name
             koha-worker --all-queues --stop $name || /bin/true
             koha-worker --all-queues --disable $name || /bin/true
         elif [ "$RET" = 2 ]; then
