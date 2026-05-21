@@ -47,7 +47,8 @@ $schema->storage->txn_begin;
 my $dbh     = C4::Context->dbh;
 my $builder = t::lib::TestBuilder->new;
 
-t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions", "0" );
+t::lib::Mocks::mock_preference( 'EmailPurchaseSuggestions', '0' );
+t::lib::Mocks::mock_preference( 'FallbackToSMSIfNoEmail',   0 );
 
 # Reset item types to only the default ones
 $dbh->do(q|DELETE FROM itemtypes;|);
