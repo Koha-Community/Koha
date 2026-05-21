@@ -28,9 +28,11 @@
                     <ul class="dropdown-menu">
                         [% IF ( CAN_user_reports_create_reports ) %]
                             [% UNLESS ( editsql ) # Do not show edit button on edit page %]
-                                <li>
-                                    <a class="dropdown-item" id="editreport" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% id | html %]&amp;op=edit_form"> Edit </a>
-                                </li>
+                                [% IF ( CAN_user_reports_edit_all_reports || report_creator == loggedinusernumber ) %]
+                                    <li>
+                                        <a class="dropdown-item" id="editreport" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% id | html %]&amp;op=edit_form"> Edit </a>
+                                    </li>
+                                [% END %]
                             [% END %]
                             <li>
                                 <a class="dropdown-item" title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?op=duplicate&amp;id=[% id | uri %]"> Duplicate </a>

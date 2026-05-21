@@ -2764,6 +2764,7 @@
         function previewSql(report_data) {
             var reportid = report_data.reportid;
             var can_create = report_data.create;
+            var can_edit = report_data.edit;
             var can_delete = report_data.delete;
             var can_run = report_data.run;
             var message = $("#previewSql" + reportid).val();
@@ -2792,11 +2793,15 @@
                 clone.querySelector("#preview-modal-schedule").remove();
             }
 
-            if (can_create) {
+            if (can_edit) {
                 clone.querySelector('[data-placeholder="edit-href"]').href = "/cgi-bin/koha/reports/guided_reports.pl?id=" + encodeURIComponent(reportid) + "&op=edit_form";
-                clone.querySelector('[data-placeholder="duplicate-href"]').href = "/cgi-bin/koha/reports/guided_reports.pl?op=duplicate&id=" + encodeURIComponent(reportid);
             } else {
                 clone.querySelector("#preview-modal-editreport").remove();
+            }
+
+            if (can_create) {
+                clone.querySelector('[data-placeholder="duplicate-href"]').href = "/cgi-bin/koha/reports/guided_reports.pl?op=duplicate&id=" + encodeURIComponent(reportid);
+            } else {
                 clone.querySelector("#preview-modal-duplicate").remove();
             }
 

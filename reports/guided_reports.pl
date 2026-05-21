@@ -912,6 +912,7 @@ if ( $op eq 'run' ) {
         $sql   = $original_sql = $report->savedsql;
         $name  = $report->report_name;
         $notes = $report->notes;
+        $template->param( report_creator => $report->borrowernumber );
 
         my @rows    = ();
         my @allrows = ();
