@@ -55,6 +55,10 @@ my %transports = (
 # Read configuration
 #
 my $config = C4::SIP::Sip::Configuration->new( $ARGV[0] );
+
+# Per-process record of when this worker loaded $config. Not shared since $config is per-process.
+our $sip2_config_read_timestamp = Koha::Caches->get_instance->get_from_cache('sip2_resource_last_modified');
+
 my @params;
 
 #
@@ -234,13 +238,15 @@ sub _config_up_to_date {
 
     my $cache                       = Koha::Caches->get_instance();
     my $sip2_resource_last_modified = $cache->get_from_cache("sip2_resource_last_modified");
-    my $sip2_config_read_timestamp  = $cache->get_from_cache("sip2_config_read_timestamp");
 
     unless ($sip2_resource_last_modified) {
-        siplog( "LOG_WARNING", "Couldn't find sip2_resource_last_modified, considering configuration not up to date" );
+        siplog( "LOG_INFO", "Couldn't find sip2_resource_last_modified, considering configuration not up to date" );
         return 0;
     }
-    return $sip2_config_read_timestamp >= $sip2_resource_last_modified;
+
+    return 0 unless defined $sip2_config_read_timestamp;
+
+    return $sip2_config_read_timestamp >= $sip2_resource_last_modified ? 1 : 0;
 }
 
 #
@@ -260,13 +266,14 @@ sub process_request {
     my ( $sockaddr, $port, $proto );
     my $transport;
 
+    # Flush L1 before the freshness check so it sees the current shared value, not a stale one inherited at fork.
+    Koha::Caches->flush_L1_caches();
+
     $self->{config} = $config;
     unless ( $self->_config_up_to_date() ) {
         $self->{config} = C4::SIP::Sip::Configuration->get_configuration( undef, $self->{config} );
+        $sip2_config_read_timestamp = Koha::Caches->get_instance->get_from_cache('sip2_resource_last_modified');
     }
-
-    # Flushing L1 to make sure the request will be processed using the correct data
-    Koha::Caches->flush_L1_caches();
 
     $self->{account} = undef;    # Clear out the account from the last request, it may be different
     $self->{logger}  = set_logger( Koha::Logger->get( { interface => 'sip' } ) );
