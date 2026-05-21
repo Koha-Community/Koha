@@ -261,6 +261,9 @@
 [% WRAPPER 'main-container.inc' aside_block=aside %]
     [% INCLUDE "reports-toolbar.inc" %]
 
+    [% INCLUDE 'messages.inc' %]
+    [% INCLUDE 'blocking_errors.inc' %]
+
     [% IF access_denied %]
         <div>
             <h1>Access denied</h1>

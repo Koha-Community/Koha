@@ -36,6 +36,7 @@ use Koha::AuthorisedValues;
 use Koha::BiblioFrameworks;
 use Koha::Libraries;
 use Koha::Patron::Categories;
+use Koha::Patrons;
 use Koha::SharedContent;
 use Koha::Util::OpenDocument qw( generate_ods );
 use Koha::Notice::Templates;
@@ -108,6 +109,16 @@ my $limit_reports_by_library = C4::Context->preference('LimitReportsByLibrary');
 my $can_manage_report_limits = $logged_in_user && Koha::Report->can_manage_limits($logged_in_user);
 
 $template->param( templates => Koha::Notice::Templates->search( { module => 'report' } ) );
+
+# Editing a report owned by another librarian, or an ownerless report,
+# requires the edit_all_reports permission
+if ( $op eq 'edit_form' || $op eq 'cud-update_sql' || $op eq 'cud-update_and_run_sql' ) {
+    my $report = Koha::Reports->find( scalar $input->param('id') );
+    if ( $report && ( !$report->borrowernumber || $report->borrowernumber != $borrowernumber ) ) {
+        output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
+            unless Koha::Patrons->find($borrowernumber)->has_permission( { reports => 'edit_all_reports' } );
+    }
+}
 
 my $filter;
 if ( $input->param("filter_set") or $input->param('clear_filters') ) {
