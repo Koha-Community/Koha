@@ -56,7 +56,7 @@ const EdifactDisplay = (() => {
     };
 
     const showMessage = (messageId, settings, focusOptions) => {
-        const url = `${settings.jsonEndpoint}?id=${encodeURIComponent(messageId)}&format=json`;
+        const url = `${settings.jsonEndpoint}?id=${encodeURIComponent(messageId)}`;
         showMessageFromUrl(url, settings, focusOptions);
     };
 

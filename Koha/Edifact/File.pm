@@ -19,6 +19,8 @@ use Modern::Perl;
 
 use base qw(Koha::Object);
 
+use Koha::Acquisition::Basket;
+use Koha::Acquisition::Bookseller;
 use Koha::Edifact::File::Errors;
 
 =encoding utf8

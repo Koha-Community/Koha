@@ -932,8 +932,8 @@ const insertObject = async ({ type, object, baseUrl, authHeader }) => {
 const insertSampleEdifactMessages = async () => {
     // First, create a test vendor
     const vendorResult = await query({
-        sql: `INSERT INTO aqbooksellers (name, address1, address2, address3, phone, fax, url, active, listprice, invoiceprice, gstreg, listincgst, invoiceincgst, tax_rate, discount, notes)
-              VALUES ('Test EDI Vendor', '123 Test Street', 'Test City', 'Test Country', '555-1234', '555-5678', 'http://testvendor.com', 1, 'USD', 'USD', 0, 1, 1, 0.10, 0.05, 'Test vendor for EDIFACT testing')`,
+        sql: `INSERT INTO aqbooksellers (name, address1, address2, address3, phone, fax, url, active, gstreg, listincgst, invoiceincgst, tax_rate, discount, notes)
+              VALUES ('Test EDI Vendor', '123 Test Street', 'Test City', 'Test Country', '555-1234', '555-5678', 'http://testvendor.com', 1, 0, 1, 1, 0.10, 0.05, 'Test vendor for EDIFACT testing')`,
         values: [],
     });
     const vendor_id = vendorResult.insertId;
