@@ -21,7 +21,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Warn;
 
 my ( $mockConfig, $mockPrefork );
@@ -77,3 +77,45 @@ subtest 'Get_timeout' => sub {
     is( C4::SIP::SIPServer::get_timeout( $server, { transport => 1 } ), 30, "Fallback again" );
 };
 
+subtest '_config_up_to_date() tests' => sub {
+    plan tests => 4;
+
+    # _config_up_to_date() compares the shared sip2_resource_last_modified against the
+    # per-process $sip2_config_read_timestamp. Mock the cache so we control the former.
+    my $resource_last_modified;
+    my $cache_mock = Test::MockModule->new('Koha::Cache');
+    $cache_mock->mock(
+        'get_from_cache',
+        sub {
+            my ( $self, $key ) = @_;
+            return $resource_last_modified if $key eq 'sip2_resource_last_modified';
+            return $cache_mock->original('get_from_cache')->(@_);
+        }
+    );
+
+    $resource_last_modified                         = undef;
+    $C4::SIP::SIPServer::sip2_config_read_timestamp = time;
+    is(
+        C4::SIP::SIPServer::_config_up_to_date(), 0,
+        'Not up to date when sip2_resource_last_modified is unset'
+    );
+
+    $resource_last_modified                         = 2000;
+    $C4::SIP::SIPServer::sip2_config_read_timestamp = 1000;
+    is(
+        C4::SIP::SIPServer::_config_up_to_date(), 0,
+        'Not up to date when the resource changed after this process loaded its config'
+    );
+
+    $C4::SIP::SIPServer::sip2_config_read_timestamp = 2000;
+    is(
+        C4::SIP::SIPServer::_config_up_to_date(), 1,
+        'Up to date when this process loaded its config at the last modification'
+    );
+
+    $C4::SIP::SIPServer::sip2_config_read_timestamp = 3000;
+    is(
+        C4::SIP::SIPServer::_config_up_to_date(), 1,
+        'Up to date when this process loaded its config after the last modification'
+    );
+};
