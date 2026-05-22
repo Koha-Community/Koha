@@ -39,8 +39,8 @@
             <a id="resolved_filter"><i class="fa fa-bars"></i> Include resolved</a>
             <input type="checkbox" id="hide_resolved_concerns" style="display:none;" />
             [% FOR st IN status %]
-                | <a id="[% st.authorised_value | html %]_filter"><i class="fa fa-filter"></i> Filter [% st.lib | html %]</a>
-                <input type="checkbox" id="hide_[% st.authorised_value | html %]" style="display:none;" />
+                <a id="[% st.authorised_value | html %]_filter"><i class="fa fa-filter"></i> Filter [% st.lib | html %]</a>
+                <input type="checkbox" id="hide_[% st.authorised_value | html %]" style="display:none;" class="status-filter-checkbox" />
             [% END %]
         </fieldset>
 
@@ -87,6 +87,19 @@
                     }
                 },
                 source: "catalog",
+                status: function () {
+                    let avfilters = ["-and"];
+                    document.querySelectorAll(".status-filter-checkbox:checked").forEach(el => {
+                        let av = el.id.split("_")[1];
+                        avfilters.push({ "!=": av });
+                    });
+
+                    if (avfilters.length === 1) {
+                        return;
+                    }
+                    // wrap with or status is NULL to keep rows where status is NULL
+                    return ["-or", avfilters, { "=": null }];
+                },
             };
             let external_filter_nodes = {
                 hide_resolved_concerns: "#hide_resolved_concerns",
@@ -264,23 +277,13 @@
 
             statuses.forEach(function (st) {
                 const av = st.authorised_value;
+                // reset filter for reloaded page
+                $(`#hide_${av}`).prop("checked", false);
+
                 $(`#${av}_filter`).on("click", function () {
                     if ($(`#hide_${av}`).is(":checked")) {
-                        additional_filters.status.find((o, i) => {
-                            if (o["!="] === av) {
-                                additional_filters.status.splice(i, 1);
-                                return true; // stop searching
-                            }
-                        });
-                        if (additional_filters.status.length === 1) {
-                            delete additional_filters.status;
-                        }
                         $(this).html('<i class="fa fa-filter"></i> ' + _("Filter ") + st.lib);
                     } else {
-                        if (!additional_filters.hasOwnProperty("status")) {
-                            additional_filters.status = ["-and"];
-                        }
-                        additional_filters.status.push({ "!=": av });
                         $(this).html('<i class="fa fa-bars"></i> ' + _("Include ") + st.lib);
                     }
                     $(`#hide_${av}`).prop("checked", !$(`#hide_${av}`).is(":checked"));
