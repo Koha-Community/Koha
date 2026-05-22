@@ -29,6 +29,8 @@ use constant DEFAULT_SHARE_INVITATION_EXPIRY_DAYS => 14;
 use constant DEFAULT_DEBARMENTS_PURGEDAYS         => 30;
 use constant DEFAULT_JOBS_PURGEDAYS               => 1;
 use constant DEFAULT_JOBS_PURGETYPES              => qw{ update_elastic_index };
+use constant DEFAULT_JOBS_UNFINISHED_PURGEDAYS    => 365;
+use constant DEFAULT_JOBS_UNFINISHED_PURGETYPES   => qw{ update_elastic_index };
 use constant DEFAULT_EDIFACT_MSG_PURGEDAYS        => 365;
 
 use Getopt::Long qw( GetOptions );
@@ -124,6 +126,9 @@ Usage: $0
    --cards DAY             Purge card creator batches last added to more than DAYS days ago.
    --return-claims         Purge all resolved return claims older than the number of days specified in
                            the system preference CleanUpDatabaseReturnClaims.
+   --jobs-unfinished-days DAYS        Purge all unfinished background jobs this many days old. Defaults to 365 if no DAYS provided.
+   --jobs-unfinished-type TYPES       What type of unfinished background jobs to purge. Defaults to "update_elastic_index" if omitted
+                           Specifying "all" will purge all types. Repeatable.
    --jobs-days DAYS        Purge all finished background jobs this many days old. Defaults to 1 if no DAYS provided.
    --jobs-type TYPES       What type of background job to purge. Defaults to "update_elastic_index" if omitted
                            Specifying "all" will purge all types. Repeatable.
@@ -174,6 +179,8 @@ my $cards;
 my @log_modules;
 my @preserve_logs;
 my @log_actions;
+my $jobs_unfinished_days;
+my @jobs_unfinished_types;
 my $jobs_days;
 my @jobs_types;
 my $reports;
@@ -224,6 +231,8 @@ GetOptions(
     'labels:i'                   => \$labels,
     'cards:i'                    => \$cards,
     'return-claims'              => \$return_claims,
+    'jobs-unfinished-type:s'     => \@jobs_unfinished_types,
+    'jobs-unfinished-days:i'     => \$jobs_unfinished_days,
     'jobs-type:s'                => \@jobs_types,
     'jobs-days:i'                => \$jobs_days,
     'reports:i'                  => \$reports,
@@ -231,17 +240,20 @@ GetOptions(
 ) || usage(1);
 
 # Use default values
-$sessions         = 1                               if $sess_days                 && $sess_days > 0;
-$pImport          = DEFAULT_IMPORT_PURGEDAYS        if defined($pImport)          && $pImport == 0;
-$pLogs            = DEFAULT_LOGS_PURGEDAYS          if defined($pLogs)            && $pLogs == 0;
-$zebraqueue_days  = DEFAULT_ZEBRAQ_PURGEDAYS        if defined($zebraqueue_days)  && $zebraqueue_days == 0;
-$mail             = DEFAULT_MAIL_PURGEDAYS          if defined($mail)             && $mail == 0;
-$pSearchhistory   = DEFAULT_SEARCHHISTORY_PURGEDAYS if defined($pSearchhistory)   && $pSearchhistory == 0;
-$pDebarments      = DEFAULT_DEBARMENTS_PURGEDAYS    if defined($pDebarments)      && $pDebarments == 0;
-$pMessages        = DEFAULT_MESSAGES_PURGEDAYS      if defined($pMessages)        && $pMessages == 0;
-$jobs_days        = DEFAULT_JOBS_PURGEDAYS          if defined($jobs_days)        && $jobs_days == 0;
-@jobs_types       = (DEFAULT_JOBS_PURGETYPES)       if $jobs_days                 && @jobs_types == 0;
-$edifact_msg_days = DEFAULT_EDIFACT_MSG_PURGEDAYS   if defined($edifact_msg_days) && $edifact_msg_days == 0;
+$sessions             = 1                               if $sess_days                && $sess_days > 0;
+$pImport              = DEFAULT_IMPORT_PURGEDAYS        if defined($pImport)         && $pImport == 0;
+$pLogs                = DEFAULT_LOGS_PURGEDAYS          if defined($pLogs)           && $pLogs == 0;
+$zebraqueue_days      = DEFAULT_ZEBRAQ_PURGEDAYS        if defined($zebraqueue_days) && $zebraqueue_days == 0;
+$mail                 = DEFAULT_MAIL_PURGEDAYS          if defined($mail)            && $mail == 0;
+$pSearchhistory       = DEFAULT_SEARCHHISTORY_PURGEDAYS if defined($pSearchhistory)  && $pSearchhistory == 0;
+$pDebarments          = DEFAULT_DEBARMENTS_PURGEDAYS    if defined($pDebarments)     && $pDebarments == 0;
+$pMessages            = DEFAULT_MESSAGES_PURGEDAYS      if defined($pMessages)       && $pMessages == 0;
+$jobs_unfinished_days = DEFAULT_JOBS_UNFINISHED_PURGEDAYS
+    if defined($jobs_unfinished_days) && $jobs_unfinished_days == 0;
+@jobs_unfinished_types = (DEFAULT_JOBS_UNFINISHED_PURGETYPES) if $jobs_unfinished_days && @jobs_unfinished_types == 0;
+$jobs_days             = DEFAULT_JOBS_PURGEDAYS               if defined($jobs_days)   && $jobs_days == 0;
+@jobs_types            = (DEFAULT_JOBS_PURGETYPES)            if $jobs_days            && @jobs_types == 0;
+$edifact_msg_days      = DEFAULT_EDIFACT_MSG_PURGEDAYS        if defined($edifact_msg_days) && $edifact_msg_days == 0;
 
 @statistics_types = ( @statistics_types, @Koha::Statistic::pseudonymization_types ) if defined($statistics_type_pseudo);
 @statistics_types = keys %{ { map { $_, 1 } @statistics_types } };    # remove duplicate types
@@ -295,6 +307,7 @@ unless ( $sessions
     || $cards
     || $return_claims
     || $jobs_days
+    || $jobs_unfinished_days
     || $reports
     || $edifact_msg_days )
 {
@@ -777,6 +790,32 @@ if ($cards) {
             ? sprintf "Done with purging %d card creator batches last added to more than %d days ago.\n", $count,
             $cards
             : sprintf "%d card creator batches would have been purged.", $count;
+    }
+}
+
+if ($jobs_unfinished_days) {
+    print "Purging unfinished background jobs more than $jobs_unfinished_days days ago.\n"
+        if $verbose;
+    my $jobs = Koha::BackgroundJobs->search(
+        {
+            status => { '!=' => 'finished' },
+            ( $jobs_unfinished_types[0] eq 'all' ? () : ( type => \@jobs_unfinished_types ) )
+        }
+    )->filter_by_last_update(
+        {
+            timestamp_column_name => 'enqueued_on',
+            days                  => $jobs_unfinished_days,
+        }
+    );
+    my $count = $jobs->count;
+    $jobs->delete if $confirm;
+    if ($verbose) {
+        say $confirm
+            ? sprintf "Done with purging unfinished %d background jobs of type(s): %s added more than %d days ago.\n",
+            $count, join( ',', @jobs_unfinished_types ), $jobs_unfinished_days
+            : sprintf
+            "%d unfinished background jobs of type(s): %s added more than %d days ago would have been purged.",
+            $count, join( ',', @jobs_unfinished_types ), $jobs_unfinished_days;
     }
 }
 
