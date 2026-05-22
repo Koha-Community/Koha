@@ -36,23 +36,78 @@ plugin that shows a stats on borrowers
 
 =cut
 
-my $input = CGI->new;
+my $input          = CGI->new;
 my $fullreportname = "reports/bor_issues_top.tt";
-my $do_it   = $input->param('do_it');
-my $limit   = $input->param("Limit");
-my $column  = $input->param("Criteria");
-my @filters = $input->multi_param("Filter");
-my $output   = $input->param("output");
-my $basename = $input->param("basename");
-my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => $fullreportname,
-                query => $input,
-                type => "intranet",
-                flagsrequired => {reports => '*'},
-                });
-our $sep = C4::Context->csv_delimiter(scalar $input->param("sep"));
-$template->param(do_it => $do_it,
-        );
+my $do_it          = $input->param('do_it');
+my $limit          = $input->param("Limit");
+my $column         = $input->param("Criteria");
+my @filters        = $input->multi_param("Filter");
+my $output         = $input->param("output");
+my $basename       = $input->param("basename");
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name => $fullreportname,
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { reports => '*' },
+    }
+);
+my $do_it = $input->param('do_it') ? 1 : 0;
+my $limit;
+my $limit_input = $input->param("Limit");
+my $column;
+my $column_input   = $input->param("Criteria");
+my @filters        = $input->multi_param("Filter");
+my $output         = "screen";
+my $output_input   = $input->param("output");
+my $basename       = "Export";
+my $basename_input = $input->param("basename");
+our $sep = C4::Context->csv_delimiter();
+my $sep_input = $input->param("sep");
+
+#NOTE: Validate sep parameter
+my $delimiter_choices = GetDelimiterChoices();
+my %allowed_seps      = map { $_ => 1 } @{ $delimiter_choices->{values} };
+if ( $sep_input && $allowed_seps{$sep_input} ) {
+    $sep = $sep_input;
+}
+
+my %allowed_fields = (
+    "branchcode"   => 1,
+    "categorycode" => 1,
+    "itemtype"     => 1,
+    "Day"          => 1,
+    "Week"         => 1,
+    "Month"        => 1,
+    "Year"         => 1,
+);
+
+#NOTE: Validate Criteria parameter
+if ( $column_input && $allowed_fields{$column_input} ) {
+    $column = $column_input;
+}
+
+#NOTE: Validate Limit parameter
+if ( $limit_input && $limit_input =~ /^\d+$/ ) {
+    $limit = $limit_input;
+}
+
+#NOTE: Validate output parameter
+if ( $output_input && ( $output_input eq "screen" || $output_input eq "file" ) ) {
+    $output = $output_input;
+}
+
+#NOTE: Validate basename parameter
+if ($basename_input) {
+    $basename_input =~ s/[^A-Za-z0-9-]+/_/g;
+    if ($basename_input) {
+        $basename = $basename_input;
+    }
+}
+
+$template->param(
+    do_it => $do_it,
+);
 if ($do_it) {
 # Displaying results
     my $results = calculate($limit, $column, \@filters);
@@ -188,6 +243,7 @@ sub calculate {
             $colorder .= $column;
         }  
 
+        my @bind2 = ();
         my $strsth2;
         $strsth2 .= "SELECT DISTINCTROW $colfield 
                      FROM `old_issues` 
@@ -197,21 +253,26 @@ sub calculate {
                      WHERE 1";
         if (($column=~/timestamp/) or ($column=~/returndate/)){
             if ($colfilter[1] and $colfilter[0]){
-                $strsth2 .= " AND $column between '$colfilter[0]' AND '$colfilter[1]' " ;
+                $strsth2 .= " AND $column between ? AND ? ";
+                push( @bind2, $colfilter[0] );
+                push( @bind2, $colfilter[1] );
             } elsif ($colfilter[1]) {
-                $strsth2 .= " AND $column < '$colfilter[1]' " ;
+                $strsth2 .= " AND $column < ? ";
+                push( @bind2, $colfilter[1] );
             } elsif ($colfilter[0]) {
-                $strsth2 .= " AND $column > '$colfilter[0]' " ;
+                $strsth2 .= " AND $column > ? ";
+                push( @bind2, $colfilter[0] );
             }
         } elsif ($colfilter[0]) {
             $colfilter[0] =~ s/\*/%/g;
-            $strsth2 .= " AND $column LIKE '$colfilter[0]' " ;
+            $strsth2 .= " AND $column LIKE ? ";
+            push( @bind2, $colfilter[0] );
         }
         $strsth2 .=" GROUP BY $colfield";
         $strsth2 .=" ORDER BY $colorder";
 
         my $sth2 = $dbh->prepare($strsth2);
-        $sth2->execute;
+        $sth2->execute(@bind2);
         while (my @row = $sth2->fetchrow) {
 			$columns{($row[0] ||'NULL')}++;
             push @loopcol, { coltitle => $row[0] || 'NULL' };
@@ -219,7 +280,7 @@ sub calculate {
 
 		$strsth2 =~ s/old_issues/issues/g;
 		$sth2 = $dbh->prepare($strsth2);
-        $sth2->execute;
+        $sth2->execute(@bind2);
         while (my @row = $sth2->fetchrow) {
 			$columns{($row[0] ||'NULL')}++;
             push @loopcol, { coltitle => $row[0] || 'NULL' };
@@ -248,11 +309,13 @@ sub calculate {
 		'biblioitems.itemtype   like',
 		'borrowers.categorycode like',
 	);
-    foreach ((@$filters)[0..9]) {
+    my @bind3 = ();
+    foreach my $filter ( (@$filters)[ 0 .. 9 ] ) {
 		my $term = shift @filterterms;	# go through both arrays in step
-		($_) or next;
+        ($filter) or next;
 		s/\*/%/g;
-		$strcalc .= " AND $term '$_' ";
+        $strcalc .= " AND $term ? ";
+        push( @bind3, $filter );
 	}
     $strcalc .= " GROUP BY borrowers.borrowernumber";
     $strcalc .= ", $colfield" if ($column);
@@ -261,7 +324,7 @@ sub calculate {
     $strcalc .= " LIMIT $limit" if ($limit);
 
     my $dbcalc = $dbh->prepare($strcalc);
-    $dbcalc->execute;
+    $dbcalc->execute(@bind3);
 	my %patrons = ();
 	# DATA STRUCTURE is going to look like this:
 	# 	(2253=> {name=>"John Doe",
@@ -280,7 +343,7 @@ sub calculate {
 	
 	$strcalc =~ s/old_issues/issues/g;
     $dbcalc = $dbh->prepare($strcalc);
-    $dbcalc->execute;
+    $dbcalc->execute(@bind3);
     while (my @data = $dbcalc->fetchrow) {
         my ($row, $rank, $id, $col) = @data;
         $col = "zzEMPTY" if (!defined($col));
