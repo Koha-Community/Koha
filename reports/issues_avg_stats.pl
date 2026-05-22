@@ -37,28 +37,90 @@ plugin that shows a stats on borrowers
 =cut
 
 my $input = CGI->new;
-my $do_it=$input->param('do_it');
+my $do_it          = $input->param('do_it') ? 1 : 0;
 my $fullreportname = "reports/issues_avg_stats.tt";
-my $line = $input->param("Line");
-my $column = $input->param("Column");
-my @filters = $input->multi_param("Filter");
 
-my $podsp = $input->param("IssueDisplay");
-my $rodsp = $input->param("ReturnDisplay");
-my $calc = $input->param("Cellvalue");
-my $output = $input->param("output");
-my $basename = $input->param("basename");
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name => $fullreportname,
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { reports => '*' },
+    }
+);
 
-#warn "calcul : ".$calc;
-my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => $fullreportname,
-                query => $input,
-                type => "intranet",
-                flagsrequired => {reports => '*'},
-                    });
-our $sep = C4::Context->csv_delimiter(scalar $input->param("sep"));
-$template->param(do_it => $do_it,
-    );
+my $line       = "borrowers.categorycode";
+my $line_input = $input->param("Line");
+
+my $column       = "timestamp";
+my $column_input = $input->param("Column");
+my @filters      = $input->multi_param("Filter");
+
+my $podsp;
+my $podsp_input = $input->param("IssueDisplay");
+my $rodsp;
+my $rodsp_input = $input->param("ReturnDisplay");
+my $calc;    #NOTE: This param isn't used in this stat wizard UI
+my $output         = "screen";
+my $output_input   = $input->param("output");
+my $basename       = "Export";
+my $basename_input = $input->param("basename");
+our $sep = C4::Context->csv_delimiter();
+my $sep_input = $input->param("sep");
+
+#NOTE: Validate sep parameter
+my $delimiter_choices = GetDelimiterChoices();
+my %allowed_seps      = map { $_ => 1 } @{ $delimiter_choices->{values} };
+if ( $sep_input && $allowed_seps{$sep_input} ) {
+    $sep = $sep_input;
+}
+
+my %allowed_fields = (
+    "timestamp"              => 1,
+    "returndate"             => 1,
+    "borrowers.categorycode" => 1,
+    "itemtype"               => 1,
+    "branchcode"             => 1,
+    "borrowers.sort1"        => 1,
+    "borrowers.sort2"        => 1,
+);
+
+#NOTE: Validate Line parameter
+if ( $line_input && $allowed_fields{$line_input} ) {
+    $line = $line_input;
+}
+
+#NOTE: Validate Column parameter
+if ( $column_input && $allowed_fields{$column_input} ) {
+    $column = $column_input;
+}
+
+#NOTE: Validate IssueDisplay parameter
+if ( $podsp_input && $podsp_input =~ /^\d+$/ ) {
+    $podsp = $podsp_input;
+}
+
+#NOTE: Validate ReturnDisplay parameter
+if ( $rodsp_input && $rodsp_input =~ /^\d+$/ ) {
+    $rodsp = $rodsp_input;
+}
+
+#NOTE: Validate output parameter
+if ( $output_input && ( $output_input eq "screen" || $output_input eq "file" ) ) {
+    $output = $output_input;
+}
+
+#NOTE: Validate basename parameter
+if ($basename_input) {
+    $basename_input =~ s/[^A-Za-z0-9-]+/_/g;
+    if ($basename_input) {
+        $basename = $basename_input;
+    }
+}
+
+$template->param(
+    do_it => $do_it,
+);
 if ($do_it) {
 # Displaying results
     my $results = calculate($line, $column, $rodsp, $podsp, $calc, \@filters);
@@ -266,29 +328,37 @@ sub calculate {
                 LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber) 
                 WHERE 1";
     
+    my @bind = ();
     if (($line=~/timestamp/) or ($line=~/returndate/)){
         if ($linefilter[1] and ($linefilter[0])){
-            $strsth .= " AND $line BETWEEN '$linefilter[0]' AND '$linefilter[1]' " ;
+            $strsth .= " AND $line BETWEEN ? AND ? ";
+            push( @bind, $linefilter[0] );
+            push( @bind, $linefilter[1] );
         } elsif ($linefilter[1]) {
-                $strsth .= " AND $line < \'$linefilter[1]\' " ;
+            $strsth .= " AND $line < ? ";
+            push( @bind, $linefilter[1] );
         } elsif ($linefilter[0]) {
-            $strsth .= " AND $line > \'$linefilter[0]\' " ;
+            $strsth .= " AND $line > ? ";
+            push( @bind, $linefilter[0] );
         }
         if ($linefilter[2]){
-            $strsth .= " AND dayname($line) = '$linefilter[2]' " ;
+            $strsth .= " AND dayname($line) = ? ";
+            push( @bind, $linefilter[2] );
         }
         if ($linefilter[3]){
-            $strsth .= " AND monthname($line) = '$linefilter[3]' " ;
+            $strsth .= " AND monthname($line) = ? ";
+            push( @bind, $linefilter[3] );
         }
     } elsif ($linefilter[0]) {
         $linefilter[0] =~ s/\*/%/g;
-        $strsth .= " AND $line LIKE '$linefilter[0]' " ;
+        $strsth .= " AND $line LIKE ? ";
+        push( @bind, $linefilter[0] );
     }
     $strsth .=" GROUP BY $linefield";
     $strsth .=" ORDER BY $lineorder";
    
     my $sth = $dbh->prepare( $strsth );
-    $sth->execute;
+    $sth->execute(@bind);
 
     while ( my ($celvalue) = $sth->fetchrow) {
         my %cell;
@@ -332,30 +402,38 @@ sub calculate {
                   LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber) 
                   WHERE 1";
     
+    my @bind2 = ();
     if (($column=~/timestamp/) or ($column=~/returndate/)){
         if ($colfilter[1] and ($colfilter[0])){
-            $strsth2 .= " AND $column BETWEEN '$colfilter[0]' AND '$colfilter[1]' " ;
+            $strsth2 .= " AND $column BETWEEN ? AND ? ";
+            push( @bind2, $colfilter[0] );
+            push( @bind2, $colfilter[1] );
         } elsif ($colfilter[1]) {
-                $strsth2 .= " AND $column < '$colfilter[1]' " ;
+            $strsth2 .= " AND $column < ? ";
+            push( @bind2, $colfilter[1] );
         } elsif ($colfilter[0]) {
-            $strsth2 .= " AND $column > '$colfilter[0]' " ;
+            $strsth2 .= " AND $column > ? ";
+            push( @bind2, $colfilter[0] );
         }
         if ($colfilter[2]){
-            $strsth2 .= " AND dayname($column) = '$colfilter[2]' " ;
+            $strsth2 .= " AND dayname($column) = ? ";
+            push( @bind2, $colfilter[2] );
         }
         if ($colfilter[3]){
-            $strsth2 .= " AND monthname($column) = '$colfilter[3]' " ;
+            $strsth2 .= " AND monthname($column) = ? ";
+            push( @bind2, $colfilter[3] );
         }
     } elsif ($colfilter[0]) {
         $colfilter[0] =~ s/\*/%/g;
-        $strsth2 .= " AND $column LIKE '$colfilter[0]' " ;
+        $strsth2 .= " AND $column LIKE ? ";
+        push( @bind2, $colfilter[0] );
     }
     $strsth2 .=" GROUP BY $colfield";
     $strsth2 .=" ORDER BY $colorder";
     
     my $sth2 = $dbh->prepare( $strsth2 );
 
-    $sth2->execute;
+    $sth2->execute(@bind2);
 
     while (my ($celvalue) = $sth2->fetchrow) {
         my %cell;
@@ -392,32 +470,43 @@ sub calculate {
     $strcalc .= " issuedate, returndate, COUNT(*) FROM `old_issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber) WHERE old_issues.itemnumber=items.itemnumber AND old_issues.borrowernumber=borrowers.borrowernumber";
 
     @$filters[0]=~ s/\*/%/g if (@$filters[0]);
-    $strcalc .= " AND old_issues.timestamp > '" . @$filters[0] ."'" if ( @$filters[0] );
+    $strcalc .= " AND old_issues.timestamp > ?"      if ( @$filters[0] );
     @$filters[1]=~ s/\*/%/g if (@$filters[1]);
-    $strcalc .= " AND old_issues.timestamp < '" . @$filters[1] ."'" if ( @$filters[1] );
+    $strcalc .= " AND old_issues.timestamp < ?"      if ( @$filters[1] );
     @$filters[4]=~ s/\*/%/g if (@$filters[4]);
-    $strcalc .= " AND old_issues.returndate > '" . @$filters[4] ."'" if ( @$filters[4] );
+    $strcalc .= " AND old_issues.returndate > ?"     if ( @$filters[4] );
     @$filters[5]=~ s/\*/%/g if (@$filters[5]);
-    $strcalc .= " AND old_issues.returndate < '" . @$filters[5] ."'" if ( @$filters[5] );
+    $strcalc .= " AND old_issues.returndate < ?"     if ( @$filters[5] );
     @$filters[8]=~ s/\*/%/g if (@$filters[8]);
-    $strcalc .= " AND borrowers.categorycode like '" . @$filters[8] ."'" if ( @$filters[8] );
+    $strcalc .= " AND borrowers.categorycode like ?" if ( @$filters[8] );
     @$filters[9]=~ s/\*/%/g if (@$filters[9]);
-    $strcalc .= " AND $itype like '" . @$filters[9] ."'" if ( @$filters[9] );
+    $strcalc .= " AND $itype like ?"                 if ( @$filters[9] );
     @$filters[10]=~ s/\*/%/g if (@$filters[10]);
-    $strcalc .= " AND old_issues.branchcode like '" . @$filters[10] ."'" if ( @$filters[10] );
+    $strcalc .= " AND old_issues.branchcode like ?"  if ( @$filters[10] );
     @$filters[11]=~ s/\*/%/g if (@$filters[11]);
-    $strcalc .= " AND borrowers.sort1 like '" . @$filters[11] ."'" if ( @$filters[11] );
+    $strcalc .= " AND borrowers.sort1 like ?"        if ( @$filters[11] );
     @$filters[12]=~ s/\*/%/g if (@$filters[12]);
-    $strcalc .= " AND borrowers.sort2 like '" . @$filters[12] ."'" if ( @$filters[12] );
-    $strcalc .= " AND dayname(timestamp) like '" . @$filters[2]."'" if (@$filters[2]);
-    $strcalc .= " AND monthname(timestamp) like '" . @$filters[3] ."'" if ( @$filters[3] );
-    $strcalc .= " AND dayname(returndate) like '" . @$filters[5]."'" if (@$filters[5]);
-    $strcalc .= " AND monthname(returndate) like '" . @$filters[6] ."'" if ( @$filters[6] );
+    $strcalc .= " AND borrowers.sort2 like ?"       if ( @$filters[12] );
+    $strcalc .= " AND dayname(timestamp) like ?"    if ( @$filters[2] );
+    $strcalc .= " AND monthname(timestamp) like ?"  if ( @$filters[3] );
+    $strcalc .= " AND dayname(returndate) like ?"   if ( @$filters[5] );
+    $strcalc .= " AND monthname(returndate) like ?" if ( @$filters[6] );
+    my @bind3 = ();
+
+    #NOTE: To save my sanity and extensive refactoring,
+    #we just test the indexes based on the if statements above.
+    foreach my $index ( 0, 1, 4, 5, 8, 9, 10, 11, 12, 2, 3, 5, 6 ) {
+        my $filter = @$filters[$index];
+        if ($filter) {
+            push( @bind3, $filter );
+        }
+    }
     
     $strcalc .= " group by  $linefield, $colfield, issuedate, returndate order by $linefield, $colfield";
     
     my $dbcalc = $dbh->prepare($strcalc);
-    $dbcalc->execute;
+    $dbcalc->execute(@bind3);
+
 # 	warn "filling table";
     my $issues_count=0;
     my $loanlength; 
