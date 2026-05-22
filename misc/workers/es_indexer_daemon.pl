@@ -61,6 +61,7 @@ use Time::HiRes;
 use C4::Context;
 use Koha::Logger;
 use Koha::BackgroundJobs;
+use Koha::Caches;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Indexer;
 
@@ -157,6 +158,9 @@ while (1) {
             next;
         }
 
+        # Flush L1 cache so syspref changes are picked up without restarting the daemon
+        Koha::Caches->flush_L1_caches();
+
         my $job = Koha::BackgroundJobs->find( $args->{job_id} );
 
         if ( $job && $job->status ne 'new' ) {
@@ -196,6 +200,10 @@ while (1) {
         }
 
     } else {
+
+        # Flush L1 cache so syspref changes are picked up without restarting the daemon
+        Koha::Caches->flush_L1_caches();
+
         @jobs = Koha::BackgroundJobs->search(
             { status => 'new', queue => 'elastic_index' },
             { rows   => $batch_size }
