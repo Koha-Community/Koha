@@ -68,7 +68,26 @@ describe("EDIFACT Modal Tests", () => {
         });
 
         it("should close modal when close button is clicked", () => {
+            // Attach shown.bs.modal listener BEFORE the click so we don't
+            // miss it if the Ajax response is faster than Bootstrap's 300ms
+            // show animation — _isTransitioning stays true until shown.bs.modal fires
+            let modalShownPromise: Promise<void>;
+            cy.get("#EDI_modal").then($modal => {
+                modalShownPromise = new Promise(resolve => {
+                    $modal[0].addEventListener(
+                        "shown.bs.modal",
+                        () => resolve(),
+                        { once: true }
+                    );
+                });
+            });
+
             cy.get(".view_edifact_message").first().click();
+
+            // Wait for Bootstrap's show animation to complete before attempting
+            // to close — hide() is a no-op while _isTransitioning is true
+            cy.then(() => modalShownPromise);
+
             cy.get("#EDI_modal").should("be.visible");
             cy.get("#EDI_modal").should("have.class", "show");
 
@@ -77,21 +96,20 @@ describe("EDIFACT Modal Tests", () => {
                 timeout: 10000,
             }).should("be.visible");
 
-            // Click close button and force modal to close if needed
-            cy.get("#EDI_modal .btn-close").click();
-
-            // Wait a bit then force close if still open
-            cy.wait(1000);
-            cy.get("#EDI_modal").then($modal => {
-                if ($modal.hasClass("show")) {
-                    // Force close the modal using Bootstrap API
-                    cy.window().then(win => {
-                        const modal =
-                            win.bootstrap.Modal.getInstance($modal[0]) ||
-                            new win.bootstrap.Modal($modal[0]);
-                        modal.hide();
-                    });
-                }
+            // Verify the button has the correct dismiss attribute
+            cy.get("#EDI_modal .btn-close")
+                .should("have.attr", "data-bs-dismiss", "modal")
+                .click();
+            // data-bs-dismiss event delegation is unreliable in headless
+            // Cypress/Electron; retrieve the existing Bootstrap instance
+            // (created by modal.modal("show") in edifact_interchange.js) and
+            // call hide() directly — getInstance() returns null if not shown,
+            // getOrCreateInstance() would create a fresh instance with
+            // _isShown=false where hide() is a no-op
+            cy.window().then(win => {
+                win.bootstrap.Modal.getInstance(
+                    win.document.getElementById("EDI_modal")
+                )?.hide();
             });
 
             cy.get("#EDI_modal", { timeout: 5000 }).should(
@@ -102,7 +120,26 @@ describe("EDIFACT Modal Tests", () => {
         });
 
         it("should close modal when pressing escape key", () => {
+            // Attach shown.bs.modal listener BEFORE the click so we don't
+            // miss it if the Ajax response is faster than Bootstrap's 300ms
+            // show animation — _isTransitioning stays true until shown.bs.modal fires
+            let modalShownPromise: Promise<void>;
+            cy.get("#EDI_modal").then($modal => {
+                modalShownPromise = new Promise(resolve => {
+                    $modal[0].addEventListener(
+                        "shown.bs.modal",
+                        () => resolve(),
+                        { once: true }
+                    );
+                });
+            });
+
             cy.get(".view_edifact_message").first().click();
+
+            // Wait for Bootstrap's show animation to complete before attempting
+            // to close — hide() is a no-op while _isTransitioning is true
+            cy.then(() => modalShownPromise);
+
             cy.get("#EDI_modal").should("be.visible");
             cy.get("#EDI_modal").should("have.class", "show");
 
@@ -111,21 +148,13 @@ describe("EDIFACT Modal Tests", () => {
                 timeout: 10000,
             }).should("be.visible");
 
-            // Press escape key and force modal to close if needed
             cy.get("body").type("{esc}");
-
-            // Wait a bit then force close if still open
-            cy.wait(1000);
-            cy.get("#EDI_modal").then($modal => {
-                if ($modal.hasClass("show")) {
-                    // Force close the modal using Bootstrap API
-                    cy.window().then(win => {
-                        const modal =
-                            win.bootstrap.Modal.getInstance($modal[0]) ||
-                            new win.bootstrap.Modal($modal[0]);
-                        modal.hide();
-                    });
-                }
+            // Keyboard dismiss is unreliable in headless Cypress/Electron;
+            // dismiss via the Bootstrap instance directly
+            cy.window().then(win => {
+                win.bootstrap.Modal.getInstance(
+                    win.document.getElementById("EDI_modal")
+                )?.hide();
             });
 
             cy.get("#EDI_modal", { timeout: 5000 }).should(
@@ -246,36 +275,19 @@ describe("EDIFACT Modal Tests", () => {
                 .should("be.visible")
                 .should("not.be.disabled");
 
-            // Click expand all
             cy.get("#EDI_modal .expand-all-btn").click();
 
-            // Wait for expand operations to complete
-            cy.wait(3000);
-
-            // Verify that sections are expanded (accepting some timing variations)
-            cy.get("#EDI_modal .collapse").then($collapses => {
-                const expandedAfterClick = $collapses.filter(".show").length;
-                if (expandedAfterClick > 0) {
-                    cy.get("#EDI_modal .collapse.show").should(
-                        "have.length",
-                        expandedAfterClick
-                    );
-                } else {
-                    // Accept that expand-all may have Bootstrap 5 timing conflicts
-                    cy.get("#EDI_modal .collapse").should(
-                        "have.length",
-                        $collapses.length
-                    );
-                }
-            });
+            cy.get("#EDI_modal .collapse:not(.show)", {
+                timeout: 5000,
+            }).should("not.exist");
         });
 
         it("should collapse all sections when Collapse All is clicked", () => {
             cy.get("#EDI_modal .collapse-all-btn").click();
 
-            // Wait for collapse animation
-            cy.wait(500);
-            cy.get("#EDI_modal .collapse").should("not.have.class", "show");
+            cy.get("#EDI_modal .collapse.show", { timeout: 5000 }).should(
+                "not.exist"
+            );
         });
 
         it("should toggle individual sections when clicked", () => {
@@ -291,12 +303,17 @@ describe("EDIFACT Modal Tests", () => {
                 cy.get(`#${cleanId}`).should("have.class", "show");
 
                 cy.get("@toggleButton").click();
-                cy.wait(300);
-                cy.get(`#${cleanId}`).should("not.have.class", "show");
+                // Bootstrap removes .show at animation start and adds .collapsing;
+                // wait for both to be gone before the second click or Bootstrap
+                // ignores it while mid-animation
+                cy.get(`#${cleanId}`)
+                    .should("not.have.class", "show")
+                    .and("not.have.class", "collapsing");
 
                 cy.get("@toggleButton").click();
-                cy.wait(300);
-                cy.get(`#${cleanId}`).should("have.class", "show");
+                cy.get(`#${cleanId}`)
+                    .should("have.class", "show")
+                    .and("not.have.class", "collapsing");
             });
         });
 
@@ -394,15 +411,19 @@ describe("EDIFACT Modal Tests", () => {
 
     describe("Search Functionality", () => {
         beforeEach(() => {
+            cy.intercept("GET", "**/edimsg.pl*").as("ediMsg");
             cy.get(".view_edifact_message").first().click();
+            cy.wait("@ediMsg");
             cy.get("#EDI_modal .edi-tree", {
                 timeout: 10000,
             }).should("be.visible");
         });
 
         it("should find all matching results in search", () => {
-            // Type a search query that should have multiple results
-            cy.get("#EDI_modal .edi-search-input").type("UNH");
+            // Use invoke+trigger to avoid timing races with the 500ms debounce
+            cy.get("#EDI_modal .edi-search-input")
+                .invoke("val", "UNH")
+                .trigger("input");
 
             // Wait for debounce + search to complete
             cy.get("#EDI_modal .edi-search-count", { timeout: 10000 }).should(
@@ -421,8 +442,10 @@ describe("EDIFACT Modal Tests", () => {
             cy.get("#EDI_modal .edi-search-prev").should("be.disabled");
             cy.get("#EDI_modal .edi-search-next").should("be.disabled");
 
-            // Search for something likely to exist
-            cy.get("#EDI_modal .edi-search-input").type("UN");
+            // Use invoke+trigger to avoid timing races with the 500ms debounce
+            cy.get("#EDI_modal .edi-search-input")
+                .invoke("val", "UN")
+                .trigger("input");
 
             // Wait for debounce + search to complete
             cy.get("#EDI_modal .edi-search-count", { timeout: 10000 }).then(
@@ -441,14 +464,19 @@ describe("EDIFACT Modal Tests", () => {
         });
 
         it("should clear search when input is cleared", () => {
-            cy.get("#EDI_modal .edi-search-input").type("test");
-            cy.wait(500);
+            cy.get("#EDI_modal .edi-search-input")
+                .invoke("val", "UNH")
+                .trigger("input");
+            // Wait for debounce + search to produce results
+            cy.get("#EDI_modal .edi-search-count", { timeout: 10000 }).should(
+                "not.contain",
+                "0 results"
+            );
 
             // Clear the input (simulating native clear button)
             cy.get("#EDI_modal .edi-search-input").clear();
-            cy.wait(500);
 
-            // Search should be cleared
+            // clearSearch runs immediately on empty input (no debounce)
             cy.get("#EDI_modal .edi-search-count").should(
                 "contain",
                 "0 results"
