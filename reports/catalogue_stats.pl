@@ -41,16 +41,88 @@ plugin that shows a stats on borrowers
 our $debug = 0;
 my $input          = CGI->new;
 my $fullreportname = "reports/catalogue_stats.tt";
-my $do_it          = $input->param('do_it');
-my $line           = $input->param("Line");
-my $column         = $input->param("Column");
-my $cellvalue      = $input->param("Cellvalue");      # one of 'items', 'biblios', 'deleteditems'
-my @filters        = $input->multi_param("Filter");
-my $cotedigits     = $input->param("cotedigits");
-my $output         = $input->param("output");
-my $basename       = $input->param("basename");
-our $sep = C4::Context->csv_delimiter( scalar $input->param("sep") );
+
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name => $fullreportname,
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { reports => '*' },
+    }
+);
+
+my $do_it           = $input->param('do_it') ? 1 : 0;
+my $line            = "items.homebranch";
+my $line_input      = $input->param("Line");
+my $column          = "items.itype";
+my $column_input    = $input->param("Column");
+my $cellvalue       = "items";
+my $cellvalue_input = $input->param("Cellvalue");       # one of 'items', 'biblios', 'deleteditems'
+my @filters         = $input->multi_param("Filter");
+my $cotedigits;
+my $cotedigits_input = $input->param("cotedigits");
+my $output           = "screen";
+my $output_input     = $input->param("output");
+my $basename         = "Export";
+my $basename_input   = $input->param("basename");
+our $sep = C4::Context->csv_delimiter();
+my $sep_input = $input->param("sep");
+
 my $item_itype;
+
+my %allowed_fields = (
+    "items.itemcallnumber"  => 1,
+    "items.itype"           => 1,
+    "publishercode"         => 1,
+    "publicationyear"       => 1,
+    "items.homebranch"      => 1,
+    "items.location"        => 1,
+    "items.ccode"           => 1,
+    "items.notforloan"      => 1,
+    "items.materials"       => 1,
+    "items.dateaccessioned" => 1,
+);
+
+#NOTE: Validate Line parameter
+if ( $line_input && $allowed_fields{$line_input} ) {
+    $line = $line_input;
+}
+
+#NOTE: Validate Column parameter
+if ( $column_input && $allowed_fields{$column_input} ) {
+    $column = $column_input;
+}
+
+#NOTE: Validate Cellvalue parameter
+if ( $cellvalue_input
+    && ( $cellvalue_input eq 'items' || $cellvalue_input eq 'biblios' || $cellvalue_input eq 'deleteditems' ) )
+{
+    $cellvalue = $cellvalue_input;
+}
+
+if ( $cotedigits_input && $cotedigits_input =~ /^\d+$/ ) {
+    $cotedigits = $cotedigits_input;
+}
+
+#NOTE: Validate output parameter
+if ( $output_input && ( $output_input eq "screen" || $output_input eq "file" ) ) {
+    $output = $output_input;
+}
+
+#NOTE: Validate basename parameter
+if ($basename_input) {
+    $basename_input =~ s/[^A-Za-z0-9-]+/_/g;
+    if ($basename_input) {
+        $basename = $basename_input;
+    }
+}
+
+#NOTE: Validate sep parameter
+my $delimiter_choices = GetDelimiterChoices();
+my %allowed_seps      = map { $_ => 1 } @{ $delimiter_choices->{values} };
+if ( $sep_input && $allowed_seps{$sep_input} ) {
+    $sep = $sep_input;
+}
 
 if ( C4::Context->preference('item-level_itypes') ) {
     $item_itype = "items\.itype";
@@ -64,14 +136,6 @@ if ( C4::Context->preference('marcflavour') ne "UNIMARC" && ( $column =~ /public
     $column = "copyrightdate";
 }
 
-my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {
-        template_name => $fullreportname,
-        query         => $input,
-        type          => "intranet",
-        flagsrequired => { reports => '*' },
-    }
-);
 $template->param( do_it => $do_it );
 if ($do_it) {
     my $results = calculate( $line, $column, $cellvalue, $cotedigits, \@filters );
