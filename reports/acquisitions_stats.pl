@@ -40,16 +40,7 @@ Plugin that shows a stats on borrowers
 =cut
 
 my $input          = CGI->new;
-my $do_it          = $input->param('do_it');
 my $fullreportname = "reports/acquisitions_stats.tt";
-my $line           = $input->param("Line");
-my $column         = $input->param("Column");
-my @filters        = $input->multi_param("Filter");
-my $podsp          = $input->param("PlacedOnDisplay");
-my $rodsp          = $input->param("ReceivedOnDisplay");
-my $calc           = $input->param("Cellvalue");
-my $output         = $input->param("output");
-my $basename       = $input->param("basename");
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -60,18 +51,73 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-# Validate line and column
-if (
-    $do_it
-    && (  !$line
-        || $line !~ /^(aqbasket|aqorders|aqbooksellers|items|biblioitems|aqbudgets)\.\w+$/
-        || !$column
-        || $column !~ /^(aqbasket|aqorders|aqbooksellers|items|biblioitems|aqbudgets)\.\w+$/ )
-    )
-{
-    C4::Output::output_error( $input, '403' );
-    exit;
+my %allowed_fields = (
+    "aqbasket.closedate"    => 1,
+    "aqorders.datereceived" => 1,
+    "aqbooksellers.name"    => 1,
+    "items.homebranch"      => 1,
+    "items.ccode"           => 1,
+    "biblioitems.itemtype"  => 1,
+    "aqbudgets.budget_code" => 1,
+);
+
+my $do_it        = $input->param('do_it') ? 1 : 0;
+my $line         = "aqbasket.closedate";
+my $line_input   = $input->param("Line");
+my $column       = "aqbooksellers.name";
+my $column_input = $input->param("Column");
+my @filters      = $input->multi_param("Filter");
+my $podsp;
+my $podsp_input = $input->param("PlacedOnDisplay");
+my $rodsp;
+my $rodsp_input    = $input->param("ReceivedOnDisplay");
+my $calc           = 1;
+my $calc_input     = $input->param("Cellvalue");
+my $output         = "screen";
+my $output_input   = $input->param("output");
+my $basename       = "Export";
+my $basename_input = $input->param("basename");
+
+#NOTE: Validate Line parameter
+if ( $line_input && $allowed_fields{$line_input} ) {
+    $line = $line_input;
 }
+
+#NOTE: Validate Column parameter
+if ( $column_input && $allowed_fields{$column_input} ) {
+    $column = $column_input;
+}
+
+#NOTE: Validate PlacedOnDisplay parameter
+if ( $podsp_input && $podsp_input =~ /^\d+$/ ) {
+    $podsp = $podsp_input;
+}
+
+#NOTE: Validate ReceivedOnDisplay parameter
+if ( $rodsp_input && $rodsp_input =~ /^\d+$/ ) {
+    $rodsp = $rodsp_input;
+}
+
+#NOTE: Validate Cellvalue parameter
+if ( $calc_input && $calc_input =~ /^\d+$/ ) {
+    $calc = $calc_input;
+}
+
+#NOTE: Validate output parameter
+if ( $output_input && ( $output_input eq "screen" || $output_input eq "file" ) ) {
+    $output = $output_input;
+}
+
+#NOTE: Validate basename parameter
+if ($basename_input) {
+    $basename_input =~ s/[^A-Za-z0-9-]+/_/g;
+    if ($basename_input) {
+        $basename = $basename_input;
+    }
+}
+
+#NOTE: Ideally it would be nice to validate the Filter parameter,
+#but that would take a fair bit of work...
 
 our $sep = C4::Context->csv_delimiter( scalar $input->param("sep") );
 
@@ -435,41 +481,47 @@ sub calculate {
     $strcalc .= " AND aqorders.datereceived IS NOT NULL AND aqorders.datereceived <> '' "
         if ( $process == 5 );
     @$filters[0] =~ s/\*/%/g if ( @$filters[0] );
-    $strcalc .= " AND aqbasket.closedate >= '" . @$filters[0] . "'"
+    $strcalc .= " AND aqbasket.closedate >= ?"
         if ( @$filters[0] );
     @$filters[1] =~ s/\*/%/g if ( @$filters[1] );
-    $strcalc .= " AND aqbasket.closedate <= '" . @$filters[1] . "'"
+    $strcalc .= " AND aqbasket.closedate <= ?"
         if ( @$filters[1] );
     @$filters[2] =~ s/\*/%/g if ( @$filters[2] );
-    $strcalc .= " AND aqorders.datereceived >= '" . @$filters[2] . "'"
+    $strcalc .= " AND aqorders.datereceived >= ?"
         if ( @$filters[2] );
     @$filters[3] =~ s/\*/%/g if ( @$filters[3] );
-    $strcalc .= " AND aqorders.datereceived <= '" . @$filters[3] . "'"
+    $strcalc .= " AND aqorders.datereceived <= ?"
         if ( @$filters[3] );
     @$filters[4] =~ s/\*/%/g if ( @$filters[4] );
-    $strcalc .= " AND aqbooksellers.name LIKE '" . @$filters[4] . "'"
+    $strcalc .= " AND aqbooksellers.name LIKE ?"
         if ( @$filters[4] );
-    $strcalc .= " AND items.homebranch = '" . @$filters[5] . "'"
+    $strcalc .= " AND items.homebranch = ?"
         if ( @$filters[5] );
     @$filters[6] =~ s/\*/%/g if ( @$filters[6] );
-    $strcalc .= " AND items.ccode = '" . @$filters[6] . "'"
+    $strcalc .= " AND items.ccode = ?"
         if ( @$filters[6] );
     @$filters[7] =~ s/\*/%/g if ( @$filters[7] );
-    $strcalc .= " AND biblioitems.itemtype LIKE '" . @$filters[7] . "'"
+    $strcalc .= " AND biblioitems.itemtype LIKE ?"
         if ( @$filters[7] );
     @$filters[8] =~ s/\*/%/g if ( @$filters[8] );
-    $strcalc .= " AND aqbudgets.budget_code LIKE '" . @$filters[8] . "'"
+    $strcalc .= " AND aqbudgets.budget_code LIKE ?"
         if ( @$filters[8] );
     @$filters[9] =~ s/\*/%/g if ( @$filters[9] );
-    $strcalc .= " AND aqorders.sort1 LIKE '" . @$filters[9] . "'"
+    $strcalc .= " AND aqorders.sort1 LIKE ?"
         if ( @$filters[9] );
     @$filters[10] =~ s/\*/%/g if ( @$filters[10] );
-    $strcalc .= " AND aqorders.sort2 LIKE '" . @$filters[10] . "'"
+    $strcalc .= " AND aqorders.sort2 LIKE ?"
         if ( @$filters[10] );
 
     $strcalc .= " GROUP BY $linefield, $colfield ORDER BY $linefield,$colfield";
     my $dbcalc = $dbh->prepare($strcalc);
-    $dbcalc->execute;
+    my @bind   = ();
+    foreach my $filter (@$filters) {
+        if ($filter) {
+            push( @bind, $filter );
+        }
+    }
+    $dbcalc->execute(@bind);
 
     my $emptycol;
     while ( my ( $row, $col, $value ) = $dbcalc->fetchrow ) {
