@@ -18,6 +18,7 @@
 use Modern::Perl;
 
 use Test::More;
+use Test::NoWarnings;
 use Cwd     qw( abs_path );
 use FindBin qw( $Bin );
 
@@ -30,16 +31,19 @@ my $units_dir = abs_path("$Bin/../debian/systemd");
 plan( skip_all => 'debian/systemd not found' )
     unless $units_dir && -d $units_dir;
 
+my $probe = qx(systemd-analyze verify --unit-path=/tmp /bin/true 2>&1);
+plan( skip_all => 'systemd-analyze --unit-path not supported; upgrade systemd' )
+    if $probe =~ /unrecognized option/;
+
 opendir( my $dh, $units_dir ) or die "Cannot open $units_dir: $!";
 my @units =
     sort
-    grep { /\.(service|target|socket|timer)$/ }
-    readdir $dh;
+    grep { /\.(service|target|socket|timer)$/ } readdir $dh;
 closedir $dh;
 
 plan( skip_all => 'No unit files found in debian/systemd' ) unless @units;
 
-plan tests => scalar @units;
+plan tests => scalar(@units) + 1;
 
 for my $unit (@units) {
     my $output = qx(systemd-analyze verify --no-pager "--unit-path=$units_dir" $unit 2>&1);
