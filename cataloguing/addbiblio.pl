@@ -489,15 +489,14 @@ sub build_tabs {
 # ========================
 #          MAIN
 #=========================
-my $input         = CGI->new;
-my $error         = $input->param('error');
-my $biblionumber  = $input->param('biblionumber');         # if biblionumber exists, it's a modif, not a new biblio.
-my $parentbiblio  = $input->param('parentbiblionumber');
-my $breedingid    = $input->param('breedingid');
-my $z3950         = $input->param('z3950');
-my $mode          = $input->param('mode') // q{};
-my $frameworkcode = $input->param('frameworkcode');
-$frameworkcode = '' if ( $frameworkcode eq 'Default' );
+my $input            = CGI->new;
+my $error            = $input->param('error');
+my $biblionumber     = $input->param('biblionumber');         # if biblionumber exists, it's a modif, not a new biblio.
+my $parentbiblio     = $input->param('parentbiblionumber');
+my $breedingid       = $input->param('breedingid');
+my $z3950            = $input->param('z3950');
+my $mode             = $input->param('mode') // q{};
+my $frameworkcode    = $input->param('frameworkcode');
 my $redirect         = $input->param('redirect');
 my $searchid         = $input->param('searchid') // "";
 my $dbh              = C4::Context->dbh;
@@ -511,10 +510,17 @@ my $fa_branch             = $input->param('branch');
 my $fa_stickyduedate      = $input->param('stickyduedate');
 my $fa_duedatespec        = $input->param('duedatespec');
 
-$op            = $input->param('op') // q{};
+$op = $input->param('op') // q{};
+
+# edit a record, frameworkcode is not defined
 $frameworkcode = &GetFrameworkCode($biblionumber)
     if ( $biblionumber and not( defined $frameworkcode ) and $op ne 'cud-addbiblio' );
+
+# cataloguing new record, frameworkcode is not defined
 $frameworkcode //= '';
+
+# z39.50 search, frameworkcode=Default
+$frameworkcode = '' if ( $frameworkcode eq 'Default' );
 
 my $fast_cataloging_mode =
     $frameworkcode eq ''
