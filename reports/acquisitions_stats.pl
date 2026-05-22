@@ -119,7 +119,14 @@ if ($basename_input) {
 #NOTE: Ideally it would be nice to validate the Filter parameter,
 #but that would take a fair bit of work...
 
-our $sep = C4::Context->csv_delimiter( scalar $input->param("sep") );
+#NOTE: Validate sep parameter
+our $sep = C4::Context->csv_delimiter();
+my $sep_input         = scalar $input->param("sep");
+my $delimiter_choices = GetDelimiterChoices();
+my %allowed_seps      = map { $_ => 1 } @{ $delimiter_choices->{values} };
+if ( $sep_input && $allowed_seps{$sep_input} ) {
+    $sep = $sep_input;
+}
 
 $template->param(
     do_it                    => $do_it,
