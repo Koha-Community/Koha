@@ -503,4 +503,26 @@ sub guarantors_can_see_checkouts {
     };
 }
 
+=head3 overdues_count
+
+Controller function that returns the count of overdue checkouts for a patron.
+
+=cut
+
+sub overdues_count {
+    my $c = shift->openapi->valid_input or return;
+
+    return try {
+        my $patron = Koha::Patrons->find( $c->param('patron_id') );
+        return $c->render_resource_not_found("Patron") unless $patron;
+
+        return $c->render(
+            status  => 200,
+            openapi => $patron->overdues->count,
+        );
+    } catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 1;
