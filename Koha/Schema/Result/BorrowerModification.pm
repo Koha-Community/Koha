@@ -103,6 +103,8 @@ patron/borrower's middle name
   data_type: 'tinytext'
   is_nullable: 1
 
+the house number for your patron/borrower's primary address
+
 =head2 streettype
 
   data_type: 'varchar'
@@ -176,6 +178,8 @@ patron/borrower's middle name
   accessor: 'b_streetnumber'
   data_type: 'tinytext'
   is_nullable: 1
+
+the house number for your patron/borrower's alternate address
 
 =head2 B_streettype
 
@@ -648,8 +652,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("verification_token", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-02-03 09:57:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:h0JPmqWPv7elhdENUDSnFw
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-05-24 16:32:52
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:++h8gd2OoZZ8qD9jm957Lw
 
 __PACKAGE__->add_columns(
     '+gonenoaddress' => { is_boolean => 1 },

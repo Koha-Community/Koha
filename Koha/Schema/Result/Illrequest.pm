@@ -83,7 +83,6 @@ Current Koha status of request
 =head2 status_alias
 
   data_type: 'varchar'
-  is_foreign_key: 1
   is_nullable: 1
   size: 80
 
@@ -217,7 +216,7 @@ __PACKAGE__->add_columns(
   "status",
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "status_alias",
-  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 80 },
+  { data_type => "varchar", is_nullable => 1, size => 80 },
   "placed",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "replied",
@@ -370,29 +369,9 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 status_alias
 
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::AuthorisedValue>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "status_alias",
-  "Koha::Schema::Result::AuthorisedValue",
-  { authorised_value => "status_alias" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "SET NULL",
-    on_update     => "CASCADE",
-  },
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-03-07 16:59:58
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+LJD6O0ZLhsml2/43CSgBg
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-05-24 16:32:52
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HB+SgwXuyzyRq01OslJA8w
 
 __PACKAGE__->has_many(
   "comments",

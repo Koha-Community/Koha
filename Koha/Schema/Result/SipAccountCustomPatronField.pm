@@ -47,9 +47,8 @@ SIP field name e.g. XY
 
 =head2 template
 
-  data_type: 'varchar'
+  data_type: 'text'
   is_nullable: 0
-  size: 80
 
 Template toolkit template
 
@@ -63,7 +62,7 @@ __PACKAGE__->add_columns(
   "field",
   { data_type => "varchar", is_nullable => 0, size => 80 },
   "template",
-  { data_type => "varchar", is_nullable => 0, size => 80 },
+  { data_type => "text", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -115,8 +114,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-02-04 13:31:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1mg3Ed2+AR3Hbzg89mN/NA
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-05-24 16:32:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LoxKYcjEzO7Z2zRaME5eNA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

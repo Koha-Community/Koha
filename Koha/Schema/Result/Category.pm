@@ -30,7 +30,7 @@ __PACKAGE__->table("categories");
   is_nullable: 0
   size: 10
 
-unique primary key used to idenfity the patron category
+unique primary key used to identify the patron category
 
 =head2 description
 
@@ -410,8 +410,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-07-10 07:11:31
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ADt+iDjteg9Jb81L2FMIvg
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-05-24 16:32:52
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vzwTrbCz1W9rJ3k5UrHWtw
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 
