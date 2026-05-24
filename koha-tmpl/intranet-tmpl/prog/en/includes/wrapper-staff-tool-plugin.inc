@@ -62,8 +62,7 @@
 [% WRAPPER 'main-container.inc' aside=dynamicaside %]
     <main> [% content | $raw %] </main>
     <!-- /.row -->
-    [% SET islands = Asset.js("js/vue/dist/islands.esm.js").match('(src="([^"]+)")').1 %]
- <script src="[% islands | $raw %]" type="module">
+    [% SET islands = Asset.js("js/vue/dist/islands.esm.js").match('(src="([^"]+)")').1 %] <script src="[% islands | $raw %]" type="module">
 </script>
     <script nonce="[% Koha.CSPNonce | $raw %]" type="module">
         import { hydrate } from "[% islands | $raw %]";
