@@ -1497,7 +1497,7 @@ function update_search_description(
                 table_settings["default_display_length"] != null
             ) {
                 settings["pageLength"] =
-                    table_settings["default_display_length"];
+                    parseInt(table_settings["default_display_length"], 10);
             }
             if (
                 table_settings.hasOwnProperty("default_sort_order") &&
