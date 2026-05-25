@@ -7,10 +7,17 @@ describe("SCO", () => {
                 values: [objects.items[0].item_id],
             });
         });
+        cy.task("query", {
+            sql: "SELECT value FROM systempreferences WHERE variable='WebBasedSelfCheck'",
+        }).then(value => {
+            cy.wrap(value).as("syspref_WebBasedSelfCheck");
+        });
     });
 
     afterEach(function () {
         cy.task("deleteSampleObjects", this.objects);
+        cy.login();
+        cy.set_syspref("WebBasedSelfCheck", this.syspref_WebBasedSelfCheck);
     });
 
     it("Should not crash if barcode contains '+'", function () {
