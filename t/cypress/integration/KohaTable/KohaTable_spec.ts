@@ -589,3 +589,46 @@ describe("ERM ", () => {
         });
     });
 });
+
+describe("Itemtypes", () => {
+    beforeEach(() => {
+        cy.login();
+        cy.title().should("eq", "Koha staff interface");
+        cy.task("buildSampleObjects", {
+            object: "item_type",
+            count: RESTdefaultPageSize,
+        }).then(itemtypes => {
+            itemtypes.forEach(itemtype => {
+                cy.task("insertObject", {
+                    type: "item_type",
+                    object: itemtype,
+                });
+            });
+            cy.wrap(itemtypes).as("itemtypes");
+        });
+    });
+
+    afterEach(function () {
+        cy.task("deleteSampleObjects", [this.itemtypes]);
+    });
+
+    const table_id = "table_item_type";
+    it("Next && pageLength", function () {
+        cy.visit("/cgi-bin/koha/admin/itemtypes.pl");
+
+        cy.task("query", {
+            sql: "SELECT COUNT(*) as count FROM itemtypes",
+        }).then(result => {
+            cy.get(`#${table_id}_wrapper .dt-info`).contains(
+                `Showing 1 to 10 of ${result[0].count} entries`
+            );
+
+            cy.get(
+                `#${table_id}_wrapper .top.pager .dt-paging-button.next`
+            ).click();
+            cy.get(`#${table_id}_wrapper .dt-info`).contains(
+                `Showing 11 to 20 of ${result[0].count} entries`
+            );
+        });
+    });
+});
