@@ -9,10 +9,7 @@ print_usage(){
     echo " - printer_host   Network Name or IP of the printer (port possibly included) ";
     echo " - printer_name   printername ";
     echo "Note that css printerhost and printername are optional parameters ";
-    echo "Note that this script uses xhtml2pdf command ";
-    echo "    xhtml2pdf command comes with pisa (a python library)
-              To install you need setuptools library for python
-              then type easy_install pisa ";
+    echo "Note that this script uses weasyprint command ";
 
     exit 1;
 }
@@ -27,7 +24,7 @@ then
 fi
 if [[ -n $2 && -f $2 ]]
 then
-    optpisa="--css $2";
+    cssopt="-s $2";
 fi
 if [[ -n $3 ]]
 then
@@ -37,9 +34,11 @@ if [[ -n $4 ]]
 then
     optprinter="$optprinter -d $4";
 fi
-for i in $1/*.html
+
+for i in $(ls $1/*.html 2>/dev/null)
 do
-    xhtml2pdf $optpisa  $i;
+    outputfile=$(echo $i | sed 's/\.html/.pdf/')
+    weasyprint $cssopt $i $outputfile;
 done
 
 if [[ -n $optprinter ]]
