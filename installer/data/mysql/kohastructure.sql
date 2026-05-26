@@ -6155,6 +6155,7 @@ CREATE TABLE `saved_sql` (
   `report_group` varchar(80) DEFAULT NULL,
   `report_subgroup` varchar(80) DEFAULT NULL,
   `mana_id` int(11) DEFAULT NULL,
+  `run_type` enum('any','foreground','background') NOT NULL DEFAULT 'any' COMMENT 'optional constraint forcing this report to always run in the foreground or always as a background job',
   PRIMARY KEY (`id`),
   KEY `sql_area_group_idx` (`report_group`,`report_subgroup`),
   KEY `boridx` (`borrowernumber`)
