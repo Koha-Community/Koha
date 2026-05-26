@@ -632,8 +632,10 @@ function _dt_visibility(table_settings, table_dt) {
                 table_settings.hasOwnProperty("default_display_length") &&
                 table_settings["default_display_length"] != null
             ) {
-                settings["pageLength"] =
-                    table_settings["default_display_length"];
+                settings["pageLength"] = parseInt(
+                    table_settings["default_display_length"],
+                    10
+                );
             }
             if (
                 table_settings.hasOwnProperty("default_sort_order") &&
