@@ -739,6 +739,7 @@ sub save_report {
     my $subgroup       = $fields->{subgroup};
     my $cache_expiry   = $fields->{cache_expiry};
     my $public         = $fields->{public};
+    my $run_type       = $fields->{run_type};
 
     $sql =~ s/(\s*\;\s*)$//;    # removes trailing whitespace and /;/
     my $now    = dt_from_string;
@@ -756,6 +757,7 @@ sub save_report {
             notes           => $notes,
             cache_expiry    => $cache_expiry,
             public          => $public,
+            run_type        => $run_type,
         }
     )->store;
 
@@ -778,6 +780,7 @@ sub update_sql {
     my $subgroup     = $fields->{subgroup};
     my $cache_expiry = $fields->{cache_expiry};
     my $public       = $fields->{public};
+    my $run_type     = $fields->{run_type};
 
     $sql =~ s/(\s*\;\s*)$// if defined $sql;    # removes trailing whitespace and /;/
     my $report = Koha::Reports->find($id);
@@ -789,6 +792,7 @@ sub update_sql {
     $report->report_subgroup($subgroup);
     $report->cache_expiry($cache_expiry) if defined $cache_expiry;
     $report->public($public);
+    $report->run_type($run_type);
     $report->store();
 
     if ( $cache_expiry >= 2592000 ) {

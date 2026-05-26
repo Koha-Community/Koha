@@ -1054,7 +1054,7 @@
                     [% IF ( template_id ) %]
                         <input type="hidden" name="template" value="[% template_id | html %]" />
                     [% END %]
-                    [% IF can_run_report.foreground && can_run_report.background %]
+                    [% IF can_run_report.foreground && can_run_report.background && report_run_type == 'any' %]
                         <button type="submit" name="run_in_background" value="0" class="btn btn-primary"><i class="fa-solid fa-play" aria-hidden="true"></i> Run now</button>
                         <button type="submit" name="run_in_background" value="1" class="btn btn-default"><i class="fa-solid fa-clock" aria-hidden="true"></i> Queue as background job</button>
                     [% ELSE %]
@@ -1611,6 +1611,14 @@
                         </li>
                     [% END # /IF (usecache) %]
                     <li>
+                        <label for="run_type">Run type:</label>
+                        <select id="run_type" name="run_type">
+                            <option value="any" [% IF !run_type || run_type == 'any' %]selected="selected"[% END %]>Both</option>
+                            <option value="foreground" [% IF run_type == 'foreground' %]selected="selected"[% END %]>Foreground only</option>
+                            <option value="background" [% IF run_type == 'background' %]selected="selected"[% END %]>Background only</option>
+                        </select>
+                    </li>
+                    <li>
                         <label for="notes">Notes:</label>
                         <textarea id="notes" name="notes" cols="50" rows="2">[% notes | scrub_html type => 'note' | $raw %]</textarea>
                     </li>
@@ -1741,6 +1749,14 @@
                             </select>
                         </li>
                     [% END %]
+                    <li>
+                       <label for="run_type">Run type:</label>
+                       <select id="run_type" name="run_type">
+                           <option value="any" [% IF !run_type || run_type == 'any' %]selected="selected"[% END %]>Both</option>
+                           <option value="foreground" [% IF run_type == 'foreground' %]selected="selected"[% END %]>Foreground only</option>
+                           <option value="background" [% IF run_type == 'background' %]selected="selected"[% END %]>Background only</option>
+                       </select>
+                    </li>
                     <li>
                         <label for="notes">Notes:</label>
                         <textarea id="notes" name="notes" cols="50" rows="2">[% notes | scrub_html type => 'note' | $raw %]</textarea>

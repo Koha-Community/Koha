@@ -227,6 +227,7 @@ if ( !$op ) {
             'id'                    => $report_id,
             'cache_expiry'          => $report->cache_expiry,
             'public'                => $report->public,
+        'run_type'              => $report->run_type,
             'usecache'              => $usecache,
             'editsql'               => 1,
             'mana_id'               => $report->{mana_id},
@@ -247,6 +248,7 @@ if ( !$op ) {
         my $cache_expiry       = $input->param('cache_expiry');
         my $cache_expiry_units = $input->param('cache_expiry_units');
         my $public             = $input->param('public');
+    my $run_type           = $input->param('run_type');
         my $save_anyway        = $input->param('save_anyway');
         my @errors;
         my $tables   = get_tables();
@@ -320,6 +322,7 @@ if ( !$op ) {
                         notes        => $notes,
                         public       => $public,
                         cache_expiry => $cache_expiry,
+                    run_type     => $run_type,
                     }
                 );
 
@@ -651,6 +654,7 @@ if ( !$op ) {
     my $cache_expiry       = $input->param('cache_expiry');
     my $cache_expiry_units = $input->param('cache_expiry_units');
     my $public             = $input->param('public');
+    my $run_type           = $input->param('run_type');
     my $save_anyway        = $input->param('save_anyway');
     my $tables             = get_tables();
     my @branches           = grep { $_ ne q{} } $input->multi_param('branches');
@@ -733,6 +737,7 @@ if ( !$op ) {
                     notes          => $notes,
                     cache_expiry   => $cache_expiry,
                     public         => $public,
+                    run_type       => $run_type,
                 }
             );
             my $report = Koha::Reports->find($id);
@@ -960,10 +965,19 @@ if ( $op eq 'run' ) {
     my $template_id     = $input->param('template');
     my $want_full_chart = $input->param('want_full_chart') || 0;
 
-    # Decide whether to run as a background job
+    # Decide whether to run as a background job. A value set in saved_sql.run_type
+    # overrides the user's choice.
+    my $report_run_type          = $report ? $report->run_type : 'any';
     my $run_in_background_chosen = defined $input->param('run_in_background_chosen');
-    my $run_in_background        = $can_run_report->{background}
-        && ( !$can_run_report->{foreground} || $input->param('run_in_background') ) ? 1 : 0;
+    my $run_in_background;
+    if ( $report_run_type eq 'background' ) {
+        $run_in_background = 1;
+    } elsif ( $report_run_type eq 'foreground' ) {
+        $run_in_background = 0;
+    } else {
+        $run_in_background = $can_run_report->{background}
+            && ( !$can_run_report->{foreground} || $input->param('run_in_background') ) ? 1 : 0;
+    }
 
     output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
         unless $can_run_report->{ $run_in_background ? 'background' : 'foreground' };
@@ -984,9 +998,10 @@ if ( $op eq 'run' ) {
     }
 
     $template->param(
-        limit      => $limit,
-        id         => $report_id,
-        open_in_dt => scalar $input->param('open_in_dt'),
+        limit           => $limit,
+        id              => $report_id,
+        open_in_dt      => scalar $input->param('open_in_dt'),
+        report_run_type => $report_run_type,
     );
 
     my ( $sql, $original_sql, $type, $name, $notes );
@@ -1172,7 +1187,7 @@ if ( $op eq 'run' ) {
                 'id'              => $report_id,
                 'template_id'     => $template_id,
             );
-        } elsif ( $can_run_report->{foreground} && $can_run_report->{background} && !$run_in_background_chosen ) {
+        } elsif ( $report_run_type eq 'any' && $can_run_report->{foreground} && $can_run_report->{background} && !$run_in_background_chosen ) {
 
             # User needs to pick foreground vs background for this run.
             $template->param(
