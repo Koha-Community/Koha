@@ -51,8 +51,8 @@ This will return a list of all the available delimiters.
 sub GetDelimiterChoices {
     my $default = C4::Context->preference('CSVDelimiter');
 
-    # NOTE: The below list should match the corresponding options in the .pref file
-    my @dels = ( ';', 'tabulation', ',', '/', '\\', '#' );
+    # Use the centralized list of allowed delimiters from C4::Context
+    my @dels = C4::Context::ALLOWED_CSV_DELIMITERS;
 
     return {
         values  => \@dels,

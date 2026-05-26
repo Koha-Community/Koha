@@ -89,7 +89,7 @@ subtest 'needs_install() tests' => sub {
 
 subtest 'csv_delimiter() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 7;
 
     t::lib::Mocks::mock_preference( 'CSVDelimiter', undef );
     is( C4::Context->csv_delimiter, ',', "csv_delimiter returns comma if system preference CSVDelimiter is undefined" );
@@ -110,6 +110,18 @@ subtest 'csv_delimiter() tests' => sub {
     is(
         C4::Context->csv_delimiter, "\t",
         "csv_delimiter returns '\t' if system preference CSVDelimiter is tabulation"
+    );
+
+    t::lib::Mocks::mock_preference( 'CSVDelimiter', ';' );
+    is( C4::Context->csv_delimiter(','), ',', "csv_delimiter returns comma if passed" );
+    is(
+        C4::Context->csv_delimiter(";"), ';',
+        "csv_delimiter returns semicolon if passed"
+    );
+
+    is(
+        C4::Context->csv_delimiter("£"), ';',
+        "csv_delimiter returns semicolon if not allowed"
     );
 };
 
