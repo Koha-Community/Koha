@@ -242,6 +242,9 @@ C<$params-E<gt>{run_type}> is required and must be C<foreground> or
 C<background>. Missing throws L<Koha::Exceptions::MissingParameter>; any
 other value throws L<Koha::Exceptions::BadParameter>.
 
+If C<saved_sql.run_type> is set to a single mode, calling C<prep_report>
+with the other mode throws L<Koha::Exceptions::Report::RunTypeNotAllowed>.
+
 =cut
 
 sub prep_report {
@@ -329,6 +332,15 @@ sub prep_report {
     my $run_type = $params->{run_type} // Koha::Exceptions::MissingParameter->throw( parameter => 'run_type' );
     Koha::Exceptions::BadParameter->throw( parameter => 'run_type' )
         unless $run_type =~ /^(foreground|background)$/;
+
+    my $report_run_type = $self->run_type;
+    if ( $report_run_type ne 'any' && $report_run_type ne $run_type ) {
+        Koha::Exceptions::Report::RunTypeNotAllowed->throw(
+            report_id => $report_id,
+            requested => $run_type,
+            allowed   => $report_run_type,
+        );
+    }
 
     $sql .= " /* { saved_sql.id: $report_id } { user_id: $user_id } { run_type: $run_type } */";
 

@@ -19,6 +19,11 @@ use Exception::Class (
         description => 'The selected library is not allowed for this report',
         fields      => [ 'report_id', 'branchcode' ],
     },
+    'Koha::Exceptions::Report::RunTypeNotAllowed' => {
+        isa         => 'Koha::Exceptions::Report',
+        description => "The report's run_type is set to a value that does not match the allowed one",
+        fields      => [ 'report_id', 'requested', 'allowed' ],
+    },
 );
 
 =head1 NAME
@@ -45,6 +50,11 @@ branchcodes the report's library limits allow under LimitReportsBy.
 =head2 description
 
 Returns the description of the exception.
+
+=head2 Koha::Exceptions::Report::RunTypeNotAllowed
+
+Exception raised when the requested run_type does not match the run_type
+the report is set to.
 
 =cut
 

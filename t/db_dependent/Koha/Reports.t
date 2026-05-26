@@ -20,7 +20,7 @@ use Modern::Perl;
 use Test::Exception;
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 23;
+use Test::More tests => 24;
 
 use C4::Context;
 use Koha::BackgroundJob;
@@ -72,6 +72,7 @@ subtest 'prep_report' => sub {
         {
             report_name => 'report_name_for_test_1',
             savedsql    => 'SELECT * FROM items WHERE itemnumber IN <<Test|list>>',
+            run_type    => 'any',
         }
     )->store;
     my $id = $report->id;
@@ -1215,7 +1216,34 @@ subtest 'can_run_foreground_background' => sub {
         Koha::Report->can_run_foreground_background($you_get_nothing_dude),
         { foreground => 0, background => 0 }, 'no permissions cannot run'
     );
+};
 
+subtest 'prep_report() honors saved_sql.run_type setting' => sub {
+    plan tests => 5;
+
+    my $fg_report =
+        Koha::Report->new( { report_name => 'fg_only', savedsql => 'SELECT 1', run_type => 'foreground' } )->store;
+    my $bg_report =
+        Koha::Report->new( { report_name => 'bg_only', savedsql => 'SELECT 1', run_type => 'background' } )->store;
+    my $any_report =
+        Koha::Report->new( { report_name => 'any_runtype', savedsql => 'SELECT 1', run_type => 'any' } )->store;
+
+    throws_ok { $fg_report->prep_report( [], [], { run_type => 'background' } ) }
+    'Koha::Exceptions::Report::RunTypeNotAllowed',
+        'foreground-only report rejects a background request';
+
+    throws_ok { $bg_report->prep_report( [], [], { run_type => 'foreground' } ) }
+    'Koha::Exceptions::Report::RunTypeNotAllowed',
+        'background-only report rejects a foreground request';
+
+    lives_ok { $fg_report->prep_report( [], [], { run_type => 'foreground' } ) }
+    'foreground-only report accepts a foreground request';
+
+    lives_ok { $bg_report->prep_report( [], [], { run_type => 'background' } ) }
+    'background-only report accepts a background request';
+
+    lives_ok { $any_report->prep_report( [], [], { run_type => 'background' } ) }
+    'any-runtype report accepts either request';
 };
 
 $schema->storage->txn_rollback;
