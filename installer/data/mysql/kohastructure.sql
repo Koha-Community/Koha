@@ -3,7 +3,7 @@
 --
 -- Host: db    Database: koha_kohadev
 -- ------------------------------------------------------
--- Server version	12.1.2-MariaDB-ubu2404
+-- Server version	12.2.2-MariaDB-ubu2404
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -7226,4 +7226,4 @@ CREATE TABLE `zebraqueue` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-05 17:27:25
+-- Dump completed on 2026-05-26 16:13:34
