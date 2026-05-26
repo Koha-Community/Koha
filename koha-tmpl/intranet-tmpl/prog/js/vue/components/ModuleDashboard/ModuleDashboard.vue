@@ -4,7 +4,7 @@
             <p>
                 {{ $__("Customize your dashboard by adding widgets.") }}
                 <a href="#" id="open-widget-picker" @click="toggleWidgetPicker">
-                    {{ $__("Open Widget Picker") }}
+                    {{ $__("Open widget picker") }}
                 </a>
             </p>
         </div>

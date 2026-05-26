@@ -247,7 +247,7 @@
                         <a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form_sql" class="btn btn-primary">Create report from SQL</a>
                     [% END %]
 
-                    <h2>Reports Dictionary</h2>
+                    <h2>Reports dictionary</h2>
                     <p>Use the reports dictionary to define custom criteria to use in your reports</p>
                     <a href="/cgi-bin/koha/reports/dictionary.pl?op=list" class="btn btn-primary">View dictionary</a>
                 [% END # /IF (start) %]
@@ -1645,8 +1645,8 @@
                                 [% ELSIF ( error.total_running_reports_limit_exceeded ) %]
                                     <p>You have too many reports running at the moment. Please wait for some of them to finish before running this report again.</p>
                                 [% ELSIF ( error.sqlerr ) %]
-                                    <p>This report contains an SQL keyword: <strong>[% error.sqlerr | html %]</strong>. </p
-                                    ><p>Use of this keyword is not allowed in Koha reports due to security and data integrity risks. Only SELECT queries are allowed.</p>
+                                    <p>This report contains an SQL keyword: <strong>[% error.sqlerr | html %]</strong>. </p>
+                                    <p>Use of this keyword is not allowed in Koha reports due to security and data integrity risks. Only SELECT queries are allowed.</p>
                                     <p>Please delete this report or retry creating a new one.</p>
                                 [% ELSIF ( error.queryerr ) %]
                                     <h2>SQL error:</h2>

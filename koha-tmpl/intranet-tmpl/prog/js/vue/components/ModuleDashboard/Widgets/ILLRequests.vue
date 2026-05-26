@@ -13,7 +13,7 @@
                     type="button"
                     @click="visitOldILLModule"
                 >
-                    {{ $__("Visit ILL requests (previously ILL Module)") }}
+                    {{ $__("Visit ILL requests (previously ILL module)") }}
                 </button>
             </div>
         </template>
@@ -157,10 +157,10 @@ export default {
         const baseWidget = useBaseWidget(
             {
                 id: "ILLRequests",
-                name: $__("ILL Requests"),
+                name: $__("ILL requests"),
                 icon: "fa fa-download",
                 description: $__(
-                    "Show ILL requests that need action. It filters requests by status and library. Provides a button to visit the ILL requests (previously ILL Module). This widget is configurable."
+                    "Show ILL requests that need action. It filters requests by status and library. Provides a button to visit the ILL requests (previously ILL module). This widget is configurable."
                 ),
                 loading: false,
                 settings: settings,

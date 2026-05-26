@@ -110,7 +110,7 @@ export default {
                 },
                 {
                     name: "securityCode",
-                    label: $__("Security Code"),
+                    label: $__("Security code"),
                     required: true,
                     type: "text",
                     hideIn: ["List"],

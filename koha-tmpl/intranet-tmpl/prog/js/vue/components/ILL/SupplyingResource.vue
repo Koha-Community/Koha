@@ -166,8 +166,8 @@ export default {
                                 <thead>
                                     <tr>
                                         <th>${$__("Barcode")}</th>
-                                        <th>${$__("Home Library")}</th>
-                                        <th>${$__("Holding Library")}</th>
+                                        <th>${$__("Home library")}</th>
+                                        <th>${$__("Holding library")}</th>
                                         <th>${$__("Action")}</th>
                                     </tr>
                                 </thead>
@@ -175,7 +175,7 @@ export default {
 
                         result.forEach(item => {
                             const barcode =
-                                item.external_id || $__("No Barcode");
+                                item.external_id || $__("No barcode");
                             const home_library =
                                 item.home_library_id?.name ||
                                 item.home_library_id ||
@@ -937,14 +937,14 @@ export default {
             resourceAttrs: [
                 {
                     name: "iso18626_request_id",
-                    label: $__("Supplying Agency Request ID"),
+                    label: $__("Supplying agency request ID"),
                     type: "text",
                     hideIn: ["Form"],
                     group: $__("Request details"),
                 },
                 {
                     name: "iso18626_requesting_agency_id",
-                    label: $__("Requesting Agency"),
+                    label: $__("Requesting agency"),
                     type: "relationshipSelect",
                     showElement: {
                         type: "text",
@@ -997,7 +997,7 @@ export default {
                 },
                 {
                     name: "requestingAgencyRequestId",
-                    label: $__("Requesting Agency Request ID"),
+                    label: $__("Requesting agency request ID"),
                     type: "text",
                     hideIn: ["List", "Form"],
                     group: $__("Request details"),

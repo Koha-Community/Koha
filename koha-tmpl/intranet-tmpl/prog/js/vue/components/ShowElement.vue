@@ -216,7 +216,7 @@ export default {
                 return baseElement.accessNestedProperty(valueKey, resource);
             }
             const displayValue = attr.format(resource[valueKey], resource);
-            if (displayValue == "Invalid Date") {
+            if (displayValue == "Invalid date") {
                 return "";
             }
             return displayValue || "";
