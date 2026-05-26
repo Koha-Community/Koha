@@ -16,7 +16,10 @@ describe("SCO", () => {
     it("Should not crash if barcode contains '+'", function () {
         const barcode = `+${this.objects.items[0].item_id}+`;
         cy.visitOpac("/cgi-bin/koha/sco/sco-main.pl?op=logout");
-        cy.get("#patronlogin").should("be.visible").type("koha");
+        cy.get("#patronlogin")
+            .should("be.visible")
+            .should("be.focused")
+            .type("koha");
         cy.get("#patronpw").type("koha");
         cy.get("#mainform button").click();
         cy.get("#barcode").should("be.visible").type(barcode);
