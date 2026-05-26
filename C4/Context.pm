@@ -51,6 +51,10 @@ use Koha::Config::SysPrefs;
 use Koha::Config;
 use Koha;
 
+# NOTE: The below list should match the corresponding options in the .pref file
+# for CSVDelimiter
+use constant ALLOWED_CSV_DELIMITERS => ( ';', 'tabulation', ',', '/', '\\', '#' );
+
 =head1 NAME
 
 C4::Context - Maintain and manipulate the context of a Koha script
@@ -478,6 +482,13 @@ sub delete_preference {
 
 sub csv_delimiter {
     my ( $self, $value ) = @_;
+
+    # Validate input against allowed delimiters
+    if ($value) {
+        my %allowed = map { $_ => 1 } ALLOWED_CSV_DELIMITERS;
+        $value = undef unless $allowed{$value};
+    }
+
     my $delimiter = $value || $self->preference('CSVDelimiter') || ',';
     $delimiter = "\t" if $delimiter eq 'tabulation';
     return $delimiter;

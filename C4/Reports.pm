@@ -64,6 +64,10 @@ sub GetDelimiterChoices {
     my ( $choices, $default ) = $sth->fetchrow;
     my @dels = split /\|/, $choices;
 
+    #See BZ 41834 to see why this kludge is used here in older versions
+    # Use the centralized list of allowed delimiters from C4::Context
+    @dels = C4::Context::ALLOWED_CSV_DELIMITERS;
+
     return {
         values  => \@dels,
         default => $default,
