@@ -1636,25 +1636,26 @@
                 [% IF ( errors ) %]
                     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
                         <div class="alert alert-warning">
-                            <strong>The following error was encountered:</strong><br />
+                            <h1>The following error was encountered:</h1>
                             [% FOREACH error IN errors %]
                                 [% IF ( error.duplicate_running_report ) %]
-                                    This report is already running. Please wait for it to finish before running it again.
+                                    <p>This report is already running. Please wait for it to finish before running it again.</p>
                                 [% ELSIF ( error.total_running_reports_limit_exceeded ) %]
-                                    You have too many reports running at the moment. Please wait for some of them to finish before running this report again.
+                                    <p>You have too many reports running at the moment. Please wait for some of them to finish before running this report again.</p>
                                 [% ELSIF ( error.sqlerr ) %]
-                                    This report contains the SQL keyword <strong>[% error.sqlerr | html %]</strong>.<br />
-                                    Use of this keyword is not allowed in Koha reports due to security and data integrity risks. Only SELECT queries are allowed.<br />
-                                    Please return to the &quot;Saved Reports&quot; screen and delete this report or retry creating a new one.
+                                    <p>
+                                        This report contains an SQL keyword: <strong>[% error.sqlerr | html %]</strong>. Use of this keyword is not allowed in Koha reports due to security and data integrity risks. Only SELECT queries are allowed.
+                                    </p>
+                                    <p>Please delete this report or retry creating a new one.</p>
                                 [% ELSIF ( error.queryerr ) %]
-                                    <span>The database returned the following error:</span> <br />
-                                    [% error.queryerr | html %]<br />Please check the log for further details.
+                                    <h2>SQL error:</h2>
+                                    <p>[% error.queryerr | html %]</p>
+                                    <p>Please check the log for further details.</p>
                                 [% ELSIF ( error.cache_expiry ) %]
-                                    Please select a cache expiry less than 30 days.
+                                    <p>Please select a cache expiry less than 30 days.</p>
                                 [% ELSIF ( error.passworderr ) %]
-                                    The column selection in this report includes a password field.<br />
-                                    The report cannot be executed due to security risks.<br />
-                                    Please edit this report and ensure no password columns have been selected.
+                                    <p>The column selection in this report includes a password field.</p>
+                                    <p>The report cannot be executed due to security risks. Please edit this report and ensure no password columns have been selected.</p>
                                 [% ELSE %]
 
                                 [% END %]
