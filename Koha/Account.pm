@@ -34,6 +34,7 @@ use Koha::Account::Debits;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::Account::DebitTypes;
+use Koha::CirculationRules;
 use Koha::Exceptions;
 use Koha::Exceptions::Account;
 use Koha::Plugins;
@@ -586,6 +587,108 @@ sub add_debit {
     };
 
     return $line;
+}
+
+=head3 add_lost_replacement_fee
+
+    $account->add_lost_replacement_fee(
+        {
+            item              => $item,
+            user_id           => $user_id,
+            issue_id          => $issue_id,        # optional
+            library_id        => $library_id,
+            interface         => $interface,
+            description       => $description,     # optional
+            replacement_price => $replacement_price, # optional; defaults to 0
+        }
+    );
+
+Adds the LOST replacement charge (and any configured lost-item processing fee)
+to this patron's account for the given item. De-duplicates: if a LOST charge
+already exists for this (item, issue) pair, returns without adding anything.
+
+Honours C<useDefaultReplacementCost>: where the replacement price is 0 and the
+preference is on, the itemtype's C<defaultreplacecost> is charged instead. Does
+B<not> consult C<WhenLostChargeReplacementFee> — that gate is the caller's
+responsibility. Branch and interface are caller-supplied.
+
+Returns C<$self> in all cases.
+
+=cut
+
+sub add_lost_replacement_fee {
+    my ( $self, $params ) = @_;
+
+    my $item                 = $params->{item};
+    my $itemtype_obj         = $item->itemtype;
+    my $default_replace_cost = $itemtype_obj->defaultreplacecost;
+    my $issue_id             = $params->{issue_id};
+    my $library_id           = $params->{library_id};
+    my $user_id              = $params->{user_id};
+    my $interface            = $params->{interface};
+    my $description          = $params->{description}       // q{};
+    my $replacement_price    = $params->{replacement_price} // 0;
+
+    if (   C4::Context->preference('useDefaultReplacementCost')
+        && $replacement_price == 0
+        && $default_replace_cost )
+    {
+        $replacement_price = $default_replace_cost;
+    }
+
+    my $existing_charges = $self->lines->search(
+        {
+            itemnumber      => $item->itemnumber,
+            debit_type_code => 'LOST',
+            issue_id        => $issue_id,
+        }
+    )->count;
+
+    if ($existing_charges) {
+        return $self;
+    }
+
+    my $processing_fee = Koha::CirculationRules->get_effective_rule_value(
+        {
+            rule_name    => 'lost_item_processing_fee',
+            categorycode => undef,
+            itemtype     => $itemtype_obj->itemtype,
+            branchcode   => $library_id,
+        }
+    ) // 0;
+
+    my %base_payload = (
+        description => $description,
+        user_id     => $user_id,            # the id of the staff user adding the fee
+        interface   => $interface,
+        library_id  => $library_id,
+        item_id     => $item->itemnumber,
+        ( defined $issue_id ? ( issue_id => $issue_id ) : () ),
+    );
+
+    if ( $processing_fee > 0 ) {
+        $self->add_debit(
+            {
+                %base_payload,
+                amount => $processing_fee,
+                note   => C4::Context->preference('ProcessingFeeNote'),
+                type   => 'PROCESSING',
+            }
+        );
+    }
+
+    if ( $replacement_price > 0 ) {
+        $self->add_debit(
+            {
+                %base_payload,
+                amount => $replacement_price,
+                note   => undef,
+                type   => 'LOST',
+            }
+        );
+    }
+
+    return $self;
 }
 
 =head3 payout_amount

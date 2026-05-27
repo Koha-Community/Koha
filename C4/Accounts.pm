@@ -66,18 +66,12 @@ FIXME : if no replacement price, borrower just doesn't get charged?
 =cut
 
 sub chargelostitem {
-    my $dbh = C4::Context->dbh();
     my ( $borrowernumber, $itemnumber, $replacementprice, $description, $opts ) = @_;
     $opts ||= {};
 
     my $patron = Koha::Patrons->find($borrowernumber);
     my $item   = Koha::Items->find($itemnumber);
-    my $itype  = $item->itemtype;
     $replacementprice //= 0;
-
-    my $defaultreplacecost        = $itype->defaultreplacecost;
-    my $usedefaultreplacementcost = C4::Context->preference("useDefaultReplacementCost");
-    my $processingfeenote         = C4::Context->preference("ProcessingFeeNote");
 
     my $lost_control_pref = C4::Context->preference('LostChargesControl');
     my $lost_control_branch;
@@ -105,66 +99,21 @@ sub chargelostitem {
         $issue_id = $checkout ? $checkout->issue_id : undef;
     }
 
-    if ( $usedefaultreplacementcost && $replacementprice == 0 && $defaultreplacecost ) {
-        $replacementprice = $defaultreplacecost;
-    }
+    my $account    = Koha::Account->new( { patron_id => $borrowernumber } );
+    my $userenv    = C4::Context->userenv;
+    my $manager_id = $userenv ? $userenv->{number} : undef;
 
-    my $account = Koha::Account->new( { patron_id => $borrowernumber } );
-
-    my $existing_charges = $account->lines->search(
+    $account->add_lost_replacement_fee(
         {
-            itemnumber      => $itemnumber,
-            debit_type_code => 'LOST',
-            issue_id        => $issue_id,
+            item              => $item,
+            issue_id          => $issue_id,
+            library_id        => $library_id,
+            user_id           => $manager_id,
+            interface         => $interface,
+            description       => $description,
+            replacement_price => $replacementprice,
         }
-    )->count();
-
-    # OK, they haven't
-    unless ($existing_charges) {
-
-        my $processfee = Koha::CirculationRules->get_effective_rule_value(
-            {
-                rule_name    => "lost_item_processing_fee",
-                categorycode => undef,
-                itemtype     => $itype->itemtype,
-                branchcode   => $library_id,
-            }
-        ) // 0;
-
-        #add processing fee
-        if ( $processfee && $processfee > 0 ) {
-            my $accountline = $account->add_debit(
-                {
-                    amount      => $processfee,
-                    description => $description,
-                    note        => $processingfeenote,
-                    user_id     => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
-                    interface   => $interface,
-                    library_id  => $library_id,
-                    type        => 'PROCESSING',
-                    item_id     => $itemnumber,
-                    ( defined $issue_id ? ( issue_id => $issue_id ) : () ),
-                }
-            );
-        }
-
-        #add replace cost
-        if ( $replacementprice > 0 ) {
-            my $accountline = $account->add_debit(
-                {
-                    amount      => $replacementprice,
-                    description => $description,
-                    note        => undef,
-                    user_id     => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
-                    interface   => $interface,
-                    library_id  => $library_id,
-                    type        => 'LOST',
-                    item_id     => $itemnumber,
-                    ( defined $issue_id ? ( issue_id => $issue_id ) : () ),
-                }
-            );
-        }
-    }
+    );
 }
 
 =head2 purge_zero_balance_fees
