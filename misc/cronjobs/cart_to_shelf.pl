@@ -30,16 +30,11 @@ use warnings;
 
 use Koha::Script -cron;
 use C4::Items qw( CartToShelf );
-use C4::Log   qw( cronlogaction );
 
 use C4::Context;
 use Getopt::Long qw( GetOptions );
 
 my $hours = 0;
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 GetOptions( 'h|hours=s' => \$hours, );
 
 my $usage = <<'ENDUSAGE';
@@ -68,4 +63,3 @@ while ( my ($itemnumber) = $sth->fetchrow_array ) {
     CartToShelf($itemnumber);
 }
 
-cronlogaction( { action => 'End', info => "COMPLETED" } );

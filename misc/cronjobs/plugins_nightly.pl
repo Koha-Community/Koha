@@ -12,9 +12,6 @@ use Koha::Logger;
 use Koha::Plugins;
 use Koha::Script -cron;
 
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 my $metadata;
 my $help;
 GetOptions(
@@ -45,8 +42,6 @@ if ( C4::Context->config("enable_plugins") ) {
         };
     }
 }
-
-cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 =head1 NAME
 

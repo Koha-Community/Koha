@@ -50,7 +50,6 @@ my $log;
 my $maxdays;
 my $verify_issue;
 
-
 GetOptions(
     'h|help'        => \$help,
     'v|verbose'     => \$verbose,

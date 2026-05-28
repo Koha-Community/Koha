@@ -32,11 +32,6 @@ use Koha::Script -cron;
 use Koha::DateUtils;
 use Koha::Checkouts;
 use Koha::Recalls;
-use C4::Log;
-
-my $command_line_options = join( " ", @ARGV );
-
-cronlogaction( { info => $command_line_options } );
 
 my $recalls = Koha::Recalls->search( { status => 'requested' } );
 while ( my $recall = $recalls->next ) {
@@ -45,4 +40,3 @@ while ( my $recall = $recalls->next ) {
     }
 }
 
-cronlogaction( { action => 'End', info => "COMPLETED" } );

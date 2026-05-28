@@ -10,7 +10,6 @@ use C4::Templates;
 use File::Spec;
 use Pod::Usage   qw( pod2usage );
 use Getopt::Long qw( GetOptions );
-use C4::Log      qw( cronlogaction );
 
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Email;
@@ -28,10 +27,6 @@ my (
     $send,
     @emails,
 );
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 $send = 1;
 GetOptions(
     'h|help'        => \$help,
@@ -144,8 +139,6 @@ if (@emails) {
         );
     }
 }
-
-cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 sub print_notices {
     my ($params) = @_;

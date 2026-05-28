@@ -23,12 +23,9 @@ use Pod::Usage   qw( pod2usage );
 
 use Koha::Script -cron;
 use C4::Reserves;
-use C4::Log qw( cronlogaction );
 use Koha::Holds;
 use Koha::Calendar;
 use Koha::Libraries;
-
-cronlogaction();
 
 =head1 NAME
 
@@ -84,10 +81,6 @@ my $use_calendar = 0;
 my $verbose      = 0;
 my $confirm      = 0;
 my $reason;
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 GetOptions(
     'h|help|?'  => \$help,
     'days=s'    => \$days,
@@ -147,4 +140,3 @@ foreach my $branch (@branchcodes) {
 
 }
 
-cronlogaction( { action => 'End', info => "COMPLETED" } );

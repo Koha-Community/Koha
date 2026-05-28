@@ -9,16 +9,11 @@ use Koha::Script -cron;
 use C4::Members     qw( GetBorrowersToExpunge );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Patrons;
-use C4::Log qw( cronlogaction );
 
 my (
     $help,          $verbose,    $not_borrowed_since, $expired_before,            $last_seen,
     @category_code, $branchcode, $file,               @without_restriction_types, $confirm
 );
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 GetOptions(
     'h|help'                     => \$help,
     'v|verbose'                  => \$verbose,
@@ -157,8 +152,6 @@ for my $member (@$members) {
 }
 
 say $confirm ? "$deleted patrons deleted" : "$deleted patrons would have been deleted" if $verbose;
-
-cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 =head1 NAME
 

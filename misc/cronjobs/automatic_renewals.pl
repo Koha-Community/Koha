@@ -81,15 +81,10 @@ use Getopt::Long qw( GetOptions );
 
 use Koha::Script -cron;
 use C4::Context;
-use C4::Log qw( cronlogaction );
 use C4::Letters;
 use Koha::Checkouts;
 use Koha::Libraries;
 use Koha::Patrons;
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 my ( $help, $send_notices, $verbose, $confirm, $digest_per_branch );
 GetOptions(
     'h|help'              => \$help,
@@ -175,8 +170,6 @@ DATA_LOOP:
 } else {
     _ProcessRenewals( \@auto_renews );
 }
-
-cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 =head1 METHODS
 

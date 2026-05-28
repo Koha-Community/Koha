@@ -24,7 +24,6 @@ use C4::Biblio qw(
     LinkBibHeadingsToAuthorities
     ModBiblio
 );
-use C4::Log qw( cronlogaction );
 use Koha::Biblios;
 use Getopt::Long              qw( GetOptions );
 use Pod::Usage                qw( pod2usage );
@@ -54,8 +53,7 @@ my $commit = 100;
 my $tagtolink;
 my $allowrelink = C4::Context->preference("LinkerRelink") // '';
 
-my $command_line_options = join( " ", @ARGV );
-my $result               = GetOptions(
+my $result = GetOptions(
     'v|verbose'      => \$verbose,
     't|test'         => \$test_only,
     'l|link-report'  => \$link_report,

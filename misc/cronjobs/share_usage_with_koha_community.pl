@@ -8,12 +8,7 @@ use Getopt::Long qw( GetOptions );
 use Koha::Script -cron;
 use C4::Context;
 use C4::UsageStats;
-use C4::Log qw( cronlogaction );
-use POSIX   qw( strftime );
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
+use POSIX qw( strftime );
 my ( $help, $verbose, $force, $quiet );
 GetOptions(
     'h|help'    => \$help,
@@ -45,8 +40,6 @@ C4::Context->set_preference(
     'UsageStatsLastUpdateTime',
     strftime( "%s", localtime )
 );
-
-cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 =head1 NAME
 

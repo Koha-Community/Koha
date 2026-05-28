@@ -33,7 +33,6 @@ use Pod::Usage   qw( pod2usage );
 
 use C4::Circulation qw( LostItem MarkIssueReturned );
 use C4::Context;
-use C4::Log qw( cronlogaction );
 use Koha::Checkout;
 use Koha::Checkouts;
 use Koha::Items;
@@ -57,10 +56,6 @@ my $man             = 0;
 my $list_categories = 0;
 my $list_itemtypes  = 0;
 my @skip_lost_values;
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 GetOptions(
     'l|lost=s%'         => \$lost,
     'c|charge=s'        => \$charge,
@@ -581,4 +576,3 @@ if ( !$quiet ) {
     print "\nTOTAL: $total items\n";
 }
 
-cronlogaction( { action => 'End', info => "COMPLETED" } );

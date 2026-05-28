@@ -28,15 +28,10 @@ use Getopt::Long qw( GetOptions );
 
 use Koha::Script -cron;
 use C4::Context qw($context);
-use C4::Log     qw( cronlogaction );
 
 my $verbose = 0;
 my $help    = 0;
 my $conf    = '';
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 GetOptions(
     'verbose' => \$verbose,
     'help'    => \$help,
@@ -87,8 +82,6 @@ for my $cloud (@clouds) {
     close $fh;
 }
 $original_context->set_context;
-
-cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 package ZebraIndex;
 

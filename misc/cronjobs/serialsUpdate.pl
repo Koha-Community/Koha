@@ -24,7 +24,6 @@ use Koha::Script -cron;
 use C4::Context;
 use C4::Serials qw( GetSubscription GetNextDate ModSerialStatus );
 use C4::Serials::Frequency;
-use C4::Log         qw( cronlogaction );
 use Koha::DateUtils qw( dt_from_string );
 
 use Date::Calc   qw( check_date Date_to_Days );
@@ -58,10 +57,6 @@ my $confirm = 0;
 my $verbose = 0;
 my $note    = '';
 my $nonote  = 0;
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 GetOptions(
     'help|h|?'  => \$help,
     'man'       => \$man,
@@ -120,4 +115,3 @@ while ( my $issue = $sth->fetchrow_hashref ) {
     }
 }
 
-cronlogaction( { action => 'End', info => "COMPLETED" } );

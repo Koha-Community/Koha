@@ -24,7 +24,6 @@ use Pod::Usage   qw( pod2usage );
 
 use Koha::Script;
 use Koha::Patrons::Import;
-use C4::Log qw( cronlogaction );
 my $Import = Koha::Patrons::Import->new();
 
 my $csv_file;
@@ -41,8 +40,6 @@ my @preserve_fields;
 my $update_dateexpiry;
 my $update_dateexpiry_from_today;
 my $update_dateexpiry_from_existing;
-
-my $command_line_options = join( " ", @ARGV );
 
 GetOptions(
     'c|confirm'                      => \$confirm,
@@ -67,7 +64,6 @@ pod2usage(q|--file is required|)       unless $csv_file;
 pod2usage(q|--matchpoint is required|) unless $matchpoint;
 
 if ($confirm) {
-    cronlogaction( { action => 'Run', info => $command_line_options } );
 } else {
     warn "Running in dry-run mode, provide --confirm to apply the changes\n";
 }
@@ -135,7 +131,6 @@ my $info =
     . $total;
 
 if ($confirm) {
-    cronlogaction( { action => 'End', info => $info } );
 }
 
 =head1 NAME

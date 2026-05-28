@@ -37,9 +37,6 @@ my @type;
 my @letter_code;
 my $exit_on_plugin_failure = 0;
 
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 GetOptions(
     'u|username:s'             => \$username,
     'p|password:s'             => \$password,
@@ -104,4 +101,3 @@ C4::Letters::SendQueuedMessages(
     }
 );
 
-cronlogaction( { action => 'End', info => "COMPLETED" } );

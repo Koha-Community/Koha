@@ -31,7 +31,6 @@ use Koha::Script -cron;
 use C4::Context;
 use Koha::Patrons;
 use Getopt::Long;
-use C4::Log;
 
 sub usage {
     print STDERR <<USAGE;
@@ -74,8 +73,6 @@ unless ($confirm) {
     print STDERR "Add --confirm to actually perform the anonymization.\n";
     exit(1);
 }
-
-cronlogaction();
 
 my $rows = Koha::Patrons->anonymize_last_borrowers();
 $verbose and print int($rows) . " item's last borrowers anonymized.\n";

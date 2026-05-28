@@ -13,12 +13,7 @@ use Time::HiRes qw(gettimeofday);
 use ZOOM;
 use MARC::File::USMARC;
 use Getopt::Long;
-use C4::Log;
 use Koha::Biblios;
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 my ( $input_marc_file, $number ) = ( '', 0 );
 my ( $version, $confirm, $field, $batch, $max_digits, $cloud_tag );
 GetOptions(
@@ -173,8 +168,6 @@ if ($cloud_tag) {
 # $dbh->do("unlock tables");
 my $timeneeded = time() - $starttime;
 print "$i records done in $timeneeded seconds\n" unless $batch;
-
-cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 sub dewey_french {
     return {

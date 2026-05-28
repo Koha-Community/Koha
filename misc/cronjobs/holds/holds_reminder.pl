@@ -24,7 +24,6 @@ use DateTime::Duration;
 
 use C4::Context;
 use C4::Letters;
-use C4::Log         qw( cronlogaction );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Calendar;
 use Koha::Libraries;
@@ -174,10 +173,6 @@ my $use_calendar = 0;
 my $date_input;
 my $opt_out = 0;
 my @mtts;
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 GetOptions(
     'help|?'       => \$help,
     'man'          => \$man,
@@ -332,4 +327,3 @@ foreach my $branchcode (@branchcodes) {    #BEGIN BRANCH LOOP
 
 }    #END BRANCH LOOP
 
-cronlogaction( { action => 'End', info => "COMPLETED" } );

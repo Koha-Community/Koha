@@ -27,7 +27,6 @@ use Koha::Script -cron;
 use Koha::DateUtils qw( dt_from_string );
 use C4::Context;
 use C4::Biblio qw( UpdateTotalIssues );
-use C4::Log    qw( cronlogaction );
 use DateTime;
 use DateTime::Format::MySQL;
 use Time::HiRes qw( time );
@@ -51,10 +50,6 @@ my $useitems    = 0;
 my $incremental = 0;
 my $progress    = 100;
 my $unit;
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 my $result = GetOptions(
     'v|verbose'    => \$verbose,
     't|test'       => \$test_only,
@@ -102,8 +97,6 @@ process_items() if $useitems;
 process_stats() if $usestats;
 
 report();
-
-cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 exit 0;
 

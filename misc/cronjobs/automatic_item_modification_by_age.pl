@@ -9,10 +9,6 @@ use JSON;
 use Koha::Script -cron;
 use C4::Context;
 use C4::Items;
-use C4::Log qw( cronlogaction );
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
 
 # Getting options
 my ( $verbose, $help, $confirm );
@@ -49,8 +45,6 @@ if ($verbose) {
         say "There is no item to modify";
     }
 }
-
-cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 exit(0);
 

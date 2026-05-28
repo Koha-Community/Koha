@@ -40,7 +40,6 @@ use Koha::Script -cron;
 
 use C4::Accounts qw( purge_zero_balance_fees );
 use C4::Context;
-use C4::Log qw( cronlogaction );
 use C4::Search::History;
 use C4::Search;
 use Koha::BackgroundJobs;
@@ -185,10 +184,6 @@ my $jobs_days;
 my @jobs_types;
 my $reports;
 my $edifact_msg_days;
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 GetOptions(
     'h|help'                     => \$help,
     'confirm'                    => \$confirm,
@@ -862,8 +857,6 @@ if ($edifact_msg_days) {
             : sprintf( "%d EDIFACT messages would have been removed", $count );
     }
 }
-
-cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 exit(0);
 

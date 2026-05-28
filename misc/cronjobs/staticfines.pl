@@ -33,7 +33,6 @@ use Koha::Script -cron;
 use C4::Context;
 use C4::Overdues    qw( CalcFine checkoverdues GetFine Getoverdues );
 use C4::Calendar    qw();                                               # don't need any exports from Calendar
-use C4::Log         qw( cronlogaction );
 use Getopt::Long    qw( GetOptions );
 use List::MoreUtils qw( none );
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -51,10 +50,6 @@ my $borrowernumberlimit;
 my $borrowersalreadyapplied;    # hashref of borrowers for whom we already applied the fine, so it's only applied once
 my $debug    = 0;
 my $bigdebug = 0;
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 GetOptions(
     'h|help'                 => \$help,
     'v|verbose'              => \$verbose,
@@ -259,4 +254,3 @@ Number of Overdue Items:
 EOM
 }
 
-cronlogaction( { action => 'End', info => "COMPLETED" } );

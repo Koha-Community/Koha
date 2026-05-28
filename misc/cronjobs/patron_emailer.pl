@@ -22,7 +22,6 @@ use Koha::Script -cron;
 use Getopt::Long qw( GetOptions );
 use Pod::Usage   qw( pod2usage );
 
-use C4::Log             qw( cronlogaction );
 use C4::Reports::Guided qw( EmailReport );
 
 =head1 NAME
@@ -116,10 +115,6 @@ my $error_msgs = {
     NO_FROM_COL    => "No from email was specified for row ",
     NO_BOR         => "There is no borrower with borrowernumber "
 };
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 GetOptions(
     'help|?'    => \$help,
     'report=i'  => \$report_id,
@@ -175,4 +170,3 @@ if ( $verbose || !$commit ) {
     }
 }
 
-cronlogaction( { action => 'End', info => "COMPLETED" } );

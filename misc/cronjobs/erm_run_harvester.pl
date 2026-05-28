@@ -23,7 +23,6 @@ use Getopt::Long qw( GetOptions );
 use Pod::Usage   qw( pod2usage );
 use POSIX;
 
-use C4::Log         qw( cronlogaction );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::ERM::EUsage::UsageDataProviders;
 use Koha::Script -cron;
@@ -106,9 +105,6 @@ C<erm_run_harvester.pl --begin-date 2000-01-01 --end-date 2024-01-01 --debug --d
 
 =cut
 
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 # Command line option values
 my $help         = 0;
 my $man          = 0;
@@ -184,8 +180,6 @@ while ( my $udprovider = $udproviders->next ) {
     }
 
 }
-
-cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 sub debug_msg {
     my ($msg) = @_;

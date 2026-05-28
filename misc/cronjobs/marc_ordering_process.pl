@@ -62,12 +62,6 @@ use File::Copy   qw( copy move );
 use Koha::Script -cron;
 use Koha::MarcOrder;
 use Koha::MarcOrderAccounts;
-
-use C4::Log qw( cronlogaction );
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 my ( $help, $verbose, $confirm, $delete );
 GetOptions(
     'h|help'    => \$help,
@@ -142,4 +136,3 @@ foreach my $acct (@accounts) {
     print "Moving to next account\n\n";
 }
 print "Process complete\n";
-cronlogaction( { action => 'End', info => "COMPLETED" } );

@@ -168,7 +168,6 @@ use Pod::Usage   qw( pod2usage );
 use Koha::Script -cron;
 use C4::Context;
 use C4::Letters;
-use C4::Log qw( cronlogaction );
 
 use Koha::Patrons;
 
@@ -188,10 +187,6 @@ my $inactive;
 my $renew;
 my $letter_expiry;
 my $letter_renew;
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 GetOptions(
     'help|?'         => \$help,
     'man'            => \$man,
@@ -300,4 +295,3 @@ if ($verbose) {
     print "Skipped $count_skipped active patrons\n"   if $inactive;
 }
 
-cronlogaction( { action => 'End', info => "COMPLETED" } );

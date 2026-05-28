@@ -56,17 +56,12 @@ use Pod::Usage   qw( pod2usage );
 use Try::Tiny    qw( catch try );
 
 use Koha::Script -cron;
-use C4::Log qw( cronlogaction );
 
 use Koha::Account::Lines;
 use Koha::Patrons;
 
 my $help    = 0;
 my $verbose = 0;
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 GetOptions(
     'help'    => \$help,
     'verbose' => \$verbose
@@ -115,8 +110,6 @@ while ( my $patron = $patrons->next ) {
         };
     }
 }
-
-cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 1;
 

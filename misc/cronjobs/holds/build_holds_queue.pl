@@ -13,7 +13,6 @@ use Pod::Usage   qw( pod2usage );
 
 use C4::Context;
 use C4::HoldsQueue qw(CreateQueue);
-use C4::Log        qw( cronlogaction );
 use Koha::Script -cron;
 
 =head1 NAME
@@ -63,10 +62,6 @@ my $help        = 0;
 my $man         = 0;
 my $force       = 0;
 my $unallocated = 0;
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 GetOptions(
     'h|help'        => \$help,
     'm|man'         => \$man,
@@ -87,4 +82,3 @@ if ( $rthq && !$force ) {
 my $loops = C4::Context->preference('HoldsQueueParallelLoopsCount');
 CreateQueue( { loops => $loops, unallocated => $unallocated } );
 
-cronlogaction( { action => 'End', info => "COMPLETED" } );

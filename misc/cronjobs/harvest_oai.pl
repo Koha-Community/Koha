@@ -27,10 +27,6 @@ use Koha::OAI::Client::Harvester;
 use Koha::OAIServers;
 use C4::Log   qw( cronlogaction );
 use Try::Tiny qw( catch try );
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 my ( $help, $verbose, $id, $days, $list, $force );
 
 GetOptions(
@@ -103,8 +99,6 @@ try {
 my $harvester =
     Koha::OAI::Client::Harvester->new( { server => $server, days => $days, force => $force, logger => \&logFunction } );
 $harvester->init();
-
-cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 sub logFunction {
     my $message = shift;

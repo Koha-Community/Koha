@@ -24,7 +24,6 @@ use Koha::Script -cron;
 use C4::Reports::Guided qw( store_results execute_query );
 use Koha::Reports;
 use C4::Context;
-use C4::Log qw( cronlogaction );
 use Koha::Email;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::File::Transports;
@@ -208,10 +207,6 @@ my $filename = undef;
 my $username = undef;
 my $password = undef;
 my $method   = 'LOGIN';
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 GetOptions(
     'help|?'         => \$help,
     'man'            => \$man,
@@ -429,4 +424,3 @@ foreach my $report_id (@ARGV) {
     }
 }
 
-cronlogaction( { action => 'End', info => "COMPLETED" } );

@@ -18,7 +18,6 @@
 use Modern::Perl;
 
 use C4::Context;
-use C4::Log      qw(cronlogaction);
 use Getopt::Long qw( GetOptions );
 use Pod::Usage   qw( pod2usage );
 use Koha::Logger;
@@ -169,10 +168,6 @@ my $reg_aft;
 my $branch_lim;
 my %fields;
 my @where;
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 GetOptions(
     'help|?'          => \$help,
     'man'             => \$man,

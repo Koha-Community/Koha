@@ -45,7 +45,6 @@ use C4::Context;
 use C4::Letters;
 use C4::Members;
 use C4::Members::Messaging;
-use C4::Log qw( cronlogaction );
 use Koha::Items;
 use Koha::Libraries;
 use Koha::Patrons;
@@ -184,10 +183,6 @@ my $itemscontent = join( ',', qw( date_due title author barcode ) );
 
 my $help = 0;
 my $man  = 0;
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 GetOptions(
     'help|?'            => \$help,
     'man'               => \$man,
@@ -701,8 +696,6 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %{ $params->{digests} } )
         }
     }
 }
-
-cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 1;
 

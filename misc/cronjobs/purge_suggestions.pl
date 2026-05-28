@@ -23,14 +23,9 @@ use Getopt::Long qw( GetOptions );
 
 use Koha::Script -cron;
 use C4::Suggestions;
-use C4::Log qw( cronlogaction );
 use C4::Context;
 
 my ( $help, $days, $confirm, $verbose );
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 GetOptions(
     'help|?'    => \$help,
     'days:i'    => \$days,
@@ -73,4 +68,3 @@ if ( !$confirm || $help || !defined($days) ) {
     warn "This script requires a positive number of days. Aborted.\n";
 }
 
-cronlogaction( { action => 'End', info => "COMPLETED" } );

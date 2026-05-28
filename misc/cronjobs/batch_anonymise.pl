@@ -22,7 +22,6 @@ use Modern::Perl;
 use Koha::Script -cron;
 
 use C4::Context;
-use C4::Log qw( cronlogaction );
 
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string output_pref);
@@ -42,10 +41,6 @@ Note: If the system preference 'AnonymousPatron' is not defined, NULL will be us
 USAGE
     exit $_[0];
 }
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 my ( $help, $days, $verbose );
 
 GetOptions(
@@ -78,7 +73,5 @@ $verbose and print int($rows) . " checkouts anonymised.\n";
 $rows = Koha::Old::Holds->filter_by_anonymizable->filter_by_last_update( { days => $days } )->anonymize;
 
 $verbose and print int($rows) . " holds anonymised.\n";
-
-cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 exit(0);

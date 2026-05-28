@@ -30,7 +30,6 @@ use Koha::Script -cron;
 use C4::Context;
 use C4::Letters;
 use C4::Overdues             qw( GetOverdueMessageTransportTypes parse_overdues_letter );
-use C4::Log                  qw( cronlogaction );
 use Koha::Patron::Debarments qw( AddUniqueDebarment );
 use Koha::DateUtils          qw( dt_from_string output_pref );
 use Koha::Calendar;
@@ -341,10 +340,6 @@ my $itemscontent = join( ',', qw( date_due title barcode author itemnumber ) );
 my @myborcat;
 my @myborcatout;
 my ( $date_input, $today );
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 GetOptions(
     'help|?'         => \$help,
     'man'            => \$man,
@@ -1056,4 +1051,3 @@ sub _get_html_end {
 
 }
 
-cronlogaction( { action => 'End', info => "COMPLETED" } );

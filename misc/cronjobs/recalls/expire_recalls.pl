@@ -33,11 +33,6 @@ BEGIN {
 use Koha::Script -cron;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Recalls;
-use C4::Log;
-
-my $command_line_options = join( " ", @ARGV );
-
-cronlogaction( { info => $command_line_options } );
 
 my $recalls = Koha::Recalls->search( { completed => 0 } );
 my $today   = dt_from_string()->truncate( to => 'day' );
@@ -77,4 +72,3 @@ while ( my $recall = $recalls->next ) {
     }
 }
 
-cronlogaction( { action => 'End', info => "COMPLETED" } );
