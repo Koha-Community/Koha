@@ -39,8 +39,27 @@ use File::Basename qw( fileparse );
 use Fcntl          qw( LOCK_EX LOCK_NB );
 
 use C4::Context;
+use C4::Log qw( cronlogaction );
 use Koha::Exceptions;
 use Koha::Exception;
+
+INIT {
+    my $command_line_options = join( " ", @ARGV );
+    cronlogaction( { info => $command_line_options } );
+}
+
+END {
+    cronlogaction( { action => 'End', info => "COMPLETED" } );
+}
+
+=head2 import
+
+    use Koha::Script;
+    use Koha::Script -cron;
+
+Sets the interface and userenv appropriately based on the flags passed.
+
+=cut
 
 sub import {
     my $class = shift;

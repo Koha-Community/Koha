@@ -72,8 +72,6 @@ if ( not $result or $want_help ) {
     usage();
 }
 
-cronlogaction( { info => $command_line_options } );
-
 my $linker_module = "C4::Linker::" . ( C4::Context->preference("LinkerModule") || 'Default' );
 unless ( can_load( modules => { $linker_module => undef } ) ) {
     $linker_module = 'C4::Linker::Default';

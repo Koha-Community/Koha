@@ -50,8 +50,6 @@ my $log;
 my $maxdays;
 my $verify_issue;
 
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
 
 GetOptions(
     'h|help'        => \$help,
@@ -211,8 +209,6 @@ Number of Overdue Items:
 
 EOM
 }
-
-cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 sub set_holiday {
     my ( $branch, $dt ) = @_;
