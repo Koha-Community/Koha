@@ -651,7 +651,7 @@
                                     <label for="branchcode">Library:</label>
                                     <select name="branchcode" id="branchcode">
                                         <option value="">Any</option>
-                                        [% PROCESS options_for_libraries libraries => Branches.all( selected => suggestion.branchcode ) %]
+                                        [% PROCESS options_for_libraries libraries => Branches.all( selected => suggestion.branchcode || default_branch ) %]
                                     </select>
                                 </li>
                                 <li> [% PROCESS funds_dropdown %] </li>
