@@ -138,6 +138,10 @@ sub new {
 
     my $circ_blocked =
         ( C4::Context->preference('OverduesBlockCirc') ne "noblock" && defined $flags->{ODUES}->{itemlist} ) ? 1 : 0;
+
+    # Fetch holds once and derive hold_items and unavail_holds from the result
+    my @holds = $patron->holds->as_list;
+
     {
         no warnings;    # any of these $kp->{fields} being concat'd could be undef
         %ilspatron = (
@@ -168,7 +172,7 @@ sub new {
             screen_msg     => 'Greetings from Koha. ' . $kp->{opacnote} . $fines_msg,
             print_line     => '',
             items          => [],
-            hold_items     => $patron->holds->unblessed,
+            hold_items     => [ map { $_->unblessed } @holds ],
             overdue_items  => $flags->{ODUES}->{itemlist},
             too_many_overdue => $circ_blocked,
             fine_items       => [],
@@ -223,7 +227,7 @@ sub new {
     }
 
     # FIXME: populate recall_items
-    $ilspatron{unavail_holds} = _get_outstanding_holds( $kp->{borrowernumber} );
+    $ilspatron{unavail_holds} = _get_outstanding_holds( \@holds );
 
     my $pending_checkouts = $patron->pending_checkouts;
     my @barcodes;
@@ -695,12 +699,12 @@ sub _get_address {
 }
 
 sub _get_outstanding_holds {
-    my $borrowernumber = shift;
+    my $holds = shift;
 
-    my $patron = Koha::Patrons->find($borrowernumber);
-    my $holds  = $patron->holds->search( { -or => [ { found => undef }, { found => { '!=' => 'W' } } ] } );
     my @holds;
-    while ( my $hold = $holds->next ) {
+    foreach my $hold ( @{$holds} ) {
+        next if ( $hold->found // '' ) eq 'W';
+
         my $item;
         if ( $hold->itemnumber ) {
             $item = $hold->item;
