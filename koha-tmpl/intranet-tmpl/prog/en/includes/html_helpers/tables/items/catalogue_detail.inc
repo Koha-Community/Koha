@@ -430,7 +430,7 @@
                               render: function (data, type, row, meta) {
                                   let node = "";
                                   let item_type_description = row._strings.item_type_id ? row._strings.item_type_id.str : row.item_type_id;
-                                  if (Koha.prefs.noItemTypeImages) {
+                                  if (!Koha.prefs.noItemTypeImages) {
                                       let image_location = item_type_image_locations[row.item_type_id];
                                       node += image_location ? '<img class="itemtype-image" src="%s" alt="" /> '.format(escape_str(image_location), escape_str(item_type_description), escape_str(item_type_description)) : "";
                                   }
