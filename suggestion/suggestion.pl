@@ -296,7 +296,6 @@ if ( $op =~ /cud-save/ ) {
     $template->param(
         other_reason        => $other_reason,
         default_manageddate => dt_from_string,
-        default_branch      => C4::Context->userenv->{"branch"},
     );
     $op = 'save';
 } elsif ( $op eq "cud-update_status" ) {
