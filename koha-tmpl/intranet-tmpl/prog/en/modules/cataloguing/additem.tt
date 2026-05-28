@@ -131,7 +131,7 @@
                                 [% END %]
                             [% END %]
                             [% IF can_be_edited %]
-                                [% tr_class.push = 'editable' %]
+                                [% tr_class.push('editable') %]
                             [% END %]
                             <tr id="row[% item.itemnumber | html %]" class="[% tr_class.join(' ') | html %]" title="[% tr_title | html %]">
                                 [% UNLESS can_be_edited %]
