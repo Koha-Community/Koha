@@ -338,79 +338,81 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'select2.inc' %]
     <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
-        $('#current-article-requests').ready(function() {
+        // Initialize format(s)
+        Koha.addPrefs({
+            ArticleRequestsSupportedFormats: "[% Koha.Preference('ArticleRequestsSupportedFormats') | html %]",
+        });
+    </script>
+    <script nonce="[% Koha.CSPNonce | $raw %]">
+        $("#current-article-requests").ready(function () {
             $(".hide").hide();
         });
 
-        $(document).ready(function() {
-
-            $( ".ar-update-branchcode" ).on('focus', function(){
+        $(document).ready(function () {
+            $(".ar-update-branchcode").on("focus", function () {
                 previous_branchcode = this.value;
-            })
+            });
 
-            $('#modal-cancellation-reason').on('change', function(e) {
+            $("#modal-cancellation-reason").on("change", function (e) {
                 let reason = $(this).val();
-                $('#modal-notes').attr('disabled', !!reason);
-            })
+                $("#modal-notes").attr("disabled", !!reason);
+            });
 
             let cancel_a;
-            $("#cancelModalConfirmBtn").on("click",function(e) {
-                var id = cancel_a.attr('id').split("cancel-")[1];
-                $("#cancel-processing-" + id ).hide('slow');
-                $("#cancel-processing-spinner-" + id ).show('slow');
+            $("#cancelModalConfirmBtn").on("click", function (e) {
+                var id = cancel_a.attr("id").split("cancel-")[1];
+                $("#cancel-processing-" + id).hide("slow");
+                $("#cancel-processing-spinner-" + id).show("slow");
 
                 let reason = $("#modal-cancellation-reason").val();
                 let notes = $("#modal-notes").val();
-                let query = '?'+(reason?'cancellation_reason='+reason:'notes='+notes)
+                let query = "?" + (reason ? "cancellation_reason=" + reason : "notes=" + notes);
 
                 $.ajax({
                     type: "DELETE",
-                    url: '/api/v1/article_requests/'+id+query,
-                    success: function( data ) {
-                        cancel_a.parents('tr').hide('slow');
-                    }
+                    url: "/api/v1/article_requests/" + id + query,
+                    success: function (data) {
+                        cancel_a.parents("tr").hide("slow");
+                    },
                 });
             });
 
-
-            $(".ar-cancel-request").on("click", function(){
+            $(".ar-cancel-request").on("click", function () {
                 cancel_a = $(this);
-                $('#cancelModal').modal('show');
+                $("#cancelModal").modal("show");
             });
 
-            // Initialize format(s)
-            var supported_formats = "[% Koha.Preference('ArticleRequestsSupportedFormats') | $raw %]";
-            if( !supported_formats.match(/PHOTOCOPY/) )
-                $('#format option[value="PHOTOCOPY"]').remove();
-            if( !supported_formats.match(/SCAN/) )
-                $('#format option[value="SCAN"]').remove();
+            if (!Koha.prefs.ArticleRequestsSupportedFormats.match(/PHOTOCOPY/)) $('#format option[value="PHOTOCOPY"]').remove();
+            if (!Koha.prefs.ArticleRequestsSupportedFormats.match(/SCAN/)) $('#format option[value="SCAN"]').remove();
 
-            if( $('#format option').length > 1 ) {
-            // Select first listed format
-                var first_format = supported_formats.split('|')[0].replace(/^\s*|\s*$/g, '');
-                $('#format option[value="'+first_format+'"]').attr('selected', true);
+            if ($("#format option").length > 1) {
+                // Select first listed format
+                var first_format = Koha.prefs.ArticleRequestsSupportedFormats.split("|")[0].replace(/^\s*|\s*$/g, "");
+                $('#format option[value="' + first_format + '"]').attr("selected", true);
             }
         });
 
-        $(".ar-update-branchcode").on('change', async function(e){
+        $(".ar-update-branchcode").on("change", async function (e) {
             var branchcode = this.value;
-            var c = confirm(_("Are you sure you want to change the pickup library from %s to %s for this request?").format( previous_branchcode, branchcode ));
+            var c = confirm(_("Are you sure you want to change the pickup library from %s to %s for this request?").format(previous_branchcode, branchcode));
 
-            if ( c ) {
+            if (c) {
                 var id = this.id.split("branchcode-")[1];
-                $("#update-processing-" + id ).css({opacity: 0, visibility: "visible"}).animate({opacity: 1.0}, 200);
+                $("#update-processing-" + id)
+                    .css({ opacity: 0, visibility: "visible" })
+                    .animate({ opacity: 1.0 }, 200);
 
                 const client = APIClient.article_request;
                 await client.articleRequests.update_library_id(id, branchcode).then(
                     success => {
-                        $("#update-processing-" + id ).css({opacity: 1.0, visibility: "visible"}).animate({opacity: 0}, 200);
+                        $("#update-processing-" + id)
+                            .css({ opacity: 1.0, visibility: "visible" })
+                            .animate({ opacity: 0 }, 200);
                     },
                     error => {
                         console.warn("Something wrong happened: %s", error);
                     }
                 );
-
-
             } else {
                 this.value = previous_branchcode;
             }
