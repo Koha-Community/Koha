@@ -925,9 +925,6 @@ __END__
     {message}     "Yes"
     {itemlist}    ref-to-array: list of overdue books
     {itemlisttext}    Text list of overdue items
- {WAITING}         Set if there are items available that the patron reserved
-    {message}     Message to this effect
-    {itemlist}    ref-to-array: list of available items
 
 =cut
 

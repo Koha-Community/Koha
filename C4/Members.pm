@@ -94,10 +94,6 @@ The following will be set where applicable:
  $flags->{ ODUES }->{itemlist}      ref-to-array: list of overdue books
  $flags->{ ODUES }->{itemlisttext}  Text list of overdue items -- deprecated
 
- $flags->{WAITING}                  Set if any of patron's reserves are available
- $flags->{WAITING}->{message}       Message -- deprecated
- $flags->{WAITING}->{itemlist}      ref-to-array: list of available items
-
 =over
 
 =item C<$flags-E<gt>{ODUES}-E<gt>{itemlist}> is a reference-to-array listing the
@@ -107,10 +103,6 @@ biblioitems, and items tables of the Koha database.
 
 =item C<$flags-E<gt>{ODUES}-E<gt>{itemlisttext}> is a string giving a text listing of
 the overdue items, one per line.  Deprecated.
-
-=item C<$flags-E<gt>{WAITING}-E<gt>{itemlist}> is a reference-to-array listing the
-available items. Each element is a reference-to-hash whose keys are
-fields from the reserves table of the Koha database.
 
 =back
 
@@ -203,14 +195,6 @@ sub patronflags {
         $flags{'ODUES'} = \%flaginfo;
     }
 
-    my $waiting_holds = $patron->holds->search( { found => 'W' } );
-    my $nowaiting     = $waiting_holds->count;
-    if ( $nowaiting > 0 ) {
-        my %flaginfo;
-        $flaginfo{'message'}  = "Reserved items available";
-        $flaginfo{'itemlist'} = $waiting_holds->unblessed;
-        $flags{'WAITING'}     = \%flaginfo;
-    }
     return ( \%flags );
 }
 
