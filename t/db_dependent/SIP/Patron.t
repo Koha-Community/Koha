@@ -5,7 +5,7 @@
 
 use Modern::Perl;
 use Test::NoWarnings;
-use Test::More tests => 12;
+use Test::More tests => 13;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -553,6 +553,41 @@ subtest "Patron messages tests" => sub {
     like(
         $sip_patron->screen_msg, qr/Messages for you: $today: my message 1 \/ $today: my message 2/,
         "Screen message includes patron messages"
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest "hold_items counts all holds ( Bug 42700 )" => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => { borrowernumber => $patron->borrowernumber, found => 'W' },
+        }
+    ) for 1 .. 2;
+
+    $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => { borrowernumber => $patron->borrowernumber, found => undef },
+        }
+    ) for 1 .. 3;
+
+    my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+
+    is(
+        scalar @{ $sip_patron->{hold_items} }, 5,
+        "hold_items contains all holds ( waiting + non-waiting )"
+    );
+    is(
+        scalar @{ $sip_patron->{unavail_holds} }, 3,
+        "unavail_holds contains only non-waiting holds"
     );
 
     $schema->storage->txn_rollback;
