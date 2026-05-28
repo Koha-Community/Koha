@@ -18,8 +18,8 @@
 use Modern::Perl;
 use C4::Context;
 use Net::SFTP::Foreign;
-use C4::Log qw( cronlogaction );
 use Koha::Email;
+use Koha::Script -cron;
 use Getopt::Long   qw( GetOptions );
 use Pod::Usage     qw( pod2usage );
 use Carp           qw( carp );
@@ -126,9 +126,6 @@ my $status_email         = undef;
 my $status_email_message = undef;
 my $sftp_status          = undef;
 
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
-
 GetOptions(
     'help|?'         => \$help,
     'm|man'          => \$man,
@@ -218,4 +215,3 @@ if ($email) {
     ) or warn "can't enqueue letter " . $status_email->{code};
 }
 
-cronlogaction( { action => 'End', info => "COMPLETED" } );

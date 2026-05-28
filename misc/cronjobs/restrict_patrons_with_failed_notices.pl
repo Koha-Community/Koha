@@ -21,15 +21,12 @@ use Modern::Perl;
 
 use Getopt::Long;
 use Pod::Usage;
-use C4::Log;
+use Koha::Script -cron;
 
 use C4::Context;
 use Koha::Patrons;
 use C4::Letters;
 use Koha::Notice::Message;
-
-my $command_line_options = join( " ", @ARGV );
-cronlogaction( { info => $command_line_options } );
 
 # Getting options
 my ( $help, $verbose, $confirm );
