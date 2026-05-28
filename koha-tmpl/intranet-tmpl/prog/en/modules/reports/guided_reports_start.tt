@@ -1643,9 +1643,8 @@
                                 [% ELSIF ( error.total_running_reports_limit_exceeded ) %]
                                     <p>You have too many reports running at the moment. Please wait for some of them to finish before running this report again.</p>
                                 [% ELSIF ( error.sqlerr ) %]
-                                    <p>
-                                        This report contains an SQL keyword: <strong>[% error.sqlerr | html %]</strong>. Use of this keyword is not allowed in Koha reports due to security and data integrity risks. Only SELECT queries are allowed.
-                                    </p>
+                                    <p>This report contains an SQL keyword: <strong>[% error.sqlerr | html %]</strong>. </p
+                                    ><p>Use of this keyword is not allowed in Koha reports due to security and data integrity risks. Only SELECT queries are allowed.</p>
                                     <p>Please delete this report or retry creating a new one.</p>
                                 [% ELSIF ( error.queryerr ) %]
                                     <h2>SQL error:</h2>
