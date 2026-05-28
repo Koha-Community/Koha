@@ -1418,9 +1418,11 @@
                                                         <div id="cardnumber_autolink" class="btn-group dropup autolink no-export"
                                                             ><a class="btn btn-link dropdown-toggle" role="button" data-bs-toggle="dropdown" href="#">[% cells.cell | $raw %] </a>
                                                             <ul class="dropdown-menu" role="menu">
-                                                                <li
-                                                                    ><a target="_blank" href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% cells.cell | $raw %]"><i class="fa fa-barcode" aria-hidden="true"></i> Check out</a></li
-                                                                >
+                                                                <li>
+                                                                    <a class="dropdown-item" target="_blank" href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% cells.cell | $raw %]"
+                                                                        ><i class="fa fa-barcode" aria-hidden="true"></i> Check out</a
+                                                                    >
+                                                                </li>
                                                             </ul>
                                                         </div>
                                                     </td>
