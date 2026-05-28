@@ -3333,18 +3333,15 @@ sub _FixOverduesOnReturn {
                 return 0;    # no warning, we've just removed a zero value fine (backdated return)
             } elsif ( $exemptfine && ( $amountoutstanding != 0 ) ) {
                 my $account = Koha::Account->new( { patron_id => $borrowernumber } );
-                my $credit  = $account->add_credit(
+                my $userenv = C4::Context->userenv;
+                $account->forgive_debit(
+                    $accountline,
                     {
-                        amount     => $amountoutstanding,
-                        user_id    => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
-                        library_id => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
                         interface  => C4::Context->interface,
-                        type       => 'FORGIVEN',
-                        item_id    => $item
+                        user_id    => $userenv ? $userenv->{'number'} : undef,
+                        library_id => $userenv ? $userenv->{'branch'} : undef,
                     }
                 );
-
-                $credit->apply( { debits => [$accountline] } );
 
                 if ( C4::Context->preference("FinesLog") ) {
                     &logaction( "FINES", 'MODIFY', $borrowernumber, "Overdue forgiven: item $item" );

@@ -691,6 +691,50 @@ sub add_lost_replacement_fee {
     return $self;
 }
 
+=head3 forgive_debit
+
+    $account->forgive_debit(
+        $debit_line,
+        {
+            interface  => $interface,
+            user_id    => $user_id,     # optional
+            library_id => $library_id,  # optional
+        }
+    );
+
+Forgive the outstanding amount on C<$debit_line> by creating a C<FORGIVEN>
+credit equal to its C<amountoutstanding> and applying it to the line. Returns
+the created credit, or C<undef> when there is nothing outstanding to forgive.
+
+=cut
+
+sub forgive_debit {
+    my ( $self, $debit, $params ) = @_;
+
+    if ( !defined( $params->{interface} ) ) {
+        Koha::Exceptions::MissingParameter->throw( error => "The interface parameter is mandatory" );
+    }
+
+    my $amount = $debit->amountoutstanding;
+    if ( $amount == 0 ) {
+        return;
+    }
+
+    my $credit = $self->add_credit(
+        {
+            amount     => $amount,
+            user_id    => $params->{user_id},
+            library_id => $params->{library_id},
+            interface  => $params->{interface},
+            type       => 'FORGIVEN',
+            item_id    => $debit->itemnumber,
+        }
+    );
+    $credit->apply( { debits => [$debit] } );
+
+    return $credit;
+}
+
 =head3 payout_amount
 
     my $debit = $account->payout_amount(
