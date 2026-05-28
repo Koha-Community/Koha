@@ -168,7 +168,7 @@ sub new {
             screen_msg     => 'Greetings from Koha. ' . $kp->{opacnote} . $fines_msg,
             print_line     => '',
             items          => [],
-            hold_items     => $flags->{WAITING}->{itemlist},
+            hold_items     => $patron->holds->unblessed,
             overdue_items  => $flags->{ODUES}->{itemlist},
             too_many_overdue => $circ_blocked,
             fine_items       => [],
