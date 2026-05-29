@@ -9,7 +9,7 @@
             </li>
         [% CASE 'scopus' %]
             <li class="identifier_[% info.source.lower | html %]">
-                <span>ScopusID: </span>
+                <span>Scopus ID: </span>
                 <a href="https://www.scopus.com/authid/detail.uri?authorId=[% info.number | url %]">[% info.number | html %]</a>
             </li>
         [% CASE 'loop' %]
@@ -34,8 +34,8 @@
             </li>
         [% CASE 'wikidata' %]
             <li class="identifier_[% info.source.lower | html %]">
-                <span>WIKIDATA ID: </span>
-                <a href="http://www.wikidata.org/entity/[% info.number | url %]">[% info.number | html %]</a>
+                <span>Wikidata ID: </span>
+                <a href="https://www.wikidata.org/entity/[% info.number | url %]">[% info.number | html %]</a>
             </li>
         [% CASE 'uri' %]
             <li class="identifier_[% info.source.lower | html %]">
