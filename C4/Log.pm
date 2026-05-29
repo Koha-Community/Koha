@@ -221,7 +221,7 @@ sub cronlogaction {
     my $info   = $params->{info};
     my $action = $params->{action};
     $action ||= "Run";
-    my $loginfo = ( caller(0) )[1];
+    my $loginfo = ( caller(1) )[1];
     $loginfo .= ' ' . $info                        if $info;
     logaction( 'CRONJOBS', $action, $$, $loginfo ) if C4::Context->preference('CronjobLog');
 }
