@@ -1170,7 +1170,8 @@
         const today_due_date_and_time = "[% today_due_date_and_time | $KohaDates dateformat => 'iso', with_hours => 1 %]";
         const duedatespec = "[% duedatespec | html %]";
         const override_high_holds = [% override_high_holds ? 1 : 0 | html %];
-        const HIGHHOLDS = [% HIGHHOLDS ? To.json(HIGHHOLDS) : 'null' | $raw %];
+        const HIGHHOLDS = [% HIGHHOLDS ? 1 : 0 | html %];
+        const HIGHHOLDS_returndate = "[% HIGHHOLDS.returndate | $KohaDates %]";
         const waiting_holds_barcodes = new Array();
         [% FOREACH wh IN waiting_holds %]
             waiting_holds_barcodes.push("[% wh.item.barcode | html %]");
@@ -1286,7 +1287,7 @@
 
             if (HIGHHOLDS) {
                 if (!override_high_holds) {
-                    $("input[name=duedatespec]:hidden").val(HIGHHOLDS.returndate);
+                    $("input[name=duedatespec]:hidden").val(HIGHHOLDS_returndate);
                     if (duedatespec === "") {
                         $("input[name=restoreduedatespec]:hidden").val("highholds_empty");
                     } else {
