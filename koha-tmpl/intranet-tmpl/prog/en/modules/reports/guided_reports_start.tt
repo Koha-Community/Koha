@@ -381,16 +381,7 @@
                                                                 <ul class="dropdown-menu" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
                                                                     <li><a class="dropdown-item" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | uri %]&amp;op=show"><i class="fa fa-search" aria-hidden="true"></i> View</a></li>
                                                                     <li>
-                                                                        <a
-                                                                            [% # tags below to remove extra whitespace added for readability %]
-                                                                            [%- " "|$raw -%]href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | uri %]&op=show"
-                                                                            [%- " "|$raw -%]class="dropdown-item preview_sql"
-                                                                            [%- " "|$raw -%]data-reportid="[% savedreport.id | html %]"
-                                                                            [%- " "|$raw -%]data-create="[% CAN_user_reports_create_reports || 0 | html %]"
-                                                                            [%- " "|$raw -%]data-delete="[% CAN_user_reports_delete_reports || 0 | html %]"
-                                                                            [%- " "|$raw -%]data-run="[% CAN_user_reports_execute_reports || 0 | html %]"
-                                                                            [%- ""|$raw -%]
-                                                                        >
+                                                                        <a href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | uri %]&op=show" class="dropdown-item preview_sql" data-reportid="[% savedreport.id | html %]" data-create="[% CAN_user_reports_create_reports || 0 | html %]" data-delete="[% CAN_user_reports_delete_reports || 0 | html %]" data-run="[% CAN_user_reports_execute_reports || 0 | html %]">
                                                                             <i class="fa-solid fa-eye" aria-hidden="true"></i> Preview SQL
                                                                         </a>
                                                                     </li>
