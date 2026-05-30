@@ -600,7 +600,7 @@ subtest 'DelSuggestionsOlderThan' => sub {
 };
 
 subtest 'EmailPurchaseSuggestions' => sub {
-    plan tests => 11;
+    plan tests => 13;
 
     $dbh->do(q|DELETE FROM message_queue|);
 
@@ -661,6 +661,21 @@ subtest 'EmailPurchaseSuggestions' => sub {
         'BranchEmailAddress uses branchreplyto in preference to branchemail when set'
     );
 
+    my $branchless_suggestion = { %{$my_suggestion}, branchcode => undef };
+    t::lib::Mocks::mock_preference( "ReplytoDefault", undef );
+
+    # must eval to test itself dying, then check $@ for error
+    eval { Koha::Suggestion->new($branchless_suggestion)->store; };
+    is( $@, '', 'BranchEmailAddress does not die when suggestion has no library branch' );
+
+    $newsuggestions_messages = C4::Letters::GetQueuedMessages( { letter_code => 'NEW_SUGGESTION' } );
+    my $message_branchless =
+        C4::Letters::GetMessage( $newsuggestions_messages->[4]->{message_id} );
+    is(
+        $message_branchless->{to_address}, undef,
+        'BranchEmailAddress sets no to_address when suggestion has no branch'
+    );
+
     # EmailPurchaseSuggestions set to KohaAdminEmailAddress
     t::lib::Mocks::mock_preference(
         "EmailPurchaseSuggestions",
@@ -675,13 +690,13 @@ subtest 'EmailPurchaseSuggestions' => sub {
 
     $newsuggestions_messages = C4::Letters::GetQueuedMessages( { letter_code => 'NEW_SUGGESTION' } );
     my $message5 =
-        C4::Letters::GetMessage( $newsuggestions_messages->[4]->{message_id} );
+        C4::Letters::GetMessage( $newsuggestions_messages->[5]->{message_id} );
     is(
         $message5->{to_address},
         'noreply@hosting.com', 'KohaAdminEmailAddress uses KohaAdminEmailAddress when ReplytoDefault is not set'
     );
     my $message6 =
-        C4::Letters::GetMessage( $newsuggestions_messages->[5]->{message_id} );
+        C4::Letters::GetMessage( $newsuggestions_messages->[6]->{message_id} );
     is(
         $message6->{to_address},
         'library@b.c', 'KohaAdminEmailAddress uses ReplytoDefualt when ReplytoDefault is set'
@@ -707,7 +722,7 @@ subtest 'EmailPurchaseSuggestions' => sub {
 
     $newsuggestions_messages = C4::Letters::GetQueuedMessages( { letter_code => 'NEW_SUGGESTION' } );
     my $message7 =
-        C4::Letters::GetMessage( $newsuggestions_messages->[6]->{message_id} );
+        C4::Letters::GetMessage( $newsuggestions_messages->[7]->{message_id} );
     is(
         $message7->{to_address},
         'noreply@hosting.com',
@@ -715,14 +730,14 @@ subtest 'EmailPurchaseSuggestions' => sub {
     );
 
     my $message8 =
-        C4::Letters::GetMessage( $newsuggestions_messages->[7]->{message_id} );
+        C4::Letters::GetMessage( $newsuggestions_messages->[8]->{message_id} );
     is(
         $message8->{to_address},
         'library@b.c', 'EmailAddressForSuggestions uses ReplytoDefault when EmailAddressForSuggestions is not set'
     );
 
     my $message9 =
-        C4::Letters::GetMessage( $newsuggestions_messages->[8]->{message_id} );
+        C4::Letters::GetMessage( $newsuggestions_messages->[9]->{message_id} );
     is(
         $message9->{to_address},
         'suggestions@b.c', 'EmailAddressForSuggestions uses EmailAddressForSuggestions when set'
