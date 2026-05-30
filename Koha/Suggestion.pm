@@ -91,18 +91,21 @@ sub store {
                     'suggestions' => $result->unblessed,
                 },
             )
-        ){
+            )
+        {
 
             my $toaddress;
             if ( $emailpurchasesuggestions eq "BranchEmailAddress" ) {
+
+                # can be undef for branch=any suggestions
                 my $library = $result->library;
-                $toaddress = $library->inbound_email_address;
-            }
-            elsif ( $emailpurchasesuggestions eq "KohaAdminEmailAddress" ) {
+                if ( $library && $library->inbound_email_address ) {
+                    $toaddress = $library->inbound_email_address;
+                }
+            } elsif ( $emailpurchasesuggestions eq "KohaAdminEmailAddress" ) {
                 $toaddress = C4::Context->preference('ReplytoDefault')
                   || C4::Context->preference('KohaAdminEmailAddress');
-            }
-            else {
+            } else {
                 $toaddress =
                      C4::Context->preference($emailpurchasesuggestions)
                   || C4::Context->preference('ReplytoDefault')
