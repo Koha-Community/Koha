@@ -24,6 +24,17 @@ export class ItemAPIClient {
         };
     }
 
+    get bundled_items() {
+        return {
+            add: (item_id, body, params = {}) =>
+                this.httpClient.post({
+                    endpoint: "items/" + item_id + "/bundled_items",
+                    body,
+                    ...params,
+                }),
+        };
+    }
+
     get item_types() {
         return {
             getAll: (query, params, headers) =>

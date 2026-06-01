@@ -2018,65 +2018,64 @@
                 bundle_form_active = item_id;
             });
 
-            function addToBundle(url, data) {
+            function addToBundle(item_id, data) {
                 /* Send the data using post with external_id */
-                var posting = $.post({
-                    url: url,
-                    data: JSON.stringify(data),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                });
+                const client = APIClient.item;
+                const posting = client.bundled_items.add(item_id, data, { return_response: true });
 
                 const barcode = data.external_id;
                 const marc_link = data.marc_link;
 
                 /* Report the results */
-                posting.done(function (data) {
-                    $("#addResult").replaceWith('<div id="addResult" class="alert alert-success">' + _("Success: Added '%s'").format(barcode) + "</div>");
-                    $("#external_id").val("").focus();
-                    bundle_changed = 1;
-                });
-                posting.fail(function (data) {
-                    if (data.status === 409) {
-                        var response = data.responseJSON;
-                        if (response.error_code === "already_bundled") {
-                            $("#addResult").replaceWith('<div id="addResult" class="alert alert-warning">' + _("Warning: Item '%s' already attached").format(barcode) + "</div>");
-                        } else if (response.error_code === "bundle_checkout_out") {
-                            $("#addResult").replaceWith('<div id="addResult" class="alert alert-danger">' + _("Failure: Bundle is currently checked out") + "</div>");
-                        } else if (response.error_code === "checked_out") {
-                            const button = $('<button type="button">')
-                                .addClass("btn btn-xs")
-                                .text(_("Check in and add to bundle"))
-                                .on("click", function () {
-                                    addToBundle(url, { external_id: barcode, force_checkin: true, marc_link: marc_link });
-                                });
-                            $("#addResult").empty().attr("class", "alert alert-warning").append(__x("Warning: Item {barcode} is checked out", { barcode })).append(" ", button);
-                        } else if (response.error_code === "failed_checkin") {
-                            $("#addResult").empty().attr("class", "alert alert-danger").append(__x("Failure: Item {barcode} cannot be checked in", { barcode }));
-                        } else if (response.error_code === "reserved") {
-                            const button = $('<button type="button">')
-                                .addClass("btn btn-xs")
-                                .text(_("Ignore holds and add to bundle"))
-                                .on("click", function () {
-                                    addToBundle(url, { external_id: barcode, ignore_holds: true, marc_link: marc_link });
-                                });
-                            $("#addResult").empty().attr("class", "alert alert-warning").append(__x("Warning: Item {barcode} is on hold", { barcode })).append(" ", button);
-                        } else {
-                            $("#addResult").replaceWith('<div id="addResult" class="alert alert-danger">' + _("Failure: Item '%s' belongs to another bundle").format(barcode) + "</div>");
-                        }
-                    } else if (data.status === 404) {
-                        $("#addResult").replaceWith('<div id="addResult" class="alert alert-danger">' + _("Failure: Item '%s' not found").format(barcode) + "</div>");
-                    } else if (data.status === 400) {
-                        var response = data.responseJSON;
-                        if (response.error_code === "failed_nesting") {
-                            $("#addResult").replaceWith('<div id="addResult" class="alert alert-danger">' + _("Failure: Item '%s' is a bundle and bundles cannot be nested").format(barcode) + "</div>");
-                        } else {
-                            $("#addResult").replaceWith('<div id="addResult" class="alert alert-danger">' + _("Failure: Check the logs for details.") + "</div>");
-                        }
+                posting.then(function (response) {
+                    if (response.ok) {
+                        response.json().then(function () {
+                            $("#addResult").replaceWith('<div id="addResult" class="alert alert-success">' + _("Success: Added '%s'").format(barcode) + "</div>");
+                            $("#external_id").val("").focus();
+                            bundle_changed = 1;
+                        });
                     } else {
-                        $("#addResult").replaceWith('<div id="addResult" class="alert alert-danger">' + _("Failure: Check the logs for details.") + "</div>");
+                        response.json().then(function (responseJSON) {
+                            if (response.status === 409) {
+                                if (responseJSON.error_code === "already_bundled") {
+                                    $("#addResult").replaceWith('<div id="addResult" class="alert alert-warning">' + _("Warning: Item '%s' already attached").format(barcode) + "</div>");
+                                } else if (responseJSON.error_code === "bundle_checkout_out") {
+                                    $("#addResult").replaceWith('<div id="addResult" class="alert alert-danger">' + _("Failure: Bundle is currently checked out") + "</div>");
+                                } else if (responseJSON.error_code === "checked_out") {
+                                    const button = $('<button type="button">')
+                                        .addClass("btn btn-xs")
+                                        .text(_("Check in and add to bundle"))
+                                        .on("click", function () {
+                                            addToBundle(item_id, { external_id: barcode, force_checkin: true, marc_link: marc_link });
+                                        });
+                                    $("#addResult").empty().attr("class", "alert alert-warning").append(__x("Warning: Item {barcode} is checked out", { barcode })).append(" ", button);
+                                } else if (responseJSON.error_code === "failed_checkin") {
+                                    $("#addResult").empty().attr("class", "alert alert-danger").append(__x("Failure: Item {barcode} cannot be checked in", { barcode }));
+                                } else if (responseJSON.error_code === "reserved") {
+                                    const button = $('<button type="button">')
+                                        .addClass("btn btn-xs")
+                                        .text(_("Ignore holds and add to bundle"))
+                                        .on("click", function () {
+                                            addToBundle(item_id, { external_id: barcode, ignore_holds: true, marc_link: marc_link });
+                                        });
+                                    $("#addResult").empty().attr("class", "alert alert-warning").append(__x("Warning: Item {barcode} is on hold", { barcode })).append(" ", button);
+                                } else {
+                                    $("#addResult").replaceWith('<div id="addResult" class="alert alert-danger">' + _("Failure: Item '%s' belongs to another bundle").format(barcode) + "</div>");
+                                }
+                            } else if (response.status === 404) {
+                                $("#addResult").replaceWith('<div id="addResult" class="alert alert-danger">' + _("Failure: Item '%s' not found").format(barcode) + "</div>");
+                            } else if (response.status === 400) {
+                                if (responseJSON.error_code === "failed_nesting") {
+                                    $("#addResult").replaceWith('<div id="addResult" class="alert alert-danger">' + _("Failure: Item '%s' is a bundle and bundles cannot be nested").format(barcode) + "</div>");
+                                } else {
+                                    $("#addResult").replaceWith('<div id="addResult" class="alert alert-danger">' + _("Failure: Check the logs for details.") + "</div>");
+                                }
+                            } else {
+                                $("#addResult").replaceWith('<div id="addResult" class="alert alert-danger">' + _("Failure: Check the logs for details.") + "</div>");
+                            }
+                            $("#external_id").val("").focus();
+                        });
                     }
-                    $("#external_id").val("").focus();
                 });
             }
 
@@ -2084,10 +2083,9 @@
                 /* stop form from submitting normally */
                 event.preventDefault();
 
-                const url = this.action;
                 const data = { external_id: this.elements.external_id.value, marc_link: this.elements.bundle_link.checked };
 
-                addToBundle(url, data);
+                addToBundle(bundle_form_active, data);
             });
 
             $("#addToBundleModal").on("hidden.bs.modal", function (e) {
