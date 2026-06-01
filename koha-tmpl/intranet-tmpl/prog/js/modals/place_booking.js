@@ -2328,7 +2328,6 @@ function refreshBookingsTable() {
 $("#placeBookingForm").on("submit", function (e) {
     e.preventDefault();
 
-    const url = "/api/v1/bookings";
     const start_date = $("#booking_start_date").val();
     const end_date = $("#booking_end_date").val();
     const item_id = $("#booking_item_id").val();
@@ -2354,8 +2353,10 @@ $("#placeBookingForm").on("submit", function (e) {
 
     if (!booking_id) {
         // Create new booking
-        $.post(url, JSON.stringify(payload))
-            .done(function (data) {
+        const client = APIClient.booking;
+        client.bookings
+            .create(payload)
+            .then(function (data) {
                 bookings.push(data);
                 refreshBookingsTable();
 
@@ -2369,20 +2370,17 @@ $("#placeBookingForm").on("submit", function (e) {
                 );
                 showBookingSuccess(__("Booking successfully placed"));
             })
-            .fail(function () {
+            .catch(function () {
                 showBookingError(__("Failure"));
             });
     } else {
         // Update existing booking
         payload.booking_id = booking_id;
 
-        $.ajax({
-            method: "PUT",
-            url: url + "/" + booking_id,
-            contentType: "application/json",
-            data: JSON.stringify(payload),
-        })
-            .done(function (data) {
+        const client = APIClient.booking;
+        client.bookings
+            .update(payload, booking_id)
+            .then(function (data) {
                 const target = bookings.find(
                     obj => obj.booking_id === data.booking_id
                 );
@@ -2398,7 +2396,7 @@ $("#placeBookingForm").on("submit", function (e) {
 
                 showBookingSuccess(__("Booking successfully updated"));
             })
-            .fail(function () {
+            .catch(function () {
                 showBookingError(__("Failure"));
             });
     }

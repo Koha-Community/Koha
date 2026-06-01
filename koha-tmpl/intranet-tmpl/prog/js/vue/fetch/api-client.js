@@ -1,5 +1,6 @@
 import HttpClient from "./http-client";
 
+import BookingAPIClient from "@fetch/booking-api-client";
 import ERMAPIClient from "@fetch/erm-api-client";
 import ILLAPIClient from "@fetch/ill-api-client";
 import BiblioAPIClient from "@fetch/biblio-api-client";
@@ -16,6 +17,7 @@ import SIP2APIClient from "@fetch/sip2-api-client";
 import PreservationAPIClient from "@fetch/preservation-api-client";
 
 export const APIClient = {
+    booking: new BookingAPIClient(HttpClient),
     erm: new ERMAPIClient(HttpClient),
     ill: new ILLAPIClient(HttpClient),
     biblio: new BiblioAPIClient(HttpClient),
