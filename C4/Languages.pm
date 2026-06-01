@@ -369,14 +369,16 @@ FIXME: this could be rewritten and simplified using map
 
 sub _build_languages_arrayref {
     my ( $translated_languages, $current_language, $enabled_languages ) = @_;
+
     $current_language //= '';
     my @translated_languages = @$translated_languages;
     my @languages_loop;    # the final reference to an array of hashrefs
     my @enabled_languages = @$enabled_languages;
 
     # how many languages are enabled, if one, take note, some contexts won't need to display it
-    my $language_groups;
-    my $track_language_groups;
+    my $language_groups       = {};
+    my $track_language_groups = {};
+
     my $current_language_regex = regex_lang_subtags($current_language);
 
     # Loop through the translated languages
@@ -443,9 +445,15 @@ sub _build_languages_arrayref {
                 }
             }
         }
-        ( exists $idx{$aa} and exists $idx{$bb} and ( $idx{$aa} cmp $idx{$bb} ) )
-            || ( exists $idx{$aa} and exists $idx{$bb} )
-            || exists $idx{$bb}
+        if ( exists $idx{$aa} and exists $idx{$bb} ) {
+            return $idx{$aa} cmp $idx{$bb};
+        } elsif ( exists $idx{$aa} ) {
+            return -1;
+        } elsif ( exists $idx{$bb} ) {
+            return 1;
+        } else {
+            return $a cmp $b;    # Finally order by lang code
+        }
     } keys %$language_groups;
 
     for my $key (@ordered_keys) {
