@@ -68,12 +68,28 @@ describe("loads the manage MARC import page", () => {
             .select("ignore", { force: true })
             .should("have.value", "ignore");
 
-        cy.intercept("GET", "/api/v1/jobs/*").as("jobPoll");
+        // CI reproduction — simulates Apache returning 503 on the
+        // first job poll (as happens during reset_all while Apache is restarting).
+        // Without the job_progress.js .fail() fix: no retry fires, the 2nd request
+        // never occurs, and cy.wait() times out — reproducing the exact CI error.
+        // With the fix: .fail() retries, the 2nd poll goes through, test passes.
+        let pollCount = 0;
+        cy.intercept("GET", "/api/v1/jobs/*", req => {
+            pollCount++;
+            if (pollCount === 1) {
+                req.reply({ statusCode: 503, body: {} });
+            } else {
+                req.continue();
+            }
+        }).as("jobPoll");
+
         cy.get("#mainformsubmit").click();
 
         const waitForJobFinished = () => {
             cy.wait("@jobPoll").then(interception => {
-                if (interception.response?.body?.status !== "finished") {
+                const status = interception.response?.body?.status;
+                expect(status, "Background job failed").not.to.eq("failed");
+                if (status !== "finished") {
                     waitForJobFinished();
                 }
             });
