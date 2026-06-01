@@ -549,11 +549,12 @@ foreach my $r ( @{$sugg_budgets} ) {
 @{$sugg_budget_loop} = sort { uc( $a->{b_txt} ) cmp uc( $b->{b_txt} ) } @{$sugg_budget_loop};
 $template->param( sugg_budgets => $sugg_budget_loop );
 
-if ( $suggestion_ref->{STATUS} ) {
+if ( $stored_suggestion && $stored_suggestion->STATUS ) {
     $template->param(
-        "statusselected_" . $suggestion_ref->{STATUS} => 1,
-        selected_status                               => $suggestion_ref->{STATUS}
-        , # We need template var selected_status in the second part of the template where template var suggestion.STATUS is out of scope
+        "statusselected_" . $stored_suggestion->STATUS => 1,
+        selected_status                                => $stored_suggestion->STATUS,
+
+        # We need template var selected_status in the second part of the template where template var suggestion.STATUS is out of scope
     );
 }
 
