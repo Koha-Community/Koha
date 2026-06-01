@@ -223,7 +223,7 @@ describe("Dialog operations", () => {
                 },
             }
         );
-        cy.get("#begin_date+input").click();
+        cy.get("#confirmation_input_begin_date+input").click();
         cy.get(".flatpickr-current-month select")
             .invoke("val")
             .then(month => {
