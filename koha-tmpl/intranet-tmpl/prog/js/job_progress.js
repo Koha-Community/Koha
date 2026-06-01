@@ -47,5 +47,9 @@ function updateProgress(job_id, callbacks) {
                 updateProgress(job_id, callbacks);
             }, 1 * 1000);
         }
+    }).fail(function () {
+        setTimeout(function () {
+            updateProgress(job_id, callbacks);
+        }, 1 * 1000);
     });
 }
