@@ -24,6 +24,9 @@ $(document).ready(function () {
                 body: JSON.stringify({ rating: value }),
                 headers: {
                     "Content-Type": "application/json;charset=utf-8",
+                    "CSRF-TOKEN": document
+                        .querySelector('meta[name="csrf-token"]')
+                        .getAttribute("content"),
                 },
             })
                 .then(checkError)
