@@ -1,13 +1,11 @@
 #!/usr/bin/perl
-#
-# This Koha test module is a stub!
-# Add more tests here!!!
+
 use utf8;
 use Modern::Perl;
 
 use Encode;
 use Test::NoWarnings;
-use Test::More tests => 24;
+use Test::More tests => 25;
 use Test::Deep;
 use Test::Exception;
 use List::Util qw(first);
@@ -87,6 +85,72 @@ is(
     $translatedlanguages3->[2]->{rfc4646_subtag}, 'mi-NZ',
     '_build_languages_arrayref() returns third language of "mi-NZ"'
 );
+
+subtest '_build_languages_arrayref consistent return' => sub {
+    plan tests => 33;
+
+    my $r = C4::Languages::_build_languages_arrayref( ['en'], 'en', ['en'] );
+    is( $r->[0]->{language},                                 'en' );
+    is( $r->[0]->{group_enabled},                            1 );
+    is( $r->[0]->{sublanguages_loop}->[0]->{rfc4646_subtag}, 'en' );
+    is( $r->[0]->{sublanguages_loop}->[0]->{enabled},        1 );
+    is( scalar(@$r),                                         1 );
+    is( scalar( @{ $r->[0]->{sublanguages_loop} } ),         1 );
+
+    $r = C4::Languages::_build_languages_arrayref( [ 'de-DE', 'en', 'en-NZ' ], 'en-NZ', ['en-NZ'] );
+    is( $r->[0]->{language},                                 'en' );
+    is( $r->[0]->{group_enabled},                            1 );
+    is( $r->[0]->{sublanguages_loop}->[0]->{rfc4646_subtag}, 'en' );
+    ok( !$r->[0]->{sublanguages_loop}->[0]->{enabled} );
+    is( $r->[0]->{sublanguages_loop}->[1]->{rfc4646_subtag}, 'en-NZ' );
+    ok( $r->[0]->{sublanguages_loop}->[1]->{enabled} );
+    is( scalar(@$r),                                         2 );
+    is( scalar( @{ $r->[0]->{sublanguages_loop} } ),         2 );
+    is( $r->[1]->{sublanguages_loop}->[0]->{rfc4646_subtag}, 'de-DE' );
+    ok( !$r->[1]->{sublanguages_loop}->[0]->{enabled} );
+    is( scalar( @{ $r->[1]->{sublanguages_loop} } ), 1 );
+
+    my @available_langages = qw(
+        be-BY
+        de-DE
+        en
+        en-GB
+        es-ES
+        fr-CA
+        fr-FR
+        it-IT
+        ku-Arab
+        sv-SE
+    );
+    my @enabled_languages = qw(
+        en
+        fr-CA
+        fr-FR
+        sv-SE
+        es-ES
+        de-DE
+        it-IT
+    );
+    $r = C4::Languages::_build_languages_arrayref( \@available_langages, 'fr-FR', \@enabled_languages );
+
+    is( $r->[0]->{language},      'en' );
+    is( $r->[0]->{group_enabled}, 1 );
+    is( $r->[1]->{language},      'fr' );
+    is( $r->[1]->{group_enabled}, 1 );
+    is( $r->[2]->{language},      'sv' );
+    is( $r->[2]->{group_enabled}, 1 );
+    is( $r->[3]->{language},      'es' );
+    is( $r->[3]->{group_enabled}, 1 );
+    is( $r->[4]->{language},      'de' );
+    is( $r->[4]->{group_enabled}, 1 );
+    is( $r->[5]->{language},      'it' );
+    is( $r->[5]->{group_enabled}, 1 );
+
+    is( $r->[6]->{language}, 'be' );
+    ok( !$r->[6]->{group_enabled}, );
+    is( $r->[7]->{language}, 'ku' );
+    ok( !$r->[7]->{group_enabled}, );
+};
 
 # Language Descriptions
 my $sth = $dbh->prepare("SELECT DISTINCT subtag,type,lang,description from language_descriptions;");
