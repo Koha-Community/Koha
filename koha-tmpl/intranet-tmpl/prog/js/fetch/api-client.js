@@ -190,6 +190,7 @@ export const APIClient = {
     booking: createClientProxy(() => import("./booking-api-client.js")),
     cataloguing: createClientProxy(() => import("./cataloguing-api-client.js")),
     circulation: createClientProxy(() => import("./circulation-api-client.js")),
+    claim: createClientProxy(() => import("./claim-api-client.js")),
     club: createClientProxy(() => import("./club-api-client.js")),
     cover_image: createClientProxy(() => import("./cover-image-api-client.js")),
     ill: createClientProxy(() => import("./ill-api-client.js")),

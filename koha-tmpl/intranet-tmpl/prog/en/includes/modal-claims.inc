@@ -84,7 +84,8 @@
                 created_by: logged_in_user_borrowernumber,
             };
 
-            $.post( '/api/v1/return_claims', JSON.stringify(params), function( data ) {
+            const client = APIClient.claim;
+            client.return_claims.create(params).then(function( data ) {
 
                 id = "#return_claim_spinner_" + data.item_id;
 
@@ -102,7 +103,7 @@
                 $(id).replaceWith( content );
 
                 $('body').trigger('refreshClaimModal');
-            }, "json")
+            });
         });
     </script>
 [% END %]
