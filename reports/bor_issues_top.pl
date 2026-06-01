@@ -56,15 +56,7 @@ my $output         = "screen";
 my $output_input   = $input->param("output");
 my $basename       = "Export";
 my $basename_input = $input->param("basename");
-our $sep = C4::Context->csv_delimiter();
-my $sep_input = $input->param("sep");
-
-#NOTE: Validate sep parameter
-my $delimiter_choices = GetDelimiterChoices();
-my %allowed_seps      = map { $_ => 1 } @{ $delimiter_choices->{values} };
-if ( $sep_input && $allowed_seps{$sep_input} ) {
-    $sep = $sep_input;
-}
+our $sep = C4::Context->csv_delimiter( scalar $input->param("sep") );
 
 my %allowed_fields = (
     "branchcode"   => 1,
