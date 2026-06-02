@@ -74,7 +74,7 @@
                 cancellation_date: { "=": null },
             };
 
-            $("#transferstoreceive").kohaTable(
+            var transfers_table = $("#transferstoreceive").kohaTable(
                 {
                     ajax: {
                         url: "/api/v1/transfers",
@@ -190,8 +190,8 @@
                             searchable: false,
                             orderable: false,
                             render: function (data, type, row, meta) {
-                                var itemnumber = encodeURIComponent(row.item_id);
-                                return `<a href="/cgi-bin/koha/circ/returns.pl?itemnumber=${itemnumber}&canceltransfer=1&dest=ttr" class="btn btn-default btn-xs"><i class="fa fa-times"></i> ${_("Cancel transfer")}</a>`;
+                                var transfer_id = encodeURIComponent(row.transfer_id);
+                                return `<a href="#" class="btn btn-default btn-xs cancel-transfer" data-transfer-id="${transfer_id}"><i class="fa fa-times"></i> ${_("Cancel transfer")}</a>`;
                             },
                         },
                     ],
@@ -200,6 +200,29 @@
                 1,
                 additional_filters
             );
+
+            $("#transferstoreceive").on("click", ".cancel-transfer", function (e) {
+                e.preventDefault();
+                var transfer_id = $(this).data("transfer-id");
+                $.ajax({
+                    method: "DELETE",
+                    url: `/api/v1/transfers/${transfer_id}`,
+                    contentType: "application/json",
+                    data: JSON.stringify({ cancellation_reason: "Manual" }),
+                })
+                    .done(function () {
+                        transfers_table.DataTable().ajax.reload(null, false);
+                    })
+                    .fail(function (xhr) {
+                        if (xhr.status === 404) {
+                            // The transfer was already received or cancelled elsewhere; refresh so the row drops off
+                            alert(_("This transfer no longer exists. It may have already been received or cancelled."));
+                            transfers_table.DataTable().ajax.reload(null, false);
+                        } else {
+                            alert(_("Something went wrong, the transfer could not be cancelled"));
+                        }
+                    });
+            });
         });
     </script>
 [% END %]

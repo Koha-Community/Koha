@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -111,6 +111,68 @@ subtest 'list() tests' => sub {
     $t->get_ok("//$userid:$password@/api/v1/transfers?transfer_blah=blah")
         ->status_is(400)
         ->json_is( [ { path => '/query/transfer_blah', message => 'Malformed query string' } ] );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'delete() tests' => sub {
+
+    plan tests => 10;
+
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**1 }    # circulate flag = 1
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $unauth_userid = $patron->userid;
+
+    my $item     = $builder->build_sample_item;
+    my $transfer = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber    => $item->itemnumber,
+                datesent      => \'NOW()',            # in transit
+                datearrived   => undef,
+                datecancelled => undef,
+            }
+        }
+    );
+
+    # Unauthorized access
+    $t->delete_ok(
+        "//$unauth_userid:$password@/api/v1/transfers/" . $transfer->id => json => { cancellation_reason => 'Manual' } )
+        ->status_is(403);
+
+    # A cancellation reason is mandatory
+    $t->delete_ok( "//$userid:$password@/api/v1/transfers/" . $transfer->id )->status_is(400);
+
+    # Not found
+    $t->delete_ok( "//$userid:$password@/api/v1/transfers/"
+            . ( $transfer->id + 1000 ) => json => { cancellation_reason => 'Manual' } )->status_is(404);
+
+    # Cancel an in-transit transfer with the supplied reason
+    $t->delete_ok(
+        "//$userid:$password@/api/v1/transfers/" . $transfer->id => json => { cancellation_reason => 'WrongTransfer' } )
+        ->status_is(204);
+
+    $transfer->discard_changes;
+    ok( defined $transfer->datecancelled, 'The transfer has been cancelled' );
+    is( $transfer->cancellation_reason, 'WrongTransfer', 'The supplied cancellation reason is recorded' );
 
     $schema->storage->txn_rollback;
 };

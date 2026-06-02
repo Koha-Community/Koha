@@ -699,6 +699,8 @@ paths:
     $ref: "./paths/transfer_limits.yaml#/~1transfer_limits~1{limit_id}"
   /transfers:
     $ref: ./paths/transfers.yaml#/~1transfers
+  "/transfers/{transfer_id}":
+    $ref: "./paths/transfers.yaml#/~1transfers~1{transfer_id}"
   /status/version:
     $ref: ./paths/status.yaml#/~1status~1version
 parameters:
@@ -1127,6 +1129,12 @@ parameters:
     description: Internal ticket identifier
     in: path
     name: ticket_id
+    required: true
+    type: integer
+  transfer_id_pp:
+    description: Internal transfer identifier
+    in: path
+    name: transfer_id
     required: true
     type: integer
   transfer_limit_id_pp:

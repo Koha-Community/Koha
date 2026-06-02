@@ -19,7 +19,9 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
+use C4::Context;
 use Koha::Item::Transfers;
+use Koha::Recalls;
 
 use Try::Tiny qw( catch try );
 
@@ -39,6 +41,37 @@ sub list {
     return try {
         my $transfers = $c->objects->search( Koha::Item::Transfers->new );
         return $c->render( status => 200, openapi => $transfers );
+    } catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+=head3 delete
+
+Controller function that handles cancelling an item transfer
+
+=cut
+
+sub delete {
+    my $c = shift->openapi->valid_input or return;
+
+    my $transfer = Koha::Item::Transfers->find( $c->param('transfer_id') );
+
+    return $c->render_resource_not_found("Transfer")
+        unless $transfer;
+
+    return try {
+        my $body = $c->req->json;
+
+        $transfer->cancel( { reason => $body->{cancellation_reason}, force => 1 } );
+
+        # Revert an in transit recall tied to this item, as returns.pl does
+        if ( C4::Context->preference('UseRecalls') ) {
+            my $recall = Koha::Recalls->find( { item_id => $transfer->itemnumber, status => 'in_transit' } );
+            $recall->revert_transfer if $recall;
+        }
+
+        return $c->render_resource_deleted;
     } catch {
         $c->unhandled_exception($_);
     };
