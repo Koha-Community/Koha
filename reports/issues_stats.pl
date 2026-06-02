@@ -43,25 +43,21 @@ Plugin that shows circulation stats
 
 my $input          = CGI->new;
 my $fullreportname = "reports/issues_stats.tt";
-my $do_it          = $input->param('do_it');
-my $line           = $input->param("Line");
-my $column         = $input->param("Column");
-my @filters        = $input->multi_param("Filter");
-my $podsp          = $input->param("DisplayBy");
-my $type           = $input->param("PeriodTypeSel");
-my $daysel         = $input->param("PeriodDaySel");
-my $monthsel       = $input->param("PeriodMonthSel");
-my $calc           = $input->param("Cellvalue");
-my $output         = $input->param("output");
-my $basename       = $input->param("basename");
+my $do_it          = $input->param('do_it') ? 1 : 0;
 
-my $attribute_filters;
-my $vars = $input->Vars;
-foreach ( keys %$vars ) {
-    if (/^Filter_borrower_attributes\.(.*)/) {
-        $attribute_filters->{$1} = $vars->{$_};
-    }
-}
+my $line_input     = $input->param("Line");
+my $column_input   = $input->param("Column");
+my @filters        = $input->multi_param("Filter");
+my $podsp_input    = $input->param("DisplayBy");
+my $type_input     = $input->param("PeriodTypeSel");
+my $daysel_input   = $input->param("PeriodDaySel");
+my $monthsel_input = $input->param("PeriodMonthSel");
+my $calc           = 1;
+my $calc_input     = $input->param("Cellvalue");
+my $output         = "screen";
+my $output_input   = $input->param("output");
+my $basename       = "Export";
+my $basename_input = $input->param("basename");
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -71,10 +67,102 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         flagsrequired => { reports => '*' },
     }
 );
-our $sep = C4::Context->csv_delimiter( scalar $input->param("sep") );
-$template->param(
-    do_it => $do_it,
+
+my $attribute_filters;
+my $vars = $input->Vars;
+for my $k ( keys %$vars ) {
+    if ( $k =~ /^Filter_borrower_attributes\.(\d+)$/ ) {
+        my $val = $vars->{$k};
+        $val =~ s/\*/%/g if $val;
+        $attribute_filters->{$1} = $val;
+    }
+}
+
+# Allowed values for Line and Column
+my %allowed_fields = (
+    "datetime"               => 1,
+    "returndate"             => 1,
+    "borrowers.categorycode" => 1,
+    "itemtype"               => 1,
+    "branch"                 => 1,
+    "items.ccode"            => 1,
+    "items.location"         => 1,
+    "borrowers.sort1"        => 1,
+    "borrowers.sort2"        => 1,
+    "items.homebranch"       => 1,
+    "items.holdingbranch"    => 1,
+    "borrowers.branchcode"   => 1,
 );
+
+# Validate Line parameter
+my $line = "branch";
+if ( $line_input && $allowed_fields{$line_input} ) {
+    $line = $line_input;
+} elsif ( $line_input && $line_input =~ /^borrower_attributes\.(\d+)$/ ) {
+    $line = $line_input;
+}
+
+# Validate Column parameter
+my $column = "datetime";
+if ( $column_input && $allowed_fields{$column_input} ) {
+    $column = $column_input;
+} elsif ( $column_input && $column_input =~ /^borrower_attributes\.(\d+)$/ ) {
+    $column = $column_input;
+}
+
+# Validate DisplayBy parameter
+my $podsp = "";
+if ( $podsp_input && $podsp_input =~ /^[1-4]$/ ) {
+    $podsp = $podsp_input;
+}
+
+# Validate PeriodTypeSel parameter
+my %allowed_types = (
+    "issue"           => 1,
+    "onsite_checkout" => 1,
+    "renew"           => 1,
+    "return"          => 1,
+    "localuse"        => 1,
+);
+my $type;
+if ( $type_input && $allowed_types{$type_input} ) {
+    $type = $type_input;
+}
+
+# Validate PeriodDaySel parameter
+my %allowed_days = map { $_ => 1 } qw(Monday Tuesday Wednesday Thursday Friday Saturday Sunday);
+my $daysel;
+if ( $daysel_input && $allowed_days{$daysel_input} ) {
+    $daysel = $daysel_input;
+}
+
+# Validate PeriodMonthSel parameter
+my %allowed_months =
+    map { $_ => 1 } qw(January February March April May June July August September October November December);
+my $monthsel;
+if ( $monthsel_input && $allowed_months{$monthsel_input} ) {
+    $monthsel = $monthsel_input;
+}
+
+# Validate Cellvalue parameter
+if ( $calc_input && $calc_input =~ /^\d+$/ ) {
+    $calc = $calc_input;
+}
+
+# Validate output parameter
+if ( $output_input && ( $output_input eq "screen" || $output_input eq "file" ) ) {
+    $output = $output_input;
+}
+
+# Validate basename parameter
+if ($basename_input) {
+    $basename_input =~ s/[^A-Za-z0-9-]+/_/g;
+    if ($basename_input) {
+        $basename = $basename_input;
+    }
+}
+
+our $sep = C4::Context->csv_delimiter( scalar $input->param("sep") );
 
 our $itemtypes = Koha::ItemTypes->search_with_localization->unblessed;
 
@@ -97,6 +185,10 @@ our $Bsort2 = GetAuthorisedValues("Bsort2");
 my ( $hassort1, $hassort2 );
 $hassort1 = 1 if $Bsort1;
 $hassort2 = 1 if $Bsort2;
+
+$template->param(
+    do_it => $do_it,
+);
 
 if ($do_it) {
 
@@ -303,7 +395,7 @@ sub calculate {
 
     my $strsth;
     if ($line_attribute_type) {
-        $strsth = "SELECT attribute FROM borrower_attributes WHERE code = '$line_attribute_type' ";
+        $strsth = "SELECT attribute FROM borrower_attributes WHERE code = ? ";
     } else {
         $strsth = "SELECT distinctrow $linefield FROM statistics ";
 
@@ -324,25 +416,33 @@ sub calculate {
         } elsif ( $linefilter[0] ) {
             $strsth .= " AND $line >= ? ";
         }
-        $strsth .= " AND type ='" . $type . "' "                    if $type;
-        $strsth .= " AND   dayname(datetime) ='" . $daysel . "' "   if $daysel;
-        $strsth .= " AND monthname(datetime) ='" . $monthsel . "' " if $monthsel;
+        $strsth .= " AND type = ? "                if $type;
+        $strsth .= " AND dayname(datetime) = ? "   if $daysel;
+        $strsth .= " AND monthname(datetime) = ? " if $monthsel;
     } elsif ( $linefilter[0] ) {
         $linefilter[0] =~ s/\*/%/g;
         $strsth .= " AND $line LIKE ? ";
     }
     $strsth .= " group by $linefield order by $lineorder ";
     push @loopfilter, { crit => 'SQL =', sql => 1, filter => $strsth };
-    my $sth = $dbh->prepare($strsth);
-    if ( (@linefilter) and ( $linefilter[0] ) and ( $linefilter[1] ) ) {
-        $sth->execute( $linefilter[0], $linefilter[1] . " 23:59:59" );
-    } elsif ( $linefilter[1] ) {
-        $sth->execute( $linefilter[1] . " 23:59:59" );
-    } elsif ( $linefilter[0] ) {
-        $sth->execute( $linefilter[0] );
-    } else {
-        $sth->execute;
+    my $sth  = $dbh->prepare($strsth);
+    my @bind = ();
+    if ($line_attribute_type) {
+        push @bind, $line_attribute_type;
     }
+    if ( (@linefilter) and ( $linefilter[0] ) and ( $linefilter[1] ) ) {
+        push @bind, $linefilter[0], $linefilter[1] . " 23:59:59";
+    } elsif ( $linefilter[1] ) {
+        push @bind, $linefilter[1] . " 23:59:59";
+    } elsif ( $linefilter[0] ) {
+        push @bind, $linefilter[0];
+    }
+    if ( $line =~ /datetime/ ) {
+        push @bind, $type     if $type;
+        push @bind, $daysel   if $daysel;
+        push @bind, $monthsel if $monthsel;
+    }
+    $sth->execute(@bind);
 
     my $itemtypes_map = { map { $_->{itemtype} => $_ } @{$itemtypes} };
     while ( my ($celvalue) = $sth->fetchrow ) {
@@ -393,7 +493,7 @@ sub calculate {
         :                              $colfield;
     my $strsth2;
     if ($column_attribute_type) {
-        $strsth2 = "SELECT attribute FROM borrower_attributes WHERE code = '$column_attribute_type' ";
+        $strsth2 = "SELECT attribute FROM borrower_attributes WHERE code = ? ";
     } else {
         $strsth2 = "SELECT distinctrow $colfield FROM statistics ";
 
@@ -414,9 +514,9 @@ sub calculate {
         } elsif ( $colfilter[0] ) {
             $strsth2 .= " AND $column >= ? ";
         }
-        $strsth2 .= " AND                type ='" . $type . "' "     if $type;
-        $strsth2 .= " AND   dayname(datetime) ='" . $daysel . "' "   if $daysel;
-        $strsth2 .= " AND monthname(datetime) ='" . $monthsel . "' " if $monthsel;
+        $strsth2 .= " AND type = ? "                if $type;
+        $strsth2 .= " AND dayname(datetime) = ? "   if $daysel;
+        $strsth2 .= " AND monthname(datetime) = ? " if $monthsel;
     } elsif ( $colfilter[0] ) {
         $colfilter[0] =~ s/\*/%/g;
         $strsth2 .= " AND $column LIKE ? ";
@@ -424,16 +524,24 @@ sub calculate {
 
     $strsth2 .= " group by $colfield order by $colorder ";
     push @loopfilter, { crit => 'SQL =', sql => 1, filter => $strsth2 };
-    my $sth2 = $dbh->prepare($strsth2);
-    if ( (@colfilter) and ( $colfilter[0] ) and ( $colfilter[1] ) ) {
-        $sth2->execute( $colfilter[0], $colfilter[1] . " 23:59:59" );
-    } elsif ( $colfilter[1] ) {
-        $sth2->execute( $colfilter[1] . " 23:59:59" );
-    } elsif ( $colfilter[0] ) {
-        $sth2->execute( $colfilter[0] );
-    } else {
-        $sth2->execute;
+    my $sth2  = $dbh->prepare($strsth2);
+    my @bind2 = ();
+    if ($column_attribute_type) {
+        push @bind2, $column_attribute_type;
     }
+    if ( (@colfilter) and ( $colfilter[0] ) and ( $colfilter[1] ) ) {
+        push @bind2, $colfilter[0], $colfilter[1] . " 23:59:59";
+    } elsif ( $colfilter[1] ) {
+        push @bind2, $colfilter[1] . " 23:59:59";
+    } elsif ( $colfilter[0] ) {
+        push @bind2, $colfilter[0];
+    }
+    if ( $column =~ /datetime/ ) {
+        push @bind2, $type     if $type;
+        push @bind2, $daysel   if $daysel;
+        push @bind2, $monthsel if $monthsel;
+    }
+    $sth2->execute(@bind2);
 
     while ( my ($celvalue) = $sth2->fetchrow ) {
         my %cell = ( coltitle => $celvalue )
@@ -499,13 +607,13 @@ sub calculate {
         FROM statistics
         LEFT JOIN borrowers ON statistics.borrowernumber=borrowers.borrowernumber
     ";
-    foreach ( keys %$attribute_filters ) {
-        if (   ( $line_attribute_type and $line_attribute_type eq $_ )
-            or $column_attribute_type and $column_attribute_type eq $_
-            or $attribute_filters->{$_} )
+    foreach my $type ( keys %$attribute_filters ) {
+        if (   ( $line_attribute_type and $line_attribute_type eq $type )
+            or $column_attribute_type and $column_attribute_type eq $type
+            or $attribute_filters->{$type} )
         {
             $strcalc .=
-                " LEFT JOIN borrower_attributes AS attribute_$_ ON (statistics.borrowernumber = attribute_$_.borrowernumber AND attribute_$_.code = '$_') ";
+                " LEFT JOIN borrower_attributes AS attribute_$type ON (statistics.borrowernumber = attribute_$type.borrowernumber AND attribute_$type.code = ?) ";
         }
     }
     $strcalc .=
@@ -525,28 +633,66 @@ sub calculate {
         || @$filters[13] );
 
     $strcalc .= "WHERE 1=1 ";
+    my @bind3 = ();
     @$filters = map { my $f = $_; defined($f) and $f =~ s/\*/%/g; $f } @$filters;
-    $strcalc .= " AND statistics.datetime >= '" . @$filters[0] . "'"          if ( @$filters[0] );
-    $strcalc .= " AND statistics.datetime <= '" . @$filters[1] . " 23:59:59'" if ( @$filters[1] );
-    $strcalc .= " AND borrowers.categorycode LIKE '" . @$filters[2] . "'"     if ( @$filters[2] );
-    $strcalc .= " AND statistics.itemtype LIKE '" . @$filters[3] . "'"        if ( @$filters[3] );
-    $strcalc .= " AND statistics.branch LIKE '" . @$filters[4] . "'"          if ( @$filters[4] );
-    $strcalc .= " AND items.ccode LIKE '" . @$filters[5] . "'"                if ( @$filters[5] );
-    $strcalc .= " AND items.location LIKE '" . @$filters[6] . "'"             if ( @$filters[6] );
-    $strcalc .= " AND items.itemcallnumber >='" . @$filters[7] . "'"          if ( @$filters[7] );
-    $strcalc .= " AND items.itemcallnumber <'" . @$filters[8] . "'"           if ( @$filters[8] );
-    $strcalc .= " AND borrowers.sort1 LIKE '" . @$filters[9] . "'"            if ( @$filters[9] );
-    $strcalc .= " AND borrowers.sort2 LIKE '" . @$filters[10] . "'"           if ( @$filters[10] );
-    $strcalc .= " AND items.homebranch LIKE '" . @$filters[11] . "'"          if ( @$filters[11] );
-    $strcalc .= " AND items.holdingbranch LIKE '" . @$filters[12] . "'"       if ( @$filters[12] );
-    $strcalc .= " AND borrowers.branchcode LIKE '" . @$filters[13] . "'"      if ( @$filters[13] );
-    $strcalc .= " AND dayname(datetime) LIKE '" . $daysel . "'"               if ($daysel);
-    $strcalc .= " AND monthname(datetime) LIKE '" . $monthsel . "'"           if ($monthsel);
-    $strcalc .= " AND statistics.type LIKE '" . $type . "'"                   if ($type);
+    $strcalc .= " AND statistics.datetime >= ?"      if ( @$filters[0] );
+    $strcalc .= " AND statistics.datetime <= ?"      if ( @$filters[1] );
+    $strcalc .= " AND borrowers.categorycode LIKE ?" if ( @$filters[2] );
+    $strcalc .= " AND statistics.itemtype LIKE ?"    if ( @$filters[3] );
+    $strcalc .= " AND statistics.branch LIKE ?"      if ( @$filters[4] );
+    $strcalc .= " AND items.ccode LIKE ?"            if ( @$filters[5] );
+    $strcalc .= " AND items.location LIKE ?"         if ( @$filters[6] );
+    $strcalc .= " AND items.itemcallnumber >= ?"     if ( @$filters[7] );
+    $strcalc .= " AND items.itemcallnumber < ?"      if ( @$filters[8] );
+    $strcalc .= " AND borrowers.sort1 LIKE ?"        if ( @$filters[9] );
+    $strcalc .= " AND borrowers.sort2 LIKE ?"        if ( @$filters[10] );
+    $strcalc .= " AND items.homebranch LIKE ?"       if ( @$filters[11] );
+    $strcalc .= " AND items.holdingbranch LIKE ?"    if ( @$filters[12] );
+    $strcalc .= " AND borrowers.branchcode LIKE ?"   if ( @$filters[13] );
+    $strcalc .= " AND dayname(datetime) = ?"         if ($daysel);
+    $strcalc .= " AND monthname(datetime) = ?"       if ($monthsel);
+    $strcalc .= " AND statistics.type = ?"           if ($type);
 
     foreach ( keys %$attribute_filters ) {
         if ( $attribute_filters->{$_} ) {
-            $strcalc .= " AND attribute_$_.attribute LIKE '" . $attribute_filters->{$_} . "'";
+            $strcalc .= " AND attribute_$_.attribute LIKE ?";
+        }
+    }
+
+    # Build bind array for the main calculation query
+    # First, add the attribute filter codes for the JOINs (in the same order as the JOINs above)
+    for my $type ( keys %$attribute_filters ) {
+        if (   ( $line_attribute_type and $line_attribute_type eq $type )
+            or $column_attribute_type and $column_attribute_type eq $type
+            or $attribute_filters->{$type} )
+        {
+            push @bind3, $type;
+        }
+    }
+
+    # Then add the filter values
+    push @bind3, @$filters[0]               if ( @$filters[0] );
+    push @bind3, @$filters[1] . " 23:59:59" if ( @$filters[1] );
+    push @bind3, @$filters[2]               if ( @$filters[2] );
+    push @bind3, @$filters[3]               if ( @$filters[3] );
+    push @bind3, @$filters[4]               if ( @$filters[4] );
+    push @bind3, @$filters[5]               if ( @$filters[5] );
+    push @bind3, @$filters[6]               if ( @$filters[6] );
+    push @bind3, @$filters[7]               if ( @$filters[7] );
+    push @bind3, @$filters[8]               if ( @$filters[8] );
+    push @bind3, @$filters[9]               if ( @$filters[9] );
+    push @bind3, @$filters[10]              if ( @$filters[10] );
+    push @bind3, @$filters[11]              if ( @$filters[11] );
+    push @bind3, @$filters[12]              if ( @$filters[12] );
+    push @bind3, @$filters[13]              if ( @$filters[13] );
+    push @bind3, $daysel                    if ($daysel);
+    push @bind3, $monthsel                  if ($monthsel);
+    push @bind3, $type                      if ($type);
+
+    # Add attribute filter values
+    for my $type ( keys %$attribute_filters ) {
+        if ( $attribute_filters->{$type} ) {
+            push @bind3, $attribute_filters->{$type};
         }
     }
 
@@ -576,7 +722,7 @@ sub calculate {
 
     my $dbcalc = $dbh->prepare($strcalc);
     push @loopfilter, { crit => 'SQL =', sql => 1, filter => $strcalc };
-    $dbcalc->execute;
+    $dbcalc->execute(@bind3);
     my ( $emptycol, $emptyrow );
     while ( my ( $row, $col, $value ) = $dbcalc->fetchrow ) {
         unless ( defined $col ) {
