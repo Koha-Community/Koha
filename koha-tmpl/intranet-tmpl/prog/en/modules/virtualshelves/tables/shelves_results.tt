@@ -15,7 +15,7 @@
                 "dt_shelfname":
                     "<a href='/cgi-bin/koha/virtualshelves/shelves.pl?op=view&shelfnumber=[% d.shelfnumber | html %]'>[% d.shelfname | html | $To %]</a>",
                 "dt_count":
-                    "[% tnx('{count} item', '{count} items', count, { count = d.count }) | $raw %]",
+                    "[% tnx('{count} item', '{count} items', d.count, { count = d.count }) | $raw %]",
                 "dt_is_shared":
                     "[% IF d.public %]<span>Public</span>[% ELSIF d.is_shared %]<span>Shared</span>[% ELSE %]<span>Private</span>[% END %]",
                 "dt_owner":
