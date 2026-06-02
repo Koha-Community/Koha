@@ -278,8 +278,10 @@ if ( $op =~ /cud-save/ ) {
     }
 } elsif ( $op eq 'add_form' ) {
 
+    # get the patron that is suggesting or fall back to the logged-in-user
+    my $default_suggester = $suggestedby ? Koha::Patrons->find($suggestedby) : $librarian;
     $template->param(
-        default_suggester     => $librarian,
+        default_suggester     => $default_suggester,
         default_suggesteddate => dt_from_string,
         default_branch        => C4::Context->userenv->{"branch"},
     );
