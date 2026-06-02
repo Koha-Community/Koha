@@ -1,9 +1,9 @@
 [% USE raw %]
 [% USE Asset %]
-[% USE AuthorisedValues %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -35,102 +35,171 @@
 [% SET aside = Koha.Preference('CircSidebar') ? 'circ-nav' : '' %]
 [% WRAPPER 'main-container.inc' aside=aside %]
     <h1>Transfers made to your library as of [% show_date | $KohaDates %]</h1>
-    [% IF ( branchesloop ) %]
-        <p>Your library is the destination for the following transfer(s)</p>
-        [% IF ( latetransfers ) %]<p>Transfers are <span class="error">considered late</span> after [% TransfersMaxDaysWarning | html %] days.</p>[% END %]
-        <div id="resultlist">
-            [% FOREACH branchesloo IN branchesloop %]
-                [% IF ( branchesloo.branchcode ) %]
-                    <div class="page-section">
-                        <table style="width: 100%" id="transferst[% branchesloo.branchcode | html %]">
-                            <caption>Coming from [% branchesloo.branchname | html %]</caption>
-                            <thead
-                                ><tr>
-                                    <th>Date of transfer</th>
-                                    <th class="anti-the">Title</th>
-                                    <th>On hold for</th>
-                                    <th>Home library</th>
-                                    <th>Call number</th>
-                                    <th class="no-sort">&nbsp;</th>
-                                </tr></thead
-                            >
-                            <tbody
-                                >[% FOREACH reser IN branchesloo.reserve %]
-                                    <tr>
-                                        <td data-order="[% reser.datetransfer | html %]">
-                                            [% reser.datetransfer | $KohaDates %]
-                                            [% IF ( reser.messcompa ) %]
-                                                <span class="badge bg-warning text-dark">[% tnx('{count} day late', '{count} days late', reser.diff, { count = reser.diff }) %]</span>
-                                            [% END %]
-                                        </td>
-                                        <td>
-                                            [% INCLUDE 'biblio-title.inc' biblio=reser link = 1 %] [% IF ( reser.author ) %]by [% reser.author | html %][% END %]
-                                            [% IF ( reser.itemtype ) %](<strong>[% reser.itemtype | html %]</strong>)[% END %]
-                                            [% IF ( reser.ccode ) -%]
-                                                <span class="collection_code">Collection: [% AuthorisedValues.GetDescriptionByKohaField(kohafield => 'items.ccode', authorised_value => reser.ccode) | html %]</span>
-                                            [%- END %]
-                                            <br />Barcode: [% reser.barcode | html %]
-                                        </td>
-                                        <td
-                                            >[% IF ( reser.patron ) %]
-                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reser.patron.borrowernumber | uri %]">
-                                                    [% reser.patron.surname | html %][% IF ( reser.patron.firstname ) %], [% reser.patron.firstname | html %][% END %]
-                                                </a>
-                                                [% IF ( reser.patron.phone ) %]<br />[% reser.patron.phone | html %][% END %]
-                                                [% IF ( reser.patron.notice_email_address ) %]
-                                                    <br />
-                                                    [% BLOCK subject %]Hold:[% END %]
-                                                    <a href="mailto:[% reser.patron.notice_email_address | uri %]?subject=[% INCLUDE subject %] [% reser.title | uri %]"> [% reser.patron.notice_email_address | html %] </a>
-                                                [% END %]
-                                                [% IF reser.patron.cardnumber %]
-                                                    <div class="cardnumber">Card number: [% reser.patron.cardnumber | html %]</div>
-                                                [% END %]
-                                            [% ELSIF ( reser.recall ) %]
-                                                Recall requested by
-                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reser.recall.patron_id | uri %]"
-                                                    >[% reser.recall.patron.surname | html %][% IF reser.recall.patron.firstname %], [% reser.recall.patron.firstname | html %][% END %] ([% reser.recall.patron.cardnumber | html %])</a
-                                                >
-                                            [% ELSE %]
-                                                <p>None</p>
-                                            [% END %]
-                                        </td>
-                                        <td>[% IF reser.homebranch %][% Branches.GetName( reser.homebranch ) | html %][% END %]</td>
-                                        <td>[% reser.itemcallnumber | html %]</td>
-                                        <td class="actions"
-                                            ><a href="/cgi-bin/koha/circ/returns.pl?itemnumber=[% reser.itemnumber | uri %]&amp;canceltransfer=1&amp;dest=ttr" class="btn btn-default btn-xs"
-                                                ><i class="fa fa-times"></i> Cancel transfer</a
-                                            ></td
-                                        >
-                                    </tr>
-                                [% END %]</tbody
-                            >
-                        </table>
-                    </div>
-                    <!-- /.page-section -->
-                [% END %]
-            [% END %]
+    <p>Your library is the destination for the following transfer(s)</p>
+    [% IF ( TransfersMaxDaysWarning ) %]<p>Transfers are <span class="error">considered late</span> after [% TransfersMaxDaysWarning | html %] days.</p>[% END %]
+    <div id="resultlist">
+        <div class="page-section">
+            <table id="transferstoreceive"></table>
         </div>
-    [% ELSE %]
-        <p>No transfers to receive</p>
-    [% END %]
+        <!-- /.page-section -->
+    </div>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
-        let library_ids = [];
-        [% FOR library IN branchesloop %]
-            library_ids.push("[% library.branchcode | html %]");
-        [% END %]
+    [% INCLUDE 'js-biblio-format.inc' %]
+    [% INCLUDE 'js-date-format.inc' %]
+    <script nonce="[% Koha.CSPNonce | $raw %]">
+        var table_settings = [% TablesSettings.GetTableSettings( 'circ', 'transferstoreceive', 'transferstoreceive', 'json' ) | $raw %];
+        var TransfersMaxDaysWarning = [% TransfersMaxDaysWarning ? TransfersMaxDaysWarning : 0 | html %];
+
+        // Mirror the legacy "late transfer" calculation: a transfer is late once it has been
+        // sent for more than TransfersMaxDaysWarning days without arriving
+        function days_late(sent_date) {
+            if (!sent_date || !TransfersMaxDaysWarning) return 0;
+            var sent = new Date(sent_date);
+            var threshold = new Date(sent.getFullYear(), sent.getMonth(), sent.getDate() + Number(TransfersMaxDaysWarning));
+            var now = new Date();
+            var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            var diff = Math.floor((today - threshold) / 86400000);
+            return diff > 0 ? diff : 0;
+        }
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
-            library_ids.forEach(library_id => {
-                $(`#transferst${library_id}`).kohaTable({
-                    dom: "t",
-                    paging: false,
-                });
-            });
+            var additional_filters = {
+                to_library_id: "[% branchcode | html %]",
+                sent_date: { "!=": null },
+                arrived_date: { "=": null },
+                cancellation_date: { "=": null },
+            };
+
+            $("#transferstoreceive").kohaTable(
+                {
+                    ajax: {
+                        url: "/api/v1/transfers",
+                    },
+                    language: {
+                        emptyTable: _("No transfers to receive"),
+                    },
+                    embed: [
+                        "item+strings",
+                        "item.biblio",
+                        "item.home_library",
+                        "item.item_type",
+                        "item.first_hold.patron",
+                        "item.recall.patron",
+                        "from_library",
+                    ],
+                    order: [[1, "asc"]],
+                    columns: [
+                        {
+                            data: "me.from_library_id",
+                            title: _("Sent from"),
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return escape_str(row.from_library.name);
+                            },
+                        },
+                        {
+                            data: "sent_date",
+                            title: _("Date of transfer"),
+                            type: "date",
+                            searchable: false,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                var html = $date(data);
+                                var late = days_late(data);
+                                if (late > 0) {
+                                    var badge = __nx("{count} day late", "{count} days late", late, { count: late });
+                                    html += ` <span class="badge bg-warning text-dark">${badge}</span>`;
+                                }
+                                return html;
+                            },
+                        },
+                        {
+                            data: "item.biblio.title",
+                            title: _("Title"),
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                var item = row.item;
+                                var html = $biblio_to_html(item.biblio, { link: 1 });
+
+                                if (item.biblio.author) {
+                                    var author = escape_str(item.biblio.author);
+                                    html += ` ${_("by")} ${author}`;
+                                }
+
+                                if (item.item_type) {
+                                    var item_type = escape_str(item.item_type.translated_description || item.item_type.description);
+                                    if (item_type) html += ` (<strong>${item_type}</strong>)`;
+                                }
+
+                                if (item._strings.collection_code && item._strings.collection_code.str) {
+                                    var collection_code = escape_str(item._strings.collection_code.str);
+                                    html += ` <span class="collection_code">${_("Collection:")} ${collection_code}</span>`;
+                                }
+
+                                var barcode = escape_str(item.external_id);
+                                html += `<br>${_("Barcode:")} ${barcode}`;
+
+                                return html;
+                            },
+                        },
+                        {
+                            data: null,
+                            title: _("On hold for"),
+                            searchable: false,
+                            orderable: false,
+                            render: function (data, type, row, meta) {
+                                var item = row.item;
+                                if (item.first_hold) {
+                                    return $patron_to_html(item.first_hold.patron, { url: true, display_cardnumber: true });
+                                } else if (item.recall) {
+                                    var patron = $patron_to_html(item.recall.patron, { url: true, display_cardnumber: true });
+                                    return `${_("Recall requested by")} ${patron}`;
+                                } else {
+                                    return _("None");
+                                }
+                            },
+                        },
+                        {
+                            data: "item.home_library_id",
+                            title: _("Home library"),
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return escape_str(row.item.home_library.name);
+                            },
+                        },
+                        {
+                            data: "item.callnumber",
+                            title: _("Call number"),
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return escape_str(data);
+                            },
+                        },
+                        {
+                            data: null,
+                            title: _("Actions"),
+                            class: "actions",
+                            searchable: false,
+                            orderable: false,
+                            render: function (data, type, row, meta) {
+                                var itemnumber = encodeURIComponent(row.item_id);
+                                return `<a href="/cgi-bin/koha/circ/returns.pl?itemnumber=${itemnumber}&canceltransfer=1&dest=ttr" class="btn btn-default btn-xs"><i class="fa fa-times"></i> ${_("Cancel transfer")}</a>`;
+                            },
+                        },
+                    ],
+                },
+                table_settings,
+                1,
+                additional_filters
+            );
         });
     </script>
 [% END %]
