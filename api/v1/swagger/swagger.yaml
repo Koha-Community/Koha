@@ -222,6 +222,8 @@ definitions:
     $ref: ./definitions/ticket.yaml
   ticket_update:
     $ref: ./definitions/ticket_update.yaml
+  transfer:
+    $ref: ./definitions/transfer.yaml
   transfer_limit:
     $ref: ./definitions/transfer_limit.yaml
   vendor:
@@ -695,6 +697,8 @@ paths:
     $ref: ./paths/transfer_limits.yaml#/~1transfer_limits~1batch
   "/transfer_limits/{limit_id}":
     $ref: "./paths/transfer_limits.yaml#/~1transfer_limits~1{limit_id}"
+  /transfers:
+    $ref: ./paths/transfers.yaml#/~1transfers
   /status/version:
     $ref: ./paths/status.yaml#/~1status~1version
 parameters:
@@ -1517,6 +1521,9 @@ tags:
   - description: "Manage transfer limits\n"
     name: transfer_limits
     x-displayName: Transfer limits
+  - description: "Manage item transfers\n"
+    name: transfers
+    x-displayName: Transfers
   - description: "Handle two factor authentication flows\n"
     name: 2fa
     x-displayName: Two factor authentication

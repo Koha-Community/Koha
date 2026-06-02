@@ -216,6 +216,25 @@ sub strings_map {
     };
 }
 
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Item::Transfer object on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        branchtransfer_id => 'transfer_id',
+        itemnumber        => 'item_id',
+        daterequested     => 'requested_date',
+        datesent          => 'sent_date',
+        datearrived       => 'arrived_date',
+        datecancelled     => 'cancellation_date',
+        frombranch        => 'from_library_id',
+        tobranch          => 'to_library_id',
+    };
+}
+
 =head3 type
 
 =cut

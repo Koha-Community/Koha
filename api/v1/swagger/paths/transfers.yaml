@@ -1,0 +1,87 @@
+---
+/transfers:
+  get:
+    x-mojo-to: Transfers#list
+    operationId: listTransfers
+    tags:
+      - transfers
+    summary: List transfers
+    parameters:
+      - name: item_id
+        in: query
+        description: Search on the internal item identifier
+        required: false
+        type: integer
+      - name: from_library_id
+        in: query
+        description: Search on the library the transfer is coming from
+        required: false
+        type: string
+      - name: to_library_id
+        in: query
+        description: Search on the library the transfer is going to
+        required: false
+        type: string
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - item+strings
+            - item.biblio
+            - item.home_library
+            - item.item_type
+            - item.first_hold.patron
+            - item.recall.patron
+            - from_library
+        collectionFormat: csv
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/request_id_header"
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A list of transfers
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/transfer"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        circulate: circulate_remaining_permissions
