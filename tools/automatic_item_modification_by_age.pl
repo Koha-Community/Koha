@@ -56,11 +56,13 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $op                 = $cgi->param('op') // 'show';
-my @item_fields        = map { "items.$_" } Koha::Items->columns;
-my @biblioitem_fields  = map { "biblioitems.$_" } Koha::Biblioitems->columns;
-my @biblio_fields      = map { "biblio.$_" } Koha::Biblios->columns;
-my @allowed_age_fields = (
+my $op                          = $cgi->param('op') // 'show';
+my @item_fields                 = map { "items.$_" } Koha::Items->columns;
+my @biblioitem_fields           = map { "biblioitems.$_" } Koha::Biblioitems->columns;
+my @biblio_fields               = map { "biblio.$_" } Koha::Biblios->columns;
+my @allowed_condition_fields    = ( @item_fields, @biblioitem_fields, @biblio_fields );
+my @allowed_substitution_fields = @item_fields;
+my @allowed_age_fields          = (
     'items.dateaccessioned', 'items.replacementpricedate', 'items.datelastborrowed', 'items.datelastseen',
     'items.damaged_on',      'items.itemlost_on',          'items.withdrawn_on'
 );
@@ -82,6 +84,7 @@ if ( $op eq 'cud-update' ) {
         for my $value (@substitution_values) {
             my $field = shift @substitution_fields;
             last unless $field;
+            next unless grep { $_ eq $field } @allowed_substitution_fields;
             push @{ $rule->{substitutions} }, { field => $field, value => $value };
         }
         push @{ $rule->{substitutions} }, {}
@@ -89,6 +92,7 @@ if ( $op eq 'cud-update' ) {
         for my $value (@condition_values) {
             my $field = shift @condition_fields;
             last unless $field;
+            next unless grep { $_ eq $field } @allowed_condition_fields;
             push @{ $rule->{conditions} }, { field => $field, value => $value };
         }
         push @{ $rule->{conditions} }, {}
@@ -125,9 +129,9 @@ if ($@) {
 $template->param(
     op                  => $op,
     messages            => \@messages,
-    agefields           => [@allowed_age_fields],
-    condition_fields    => [ @item_fields, @biblioitem_fields, @biblio_fields ],
-    substitution_fields => \@item_fields,
+    agefields           => \@allowed_age_fields,
+    condition_fields    => \@allowed_condition_fields,
+    substitution_fields => \@allowed_substitution_fields,
     rules               => $rules,
 );
 
