@@ -110,10 +110,10 @@ This modules provides some functions to deal with reservations.
   - priority >0      : then the reserve is at 1st stage, and not yet affected to any item.
              =0      : then the reserve is being dealt
   - found : NULL         : means the patron requested the 1st available, and we haven't chosen the item
-            T(ransit)    : the reserve is linked to an item but is in transit to the pickup branch
-            W(aiting)    : the reserve is linked to an item, is at the pickup branch, and is waiting on the hold shelf
-            F(inished)   : the reserve has been completed, and is done
-            P(rocessing) : reserved item has been returned using self-check machine and reserve needs to be confirmed
+            T (Transit)    : the reserve is linked to an item but is in transit to the pickup branch
+            W (Waiting)    : the reserve is linked to an item, is at the pickup branch, and is waiting on the hold shelf
+            F (Finished)   : the reserve has been completed, and is done
+            P (Processing) : reserved item has been returned using self-check machine and reserve needs to be confirmed
                            by librarian before notice is send and status changed to waiting.
                            Applicable only if HoldsNeedProcessingSIP system preference is set.
   - itemnumber : empty : the reserve is still unaffected to an item
