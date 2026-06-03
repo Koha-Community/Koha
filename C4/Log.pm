@@ -38,7 +38,7 @@ use vars qw(@ISA @EXPORT);
 BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
-    @EXPORT = qw(logaction cronlogaction);
+    @EXPORT = qw(logaction cronlogaction logscriptaction);
 }
 
 =head1 NAME
@@ -227,6 +227,27 @@ sub cronlogaction {
 
     $loginfo .= ' ' . $info                        if $info;
     logaction( 'CRONJOBS', $action, $$, $loginfo ) if C4::Context->preference('CronjobLog');
+}
+
+=item logscriptaction
+
+  &logscriptaction({ info => $info, action => $action });
+
+Convenience routine to add a record into the action_logs table for a
+non-cron Koha script. Logs the path of the running script plus any
+additional information provided in C<info>. Only logs when the
+C<ScriptLog> system preference is enabled.
+
+=cut
+
+sub logscriptaction {
+    my $params = shift;
+    my $info   = $params->{info};
+    my $action = $params->{action};
+    $action ||= "Run";
+    my $loginfo = $0;
+    $loginfo .= ' ' . $info                       if $info;
+    logaction( 'SCRIPTS', $action, $$, $loginfo ) if C4::Context->preference('ScriptLog');
 }
 
 1;
