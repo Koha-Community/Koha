@@ -365,7 +365,7 @@ Note: The minimum you need here is a <matchpoint> block, containing a valid colu
 
 It should be as simple as that; you should now be able to login via shibboleth in the opac.
 
-If you need more help configuring your B<S>ervice B<P>rovider to authenticate against a chosen B<Id>entity B<P>rovider then it might be worth taking a look at the community wiki L<page|https://wiki.koha-community.org/wiki/Shibboleth_Configuration>
+If you need more help configuring your B<S>ervice B<P>rovider to authenticate against a chosen B<Id>entity B<P>rovider then it might be worth taking a look at the community wiki L<page|https://wiki.koha-community.org/wiki/Shibboleth_Configuration>  # codespell:ignore
 
 =head1 FUNCTIONS
 
