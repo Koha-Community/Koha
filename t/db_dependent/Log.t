@@ -18,10 +18,10 @@ use Modern::Perl;
 use Data::Dumper qw( Dumper );
 
 use Test::NoWarnings;
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use C4::Context;
-use C4::Log  qw( logaction cronlogaction );
+use C4::Log  qw( logaction cronlogaction logscriptaction );
 use C4::Auth qw( checkpw );
 use Koha::Database;
 use Koha::ActionLogs;
@@ -280,6 +280,31 @@ subtest 'cronlogaction(): loginfo uses $0 and appends info' => sub {
     cronlogaction();
     $log = Koha::ActionLogs->search( { module => 'CRONJOBS' } )->next;
     is( $log->info, $0, 'loginfo is exactly $0 when no info param is given' );
+};
+
+subtest 'logscriptaction(): logs to SCRIPTS module using ScriptLog pref' => sub {
+    plan tests => 5;
+
+    Koha::ActionLogs->search( { module => 'SCRIPTS' } )->delete;
+
+    t::lib::Mocks::mock_preference( 'ScriptLog', 0 );
+    logscriptaction( { info => 'test' } );
+    is(
+        Koha::ActionLogs->search( { module => 'SCRIPTS' } )->count, 0,
+        'logscriptaction does not log when ScriptLog=0'
+    );
+
+    t::lib::Mocks::mock_preference( 'ScriptLog', 1 );
+    logscriptaction( { info => 'extra_info' } );
+    my $log = Koha::ActionLogs->search( { module => 'SCRIPTS' } )->next;
+    like( $log->info, qr/\Q$0\E/,      'logscriptaction prefixes loginfo with $0' );
+    like( $log->info, qr/extra_info$/, 'logscriptaction appends the info parameter' );
+    is( $log->action, 'Run', 'default action is Run' );
+
+    Koha::ActionLogs->search( { module => 'SCRIPTS' } )->delete;
+    logscriptaction( { action => 'End', info => 'COMPLETED' } );
+    $log = Koha::ActionLogs->search( { module => 'SCRIPTS' } )->next;
+    is( $log->action, 'End', 'custom action is respected' );
 };
 
 $schema->storage->txn_rollback;
