@@ -39,21 +39,31 @@ use File::Basename qw( fileparse );
 use Fcntl          qw( LOCK_EX LOCK_NB );
 
 use C4::Context;
-use C4::Log qw( cronlogaction );
+use C4::Log qw( cronlogaction logscriptaction );
 use Koha::Exceptions;
 use Koha::Exception;
 
 our $_cron = 0;
 
+# Flag names (matched case-insensitively, substring match) whose following
+# value should be redacted from logged command-line output.
+my @_sensitive_patterns = qw( password passwd secret token apikey api_key credential );
+
 INIT {
+    my $command_line_options = join( " ", _scrub_argv(@ARGV) );
     if ($_cron) {
-        my $command_line_options = join( " ", @ARGV );
         cronlogaction( { info => $command_line_options } );
+    } else {
+        logscriptaction( { info => $command_line_options } );
     }
 }
 
 END {
-    cronlogaction( { action => 'End', info => "COMPLETED" } ) if $_cron;
+    if ($_cron) {
+        cronlogaction( { action => 'End', info => "COMPLETED" } );
+    } else {
+        logscriptaction( { action => 'End', info => "COMPLETED" } );
+    }
 }
 
 =head2 import
@@ -62,9 +72,17 @@ END {
     use Koha::Script -cron;
 
 Sets the interface and userenv appropriately based on the flags passed.
-When the C<-cron> flag is used the script is also automatically logged to
-the CRONJOBS action log (start and end) when the C<CronjobLog> system
+
+When the C<-cron> flag is used the script is automatically logged to the
+CRONJOBS action log (start and end) when the C<CronjobLog> system
 preference is enabled.
+
+Without C<-cron>, the script is automatically logged to the SCRIPTS
+action log when the C<ScriptLog> system preference is enabled.
+
+In both cases, command-line arguments whose flag names contain sensitive
+patterns (C<password>, C<secret>, C<token>, etc.) have their values
+replaced with C<[REDACTED]> before logging.
 
 =cut
 
@@ -95,6 +113,51 @@ sub import {
         # Set interface
         C4::Context->interface('commandline');
     }
+}
+
+=head2 Internal methods
+
+=head3 _scrub_argv
+
+    my @scrubbed = Koha::Script::_scrub_argv(@ARGV);
+
+Returns a copy of the argument list with values redacted for any flag whose
+name matches a sensitive pattern (C<password>, C<passwd>, C<secret>,
+C<token>, C<apikey>, C<api_key>, C<credential>; case-insensitive substring
+match). Handles both C<--flag value> and C<--flag=value> forms.
+
+=cut
+
+sub _scrub_argv {
+    my @argv = @_;
+    my $re   = join '|', @_sensitive_patterns;
+    $re = qr/$re/i;
+
+    my @out;
+    my $i = 0;
+    while ( $i < @argv ) {
+        my $arg = $argv[$i];
+        if ( $arg =~ /^(-{1,2})([\w-]+)=(.*)$/ ) {
+
+            # --flag=value form
+            my ( $dash, $name, $val ) = ( $1, $2, $3 );
+            push @out, $name =~ $re ? "${dash}${name}=[REDACTED]" : $arg;
+        } elsif ( $arg =~ /^(-{1,2})([\w-]+)$/ ) {
+
+            # --flag form — peek at the next element; redact if it is a value
+            # (i.e. does not itself start with a dash)
+            my ( $dash, $name ) = ( $1, $2 );
+            push @out, $arg;
+            if ( $name =~ $re && $i + 1 < @argv && $argv[ $i + 1 ] !~ /^-/ ) {
+                $i++;
+                push @out, '[REDACTED]';
+            }
+        } else {
+            push @out, $arg;
+        }
+        $i++;
+    }
+    return @out;
 }
 
 =head1 API
