@@ -74,106 +74,104 @@
             var lastitemblock = $("#outeritemblock > div:last");
             var tobedeleted = true;
             var listitems = $("#items_list tr");
-            $(listitems).each(function(){
-                if($(this).attr('idblock') == $(lastitemblock).attr('id')){
+            $(listitems).each(function () {
+                if ($(this).attr("idblock") == $(lastitemblock).attr("id")) {
                     tobedeleted = false;
                 }
             });
-            if(tobedeleted){
+            if (tobedeleted) {
                 $(lastitemblock).remove();
             }
         }
 
-        var ok=0;
-        var _alertString= _("Form not submitted because of the following problem(s)")+"\n";
+        var ok = 0;
+        var _alertString = _("Form not submitted because of the following problem(s)") + "\n";
 
-        _alertString +="-------------------------------------------------------------------\n\n";
+        _alertString += "-------------------------------------------------------------------\n\n";
 
-        if(isNull(ff.budget_id,1)){
-            ok=1;
-            _alertString += "\n- "+ _("You must select a fund");
+        if (isNull(ff.budget_id, 1)) {
+            ok = 1;
+            _alertString += "\n- " + _("You must select a fund");
         }
 
-        if (!(isNum(ff.quantity,0)) || ff.quantity.value == 0){
-            ok=1;
-                        _alertString += "\n- " + _("Quantity must be greater than '0'");
+        if (!isNum(ff.quantity, 0) || ff.quantity.value == 0) {
+            ok = 1;
+            _alertString += "\n- " + _("Quantity must be greater than '0'");
         }
 
-        if (!(isNum(ff.listprice,0))){
-            ok=1;
-                        _alertString += "\n- " + _("Vendor price must be a number");
+        if (!isNum(ff.listprice, 0)) {
+            ok = 1;
+            _alertString += "\n- " + _("Vendor price must be a number");
         }
 
-        if (!(isNum(ff.total,0))){
-            ok=1;
-                        _alertString += "\n- " + _("Total must be a number");
+        if (!isNum(ff.total, 0)) {
+            ok = 1;
+            _alertString += "\n- " + _("Total must be a number");
         }
 
-        if (totalExceedsBudget(ff.budget_id.value, ff.total.value  )  ) {
-            ok=1;
+        if (totalExceedsBudget(ff.budget_id.value, ff.total.value)) {
+            ok = 1;
             _alertString += "\n- " + _("Order total (%s) exceeds budget available (%s)").format(ff.total.value, actTotal);
         }
 
-        if ( ff.field_value ) {
+        if (ff.field_value) {
             var empty_item_mandatory = CheckMandatorySubfields(ff);
             if (empty_item_mandatory > 0) {
                 ok = 1;
-                _alertString +=
-                    "\n- " + _("%s item mandatory fields empty").format(empty_item_mandatory);
+                _alertString += "\n- " + _("%s item mandatory fields empty").format(empty_item_mandatory);
             }
-
         }
 
         if (ok) {
             alert(_alertString);
             if (AcqCreateItemOrdering) {
-                if(tobedeleted) {
-                    $(lastitemblock).appendTo('#outeritemblock');
+                if (tobedeleted) {
+                    $(lastitemblock).appendTo("#outeritemblock");
                 }
             }
             return false;
         }
 
         if (AcqCreateItemOrdering) {
-            if(check_additem(Koha.prefs.UniqueItemFields) == false) {
-                alert(_("Duplicate values detected. Please correct the errors and resubmit.") );
-                if(tobedeleted) {
-                    $(lastitemblock).appendTo('#outeritemblock');
+            if (check_additem(Koha.prefs.UniqueItemFields) == false) {
+                alert(_("Duplicate values detected. Please correct the errors and resubmit."));
+                if (tobedeleted) {
+                    $(lastitemblock).appendTo("#outeritemblock");
                 }
                 return false;
             }
         }
     }
 
-    $(document).ready(function(){
-        if (!ordernumber ){
+    $(document).ready(function () {
+        if (!ordernumber) {
             $("#items_list").hide();
         }
 
-        if (AcqCreateItemOrdering && !is_standing ){
+        if (AcqCreateItemOrdering && !is_standing) {
             cloneItemBlock(0, Koha.prefs.UniqueItemFields);
         }
 
         if (from_suggestion) {
             updateCosts();
         }
-        $("#quantity").change(function() {
+        $("#quantity").change(function () {
             updateCosts();
         });
 
         //We apply the function only for modify option
-        if ( quantityrec && !subscriptionid ) {
-            if ( AcqCreateItemOrdering ){
-                $('#quantity').blur(function(){
+        if (quantityrec && !subscriptionid) {
+            if (AcqCreateItemOrdering) {
+                $("#quantity").blur(function () {
                     // if user decreases the quantity
-                    if($(this).val() < quantityrec ){
+                    if ($(this).val() < quantityrec) {
                         alert(_("You have deleted item(s) in the order, don't forget to delete it(them) in the catalog"));
                         return true;
                     } else {
                         // if user increases the quantity
                         alert(_("You can't add a new item, please create a new order line"));
                         // and we replace the original value
-                        $(this).val([% quantityrec | html %])
+                        $(this).val(quantityrec);
                         updateCosts(); // blur is invoked after change which updated values
                         return false;
                     }
@@ -182,50 +180,47 @@
         }
 
         //keep a copy of all budgets before removing the inactives
-        disabledBudgetsCopy = $('#budget_id').html();
-        $('#budget_id .b_inactive').remove();
+        disabledBudgetsCopy = $("#budget_id").html();
+        $("#budget_id .b_inactive").remove();
 
-        $('#showallbudgets').click(function() {
+        $("#showallbudgets").click(function () {
             if ($(this).is(":checked")) {
-                $('#budget_id').html(disabledBudgetsCopy); //Puts back all the funds
-            }
-            else {
-                $('#budget_id .b_inactive').remove();
+                $("#budget_id").html(disabledBudgetsCopy); //Puts back all the funds
+            } else {
+                $("#budget_id .b_inactive").remove();
             }
         });
 
-        $("#budget_id").change(function(){
-            var destination_sort1 = $(this).parents('fieldset.rows').find('input[name="sort1"]');
-            var sort1_authcat = $(this).find("option:selected").attr('data-sort1-authcat');
+        $("#budget_id").change(function () {
+            var destination_sort1 = $(this).parents("fieldset.rows").find('input[name="sort1"]');
+            var sort1_authcat = $(this).find("option:selected").attr("data-sort1-authcat");
             var sort1 = $(destination_sort1).val() || "";
-            if ( destination_sort1.length < 1 ) {
-                destination_sort1 = $(this).parents('fieldset.rows').find('select[name="sort1"]');
+            if (destination_sort1.length < 1) {
+                destination_sort1 = $(this).parents("fieldset.rows").find('select[name="sort1"]');
             }
-            var destination_sort2 = $(this).parents('fieldset.rows').find('input[name="sort2"]');
-            var sort2_authcat = $(this).find("option:selected").attr('data-sort2-authcat');
+            var destination_sort2 = $(this).parents("fieldset.rows").find('input[name="sort2"]');
+            var sort2_authcat = $(this).find("option:selected").attr("data-sort2-authcat");
             var sort2 = $(destination_sort2).val() || "";
-            if ( destination_sort2.length < 1 ) {
-                destination_sort2 = $(this).parents('fieldset.rows').find('select[name="sort2"]');
+            if (destination_sort2.length < 1) {
+                destination_sort2 = $(this).parents("fieldset.rows").find('select[name="sort2"]');
             }
-            getAuthValueDropbox( 'sort1', sort1_authcat, destination_sort1, sort1 );
-            getAuthValueDropbox( 'sort2', sort2_authcat, destination_sort2, sort2 );
+            getAuthValueDropbox("sort1", sort1_authcat, destination_sort1, sort1);
+            getAuthValueDropbox("sort2", sort2_authcat, destination_sort2, sort2);
         });
         $("#budget_id").change();
     });
 
     function add_user(borrowernumber, borrowername) {
         var ids = $("#users_ids").val();
-        if(ids.length > 0) {
-            ids = ids.split(':');
+        if (ids.length > 0) {
+            ids = ids.split(":");
         } else {
-            ids = new Array;
+            ids = new Array();
         }
-    if (ids.indexOf(borrowernumber.toString()) < 0) {
+        if (ids.indexOf(borrowernumber.toString()) < 0) {
             ids.push(borrowernumber);
-            $("#users_ids").val(ids.join(':'));
-            var li = '<li id="user_'+borrowernumber+'">'+borrowername
-                + ' [<a style="cursor:pointer" onclick="del_user('+borrowernumber+');">'
-                + _("Delete user") + '</a>]</li>';
+            $("#users_ids").val(ids.join(":"));
+            var li = '<li id="user_' + borrowernumber + '">' + borrowername + ' [<a style="cursor:pointer" onclick="del_user(' + borrowernumber + ');">' + _("Delete user") + "</a>]</li>";
             $("#users_names").append(li);
             return 0;
         }
@@ -233,10 +228,10 @@
     }
 
     function del_user(borrowernumber) {
-        $("#user_"+borrowernumber).remove();
-        var ids = $("#users_ids").val().split(':');
+        $("#user_" + borrowernumber).remove();
+        var ids = $("#users_ids").val().split(":");
         ids.splice(ids.indexOf(borrowernumber.toString()), 1);
-        $("#users_ids").val(ids.join(':'));
+        $("#users_ids").val(ids.join(":"));
     }
 </script>
 [% Asset.css("css/addbiblio.css") | $raw %]
