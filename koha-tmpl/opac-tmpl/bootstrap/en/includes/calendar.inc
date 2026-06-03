@@ -19,7 +19,7 @@
     var flatpickr_timeformat_string = [% IF Koha.Preference('TimeFormat') == '12hr' %]"G:i K"[% ELSE %]"H:i"[% END %];
     var flatpickr_timeformat = [% IF Koha.Preference('TimeFormat') == '12hr' %]false[% ELSE %]true[% END %];
     var flatpickr_dateformat_string = "";
-    var delimter = "";
+    var delimiter = "";
     var altinput_dateformat = "";
     switch ( dateformat_pref ){
         case "us":

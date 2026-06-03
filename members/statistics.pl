@@ -74,7 +74,7 @@ my $r                           = merge( @$precedent_state, @$total_issues_today
 add_actual_state($r);
 my ( $total, $datas ) = build_array($r);
 
-# Gettings sums
+# Getting sums
 my $count_total_precedent_state = $total->{count_precedent_state}             || 0;
 my $count_total_issues          = $total->{count_total_issues_today}          || 0;
 my $count_total_issues_returned = $total->{count_total_issues_returned_today} || 0;

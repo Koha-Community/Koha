@@ -3337,7 +3337,7 @@ subtest 'queue_notice' => sub {
     is_deeply(
         $patron->queue_notice( { letter_params => $letter_params, message_transports => \@mtts } ),
         { sent => ['print'], fallback => [ 'email', 'sms' ] },
-        "Email fallsback to print if no emai, sms fallsback to print if no sms, only one print sent"
+        "Email fallsback to print if no email, sms fallsback to print if no sms, only one print sent"
     );
     is(
         Koha::Notice::Messages->search( { borrowernumber => $patron->borrowernumber } )->count, $counter + 1,

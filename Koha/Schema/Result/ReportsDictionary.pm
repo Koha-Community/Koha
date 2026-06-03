@@ -75,7 +75,7 @@ SQL snippet for us in reports
   is_nullable: 1
   size: 6
 
-Koha module this definition is for Circulation, Catalog, Patrons, Acquistions, Accounts)
+Koha module this definition is for Circulation, Catalog, Patrons, Acquisitions, Accounts)
 
 =cut
 

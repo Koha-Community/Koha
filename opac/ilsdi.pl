@@ -50,7 +50,7 @@ my @services = (
     #    'HarvestExpandedRecords',            # OAI-PMH
     'GetAvailability',    # FIXME Add bibliographic level
 
-    #    'GoToBibliographicRequestPage'       # I don't understant this one
+    #    'GoToBibliographicRequestPage'       # I don't understand this one
     #    Level 2: Elementary OPAC supplement
     #    'HarvestAuthorityRecords',           # OAI-PMH
     #    'HarvestHoldingsRecords',            # OAI-PMH
@@ -60,8 +60,8 @@ my @services = (
     #    'Scan',                                 # TODO
     'GetAuthorityRecords',
 
-    #    'OutputRewritablePage',              # I don't understant this one
-    #    'OutputIntermediateFormat',          # I don't understant this one
+    #    'OutputRewritablePage',              # I don't understand this one
+    #    'OutputIntermediateFormat',          # I don't understand this one
     #    Level 3: Elementary OPAC alternative
     'LookupPatron',
     'AuthenticatePatron',

@@ -396,7 +396,7 @@ subtest 'Record fields has been added and deleted when add = 1, append = 0, remo
         }
     )->store();
 
-    # Warning - is there a use case in real-life for this combinaison?
+    # Warning - is there a use case in real-life for this combination?
     my $expected_record = build_record(
         [
             # "250" field have retained their original value

@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 # Unit tests for Koha::Misc::Files
-# Author: Jacek Ablewicz, abl@biblos.pk.edu.pl
+# Author: Jacek Ablewicz, able@biblos.pk.edu.pl
 
 use Modern::Perl;
 use C4::Context;

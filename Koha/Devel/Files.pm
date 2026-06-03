@@ -102,9 +102,15 @@ my $exceptions = {
                 misc/cronjobs/rss
             )
         ],
-        codespell => [],
-        core      => [],
-        nonce     => [qw(t/lib/plugins/Koha/Plugin/TestValuebuilder/test_valuebuilder_popup.tt)],
+        codespell => [
+            qw(
+                koha-tmpl/intranet-tmpl/prog/en/modules/about.tt
+                t/mock_templates/intranet-tmpl/prog/en/modules/about.tt
+                t/mock_templates/intranet-tmpl/prog/fr-CA/modules/about.tt
+            )
+        ],
+        core  => [],
+        nonce => [qw(t/lib/plugins/Koha/Plugin/TestValuebuilder/test_valuebuilder_popup.tt)],
     },
     yml => {
         core => [],

@@ -157,7 +157,7 @@ subtest 'replace' => sub {
     my $updated_record = MARC::Record->new_from_xml( $koha_auth->marcxml, 'UTF-8' );
     is(
         $updated_record->field('100')->as_string, $auth_record->field('100')->as_string,
-        "The Koha auhtority record is correctly updated"
+        "The Koha authority record is correctly updated"
     );
     is( $import_record->marcxml_old, $koha_xml, "The old marcxml in import record is correctly updated" );
 

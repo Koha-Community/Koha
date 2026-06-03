@@ -387,7 +387,7 @@ subtest 'automatic_checkin' => sub {
         }
     )->store;
 
-    # due checkout for nomal itemtype
+    # due checkout for normal itemtype
     my $checkout_ni = Koha::Checkout->new(
         {
             borrowernumber => $patron->borrowernumber,

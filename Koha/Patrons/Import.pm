@@ -594,7 +594,7 @@ LINE: while ( my $borrowerline = <$handle> ) {
 
  my @csvcolumns = $self->prepare_columns({headerrow => $borrowerline, keycol => \%csvkeycol, errors => \@errors, });
 
-Returns an array of all column key and populates a hash of colunm key positions.
+Returns an array of all column key and populates a hash of column key positions.
 
 =cut
 

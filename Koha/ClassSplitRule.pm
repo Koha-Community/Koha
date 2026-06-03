@@ -25,7 +25,7 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::ClassSplitRule Koha Classfication Splitting Rule Object class
+Koha::ClassSplitRule Koha Classification Splitting Rule Object class
 
 =head1 API
 

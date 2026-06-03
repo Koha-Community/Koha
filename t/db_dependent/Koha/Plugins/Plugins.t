@@ -255,7 +255,7 @@ subtest 'InstallPlugins() tests' => sub {
     }
     'Koha::Exceptions::BadParameter';
 
-    # Tests when the plugin to be installled is not found
+    # Tests when the plugin to be installed is not found
     throws_ok {
         $plugins->InstallPlugins( { include => ["Koha::Plugin::NotfoundPlugin"] } );
     }

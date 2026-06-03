@@ -48,7 +48,7 @@ if ( $reserve_id && $borrowernumber ) {
 
     unless ( $hold && $hold->borrowernumber == $borrowernumber ) {
 
-        # whatcha tryin to do?
+        # whatcha trying to do?
         print $query->redirect('/cgi-bin/koha/errors/403.pl');
         exit;
     }
@@ -62,7 +62,7 @@ if ( $reserve_id && $borrowernumber ) {
             $hold->set_pickup_location( { library_id => $new_pickup_location } );
         } else {
 
-            # whatcha tryin to do?
+            # whatcha trying to do?
             print $query->redirect('/cgi-bin/koha/errors/403.pl');
             exit;
         }

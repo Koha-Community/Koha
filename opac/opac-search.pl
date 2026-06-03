@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2008 Garry Collum and the Koha Development team
+# Copyright 2008 Garry Column and the Koha Development team
 # Copyright 2010 BibLibre
 # Copyright 2011 KohaAloha, NZ
 #

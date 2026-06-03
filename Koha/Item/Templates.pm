@@ -31,7 +31,7 @@ Koha::Item::Templates - Koha Item Template Object set class
 
 =head3 get_available
 
-Returns a hashref with keys 'owned' and 'shared' pointing to Koha::Item::Templats objects
+Returns a hashref with keys 'owned' and 'shared' pointing to Koha::Item::Templates objects
 representing templates owned by the user or shared to the user respectivetly.
 
 =cut

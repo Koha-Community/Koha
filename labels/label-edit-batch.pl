@@ -86,7 +86,7 @@ if ( $op eq 'cud-delete' ) {
             if ( $number_type eq "itemnumber" && Koha::Items->find($number) ) {
                 push @item_numbers, $number;
             } elsif ( $number_type eq "barcode" )
-            {    # we must test in case an invalid barcode is passed in; we effectively disgard them atm
+            {    # we must test in case an invalid barcode is passed in; we effectively discard them atm
                 $number = barcodedecode($number);
                 my $item = Koha::Items->find( { barcode => $number } );
                 push @item_numbers, $item->itemnumber if $item;

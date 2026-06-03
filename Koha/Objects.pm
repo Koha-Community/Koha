@@ -374,7 +374,7 @@ sub empty {
 
 Koha::Objects->reset();
 
-resets iteration so the next call to next() will start agein
+resets iteration so the next call to next() will start again
 with the first object in a set.
 
 =cut

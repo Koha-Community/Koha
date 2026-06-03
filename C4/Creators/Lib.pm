@@ -272,7 +272,7 @@ ADD_LAYOUTS:
 
 This function returns an arrayref whose elements are hashes containing all profiles upon success and 1 upon failure. Errors are logged
 to the Apache log. Two parameters are accepted. The first limits the field(s) returned. This parameter should be string of comma separated
-fields. ie. "field_1, field_2, ...field_n" The second limits the records returned based on a string containing a valud SQL 'WHERE' filter.
+fields. ie. "field_1, field_2, ...field_n" The second limits the records returned based on a string containing a valid SQL 'WHERE' filter.
 
 NOTE: Do not pass in the keyword 'WHERE.'
 
@@ -320,7 +320,7 @@ sub get_all_image_names {
 
 This function returns an arrayref whose elements are hashes containing the batch_ids of current batches along with the item count
 for each batch upon success and 1 upon failure. Item counts are stored under the key '_item_count' Errors are logged to the Apache log.
-One parameter is accepted which limits the records returned based on a string containing a valud SQL 'WHERE' filter.
+One parameter is accepted which limits the records returned based on a string containing a valid SQL 'WHERE' filter.
 
 NOTE: Do not pass in the keyword 'WHERE.'
 
@@ -352,7 +352,7 @@ sub get_batch_summary {
 
 This function returns an arrayref whose elements are hashes containing the label_ids of current labels along with the item count
 for each label upon success and 1 upon failure. Item counts are stored under the key '_item_count' Errors are logged to the Apache log.
-One parameter is accepted which limits the records returned based on a string containing a valud SQL 'WHERE' filter.
+One parameter is accepted which limits the records returned based on a string containing a valid SQL 'WHERE' filter.
 
 NOTE: Do not pass in the keyword 'WHERE.'
 
@@ -405,7 +405,7 @@ sub get_label_summary {
 
 This function returns an arrayref whose elements are hashes containing the label_ids of current cards along with the item count
 for each card upon success and 1 upon failure. Item counts are stored under the key '_item_count' Errors are logged to the Apache log.
-One parameter is accepted which limits the records returned based on a string containing a valud SQL 'WHERE' filter.
+One parameter is accepted which limits the records returned based on a string containing a valid SQL 'WHERE' filter.
 
 NOTE: Do not pass in the keyword 'WHERE.'
 

@@ -132,7 +132,7 @@ $0: establish relationship to host items
 
 Based on barcode in host field populates subfield 0 with host biblionumber and subfield 9 with host itemnumber.
 
-Subfield 0 and 9 are used in Koha screns to display relationships between analytical records and host bibs and items.
+Subfield 0 and 9 are used in Koha screens to display relationships between analytical records and host bibs and items.
 
 NOT usable with UNIMARC data. You can use it only if you have tag 461 with also an items id (like barcode or item numbers). In UNIMARC this situation is very rare. If you have data coded in this way, send a mail to koha-dev mailing list and ask for the feature.
 

@@ -1603,7 +1603,7 @@ Koha::EDI
      Returns 1 on success undef on error
 
      Most usual cause of error is a line with no or incorrect budget codes
-     which woild cause order creation to abort
+     which would cause order creation to abort
      If other correct lines exist these are processed and the erroneous line os logged
 
 =head2 title_level_class

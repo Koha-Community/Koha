@@ -56,7 +56,7 @@ Koha::FrameworkPlugin - Facilitate use of plugins in MARC/items editor
 
     This object support two code styles:
     - In the new style, the plugin returns a hashref with a builder and a
-      launcher key pointing to two anynomous subroutines.
+      launcher key pointing to two anonymous subroutines.
     - In the old style, the builder is subroutine plugin_javascript and the
       launcher is subroutine plugin. For each plugin the routines are
       redefined.
