@@ -43,13 +43,17 @@ use C4::Log qw( cronlogaction );
 use Koha::Exceptions;
 use Koha::Exception;
 
+our $_cron = 0;
+
 INIT {
-    my $command_line_options = join( " ", @ARGV );
-    cronlogaction( { info => $command_line_options } );
+    if ($_cron) {
+        my $command_line_options = join( " ", @ARGV );
+        cronlogaction( { info => $command_line_options } );
+    }
 }
 
 END {
-    cronlogaction( { action => 'End', info => "COMPLETED" } );
+    cronlogaction( { action => 'End', info => "COMPLETED" } ) if $_cron;
 }
 
 =head2 import
@@ -58,6 +62,9 @@ END {
     use Koha::Script -cron;
 
 Sets the interface and userenv appropriately based on the flags passed.
+When the C<-cron> flag is used the script is also automatically logged to
+the CRONJOBS action log (start and end) when the C<CronjobLog> system
+preference is enabled.
 
 =cut
 
@@ -66,6 +73,7 @@ sub import {
     my @flags = @_;
 
     if ( ( $flags[0] || '' ) eq '-cron' ) {
+        $_cron = 1;
 
         # Set userenv
         C4::Context->set_userenv(
