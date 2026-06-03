@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Exception;
 
 BEGIN { use_ok('Koha::Script') }
@@ -52,6 +52,8 @@ is_deeply(
 
 my $interface = C4::Context->interface;
 is( $interface, 'commandline', "Context interface set correctly with no flags" );
+
+ok( !$Koha::Script::_cron, '_cron flag is false when Koha::Script is loaded without -cron' );
 
 subtest 'lock_exec() tests' => sub {
 

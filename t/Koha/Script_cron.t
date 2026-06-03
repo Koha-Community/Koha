@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 BEGIN { use_ok( "Koha::Script", '-cron' ) }
 
@@ -49,5 +49,7 @@ is_deeply(
 
 my $interface = C4::Context->interface;
 is( $interface, 'cron', "Context interface set correctly with -cron" );
+
+ok( $Koha::Script::_cron, '_cron flag is true when Koha::Script is loaded with -cron' );
 
 1;

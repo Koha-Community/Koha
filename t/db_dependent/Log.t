@@ -18,7 +18,7 @@ use Modern::Perl;
 use Data::Dumper qw( Dumper );
 
 use Test::NoWarnings;
-use Test::More tests => 9;
+use Test::More tests => 10;
 
 use C4::Context;
 use C4::Log  qw( logaction cronlogaction );
@@ -257,6 +257,29 @@ subtest 'Test storing original version of an item' => sub {
         Koha::ActionLogs->search( { module => 'CATALOGUING', action => 'MODIFY', object => $item->itemnumber } )->next;
     my $info = $log->info;
     is( $info, "item " . Dumper( $original->unblessed ), 'Original version of item logged successfully' );
+};
+
+subtest 'cronlogaction(): loginfo uses $0 and appends info' => sub {
+    plan tests => 5;
+
+    Koha::ActionLogs->search( { module => 'CRONJOBS' } )->delete;
+    t::lib::Mocks::mock_preference( 'CronjobLog', 1 );
+
+    cronlogaction( { info => 'extra_info' } );
+    my $log = Koha::ActionLogs->search( { module => 'CRONJOBS' } )->next;
+    like( $log->info, qr/\Q$0\E/,      'cronlogaction prefixes loginfo with $0 (script path)' );
+    like( $log->info, qr/extra_info$/, 'cronlogaction appends the info parameter after the script path' );
+    is( $log->action, 'Run', 'default action is Run' );
+
+    Koha::ActionLogs->search( { module => 'CRONJOBS' } )->delete;
+    cronlogaction( { action => 'End', info => 'COMPLETED' } );
+    $log = Koha::ActionLogs->search( { module => 'CRONJOBS' } )->next;
+    is( $log->action, 'End', 'custom action is respected' );
+
+    Koha::ActionLogs->search( { module => 'CRONJOBS' } )->delete;
+    cronlogaction();
+    $log = Koha::ActionLogs->search( { module => 'CRONJOBS' } )->next;
+    is( $log->info, $0, 'loginfo is exactly $0 when no info param is given' );
 };
 
 $schema->storage->txn_rollback;
