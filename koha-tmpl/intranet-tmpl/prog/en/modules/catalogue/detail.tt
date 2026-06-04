@@ -1297,7 +1297,8 @@
 
         const activetab = "[% activetab | html %]";
         const has_component_parts = [% ComponentParts && ComponentParts.size ? 1 : 0 | html %];
-        const show_holdings_panel = [% items_to_display_count - ( other_holdings_count || 0 ) ? 1 : 0 | html %]
+        const show_holdings_panel = [% items_to_display_count - ( other_holdings_count || 0 ) ? 1 : 0 | html %];
+        const HTML5MediaSetsSize = [% HTML5MediaEnabled && HTML5MediaSets.size ? HTML5MediaSets.size : 0 | html %];
 
         const normalized_isbn = "[% normalized_isbn | html %]";
         const normalized_upc = "[% normalized_upc | html %]";
@@ -1323,8 +1324,8 @@
             BundleLostValue: "[% Koha.Preference('BundleLostValue') | html %]",
             CoceHost: "[% Koha.Preference('CoceHost') | html %]",
             CoceProviders: "[% Koha.Preference('CoceProviders') | html %]",
-            HTML5MediaEnabled: "[% HTML5MediaEnabled | html %]",
-            KohaAdminEmailAddress: "[% KohaAdminEmailAddress | uri %]",
+            HTML5MediaEnabled: "[% Koha.Preference('HTML5MediaEnabled') | html %]",
+            KohaAdminEmailAddress: "[% Koha.Preference('KohaAdminEmailAddress') | uri %]",
             IntranetCoce: [% Koha.Preference('IntranetCoce') ? 1 : 0 | html %],
             NovelistSelectStaffEnabled: [% Koha.Preference('NovelistSelectStaffEnabled') ? 1 : 0 | html %],
             NovelistSelectStaffProfile: "[% Koha.Preference('NovelistSelectStaffProfile') | html %]",
@@ -1684,7 +1685,7 @@
             if (activetab == "comments") {
                 $("#bibliodetails a[href='#comments_panel']").tab("show");
             } else if (all_items_count == 0) {
-                if ((Koha.prefs.HTML5MediaEnabled == "staff" || Koha.prefs.HTML5MediaEnabled == "both") && HTML5MediaSets.size) {
+                if ((Koha.prefs.HTML5MediaEnabled == "staff" || Koha.prefs.HTML5MediaEnabled == "both") && HTML5MediaSetsSize) {
                     $("#bibliodetails a[href='#html5media_panel']").tab("show");
                 } else if (has_component_parts) {
                     $("#bibliodetails a[href='#components_panel']").tab("show");
