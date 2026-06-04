@@ -119,6 +119,7 @@ if ( !defined $op ) {
         branches            => get_branches(),
         biblio              => $biblio,
         biblionumber        => $biblio->biblionumber,
+        searchid            => $params{searchid},
         stockrotationview   => 1,
         subscriptionsnumber => CountSubscriptionFromBiblionumber($biblionumber),
         C4::Search::enabled_staff_search_views
