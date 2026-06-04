@@ -1032,7 +1032,10 @@ function _dt_visibility(table_settings, table_dt) {
         if (use_names) {
             // Deal with visibility_condition (needed when state is not saved)
             table_settings.columns = table_settings.columns.map(c => {
-                if (c.visibility_condition === false) {
+                if (
+                    c.visibility_condition !== undefined &&
+                    !c.visibility_condition
+                ) {
                     return {
                         ...c,
                         is_hidden: true,
