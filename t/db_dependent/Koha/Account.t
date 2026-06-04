@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 16;
+use Test::More tests => 17;
 use Test::MockModule;
 use Test::Exception;
 use Test::Warn;
@@ -1546,6 +1546,151 @@ subtest 'Koha::Account::payin_amount() tests' => sub {
     is( $offset->debit_id,   $debit_5->id, "Offset added against debit_5" );
     is( $offset->type,       'APPLY',      "APPLY used for offset_type" );
     is( $offset->amount * 1, -2.50,        'Correct amount offset against debit_5' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'add_lost_replacement_fee() tests' => sub {
+
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    # A second patron, so manager_id and borrowernumber can be told apart
+    my $manager = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $itemtype =
+        $builder->build_object( { class => 'Koha::ItemTypes', value => { defaultreplacecost => 9.99 } } );
+    my $item  = $builder->build_sample_item( { itype => $itemtype->itemtype, replacementprice => 12.34 } );
+    my $issue = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => { borrowernumber => $patron->borrowernumber, itemnumber => $item->itemnumber },
+        }
+    );
+
+    t::lib::Mocks::mock_preference( 'useDefaultReplacementCost', 0 );
+    t::lib::Mocks::mock_preference( 'ProcessingFeeNote',         'PFN' );
+
+    my $account = Koha::Account->new( { patron_id => $patron->borrowernumber } );
+    $account->add_lost_replacement_fee(
+        {
+            item              => $item,
+            issue_id          => $issue->issue_id,
+            library_id        => $library->branchcode,
+            user_id           => $manager->borrowernumber,
+            interface         => 'cron',
+            replacement_price => 12.34,
+        }
+    );
+
+    my $accountline_debit_lost =
+        $account->lines->search( { debit_type_code => 'LOST', itemnumber => $item->itemnumber } );
+    is( $accountline_debit_lost->count,            1,     'one LOST debit added' );
+    is( $accountline_debit_lost->next->amount + 0, 12.34, 'LOST debit uses the supplied replacement price' );
+
+    is(
+        $account->lines->search( { debit_type_code => 'LOST', itemnumber => $item->itemnumber } )->next->manager_id,
+        $manager->borrowernumber,
+        'user_id is recorded as the accountline manager, not the patron being charged'
+    );
+
+    # De-duplicate: a second call for the same (item, issue) bails out.
+    $account->add_lost_replacement_fee(
+        {
+            item              => $item,
+            issue_id          => $issue->issue_id,
+            library_id        => $library->branchcode,
+            interface         => 'cron',
+            replacement_price => 12.34,
+        }
+    );
+    is(
+        $account->lines->search( { debit_type_code => 'LOST', itemnumber => $item->itemnumber } )->count,
+        1, 'duplicate call does not create a second LOST debit'
+    );
+
+    # A replacement price of 0 falls back to the itemtype defaultreplacecost
+    # when useDefaultReplacementCost is on.
+    my $item_2  = $builder->build_sample_item( { itype => $itemtype->itemtype } );
+    my $issue_2 = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => { borrowernumber => $patron->borrowernumber, itemnumber => $item_2->itemnumber },
+        }
+    );
+    t::lib::Mocks::mock_preference( 'useDefaultReplacementCost', 1 );
+    $account->add_lost_replacement_fee(
+        {
+            item              => $item_2,
+            issue_id          => $issue_2->issue_id,
+            library_id        => $library->branchcode,
+            interface         => 'cron',
+            replacement_price => 0,
+        }
+    );
+    my $accountline_debit_lost_2 =
+        $account->lines->search( { debit_type_code => 'LOST', itemnumber => $item_2->itemnumber } )->next;
+    is(
+        $accountline_debit_lost_2->amount + 0, 9.99,
+        'falls back to itemtype defaultreplacecost when useDefaultReplacementCost is on'
+    );
+
+    # With the preference off, a replacement price of 0 charges nothing.
+    my $item_3  = $builder->build_sample_item( { itype => $itemtype->itemtype } );
+    my $issue_3 = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => { borrowernumber => $patron->borrowernumber, itemnumber => $item_3->itemnumber },
+        }
+    );
+    t::lib::Mocks::mock_preference( 'useDefaultReplacementCost', 0 );
+    $account->add_lost_replacement_fee(
+        {
+            item              => $item_3,
+            issue_id          => $issue_3->issue_id,
+            library_id        => $library->branchcode,
+            interface         => 'cron',
+            replacement_price => 0,
+        }
+    );
+    is(
+        $account->lines->search( { debit_type_code => 'LOST', itemnumber => $item_3->itemnumber } )->count,
+        0, 'no LOST debit when the replacement price is 0 and useDefaultReplacementCost is off'
+    );
+
+    # Processing fee rule levies a PROCESSING debit alongside LOST.
+    Koha::CirculationRules->set_rule(
+        {
+            rule_name  => 'lost_item_processing_fee',
+            rule_value => 2.50,
+            branchcode => $library->branchcode,
+            itemtype   => $itemtype->itemtype,
+        }
+    );
+
+    my $item_4  = $builder->build_sample_item( { itype => $itemtype->itemtype, replacementprice => 5 } );
+    my $issue_4 = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => { borrowernumber => $patron->borrowernumber, itemnumber => $item_4->itemnumber },
+        }
+    );
+    $account->add_lost_replacement_fee(
+        {
+            item              => $item_4,
+            issue_id          => $issue_4->issue_id,
+            library_id        => $library->branchcode,
+            interface         => 'cron',
+            replacement_price => 5,
+        }
+    );
+    my $processing =
+        $account->lines->search( { debit_type_code => 'PROCESSING', itemnumber => $item_4->itemnumber } )->next;
+    ok( $processing, 'PROCESSING debit created when lost_item_processing_fee rule set' );
+    is( $processing->amount + 0, 2.50, 'processing fee amount comes from the rule' );
 
     $schema->storage->txn_rollback;
 };
