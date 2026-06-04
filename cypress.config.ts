@@ -12,7 +12,6 @@ export default defineConfig({
         setupNodeEvents(on, config) {
             return require("./t/cypress/plugins/index.js")(on, config);
         },
-        experimentalStudio: true,
         baseUrl: process.env.KOHA_INTRANET_URL || "http://localhost:8081",
         specPattern: "t/cypress/integration/**/*.*",
         supportFile: "t/cypress/support/e2e.js",
