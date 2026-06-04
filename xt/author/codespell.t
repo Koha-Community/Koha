@@ -25,7 +25,7 @@ my %results;
 for my $file (@files) {
     my $output = qx{codespell -d --ignore-words .codespell-ignore $file};
     chomp $output;
-    is( $output, q{} ) or $results{$file} = 1;
+    is( $output, q{}, $file ) or $results{$file} = 1;
 }
 
 $ci->report_results( \%results );
