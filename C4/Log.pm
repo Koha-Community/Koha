@@ -215,13 +215,16 @@ Logs the path and name of the calling script plus the information provided by pa
 
 =cut
 
-#'
 sub cronlogaction {
     my $params = shift;
     my $info   = $params->{info};
     my $action = $params->{action};
     $action ||= "Run";
+
+    # $0 is a special Perl variable containing the program that is currently running
+    # https://perldoc.perl.org/variables/$0
     my $loginfo = $0;
+
     $loginfo .= ' ' . $info                        if $info;
     logaction( 'CRONJOBS', $action, $$, $loginfo ) if C4::Context->preference('CronjobLog');
 }
