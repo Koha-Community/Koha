@@ -28,6 +28,7 @@ use t::lib::TestBuilder;
 
 use Test::MockModule;
 
+use JSON::PP ();
 use MARC::Record;
 use Try::Tiny;
 use List::Util qw( any );
@@ -144,7 +145,7 @@ subtest 'get_elasticsearch_settings() tests' => sub {
 
 subtest 'get_elasticsearch_mappings() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 5;
 
     my $mappings;
 
@@ -206,6 +207,14 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
         'Field mappings parsed correctly for sort for callnumber type'
     );
     is( $mappings->{properties}{isbn__sort}{index}, 'false', 'Field mappings parsed correctly' );
+    is(
+        $mappings->{date_detection}, JSON::PP::false,
+        'date_detection disabled at mapping root'
+    );
+    is(
+        $mappings->{numeric_detection}, JSON::PP::false,
+        'numeric_detection disabled at mapping root'
+    );
 
 };
 
