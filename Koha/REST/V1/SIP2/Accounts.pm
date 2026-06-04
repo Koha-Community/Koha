@@ -20,6 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::SIP2::Accounts;
+use Koha::SIP2::MessageTester;
 
 use Try::Tiny qw( catch try );
 
@@ -203,6 +204,46 @@ sub delete {
         $account->delete;
         return $c->render_resource_deleted;
     } catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+=head3 test_message
+
+Controller function that generates the SIP2 response a saved account would
+return for a given message, for testing purposes
+
+=cut
+
+sub test_message {
+    my $c = shift->openapi->valid_input or return;
+
+    my $account = Koha::SIP2::Accounts->find( $c->param('sip_account_id') );
+
+    return $c->render_resource_not_found("Account")
+        unless $account;
+
+    return try {
+        my $body = $c->req->json;
+
+        my $result = Koha::SIP2::MessageTester->new( { account => $account } )->run(
+            {
+                message         => $body->{message},
+                patron_id       => $body->{patron_id},
+                item_id         => $body->{item_id},
+                patron_password => $body->{patron_password},
+                request         => $body->{request},
+            }
+        );
+
+        return $c->render( status => 200, openapi => $result );
+    } catch {
+        if ( blessed $_ ) {
+            if ( $_->isa('Koha::Exceptions::MissingParameter') || $_->isa('Koha::Exceptions::BadParameter') ) {
+                return $c->render( status => 400, openapi => { error => "$_" } );
+            }
+        }
+
         $c->unhandled_exception($_);
     };
 }
