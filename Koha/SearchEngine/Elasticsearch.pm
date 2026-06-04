@@ -58,6 +58,7 @@ use Search::Elasticsearch::Role::Cxn;
 }
 
 use Try::Tiny qw( catch try );
+use JSON::PP ();
 use YAML::XS;
 
 use List::Util qw( sum0 );
