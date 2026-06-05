@@ -71,7 +71,7 @@
                     <ul class="dropdown-menu">
                         [% FOREACH tmpl IN templates %]
                             <li>
-                                <a class="dropdown-item" id="runreport_[% tmpl.id | html %]" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% id | html %]&amp;op=run&amp;template=[% tmpl.id | html %][% PROCESS params %]">
+                                <a class="dropdown-item" id="runreport_[% tmpl.id | html %]" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% id | html %]&amp;op=run&amp;template_code=[% tmpl.code | html %][% PROCESS params %]">
                                     [% tmpl.name | html %]
                                 </a>
                             </li>
@@ -145,7 +145,7 @@
                             ><a
                                 class="dropdown-item"
                                 id="template"
-                                href="/cgi-bin/koha/reports/guided_reports.pl?op=export&amp;format=template&amp;id=[% id | html %]&amp;template=[% template_id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]"
+                                href="/cgi-bin/koha/reports/guided_reports.pl?op=export&amp;format=template&amp;id=[% id | html %]&amp;template_code=[% template_code | html %]&amp;reportname=[% name |uri %][% PROCESS params %]"
                                 >Rendered template ([% processed_notice_title | html %])</a
                             ></li
                         >

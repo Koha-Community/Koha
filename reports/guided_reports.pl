@@ -42,6 +42,7 @@ use Koha::Notice::Templates;
 use Koha::TemplateUtils qw( process_tt );
 use C4::ClassSource     qw( GetClassSources );
 use C4::Scrubber;
+use C4::Letters qw( GetPreparedLetter );
 
 =head1 NAME
 
@@ -748,24 +749,16 @@ if ( !$op ) {
                 print $_ while <$ods_fh>;
                 unlink $ods_filepath;
             } elsif ( $format eq 'template' ) {
-                my $template_id     = $input->param('template');
-                my $notice_template = Koha::Notice::Templates->find($template_id);
-                my $data            = $sth->fetchall_arrayref( {} );
-                $content = process_tt(
-                    $notice_template->content,
-                    {
-                        data         => $data,
-                        report_id    => $report_id,
-                        for_download => 1,
-                    }
+                my $template_code = $input->param('template_code');
+                my $data          = $sth->fetchall_arrayref( {} );
+
+                my $rendered = GetPreparedLetter(
+                    module      => 'report',
+                    letter_code => $template_code,
+                    objects     => { data => $data, report_id => $report_id, for_download => 1 }
                 );
-                $reportfilename = process_tt(
-                    $notice_template->title,
-                    {
-                        data      => $data,
-                        report_id => $report_id,
-                    }
-                );
+                $content        = $rendered->{content};
+                $reportfilename = $rendered->{title};
             }
         }
 
@@ -832,7 +825,7 @@ if ( $op eq 'run' ) {
     my $report_id       = $input->param('id');
     my @sql_params      = $input->multi_param('sql_params');
     my @param_names     = $input->multi_param('param_name');
-    my $template_id     = $input->param('template');
+    my $template_code   = $input->param('template_code');
     my $want_full_chart = $input->param('want_full_chart') || 0;
 
     # offset algorithm
@@ -1018,7 +1011,7 @@ if ( $op eq 'run' ) {
                 'auth_val_errors' => \@authval_errors,
                 'enter_params'    => 1,
                 'id'              => $report_id,
-                'template_id'     => $template_id,
+                'template_code'   => $template_code,
             );
         } else {
             my ( $sql, $header_types );
@@ -1085,18 +1078,20 @@ if ( $op eq 'run' ) {
                     $url = join( '&sql_params=', $url, map { URI::Escape::uri_escape_utf8($_) } @sql_params );
                 }
 
-                if ($template_id) {
-                    my $notice_template = Koha::Notice::Templates->find($template_id);
+                if ($template_code) {
                     my ( $sth2, $errors2 ) = execute_query( { sql => $sql, report_id => $report_id } );
                     my $data = $sth2->fetchall_arrayref( {} );
-                    my $notice_rendered =
-                        process_tt( $notice_template->content, { data => $data, report_id => $report_id } );
-                    my $title_rendered =
-                        process_tt( $notice_template->title, { data => $data, report_id => $report_id } );
+
+                    my $rendered = GetPreparedLetter(
+                        module      => 'report',
+                        letter_code => $template_code,
+                        objects     => { data => $data, report_id => $report_id }
+                    );
+
                     $template->param(
-                        template_id            => $template_id,
-                        processed_notice       => $notice_rendered,
-                        processed_notice_title => $title_rendered,
+                        template_code          => $template_code,
+                        processed_notice       => $rendered->{content},
+                        processed_notice_title => $rendered->{title},
                     );
                 }
 
