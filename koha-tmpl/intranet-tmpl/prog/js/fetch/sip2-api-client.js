@@ -80,6 +80,11 @@ export class SIP2APIClient {
                             ...(query && { q: JSON.stringify(query) }),
                         }),
                 }),
+            testMessage: (id, body) =>
+                this.httpClient.post({
+                    endpoint: "accounts/" + id + "/test_message",
+                    body,
+                }),
         };
     }
 

@@ -2,6 +2,7 @@ import { markRaw } from "vue";
 
 import Home from "../components/SIP2/Home.vue";
 import ResourceWrapper from "../components/ResourceWrapper.vue";
+import SIP2AccountTester from "../components/SIP2/SIP2AccountTester.vue";
 import { $__ } from "../i18n";
 
 export const routes = [
@@ -85,6 +86,12 @@ export const routes = [
                                 name: "SIP2AccountsFormAddEdit",
                                 component: markRaw(ResourceWrapper),
                                 title: $__("Edit account"),
+                            },
+                            {
+                                path: "test/:sip_account_id",
+                                name: "SIP2AccountsTest",
+                                component: markRaw(SIP2AccountTester),
+                                title: $__("Test SIP2 messages"),
                             },
                         ],
                     },
