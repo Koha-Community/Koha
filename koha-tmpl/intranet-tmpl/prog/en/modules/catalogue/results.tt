@@ -1061,58 +1061,60 @@
             window.location.href = "/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %]&[% limit_cgi | $raw %]&[% sort_cgi | $raw %]&limit="+index+escape_str( $("#refiner").val() );
         });
 
-        [% IF ( CAN_user_parameters_manage_search_filters ) %]
+        Koha.addPermissions({CAN_user_parameters_manage_search_filters: [% CAN_user_parameters_manage_search_filters ? 1 : 0 | html %]});
+    </script>
+    <script nonce="[% Koha.CSPNonce | $raw %]">
+        if (Koha.permissions.CAN_user_parameters_manage_search_filters) {
             function getFilters(id) {
                 const select = $("#existing_filters");
                 $("option[value!='']", select).remove();
-                return new Promise(function(resolve, reject) {
-                    $.ajax("/api/v1/search_filters")
-                    .then(resolve, reject);
+                return new Promise(function (resolve, reject) {
+                    $.ajax("/api/v1/search_filters").then(resolve, reject);
                 })
-                .then(function(filters) {
-                    if( filters.length == 0 ){
-                       $(".existing_filters_section").hide();
-                    } else {
-                       $(".existing_filters_section").show();
-                    }
-                    filters.forEach(function(filter) {
-                        const opt = $("<option/>");
-                        select.append(opt);
-                        if(id && filter.search_filter_id == id) {
-                            opt.prop('selected', true);
+                    .then(function (filters) {
+                        if (filters.length == 0) {
+                            $(".existing_filters_section").hide();
+                        } else {
+                            $(".existing_filters_section").show();
                         }
-                        opt.attr("value", filter.search_filter_id);
-                        opt.attr("title", "Query:" + filter.query + " Limit:"+filter.limits);
-                        opt.text(filter.name);
-                        opt.data("filter", filter);
+                        filters.forEach(function (filter) {
+                            const opt = $("<option/>");
+                            select.append(opt);
+                            if (id && filter.search_filter_id == id) {
+                                opt.prop("selected", true);
+                            }
+                            opt.attr("value", filter.search_filter_id);
+                            opt.attr("title", "Query:" + filter.query + " Limit:" + filter.limits);
+                            opt.text(filter.name);
+                            opt.data("filter", filter);
+                        });
+                    })
+                    .then(function () {
+                        select.change();
                     });
-                })
-                .then(function(){
-                    select.change();
-                });
             }
-            $("#save_search_filter").click(function(){
+            $("#save_search_filter").click(function () {
                 getFilters();
-                $("#search_filters_modal").modal('show');
+                $("#search_filters_modal").modal("show");
             });
-            $("#save_new_filter").click(function(){
+            $("#save_new_filter").click(function () {
                 let name = $("#new_filter").val().trim();
-                if(!name){
-                    humanMsg.displayAlert( _("You must provide a name for the new filter"), { className: 'human Error' } );
+                if (!name) {
+                    humanMsg.displayAlert(_("You must provide a name for the new filter"), { className: "human Error" });
                     return;
                 }
-                let opac = $("#show_filter_opac").prop('checked');
-                let staff = $("#show_filter_staff_client").prop('checked');
-                save_search_filter(name,null,opac,staff);
+                let opac = $("#show_filter_opac").prop("checked");
+                let staff = $("#show_filter_staff_client").prop("checked");
+                save_search_filter(name, null, opac, staff);
             });
-            $("#replace_existing_filter").click(function(){
+            $("#replace_existing_filter").click(function () {
                 let id = $("#existing_filters").val();
-                let name = $("#existing_filters option[value="+id+"]").text();
-                save_search_filter(name,id);
+                let name = $("#existing_filters option[value=" + id + "]").text();
+                save_search_filter(name, id);
             });
-            function save_search_filter(name,id,opac,staff){
+            function save_search_filter(name, id, opac, staff) {
                 let options = {
-                    url: '/api/v1/search_filters',
+                    url: "/api/v1/search_filters",
                     contentType: "application/json",
                     data: JSON.stringify({
                         name: name,
@@ -1120,26 +1122,25 @@
                         limits: JSON.stringify(search_result.limit_json),
                         opac: opac,
                         staff_client: staff,
-                    })
+                    }),
                 };
-                if (id){
+                if (id) {
                     options.method = "PUT";
-                    options.url = options.url+"/"+id
+                    options.url = options.url + "/" + id;
                 } else {
                     options.method = "POST";
                 }
                 $.ajax(options)
-                    .then(function(result) {
-                        $("#search_filters_modal").modal('hide');
-                        humanMsg.displayAlert( _("Saved filter: ") + name  , { className: 'human Success' } );
+                    .then(function (result) {
+                        $("#search_filters_modal").modal("hide");
+                        humanMsg.displayAlert(_("Saved filter: ") + name, { className: "human Success" });
                         getFilters();
                     })
-                    .fail(function(err) {
-                        humanMsg.displayAlert( _("There was an error during saving:") + err.responseText, { className: 'humanError' } );
+                    .fail(function (err) {
+                        humanMsg.displayAlert(_("There was an error during saving:") + err.responseText, { className: "humanError" });
                     });
             }
-
-        [% END %]
+        }
     </script>
     [% Asset.js("js/pages/results.js") | $raw %]
     [% CoverImagePlugins | $raw %]
