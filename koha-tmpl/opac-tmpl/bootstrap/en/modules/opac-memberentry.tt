@@ -271,6 +271,7 @@
                                                         <span class="label">Library card number:</span>
                                                         [% borrower.cardnumber | html %]
                                                     [% ELSE %]
+                                                        <label for="borrower_cardnumber" class="[% required.cardnumber | html %]">Library card number:</label>
                                                         [% IF minlength_cardnumber == maxlength_cardnumber %]
                                                             <input
                                                                 type="text"
