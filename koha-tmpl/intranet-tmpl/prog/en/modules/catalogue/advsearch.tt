@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Koha %]
 [% USE Asset %]
+[% USE To %]
 [% USE Branches %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
@@ -402,6 +403,11 @@
     [% Asset.css("css/humanmsg.css") | $raw %]
     [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+        const search_groups = [% search_groups ? 1 : 0 | html %];
+        const searchid = "[% searchid | html %]";
+        const edit_filter =  [% To.json(edit_filter.unblessed) || 0 | $raw %];
+    </script>
+    <script nonce="[% Koha.CSPNonce | $raw %]">
         /**
          *  Function add_field();
          *  This function allows to display a new field to search.
@@ -409,99 +415,96 @@
         function add_field() {
             var ButtonPlus = document.getElementById("ButtonPlus");
             var line = ButtonPlus.parentNode;
-            var dad  = line.parentNode;
+            var dad = line.parentNode;
             dad.appendChild(line.cloneNode(true));
             line.removeChild(ButtonPlus);
         }
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             $("input[name=q]:eq(0)").focus();
-            if( $("#advsearches .tab-pane.active").length < 1 ){
+            if ($("#advsearches .tab-pane.active").length < 1) {
                 $("#advsearches a:first").tab("show");
             }
-            [% IF search_groups %]
+
+            if (search_groups) {
                 function branch_limit() {
-                    if( $("#branchloop").val() != "" ){
-                        $("#categoryloop").val("").prop('disabled',true);
+                    if ($("#branchloop").val() != "") {
+                        $("#categoryloop").val("").prop("disabled", true);
                     } else {
-                        $("#categoryloop").prop('disabled',false);
+                        $("#categoryloop").prop("disabled", false);
                     }
-                    if ( $("#categoryloop").val() != "" ){
-                        $("#branchloop").val("").prop('disabled',true);
+                    if ($("#categoryloop").val() != "") {
+                        $("#branchloop").val("").prop("disabled", true);
                     } else {
-                        $("#branchloop").prop('disabled',false);
+                        $("#branchloop").prop("disabled", false);
                     }
                 }
                 branch_limit();
-                $("#branchloop,#categoryloop").on("change",function(){
+                $("#branchloop,#categoryloop").on("change", function () {
                     branch_limit();
                 });
-            [% END %]
+            }
 
-            if( $("#current_subtype_limits input").length == 0 ){
+            if ($("#current_subtype_limits input").length == 0) {
                 $("#current_subtype_limits").hide();
             }
-            $(".toggle_limit").on('click',function(){
-                $(this).siblings("[type='hidden']").prop('disabled', !this.checked);
+            $(".toggle_limit").on("click", function () {
+                $(this).siblings("[type='hidden']").prop("disabled", !this.checked);
             });
 
-            [% IF searchid %]
-                browser = KOHA.browser('[% searchid | html %]');
+            if (searchid) {
+                browser = KOHA.browser(searchid);
                 browser.show_back_link();
-            [% END %]
+            }
 
-            [% IF edit_filter %]
-            $("#save_filter").click(function(e){
-                e.preventDefault();
-                let operators = [];
-                let indexes = [];
-                let operands = [];
-                let limits =[];
-                let opac = $("#show_filter_opac").prop('checked');
-                let staff_client = $("#show_filter_staff_client").prop('checked');
-                $("select[name='op']").each(function(){
-                    operators.push( $(this).val() );
-                });
-                $("select[name='idx']").each(function(){
-                    indexes.push( $(this).val() );
-                });
-                $("input[name='q']").each(function(){
-                    operands.push( $(this).val() );
-                });
-                $("select[name='limit'],input[name='limit']:checked").each(function(){
-                    if( $(this).val() != ""){
-                        limits.push( $(this).val() );
-                    }
-                });
-                let year_limit = $("#limit-yr").val();
-                if( year_limit ){
-                    limits.push( "yr,st-numeric:"+year_limit );
-                }
-                let options = {
-                    url: '/api/v1/search_filters/'+ [% edit_filter.id | html %],
-                    method: "PUT",
-                    contentType: "application/json",
-                    data: JSON.stringify({
-                        name: "[% edit_filter.name | html %]",
-                        query: JSON.stringify({ operands: operands, indexes: indexes, operators:operators }),
-                        limits: JSON.stringify({ limits: limits }),
-                        opac: opac,
-                        staff_client: staff_client,
-                    })
-                };
-                $.ajax(options)
-                    .then(function(result) {
-                        humanMsg.displayAlert( _("Saved filter: ") + result.name  , { className: 'human Success' } );
-                    })
-                    .fail( function(err){
-                        humanMsg.displayAlert( _("There was an error during saving:") + err.responseText, { className: 'humanError' } );
+            if (edit_filter) {
+                $("#save_filter").click(function (e) {
+                    e.preventDefault();
+                    let operators = [];
+                    let indexes = [];
+                    let operands = [];
+                    let limits = [];
+                    let opac = $("#show_filter_opac").prop("checked");
+                    let staff_client = $("#show_filter_staff_client").prop("checked");
+                    $("select[name='op']").each(function () {
+                        operators.push($(this).val());
                     });
-
-
-            });
-            [% END %]
-
-
+                    $("select[name='idx']").each(function () {
+                        indexes.push($(this).val());
+                    });
+                    $("input[name='q']").each(function () {
+                        operands.push($(this).val());
+                    });
+                    $("select[name='limit'],input[name='limit']:checked").each(function () {
+                        if ($(this).val() != "") {
+                            limits.push($(this).val());
+                        }
+                    });
+                    let year_limit = $("#limit-yr").val();
+                    if (year_limit) {
+                        limits.push("yr,st-numeric:" + year_limit);
+                    }
+                    let options = {
+                        url: `/api/v1/search_filters/${edit_filter.search_filter_id}`,
+                        method: "PUT",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            name: edit_filter.name,
+                            query: JSON.stringify({ operands: operands, indexes: indexes, operators: operators }),
+                            limits: JSON.stringify({ limits: limits }),
+                            opac: opac,
+                            staff_client: staff_client,
+                        }),
+                    };
+                    $.ajax(options)
+                        .then(function (result) {
+                            humanMsg.displayAlert(_("Saved filter: ") + result.name, { className: "human Success" });
+                        })
+                        .fail(function (err) {
+                            humanMsg.displayAlert(_("There was an error during saving:") + err.responseText, { className: "humanError" });
+                        });
+                });
+            }
         });
     </script>
 [% END %]
