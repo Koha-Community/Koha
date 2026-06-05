@@ -32,6 +32,8 @@
         <span>System preferences</span>
     [% CASE 'CRONJOBS' %]
         <span>Cron jobs</span>[% UNLESS Koha.Preference('CronjobLog') %]<i class="log-disabled fa-solid fa-triangle-exclamation" title="Log not enabled" data-log="CronjobLog"></i>[% END %]
+    [% CASE 'SCRIPTS' %]
+        <span>Scripts</span>[% UNLESS Koha.Preference('ScriptLog') %]<i class="log-disabled fa-solid fa-triangle-exclamation" title="Log not enabled" data-log="ScriptLog"></i>[% END %]
     [% CASE 'REPORTS' %]
         <span>Reports</span>[% UNLESS Koha.Preference('ReportsLog') %]<i class="log-disabled fa-solid fa-triangle-exclamation" title="Log not enabled" data-log="ReportsLog"></i>[% END %]
     [% CASE 'SEARCHENGINE' %]

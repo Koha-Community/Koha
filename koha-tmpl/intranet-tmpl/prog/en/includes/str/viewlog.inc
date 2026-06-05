@@ -18,6 +18,7 @@
         FINES: _("Fines"),
         SYSTEMPREFERENCE: _("System preferences"),
         CRONJOBS: _("Cron jobs"),
+        SCRIPTS: _("Scripts"),
         REPORTS: _("Reports"),
         SEARCHENGINE: _("Search engine"),
         NOTICES: _("Notices"),
