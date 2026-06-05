@@ -47,7 +47,7 @@ our $_cron = 0;
 
 # Flag names (matched case-insensitively, substring match) whose following
 # value should be redacted from logged command-line output.
-my @_sensitive_patterns = qw( password passwd secret token apikey api_key credential );
+my @_sensitive_patterns = qw( password passwd secret token apikey api_key credential ^p$ ^pass$ );
 
 INIT {
     my $command_line_options = join( " ", _scrub_argv(@ARGV) );
