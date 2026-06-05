@@ -770,6 +770,7 @@
                                                         <th>Last updated</th>
                                                         <th>Library</th>
                                                         <th>Fund</th>
+                                                        <th>Total</th>
                                                         <th>Non-public note</th>
                                                         <th>Status</th>
                                                         <th class="no-sort no-export">&nbsp;</th>
@@ -1420,6 +1421,14 @@
                                         orderable: true,
                                         render: function (data, type, row, meta) {
                                             return escape_str(row.fund?.name ? row.fund.name : "");
+                                        },
+                                    },
+                                    {
+                                        data: "total",
+                                        searchable: true,
+                                        orderable: true,
+                                        render: function (data, type, row, meta) {
+                                            return escape_str(row.total_price ?? "");
                                         },
                                     },
                                     {
