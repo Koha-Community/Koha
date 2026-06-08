@@ -1668,6 +1668,20 @@ Koha::EDI
 
      Returns the bib_record
 
+=head2 _validate_location_code
+
+     ok = _validate_location_code($location_code, $quote_message)
+
+     Returns 1 if $location_code is empty or matches an authorised value in
+     category LOC. Returns 0 and records an error on $quote_message otherwise.
+
+=head2 _validate_collection_code
+
+     ok = _validate_collection_code($ccode, $quote_message)
+
+     Returns 1 if $ccode is empty or matches an authorised value in category
+     CCODE. Returns 0 and records an error on $quote_message otherwise.
+
 =head1 AUTHOR
 
    Colin Campbell <colin.campbell@ptfs-europe.com>
