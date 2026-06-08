@@ -2531,7 +2531,7 @@ sub GetInvoices {
     if ( $args{order_by} ) {
         my ( $column, $direction ) = split / /, $args{order_by};
         if ( grep { $_ eq $column } @columns ) {
-            $direction ||= 'ASC';
+            $direction = ( uc( $direction // '' ) eq 'DESC' ) ? 'DESC' : 'ASC';
             $query .= " ORDER BY $column $direction";
         }
     }

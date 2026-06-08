@@ -9,7 +9,7 @@ use Koha::Acquisition::Orders;
 use Koha::Database;
 
 use Test::NoWarnings;
-use Test::More tests => 30;
+use Test::More tests => 31;
 
 BEGIN {
     use_ok(
@@ -222,6 +222,14 @@ is_deeply(
     \@invoices_linked_to_subscriptions, [],
     "GetInvoices return linked_to_subscriptions: there is no invoices linked to subscriptions yet"
 );
+
+subtest 'prevent SQL injection in GetInvoices for order_by' => sub {
+    plan tests => 1;
+
+    # No error
+    GetInvoices( order_by => 'shipmentdate ASC,(SELECT/**/1/**/FROM/**/koha_zzz_nope)' );
+    pass();
+};
 
 END {
     $dbh and $schema->storage->txn_rollback();
