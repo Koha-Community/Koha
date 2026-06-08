@@ -2,6 +2,7 @@
 [% USE AdditionalContents %]
 [% USE Asset %]
 [% USE Koha %]
+[% USE To %]
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
@@ -681,44 +682,8 @@
         [% END %]
 
         [% IF shelf AND op == 'view' %]
-            function build_dropdown(){
-                var param1 = "| <label for=\"addto\">"+_("Add to:")+"<\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
-                if (Koha.prefs.intranetbookbag){
-                     param1 += "<option value=\"addtocart\">"+_("Cart")+"<\/option>";
-                }
-                if (Koha.prefs.virtualshelves){
-                    [% IF add_to_some_private_shelves.count %]
-                        param1 += "<optgroup label=\""+_("Your lists:")+"\">";
-                        [% SET number_of_private_shelves = 0 %]
-                        [% FOREACH s IN add_to_some_private_shelves %]
-                            [% IF shelfnumber != s.shelfnumber %]
-                                param1 += "<option id=\"s[% s.shelfnumber | html %]\" value=\"addtolist\">[% s.shelfname | html %]<\/option>";
-                                [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
-                                [% IF number_of_private_shelves == 10 %][% LAST %][% END %]
-                            [% END %]
-                        [% END %]
-                        param1 += "<\/optgroup>";
-                    [% END %]
-                    [% IF add_to_some_public_shelves.count %]
-                        param1 += "<optgroup label=\""+_("Public lists:")+"\">";
-                        [% SET number_of_public_shelves = 0 %]
-                        [% FOREACH s IN add_to_some_public_shelves %]
-                            [% IF shelfnumber != s.shelfnumber %]
-                                param1 += "<option id=\"s[% s.shelfnumber | html %]\" value=\"addtolist\">[% s.shelfname | html %]<\/option>";
-                                [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
-                                [% IF number_of_public_shelves == 10 %][% LAST %][% END %]
-                            [% END %]
-                        [% END %]
-                        param1 += "<\/optgroup>";
-                    [% END %]
-                    [% IF add_to_some_private_shelves.count > 10 or add_to_some_public_shelves.count > 10 %]
-                        param1 += "<option value=\"morelists\">[ "+_("More lists")+" ]<\/option>";
-                    [% END %]
-                    param1 +="<option value=\"newlist\">"+_("[ New list ]")+"<\/option>"
-                }
-                param1 += "<\/select> <button id=\"cartsubmit\" type=\"submit\" class=\"btn btn-default btn-xs\">"+_("Save")+"</button>";
-                return param1;
-            }
+            const add_to_some_private_shelves = [% To.json(add_to_some_private_shelves.unblessed || []) | $raw  %];
+            const add_to_some_public_shelves = [% To.json(add_to_some_public_shelves.unblessed || []) | $raw  %];
         [% END %]
     </script>
     [% IF print %]
@@ -864,6 +829,46 @@
                     $("#barcodes").focus();
                 });
             });
+
+            function build_dropdown() {
+                var param1 = '| <label for="addto">' + _("Add to:") + '<\/label> <select name="addto" id="addto"><option value=""><\/option>';
+                if (Koha.prefs.intranetbookbag) {
+                    param1 += '<option value="addtocart">' + _("Cart") + "<\/option>";
+                }
+                if (Koha.prefs.virtualshelves) {
+                    if (add_to_some_private_shelves.length) {
+                        param1 += '<optgroup label="' + _("Your lists:") + '">';
+                        let number_of_private_shelves = 0;
+                        for (let s of add_to_some_private_shelves) {
+                            if (shelfnumber != s.shelfnumber) {
+                                param1 += `<option id=\"s${s.shelfnumber}\" value=\"addtolist\">${escape_str(s.shelfname)}<\/option>`;
+                                number_of_private_shelves++;
+                                if (number_of_private_shelves == 10) break;
+                            }
+                        }
+                        param1 += "<\/optgroup>";
+                    }
+
+                    if (add_to_some_public_shelves.length) {
+                        param1 += '<optgroup label="' + _("Public lists:") + '">';
+                        let number_of_public_shelves = 0;
+                        for (let s of add_to_some_public_shelves) {
+                            if (shelfnumber != s.shelfnumber) {
+                                param1 += `<option id=\"s${s.shelfnumber}\" value=\"addtolist\">${escape_str(s.shelfname)}<\/option>`;
+                                number_of_public_shelves++;
+                                if (number_of_public_shelves == 10) break;
+                            }
+                        }
+                        param1 += "<\/optgroup>";
+                    }
+                    if (add_to_some_private_shelves.length > 10 || add_to_some_public_shelves.length > 10) {
+                        param1 += '<option value="morelists">[ ' + _("More lists") + " ]<\/option>";
+                    }
+                    param1 += '<option value="newlist">' + _("[ New list ]") + "<\/option>";
+                }
+                param1 += '<\/select> <button id="cartsubmit" type="submit" class="btn btn-default btn-xs">' + _("Save") + "</button>";
+                return param1;
+            }
         </script>
     [% END # /IF shelf AND op == 'view' %]
 
