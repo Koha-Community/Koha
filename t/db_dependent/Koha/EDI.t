@@ -20,15 +20,16 @@
 use Modern::Perl;
 use FindBin qw( $Bin );
 
+use Test::Exception;
 use Test::NoWarnings;
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::MockModule;
 
 use t::lib::Mocks;
 use t::lib::Mocks::Logger;
 use t::lib::TestBuilder;
 
-use Koha::EDI qw(process_quote process_invoice create_edi_order);
+use Koha::EDI qw(process_quote process_invoice process_ordrsp create_edi_order);
 use Koha::Edifact::Transport;
 use Koha::Edifact::File::Errors;
 use Koha::DateUtils qw(dt_from_string);
@@ -1911,3 +1912,157 @@ subtest 'LSL and LSQ field copy to item_hash' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+subtest 'process_ordrsp' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    subtest 'cancellation updates order status, removes items, and reverts suggestion' => sub {
+        plan tests => 6;
+
+        my $biblio        = $builder->build_sample_biblio();
+        my $item          = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+        my $bookseller    = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
+        my $budget_period = $builder->build( { source => 'Aqbudgetperiod', value => { budget_period_active => 1 } } );
+        my $budget        = $builder->build(
+            { source => 'Aqbudget', value => { budget_period_id => $budget_period->{budget_period_id} } } );
+        my $basket = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Baskets',
+                value => { booksellerid => $bookseller->id },
+            }
+        );
+        my $order = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Orders',
+                value => {
+                    basketno     => $basket->basketno,
+                    biblionumber => $biblio->biblionumber,
+                    budget_id    => $budget->{budget_id},
+                    orderstatus  => 'ordered',
+                },
+            }
+        );
+
+        $builder->build(
+            {
+                source => 'AqordersItem',
+                value  => {
+                    ordernumber => $order->ordernumber,
+                    itemnumber  => $item->itemnumber,
+                },
+            }
+        );
+
+        my $suggestion = $builder->build_object(
+            {
+                class => 'Koha::Suggestions',
+                value => {
+                    biblionumber => $biblio->biblionumber,
+                    STATUS       => 'ORDERED',
+                },
+            }
+        );
+
+        my $edi_msg = $schema->resultset('EdifactMessage')->create(
+            {
+                message_type => 'ORDRSP',
+                raw_msg      => _build_ordrsp_msg( $order->ordernumber, 2, 'OP' ),
+                status       => 'new',
+            }
+        );
+
+        process_ordrsp($edi_msg);
+
+        $order->discard_changes;
+        is( $order->orderstatus,        'cancelled',    'Order status set to cancelled' );
+        is( $order->cancellationreason, 'Out of print', 'Cancellation reason set from EDI 8B code' );
+        ok( $order->datecancellationprinted, 'Cancellation date set' );
+        is( $order->items->count, 0, 'On-order item deleted' );
+        $suggestion->discard_changes;
+        is( $suggestion->STATUS, 'ACCEPTED', 'Suggestion reverted from ORDERED to ACCEPTED' );
+        $edi_msg->discard_changes;
+        is( $edi_msg->status, 'received', 'EDI message status updated to received' );
+    };
+
+    subtest 'non-cancellation updates suppliers_report only' => sub {
+        plan tests => 3;
+
+        my $bookseller    = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
+        my $budget_period = $builder->build( { source => 'Aqbudgetperiod', value => { budget_period_active => 1 } } );
+        my $budget        = $builder->build(
+            { source => 'Aqbudget', value => { budget_period_id => $budget_period->{budget_period_id} } } );
+        my $basket = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Baskets',
+                value => { booksellerid => $bookseller->id },
+            }
+        );
+        my $order = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Orders',
+                value => {
+                    basketno    => $basket->basketno,
+                    budget_id   => $budget->{budget_id},
+                    orderstatus => 'ordered',
+                },
+            }
+        );
+
+        my $edi_msg = $schema->resultset('EdifactMessage')->create(
+            {
+                message_type => 'ORDRSP',
+                raw_msg      => _build_ordrsp_msg( $order->ordernumber, 5, 'IB' ),
+                status       => 'new',
+            }
+        );
+
+        process_ordrsp($edi_msg);
+
+        $order->discard_changes;
+        isnt( $order->orderstatus, 'cancelled', 'Order not cancelled for non-cancellation action' );
+        like( $order->suppliers_report, qr/In stock/, 'Suppliers report updated from coded reason text' );
+        $edi_msg->discard_changes;
+        is( $edi_msg->status, 'received', 'EDI message status updated to received' );
+    };
+
+    subtest 'missing ordernumber is handled gracefully' => sub {
+        plan tests => 1;
+
+        my $edi_msg = $schema->resultset('EdifactMessage')->create(
+            {
+                message_type => 'ORDRSP',
+                raw_msg      => _build_ordrsp_msg( 999999999, 2, 'OP' ),
+                status       => 'new',
+            }
+        );
+
+        lives_ok { process_ordrsp($edi_msg) }
+        'process_ordrsp does not die when ordernumber not found';
+    };
+
+    $schema->storage->txn_rollback;
+};
+
+# Build a minimal single-line EDIFACT ORDRSP message for testing process_ordrsp().
+# action_code: 2=cancelled, 4=no_action, 5=accepted
+# reason_code: 'OP'=Out of print, 'IB'=In stock (EditEUR 8B table)
+sub _build_ordrsp_msg {
+    my ( $ordernumber, $action_code, $reason_code ) = @_;
+    return sprintf(
+              "UNA:+.? '"
+            . "UNB+UNOC:3+5412345000176+4012345000094+200101:1200+1++ORDRSP'"
+            . "UNH+1+ORDRSP:D:96A:UN:EAN005'"
+            . "BGM+231+RSP001+9'"
+            . "LIN+1+%d'"
+            . "QTY+21:1'"
+            . "FTX+LIN++%s:8B:28'"
+            . "RFF+LI:%s'"
+            . "UNS+S'"
+            . "CNT+2:1'"
+            . "UNT+9+1'"
+            . "UNZ+1+1'",
+        $action_code, $reason_code, $ordernumber
+    );
+}
