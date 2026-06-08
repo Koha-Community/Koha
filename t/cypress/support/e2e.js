@@ -75,46 +75,40 @@ Cypress.on("uncaught:exception", err => {
     }
 });
 
-function get_fallback_login_value(param) {
-    var env_var = param == "username" ? "KOHA_USER" : "KOHA_PASS";
-
-    return typeof Cypress.env(env_var) === "undefined"
-        ? "koha"
-        : Cypress.env(env_var);
-}
-
 Cypress.Commands.add("visitOpac", path => {
-    cy.visit(Cypress.env("opacBaseUrl") + path);
+    cy.env(["opacBaseUrl"]).then(({ opacBaseUrl }) =>
+        cy.visit(opacBaseUrl + path)
+    );
 });
 
 Cypress.Commands.add("login", (username, password) => {
-    var user =
-        typeof username === "undefined"
-            ? get_fallback_login_value("username")
-            : username;
-    var pass =
-        typeof password === "undefined"
-            ? get_fallback_login_value("password")
-            : password;
-    cy.visit("/cgi-bin/koha/mainpage.pl?logout.x=1");
-    cy.get("#userid").type(user);
-    cy.get("#password").type(pass);
-    cy.get("#submit-button").click();
+    cy.env(["kohaUsername", "kohaPassword"]).then(
+        ({ kohaUsername, kohaPassword }) => {
+            var user =
+                typeof username === "undefined" ? kohaUsername : username;
+            var pass =
+                typeof password === "undefined" ? kohaPassword : password;
+            cy.visit("/cgi-bin/koha/mainpage.pl?logout.x=1");
+            cy.get("#userid").type(user);
+            cy.get("#password").type(pass);
+            cy.get("#submit-button").click();
+        }
+    );
 });
 
 Cypress.Commands.add("loginOpac", (username, password) => {
-    var user =
-        typeof username === "undefined"
-            ? get_fallback_login_value("username")
-            : username;
-    var pass =
-        typeof password === "undefined"
-            ? get_fallback_login_value("password")
-            : password;
-    cy.visitOpac("/cgi-bin/koha/opac-main.pl?logout.x=1");
-    cy.get("#userid").type(user);
-    cy.get("#password").type(pass);
-    cy.get("#auth .action").contains("Log in").click();
+    cy.env(["kohaUsername", "kohaPassword"]).then(
+        ({ kohaUsername, kohaPassword }) => {
+            var user =
+                typeof username === "undefined" ? kohaUsername : username;
+            var pass =
+                typeof password === "undefined" ? kohaPassword : password;
+            cy.visitOpac("/cgi-bin/koha/opac-main.pl?logout.x=1");
+            cy.get("#userid").type(user);
+            cy.get("#password").type(pass);
+            cy.get("#auth .action").contains("Log in").click();
+        }
+    );
 });
 
 Cypress.Commands.add("left_menu_active_item_is", label => {

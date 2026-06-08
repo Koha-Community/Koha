@@ -55,18 +55,20 @@ describe("Patron self-renewal", () => {
     });
     it("should verify that the patron wants to renew their account", function () {
         cy.visitOpac("/cgi-bin/koha/opac-user.pl");
-        cy.intercept(
-            "GET",
-            Cypress.env("opacBaseUrl") +
-                "/api/v1/public/patrons/*/self_renewal?_per_page=-1",
-            {
-                self_renewal_settings: {
-                    opac_patron_details: "0",
-                    self_renewal_failure_message:
-                        "Your self-renewal can't be processed at this time. Please visit your local branch to complete your renewal.",
-                },
-            }
-        ).as("renewalConfig");
+        cy.env(["opacBaseUrl"]).then(({ opacBaseUrl }) => {
+            cy.intercept(
+                "GET",
+                opacBaseUrl +
+                    "/api/v1/public/patrons/*/self_renewal?_per_page=-1",
+                {
+                    self_renewal_settings: {
+                        opac_patron_details: "0",
+                        self_renewal_failure_message:
+                            "Your self-renewal can't be processed at this time. Please visit your local branch to complete your renewal.",
+                    },
+                }
+            ).as("renewalConfig");
+        });
         cy.get("#patronSelfRenewal", { timeout: 10000 });
         cy.get("#self_renewal_available a").click();
         cy.wait("@renewalConfig");
@@ -76,33 +78,36 @@ describe("Patron self-renewal", () => {
     });
     it("should renew a patron's account", function () {
         cy.visitOpac("/cgi-bin/koha/opac-user.pl");
-        cy.intercept(
-            "GET",
-            Cypress.env("opacBaseUrl") +
-                "/api/v1/public/patrons/*/self_renewal?_per_page=-1",
-            {
-                self_renewal_settings: {
-                    opac_patron_details: "0",
-                    self_renewal_failure_message:
-                        "Your self-renewal can't be processed at this time. Please visit your local branch to complete your renewal.",
-                },
-            }
-        ).as("renewalConfig");
+        cy.env(["opacBaseUrl"]).then(({ opacBaseUrl }) => {
+            cy.intercept(
+                "GET",
+                opacBaseUrl +
+                    "/api/v1/public/patrons/*/self_renewal?_per_page=-1",
+                {
+                    self_renewal_settings: {
+                        opac_patron_details: "0",
+                        self_renewal_failure_message:
+                            "Your self-renewal can't be processed at this time. Please visit your local branch to complete your renewal.",
+                    },
+                }
+            ).as("renewalConfig");
+        });
         cy.get("#patronSelfRenewal", { timeout: 10000 });
         cy.get("#self_renewal_available a").click();
         cy.wait("@renewalConfig");
-        cy.intercept(
-            "POST",
-            Cypress.env("opacBaseUrl") +
-                "/api/v1/public/patrons/*/self_renewal",
-            {
-                statusCode: 201,
-                body: {
-                    expiry_date: "2099-01-01",
-                    confirmation_sent: true,
-                },
-            }
-        ).as("submitRenewal");
+        cy.env(["opacBaseUrl"]).then(({ opacBaseUrl }) => {
+            cy.intercept(
+                "POST",
+                opacBaseUrl + "/api/v1/public/patrons/*/self_renewal",
+                {
+                    statusCode: 201,
+                    body: {
+                        expiry_date: "2099-01-01",
+                        confirmation_sent: true,
+                    },
+                }
+            ).as("submitRenewal");
+        });
         cy.get("#patronSelfRenewal .verification_actions")
             .contains("Yes")
             .click();
@@ -113,34 +118,39 @@ describe("Patron self-renewal", () => {
     });
     it("should display an information message step", function () {
         cy.visitOpac("/cgi-bin/koha/opac-user.pl");
-        cy.intercept(
-            "GET",
-            Cypress.env("opacBaseUrl") +
-                "/api/v1/public/patrons/*/self_renewal?_per_page=-1",
-            {
-                self_renewal_settings: {
-                    opac_patron_details: "0",
-                    self_renewal_failure_message:
-                        "Your self-renewal can't be processed at this time. Please visit your local branch to complete your renewal.",
-                    self_renewal_information_messages: ["This should be shown"],
-                },
-            }
-        ).as("renewalConfig");
+        cy.env(["opacBaseUrl"]).then(({ opacBaseUrl }) => {
+            cy.intercept(
+                "GET",
+                opacBaseUrl +
+                    "/api/v1/public/patrons/*/self_renewal?_per_page=-1",
+                {
+                    self_renewal_settings: {
+                        opac_patron_details: "0",
+                        self_renewal_failure_message:
+                            "Your self-renewal can't be processed at this time. Please visit your local branch to complete your renewal.",
+                        self_renewal_information_messages: [
+                            "This should be shown",
+                        ],
+                    },
+                }
+            ).as("renewalConfig");
+        });
         cy.get("#patronSelfRenewal", { timeout: 10000 });
         cy.get("#self_renewal_available a").click();
         cy.wait("@renewalConfig");
-        cy.intercept(
-            "POST",
-            Cypress.env("opacBaseUrl") +
-                "/api/v1/public/patrons/*/self_renewal",
-            {
-                statusCode: 201,
-                body: {
-                    expiry_date: "2099-01-01",
-                    confirmation_sent: true,
-                },
-            }
-        ).as("submitRenewal");
+        cy.env(["opacBaseUrl"]).then(({ opacBaseUrl }) => {
+            cy.intercept(
+                "POST",
+                opacBaseUrl + "/api/v1/public/patrons/*/self_renewal",
+                {
+                    statusCode: 201,
+                    body: {
+                        expiry_date: "2099-01-01",
+                        confirmation_sent: true,
+                    },
+                }
+            ).as("submitRenewal");
+        });
         cy.get("#patronSelfRenewal .verification_question").contains(
             "This should be shown"
         );
@@ -158,18 +168,20 @@ describe("Patron self-renewal", () => {
     });
     it("should confirm patron details if required", function () {
         cy.visitOpac("/cgi-bin/koha/opac-user.pl");
-        cy.intercept(
-            "GET",
-            Cypress.env("opacBaseUrl") +
-                "/api/v1/public/patrons/*/self_renewal?_per_page=-1",
-            {
-                self_renewal_settings: {
-                    opac_patron_details: "1",
-                    self_renewal_failure_message:
-                        "Your self-renewal can't be processed at this time. Please visit your local branch to complete your renewal.",
-                },
-            }
-        ).as("renewalConfig");
+        cy.env(["opacBaseUrl"]).then(({ opacBaseUrl }) => {
+            cy.intercept(
+                "GET",
+                opacBaseUrl +
+                    "/api/v1/public/patrons/*/self_renewal?_per_page=-1",
+                {
+                    self_renewal_settings: {
+                        opac_patron_details: "1",
+                        self_renewal_failure_message:
+                            "Your self-renewal can't be processed at this time. Please visit your local branch to complete your renewal.",
+                    },
+                }
+            ).as("renewalConfig");
+        });
         cy.get("#patronSelfRenewal", { timeout: 10000 });
         cy.get("#self_renewal_available a").click();
         cy.wait("@renewalConfig");
@@ -183,18 +195,19 @@ describe("Patron self-renewal", () => {
         cy.get("#update-account div.alert.alert-info").contains(
             "Please verify your details to proceed with your self-renewal"
         );
-        cy.intercept(
-            "POST",
-            Cypress.env("opacBaseUrl") +
-                "/api/v1/public/patrons/*/self_renewal",
-            {
-                statusCode: 201,
-                body: {
-                    expiry_date: "2099-01-01",
-                    confirmation_sent: true,
-                },
-            }
-        ).as("submitRenewal");
+        cy.env(["opacBaseUrl"]).then(({ opacBaseUrl }) => {
+            cy.intercept(
+                "POST",
+                opacBaseUrl + "/api/v1/public/patrons/*/self_renewal",
+                {
+                    statusCode: 201,
+                    body: {
+                        expiry_date: "2099-01-01",
+                        confirmation_sent: true,
+                    },
+                }
+            ).as("submitRenewal");
+        });
         cy.get("#update-account fieldset.action input[type='submit']")
             .contains("Submit renewal request")
             .click();
