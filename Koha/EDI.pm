@@ -54,6 +54,7 @@ use Koha::Plugins;    # Adds plugin dirs to @INC
 use Koha::Plugins::Handler;
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Booksellers;
+use Koha::Acquisition::Orders;
 use Koha::AuthorisedValues;
 use Koha::Util::FrameworkPlugin qw( biblio_008 );
 
@@ -216,14 +217,12 @@ sub process_ordrsp {
                 my $action = $line->action_notification();
                 if ( $action eq 'cancelled' ) {
                     my $reason = $line->coded_orderline_text();
-                    ModOrder(
-                        {
-                            ordernumber             => $ordernumber,
-                            cancellationreason      => $reason,
-                            orderstatus             => 'cancelled',
-                            datecancellationprinted => dt_from_string()->ymd(),
-                        }
-                    );
+                    my $order  = Koha::Acquisition::Orders->find($ordernumber);
+                    if ($order) {
+                        $order->cancel( { reason => $reason } );
+                    } else {
+                        $logger->error("EDI ORDRSP: ordernumber $ordernumber not found, cannot process cancellation");
+                    }
                 } else {    # record order as due with possible further info
 
                     my $report     = $line->coded_orderline_text();
