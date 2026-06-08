@@ -134,6 +134,9 @@
         };
         $(document).ready(function () {
             let additional_filters = {
+                status: function () {
+                    return { "-in": ["new", "issued"] };
+                },
                 start_date: function () {
                     let fromdate = $("#from");
                     let isoFrom;

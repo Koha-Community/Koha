@@ -422,7 +422,7 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                 "/api/v1/bookings?biblio_id=" +
                 biblionumber +
                 "&_per_page=-1" +
-                '&q={"status":{"-in":["new","pending","active"]}}',
+                '&q={"status":{"-in":["new","issued"]}}',
             dataType: "json",
             type: "GET",
         });
