@@ -172,7 +172,7 @@ subtest 'get() tests' => sub {
 
 subtest 'get_items() tests' => sub {
 
-    plan tests => 12;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -249,6 +249,45 @@ subtest 'get_items() tests' => sub {
     };
 
     $schema->storage->txn_rollback;
+
+    subtest 'group_by_status' => sub {
+        plan tests => 8;
+        $schema->storage->txn_begin;
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => {
+                    flags => 1,
+                }
+            }
+        );
+        $patron->set_password( { password => $password, skip_validation => 1 } );
+        my $userid = $patron->userid;
+
+        my $biblio           = $builder->build_sample_biblio();
+        my $available_item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+        my $withdrawn_item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, withdrawn => 1 } );
+        my $lost_item_1      = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itemlost  => 1 } );
+
+        my $available_item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+        my $withdrawn_item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, withdrawn => 1 } );
+        my $lost_item_2      = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itemlost  => 1 } );
+
+        $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/items?group_by_status=1" )
+            ->status_is(200)
+            ->json_is(
+            '/0/item_id', $available_item_1->itemnumber,
+            'Items are grouped by status, available comes first'
+            )
+            ->json_is( '/1/item_id', $available_item_2->itemnumber )
+            ->json_is( '/2/item_id', $lost_item_1->itemnumber, 'Lost comes after available' )
+            ->json_is( '/3/item_id', $lost_item_2->itemnumber )
+            ->json_is( '/4/item_id', $withdrawn_item_1->itemnumber )
+            ->json_is( '/5/item_id', $withdrawn_item_2->itemnumber, 'Withdrawn comes after lost' );
+
+        $schema->storage->txn_rollback;
+    };
+
 };
 
 subtest 'delete() tests' => sub {
@@ -2504,4 +2543,4 @@ subtest 'merge() tests' => sub {
     unlike( $result, qr/$title_1/, "Change all record with dat in the 'datarecord' field" );
 
     $schema->storage->txn_rollback;
-    }
+};
