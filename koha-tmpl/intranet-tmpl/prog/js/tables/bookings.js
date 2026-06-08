@@ -1,8 +1,32 @@
 // Bookings
 var bookings_table;
 $(document).ready(function () {
-    // Determine whether we have a filtered list
-    let filter_expired = $("#expired_filter").hasClass("filtered");
+    const af = AdditionalFilters.init([
+        "filter-completed",
+        "filter-cancelled",
+    ]).onChange(() => {
+        if (bookings_table) {
+            bookings_table.DataTable().ajax.reload();
+        }
+    });
+
+    const additional_filters = {
+        patron_id: patron_borrowernumber,
+        ...af.build({
+            status: ({ filters, isNotApplied }) => {
+                const defaults = ["new", "issued"];
+                const filtered = [...defaults];
+                if (isNotApplied(filters["filter-cancelled"])) {
+                    filtered.push("cancelled");
+                }
+                if (isNotApplied(filters["filter-completed"])) {
+                    filtered.push("completed");
+                }
+                return { "-in": filtered };
+            },
+        }),
+    };
+
     // Load bookings table on page load
     if (window.location.hash === "#bookings_panel") {
         loadBookingsTable();
@@ -13,18 +37,6 @@ $(document).ready(function () {
     });
 
     function loadBookingsTable() {
-        let additional_filters = {
-            patron_id: patron_borrowernumber,
-            end_date: function () {
-                if (filter_expired) {
-                    let today = new Date();
-                    return { ">=": today.toISOString() };
-                } else {
-                    return;
-                }
-            },
-        };
-
         if (!bookings_table) {
             var bookings_table_url = "/api/v1/bookings";
             bookings_table = $("#bookings_table").kohaTable(
@@ -123,35 +135,13 @@ $(document).ready(function () {
     }
 
     function renderStatus(data, type, row, meta) {
-        const isExpired = date => dayjs(date).isBefore(new Date());
-        const isActive = (startDate, endDate) => {
-            const now = dayjs();
-            return (
-                now.isAfter(dayjs(startDate)) &&
-                now.isBefore(dayjs(endDate).add(1, "day"))
-            );
-        };
-
         const statusMap = {
-            new: () => {
-                if (isExpired(row.end_date)) {
-                    return __("Expired");
-                }
-
-                if (isActive(row.start_date, row.end_date)) {
-                    return __("Active");
-                }
-
-                if (dayjs(row.start_date).isAfter(new Date())) {
-                    return __("Pending");
-                }
-
-                return __("New");
-            },
+            new: () => __("New"),
             cancelled: () =>
                 [__("Cancelled"), row.cancellation_reason]
                     .filter(Boolean)
                     .join(": "),
+            issued: () => __("Issued"),
             completed: () => __("Completed"),
         };
 
@@ -160,11 +150,9 @@ $(document).ready(function () {
             : __("Unknown");
 
         const classMap = [
-            { status: __("Expired"), class: "bg-secondary" },
             { status: __("Cancelled"), class: "bg-secondary" },
-            { status: __("Pending"), class: "bg-warning" },
-            { status: __("Active"), class: "bg-primary" },
-            { status: __("Completed"), class: "bg-info" },
+            { status: __("Completed"), class: "bg-secondary" },
+            { status: __("Issued"), class: "bg-info" },
             { status: __("New"), class: "bg-success" },
         ];
 
@@ -174,24 +162,4 @@ $(document).ready(function () {
 
         return `<span class="badge rounded-pill ${badgeClass}">${statusText}</span>`;
     }
-
-    var txtActivefilter = __("Show expired");
-    var txtInactivefilter = __("Hide expired");
-    $("#expired_filter").on("click", function () {
-        if ($(this).hasClass("filtered")) {
-            filter_expired = false;
-            $(this).html('<i class="fa fa-filter"></i> ' + txtInactivefilter);
-        } else {
-            filter_expired = true;
-            $(this).html('<i class="fa fa-bars"></i> ' + txtActivefilter);
-        }
-
-        bookings_table.DataTable().ajax.reload(() => {
-            bookings_table
-                .DataTable()
-                .column("status:name")
-                .visible(!filter_expired, false);
-        });
-        $(this).toggleClass("filtered");
-    });
 });

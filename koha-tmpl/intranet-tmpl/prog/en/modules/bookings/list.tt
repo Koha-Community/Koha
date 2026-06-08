@@ -16,7 +16,6 @@
 </head>
 
 <body id="circ_request" class="catalog">
-
 [% WRAPPER 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
 [% END %]
@@ -41,7 +40,7 @@
         <h1>Bookings for [% INCLUDE 'biblio-title-head.inc' %]</h1>
         <div class="page-section" id="bookings-timeline"></div>
         <div class="page-section">
-            [% INCLUDE 'additional-filters.inc' filters = [ { id = 'filter-expired', label_show = t('Include expired'), label_hide = t('Exclude expired') }, { id = 'filter-cancelled', label_show = t('Include cancelled'), label_hide = t('Exclude cancelled') }, { id = 'filter-completed', label_show = t('Include completed'), label_hide = t('Exclude completed') },] filter_class = 'bookings' %]
+            [% INCLUDE 'additional-filters.inc' filters = [ { id = 'filter-cancelled', label_show = t('Include cancelled'), label_hide = t('Exclude cancelled') }, { id = 'filter-completed', label_show = t('Include completed'), label_hide = t('Exclude completed') },] filter_class = 'bookings' %]
             <table id="bookings_table"></table>
         </div>
     </div>
@@ -107,7 +106,7 @@
 
                     var bookingsSet = new vis.DataSet();
                     for (booking of bookings[0]) {
-                        const isActive = ["new", "pending", "active"].includes(booking.status);
+                        const isActive = ["new", "issued"].includes(booking.status);
                         const patronContent = $patron_to_html(booking.patron, {
                             display_cardnumber: true,
                             url: false,
@@ -124,7 +123,7 @@
                             end: $toDisplayDate(endServerTz),
                             content: !isActive ? `<s>${patronContent}</s>` : patronContent,
                             className: booking.status === "cancelled" ? "cancelled" : "",
-                            ...(Koha.permissions.CAN_user_circulate_manage_bookings ? { editable: !["cancelled", "completed"].includes(booking.status) ? { remove: true, updateTime: true } : false } : { editable: false }),
+                            ...(Koha.permissions.CAN_user_circulate_manage_bookings ? { editable: !["cancelled", "issued", "completed"].includes(booking.status) ? { remove: true, updateTime: true } : false } : { editable: false }),
                             type: "range",
                             group: booking.item_id ?? 0,
                         });
@@ -225,19 +224,13 @@
                 }
             );
 
-            const additional_filters = AdditionalFilters.init(["filter-expired", "filter-cancelled", "filter-completed"])
+            const additional_filters = AdditionalFilters.init(["filter-cancelled", "filter-completed"])
                 .onChange((filters, { anyFiltersNotApplied }) => {
                     bookings_table.DataTable().ajax.reload();
                 })
                 .build({
-                    end_date: ({ filters, isNotApplied }) => {
-                        if (isNotApplied(filters["filter-expired"])) {
-                            let today = new Date();
-                            return { ">=": today.toISOString() };
-                        }
-                    },
                     status: ({ filters, isNotApplied }) => {
-                        const defaults = ["new", "pending", "active"];
+                        const defaults = ["new", "issued"];
                         const filtered = [...defaults];
                         if (isNotApplied(filters["filter-cancelled"])) {
                             filtered.push("cancelled");
@@ -270,40 +263,19 @@
                             orderable: false,
                             visible: true,
                             render: function (data, type, row, meta) {
-                                const isExpired = date => dayjs(date).isBefore(new Date());
-                                const isActive = (startDate, endDate) => {
-                                    const now = dayjs();
-                                    return now.isAfter(dayjs(startDate)) && now.isBefore(dayjs(endDate).add(1, "day"));
-                                };
-
                                 const statusMap = {
-                                    new: () => {
-                                        if (isExpired(row.end_date)) {
-                                            return _("Expired");
-                                        }
-
-                                        if (isActive(row.start_date, row.end_date)) {
-                                            return _("Active");
-                                        }
-
-                                        if (dayjs(row.start_date).isAfter(new Date())) {
-                                            return _("Pending");
-                                        }
-
-                                        return _("New");
-                                    },
+                                    new: () => _("New"),
                                     cancelled: () => [_("Cancelled"), row.cancellation_reason].filter(Boolean).join(": "),
+                                    issued: () => _("Issued"),
                                     completed: () => _("Completed"),
                                 };
 
                                 const statusText = statusMap[row.status] ? statusMap[row.status]() : _("Unknown");
 
                                 const classMap = [
-                                    { status: _("Expired"), class: "bg-secondary" },
                                     { status: _("Cancelled"), class: "bg-secondary" },
-                                    { status: _("Pending"), class: "bg-warning" },
-                                    { status: _("Active"), class: "bg-primary" },
-                                    { status: _("Completed"), class: "bg-info" },
+                                    { status: _("Completed"), class: "bg-secondary" },
+                                    { status: _("Issued"), class: "bg-info" },
                                     { status: _("New"), class: "bg-success" },
                                 ];
 
@@ -373,7 +345,7 @@
                             orderable: false,
                             render: function (data, type, row, meta) {
                                 let result = "";
-                                const is_readonly = ["cancelled", "completed"].includes(row.status);
+                                const is_readonly = ["cancelled", "issued", "completed"].includes(row.status);
                                 if (Koha.permissions.CAN_user_circulate_manage_bookings && !is_readonly) {
                                     result += `
                                 <button type="button" class="btn btn-default btn-xs edit-action"

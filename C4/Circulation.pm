@@ -105,6 +105,7 @@ use Koha::Calendar;
 use Koha::Checkouts;
 use Koha::ILL::Requests;
 use Koha::ILL::ISO18626::Requests;
+use Koha::Bookings;
 use Koha::Items;
 use Koha::Patrons;
 use Koha::Patron::Debarments qw( DelUniqueDebarment AddUniqueDebarment );
@@ -1854,8 +1855,8 @@ sub AddIssue {
                     {
                         if ( $booking->patron_id == $patron->borrowernumber ) {
 
-                            # Patron's own booking - mark as completed and link checkout to booking
-                            $booking->status('completed')->store;
+                            # Patron's own booking - mark as issued and link checkout to booking
+                            $booking->status('issued')->store;
                             $issue_attributes->{'booking_id'} = $booking->booking_id;
                         } else {
 
@@ -2491,6 +2492,7 @@ sub AddReturn {
         $patron or warn "AddReturn without current borrower";
 
         if ($patron) {
+            my $booking_id = $issue->booking_id;
             eval {
                 MarkIssueReturned(
                     $borrowernumber, $item->itemnumber, $return_date, $patron->privacy,
@@ -2512,6 +2514,13 @@ sub AddReturn {
                             return_date => $return_date
                         }
                     );
+                }
+
+                if ($booking_id) {
+                    my $booking = Koha::Bookings->find($booking_id);
+                    if ( $booking && $booking->status eq 'issued' ) {
+                        $booking->status('completed')->store;
+                    }
                 }
             } else {
                 my $error = "$@";

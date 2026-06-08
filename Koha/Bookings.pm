@@ -36,18 +36,14 @@ Koha::Bookings - Koha Booking object set class
 
     $bookings->filter_by_active;
 
-Will return the bookings that have not ended, were cancelled or are completed.
+Returns bookings that are still active, i.e. awaiting collection (C<new>) or
+currently on loan (C<issued>).  Cancelled and completed bookings are excluded.
 
 =cut
 
 sub filter_by_active {
     my ($self) = @_;
-    return $self->search(
-        {
-            end_date => { '>='      => \'NOW()' },
-            status   => { '-not_in' => [ 'cancelled', 'completed' ] }
-        }
-    );
+    return $self->search( { status => { '-in' => [ 'new', 'issued' ] } } );
 }
 
 =head2 Internal Methods

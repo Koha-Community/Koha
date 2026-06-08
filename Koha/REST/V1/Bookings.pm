@@ -37,7 +37,7 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $bookings = $c->objects->search( Koha::Bookings->filter_by_active );
+        my $bookings = $c->objects->search( Koha::Bookings->new );
         return $c->render( status => 200, openapi => $bookings );
     } catch {
         $c->unhandled_exception($_);

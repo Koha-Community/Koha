@@ -855,6 +855,7 @@
     [% Asset.js("js/holds.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% IF Koha.Preference('EnableBooking') %]
+        [% Asset.js("js/additional-filters.js") | $raw %]
         [% Asset.js("js/cancel_booking_modal.js") | $raw %]
         [% Asset.js("js/tables/bookings.js") | $raw %]
     [% END %]

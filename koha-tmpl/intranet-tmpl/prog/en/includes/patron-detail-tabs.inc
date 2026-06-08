@@ -40,7 +40,7 @@
             [% IF Koha.Preference('EnableBooking') %]
                 [% WRAPPER tab_item tabname="bookings" %]
                     [% SET bookings_count = patron.bookings.filter_by_active.count %]
-                    [% SET expired_bookings_count = patron.bookings.count - bookings_count %]
+                    [% SET closed_bookings_count = patron.bookings.count - bookings_count %]
                     <span>Bookings</span>
                     [% IF ( bookings_count ) %]
                         <span class="badge text-bg-info">[% bookings_count || 0 | html %]</span>
@@ -229,15 +229,8 @@
 
             [% IF Koha.Preference('EnableBooking') %]
                 [% WRAPPER tab_panel tabname="bookings" %]
-                    [% IF ( bookings_count ) %]
-                        <fieldset class="action filters" style="cursor:pointer;">
-                            <a id="expired_filter" class="filtered"><i class="fa fa-bars"></i> Show expired</a>
-                        </fieldset>
-                        <table id="bookings_table" style="width: 100% !Important;"></table>
-                    [% ELSIF ( expired_bookings_count ) %]
-                        <fieldset class="action filters" style="cursor:pointer;">
-                            <a id="expired_filter"><i class="fa fa-filter"></i> Hide expired</a>
-                        </fieldset>
+                    [% IF ( bookings_count || closed_bookings_count ) %]
+                        [% INCLUDE 'additional-filters.inc' filters = [ { id = 'filter-completed', label_show = t('Include completed'), label_hide = t('Exclude completed') }, { id = 'filter-cancelled', label_show = t('Include cancelled'), label_hide = t('Exclude cancelled') } ] filter_class = 'bookings' %]
                         <table id="bookings_table" style="width: 100% !Important;"></table>
                     [% ELSE %]
                         <p>Patron has nothing booked.</p>
