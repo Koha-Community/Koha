@@ -5804,7 +5804,7 @@ CREATE TABLE `reports_dictionary` (
   `date_created` datetime DEFAULT NULL COMMENT 'date and time this definition was created',
   `date_modified` datetime DEFAULT NULL COMMENT 'date and time this definition was last modified',
   `saved_sql` mediumtext DEFAULT NULL COMMENT 'SQL snippet for us in reports',
-  `report_area` varchar(6) DEFAULT NULL COMMENT 'Koha module this definition is for Circulation, Catalog, Patrons, Acquisitions, Accounts)',
+  `report_area` varchar(6) DEFAULT NULL COMMENT 'Koha module this definition is for (Circulation, Catalog, Patrons, Acquisitions, Accounts)',
   PRIMARY KEY (`id`),
   KEY `dictionary_area_idx` (`report_area`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
