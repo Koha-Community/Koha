@@ -138,7 +138,7 @@ subtest 'Relation accessor tests' => sub {
                 value => {
                     patron_id => $patron->borrowernumber,
                     item_id   => $item->itemnumber,
-                    status    => 'completed'
+                    status    => 'issued'
                 }
             }
         );
@@ -671,7 +671,7 @@ subtest 'store() tests' => sub {
 
         $booking->update(
             {
-                status => 'completed',
+                status => 'issued',
             }
         );
 
@@ -1178,7 +1178,7 @@ subtest 'Integration test: Full optimal selection workflow' => sub {
 };
 
 subtest 'store() skips clash detection on terminal status transition' => sub {
-    plan tests => 3;
+    plan tests => 4;
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object( { class => "Koha::Patrons" } );
@@ -1211,13 +1211,17 @@ subtest 'store() skips clash detection on terminal status transition' => sub {
     # false clash when there is only one bookable item.
     C4::Circulation::AddIssue( $patron, $non_bookable_item->barcode );
 
-    # Without the fix, transitioning to 'completed' runs clash
+    # Without the fix, transitioning to 'issued' runs clash
     # detection which sees the non-bookable checkout and throws
     # Koha::Exceptions::Booking::Clash → 500 error.
+    lives_ok { $booking->status('issued')->store() }
+    'Transition to issued skips clash detection';
+
+    # Transition to completed (item returned) also skips clash detection
     lives_ok { $booking->status('completed')->store() }
     'Transition to completed skips clash detection';
 
-    # Cancellation from completed is also a terminal transition
+    # Cancellation is also a terminal transition
     lives_ok { $booking->status('cancelled')->store() }
     'Transition to cancelled skips clash detection';
 

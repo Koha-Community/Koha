@@ -34,113 +34,65 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'filter_by_active' => sub {
 
-    plan tests => 7;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
-    my $biblio     = $builder->build_sample_biblio;
-    my $start_ago  = dt_from_string->subtract( hours => 1 );
-    my $start_hour = dt_from_string->add( hours => 1 );
-    my $start_day  = dt_from_string->add( days  => 1 );
-    my $end_ago    = dt_from_string->subtract( minutes => 1 );
-    my $end_hour   = dt_from_string->add( hours => 1 );
-    my $end_day    = dt_from_string->add( days  => 1 );
-    $builder->build_object(
-        {
-            class => 'Koha::Bookings',
-            value => {
-                biblio_id  => $biblio->biblionumber,
-                start_date => $start_ago,
-                end_date   => $end_hour,
-                status     => 'new'
-
-            }
-        }
-    );
-    is( $biblio->bookings->filter_by_active->count, 1, 'Booking started in past, ending in future is counted' );
+    my $biblio    = $builder->build_sample_biblio;
+    my $start_ago = dt_from_string->subtract( days => 5 );
+    my $end_ago   = dt_from_string->subtract( days => 1 );
+    my $start_day = dt_from_string->add( days => 1 );
+    my $end_day   = dt_from_string->add( days => 5 );
 
     $builder->build_object(
         {
             class => 'Koha::Bookings',
-            value => {
-                biblio_id  => $biblio->biblionumber,
-                start_date => $start_ago,
-                end_date   => $end_ago,
-                status     => 'new'
-
-            }
+            value =>
+                { biblio_id => $biblio->biblionumber, start_date => $start_ago, end_date => $end_day, status => 'new' }
         }
     );
-    is( $biblio->bookings->filter_by_active->count, 1, 'Booking started in past, ended now is not counted' );
+    is( $biblio->bookings->filter_by_active->count, 1, 'Active new booking is open' );
+
+    $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value =>
+                { biblio_id => $biblio->biblionumber, start_date => $start_ago, end_date => $end_ago, status => 'new' }
+        }
+    );
+    is( $biblio->bookings->filter_by_active->count, 2, 'Uncollected past-window new booking is still open' );
 
     $builder->build_object(
         {
             class => 'Koha::Bookings',
             value => {
-                biblio_id  => $biblio->biblionumber,
-                start_date => $start_hour,
-                end_date   => $end_hour,
-                status     => 'new'
-
+                biblio_id => $biblio->biblionumber, start_date => $start_ago, end_date => $end_day, status => 'issued'
             }
         }
     );
-    is( $biblio->bookings->filter_by_active->count, 2, 'Booking starting soon, ending soon is still counted' );
+    is( $biblio->bookings->filter_by_active->count, 3, 'Issued booking is open' );
 
     $builder->build_object(
         {
             class => 'Koha::Bookings',
             value => {
-                biblio_id  => $biblio->biblionumber,
-                start_date => $start_day,
-                end_date   => $end_day,
-                status     => 'new'
+                biblio_id => $biblio->biblionumber, start_date => $start_day, end_date => $end_day,
+                status    => 'cancelled'
             }
         }
     );
-    is( $biblio->bookings->filter_by_active->count, 3, 'Booking starting tomorrow, ending tomorrow is counted' );
+    is( $biblio->bookings->filter_by_active->count, 3, 'Cancelled booking is not open' );
 
     $builder->build_object(
         {
             class => 'Koha::Bookings',
             value => {
-                biblio_id  => $biblio->biblionumber,
-                start_date => $start_day,
-                end_date   => $end_ago,
-                status     => 'new'
+                biblio_id => $biblio->biblionumber, start_date => $start_ago, end_date => $end_ago,
+                status    => 'completed'
             }
         }
     );
-    is(
-        $biblio->bookings->filter_by_active->count, 3,
-        'EDGE CASE: Booking starting in future, already ended is not counted - should be impossible, but good check'
-    );
-
-    $builder->build_object(
-        {
-            class => 'Koha::Bookings',
-            value => {
-                biblio_id  => $biblio->biblionumber,
-                start_date => $start_day,
-                end_date   => $end_day,
-                status     => 'cancelled'
-            }
-        }
-    );
-    is( $biblio->bookings->filter_by_active->count, 3, 'Cancelled bookings are not counted' );
-
-    $builder->build_object(
-        {
-            class => 'Koha::Bookings',
-            value => {
-                biblio_id  => $biblio->biblionumber,
-                start_date => $start_day,
-                end_date   => $end_day,
-                status     => 'completed'
-            }
-        }
-    );
-    is( $biblio->bookings->filter_by_active->count, 3, 'Completed bookings are not counted' );
+    is( $biblio->bookings->filter_by_active->count, 3, 'Completed booking is not open' );
 
     $schema->storage->txn_rollback;
 };

@@ -7259,8 +7259,8 @@ subtest 'AddIssue records staff who checked out item if appropriate' => sub {
     );
 };
 
-subtest 'AddIssue | booking status handling' => sub {
-    plan tests => 5;
+subtest 'AddIssue/AddReturn | booking status handling' => sub {
+    plan tests => 6;
 
     my $schema = Koha::Database->schema;
     $schema->storage->txn_begin;
@@ -7270,7 +7270,7 @@ subtest 'AddIssue | booking status handling' => sub {
     my $pickup_library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $item           = $builder->build_sample_item( { bookable => 1 } );
 
-    # Test 1: Patron checks out item with their own booking - should mark as completed
+    # Test 1: Patron checks out item with their own booking - should mark as issued
     my $booking1 = Koha::Booking->new(
         {
             patron_id         => $patron1->borrowernumber,
@@ -7285,10 +7285,13 @@ subtest 'AddIssue | booking status handling' => sub {
     my $issue1 = AddIssue( $patron1, $item->barcode, dt_from_string()->add( days => 7 ) );
     $booking1->discard_changes();
 
-    is( $booking1->status, 'completed', "Patron's own booking marked as completed when item checked out" );
+    is( $booking1->status, 'issued', "Patron's own booking marked as issued when item checked out" );
 
-    # Clean up for next test
+    # Return the item - booking should now be completed
     AddReturn( $item->barcode, $pickup_library->branchcode );
+    $booking1->discard_changes();
+    is( $booking1->status, 'completed', "Booking marked as completed when item returned" );
+
     $booking1->delete();
 
     # Test 2: Another patron checks out item with different patron's booking overlapping actual booking period - should cancel booking
