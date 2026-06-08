@@ -20,6 +20,7 @@
                 "</span>";
         }
 
+        var name;
         var firstname = escape_str(patron.firstname);
         var preferred_name = escape_str(patron.preferred_name);
         var surname = escape_str(patron.surname);
