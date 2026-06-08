@@ -25,6 +25,7 @@ describe("loads the manage MARC import page", () => {
     });
 
     it("upload a MARC record", () => {
+        cy.intercept("GET", "/api/v1/import_batch_profiles").as("profiles");
         cy.visit("/cgi-bin/koha/tools/stage-marc-import.pl");
 
         cy.fixture("sample.xml", null).as("sample_xml");
@@ -51,7 +52,12 @@ describe("loads the manage MARC import page", () => {
             "always_add"
         );
 
-        cy.get('select[name="format"]').should("have.value", "MARCXML");
+        // Wait for the profiles request to complete before making any
+        // selections. The getProfiles() callback calls select.change()
+        // which resets all form values to defaults — including format to
+        // ISO2709 and matcher to "". Waiting here ensures that reset has
+        // already fired before we set anything.
+        cy.wait("@profiles");
 
         //select some new options
         cy.get("#matcher")
@@ -67,6 +73,7 @@ describe("loads the manage MARC import page", () => {
         cy.get("#item_action")
             .select("ignore", { force: true })
             .should("have.value", "ignore");
+        cy.get('select[name="format"]').select("MARCXML");
 
         // CI reproduction — simulates Apache returning 503 on the
         // first job poll (as happens during reset_all while Apache is restarting).
