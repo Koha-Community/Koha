@@ -12,11 +12,14 @@ export default defineConfig({
         setupNodeEvents(on, config) {
             return require("./t/cypress/plugins/index.js")(on, config);
         },
+        allowCypressEnv: false,
         baseUrl: process.env.KOHA_INTRANET_URL || "http://localhost:8081",
         specPattern: "t/cypress/integration/**/*.*",
         supportFile: "t/cypress/support/e2e.js",
         env: {
             opacBaseUrl: process.env.KOHA_OPAC_URL || "http://localhost:8080",
+            kohaUsername: process.env.KOHA_USER || "koha",
+            kohaPassword: process.env.KOHA_PASS || "koha",
             apiUsername: process.env.KOHA_USER || "koha",
             apiPassword: process.env.KOHA_PASS || "koha",
         },
