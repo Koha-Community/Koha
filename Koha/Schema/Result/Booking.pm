@@ -104,7 +104,7 @@ the timestamp for when a booking has been updated
 
   data_type: 'enum'
   default_value: 'new'
-  extra: {list => ["new","cancelled","completed"]}
+  extra: {list => ["new","cancelled","issued","completed"]}
   is_nullable: 0
 
 current status of the booking
@@ -170,7 +170,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "enum",
     default_value => "new",
-    extra => { list => ["new", "cancelled", "completed"] },
+    extra => { list => ["new", "cancelled", "issued", "completed"] },
     is_nullable => 0,
   },
   "cancellation_reason",
@@ -287,8 +287,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-09-05 20:52:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MzP+qYbMutu0qNgndBHHFQ
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-07-24 07:11:44
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:q9bAKzUPGkFPlSOQgkcCpg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
