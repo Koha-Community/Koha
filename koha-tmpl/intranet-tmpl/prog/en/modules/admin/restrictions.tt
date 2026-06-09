@@ -245,13 +245,14 @@
             [% ex.code | $raw %]: '[% ex.display_text | $raw %]',
         [% END %]
         };
-
+    </script>
+    <script nonce="[% Koha.CSPNonce | $raw %]">
         //Require fee limit if "Lift after payment" is set true
-        $("#lift_after_payment").on("change", function(){
-            if($(this).val() == 1){
-                $("#fee_limit").prop("required",true).after('<span class="required">Required</span>');
+        $("#lift_after_payment").on("change", function () {
+            if ($(this).val() == 1) {
+                $("#fee_limit").prop("required", true).after('<span class="required">Required</span>');
             } else {
-                $("#fee_limit").prop("required",false).nextAll().remove();
+                $("#fee_limit").prop("required", false).nextAll().remove();
             }
         });
     </script>
