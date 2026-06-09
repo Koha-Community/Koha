@@ -190,113 +190,127 @@
             [ hh, mm ] = hhmm.split(':');
             return String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0');
         }
-        function format_slot(slot){
+
+        let library_branchcodes = [];
+        [% FOR l IN libraries %]
+            library_branchcodes.push("[% l.branchcode | html %]");
+        [% END %]
+        Koha.addPrefs({CalendarFirstDayOfWeek : [% Koha.Preference("CalendarFirstDayOfWeek") || 0 | html %]});
+    </script>
+    <script nonce="[% Koha.CSPNonce | $raw %]">
+        function format_slot(slot) {
             let day, start, end;
-            [ day, start, end ] = slot.split("-");
+            [day, start, end] = slot.split("-");
             return format_hhmm(start) + _(" to ") + format_hhmm(end);
         }
-        function delete_slot(node, branchcode){
-            let slot = $(node).find('input').val();
-            opening_slots[branchcode] = $.grep(opening_slots[branchcode], function(elt, index) {
+        function delete_slot(node, branchcode) {
+            let slot = $(node).find("input").val();
+            opening_slots[branchcode] = $.grep(opening_slots[branchcode], function (elt, index) {
                 return elt !== slot;
             });
             refresh_pickup_hours(branchcode);
         }
         function refresh_pickup_hours(branchcode) {
             let slots_per_day = {};
-            opening_slots[branchcode].forEach(function(slot){
+            opening_slots[branchcode].forEach(function (slot) {
                 let day, start, end;
-                [ day, start, end ] = slot.split("-");
-                if(!slots_per_day[day]) slots_per_day[day] = [];
+                [day, start, end] = slot.split("-");
+                if (!slots_per_day[day]) slots_per_day[day] = [];
                 slots_per_day[day].push(slot);
             });
 
-            $("#conf-"+branchcode+"_panel").find(".pickup_hours li").remove();
+            $("#conf-" + branchcode + "_panel")
+                .find(".pickup_hours li")
+                .remove();
 
-            const CalendarFirstDayOfWeek = [% Koha.Preference("CalendarFirstDayOfWeek") || 0 | html %];
             [0, 1, 2, 3, 4, 5, 6]
-               .map(i => ( CalendarFirstDayOfWeek + i ) % 7)
-               .filter(d => d in slots_per_day)
-               .map( day => {
-                    let li_node = $('<li><label>'+get_day_lib(day)+'<label></li>');
-                    slots_per_day[day].sort().forEach(function(slot) {
+                .map(i => (Koha.prefs.CalendarFirstDayOfWeek + i) % 7)
+                .filter(d => d in slots_per_day)
+                .map(day => {
+                    let li_node = $("<li><label>" + get_day_lib(day) + "<label></li>");
+                    slots_per_day[day].sort().forEach(function (slot) {
                         let span_node = $('<span class="pickup-slot"></span>');
-                        span_node.append('<input type="hidden" name="pickup-slot-'+branchcode+'" value="'+slot+'"/>');
-                        span_node.append('<span>'+format_slot(slot)+'</span>');
+                        span_node.append('<input type="hidden" name="pickup-slot-' + branchcode + '" value="' + slot + '"/>');
+                        span_node.append("<span>" + format_slot(slot) + "</span>");
 
-                        let delete_link = $('<a href="#" on> <i class="fa fa-trash-can" aria-hidden="true" title="%s"></i>'.format(_("Remove this slot"))).on('click', function(e){ e.preventDefault(); delete_slot($(this).closest('li'), branchcode); });
+                        let delete_link = $('<a href="#" on> <i class="fa fa-trash-can" aria-hidden="true" title="%s"></i>'.format(_("Remove this slot"))).on("click", function (e) {
+                            e.preventDefault();
+                            delete_slot($(this).closest("li"), branchcode);
+                        });
                         span_node.append(delete_link);
 
                         span_node.appendTo(li_node);
                     });
-                    li_node.appendTo($("#conf-"+branchcode+"_panel").find(".pickup_hours"));
+                    li_node.appendTo($("#conf-" + branchcode + "_panel").find(".pickup_hours"));
                 });
         }
-        function get_day_lib(day){
+        function get_day_lib(day) {
             let lib;
-            switch(day){
-            case 0:
-                lib = _("Sunday");
-                break;
-            case 1:
-                lib = _("Monday");
-                break;
-            case 2:
-                lib = _("Tuesday");
-                break;
-            case 3:
-                lib = _("Wednesday");
-                break;
-            case 4:
-                lib = _("Thursday");
-                break;
-            case 5:
-                lib = _("Friday");
-                break;
-            case 6:
-                lib = _("Saturday");
-                break;
+            switch (day) {
+                case 0:
+                    lib = _("Sunday");
+                    break;
+                case 1:
+                    lib = _("Monday");
+                    break;
+                case 2:
+                    lib = _("Tuesday");
+                    break;
+                case 3:
+                    lib = _("Wednesday");
+                    break;
+                case 4:
+                    lib = _("Thursday");
+                    break;
+                case 5:
+                    lib = _("Friday");
+                    break;
+                case 6:
+                    lib = _("Saturday");
+                    break;
             }
             return lib;
         }
 
-        $(document).ready(function(){
-            [% FOR l IN libraries %]
-                refresh_pickup_hours("[% l.branchcode | html %]");
-            [% END %]
+        $(document).ready(function () {
+            for (let branchcode of library_branchcodes) {
+                refresh_pickup_hours(branchcode);
+            }
 
-            $(".add-new-slot").on("click", function(){
-                let branchcode = $(this).data('branchcode');
+            $(".add-new-slot").on("click", function () {
+                let branchcode = $(this).data("branchcode");
                 let day = $("#day-" + branchcode).val();
                 let start = $("#new-start-" + branchcode).val();
                 let end = $("#new-end-" + branchcode).val();
 
                 let start_hour, start_minute, end_hour, end_minute;
-                [ start_hour, start_minute ] = start.split(":");
-                [ end_hour, end_minute ] = end.split(":");
-                if ( start_hour === undefined
-                  || start_minute === undefined
-                  || end_hour === undefined
-                  || end_minute === undefined
-                  || isNaN(parseInt(start_hour))
-                  || isNaN(parseInt(end_hour))
-                  || isNaN(parseInt(start_minute))
-                  || isNaN(parseInt(end_minute))
-                  || start_hour > 23 || start_minute > 59
-                  || end_hour > 23 || end_minute > 59
-                  ) {
+                [start_hour, start_minute] = start.split(":");
+                [end_hour, end_minute] = end.split(":");
+                if (
+                    start_hour === undefined ||
+                    start_minute === undefined ||
+                    end_hour === undefined ||
+                    end_minute === undefined ||
+                    isNaN(parseInt(start_hour)) ||
+                    isNaN(parseInt(end_hour)) ||
+                    isNaN(parseInt(start_minute)) ||
+                    isNaN(parseInt(end_minute)) ||
+                    start_hour > 23 ||
+                    start_minute > 59 ||
+                    end_hour > 23 ||
+                    end_minute > 59
+                ) {
                     $("#invalid_slot_warning").show();
                     return;
                 } else {
                     $("#invalid_slot_warning").hide();
                 }
 
-                let new_slot = day + '-' + start + '-' + end;
-                if ( opening_slots[branchcode].indexOf(new_slot) < 0 )
-                    opening_slots[branchcode].push(new_slot);
+                let new_slot = day + "-" + start + "-" + end;
+                if (opening_slots[branchcode].indexOf(new_slot) < 0) opening_slots[branchcode].push(new_slot);
 
                 refresh_pickup_hours(branchcode);
-            })
+            });
         });
     </script>
 [% END %]
