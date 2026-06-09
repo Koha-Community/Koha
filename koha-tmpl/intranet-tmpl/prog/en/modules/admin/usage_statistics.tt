@@ -265,54 +265,63 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% Asset.js("/lib/leaflet/leaflet.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+        Koha.addPrefs({
+            UsageStatsGeolocation: [[% Koha.Preference('UsageStatsGeolocation') | html %]],
+        })
+        let libraries = [];
+        [% FOR l IN libraries %]
+            [% NEXT UNLESS l.geolocation %]
+            libraries.push({ 'text': "[% l.branchname | html %]", 'id': "geolocation_[% l.branchcode | html %]", latlong :  [ [% l.geolocation | html %] ] })
+        [% END %]
+    </script>
+    <script nonce="[% Koha.CSPNonce | $raw %]">
         function positionMap() {
             var tbh = $("#mapid");
             var mapContainer = tbh.parent();
-            mapContainer.css('position', 'relative');
-            mapContainer.css('min-height', tbh.outerHeight(true));
-            tbh.css('position', 'absolute');
-            tbh.css('right', 0);
+            mapContainer.css("position", "relative");
+            mapContainer.css("min-height", tbh.outerHeight(true));
+            tbh.css("position", "absolute");
+            tbh.css("right", 0);
 
             var offsetTop = mapContainer.offset().top;
             var s = parseInt($(window).scrollTop(), 10);
-            tbh.css('top', '').css('bottom', '');
+            tbh.css("top", "").css("bottom", "");
             if (s > offsetTop) {
                 var mapContainerOffsetBottom = offsetTop + mapContainer.innerHeight();
                 if (s + tbh.outerHeight(true) > mapContainerOffsetBottom) {
-                    tbh.css('bottom', 0);
+                    tbh.css("bottom", 0);
                 } else {
-                    tbh.css('top', s - offsetTop);
+                    tbh.css("top", s - offsetTop);
                 }
             } else {
-                tbh.css('top', 0);
+                tbh.css("top", 0);
             }
         }
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             $(window).scroll(positionMap);
             positionMap();
         });
 
-        var map = L.map('mapid').setView([0,0], 1);
+        var map = L.map("mapid").setView([0, 0], 1);
 
-        L.tileLayer('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        L.tileLayer("https://a.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             maxZoom: 18,
-            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
         }).addTo(map);
 
-        var default_elt = { 'text': _("Main library"), 'id': 'UsageStatsGeolocation' };
+        var default_elt = { text: _("Main library"), id: "UsageStatsGeolocation" };
         var current_elt = default_elt;
 
         // Add the title
-        var title = L.control({position: 'topright'});
+        var title = L.control({ position: "topright" });
         title.onAdd = function (map) {
-            this._div = L.DomUtil.create('div', 'title');
+            this._div = L.DomUtil.create("div", "title");
             this.update();
             return this._div;
         };
         title.update = function (props) {
-            this._div.innerHTML = '<h4>' + _("Click on the map to set the geolocation for %s").format(current_elt.text) + '</h4>';
+            this._div.innerHTML = "<h4>" + _("Click on the map to set the geolocation for %s").format(current_elt.text) + "</h4>";
         };
         title.addTo(map);
 
@@ -322,37 +331,44 @@
             if (marker) map.removeLayer(marker);
             marker = L.marker(latlng).addTo(map);
             marker.bindPopup(elt.text);
-            marker.on('mouseover', function (e) {this.openPopup(); });
-            marker.on('mouseout',  function (e) {this.closePopup();});
+            marker.on("mouseover", function (e) {
+                this.openPopup();
+            });
+            marker.on("mouseout", function (e) {
+                this.closePopup();
+            });
             markers[elt.id] = marker;
         }
 
         // Init the map
-        [% IF Koha.Preference('UsageStatsGeolocation') %]
-            var latlng = [ [% Koha.Preference('UsageStatsGeolocation') | html %] ];
-            add_to_map( current_elt, latlng );
-        [% END %]
-        [% FOR l IN libraries %]
-            [% NEXT UNLESS l.geolocation %]
-            add_to_map( { 'text': "[% l.branchname | html %]", 'id': "geolocation_[% l.branchcode | html %]" }, [ [% l.geolocation | html %] ] );
-        [% END %]
+        if (Koha.prefs.UsageStatsGeolocation?.length) {
+            var latlng = Koha.prefs.UsageStatsGeolocation;
+            add_to_map(current_elt, latlng);
+        }
+        for (let l of libraries) {
+            add_to_map(l, l.latlong);
+        }
 
         // On click, update the geolocation and the marker
-        map.on('click', function(e){
-            add_to_map( current_elt, e.latlng );
-            $("#" + current_elt.id).val(e.latlng.lat + ',' + e.latlng.lng);
+        map.on("click", function (e) {
+            add_to_map(current_elt, e.latlng);
+            $("#" + current_elt.id).val(e.latlng.lat + "," + e.latlng.lng);
         });
 
         // Auto zoom
-        var group = new L.featureGroup(Object.keys(markers).map(function(key){return markers[key]}));
-        if ( group.getBounds().isValid() ) map.fitBounds(group.getBounds());
+        var group = new L.featureGroup(
+            Object.keys(markers).map(function (key) {
+                return markers[key];
+            })
+        );
+        if (group.getBounds().isValid()) map.fitBounds(group.getBounds());
 
         // On click on the marker icons, update the title of the map
-        $(document).ready(function(){
-            $(".change_geolocation").on('click', function(e){
+        $(document).ready(function () {
+            $(".change_geolocation").on("click", function (e) {
                 e.preventDefault();
-                if ( $(this).data('branchname') ) {
-                    current_elt = { 'text': $(this).data('branchname'), 'id': $(this).data('id') };
+                if ($(this).data("branchname")) {
+                    current_elt = { text: $(this).data("branchname"), id: $(this).data("id") };
                 } else {
                     current_elt = default_elt;
                 }
@@ -361,8 +377,8 @@
             $("#UsageStatsLibrariesInfo").change();
         });
 
-        $("#UsageStatsLibrariesInfo").on('change', function(){
-            if ( $(this).val() == 1 ) $("#libraries_info").show()
+        $("#UsageStatsLibrariesInfo").on("change", function () {
+            if ($(this).val() == 1) $("#libraries_info").show();
             else $("#libraries_info").hide();
             positionMap();
         });
