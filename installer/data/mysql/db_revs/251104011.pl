@@ -28,9 +28,17 @@ return {
             }, undef, $local_number_map_id
             );
 
-            my $index_name = $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX;
-            my $indexer    = Koha::SearchEngine::Elasticsearch::Indexer->new( { index => $index_name } );
-            $indexer->update_mappings();
+            # We do want to update the mappings in the DB in case ES gets switched on
+            # but just skip the ES engine update if ES not enabled
+            my $searchengine =
+                $dbh->selectrow_array(q|SELECT value FROM systempreferences WHERE variable = 'SearchEngine'|);
+            if ( $searchengine eq 'Elasticsearch' ) {
+                my $index_name = $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX;
+                my $indexer    = Koha::SearchEngine::Elasticsearch::Indexer->new( { index => $index_name } );
+                $indexer->update_mappings();
+            } else {
+                say $out "ES disabled, mappings not updated";
+            }
             say $out "Updated ES mappings to make local-number sortable";
         } elsif ( !defined $local_number_map_id ) {
             say_warning( $out, "No mapping defined for local-number" );
