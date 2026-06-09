@@ -21,6 +21,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
+use Test::MockModule qw(strict);
 use Test::More tests => 14;
 use Test::Warn;
 
@@ -440,7 +441,7 @@ count(h.reservedate) AS 'holds'
 
 subtest 'Email report test' => sub {
 
-    plan tests => 14;
+    plan tests => 15;
     my $dbh = C4::Context->dbh;
 
     my $id1 = $builder->build(
@@ -499,6 +500,18 @@ subtest 'Email report test' => sub {
         }
     );
 
+    my $letter4 = $builder->build(
+        {
+            source => 'Letter',
+            value  => {
+                content                => "[% today %]",
+                branchcode             => "",
+                message_transport_type => 'email',
+                is_html                => 0
+            }
+        }
+    );
+
     my $message_count = Koha::Notice::Messages->search( {} )->count;
 
     my ( $emails, $errors ) = C4::Reports::Guided::EmailReport();
@@ -551,6 +564,15 @@ subtest 'Email report test' => sub {
         { report_id => $report1, module => $letter3->{module}, code => $letter3->{code}, from => 'the@future.ooh' } );
     is( $emails->[0]{letter}->{'content-type'}, 'text/html; charset="UTF-8"', "Message has expected content type" );
 
+    {
+        # Mock formatting dates to fixed output
+        my $mock = Test::MockModule->new('C4::Letters');
+        $mock->redefine( 'output_pref', '1999-09-06 13:23' );
+        ($emails) = C4::Reports::Guided::EmailReport(
+            { report_id => $report1, module => $letter4->{module}, code => $letter4->{code}, from => 'the@future.ooh' }
+        );
+    }
+    is( $emails->[0]{letter}->{content}, '1999-09-06 13:23', "Message has expected content" );
 };
 
 $schema->storage->txn_rollback;

@@ -58,6 +58,7 @@ use Koha::Report;
 use Koha::Reports;
 use Koha::SharedContent;
 use Koha::TemplateUtils qw( process_tt );
+use C4::Letters         qw( GetPreparedLetter );
 
 =head1 NAME
 
@@ -1170,8 +1171,7 @@ sub EmailReport {
     my ( $sth, $errors ) = execute_query( { sql => $sql, report_id => $report_id } );
     return ( undef, [ { FATAL => "REPORT_FAIL" } ] ) if $errors;
 
-    my $counter  = 1;
-    my $template = $letter->{content};
+    my $counter = 1;
 
     while ( my $row = $sth->fetchrow_hashref() ) {
         my $email;
@@ -1184,13 +1184,16 @@ sub EmailReport {
 
         my $from_address = $from || $row->{from};
         my $to_address   = $row->{$email_col};
-        push( @errors, { NOT_PARSE => $counter } ) unless my $content = process_tt( $template, $row );
+        my $letter       = {%$letter};              # GetPreparedLetter mutates, so make a local copy beforehand
+        push( @errors, { NOT_PARSE => $counter } ) unless my $rendered = GetPreparedLetter(
+            letter  => $letter,
+            objects => $row
+        );
         $counter++;
-        next if scalar @errors > $err_count;    #If any problems, try next
+        next if scalar @errors > $err_count;        #If any problems, try next
 
-        $letter->{content}       = $content;
         $email->{borrowernumber} = $row->{borrowernumber};
-        $email->{letter}         = {%$letter};
+        $email->{letter}         = $rendered;
         $email->{from_address}   = $from_address;
         $email->{to_address}     = $to_address;
 
