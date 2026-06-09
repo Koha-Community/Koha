@@ -303,23 +303,25 @@
     [% Asset.js( "lib/sortable/Sortable.min.js" ) | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var themelang = "[% themelang | html %]";
-        $(document).ready(function(){
-            $("select[multiple='multiple']").multipleSelect( {
-                placeholder: _("Please select ..."),
-                selectAllText: _("Select all"),
-                allSelected: _("All selected"),
-                countSelected: _("# of % selected"),
-                noMatchesFound: _("No matches found")
-            } );
-            $(".force_reload").on("click",function(e){
-                e.preventDefault();
-                window.location.reload(true);
-            });
-        });
         // This is here because of its dependence on template variables, everything else should go in js/pages/preferences.js - jpw
         var to_highlight = "[% To.json( searchfield ) | html %]";
         var search_jumped = [% IF ( search_jumped ) %]true[% ELSE %]false[% END %];
         var db_columns = [% To.json( db_columns ) | $raw %];
+    </script>
+    <script nonce="[% Koha.CSPNonce | $raw %]">
+        $(document).ready(function () {
+            $("select[multiple='multiple']").multipleSelect({
+                placeholder: _("Please select ..."),
+                selectAllText: _("Select all"),
+                allSelected: _("All selected"),
+                countSelected: _("# of % selected"),
+                noMatchesFound: _("No matches found"),
+            });
+            $(".force_reload").on("click", function (e) {
+                e.preventDefault();
+                window.location.reload(true);
+            });
+        });
     </script>
     [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
     [% Asset.js("js/ajax.js") | $raw %]
