@@ -89,14 +89,12 @@ export default {
                 columns: [
                     {
                         title: __("Name"),
-                        data: "shelfname",
+                        data: "name",
                         searchable: true,
                         orderable: true,
                         width: "100%",
                         render: function (data, type, row, meta) {
-                            return (
-                                row.shelfname + " (#" + row.shelfnumber + ")"
-                            );
+                            return row.name + " (#" + row.id + ")";
                         },
                     },
                     {
@@ -114,7 +112,7 @@ export default {
 
                     $.each($(this).find("td .actions"), function (index, e) {
                         let tr = $(this).parent().parent();
-                        let list_id = api.row(tr).data().shelfnumber;
+                        let list_id = api.row(tr).data().id;
                         let importButton = createVNode(
                             "a",
                             {
