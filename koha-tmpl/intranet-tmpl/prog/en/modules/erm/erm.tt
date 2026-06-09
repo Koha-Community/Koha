@@ -40,7 +40,15 @@
 
         const max_allowed_packet = [% To.json(max_allowed_packet) | $raw %];
 
-        const logged_in_user_lists = [% To.json(logged_in_user.virtualshelves.unblessed) | $raw %];
+        let logged_in_user_lists = [];
+        [% FOR shelf IN logged_in_user.virtualshelves %]
+            logged_in_user_lists.push(
+                {
+                    id: "[% shelf.shelfnumber | html %]",
+                    name: "[% shelf.shelfname | html %]",
+                }
+            );
+        [% END %]
 
         const logged_in_user = [% To.json(logged_in_user.unblessed) | $raw %];
     </script>
