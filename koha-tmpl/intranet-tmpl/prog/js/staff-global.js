@@ -78,20 +78,13 @@ function togglePanel(node) {
 function apply_sticky(node) {
     if (!node) return;
 
-    let sentinel = node.previousElementSibling;
+    const onScroll = () => {
+        const rect = node.getBoundingClientRect();
+        node.classList.toggle("floating", rect.top <= 0);
+    };
 
-    if (!sentinel || !sentinel.classList.contains("sticky-sentinel")) {
-        sentinel = document.createElement("div");
-        sentinel.className = "sticky-sentinel";
-
-        node.parentNode.insertBefore(sentinel, node);
-    }
-
-    const observer = new IntersectionObserver(([entry]) => {
-        node.classList.toggle("floating", !entry.isIntersecting);
-    });
-
-    observer.observe(sentinel);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
 }
 
 $(document).ready(function () {
