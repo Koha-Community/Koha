@@ -150,136 +150,135 @@
         const branchTransferLimitsType = "[% BranchTransferLimitsType | html %]";
         const val_type = branchTransferLimitsType == "itemtype" ? "item_type" : "collection_code";
         const branches = [% To.json(branches) | $raw %];
+    </script>
+    <script nonce="[% Koha.CSPNonce | $raw %]">
+        $("#loading_limits").hide();
+        $(".spinner").hide();
 
-        $('#loading_limits').hide();
-        $('.spinner').hide();
+        $(document).ready(function () {
+            $("#check-all").click(function () {
+                const val = $("#value_selector").val();
 
-        $(document).ready(function() {
-            $("#check-all").click(function() {
-                const val = $('#value_selector').val();
-
-                $('.limit-action').addClass('disabled');
-                $('#value_selector').prop('disabled',true);
+                $(".limit-action").addClass("disabled");
+                $("#value_selector").prop("disabled", true);
 
                 let checkboxes = [];
-                $(".limit-checkboxes").each(function() {
+                $(".limit-checkboxes").each(function () {
                     const checkbox = $(this);
-                    if (checkbox.data('limit_id')) {
+                    if (checkbox.data("limit_id")) {
                         checkboxes.push(checkbox);
                         checkbox.hide();
-                        $(`#spinner-${checkbox.attr('id')}`).show();
+                        $(`#spinner-${checkbox.attr("id")}`).show();
                     }
                 });
 
-                del_limits( checkboxes, val );
+                del_limits(checkboxes, val);
                 return false;
             });
 
+            $("#uncheck-all").click(function () {
+                const val = $("#value_selector").val();
 
-            $("#uncheck-all").click(function() {
-                const val = $('#value_selector').val();
-
-                $('.limit-action').addClass('disabled');
-                $('#value_selector').prop('disabled',true);
+                $(".limit-action").addClass("disabled");
+                $("#value_selector").prop("disabled", true);
 
                 let checkboxes = [];
-                $(".limit-checkboxes").each(function() {
+                $(".limit-checkboxes").each(function () {
                     const checkbox = $(this);
-                    if (!checkbox.data('limit_id')) {
+                    if (!checkbox.data("limit_id")) {
                         checkboxes.push(checkbox);
                         checkbox.hide();
-                        $(`#spinner-${checkbox.attr('id')}`).show();
+                        $(`#spinner-${checkbox.attr("id")}`).show();
                     }
                 });
 
-                add_limits( checkboxes, val );
+                add_limits(checkboxes, val);
                 return false;
             });
 
-            $('.check-all-col').click(function() {
+            $(".check-all-col").click(function () {
                 let checkboxes = [];
-                const to = $(this).data('to');
-                const val = $('#value_selector').val();
+                const to = $(this).data("to");
+                const val = $("#value_selector").val();
 
-                $('.limit-action').addClass('disabled');
-                $('#value_selector').prop('disabled',true);
+                $(".limit-action").addClass("disabled");
+                $("#value_selector").prop("disabled", true);
 
-                $(`.to-${to}`).each(function() {
+                $(`.to-${to}`).each(function () {
                     const checkbox = $(this);
-                    if (checkbox.data('limit_id')) {
+                    if (checkbox.data("limit_id")) {
                         checkboxes.push(checkbox);
                         checkbox.hide();
-                        $(`#spinner-${checkbox.attr('id')}`).show();
+                        $(`#spinner-${checkbox.attr("id")}`).show();
                     }
                 });
 
-                del_limits( checkboxes, val, to );
+                del_limits(checkboxes, val, to);
                 return false;
             });
 
-            $('.uncheck-all-col').click(function() {
+            $(".uncheck-all-col").click(function () {
                 let checkboxes = [];
-                const to = $(this).data('to');
-                const val = $('#value_selector').val();
+                const to = $(this).data("to");
+                const val = $("#value_selector").val();
 
-                $('.limit-action').addClass('disabled');
-                $('#value_selector').prop('disabled',true);
+                $(".limit-action").addClass("disabled");
+                $("#value_selector").prop("disabled", true);
 
-                $(`.to-${to}`).each(function() {
+                $(`.to-${to}`).each(function () {
                     const checkbox = $(this);
-                    if (!checkbox.data('limit_id')) {
+                    if (!checkbox.data("limit_id")) {
                         checkbox.hide();
-                        $(`#spinner-${checkbox.attr('id')}`).show();
+                        $(`#spinner-${checkbox.attr("id")}`).show();
                     }
                 });
 
-                add_limits( checkboxes, val, to );
+                add_limits(checkboxes, val, to);
                 return false;
             });
 
-            $('.check-all-row').click(function() {
+            $(".check-all-row").click(function () {
                 let checkboxes = [];
-                const from = $(this).data('from');
-                const val = $('#value_selector').val();
+                const from = $(this).data("from");
+                const val = $("#value_selector").val();
 
-                $('.limit-action').addClass('disabled');
-                $('#value_selector').prop('disabled',true);
+                $(".limit-action").addClass("disabled");
+                $("#value_selector").prop("disabled", true);
 
-                $(`.from-${from}`).each(function() {
+                $(`.from-${from}`).each(function () {
                     const checkbox = $(this);
-                    if (checkbox.data('limit_id')) {
+                    if (checkbox.data("limit_id")) {
                         checkboxes.push(checkbox);
                         checkbox.hide();
-                        $(`#spinner-${checkbox.attr('id')}`).show();
+                        $(`#spinner-${checkbox.attr("id")}`).show();
                     }
                 });
 
-                del_limits( checkboxes, val, null, from );
+                del_limits(checkboxes, val, null, from);
                 return false;
             });
 
-
-            $('.uncheck-all-row').click(function() {
+            $(".uncheck-all-row").click(function () {
                 let checkboxes = [];
-                const from = $(this).data('from');
-                const val = $('#value_selector').val();
+                const from = $(this).data("from");
+                const val = $("#value_selector").val();
 
-                $('.limit-action').addClass('disabled');
-                $('#value_selector').prop('disabled',true);
+                $(".limit-action").addClass("disabled");
+                $("#value_selector").prop("disabled", true);
 
-                $(`.from-${from}`).each(function() {
+                $(`.from-${from}`).each(function () {
                     const checkbox = $(this);
-                    if (!checkbox.data('limit_id')) {
+                    if (!checkbox.data("limit_id")) {
                         checkbox.hide();
-                        $(`#spinner-${checkbox.attr('id')}`).show();
+                        $(`#spinner-${checkbox.attr("id")}`).show();
                     }
                 });
 
-                add_limits( checkboxes, val, null, from );
+                add_limits(checkboxes, val, null, from);
                 return false;
             });
 
-            $(".checkbox-cell").click(function(e) {
+            $(".checkbox-cell").click(function (e) {
                 var checkbox = $(this).find(".limit-checkboxes").get(0);
                 if (checkbox && !checkbox.disabled) {
                     if (e.target != checkbox) {
@@ -289,24 +288,26 @@
                 }
             });
 
-            $("#value_selector").on('change', function() {
-                const val = $('#value_selector').val();
+            $("#value_selector").on("change", function () {
+                const val = $("#value_selector").val();
                 window.history.replaceState(null, "", `/cgi-bin/koha/admin/transfer_limits.pl?code=${val}`);
                 updateTransferLimitsTable();
             });
 
-            $(".limit-checkboxes").on('change', function() {
+            $(".limit-checkboxes").on("change", function () {
                 const checkbox = $(this);
-                const id = checkbox.attr('id');
+                const id = checkbox.attr("id");
 
                 checkbox.hide();
                 $(`#spinner-${id}`).show();
 
-                const limit_id = checkbox.data('limit_id');
+                const limit_id = checkbox.data("limit_id");
 
-                if (limit_id) { // limit id exists, so limit needs to be deleted
+                if (limit_id) {
+                    // limit id exists, so limit needs to be deleted
                     delLimit(checkbox);
-                } else { // limit does not exist, needs to be created
+                } else {
+                    // limit does not exist, needs to be created
                     addLimit(checkbox);
                 }
             });
@@ -315,40 +316,40 @@
 
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
-            const code = urlParams.get('code');
-            if ( code ) {
-                $('#value_selector').val(code);
+            const code = urlParams.get("code");
+            if (code) {
+                $("#value_selector").val(code);
                 updateTransferLimitsTable();
             }
         });
 
         function delLimit(checkbox) {
-            const id = checkbox.attr('id');
-            const limit_id = checkbox.data('limit_id');
+            const id = checkbox.attr("id");
+            const limit_id = checkbox.data("limit_id");
 
             return $.ajax({
                 url: `/api/v1/transfer_limits/${limit_id}`,
-                type: 'DELETE',
-                success: function(result) {
-                    checkbox.data('limit_id', null);
-                    checkbox.attr('checked', true);
+                type: "DELETE",
+                success: function (result) {
+                    checkbox.data("limit_id", null);
+                    checkbox.attr("checked", true);
                     $(`#spinner-${id}`).hide();
                     checkbox.show();
                 },
-                error: function(xhr, status, error) {
-                    var errorMessage = xhr.status + ': ' + xhr.statusText
-                    alert('Error - ' + errorMessage);
-                }
+                error: function (xhr, status, error) {
+                    var errorMessage = xhr.status + ": " + xhr.statusText;
+                    alert("Error - " + errorMessage);
+                },
             });
         }
 
         function addLimit(checkbox) {
-            const id = checkbox.attr('id');
-            const parts = id.split('-');
+            const id = checkbox.attr("id");
+            const parts = id.split("-");
             const from = parts[1];
             const to = parts[2];
 
-            const val = $('#value_selector').val();
+            const val = $("#value_selector").val();
 
             let data = {
                 to_library_id: to,
@@ -357,23 +358,23 @@
             data[val_type] = val;
             return $.ajax({
                 url: `/api/v1/transfer_limits`,
-                type: 'POST',
+                type: "POST",
                 data: JSON.stringify(data),
-                dataType: 'json',
-                success: function(result) {
-                    checkbox.data('limit_id', result.limit_id);
-                    checkbox.attr('checked', false);
+                dataType: "json",
+                success: function (result) {
+                    checkbox.data("limit_id", result.limit_id);
+                    checkbox.attr("checked", false);
                     $(`#spinner-${id}`).hide();
                     checkbox.show();
                 },
-                error: function(xhr, status, error) {
-                    var errorMessage = xhr.status + ': ' + xhr.statusText
-                    alert('Error - ' + errorMessage);
-                }
+                error: function (xhr, status, error) {
+                    var errorMessage = xhr.status + ": " + xhr.statusText;
+                    alert("Error - " + errorMessage);
+                },
             });
         }
 
-        function add_limits( checkboxes, val, to, from ){
+        function add_limits(checkboxes, val, to, from) {
             let data = {};
             data[val_type] = val;
             if (to) data["to_library_id"] = to;
@@ -381,32 +382,32 @@
 
             return $.ajax({
                 url: `/api/v1/transfer_limits/batch`,
-                type: 'POST',
+                type: "POST",
                 data: JSON.stringify(data),
-                dataType: 'json',
-                success: function(result) {
-                    for ( i = 0; i < result.length; i++ ) {
+                dataType: "json",
+                success: function (result) {
+                    for (i = 0; i < result.length; i++) {
                         const r = result[i];
                         let checkbox = $(`#limit-${r.from_library_id}-${r.to_library_id}`);
-                        const id = checkbox.attr('id');
-                        checkbox.data('limit_id', r.limit_id);
-                        checkbox.attr('checked', false);
+                        const id = checkbox.attr("id");
+                        checkbox.data("limit_id", r.limit_id);
+                        checkbox.attr("checked", false);
                         $(`#spinner-${id}`).hide();
                         checkbox.show();
                     }
                 },
-                complete: function() {
-                    $('.limit-action').removeClass('disabled');
-                    $('#value_selector').prop('disabled',false);
+                complete: function () {
+                    $(".limit-action").removeClass("disabled");
+                    $("#value_selector").prop("disabled", false);
                 },
-                error: function(xhr, status, error) {
-                    var errorMessage = xhr.status + ': ' + xhr.statusText
-                    alert('Error - ' + errorMessage);
-                }
+                error: function (xhr, status, error) {
+                    var errorMessage = xhr.status + ": " + xhr.statusText;
+                    alert("Error - " + errorMessage);
+                },
             });
         }
 
-        function del_limits( checkboxes, val, to, from ){
+        function del_limits(checkboxes, val, to, from) {
             let data = {};
             data[val_type] = val;
             if (to) data["to_library_id"] = to;
@@ -414,68 +415,68 @@
 
             return $.ajax({
                 url: `/api/v1/transfer_limits/batch`,
-                type: 'DELETE',
+                type: "DELETE",
                 data: JSON.stringify(data),
-                dataType: 'json',
-                success: function(result) {
-                    for ( i = 0; i < checkboxes.length; i++ ) {
+                dataType: "json",
+                success: function (result) {
+                    for (i = 0; i < checkboxes.length; i++) {
                         const checkbox = checkboxes[i];
-                        const id = checkbox.attr('id');
-                        checkbox.data('limit_id', '');
-                        checkbox.attr('checked', true);
+                        const id = checkbox.attr("id");
+                        checkbox.data("limit_id", "");
+                        checkbox.attr("checked", true);
                         $(`#spinner-${id}`).hide();
                         checkbox.show();
                     }
                 },
-                complete: function() {
-                    $('.limit-action').removeClass('disabled');
-                    $('#value_selector').prop('disabled',false);
+                complete: function () {
+                    $(".limit-action").removeClass("disabled");
+                    $("#value_selector").prop("disabled", false);
                 },
-                error: function(xhr, status, error) {
-                    var errorMessage = xhr.status + ': ' + xhr.statusText
-                    alert('Error - ' + errorMessage);
-                }
+                error: function (xhr, status, error) {
+                    var errorMessage = xhr.status + ": " + xhr.statusText;
+                    alert("Error - " + errorMessage);
+                },
             });
         }
 
         function updateTransferLimitsTable() {
-            const val = $('#value_selector').val();
+            const val = $("#value_selector").val();
             const url = `/api/v1/transfer_limits?_per_page=-1&q={"${val_type}": "${val}"}`;
 
-            if ( val ) {
-                $('#transfer_limits').show();
+            if (val) {
+                $("#transfer_limits").show();
             } else {
-                $('#transfer_limits').hide();
+                $("#transfer_limits").hide();
             }
 
             $(".limit-checkboxes").attr("disabled", true);
             $(".limit-checkboxes").attr("checked", false);
 
             if (val) {
-                $('#loading_limits').show();
+                $("#loading_limits").show();
 
                 $.ajax({
                     dataType: "json",
                     url: url,
-                    success: function(data) {
+                    success: function (data) {
                         $(".limit-checkboxes").attr("disabled", false);
                         $(".limit-checkboxes").attr("checked", true);
-                        $(".limit-checkboxes").data('limit_id', null);
+                        $(".limit-checkboxes").data("limit_id", null);
 
                         for (var i = 0; i < data.length; i++) {
                             let limit = data[i];
                             let checkbox = $(`#limit-${limit.from_library_id}-${limit.to_library_id}`);
-                            checkbox.attr('checked', false);
-                            checkbox.data('limit_id', limit.limit_id);
+                            checkbox.attr("checked", false);
+                            checkbox.data("limit_id", limit.limit_id);
                         }
                     },
-                    complete: function() {
-                        $('#loading_limits').hide();
+                    complete: function () {
+                        $("#loading_limits").hide();
                     },
-                    error: function(xhr, status, error) {
-                        var errorMessage = xhr.status + ': ' + xhr.statusText
-                        alert('Error - ' + errorMessage);
-                    }
+                    error: function (xhr, status, error) {
+                        var errorMessage = xhr.status + ": " + xhr.statusText;
+                        alert("Error - " + errorMessage);
+                    },
                 });
             }
         }
