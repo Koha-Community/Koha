@@ -682,8 +682,24 @@
         [% END %]
 
         [% IF shelf AND op == 'view' %]
-            const add_to_some_private_shelves = [% To.json(add_to_some_private_shelves.unblessed || []) | $raw  %];
-            const add_to_some_public_shelves = [% To.json(add_to_some_public_shelves.unblessed || []) | $raw  %];
+            let add_to_some_private_shelves = [];
+            [% FOR private_shelf IN add_to_some_private_shelves %]
+                add_to_some_private_shelves.push(
+                    {
+                        id: "[% private_shelf.shelfnumber | html %]",
+                        name: "[% private_shelf.shelfname | html %]",
+                    }
+                );
+            [% END %]
+            let add_to_some_public_shelves = [];
+            [% FOR public_shelf IN add_to_some_public_shelves %]
+                add_to_some_public_shelves.push(
+                    {
+                        id: "[% public_shelf.shelfnumber | html %]",
+                        name: "[% public_shelf.shelfname | html %]",
+                    }
+                );
+            [% END %]
         [% END %]
     </script>
     [% IF print %]
@@ -840,8 +856,8 @@
                         param1 += '<optgroup label="' + _("Your lists:") + '">';
                         let number_of_private_shelves = 0;
                         for (let s of add_to_some_private_shelves) {
-                            if (shelfnumber != s.shelfnumber) {
-                                param1 += `<option id=\"s${s.shelfnumber}\" value=\"addtolist\">${escape_str(s.shelfname)}<\/option>`;
+                            if (shelfnumber != s.id) {
+                                param1 += `<option id=\"s${s.id}\" value=\"addtolist\">${s.name}<\/option>`;
                                 number_of_private_shelves++;
                                 if (number_of_private_shelves == 10) break;
                             }
@@ -853,8 +869,8 @@
                         param1 += '<optgroup label="' + _("Public lists:") + '">';
                         let number_of_public_shelves = 0;
                         for (let s of add_to_some_public_shelves) {
-                            if (shelfnumber != s.shelfnumber) {
-                                param1 += `<option id=\"s${s.shelfnumber}\" value=\"addtolist\">${escape_str(s.shelfname)}<\/option>`;
+                            if (shelfnumber != s.id) {
+                                param1 += `<option id=\"s${s.id}\" value=\"addtolist\">${s.name}<\/option>`;
                                 number_of_public_shelves++;
                                 if (number_of_public_shelves == 10) break;
                             }
