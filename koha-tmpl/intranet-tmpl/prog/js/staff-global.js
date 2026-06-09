@@ -75,16 +75,23 @@ function togglePanel(node) {
     }
 }
 
-function apply_sticky(nodes) {
-    if (nodes) {
-        const observer = new IntersectionObserver(
-            ([e]) =>
-                e.target.classList.toggle("floating", e.intersectionRatio < 1),
-            { threshold: [1] }
-        );
+function apply_sticky(node) {
+    if (!node) return;
 
-        observer.observe(nodes);
+    let sentinel = node.previousElementSibling;
+
+    if (!sentinel || !sentinel.classList.contains("sticky-sentinel")) {
+        sentinel = document.createElement("div");
+        sentinel.className = "sticky-sentinel";
+
+        node.parentNode.insertBefore(sentinel, node);
     }
+
+    const observer = new IntersectionObserver(([entry]) => {
+        node.classList.toggle("floating", !entry.isIntersecting);
+    });
+
+    observer.observe(sentinel);
 }
 
 $(document).ready(function () {
