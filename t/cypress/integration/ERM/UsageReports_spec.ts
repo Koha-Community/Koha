@@ -314,10 +314,10 @@ describe("Custom reports", () => {
         cy.get("#report_type .vs__search").type("PR" + "{enter}", {
             force: true,
         });
-        cy.get("#report_builder").contains("Submit").click();
         cy.intercept("GET", "/api/v1/erm/eUsage/monthly_report/*").as(
             "reportRequest"
         );
+        cy.get("#report_builder").contains("Submit").click();
         cy.wait("@reportRequest");
 
         cy.get(".yearly_filter label").contains("Display by year");
