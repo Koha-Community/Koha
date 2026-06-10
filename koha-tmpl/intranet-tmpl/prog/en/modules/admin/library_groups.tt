@@ -169,6 +169,14 @@
                                 <input type="checkbox" name="ft_local_float_group" id="add-group-modal-ft_local_float_group" value="1" />
                             </div>
                         </div>
+                        <div class="fg-row input-checkbox">
+                            <div class="fg-label">
+                                <label for="add-group-modal-ft_reports">Limit report access by group</label>
+                            </div>
+                            <div class="fg-input">
+                                <input type="checkbox" name="ft_reports" id="add-group-modal-ft_reports" value="1" />
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
                 <!-- /.modal-body -->
@@ -268,6 +276,14 @@
                                 </label>
                             </div>
                         </div>
+                        <div class="fg-row">
+                            <div class="fg-checkbox">
+                                <label>
+                                    <input type="checkbox" id="edit-group-modal-ft_reports" name="ft_reports" value="1" />
+                                    Limit report access by group
+                                </label>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
                 <div class="modal-footer">
@@ -363,7 +379,8 @@
                 var ft_search_groups_staff = $(this).data("groupFt_search_groups_staff");
                 var ft_local_hold_group = $(this).data("groupFt_local_hold_group");
                 var ft_local_float_group = $(this).data("groupFt_local_float_group");
-                edit_group(id, parent_id, title, description, ft_hide_patron_info, ft_search_groups_opac, ft_search_groups_staff, ft_local_hold_group, ft_limit_item_editing, ft_local_float_group);
+                var ft_reports = $(this).data("groupFt_reports");
+                edit_group(id, parent_id, title, description, ft_hide_patron_info, ft_search_groups_opac, ft_search_groups_staff, ft_local_hold_group, ft_limit_item_editing, ft_local_float_group, ft_reports);
             });
 
             $(".delete-group").on("click", function (e) {
@@ -400,6 +417,7 @@
             $("#add-group-modal-ft_search_groups_staff").prop("checked", false);
             $("#add-group-modal-ft_local_hold_group").prop("checked", false);
             $("#add-group-modal-ft_local_float_group").prop("checked", false);
+            $("#add-group-modal-ft_reports").prop("checked", false);
             if (parent_id) {
                 $("#root-group-features-add").hide();
             } else {
@@ -408,7 +426,7 @@
             $("#add-group-modal").modal("show");
         }
 
-        function edit_group(id, parent_id, title, description, ft_hide_patron_info, ft_search_groups_opac, ft_search_groups_staff, ft_local_hold_group, ft_limit_item_editing, ft_local_float_group) {
+        function edit_group(id, parent_id, title, description, ft_hide_patron_info, ft_search_groups_opac, ft_search_groups_staff, ft_local_hold_group, ft_limit_item_editing, ft_local_float_group, ft_reports) {
             $("#edit-group-modal-id").val(id);
             $("#edit-group-modal-title").val(title);
             $("#edit-group-modal-description").val(description);
@@ -419,6 +437,7 @@
                 $("#edit-group-modal-ft_search_groups_staff").prop("checked", false);
                 $("#edit-group-modal-ft_local_hold_group").prop("checked", false);
                 $("#edit-group-modal-ft_local_float_group").prop("checked", false);
+                $("#edit-group-modal-ft_reports").prop("checked", false);
                 $("#root-group-features-edit").hide();
             } else {
                 $("#edit-group-modal-ft_hide_patron_info").prop("checked", ft_hide_patron_info ? true : false);
@@ -427,6 +446,7 @@
                 $("#edit-group-modal-ft_search_groups_staff").prop("checked", ft_search_groups_staff ? true : false);
                 $("#edit-group-modal-ft_local_hold_group").prop("checked", ft_local_hold_group ? true : false);
                 $("#edit-group-modal-ft_local_float_group").prop("checked", ft_local_float_group ? true : false);
+                $("#edit-group-modal-ft_reports").prop("checked", ft_reports ? true : false);
                 $("#root-group-features-edit").show();
             }
 
@@ -487,6 +507,9 @@
                     [% IF group.ft_local_float_group %]
                         <li>Is local float group</li>
                     [% END %]
+                    [% IF group.ft_reports %]
+                        <li>Limit report access by group</li>
+                    [% END %]
                 </ul>
             [% END %]
         </td>
@@ -518,6 +541,7 @@
                                 data-group-ft_local_hold_group="[% group.ft_local_hold_group | html %]"
                                 data-group-ft_limit_item_editing="[% group.ft_limit_item_editing | html %]"
                                 data-group-ft_local_float_group="[% group.ft_local_float_group | html %]"
+                                data-group-ft_reports="[% group.ft_reports | html %]"
                             >
                                 <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit
                             </a>
