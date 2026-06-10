@@ -7,8 +7,9 @@ Reports:
             - "rows when exporting report results.<br><strong>NOTE:</strong><ul><li>Using LIMIT in a report overrides this setting.</li><li>It does not limit results for 'Open in DataTables' export options.</li></ul>"
     Reports access:
         -
-            - pref: LimitReportsByLibrary
+            - "Limit report access based on:"
+            - pref: LimitReportsBy
               choices:
-                  1: Enable
-                  0: Disable
-            - "limiting report access based on staff home library."
+                  none: No restriction
+                  library: Library
+                  library_group: Library group
