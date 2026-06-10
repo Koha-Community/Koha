@@ -221,6 +221,7 @@
                                 <th data-colname="batch_patron_edit_cardnumber">Card number</th>
                                 <th data-colname="batch_patron_edit_surname">Surname</th>
                                 <th data-colname="batch_patron_edit_firstname">First name</th>
+                                <th data-colname="batch_patron_edit_sex">Gender</th>
                                 <th data-colname="batch_patron_edit_branchcode">Library</th>
                                 <th data-colname="batch_patron_edit_categorycode">Patron category</th>
                                 <th data-colname="batch_patron_edit_streetnumber">Street number</th>
@@ -257,6 +258,15 @@
                                     <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber | uri %]">[% borrower.cardnumber | html %]</a></td>
                                     <td>[% borrower.surname | html %]</td>
                                     <td>[% borrower.firstname | html %]</td>
+                                    <td>
+                                        [% IF borrower.sex == 'F' %]
+                                            Female
+                                        [% ELSIF borrower.sex == 'M' %]
+                                            Male
+                                        [% ELSIF borrower.sex == 'O' %]
+                                            Other
+                                        [% END %]
+                                    </td>
                                     <td>[% Branches.GetName( borrower.branchcode ) | html %]</td>
                                     <td>[% Categories.GetName(borrower.categorycode) | html %]</td>
                                     <td>[% borrower.streetnumber | html %]</td>
@@ -345,6 +355,8 @@
                                                 <span>Surname:</span>
                                             [% CASE 'firstname' %]
                                                 <span>First name:</span>
+                                            [% CASE 'sex' %]
+                                                <span>Gender:</span>
                                             [% CASE 'branchcode' %]
                                                 <span>Library:</span>
                                             [% CASE 'categorycode' %]
