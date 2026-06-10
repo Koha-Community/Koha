@@ -111,6 +111,14 @@ Use this group to identify libraries as pick up location for holds
 
 Use this group to identify libraries as part of float group
 
+=head2 ft_reports
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+Use this group to limit report access by library group
+
 =head2 created_on
 
   data_type: 'timestamp'
@@ -152,6 +160,8 @@ __PACKAGE__->add_columns(
   "ft_local_hold_group",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "ft_local_float_group",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "ft_reports",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "created_on",
   {
@@ -266,8 +276,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-04-28 16:41:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CkZe+3Qm2ZlmoSmXBGChag
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-06-10 12:26:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:svpZAHGLTmg9wVQFY6Ddcg
 
 =head2 koha_object_class
 
@@ -296,6 +306,7 @@ __PACKAGE__->add_columns(
     '+ft_local_hold_group'    => { is_boolean => 1 },
     '+ft_search_groups_opac'  => { is_boolean => 1 },
     '+ft_search_groups_staff' => { is_boolean => 1 },
+    '+ft_reports'             => { is_boolean => 1 },
 );
 
 1;
