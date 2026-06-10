@@ -22,7 +22,7 @@ use Koha::Logger;
 
 use Koha::Report;
 
-use base qw(Koha::Objects Koha::Objects::Limit::Library);
+use base qw(Koha::Objects Koha::Objects::Limit::Library Koha::Objects::Limit::LibraryGroup);
 
 =head1 NAME
 

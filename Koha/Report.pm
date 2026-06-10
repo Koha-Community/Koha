@@ -25,10 +25,11 @@ use Koha::Reports;
 
 use Koha::Object;
 use Koha::Object::Limit::Library;
+use Koha::Object::Limit::LibraryGroup;
 use Koha::Patrons;
 use C4::Context;
 
-use base qw(Koha::Object Koha::Object::Limit::Library);
+use base qw(Koha::Object Koha::Object::Limit::Library Koha::Object::Limit::LibraryGroup);
 
 #use Koha::DateUtils qw( dt_from_string output_pref );
 
@@ -427,6 +428,20 @@ sub _library_limits {
         class   => "ReportsBranch",
         id      => "report_id",
         library => "branchcode",
+    };
+}
+
+=head3 _library_group_limits
+
+Configurable library limits
+
+=cut
+
+sub _library_group_limits {
+    my ($self) = @_;
+    return {
+        %{ $self->_library_limits },
+        group => 'ft_reports'
     };
 }
 
