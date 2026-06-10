@@ -709,11 +709,12 @@ if ( $op eq "cud-addbiblio" ) {
     $record = TransformHtmlToMarc( $input, 1 );
 
     # check for a duplicate
-    my $duplicate;
     my ( $duplicatebiblionumber, $duplicatetitle );
-    if ( !$is_a_modif ) {
-        ($duplicate) = C4::Search::FindDuplicateWithMatchingRules( $record, $frameworkcode );
-    }
+    my ($duplicate) = C4::Search::FindDuplicateWithMatchingRules(
+        $record,
+        $frameworkcode,
+        $is_a_modif ? $biblionumber : undef
+    );
     my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
 
     # it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)

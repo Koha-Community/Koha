@@ -173,7 +173,7 @@ It returns a list of hashrefs (one per duplicate found), containing the followin
 =cut
 
 sub FindDuplicateWithMatchingRules {
-    my ( $record, $frameworkcode ) = @_;
+    my ( $record, $frameworkcode, $exclude_biblionumber ) = @_;
 
     $frameworkcode //= '';
 
@@ -185,6 +185,7 @@ sub FindDuplicateWithMatchingRules {
             my $max_matches = 1;
             my @matches     = $matcher->get_matches( $record, $max_matches );
             foreach my $match (@matches) {
+                next if $exclude_biblionumber && $match->{record_id} == $exclude_biblionumber;
                 my $biblio = Koha::Biblios->find( $match->{record_id} );
                 if ($biblio) {
                     push @duplicates, {
@@ -203,6 +204,7 @@ sub FindDuplicateWithMatchingRules {
     my @results = FindDuplicate($record);
     my @duplicates;
     while ( ( my $biblionumber = shift @results ) && ( my $title = shift @results ) ) {
+        next if $exclude_biblionumber && $biblionumber == $exclude_biblionumber;
         push @duplicates, {
             biblionumber              => $biblionumber,
             title                     => $title,
