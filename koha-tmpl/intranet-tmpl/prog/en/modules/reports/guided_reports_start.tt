@@ -1895,6 +1895,7 @@
             [% END %]
         [% END %]
 
+
         var table_settings = [% TablesSettings.GetTableSettings( 'reports', 'saved-sql', 'table_reports', 'json' ) | $raw %];
 
         let cache_expiry_column = table_settings.columns.find(c => c.columnname == 'cache_expiry');
@@ -1904,7 +1905,11 @@
         update_column.visibility_condition = [% has_obsolete_reports ? 'true' : 'false' | html %];
 
         let library_limits_column = table_settings.columns.find(c => c.columnname == 'library_limits');
-        library_limits_column.visibility_condition = [% Koha.Preference('LimitReportsByLibrary') && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ? 'true' : 'false' | html %];
+        let library_limits_col_index = table_settings.columns.map(c => c.columnname).indexOf('library_limits');
+        const can_limit_reports_by_library = [% ( Koha.Preference('LimitReportsBy') == 'library' && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) ? 1 : 0 | html %];
+        library_limits_column.is_hidden = !can_limit_reports_by_library;
+        library_limits_column.cannot_be_toggled = !can_limit_reports_by_library;
+        library_limits_column.visibility_condition = !!can_limit_reports_by_library;
 
         const tables = [% To.json(tables || []) | $raw %];
 
@@ -2354,22 +2359,7 @@
                 syncBatchFormsWithVisibleResults();
                 report_results_dt.on("draw length page search", syncBatchFormsWithVisibleResults);
             }
-            [% IF (saved1) %]
-                var table_settings = [% TablesSettings.GetTableSettings( 'reports', 'saved-sql', 'table_reports', 'json' ) | $raw %];
-                [% UNLESS ( Koha.Preference('LimitReportsBy') == 'library' && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
-                  table_settings.columns = table_settings.columns.filter(function(col) {
-                      return col.columnname !== 'library_limits';
-                  });
-                [% END %]
-
-                [% IF ( Koha.Preference('LimitReportsBy') == 'library' && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
-                  let library_limits_col_index = -1;
-                  table_settings.columns.forEach(function(col, index) {
-                      if (col.columnname === 'library_limits') {
-                          library_limits_col_index = index;
-                      }
-                  });
-                [% END %]
+            if(saved1) {
                 var rtable = $("#table_reports").kohaTable(
                     {
                         autoWidth: false,
@@ -2377,9 +2367,10 @@
                         order: [[1, "asc"]],
                         language: {
                             zeroRecords: _("No matching reports found"),
-                        }[% IF ( Koha.Preference('LimitReportsBy') == 'library' && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %],
-                        columnDefs: library_limits_col_index !== -1 ? [{ visible: false, targets: [library_limits_col_index] }] : []
-                        [% END %],
+                        },
+                        [% IF ( Koha.Preference('LimitReportsBy') == 'library' && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
+                            columnDefs: library_limits_col_index !== -1 ? [{ visible: false, targets: [library_limits_col_index] }] : [],
+                        [% END %]
                         bKohaColumnsUseNames: true
                     },
                     table_settings

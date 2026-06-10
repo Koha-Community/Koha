@@ -20,8 +20,10 @@ use Modern::Perl;
 use Test::Exception;
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 18;
+use Test::More tests => 19;
 
+use C4::Context;
+use Koha::Library::Group;
 use Koha::Report;
 use Koha::Reports;
 use Koha::Patrons;
@@ -407,7 +409,7 @@ subtest 'can_manage_limits and can_access' => sub {
     $r_AB->replace_library_limits( [ $branchA, $branchB ] );
 
     # Preference ON, branch A
-    t::lib::Mocks::mock_preference( 'LimitReportsByLibrary', 1 );
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'library' );
     t::lib::Mocks::mock_userenv( { branchcode => $branchA } );
 
     ok( Koha::Report->can_manage_limits($super_patron),  'pref ON: super manages limits' );
@@ -432,7 +434,7 @@ subtest 'can_manage_limits and can_access' => sub {
     ok( $r_AB->can_access($super_patron), 'pref ON: super sees multi AB' );
 
     # Preference OFF (everything accessible, manage disabled)
-    t::lib::Mocks::mock_preference( 'LimitReportsByLibrary', 0 );
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'none' );
     ok( !Koha::Report->can_manage_limits($super_patron), 'pref OFF: super cannot manage limits' );
     ok( !Koha::Report->can_manage_limits($mgr_patron),   'pref OFF: manager cannot manage limits' );
     ok( !Koha::Report->can_manage_limits($basic_patron), 'pref OFF: basic cannot manage limits' );
@@ -448,7 +450,8 @@ subtest 'library limits enforcement on save and update' => sub {
     my $libraryA = $builder->build_object( { class => 'Koha::Libraries' } );
     my $branchA  = $libraryA->branchcode;
 
-    my $basic_patron = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $branchA } } );
+    my $basic_patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0, branchcode => $branchA } } );
 
     # Ensure manage_report_limits permission exists and is NOT granted to basic_patron
     my $perm = $schema->resultset('Permission')->find( { module_bit => 16, code => 'manage_report_limits' } )
@@ -458,7 +461,7 @@ subtest 'library limits enforcement on save and update' => sub {
     # Create report path
 
     # pref ON, no permission: creator branch auto-assigned
-    t::lib::Mocks::mock_preference( 'LimitReportsByLibrary', 1 );
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'library' );
     my $report_create = Koha::Report->new( { report_name => 'limit test create', savedsql => 'SELECT 1' } )->store;
     my $can_manage    = Koha::Report->can_manage_limits($basic_patron);
     my @branches      = $can_manage ? () : ( $basic_patron->branchcode );
@@ -468,13 +471,13 @@ subtest 'library limits enforcement on save and update' => sub {
     is( $limits[0]->branchcode, $branchA, 'pref ON, no perm: create limit is the creator branchcode' );
 
     # pref OFF: no branches from form, no limits stored
-    t::lib::Mocks::mock_preference( 'LimitReportsByLibrary', 0 );
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'none' );
     my $report_off = Koha::Report->new( { report_name => 'limit test pref off', savedsql => 'SELECT 1' } )->store;
     $report_off->replace_library_limits( [] );
     is( $report_off->get_library_limits, undef, 'pref OFF: no limits stored on create' );
 
     # Update report path
-    t::lib::Mocks::mock_preference( 'LimitReportsByLibrary', 1 );
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'library' );
 
     # pref ON, no permission, report has existing limits: limits preserved unchanged
     my $report_update = Koha::Report->new( { report_name => 'limit test update', savedsql => 'SELECT 1' } )->store;
@@ -495,6 +498,95 @@ subtest 'library limits enforcement on save and update' => sub {
         $report_no_limits->get_library_limits, undef,
         'pref ON, no perm: update with no existing limits stays limit-free'
     );
+};
+
+subtest 'library_group_limits' => sub {
+    plan tests => 6;
+
+    my $library_a = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_b = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $root_group = Koha::Library::Group->new( { title     => 'test root group', ft_reports => 1 } )->store;
+    my $group_a    = Koha::Library::Group->new( { parent_id => $root_group->id, title => 'test group a' } )->store;
+    Koha::Library::Group->new( { parent_id => $group_a->id, branchcode => $library_a->branchcode } )->store;
+    Koha::Library::Group->new( { parent_id => $group_a->id, branchcode => $library_b->branchcode } )->store;
+
+    my $report_no_limit  = $builder->build_object( { class => 'Koha::Reports' } );
+    my $report_library_a = $builder->build_object( { class => 'Koha::Reports' } );
+
+    # No limit
+    my $limits = $report_no_limit->library_group_limits;
+    is( scalar @$limits, 0, 'report with no limits returns empty arrayref' );
+
+    # Limited to library_a - returns parent group_a
+    $report_library_a->replace_library_limits( [ $library_a->branchcode ] );
+    $limits = $report_library_a->library_group_limits;
+    is( scalar @$limits,  1,            'report limited to library_a returns one parent group' );
+    is( $limits->[0]->id, $group_a->id, 'returned group is group_a' );
+
+    # Limited to library_a and library_b (same parent) - deduplicated to one group
+    $report_library_a->replace_library_limits( [ $library_a->branchcode, $library_b->branchcode ] );
+    $limits = $report_library_a->library_group_limits;
+    is( scalar @$limits, 1, 'limits for two libraries sharing a parent deduplicates to one group' );
+
+    # ft_reports disabled on root - group excluded by filter
+    $root_group->ft_reports(0)->store;
+    $limits = $report_library_a->library_group_limits;
+    is( scalar @$limits, 0, 'returns empty arrayref when root group has ft_reports disabled' );
+
+    # Re-enable and verify
+    $root_group->ft_reports(1)->store;
+    $limits = $report_library_a->library_group_limits;
+    is( scalar @$limits, 1, 'returns group again after ft_reports re-enabled on root' );
+};
+
+subtest 'search_with_library_group_limits' => sub {
+    plan tests => 5;
+
+    C4::Context->unset_userenv;
+
+    my $library_a = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_b = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_c = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $root_group = Koha::Library::Group->new( { title => 'search test root', ft_reports => 1 } )->store;
+    my $group_a = Koha::Library::Group->new( { parent_id => $root_group->id, title => 'search test group a' } )->store;
+    Koha::Library::Group->new( { parent_id => $group_a->id, branchcode => $library_a->branchcode } )->store;
+    Koha::Library::Group->new( { parent_id => $group_a->id, branchcode => $library_b->branchcode } )->store;
+
+    my $report_no_limit  = $builder->build_object( { class => 'Koha::Reports' } );
+    my $report_library_a = $builder->build_object( { class => 'Koha::Reports' } );
+    my $report_library_b = $builder->build_object( { class => 'Koha::Reports' } );
+    $report_library_a->replace_library_limits( [ $library_a->branchcode ] );
+    $report_library_b->replace_library_limits( [ $library_b->branchcode ] );
+
+    my @ids       = ( $report_no_limit->id, $report_library_a->id, $report_library_b->id );
+    my $id_filter = { 'me.id' => { '-in' => \@ids } };
+
+    # No library_id - unrestricted search
+    my @results = Koha::Reports->search_with_library_group_limits( $id_filter, {}, undef, 'ft_reports' )->as_list;
+    is( scalar @results, 3, 'no library_id returns all reports unrestricted' );
+
+    # library_c not in any group - only own-branch and unlimited reports accessible
+    @results = Koha::Reports->search_with_library_group_limits( $id_filter, {}, $library_c->branchcode, 'ft_reports' )
+        ->as_list;
+    is( scalar @results, 1, 'library not in any group sees only reports with no limit' );
+
+    # library_a in group_a (ft_reports=1) - whole group is accessible, sees library_b limited reports too
+    @results = Koha::Reports->search_with_library_group_limits( $id_filter, {}, $library_a->branchcode, 'ft_reports' )
+        ->as_list;
+    is( scalar @results, 3, 'library in ft_reports group sees all reports limited to group siblings' );
+
+    # library_b (sibling of library_a) - same result
+    @results = Koha::Reports->search_with_library_group_limits( $id_filter, {}, $library_b->branchcode, 'ft_reports' )
+        ->as_list;
+    is( scalar @results, 3, 'sibling library in the same group also sees all group-limited reports' );
+
+    # ft_reports disabled on root - library_a falls back to own-branch only
+    $root_group->ft_reports(0)->store;
+    @results = Koha::Reports->search_with_library_group_limits( $id_filter, {}, $library_a->branchcode, 'ft_reports' )
+        ->as_list;
+    is( scalar @results, 2, 'ft_reports disabled on root limits access to own branch only' );
 };
 
 subtest 'running' => sub {
