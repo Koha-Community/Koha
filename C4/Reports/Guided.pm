@@ -907,54 +907,52 @@ sub get_saved_reports {
 
     my $result = $dbh->selectall_arrayref( $query, { Slice => {} }, @args );
 
-    my $limit_pref_enabled = C4::Context->preference('LimitReportsByLibrary');
+    my $limit_pref = C4::Context->preference('LimitReportsBy');
 
-    return $result unless $limit_pref_enabled;
+    return $result if $limit_pref eq 'none';
 
-    # Preference enabled AND showing all: attach library limits metadata, but do not filter
     if ( $filter->{show_all_reports} ) {
-        foreach my $report (@$result) {
-            my $report_obj = Koha::Reports->find( $report->{id} );
-            if ($report_obj) {
-                my $limits_rs = $report_obj->get_library_limits;
-                if ($limits_rs) {
-                    my @branches =
-                        map { { branchcode => $_->branchcode, branchname => $_->branchname } } $limits_rs->as_list;
-                    $report->{library_limits} = \@branches;
-                } else {
-                    $report->{library_limits} = [];
-                }
-            } else {
-                $report->{library_limits} = [];
-            }
-        }
+        _attach_limits( $result, $limit_pref );
         return $result;
     }
 
-    # Preference enabled AND not showing all: apply library limits filtering
-    my $limited_reports = Koha::Reports->search_with_library_limits( {}, {}, C4::Context::mybranch() );
-    my %allowed         = map  { $_->{id} => 1 } @{ $limited_reports->unblessed };
-    my @limited         = grep { $allowed{ $_->{id} } } @$result;
-
-    # Attach library limits data for the filtered list
-    foreach my $report (@limited) {
-        my $report_obj = Koha::Reports->find( $report->{id} );
-        if ($report_obj) {
-            my $limits_rs = $report_obj->get_library_limits;
-            if ($limits_rs) {
-                my @branches =
-                    map { { branchcode => $_->branchcode, branchname => $_->branchname } } $limits_rs->as_list;
-                $report->{library_limits} = \@branches;
-            } else {
-                $report->{library_limits} = [];
-            }
-        } else {
-            $report->{library_limits} = [];
-        }
+    my $limited_reports;
+    if ( $limit_pref eq 'library' ) {
+        $limited_reports = Koha::Reports->search_with_library_limits( {}, {}, C4::Context::mybranch() );
+    } elsif ( $limit_pref eq 'library_group' ) {
+        $limited_reports =
+            Koha::Reports->search_with_library_group_limits( {}, {}, C4::Context::mybranch(), 'ft_reports' );
     }
 
+    my %allowed = map  { $_->{id} => 1 } @{ $limited_reports->unblessed };
+    my @limited = grep { $allowed{ $_->{id} } } @$result;
+
+    _attach_limits( \@limited, $limit_pref );
     return \@limited;
 
+}
+
+=head2 _attach_limits
+
+Attached the library or library group limitations to a report for handling in the UI
+
+=cut
+
+sub _attach_limits {
+    my ( $report_list, $pref ) = @_;
+    for my $report (@$report_list) {
+        my $report_obj = Koha::Reports->find( $report->{id} ) or next;
+        if ( $pref eq 'library' ) {
+            my $limits_rs = $report_obj->get_library_limits;
+            $report->{library_limits} =
+                $limits_rs
+                ? [ map { { branchcode => $_->branchcode, branchname => $_->branchname } } $limits_rs->as_list ]
+                : [];
+        } elsif ( $pref eq 'library_group' ) {
+            my $groups = $report_obj->library_group_limits;
+            $report->{library_group_limits} = [ map { { id => $_->id, title => $_->title } } @$groups ];
+        }
+    }
 }
 
 =head2 get_column_type($column)
