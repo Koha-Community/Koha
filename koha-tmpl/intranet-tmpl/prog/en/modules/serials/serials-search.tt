@@ -1,5 +1,4 @@
 [% USE raw %]
-[% USE To %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
@@ -287,7 +286,10 @@
         const edit_action_link = "[% edit_action_link | html %]";
 
         [% IF mana %]
-            const additional_fields_for_subscription = [% To.json(additional_fields_for_subscription) | $raw %];
+            var additional_fields_for_subscription_ids = [];
+            [% FOR field IN additional_fields_for_subscription %]
+                additional_fields_for_subscription_ids.push([% field.id | $raw %]);
+            [% END %]
         [% END %]
     </script>
     [% Asset.js("js/serials-toolbar.js") | $raw %]
@@ -372,8 +374,8 @@
         <script nonce="[% Koha.CSPNonce | $raw %]">
             $(document).ready(function () {
                 $(".local").hide();
-                additional_fields_for_subscription.forEach(f => {
-                    $(`label[for=additional_field_${f.id}], input#additional_field_${f.id}`).hide();
+                additional_fields_for_subscription_ids.forEach(id => {
+                    $(`label[for=additional_field_${id}], input#additional_field_${id}`).hide();
                 });
             });
         </script>
