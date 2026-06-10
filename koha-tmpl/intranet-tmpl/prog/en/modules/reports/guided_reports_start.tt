@@ -392,7 +392,9 @@
                                         <th data-colname="cache_expiry" class="report_cache_expiry">Cache expiry (seconds)</th>
                                         <th data-colname="saved_results" class="report_saved_results">Saved results</th>
                                         <th data-colname="update" class="report_update">Update</th>
-                                        <th data-colname="library_limits" class="report_library_limits">Library limits</th>
+                                        [% IF ( (Koha.Preference('LimitReportsBy') == 'library' || Koha.Preference('LimitReportsBy') == 'library_group') && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
+                                            <th data-colname="library_limits" class="report_library_limits">Library limits</th>
+                                        [% END %]
                                         <th data-colname="actions" class="no-sort no-export">Actions</th>
                                     </tr>
                                 </thead>
@@ -453,29 +455,37 @@
                                                     >
                                                 [% END %]
                                             </td>
-                                            <td>
-                                                [% IF ( Koha.Preference('LimitReportsByLibrary') && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
-                                                    [% IF savedreport.library_limits && savedreport.library_limits.size > 0 %]
-                                                        [% library_str = "" %]
-                                                        [% FOREACH library IN savedreport.library_limits %]
-                                                            [%- IF loop.first -%]
-                                                                [% library_str = library.branchname _ " (" _ library.branchcode _ ")" %]
-                                                            [% ELSE %]
-                                                                [% library_str = library_str _ "\n" _ library.branchname _ " (" _ library.branchcode _ ")" %]
+                                            [% IF ( (Koha.Preference('LimitReportsBy') == 'library' || Koha.Preference('LimitReportsBy') == 'library_group') && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
+                                                <td>
+                                                    [% IF Koha.Preference('LimitReportsBy') == 'library' %]
+                                                        [% IF savedreport.library_limits && savedreport.library_limits.size > 0 %]
+                                                            [% library_str = "" %]
+                                                            [% FOREACH library IN savedreport.library_limits %]
+                                                                [%- IF loop.first -%]
+                                                                    [% library_str = library.branchname _ " (" _ library.branchcode _ ")" %]
+                                                                [% ELSE %]
+                                                                    [% library_str = library_str _ "\n" _ library.branchname _ " (" _ library.branchcode _ ")" %]
+                                                                [% END %]
                                                             [% END %]
+                                                            <span class="library_limitation" data-bs-toggle="tooltip" title="[% library_str | html %]">
+                                                                [% IF savedreport.library_limits.size > 1 %]
+                                                                    <span>[% savedreport.library_limits.size | html %] library limitations</span>
+                                                                [% ELSE %]
+                                                                    <span>[% savedreport.library_limits.size | html %] library limitation</span>
+                                                                [% END %]
+                                                            </span>
+                                                        [% ELSE %]
+                                                            <span>No limitation</span>
                                                         [% END %]
-                                                        <span class="library_limitation" data-bs-toggle="tooltip" title="[% library_str | html %]">
-                                                            [% IF savedreport.library_limits.size > 1 %]
-                                                                <span>[% savedreport.library_limits.size | html %] library limitations</span>
-                                                            [% ELSE %]
-                                                                <span>[% savedreport.library_limits.size | html %] library limitation</span>
-                                                            [% END %]
-                                                        </span>
-                                                    [% ELSE %]
-                                                        <span>No limitation</span>
+                                                    [% ELSIF Koha.Preference('LimitReportsBy') == 'library_group' %]
+                                                        [% IF savedreport.library_group_limits && savedreport.library_group_limits.size > 0 %]
+                                                            <span class="library_limitation"> [% FOREACH g IN savedreport.library_group_limits %][% g.title | html %][% UNLESS loop.last %],[% END %][% END %] </span>
+                                                        [% ELSE %]
+                                                            <span>No limitation</span>
+                                                        [% END %]
                                                     [% END %]
-                                                [% END %]
-                                            </td>
+                                                </td>
+                                            [% END %]
                                             <td>
                                                 <div class="btn-group dropup">
                                                     [%# There should be no space between these two buttons, it would render badly %]
@@ -1568,7 +1578,7 @@
             </fieldset>
             <!-- /.rows -->
 
-            [% IF ( Koha.Preference('LimitReportsByLibrary') && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
+            [% IF ( (Koha.Preference('LimitReportsBy') == 'library' || Koha.Preference('LimitReportsBy') == 'library_group') && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
                 <fieldset class="rows">
                     <legend>Library limitation:</legend>
                     <div>
@@ -1699,7 +1709,7 @@
             </fieldset>
             <!-- /.rows -->
 
-            [% IF ( Koha.Preference('LimitReportsByLibrary') && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
+            [% IF ( (Koha.Preference('LimitReportsBy') == 'library' || Koha.Preference('LimitReportsBy') == 'library_group') && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
                 <fieldset class="rows">
                     <legend>Library limitation:</legend>
                     <div
@@ -2344,7 +2354,22 @@
                 syncBatchFormsWithVisibleResults();
                 report_results_dt.on("draw length page search", syncBatchFormsWithVisibleResults);
             }
-            if (saved1) {
+            [% IF (saved1) %]
+                var table_settings = [% TablesSettings.GetTableSettings( 'reports', 'saved-sql', 'table_reports', 'json' ) | $raw %];
+                [% UNLESS ( Koha.Preference('LimitReportsBy') == 'library' && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
+                  table_settings.columns = table_settings.columns.filter(function(col) {
+                      return col.columnname !== 'library_limits';
+                  });
+                [% END %]
+
+                [% IF ( Koha.Preference('LimitReportsBy') == 'library' && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
+                  let library_limits_col_index = -1;
+                  table_settings.columns.forEach(function(col, index) {
+                      if (col.columnname === 'library_limits') {
+                          library_limits_col_index = index;
+                      }
+                  });
+                [% END %]
                 var rtable = $("#table_reports").kohaTable(
                     {
                         autoWidth: false,
@@ -2352,8 +2377,10 @@
                         order: [[1, "asc"]],
                         language: {
                             zeroRecords: _("No matching reports found"),
-                        },
-                        bKohaColumnsUseNames: true,
+                        }[% IF ( Koha.Preference('LimitReportsBy') == 'library' && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %],
+                        columnDefs: library_limits_col_index !== -1 ? [{ visible: false, targets: [library_limits_col_index] }] : []
+                        [% END %],
+                        bKohaColumnsUseNames: true
                     },
                     table_settings
                 );

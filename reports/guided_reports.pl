@@ -105,7 +105,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $session_id               = $input->cookie('CGISESSID');
 my $session                  = $session_id ? get_session($session_id) : undef;
 my $logged_in_user           = Koha::Patrons->find($borrowernumber);
-my $limit_reports_by_library = C4::Context->preference('LimitReportsByLibrary');
+my $limit_reports_active     = C4::Context->preference('LimitReportsBy') ne 'none';
 my $can_manage_report_limits = $logged_in_user && Koha::Report->can_manage_limits($logged_in_user);
 
 $template->param( templates => Koha::Notice::Templates->search( { module => 'report' } ) );
@@ -240,7 +240,7 @@ if ( !$op ) {
         my $tables   = get_tables();
         my @branches = grep { $_ ne q{} } $input->multi_param('branches');
 
-        if ( $limit_reports_by_library && !$can_manage_report_limits ) {
+        if ( $limit_reports_active && !$can_manage_report_limits ) {
             my $existing_limits = $report->get_library_limits;
             @branches = $existing_limits ? map { $_->branchcode } $existing_limits->as_list : ();
         }
@@ -604,7 +604,7 @@ if ( !$op ) {
     my $tables             = get_tables();
     my @branches           = grep { $_ ne q{} } $input->multi_param('branches');
 
-    if ( $limit_reports_by_library && !$can_manage_report_limits ) {
+    if ( $limit_reports_active && !$can_manage_report_limits ) {
         @branches = ( $logged_in_user->branchcode );
     }
 
@@ -1230,7 +1230,7 @@ if ( $op eq 'list' || $op eq 'convert' ) {
     my $reports = get_saved_reports($filter);
 
     my $library_limit_active =
-           $limit_reports_by_library
+           $limit_reports_active
         && $can_manage_report_limits
         && !$filter->{show_all_reports};
 

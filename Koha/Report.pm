@@ -455,7 +455,7 @@ Returns true if branch limiting is enabled and the patron can manage report limi
 
 sub can_manage_limits {
     my ( $class, $patron ) = @_;
-    return C4::Context->preference('LimitReportsByLibrary')
+    return C4::Context->preference('LimitReportsBy') ne 'none'
         && ( $patron->is_superlibrarian || $patron->has_permission( { reports => 'manage_report_limits' } ) );
 }
 
@@ -470,18 +470,32 @@ Returns true if the patron may access this report considering branch limits, or 
 sub can_access {
     my ( $self, $patron ) = @_;
 
-    return 1 unless C4::Context->preference('LimitReportsByLibrary');
-
+    my $pref = C4::Context->preference('LimitReportsBy');
+    return 1 if $pref eq 'none';
     return 1 if __PACKAGE__->can_manage_limits($patron);
 
-    my $limits_rs = $self->get_library_limits;
-    return 1 unless $limits_rs;
+    if ( $pref eq 'library' ) {
+        my $limits_rs = $self->get_library_limits;
+        return 1 unless $limits_rs;
+        my $user_branch = C4::Context::mybranch();
+        return 0 unless $user_branch;
+        my %allowed = map { $_->branchcode => 1 } $limits_rs->as_list;
+        return $allowed{$user_branch} ? 1 : 0;
+    }
 
-    my $user_branch = C4::Context::mybranch();
-    return 0 unless $user_branch;
+    if ( $pref eq 'library_group' ) {
+        my $groups = $self->library_group_limits;
+        return 1 unless @$groups;
+        my $user_branch = C4::Context::mybranch();
+        return 0 unless $user_branch;
+        for my $group (@$groups) {
+            my @members = map { $_->branchcode } $group->all_libraries;
+            return 1 if grep { $_ eq $user_branch } @members;
+        }
+        return 0;
+    }
 
-    my %allowed = map { $_->branchcode => 1 } $limits_rs->as_list;
-    return $allowed{$user_branch} ? 1 : 0;
+    return 1;
 }
 
 1;
