@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2008 BibLibre, BibLibre, Paul POULAIN
-#                SAN Ouest Provence
+#                SAN Ouest Provence  # codespell:ignore
 #
 # This file is part of Koha.
 #

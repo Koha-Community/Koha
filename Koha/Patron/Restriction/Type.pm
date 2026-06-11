@@ -55,7 +55,7 @@ sub delete {
             my $default = Koha::Patron::Restriction::Types->find( { is_default => 1 } )->code;
 
             # We can't use Koha objects here because Koha::Patron::Debarments
-            # is not a Koha object. So we'll do it old skool
+            # is not a Koha object. So we'll do it old school
             my $rows = C4::Context->dbh->do(
                 "UPDATE borrower_debarments SET type = ? WHERE type = ?",
                 undef, ( $default, $self->code )

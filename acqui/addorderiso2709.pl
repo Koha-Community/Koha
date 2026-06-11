@@ -176,7 +176,7 @@ if ( $op eq "" ) {
     #import selected lines
     $template->param( 'basketno' => $cgiparams->{'basketno'} );
 
-    # Budget_id is mandatory for adding an order, we just add a default, the user needs to modify this aftewards
+    # Budget_id is mandatory for adding an order, we just add a default, the user needs to modify this afterwards
     my $budgets = GetBudgets();
     if ( scalar @$budgets == 0 ) {
         die "No budgets defined, can't continue";

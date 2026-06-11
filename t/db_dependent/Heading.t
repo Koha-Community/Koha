@@ -263,7 +263,7 @@ subtest "_search tests" => sub {
         'When thesaurus in subfield 2, and nothing is found, we search again for notdefined (008_11 = z), and get no results because 040 $f with different value exists in the auth rec.'
     );
 
-    # When LinkerConsiderThesaurus off, no attantion is being paid on the thesaurus
+    # When LinkerConsiderThesaurus off, no attention is being paid on the thesaurus
     t::lib::Mocks::mock_preference( 'LinkerConsiderThesaurus', '0' );
 
     ($matched_auths) = $heading->_search('match-heading');

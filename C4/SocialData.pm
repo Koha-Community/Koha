@@ -110,7 +110,7 @@ sub update_data {
             $i++;
         }
     }
-    say "$i data insered or updated";
+    say "$i data inserted or updated";
 }
 
 =head2 get_report

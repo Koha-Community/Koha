@@ -91,7 +91,7 @@ if ( $op eq 'cud-remove' ) {
         foreach my $number (@bor_nums_unchecked) {
             $number =~ s/\r$//;    # strip any naughty return chars
             if ( Koha::Patrons->find($number) )
-            {    # we must test in case an invalid borrowernumber is passed in; we effectively disgard them atm
+            {    # we must test in case an invalid borrowernumber is passed in; we effectively discard them atm
                 my $borrower_number = $number;
                 push @borrower_numbers, $borrower_number;
             }

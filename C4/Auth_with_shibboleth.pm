@@ -312,7 +312,7 @@ Create some metadata for your koha instance (if you're in a single instance setu
 
 =item 2.
 
-Swap metadata with your Identidy Provider (IdP)
+Swap metadata with your Identify Provider (IdP)
 
 =item 3.
 

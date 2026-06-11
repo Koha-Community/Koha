@@ -26,7 +26,7 @@ my $cache = Koha::Caches->get_instance();
 
 =head1 NAME
 
-Koha::ClassSource - Koha Classfication Source Object class
+Koha::ClassSource - Koha Classification Source Object class
 
 =head1 API
 

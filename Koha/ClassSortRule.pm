@@ -23,7 +23,7 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::ClassSortRule Koha Classfication Sorting Rule Object class
+Koha::ClassSortRule Koha Classification Sorting Rule Object class
 
 =head1 API
 

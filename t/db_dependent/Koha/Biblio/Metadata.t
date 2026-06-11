@@ -312,7 +312,7 @@ subtest 'record_source() and source_allows_editing() tests' => sub {
     my $biblio = $builder->build_sample_biblio;
 
     my $metadata = $biblio->metadata;
-    is( $metadata->record_source_id, undef, 'No record source defined for metatada object' );
+    is( $metadata->record_source_id, undef, 'No record source defined for metadata object' );
     ok( $metadata->source_allows_editing, 'No record source, can be edited' );
     is( $metadata->record_source, undef );
 

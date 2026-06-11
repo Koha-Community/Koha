@@ -433,7 +433,7 @@ if (@skip_branches) {
     }
     %branches_to_process = map { $_ => 1 } @available_branches;
 
-    # The mapped 0 values here will overwrite the corrosponding mapped 1 values
+    # The mapped 0 values here will overwrite the corresponding mapped 1 values
     # where the 0 values exist
     %branches_to_process = ( %branches_to_process, map { $_ => 0 } @skip_branches );
 }

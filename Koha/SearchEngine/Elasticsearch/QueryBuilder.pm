@@ -609,7 +609,7 @@ our $koha_to_index_name = {
 };
 
 # Note that sears and aat map to 008/11 values here
-# but don't appear in C4/Headin/MARC21 thesaurus
+# but don't appear in C4/Heading/MARC21 thesaurus
 # because they don't have values in controlled field indicators
 # https://www.loc.gov/marc/authority/ad008.html
 our $thesaurus_to_value = {

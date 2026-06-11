@@ -91,7 +91,7 @@ else {
 
 # FIXME - we really need a better way to do this consistently
 # and across the board, be it bigints, Math::FixedPoint, a
-# modernized version of Math::Curency that isn't tied to the system
+# modernized version of Math::Currency that isn't tied to the system
 # locale, or something else.
 $total                 = sprintf( "%.2f", $total );
 $sub_unalloc           = sprintf( "%.2f", $sub_unalloc );

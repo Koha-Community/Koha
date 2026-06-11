@@ -149,7 +149,7 @@ sub interchange_header {
     $hdr .= $self->interchange_control_reference();
     $hdr .= $separator;
 
-    # Recipents reference password not usually used in edifact
+    # Recipients reference password not usually used in edifact
     $hdr .= q{+ORDERS};        # application reference
 
     #Edifact does not usually include the following

@@ -414,7 +414,7 @@ Edifact - Edifact message handler
 
 =head2 service_string_advice
 
-  Examines the Service String Advice returns 1 if the default separartors are in use
+  Examines the Service String Advice returns 1 if the default separators are in use
   undef otherwise
 
 =head2 segmentize

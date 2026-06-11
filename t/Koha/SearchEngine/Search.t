@@ -59,15 +59,15 @@ subtest "pagination_bar tests" => sub {
     );
     is(
         $previous_page_offset, 140,
-        "Previous page is current offset minus reults per page"
+        "Previous page is current offset minus results per page"
     );
     is(
         $next_page_offset, 180,
-        "Next page is current offset plus reults per page"
+        "Next page is current offset plus results per page"
     );
     is(
         $last_page_offset, 480,
-        "Last page is pages minus 1 times reults per page"
+        "Last page is pages minus 1 times results per page"
     );
     is( @$PAGE_NUMBERS, 10, "If on first ten pages we only show 10 pages" );
 
@@ -95,15 +95,15 @@ subtest "pagination_bar tests" => sub {
     );
     is(
         $previous_page_offset, 220,
-        "Previous page is current offset minus reults per page"
+        "Previous page is current offset minus results per page"
     );
     is(
         $next_page_offset, 260,
-        "Next page is current offset plus reults per page"
+        "Next page is current offset plus results per page"
     );
     is(
         $last_page_offset, 460,
-        "Last page is pages minus 1 times reults per page"
+        "Last page is pages minus 1 times results per page"
     );
     is( @$PAGE_NUMBERS, 20, "If past first ten pages we show 20 pages" );
 

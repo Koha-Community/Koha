@@ -106,7 +106,7 @@ subtest '_get_match_keys() tests' => sub {
         ),
         MARC::Field->new(
             '245', ' ', ' ',
-            a => '  .; thE t[]:,aliS(m)/An\'"',
+            a => '  .; thE t[]:,alias(m)/An\'"',
             c => 'Stephen King, Peter Straub.'
         ),
         MARC::Field->new(
@@ -119,7 +119,7 @@ subtest '_get_match_keys() tests' => sub {
     my @keys = C4::Matcher::_get_match_keys( $record, $matchpoint );
 
     is(
-        $keys[0], 'THE TALISMAN STEPHEN KING PETER STRAUB',
+        $keys[0], 'THE TALIASMAN STEPHEN KING PETER STRAUB',
         'Match key correctly calculated with no $norms'
     );
 
@@ -223,7 +223,7 @@ subtest '_get_match_keys() tests' => sub {
     );
     @keys = C4::Matcher::_get_match_keys( $record, $matchpoint );
     is(
-        $keys[0], '  .; thE t[]:,aliS(m)/An\'" Stephen King, Peter Straub.',
+        $keys[0], '  .; thE t[]:,alias(m)/An\'" Stephen King, Peter Straub.',
         'Match key intact if \'none\' specified, length 0 and offset 0'
     );
 
@@ -292,7 +292,7 @@ subtest '_get_match_keys() tests' => sub {
         'Passing an invalid normalization routine name raises a warning';
 
     is(
-        $keys[0], '  .; thE t[]:,aliS(m)/An\'" Stephen King, Peter Straub.',
+        $keys[0], '  .; thE t[]:,alias(m)/An\'" Stephen King, Peter Straub.',
         'Match key intact if invalid normalization routine specified'
     );
 
@@ -308,7 +308,7 @@ subtest '_get_match_keys() tests' => sub {
         'Passing an invalid normalization routine name raises a warning';
 
     is(
-        $keys[0], '  .; THE T[]:,ALIS(M)/AN\'" STEPHEN KING, PETER STRAUB.',
+        $keys[0], '  .; THE T[]:,ALIAS(M)/AN\'" STEPHEN KING, PETER STRAUB.',
         'Match key correctly normalized if invalid normalization routine specified'
     );
 
@@ -342,7 +342,7 @@ subtest '_get_match_keys() tests' => sub {
     delete $matchpoint->{component}->{subfields};
     @keys = C4::Matcher::_get_match_keys( $record, $matchpoint );
     is(
-        $keys[0], '  .; thE t[]:,aliS(m)/An\'" Stephen King, Peter Straub.',
+        $keys[0], '  .; thE t[]:,alias(m)/An\'" Stephen King, Peter Straub.',
         "Match key correctly returns whole field if no subfields specified"
     );
 };

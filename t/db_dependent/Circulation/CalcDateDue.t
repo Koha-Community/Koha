@@ -293,7 +293,7 @@ $date                   = C4::Circulation::CalcDateDue( $start_date, $itemtype, 
 $dayweek_issue_expected = $start_date->add( days => $issue_should_add );
 is(
     $date, $expected_rolled_date->strftime('%F') . 'T23:59:00',
-    "useDaysMode = Dayweek, closed on due date and two subequent due dates, 14 day loan (should trigger 2 x 7 day roll forward), issue date expiry ( start + 28 )"
+    "useDaysMode = Dayweek, closed on due date and two subsequent due dates, 14 day loan (should trigger 2 x 7 day roll forward), issue date expiry ( start + 28 )"
 );
 
 # ...and for renewals...

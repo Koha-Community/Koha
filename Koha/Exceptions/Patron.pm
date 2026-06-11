@@ -21,7 +21,7 @@ use Exception::Class (
     },
     'Koha::Exceptions::Patron::FailedDeleteAnonymousPatron' => {
         isa         => 'Koha::Exceptions::Patron',
-        description => "Deleting patron failed, AnonymousPatron is not deleteable"
+        description => "Deleting patron failed, AnonymousPatron is not deletable"
     },
     'Koha::Exceptions::Patron::FailedDeleteProtectedPatron' => {
         isa         => 'Koha::Exceptions::Patron',

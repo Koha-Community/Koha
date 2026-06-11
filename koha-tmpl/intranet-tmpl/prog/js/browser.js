@@ -6,7 +6,7 @@ KOHA.browser = function (searchid, biblionumber) {
     var me = this;
 
     if (!searchid) {
-        // We are generating a clean numeric datetime representation so we can easily compare them using the default javascript lexigraphic sorter.
+        // We are generating a clean numeric datetime representation so we can easily compare them using the default javascript lexicographic sorter.
         searchid = "scs_" + new Date().getTime(); // scs for Staff Client Search
     }
     me.searchid = searchid;

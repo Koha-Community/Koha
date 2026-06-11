@@ -16,7 +16,7 @@ sub search {
     my $start    = $params->{start};
     my $length   = $params->{length};
 
-    # If not logged in user, be carreful and set the borrowernumber to 0
+    # If not logged in user, be careful and set the borrowernumber to 0
     # to prevent private lists lack
     my $loggedinuser = C4::Context->userenv->{'number'} || 0;
 

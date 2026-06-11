@@ -36,7 +36,7 @@ import {
  * @param {Boolean} resourceConfig.table.addAdditionalFilters - A flag to indicate whether to add filters to the list component for the datatable.
  * @param {Object} resourceConfig.table.filters - The table filters for the resource. Follows the format for the resourceAttrs parameter.
  * @param {Function} resourceConfig.afterResourceFetch - A function to call after the resource is fetched. This can be used to edit resource data or fetch additional data
- * @param {Boolean} resourceConfig.embedded - A flag to indicate whether the resource is actually being used as a child component of another resource e.g. embedding a list of agreeements into EBSCO package agreements
+ * @param {Boolean} resourceConfig.embedded - A flag to indicate whether the resource is actually being used as a child component of another resource e.g. embedding a list of agreements into EBSCO package agreements
  * @param {String} resourceConfig.extendedAttributesResourceType - The resource type for extended attributes, if applicable.
  * @param {String} resourceConfig.extendedAttributesFieldGroup - The field group that you would like the additional fields to be displayed in.
  * @param {Function} resourceConfig.defaultToolbarButtons - A function to amend default buttons in the toolbar.

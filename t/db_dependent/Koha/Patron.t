@@ -2402,7 +2402,7 @@ subtest 'update privacy tests' => sub {
     $patron->discard_changes;
 
     is( $old_checkout->borrowernumber, $patron->id, "When anonymizing fails, we don't clear the checkouts" );
-    is( $patron->privacy(),            1,           "When anonymizing fails, we don't chaneg the privacy" );
+    is( $patron->privacy(),            1,           "When anonymizing fails, we don't change the privacy" );
 
     my $anon_patron = $builder->build_object( { class => 'Koha::Patrons' } );
     t::lib::Mocks::mock_preference( 'AnonymousPatron', $anon_patron->id );

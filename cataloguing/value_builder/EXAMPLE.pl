@@ -23,7 +23,7 @@ use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 # Example of framework plugin new style.
-# It should define and return at least one and normally two anynomous
+# It should define and return at least one and normally two anonymous
 # subroutines in a hash ref.
 # REQUEST: If you copy this code to construct a new plugin, please REMOVE
 # all comments copied from this file.

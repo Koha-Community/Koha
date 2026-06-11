@@ -241,13 +241,13 @@ This script is intended to be called as a cgi script although it could be easily
 parameters and two "multiple" parameters as follows:
 
     C<batch_id>         A single valid batch id to export.
-    C<template_id>      A single valid template id to be applied to the current export. This parameter is manditory.
-    C<layout_id>        A single valid layout id to be applied to the current export. This parameter is manditory.
+    C<template_id>      A single valid template id to be applied to the current export. This parameter is mandatory.
+    C<layout_id>        A single valid layout id to be applied to the current export. This parameter is mandatory.
     C<start_label>      The number of the label on which to begin the export. This parameter is optional.
     C<lable_ids>        A single valid label id to export. Multiple label ids may be submitted to export multiple labels.
     C<item_numbers>     A single valid item number to export. Multiple item numbers may be submitted to export multiple items.
 
-B<NOTE:> One of the C<batch_id>, C<label_ids>, or C<item_number> parameters is manditory. However, do not pass a combination of them or bad things might result.
+B<NOTE:> One of the C<batch_id>, C<label_ids>, or C<item_number> parameters is mandatory. However, do not pass a combination of them or bad things might result.
 
     example:
         http://staff-client.kohadev.org/cgi-bin/koha/labels/label-create-pdf.pl?batch_id=1&template_id=1&layout_id=5&start_label=1

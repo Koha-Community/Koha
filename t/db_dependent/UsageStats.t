@@ -113,7 +113,7 @@ subtest 'BuildReport() tests' => sub {
     is( $report->{volumetry}->{old_reserves},     Koha::Old::Holds->count,     "Old holds count correct" );
     is( $report->{volumetry}->{borrowers},        Koha::Patrons->count,        "Patrons count correct" );
     is( $report->{volumetry}->{aqorders},         Koha::Acquisition::Orders->count, "Orders count correct" );
-    is( $report->{volumetry}->{subscription},     Koha::Subscriptions->count,       "Suscriptions count correct" );
+    is( $report->{volumetry}->{subscription},     Koha::Subscriptions->count,       "Subscriptions count correct" );
 
     $schema->storage->txn_rollback;
 };

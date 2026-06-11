@@ -56,7 +56,7 @@ my $new_cs_2 = Koha::ClassSource->new(
 )->store;
 
 is( $new_cs_1->cn_source,              'source_1', 'Adding a new classification should have set the cn_source' );
-is( Koha::ClassSources->search->count, $nb_of_class_sources + 2, 'The 2 classifcations should have been added' );
+is( Koha::ClassSources->search->count, $nb_of_class_sources + 2, 'The 2 classifications should have been added' );
 
 my $retrieved_cs_1 = Koha::ClassSources->find( $new_cs_1->cn_source );
 is(
