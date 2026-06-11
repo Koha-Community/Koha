@@ -737,6 +737,58 @@ subtest 'search_with_library_group_limits' => sub {
     is( scalar @results, 2, 'ft_reports disabled on root limits access to own branch only' );
 };
 
+subtest '_confirm_branch_param_allowed' => sub {
+    plan tests => 7;
+
+    my $library_a = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_b = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_c = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $root_group = Koha::Library::Group->new( { title => 'confirm branch root', ft_reports => 1 } )->store;
+    my $group_ab =
+        Koha::Library::Group->new( { parent_id => $root_group->id, title => 'confirm branch group ab' } )->store;
+    Koha::Library::Group->new( { parent_id => $group_ab->id, branchcode => $library_a->branchcode } )->store;
+    Koha::Library::Group->new( { parent_id => $group_ab->id, branchcode => $library_b->branchcode } )->store;
+
+    my $report_no_limit = $builder->build_object( { class => 'Koha::Reports' } );
+    my $report_ab       = $builder->build_object( { class => 'Koha::Reports' } );
+    $report_ab->replace_library_limits( [ $library_a->branchcode ] );
+
+    # pref = none: any branch allowed regardless of user branch or report limits
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'none' );
+    t::lib::Mocks::mock_userenv( { branchcode => $library_a->branchcode } );
+    lives_ok { $report_ab->_confirm_branch_param_allowed( $library_c->branchcode ) }
+    'pref none: any branchcode passes';
+
+    # pref = library: branch matching user branch passes
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'library' );
+    lives_ok { $report_ab->_confirm_branch_param_allowed( $library_a->branchcode ) }
+    'pref library: matching branch passes';
+
+    # pref = library: branch not matching user branch throws
+    throws_ok { $report_ab->_confirm_branch_param_allowed( $library_b->branchcode ) }
+    'Koha::Exception', 'pref library: non-matching branch throws';
+
+    # pref = library: no logged-in branch throws
+    C4::Context->unset_userenv;
+    throws_ok { $report_ab->_confirm_branch_param_allowed( $library_a->branchcode ) }
+    'Koha::Exception', 'pref library: no user branch throws';
+
+    # pref = library_group: report with no group limits passes any branch
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'library_group' );
+    t::lib::Mocks::mock_userenv( { branchcode => $library_a->branchcode } );
+    lives_ok { $report_no_limit->_confirm_branch_param_allowed( $library_c->branchcode ) }
+    'pref library_group: report with no group limits passes any branchcode';
+
+    # pref = library_group: branchcode within the report group passes
+    lives_ok { $report_ab->_confirm_branch_param_allowed( $library_b->branchcode ) }
+    'pref library_group: branchcode within report group passes';
+
+    # pref = library_group: branchcode outside the report group throws
+    throws_ok { $report_ab->_confirm_branch_param_allowed( $library_c->branchcode ) }
+    'Koha::Exception', 'pref library_group: branchcode outside report group throws';
+};
+
 subtest 'running' => sub {
     plan tests => 9;
 
