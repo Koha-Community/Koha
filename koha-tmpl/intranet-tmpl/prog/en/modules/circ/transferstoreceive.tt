@@ -39,7 +39,7 @@
     [% IF ( TransfersMaxDaysWarning ) %]<p>Transfers are <span class="error">considered late</span> after [% TransfersMaxDaysWarning | html %] days.</p>[% END %]
     <div id="resultlist">
         <div class="page-section">
-            <table id="transferstoreceive"></table>
+            <table id="transferstoreceive" data-branchcode="[% branchcode | html %]"></table>
         </div>
         <!-- /.page-section -->
     </div>
@@ -68,7 +68,7 @@
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
             var additional_filters = {
-                to_library_id: "[% branchcode | html %]",
+                to_library_id: $("#transferstoreceive").data("branchcode"),
                 sent_date: { "!=": null },
                 arrived_date: { "=": null },
                 cancellation_date: { "=": null },
@@ -82,15 +82,7 @@
                     language: {
                         emptyTable: _("No transfers to receive"),
                     },
-                    embed: [
-                        "item+strings",
-                        "item.biblio",
-                        "item.home_library",
-                        "item.item_type",
-                        "item.first_hold.patron",
-                        "item.recall.patron",
-                        "from_library",
-                    ],
+                    embed: ["item+strings", "item.biblio", "item.home_library", "item.item_type", "item.first_hold.patron", "item.recall.patron", "from_library"],
                     order: [[1, "asc"]],
                     columns: [
                         {
