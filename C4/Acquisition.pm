@@ -2432,7 +2432,8 @@ sub GetInvoices {
               NULL
             )
           ) AS is_linked_to_subscriptions,
-          SUM(aqorders.quantityreceived) AS receiveditems
+          SUM(aqorders.quantityreceived) AS receiveditems,
+          SUM(aqorders.quantity) AS itemsexpected
         FROM aqinvoices
           LEFT JOIN aqbooksellers ON aqbooksellers.id = aqinvoices.booksellerid
           LEFT JOIN aqorders ON aqorders.invoiceid = aqinvoices.invoiceid
