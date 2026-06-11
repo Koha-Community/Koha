@@ -36,7 +36,7 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 subtest 'list() tests' => sub {
 
-    plan tests => 19;
+    plan tests => 22;
 
     $schema->storage->txn_begin;
 
@@ -99,6 +99,11 @@ subtest 'list() tests' => sub {
     $t->get_ok( "//$userid:$password@/api/v1/transfers?to_library_id=" . $library_a->branchcode )
         ->status_is(200)
         ->json_is( '' => [ $transfer_0->to_api ], 'filtering by to_library_id returns the matching transfer' );
+
+    # Filtering by source library
+    $t->get_ok( "//$userid:$password@/api/v1/transfers?from_library_id=" . $transfer_1->frombranch )
+        ->status_is(200)
+        ->json_is( '' => [ $transfer_1->to_api ], 'filtering by from_library_id returns the matching transfer' );
 
     # Embeds resolve through the item
     $t->get_ok( "//$userid:$password@/api/v1/transfers?to_library_id="
@@ -179,9 +184,8 @@ subtest 'delete() tests' => sub {
             }
         }
     );
-    $t->delete_ok(
-        "//$userid:$password@/api/v1/transfers/" . $arrived_transfer->id => json =>
-            { cancellation_reason => 'Manual' } )->status_is(400);
+    $t->delete_ok( "//$userid:$password@/api/v1/transfers/"
+            . $arrived_transfer->id => json => { cancellation_reason => 'Manual' } )->status_is(400);
 
     # Cancel an in-transit transfer with the supplied reason
     $t->delete_ok(
