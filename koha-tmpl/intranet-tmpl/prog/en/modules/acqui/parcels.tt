@@ -2,6 +2,7 @@
 [% USE Koha %]
 [% USE Asset %]
 [% USE KohaDates %]
+[% USE Price %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -94,6 +95,7 @@
                                     <th>Item count</th>
                                     <th>[% tp("Bibliographic record", "Record count") | html %]</th>
                                     <th>Items expected</th>
+                                    <th>Total</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -112,6 +114,7 @@
                                         <td> [% searchresult.reccount | html %] </td>
                                         <td> [% searchresult.bibcount | html %] </td>
                                         <td> [% searchresult.itemcount | html %] </td>
+                                        <td> [% searchresult.totalamount | $Price %] </td>
                                     </tr>
                                 [% END %]
                             </tbody>

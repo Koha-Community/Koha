@@ -2433,7 +2433,13 @@ sub GetInvoices {
             )
           ) AS is_linked_to_subscriptions,
           SUM(aqorders.quantityreceived) AS receiveditems,
-          SUM(aqorders.quantity) AS itemsexpected
+          SUM(aqorders.quantity) AS itemsexpected,
+          COALESCE(SUM(aqorders.unitprice_tax_excluded * aqorders.quantity), 0) AS total_tax_excluded,
+          COALESCE(SUM(aqorders.unitprice_tax_included * aqorders.quantity), 0) AS total_tax_included,
+          COALESCE(
+            (SELECT SUM(adj.adjustment) FROM aqinvoice_adjustments adj WHERE adj.invoiceid = aqinvoices.invoiceid),
+            0
+          ) AS total_adj
         FROM aqinvoices
           LEFT JOIN aqbooksellers ON aqbooksellers.id = aqinvoices.booksellerid
           LEFT JOIN aqorders ON aqorders.invoiceid = aqinvoices.invoiceid

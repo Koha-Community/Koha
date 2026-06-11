@@ -184,6 +184,10 @@ my $next_page_start = $startfrom + $resultsperpage;
 my $last_row        = ( $next_page_start < $count_parcels ) ? $next_page_start - 1 : $count_parcels - 1;
 for my $i ( $startfrom .. $last_row ) {
     my $p = $parcels[$i];
+    my $orders_total =
+        $bookseller->invoiceincgst
+        ? ( $p->{total_tax_included} // 0 )
+        : ( $p->{total_tax_excluded} // 0 );
 
     push @{$loopres},
         {
@@ -197,6 +201,7 @@ for my $i ( $startfrom .. $last_row ) {
         bibcount         => $p->{receivedbiblios} || 0,
         reccount         => $p->{receiveditems}   || 0,
         itemcount        => $p->{itemsexpected}   || 0,
+        totalamount      => $orders_total + ( $p->{total_adj} // 0 ) + ( $p->{shipmentcost} // 0 ),
         };
 }
 if ($count_parcels) {
