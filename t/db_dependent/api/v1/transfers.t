@@ -18,13 +18,14 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use Koha::Item::Transfers;
+use Koha::Recalls;
 use Koha::Database;
 
 my $schema  = Koha::Database->new->schema;
@@ -195,6 +196,57 @@ subtest 'delete() tests' => sub {
     $t->delete_ok(
         "//$userid:$password@/api/v1/transfers/" . $transfer->id => json => { cancellation_reason => 'Manual' } )
         ->status_is(400);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'delete() - UseRecalls integration' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'UseRecalls', 1 );
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**1 }    # circulate flag = 1
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $item     = $builder->build_sample_item;
+    my $transfer = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber    => $item->itemnumber,
+                datesent      => \'NOW()',
+                datearrived   => undef,
+                datecancelled => undef,
+            }
+        }
+    );
+
+    my $recall = $builder->build_object(
+        {
+            class => 'Koha::Recalls',
+            value => {
+                item_id => $item->itemnumber,
+                status  => 'in_transit',
+            }
+        }
+    );
+
+    $t->delete_ok(
+        "//$userid:$password@/api/v1/transfers/" . $transfer->id => json => { cancellation_reason => 'Manual' } )
+        ->status_is(204);
+
+    $recall->discard_changes;
+    is( $recall->status, 'requested', 'The in-transit recall was reverted when the transfer was cancelled' );
 
     $schema->storage->txn_rollback;
 };
