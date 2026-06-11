@@ -60,6 +60,12 @@ sub delete {
     return $c->render_resource_not_found("Transfer")
         unless $transfer;
 
+    return $c->render( status => 400, openapi => { error => "Transfer has already been received" } )
+        if $transfer->datearrived;
+
+    return $c->render( status => 400, openapi => { error => "Transfer has already been cancelled" } )
+        if $transfer->datecancelled;
+
     return try {
         my $body = $c->req->json;
 

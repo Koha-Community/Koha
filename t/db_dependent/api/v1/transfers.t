@@ -117,7 +117,7 @@ subtest 'list() tests' => sub {
 
 subtest 'delete() tests' => sub {
 
-    plan tests => 10;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -165,6 +165,23 @@ subtest 'delete() tests' => sub {
     $t->delete_ok( "//$userid:$password@/api/v1/transfers/"
             . ( $transfer->id + 1000 ) => json => { cancellation_reason => 'Manual' } )->status_is(404);
 
+    # Cannot cancel an already-received transfer
+    my $arrived_item     = $builder->build_sample_item;
+    my $arrived_transfer = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber    => $arrived_item->itemnumber,
+                datesent      => \'NOW()',
+                datearrived   => \'NOW()',
+                datecancelled => undef,
+            }
+        }
+    );
+    $t->delete_ok(
+        "//$userid:$password@/api/v1/transfers/" . $arrived_transfer->id => json =>
+            { cancellation_reason => 'Manual' } )->status_is(400);
+
     # Cancel an in-transit transfer with the supplied reason
     $t->delete_ok(
         "//$userid:$password@/api/v1/transfers/" . $transfer->id => json => { cancellation_reason => 'WrongTransfer' } )
@@ -173,6 +190,11 @@ subtest 'delete() tests' => sub {
     $transfer->discard_changes;
     ok( defined $transfer->datecancelled, 'The transfer has been cancelled' );
     is( $transfer->cancellation_reason, 'WrongTransfer', 'The supplied cancellation reason is recorded' );
+
+    # Cannot cancel an already-cancelled transfer
+    $t->delete_ok(
+        "//$userid:$password@/api/v1/transfers/" . $transfer->id => json => { cancellation_reason => 'Manual' } )
+        ->status_is(400);
 
     $schema->storage->txn_rollback;
 };
