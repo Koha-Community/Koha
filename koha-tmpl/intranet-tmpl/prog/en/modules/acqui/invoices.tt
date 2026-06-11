@@ -4,6 +4,7 @@
 [% USE AuthorisedValues %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% USE Price %]
 [% SET footerjs = 1 %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -66,6 +67,7 @@
                                         <th>Billing date</th>
                                         <th>Received bibliographic records</th>
                                         <th>Received items</th>
+                                        <th>Total</th>
                                         <th>Status</th>
                                         <th class="no-sort">&nbsp;</th>
                                     </tr>
@@ -91,6 +93,13 @@
                                             <td data-order="[% invoice.billingdate | html %]"> [% invoice.billingdate | $KohaDates %] </td>
                                             <td>[% invoice.receivedbiblios | html %]</td>
                                             <td>[% invoice.receiveditems | html %]</td>
+                                            <td>
+                                                [% IF invoice.invoiceincgst %]
+                                                    [% invoice.total_tax_included + invoice.total_adj + invoice.shipmentcost | $Price %]
+                                                [% ELSE %]
+                                                    [% invoice.total_tax_excluded + invoice.total_adj + invoice.shipmentcost | $Price %]
+                                                [% END %]
+                                            </td>
                                             <td>
                                                 [% IF invoice.closedate %]
                                                     <span>Closed on [% invoice.closedate | $KohaDates %]</span>
