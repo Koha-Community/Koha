@@ -4,6 +4,7 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE TablesSettings %]
+[% USE To %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -53,6 +54,12 @@
         var table_settings = [% TablesSettings.GetTableSettings( 'circ', 'transferstoreceive', 'transferstoreceive', 'json' ) | $raw %];
         var TransfersMaxDaysWarning = [% TransfersMaxDaysWarning ? TransfersMaxDaysWarning : 0 | html %];
 
+        var all_libraries = [% To.json(Branches.all) | $raw %].map(function (e) {
+            e["_id"] = e.branchcode;
+            e["_str"] = e.branchname;
+            return e;
+        });
+
         // Mirror the legacy "late transfer" calculation: a transfer is late once it has been
         // sent for more than TransfersMaxDaysWarning days without arriving
         function days_late(sent_date) {
@@ -89,16 +96,14 @@
                         dataSrc: "from_library_id",
                         startRender: function (rows, group) {
                             var first = rows.data()[0];
-                            return first.from_library
-                                ? escape_str(first.from_library.name)
-                                : escape_str(group);
+                            return first.from_library ? escape_str(first.from_library.name) : escape_str(group);
                         },
                     },
-                    columnDefs: [{ visible: false, targets: [0] }],
                     columns: [
                         {
                             data: "me.from_library_id",
                             title: _("Sent from"),
+                            dataFilter: "libraries",
                             searchable: true,
                             orderable: false,
                             render: function (data, type, row, meta) {
@@ -171,6 +176,7 @@
                         {
                             data: "item.home_library_id",
                             title: _("Home library"),
+                            dataFilter: "libraries",
                             searchable: true,
                             orderable: true,
                             render: function (data, type, row, meta) {
@@ -201,7 +207,8 @@
                 },
                 table_settings,
                 1,
-                additional_filters
+                additional_filters,
+                { libraries: all_libraries }
             );
 
             $("#transferstoreceive").on("click", ".cancel-transfer", function (e) {
