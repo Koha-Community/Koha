@@ -106,7 +106,8 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $session_id               = $input->cookie('CGISESSID');
 my $session                  = $session_id ? get_session($session_id) : undef;
 my $logged_in_user           = Koha::Patrons->find($borrowernumber);
-my $limit_reports_active     = C4::Context->preference('LimitReportsBy') ne 'none';
+my $limit_reports_by         = C4::Context->preference('LimitReportsBy');
+my $limit_reports_active     = $limit_reports_by ne 'none';
 my $can_manage_report_limits = $logged_in_user && Koha::Report->can_manage_limits($logged_in_user);
 
 $template->param( templates => Koha::Notice::Templates->search( { module => 'report' } ) );
@@ -966,7 +967,16 @@ if ( $op eq 'run' ) {
 
                     # builds list, depending on authorised value...
                     if ( $authorised_value eq "branches" ) {
-                        my $libraries = Koha::Libraries->search( {}, { order_by => ['branchname'] } );
+                        my $library_search_params = {};
+                        if($limit_reports_by eq 'library') {
+                            $library_search_params = { branchcode => C4::Context::mybranch };
+                        }
+                        if($limit_reports_by eq 'library_group') {
+                            my $report_groups = $report->library_group_limits;
+                            my @branchcodes = map { $_->branchcode } map { $_->all_libraries } @$report_groups;
+                            $library_search_params = { branchcode => { '-in' => \@branchcodes } };
+                        }
+                        my $libraries = Koha::Libraries->search( $library_search_params, { order_by => ['branchname'] } );
                         while ( my $library = $libraries->next ) {
                             push @authorised_values, $library->branchcode;
                             $authorised_lib{ $library->branchcode } = $library->branchname;
@@ -1095,6 +1105,11 @@ if ( $op eq 'run' ) {
                     $error_key = 'total_running_reports_limit_exceeded';
                 } elsif ( ref($e) eq 'Koha::Exceptions::Report::InstanceTotalRunning' ) {
                     $error_key = 'total_running_reports_per_instance_limit_exceeded';
+                } elsif ( ref($e) eq 'Koha::Exception' ) {
+                    $error_key = 'unauthorised_branch_parameter';
+                    $template->param( access_denied => 1, denied_op => 'run', id => $report_id );
+                    output_html_with_http_headers $input, $cookie, $template->output;
+                    exit;
                 }
                 if ($error_key) {
                     $template->param(

@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use C4::Context;
 use Koha::Database;
+use Koha::Exception;
 use Koha::Exceptions::Report;
 use Koha::Patrons;
 use Koha::Reports;
@@ -280,6 +281,14 @@ sub prep_report {
         }
     }
     @lookup{@$param_names} = @$sql_params;
+
+    # Check for a library to ensure the user can access data from that branch
+    for my $i ( 0 .. $#$param_names ) {
+        my ($name) = split /\|/, $param_names->[$i];
+        next unless $name eq 'Library';
+        $self->_confirm_branch_param_allowed( $sql_params->[$i] );
+    }
+
     @split = split /<<|>>/, $sql;
     for ( my $i = 0 ; $i < $#split / 2 ; $i++ ) {
         my $quoted =
@@ -415,6 +424,38 @@ Returns name of corresponding DBIC resultset
 
 sub _type {
     return 'SavedSql';
+}
+
+=head3 _confirm_branch_param_allowed
+
+Throws Koha::Exception if a Library runtime parameter value is not accessible
+to the current user under the active LimitReportsBy preference.
+
+=cut
+
+sub _confirm_branch_param_allowed {
+    my ( $self, $branchcode ) = @_;
+
+    my $pref = C4::Context->preference('LimitReportsBy');
+    return if $pref eq 'none';
+
+    if ( $pref eq 'library' ) {
+        my $user_branch = C4::Context::mybranch();
+        Koha::Exception->throw( message => 'Unauthorized branch parameter' )
+            unless $user_branch && $branchcode eq $user_branch;
+        return;
+    }
+
+    if ( $pref eq 'library_group' ) {
+        my $groups = $self->library_group_limits;
+        return unless @$groups;
+        my $allowed = {
+            map { $_->branchcode => 1 }
+            map { $_->all_libraries } @$groups
+        };
+        Koha::Exception->throw( message => 'Unauthorized branch parameter' )
+            unless $allowed->{$branchcode};
+    }
 }
 
 =head3 _library_limits
