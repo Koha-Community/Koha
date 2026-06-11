@@ -2418,6 +2418,7 @@ sub GetInvoices {
     my $query = qq{
         SELECT aqinvoices.invoiceid, aqinvoices.invoicenumber, aqinvoices.booksellerid, aqinvoices.shipmentdate, aqinvoices.billingdate, aqinvoices.closedate, aqinvoices.shipmentcost, aqinvoices.shipmentcost_budgetid, aqinvoices.message_id,
             aqbooksellers.name AS suppliername,
+            aqbooksellers.invoiceincgst,
           COUNT(
             DISTINCT IF(
               aqorders.datereceived IS NOT NULL,
@@ -2538,7 +2539,7 @@ sub GetInvoices {
     }
 
     $query .=
-        " GROUP BY aqinvoices.invoiceid, aqinvoices.invoicenumber, aqinvoices.booksellerid, aqinvoices.shipmentdate, aqinvoices.billingdate, aqinvoices.closedate, aqinvoices.shipmentcost, aqinvoices.shipmentcost_budgetid, aqinvoices.message_id, aqbooksellers.name";
+        " GROUP BY aqinvoices.invoiceid, aqinvoices.invoicenumber, aqinvoices.booksellerid, aqinvoices.shipmentdate, aqinvoices.billingdate, aqinvoices.closedate, aqinvoices.shipmentcost, aqinvoices.shipmentcost_budgetid, aqinvoices.message_id, aqbooksellers.name, aqbooksellers.invoiceincgst";
 
     if ( $args{order_by} ) {
         my ( $column, $direction ) = split / /, $args{order_by};
