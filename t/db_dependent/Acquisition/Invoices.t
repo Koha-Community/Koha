@@ -186,6 +186,18 @@ is( $invoices[1]->{invoicenumber}, 'invoice2', 'GetInvoices() to search by only 
 is( scalar @invoices,              1,               'GetInvoices() to filter by closedate' );
 is( $invoices[0]->{invoicenumber}, 'invoice_close', 'GetInvoices() to filter by closedate' );
 
+subtest 'GetInvoices() returns financial totals' => sub {
+    plan tests => 4;
+
+    my @inv  = GetInvoices( invoicenumber => 'invoice2' );
+    my $inv2 = $inv[0];
+
+    ok( exists $inv2->{total_tax_excluded}, 'GetInvoices returns total_tax_excluded' );
+    ok( exists $inv2->{total_tax_included}, 'GetInvoices returns total_tax_included' );
+    ok( exists $inv2->{total_adj},          'GetInvoices returns total_adj' );
+    cmp_ok( $inv2->{total_tax_included}, '>=', 0, 'total_tax_included is non-negative' );
+};
+
 my $invoicesummary1 = GetInvoice($invoiceid1);
 is( $invoicesummary1->{'invoicenumber'}, 'invoice1', 'GetInvoice retrieves correct invoice' );
 is(
