@@ -115,8 +115,9 @@ $template->param( templates => Koha::Notice::Templates->search( { module => 'rep
 if ( $op eq 'edit_form' || $op eq 'cud-update_sql' || $op eq 'cud-update_and_run_sql' ) {
     my $report = Koha::Reports->find( scalar $input->param('id') );
     if ( $report && ( !$report->borrowernumber || $report->borrowernumber != $borrowernumber ) ) {
+        my $patron = Koha::Patrons->find($borrowernumber);
         output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
-            unless Koha::Patrons->find($borrowernumber)->has_permission( { reports => 'edit_all_reports' } );
+            unless $patron && $patron->has_permission( { reports => 'edit_all_reports' } );
     }
 }
 

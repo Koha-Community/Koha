@@ -6,7 +6,8 @@ use Koha::Exception;
 
 use Exception::Class (
     'Koha::Exceptions::Report' => {
-        isa => 'Koha::Exception',
+        isa         => 'Koha::Exception',
+        description => 'A report operation failed',
     },
     'Koha::Exceptions::Report::DuplicateRunning' => {
         isa         => 'Koha::Exceptions::Report',
