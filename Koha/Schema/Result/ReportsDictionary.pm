@@ -75,7 +75,7 @@ SQL snippet for us in reports
   is_nullable: 1
   size: 6
 
-Koha module this definition is for Circulation, Catalog, Patrons, Acquisitions, Accounts)
+Koha module this definition is for (Circulation, Catalog, Patrons, Acquisitions, Accounts)
 
 =cut
 
@@ -117,8 +117,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-06-11 15:06:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Mf8EAq5rABGhKuzoUMymEA
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-06-11 18:54:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NEd9fYq1gJ8G+SvtDIF8Ng
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
