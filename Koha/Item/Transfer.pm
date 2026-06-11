@@ -77,7 +77,7 @@ Returns the associated item for this transfer.
 
 sub item {
     my ($self) = @_;
-    my $item_rs = $self->_result->itemnumber;
+    my $item_rs = $self->_result->item;
     return Koha::Item->_new_from_dbic($item_rs);
 }
 
@@ -91,7 +91,7 @@ Returns the associated from_library for this transfer.
 
 sub from_library {
     my ($self) = @_;
-    my $from_library_rs = $self->_result->frombranch;
+    my $from_library_rs = $self->_result->from_library;
     return Koha::Library->_new_from_dbic($from_library_rs);
 }
 
@@ -105,7 +105,7 @@ Returns the associated to_library for this transfer.
 
 sub to_library {
     my ($self) = @_;
-    my $to_library_rs = $self->_result->tobranch;
+    my $to_library_rs = $self->_result->to_library;
     return Koha::Library->_new_from_dbic($to_library_rs);
 }
 

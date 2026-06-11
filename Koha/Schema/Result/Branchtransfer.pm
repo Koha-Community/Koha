@@ -299,4 +299,25 @@ sub koha_objects_class {
     'Koha::Item::Transfers';
 }
 
+__PACKAGE__->belongs_to(
+    "item",
+    "Koha::Schema::Result::Item",
+    { itemnumber => "itemnumber" },
+    { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+__PACKAGE__->belongs_to(
+    "from_library",
+    "Koha::Schema::Result::Branch",
+    { branchcode => "frombranch" },
+    { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+__PACKAGE__->belongs_to(
+    "to_library",
+    "Koha::Schema::Result::Branch",
+    { branchcode => "tobranch" },
+    { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
 1;
