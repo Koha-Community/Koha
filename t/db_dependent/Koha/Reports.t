@@ -568,7 +568,7 @@ subtest 'running' => sub {
 };
 
 subtest 'check_edit_permission() and store enforcement' => sub {
-    plan tests => 6;
+    plan tests => 8;
 
     my $owner  = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
     my $editor = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
@@ -618,6 +618,17 @@ subtest 'check_edit_permission() and store enforcement' => sub {
             { report_name => 'new_one', savedsql => 'SELECT 1', borrowernumber => $owner->borrowernumber } )->store;
     }
     'creating a new report is not subject to the edit check';
+
+    my $ownerless = Koha::Report->new( { report_name => 'ownerless_test', savedsql => 'SELECT 1' } )->store;
+
+    t::lib::Mocks::mock_userenv( { patron => $owner } );
+    throws_ok { $ownerless->savedsql('SELECT 2')->store }
+    'Koha::Exceptions::Report::EditPermission',
+        'a patron without edit_all_reports cannot edit an ownerless report';
+
+    t::lib::Mocks::mock_userenv( { patron => $editor } );
+    lives_ok { $ownerless->savedsql('SELECT 3')->store }
+    'a patron with edit_all_reports can edit an ownerless report';
 };
 
 $schema->storage->txn_rollback;
