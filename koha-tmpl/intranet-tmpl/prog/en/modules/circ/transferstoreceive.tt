@@ -84,12 +84,23 @@
                     },
                     embed: ["item+strings", "item.biblio", "item.home_library", "item.item_type", "item.first_hold.patron", "item.recall.patron", "from_library"],
                     order: [[1, "asc"]],
+                    orderFixed: { pre: [[0, "asc"]] },
+                    rowGroup: {
+                        dataSrc: "from_library_id",
+                        startRender: function (rows, group) {
+                            var first = rows.data()[0];
+                            return first.from_library
+                                ? escape_str(first.from_library.name)
+                                : escape_str(group);
+                        },
+                    },
+                    columnDefs: [{ visible: false, targets: [0] }],
                     columns: [
                         {
                             data: "me.from_library_id",
                             title: _("Sent from"),
                             searchable: true,
-                            orderable: true,
+                            orderable: false,
                             render: function (data, type, row, meta) {
                                 return row.from_library ? escape_str(row.from_library.name) : "";
                             },
