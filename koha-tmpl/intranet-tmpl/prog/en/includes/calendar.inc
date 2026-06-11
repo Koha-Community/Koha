@@ -158,8 +158,10 @@
                 validate_date( dateText, instance );
                 var thisInput = instance.input;
                 if ( thisInput.hasAttribute('data-date_to') ) {
-                    var endPicker = document.querySelector("#"+thisInput.dataset.date_to)._flatpickr;
-                    endPicker.set('minDate', selectedDates[0]);
+                    var endPickerEl = document.querySelector("#"+thisInput.dataset.date_to);
+                    if (endPickerEl && endPickerEl._flatpickr) {
+                        endPickerEl._flatpickr.set('minDate', selectedDates[0]);
+                    }
                 }
 
                 let = on_close_focus = $(thisInput).data('flatpickr-on-close-focus');

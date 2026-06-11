@@ -415,6 +415,7 @@ export default {
                             name: "started_on",
                             type: "date",
                             label: $__("Start date"),
+                            indexRequired: true,
                             componentProps: {
                                 date_to: {
                                     type: "string",
@@ -427,6 +428,7 @@ export default {
                             name: "ended_on",
                             type: "date",
                             label: $__("End date"),
+                            indexRequired: true,
                         },
                         {
                             name: "proxy",
