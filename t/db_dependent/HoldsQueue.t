@@ -9,7 +9,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 68;
+use Test::More tests => 69;
 use Data::Dumper;
 
 use C4::Calendar;
@@ -450,8 +450,11 @@ Koha::CirculationRules->set_rule(
 $dbh->do("DELETE FROM issues");
 
 # Test homebranch = patron branch
-t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'HomeLibrary' );
-t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl',   'homebranch' );
+t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl',    'HomeLibrary' );
+t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl',      'homebranch' );
+t::lib::Mocks::mock_preference( 'LocalHoldsExclusivityPeriod',        7 );
+t::lib::Mocks::mock_preference( 'LocalHoldsExclusivityPatronControl', 'HomeLibrary' );
+t::lib::Mocks::mock_preference( 'LocalHoldsExclusivityItemControl',   'homebranch' );
 C4::Context->clear_syspref_cache();
 $dbh->do("DELETE FROM reserves");
 $sth->execute( $borrower1->{borrowernumber}, $biblionumber, $branchcodes[0], 1 );
@@ -471,7 +474,7 @@ is(
 );
 is(
     $holds_queue->[0]->{local_holdgroup_match}, 1,
-    "tmp_holdsqueue.local_holdgroup_match is set for a local match"
+    "tmp_holdsqueue.local_holdgroup_match is set when exclusivity controls also match"
 );
 my $hft_row = $dbh->selectrow_hashref(
     "SELECT local_holdgroup_match FROM hold_fill_targets WHERE borrowernumber = ?",
@@ -479,8 +482,9 @@ my $hft_row = $dbh->selectrow_hashref(
 );
 is(
     $hft_row->{local_holdgroup_match}, 1,
-    "hold_fill_targets.local_holdgroup_match is set for a local match"
+    "hold_fill_targets.local_holdgroup_match is set when exclusivity controls also match"
 );
+t::lib::Mocks::mock_preference( 'LocalHoldsExclusivityPeriod', 0 );
 
 ### Test branch transfer limits ###
 t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'HomeLibrary' );
@@ -2642,6 +2646,94 @@ SKIP: {
         is(
             $hft_non_local->local_holdgroup_match, 0,
             "local_holdgroup_match is NOT set for a non-local match"
+        );
+    }
+
+    $schema->storage->txn_rollback;
+};
+
+subtest "local_holdgroup_match uses exclusivity controls, not LocalHoldsPriority controls" => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    # Reproduce the reported bug:
+    # LHP targets an item via patron-home/item-homebranch matching.
+    # Exclusivity uses pickup-library/item-holdingbranch.
+    # When the two sets of controls point at different branches, the flag must
+    # reflect the EXCLUSIVITY check, not the LHP match.
+    #
+    # Hold group: lib_a (Fairfield) + lib_b (Fairview)
+    # Items:      lib_b (home+holding), lib_c (home+holding, NOT in group)
+    # Hold:       patron home = lib_c, pickup = lib_a
+    # LHP (HomeLibrary/homebranch):   patron home lib_c == item homebranch lib_c -> targets lib_c item
+    # Exclusivity (PickupLibrary/holdingbranch): pickup lib_a vs lib_c holdingbranch -> NOT in group -> flag = 0
+
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',                 'GiveLibrary' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl',    'HomeLibrary' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl',      'homebranch' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsExclusivityPeriod',        7 );
+    t::lib::Mocks::mock_preference( 'LocalHoldsExclusivityPatronControl', 'PickupLibrary' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsExclusivityItemControl',   'holdingbranch' );
+
+    my $group = $builder->build_object( { class => 'Koha::Library::Groups', value => { ft_local_hold_group => 1 } } );
+    my $lib_a = $builder->build_object( { class => 'Koha::Libraries' } );    # Fairfield (pickup)
+    my $lib_b = $builder->build_object( { class => 'Koha::Libraries' } );    # Fairview  (in group with lib_a)
+    my $lib_c = $builder->build_object( { class => 'Koha::Libraries' } );    # Midway    (NOT in group)
+
+    $builder->build_object(
+        { class => 'Koha::Library::Groups', value => { parent_id => $group->id, branchcode => $lib_a->branchcode } } );
+    $builder->build_object(
+        { class => 'Koha::Library::Groups', value => { parent_id => $group->id, branchcode => $lib_b->branchcode } } );
+
+    Koha::CirculationRules->set_rule(
+        {
+            rule_name  => 'holdallowed',
+            rule_value => 'from_any_library',
+            branchcode => undef,
+            itemtype   => undef,
+        }
+    );
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item_b = $builder->build_sample_item(
+        {
+            biblionumber  => $biblio->biblionumber, homebranch => $lib_b->branchcode,
+            holdingbranch => $lib_b->branchcode
+        }
+    );
+    my $item_c = $builder->build_sample_item(
+        {
+            biblionumber  => $biblio->biblionumber, homebranch => $lib_c->branchcode,
+            holdingbranch => $lib_c->branchcode
+        }
+    );
+
+    # Patron home = lib_c (Midway); pickup = lib_a (Fairfield)
+    my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $lib_c->branchcode } } );
+    my $reserve_id = AddReserve(
+        {
+            branchcode     => $lib_a->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 1,
+        }
+    );
+
+    C4::HoldsQueue::CreateQueue();
+
+    my $hft = $schema->resultset('HoldFillTarget')->search( { reserve_id => $reserve_id }, { rows => 1 } )->next;
+    ok( $hft, "Hold fill target created" );
+
+SKIP: {
+        skip "No hold_fill_target row to inspect", 2 unless $hft;
+        is(
+            $hft->get_column('itemnumber'), $item_c->itemnumber,
+            "LHP correctly targeted the lib_c item (patron home matches item homebranch)"
+        );
+        is(
+            $hft->local_holdgroup_match, 0,
+            "local_holdgroup_match is 0: lib_c holdingbranch is not in the hold group with pickup lib_a"
         );
     }
 

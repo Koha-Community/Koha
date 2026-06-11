@@ -798,11 +798,10 @@ sub MapItemsToHoldRequests {
                                 holdingbranch  => $item->{holdingbranch},
                                 pickup_branch  => $request->{branchcode}
                                     || $request->{borrowerbranch},
-                                reserve_id            => $request->{reserve_id},
-                                item_level            => $request->{item_level_hold},
-                                reservedate           => $request->{reservedate},
-                                reservenotes          => $request->{reservenotes},
-                                local_holdgroup_match => 1,
+                                reserve_id   => $request->{reserve_id},
+                                item_level   => $request->{item_level_hold},
+                                reservedate  => $request->{reservedate},
+                                reservenotes => $request->{reservenotes},
                             };
                             $allocated_items{ $item->{itemnumber} }++;
                             $request->{allocated} = 1;
@@ -849,11 +848,10 @@ sub MapItemsToHoldRequests {
                                 holdingbranch  => $item->{holdingbranch},
                                 pickup_branch  => $request->{branchcode}
                                     || $request->{borrowerbranch},
-                                reserve_id            => $request->{reserve_id},
-                                item_level            => $request->{item_level_hold},
-                                reservedate           => $request->{reservedate},
-                                reservenotes          => $request->{reservenotes},
-                                local_holdgroup_match => 1,
+                                reserve_id   => $request->{reserve_id},
+                                item_level   => $request->{item_level_hold},
+                                reservedate  => $request->{reservedate},
+                                reservenotes => $request->{reservenotes},
                             };
                             $allocated_items{ $item->{itemnumber} }++;
                             $request->{allocated} = 1;
@@ -1147,7 +1145,7 @@ sub CreatePicklistFromItemMap {
         INSERT INTO tmp_holdsqueue (biblionumber,itemnumber,barcode,surname,firstname,phone,borrowernumber,
                                     cardnumber,reservedate,title, itemcallnumber,
                                     holdingbranch,pickbranch,notes, hold_group_id, item_level_request, local_holdgroup_match)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     " );
 
     foreach my $itemnumber ( sort keys %$item_map ) {
