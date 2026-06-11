@@ -99,7 +99,7 @@
                             searchable: true,
                             orderable: true,
                             render: function (data, type, row, meta) {
-                                return escape_str(row.from_library.name);
+                                return row.from_library ? escape_str(row.from_library.name) : "";
                             },
                         },
                         {
@@ -171,7 +171,7 @@
                             searchable: true,
                             orderable: true,
                             render: function (data, type, row, meta) {
-                                return escape_str(row.item.home_library.name);
+                                return row.item.home_library ? escape_str(row.item.home_library.name) : "";
                             },
                         },
                         {
