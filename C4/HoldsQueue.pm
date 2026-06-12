@@ -37,6 +37,7 @@ BEGIN {
 
 use C4::Context;
 use C4::Circulation qw( GetBranchItemRule );
+use Koha::AuthorisedValues;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Hold::HoldsQueueItems;
 use Koha::HoldGroup;
@@ -1146,8 +1147,9 @@ sub CreatePicklistFromItemMap {
     my $sth_load = $dbh->prepare( "
         INSERT INTO tmp_holdsqueue (biblionumber,itemnumber,barcode,surname,firstname,phone,borrowernumber,
                                     cardnumber,reservedate,title, itemcallnumber,
-                                    holdingbranch,pickbranch,notes, hold_group_id, item_level_request, local_holdgroup_match)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                                    holdingbranch,pickbranch,notes, hold_group_id, item_level_request,
+                                    local_holdgroup_match, itype_description, ccode_description, location_description)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     " );
 
     foreach my $itemnumber ( sort keys %$item_map ) {
@@ -1164,6 +1166,15 @@ sub CreatePicklistFromItemMap {
         my $item           = Koha::Items->find($itemnumber);
         my $barcode        = $item->barcode;
         my $itemcallnumber = $item->itemcallnumber;
+
+        my $itype_description;
+        if ( my $itemtype = $item->itemtype ) {
+            $itype_description = $itemtype->description;
+        }
+        my $ccode_description = Koha::AuthorisedValues->get_description_by_koha_field(
+            { kohafield => 'items.ccode', authorised_value => $item->ccode } )->{lib};
+        my $location_description = Koha::AuthorisedValues->get_description_by_koha_field(
+            { kohafield => 'items.location', authorised_value => $item->location } )->{lib};
 
         my $patron     = Koha::Patrons->find($borrowernumber);
         my $cardnumber = $patron->cardnumber;
@@ -1182,9 +1193,10 @@ sub CreatePicklistFromItemMap {
         }
 
         $sth_load->execute(
-            $biblionumber,  $itemnumber,  $barcode,      $surname, $firstname, $phone, $borrowernumber,
-            $cardnumber,    $reservedate, $title,        $itemcallnumber,
-            $holdingbranch, $pickbranch,  $reservenotes, $hold_group_id, $item_level, $local_holdgroup_match
+            $biblionumber,          $itemnumber,        $barcode,      $surname, $firstname, $phone, $borrowernumber,
+            $cardnumber,            $reservedate,       $title,        $itemcallnumber,
+            $holdingbranch,         $pickbranch,        $reservenotes, $hold_group_id, $item_level,
+            $local_holdgroup_match, $itype_description, $ccode_description, $location_description
         );
     }
 }
