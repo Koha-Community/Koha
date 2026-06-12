@@ -126,6 +126,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'items_batchmod', 'Perform batch modification of items'),
    (13, 'items_batchmod_restricted', 'Limit batch item modification to subfields defined in the SubfieldsToAllowForRestrictedBatchmod preference (please note that items_batchmod is still required)'),
    (13, 'items_batchdel', 'Perform batch deletion of items'),
+   (13, 'items_modification_by_age', 'Define rules for automatic item aging'),
    (13, 'manage_csv_profiles', 'Manage CSV export profiles'),
    (13, 'moderate_tags', 'Moderate patron tags'),
    (13, 'rotating_collections', 'Manage rotating collections'),

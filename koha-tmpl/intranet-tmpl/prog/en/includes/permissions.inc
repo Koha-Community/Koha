@@ -436,6 +436,9 @@
             Limit batch item modification to subfields defined in the SubfieldsToAllowForRestrictedBatchmod preference (please note that items_batchmod is still required)
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'items_modification_by_age' -%]
+        <span class="sub_permission items_modification_by_age"> Define rules for automatic item aging </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'label_creator' -%]
         <span class="sub_permission label_creator_subpermission"> Create printable labels and barcodes from catalog and patron data </span>
         <span class="permissioncode">([% name | html %])</span>
