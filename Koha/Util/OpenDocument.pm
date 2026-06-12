@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use File::Basename    qw( dirname );
 use OpenOffice::OODoc qw( odfDocument odfWorkingDirectory );
+use Scalar::Util      qw(looks_like_number);
 
 use parent qw( Exporter );
 
@@ -70,6 +71,7 @@ sub generate_ods {
         for ( my $i = 0 ; $i < $nb_rows ; $i++ ) {
             for ( my $j = 0 ; $j < $nb_cols ; $j++ ) {
                 my $cellval = $input_rows[$i][$j];
+                $odf_doc->cellValueType( $odf_rows[$i], $j, 'float' ) if looks_like_number($cellval);
                 $odf_doc->cellValue( $odf_rows[$i], $j, $cellval );
             }
         }
