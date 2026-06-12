@@ -33,9 +33,11 @@ use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Serials;
+use Koha::AdditionalFields;
 
-my $query   = CGI->new;
-my $routing = $query->param('routing') || C4::Context->preference("RoutingSerials");
+my $query             = CGI->new;
+my $routing           = $query->param('routing') || C4::Context->preference("RoutingSerials");
+my @additional_fields = Koha::AdditionalFields->search( { tablename => 'subscription', searchable => 1 } )->as_list;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -48,6 +50,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 $template->param(
     routing                                          => $routing,
+    additional_fields_for_subscription               => \@additional_fields,
     ( uc( C4::Context->preference("marcflavour") ) ) => 1
 );
 
