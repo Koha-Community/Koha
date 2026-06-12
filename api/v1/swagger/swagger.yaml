@@ -104,6 +104,8 @@ definitions:
     $ref: ./definitions/hold.yaml
   holds:
     $ref: ./definitions/holds.yaml
+  holds_queue_item:
+    $ref: ./definitions/holds_queue_item.yaml
   hold_group:
     $ref: ./definitions/hold_group.yaml
   ill_backend:
@@ -465,6 +467,8 @@ paths:
     $ref: ./paths/extended_attribute_types.yaml#/~1extended_attribute_types
   /holds:
     $ref: ./paths/holds.yaml#/~1holds
+  "/holds/queue":
+    $ref: "./paths/holds_queue.yaml#/~1holds~1queue"
   "/holds/suspension_bulk":
     $ref: "./paths/holds.yaml#/~1holds~1suspension_bulk"
   "/holds/cancellation_bulk":

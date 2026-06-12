@@ -1,0 +1,94 @@
+---
+type: object
+properties:
+  biblio_id:
+    type:
+      - integer
+      - "null"
+    description: Internal biblio identifier
+  item_id:
+    type: integer
+    description: Internal item identifier
+  barcode:
+    type:
+      - string
+      - "null"
+    description: Item barcode
+  patron_id:
+    type: integer
+    description: Internal patron identifier
+  hold_date:
+    type:
+      - string
+      - "null"
+    format: date
+    description: The date the hold was placed
+  holding_library_id:
+    type:
+      - string
+      - "null"
+    description: Library where the item is currently held
+  pickup_library_id:
+    type:
+      - string
+      - "null"
+    description: Library where the item should be sent for pickup
+  callnumber:
+    type:
+      - string
+      - "null"
+    description: Item call number
+  notes:
+    type:
+      - string
+      - "null"
+    description: Notes related to this hold
+  hold_group_id:
+    type:
+      - integer
+      - "null"
+    description: Internal hold group identifier
+  item_level:
+    type: boolean
+    description: Whether this is an item-level request
+  local_holdgroup_match:
+    type:
+      - boolean
+      - "null"
+    description: Whether this hold matched a local hold group
+  itype_description:
+    type:
+      - string
+      - "null"
+    description: Item type description (materialized)
+  ccode_description:
+    type:
+      - string
+      - "null"
+    description: Collection code description (materialized)
+  location_description:
+    type:
+      - string
+      - "null"
+    description: Shelving location description (materialized)
+  biblio:
+    type:
+      - object
+      - "null"
+    description: Bibliographic record (x-koha-embed)
+  item:
+    type:
+      - object
+      - "null"
+    description: The item (x-koha-embed)
+  patron:
+    type:
+      - object
+      - "null"
+    description: The patron (x-koha-embed)
+  pickup_library:
+    type:
+      - object
+      - "null"
+    description: The pickup library (x-koha-embed)
+additionalProperties: false

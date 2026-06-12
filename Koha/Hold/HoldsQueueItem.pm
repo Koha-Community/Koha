@@ -23,6 +23,7 @@ use Koha::Database;
 
 use Koha::Items;
 use Koha::Biblios;
+use Koha::Libraries;
 use Koha::Patrons;
 
 use base qw(Koha::Object);
@@ -37,35 +38,63 @@ Koha::Hold::HoldsQueueItem - Koha holds queue items object class
 
 =head3 patron
 
+    my $patron = $queue_item->patron;
+
+Returns the related L<Koha::Patron> object for the hold requester,
+or C<undef> if not found.
+
 =cut
 
 sub patron {
     my ($self) = @_;
-    my $rs = $self->_result->borrowernumber;
+    my $rs = $self->_result->patron;
     return unless $rs;
     return Koha::Patron->_new_from_dbic($rs);
 }
 
 =head3 biblio
 
+    my $biblio = $queue_item->biblio;
+
+Returns the related L<Koha::Biblio> object, or C<undef> if not found.
+
 =cut
 
 sub biblio {
     my ($self) = @_;
-    my $rs = $self->_result->biblionumber;
+    my $rs = $self->_result->biblio;
     return unless $rs;
     return Koha::Biblio->_new_from_dbic($rs);
 }
 
 =head3 item
 
+    my $item = $queue_item->item;
+
+Returns the related L<Koha::Item> object, or C<undef> if not found.
+
 =cut
 
 sub item {
     my ($self) = @_;
-    my $rs = $self->_result->itemnumber;
+    my $rs = $self->_result->item;
     return unless $rs;
     return Koha::Item->_new_from_dbic($rs);
+}
+
+=head3 pickup_library
+
+    my $pickup_library = $queue_item->pickup_library;
+
+Returns the related L<Koha::Library> object, or C<undef> if not found.
+
+=cut
+
+sub pickup_library {
+    my ($self) = @_;
+    my $rs = $self->_result->pickup_library;
+    return unless $rs;
+    return Koha::Library->_new_from_dbic($rs);
 }
 
 =head2 Internal methods
@@ -76,6 +105,29 @@ sub item {
 
 sub _type {
     return 'TmpHoldsqueue';
+}
+
+=head3 to_api_mapping
+
+=cut
+
+sub to_api_mapping {
+    return {
+        biblionumber       => 'biblio_id',
+        itemnumber         => 'item_id',
+        borrowernumber     => 'patron_id',
+        reservedate        => 'hold_date',
+        holdingbranch      => 'holding_library_id',
+        pickbranch         => 'pickup_library_id',
+        itemcallnumber     => 'callnumber',
+        item_level_request => 'item_level',
+        surname            => undef,
+        firstname          => undef,
+        phone              => undef,
+        cardnumber         => undef,
+        title              => undef,
+        timestamp          => undef,
+    };
 }
 
 =head1 AUTHORS

@@ -1,0 +1,99 @@
+---
+"/holds/queue":
+  get:
+    x-mojo-to: "Holds::Queue#list"
+    operationId: listHoldsQueue
+    tags:
+      - holds
+    summary: List holds queue
+    parameters:
+      - name: biblio_id
+        in: query
+        description: Internal biblio identifier
+        type: integer
+      - name: item_id
+        in: query
+        description: Internal item identifier
+        type: integer
+      - name: patron_id
+        in: query
+        description: Internal patron identifier
+        type: integer
+      - name: holding_library_id
+        in: query
+        description: Current holding library
+        type: string
+      - name: pickup_library_id
+        in: query
+        description: Pickup library
+        type: string
+      - name: item_level
+        in: query
+        description: Item level request
+        type: boolean
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/request_id_header"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - +strings
+            - biblio
+            - item
+            - item+strings
+            - item.holding_library
+            - item.home_library
+            - patron
+            - patron+strings
+            - patron.category
+            - patron.library
+            - patron.notice_email_address
+            - pickup_library
+        collectionFormat: csv
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A list of holds queue items
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/holds_queue_item"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        circulate: circulate_remaining_permissions
