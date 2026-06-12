@@ -507,9 +507,9 @@
             docurl = docurl.replace("{FIELD}", "" + field);
             docurl = docurl.replace("{LANG}", lang);
             window.open(docurl);
-        } else if (marcflavour == "MARC21") {
+        } else if (Koha.prefs.marcflavour == "MARC21") {
             _MARC21FieldDoc(field);
-        } else if (marcflavour == "UNIMARC") {
+        } else if (Koha.prefs.marcflavour == "UNIMARC") {
             _UNIMARCFieldDoc(field);
         }
         return false;
