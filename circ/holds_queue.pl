@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
-=head1 view_holdsqueue
+=head1 holds_queue
 
 This script displays items in the tmp_holdsqueue table
 
@@ -30,7 +30,7 @@ use Koha::BiblioFrameworks;
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {
-        template_name => "circ/view_holdsqueue.tt",
+        template_name => "circ/holds_queue.tt",
         query         => $query,
         type          => "intranet",
         flagsrequired => { circulate => "circulate_remaining_permissions" },

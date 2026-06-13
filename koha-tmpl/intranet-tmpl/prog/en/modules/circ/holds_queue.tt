@@ -30,7 +30,7 @@
 </style>
 </head>
 
-<body id="circ_view_holdsqueue" class="circ">
+<body id="circ_holds_queue" class="circ">
 [% WRAPPER 'header.inc' %]
     [% INCLUDE 'circ-search.inc' %]
 [% END %]
@@ -40,21 +40,8 @@
         [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
         [% END %]
-        [% IF ( run_report ) %]
-            [% WRAPPER breadcrumb_item %]
-                [% IF Koha.Preference('UseHoldsQueueFilterOptions') %]
-                    <a href="/cgi-bin/koha/circ/view_holdsqueue.pl?branchlimit=[% Branches.GetLoggedInBranchcode | uri %]">Holds queue</a>
-                [% ELSE %]
-                    <a href="/cgi-bin/koha/circ/view_holdsqueue.pl?branchlimit=[% Branches.GetLoggedInBranchcode | uri %]&run_report=1">Holds queue</a>
-                [% END %]
-            [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Results</span>
-            [% END %]
-        [% ELSE %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Holds queue</span>
-            [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Holds queue</span>
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
@@ -103,7 +90,7 @@
 [% END %]
 
 [% BLOCK filter_form %]
-    <form method="get" name="f" action="/cgi-bin/koha/circ/view_holdsqueue.pl">
+    <form method="get" name="f" action="/cgi-bin/koha/circ/holds_queue.pl">
         [% IF ( run_report ) %]
             [% SET fieldset_class='brief' %]
         [% ELSE -%]
@@ -159,7 +146,7 @@
     [% INCLUDE 'js-date-format.inc' %]
     [% Asset.js("js/hold-group.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
-        var table_settings = [% TablesSettings.GetTableSettings('circ', 'view_holdsqueue', 'holds-table', 'json') | $raw %];
+        var table_settings = [% TablesSettings.GetTableSettings('circ', 'holds_queue', 'holds-table', 'json') | $raw %];
         $(document).ready(function () {
             // Apply select2 to all select fields having a "multiple" attribute
             let selectFields = document.querySelectorAll("select[multiple]");

@@ -81,9 +81,9 @@
                 <ul class="buttons-list">
                     <li>
                         [% IF Koha.Preference('UseHoldsQueueFilterOptions') %]
-                            <a class="circ-button holds-queue" href="/cgi-bin/koha/circ/view_holdsqueue.pl?branchlimit=[% Branches.GetLoggedInBranchcode | uri %]"><i class="fa fa-tasks"></i> Holds queue</a>
+                            <a class="circ-button holds-queue" href="/cgi-bin/koha/circ/holds_queue.pl?branchlimit=[% Branches.GetLoggedInBranchcode | uri %]"><i class="fa fa-tasks"></i> Holds queue</a>
                         [% ELSE %]
-                            <a class="circ-button holds-queue" href="/cgi-bin/koha/circ/view_holdsqueue.pl?branchlimit=[% Branches.GetLoggedInBranchcode | uri %]&run_report=1"><i class="fa fa-tasks"></i> Holds queue</a>
+                            <a class="circ-button holds-queue" href="/cgi-bin/koha/circ/holds_queue.pl?branchlimit=[% Branches.GetLoggedInBranchcode | uri %]&run_report=1"><i class="fa fa-tasks"></i> Holds queue</a>
                         [% END %]
                     </li>
                     <li>
