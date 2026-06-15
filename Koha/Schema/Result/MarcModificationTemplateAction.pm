@@ -62,7 +62,7 @@ __PACKAGE__->table("marc_modification_template_actions");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 1
+  size: 2
 
 =head2 field_value
 
@@ -167,7 +167,7 @@ __PACKAGE__->add_columns(
   "from_field",
   { data_type => "varchar", is_nullable => 0, size => 3 },
   "from_subfield",
-  { data_type => "varchar", is_nullable => 1, size => 1 },
+  { data_type => "varchar", is_nullable => 1, size => 2 },
   "field_value",
   { data_type => "text", is_nullable => 1 },
   "to_field",
@@ -234,8 +234,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-02-24 20:18:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yDK2nFt+Fj3UuXAij1UwQw
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-06-15 15:20:10
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4595k+0FjvRzTEO2/QIbCg
 
 __PACKAGE__->add_columns(
     '+conditional_regex' => { is_boolean => 1 },
