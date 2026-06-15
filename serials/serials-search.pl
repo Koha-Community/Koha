@@ -104,7 +104,7 @@ if ($searched) {
         $mana_statuscode = $result->{code};
         @subscriptions   = @{ $result->{data} };
     } else {
-        my $subscriptions = SearchSubscriptions(
+        @subscriptions = SearchSubscriptions(
             {
                 biblionumber      => $biblionumber,
                 title             => $title,
@@ -121,9 +121,7 @@ if ($searched) {
             },
             { results_limit => C4::Context->preference('SerialsSearchResultsLimit') }
         );
-        @subscriptions = @{ $subscriptions->{results} };
-        $orig_total    = $subscriptions->{total};
-
+        $orig_total = @subscriptions;
     }
 }
 
