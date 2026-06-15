@@ -49,26 +49,21 @@ export default {
 
         onBeforeMount(() => {
             loading();
-            const client = APIClient.sysprefs;
-            client.sysprefs
-                .getAll(["ILLPartnerCode", "ILLModule"])
-                .then(pref_values => {
-                    config.value.settings.ILLPartnerCode =
-                        pref_values.value.ILLPartnerCode;
-                    config.value.settings.ILLModule =
-                        pref_values.value.ILLModule;
-                    if (config.value.settings.ILLModule != 1) {
-                        loaded();
-                        return setError(
-                            $__(
-                                "The ILL module is disabled, turn on <a href='/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ILLModule'>ILLModule</a> to use it"
-                            ),
-                            false
-                        );
-                    }
+            const client = APIClient.ill;
+            client.config.get().then(result => {
+                config.value = result;
+                if (config.value.settings.ILLModule != 1) {
                     loaded();
-                });
-            initialized.value = true;
+                    return setError(
+                        $__(
+                            "The ILL module is disabled, turn on <a href='/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ILLModule'>ILLModule</a> to use it"
+                        ),
+                        false
+                    );
+                }
+                loaded();
+                initialized.value = true;
+            });
         });
 
         return {
