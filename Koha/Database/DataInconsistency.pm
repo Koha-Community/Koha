@@ -248,7 +248,7 @@ sub errors_in_marc {
                 __x(
                 q{Biblionumber {biblionumber} has biblioitemnumber '{biblioitemnumber_in_marc}' but should be '{biblioitemnumber}' in {biblioitem_tag}${biblioitem_subfield}},
                 biblionumber             => $biblio->biblionumber,
-                biblioitemnumber_in_marc => $biblionumber,
+                biblioitemnumber_in_marc => $biblioitemnumber,
                 biblioitemnumber         => $biblio->biblioitem->biblioitemnumber,
                 biblioitem_tag           => $biblioitem_tag,
                 biblioitem_subfield      => $biblioitem_subfield,
