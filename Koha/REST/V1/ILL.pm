@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
+use C4::Context;
 use Koha::Patrons;
 
 use Try::Tiny qw( catch try );
@@ -30,6 +31,26 @@ Koha::REST::V1::ILL
 =head1 API
 
 =head2 Class methods
+
+=head3 config
+
+Return the configuration options needed for the ILL Vue app
+
+=cut
+
+sub config {
+    my $c = shift->openapi->valid_input or return;
+
+    return $c->render(
+        status  => 200,
+        openapi => {
+            settings => {
+                ILLModule      => C4::Context->preference('ILLModule'),
+                ILLPartnerCode => C4::Context->preference('ILLPartnerCode'),
+            },
+        },
+    );
+}
 
 =head3 list_users
 

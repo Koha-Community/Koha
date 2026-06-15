@@ -5,6 +5,15 @@ export class ILLAPIClient {
         });
     }
 
+    get config() {
+        return {
+            get: () =>
+                this.httpClient.get({
+                    endpoint: "config",
+                }),
+        };
+    }
+
     get supplying() {
         return {
             get: id =>

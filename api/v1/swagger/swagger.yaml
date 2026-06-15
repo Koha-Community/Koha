@@ -108,6 +108,8 @@ definitions:
     $ref: ./definitions/ill_backend.yaml
   ill_backends:
     $ref: ./definitions/ill_backends.yaml
+  ill_config:
+    $ref: ./definitions/ill_config.yaml
   ill_status:
     $ref: ./definitions/ill_status.yaml
   ill_request:
@@ -471,6 +473,8 @@ paths:
     $ref: "./paths/holds.yaml#/~1holds~1{hold_id}~1suspension"
   "/holds/{hold_id}/lowest_priority":
     $ref: "./paths/holds.yaml#/~1holds~1{hold_id}~1lowest_priority"
+  /ill/config:
+    $ref: ./paths/ill_config.yaml#/~1ill~1config
   /ill/backends:
     $ref: ./paths/ill_backends.yaml#/~1ill~1backends
   "/ill/backends/{ill_backend_id}":
@@ -1403,6 +1407,9 @@ tags:
   - description: "Manage ILL module batch statuses\n"
     name: ill_batchstatuses
     x-displayName: ILL batch statuses
+  - description: "Manage ILL configuration\n"
+    name: ill_config
+    x-displayName: ILL configuration
   - description: "Manage ILL requests\n"
     name: ill_requests
     x-displayName: ILL requests
