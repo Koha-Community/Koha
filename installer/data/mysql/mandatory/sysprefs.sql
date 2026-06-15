@@ -909,7 +909,7 @@ INSERT INTO systempreferences ( `variable`, `value` ) VALUES
 ('UseLibraryFloatLimits', '0'),
 ('UseLocationAsAQInSIP', '0'),
 ('UseOCLCEncodingLevels','0'),
-('UseRecalls','0'),
+('UseRecalls','off'),
 ('UseTransportCostMatrix','0'),
 ('UseWYSIWYGinSystemPreferences','0'),
 ('viewISBD','1'),

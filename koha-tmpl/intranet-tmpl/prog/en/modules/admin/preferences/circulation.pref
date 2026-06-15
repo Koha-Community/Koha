@@ -1587,11 +1587,14 @@ Circulation:
               class: integer
             - days.
         -
+            - Recalls
             - pref: UseRecalls
               choices:
-                  1: Use
-                  0: "Don't use"
-            - recalls. Make sure you configure <a href="/cgi-bin/koha/admin/smart-rules.pl">circulation and fine rules</a> for recalls once enabled.
+                  off: are disabled
+                  opac: can be placed through the OPAC only
+                  staff: can be placed through the staff interface only
+                  opac_and_staff: can be placed through both the OPAC and staff interface
+            - . Make sure you configure <a href="/cgi-bin/koha/admin/smart-rules.pl">circulation and fine rules</a> for recalls once enabled.
 
     SIP2:
         -
