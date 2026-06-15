@@ -13,10 +13,10 @@ return {
 
         # Print useful stuff here
         # tables
-        say $out "Modifying marc_modification_template_actions.from_subfield to VARCHR(2)";
+        say $out "Modifying marc_modification_template_actions.from_subfield to VARCHAR(2)";
 
         # Other information
-        say_success( $out, "Modified marc_modification_template_actions.from_subfield to VARCHR(2)" );
+        say_success( $out, "Modified marc_modification_template_actions.from_subfield to VARCHAR(2)" );
 
     },
 };

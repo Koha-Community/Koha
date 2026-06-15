@@ -346,12 +346,10 @@ sub _update_controlfield {
             parameter => 'subfield',
         );
     }
-    my $position      = $params->{position} ? $params->{position} + 0 : 0;    # converts 01 to 1
-    my @values        = @{ $params->{values} };
-    my $value         = $values[0];
-    my $dont_erase    = $params->{dont_erase};
-    my $field_numbers = $params->{field_numbers} // [];
-    my $i             = 0;
+    my $position   = $params->{position} ? $params->{position} + 0 : 0;    # converts 01 to 1
+    my @values     = @{ $params->{values} };
+    my $value      = $values[0];
+    my $dont_erase = $params->{dont_erase};
 
     my $field = $record->field($fieldName);
 
