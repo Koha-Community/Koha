@@ -213,7 +213,7 @@ describe("kohaTable (using REST API)", () => {
                 // default settings: show "Code"
                 cy.mock_table_settings({
                     default_save_state: 1,
-                    columns: { library_code: { is_hidden: 0 } },
+                    columns: { library_code: { is_hidden: false } },
                 });
 
                 cy.get("@columns").then(columns => {
@@ -246,7 +246,10 @@ describe("kohaTable (using REST API)", () => {
                 cy.mock_table_settings({
                     default_save_state: 1,
                     columns: {
-                        library_code: { is_hidden: 0, force_visibility: 1 },
+                        library_code: {
+                            is_hidden: false,
+                            visibility_condition: true,
+                        },
                     },
                 });
 
@@ -266,9 +269,55 @@ describe("kohaTable (using REST API)", () => {
                 cy.mock_table_settings({
                     default_save_state: 1,
                     columns: {
-                        library_code: { is_hidden: 1, force_visibility: 1 },
+                        library_code: {
+                            is_hidden: false,
+                            visibility_condition: true,
+                        },
                     },
                 });
+
+                cy.get("@columns").then(columns => {
+                    cy.get(`#${table_id} th`).should(
+                        "have.length",
+                        columns.length - 1
+                    );
+                    cy.get(`#${table_id} th`).contains("Name");
+                    cy.get(`#${table_id} th`)
+                        .contains("Code")
+                        .should("not.exist");
+                });
+            });
+        });
+
+        it("visibility_condition {visibility_condition: true, is_hidden: true}", () => {
+            build_libraries().then(() => {
+                cy.visit("/cgi-bin/koha/admin/branches.pl");
+
+                // default settings: hide "Code"
+                cy.mock_table_settings({
+                    default_save_state: 1,
+                    columns: {
+                        library_code: {
+                            visibility_condition: true,
+                            is_hidden: true,
+                        },
+                    },
+                });
+
+                cy.get("@columns").then(columns => {
+                    cy.get(`#${table_id} th`).should(
+                        "have.length",
+                        columns.length - 1
+                    );
+                    cy.get(`#${table_id} th`).contains("Name");
+                    cy.get(`#${table_id} th`)
+                        .contains("Code")
+                        .should("not.exist");
+                });
+
+                // Do not touch anything
+                // Should be kept hidden after reload
+                cy.visit("/cgi-bin/koha/admin/branches.pl");
 
                 cy.get("@columns").then(columns => {
                     cy.get(`#${table_id} th`).should(
