@@ -138,6 +138,7 @@ generate_config_file() {
         -e "s#__TEMPLATE_CACHE_DIR__#$TEMPLATE_CACHE_DIR#g" \
         -e "s#__TIMEZONE__#$TIMEZONE#g" \
         -e "s#__BCRYPT_SETTINGS__#$BCRYPT_SETTINGS#g" \
+        -e "s#__ENCRYPTION_KEY__#$ENCRYPTION_KEY#g" \
         -e "s#__UPLOAD_PATH__#$UPLOAD_PATH#g" \
         -e "s#__TMP_PATH__#$TMP_PATH#g" \
         -e "s/__LOG_DIR__/\/var\/log\/koha\/$name/g" \
@@ -650,7 +651,7 @@ if [ "${CLO_ELASTICSEARCH_SERVER}" != "" ]; then
 fi
 
 BCRYPT_SETTINGS=$(htpasswd -bnBC 10 "" password | tr -d ':\n' | sed 's/$2y/$2a/');
-
+ENCRYPTION_KEY="$(pwgen -s 32 1)"
 
 if [ "$ENABLE_SRU" != "no" ]; then
     enable_sru_server
