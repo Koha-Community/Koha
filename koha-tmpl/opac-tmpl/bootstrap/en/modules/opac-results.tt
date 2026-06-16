@@ -13,7 +13,7 @@
 [% SET CartEnabled = ( Koha.Preference('opacbookbag') == 1 ) %]
 [% SET ListsEnabled = ( Koha.Preference('virtualshelves') == 1 ) && LoginEnabled %]
 [% SET HoldsEnabled = ( Koha.Preference('OPACHoldRequests') == 1 ) && LoginEnabled %]
-[% SET RecallsEnabled = ( Koha.Preference('UseRecalls') == 1 ) && LoginEnabled %]
+[% SET RecallsEnabled = ( Koha.Preference('UseRecalls').match('opac') ) && LoginEnabled %]
 [% SET ArticleRequestsEnabled = ( Koha.Preference('ArticleRequests') == 1 ) && LoginEnabled %]
 [% SET MultiHolds = ( Koha.Preference('DisplayMultiPlaceHold') == 1 ) && HoldsEnabled %]
 [% SET CoverImagePlugins = KohaPlugins.get_plugins_opac_cover_images %]

@@ -305,7 +305,7 @@
                                     <span>Holds ([% reserves_count | html %])</span>
                                 [% END %]
                             [% END %]
-                            [% IF Koha.Preference('UseRecalls') && RECALLS.count %]
+                            [% IF Koha.Preference('UseRecalls') != "off" && RECALLS.count %]
                                 [% WRAPPER tab_item tabname= "opac-user-recalls" %]
                                     <span>Recalls ([% RECALLS.count | html %])</span>
                                 [% END %]
@@ -840,7 +840,7 @@
                                 [% END # /tab_panel#opac-user-holds %]
                             [% END # / #RESERVES.count %]
 
-                            [% IF Koha.Preference('UseRecalls') && RECALLS.count %]
+                            [% IF Koha.Preference('UseRecalls') != "off" && RECALLS.count %]
                                 [% WRAPPER tab_panel tabname="opac-user-recalls" %]
                                     <table id="recalls-table" class="table table-bordered table-striped">
                                         <caption>Recalls <span class="count">([% RECALLS.count | html %])</span></caption>

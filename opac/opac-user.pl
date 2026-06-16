@@ -311,7 +311,7 @@ if ( $pending_checkouts->count ) {    # Useless test
             $issue->{normalized_oclc} = $extractor->get_normalized_oclc;
         }
 
-        if ( C4::Context->preference('UseRecalls') ) {
+        if ( C4::Context->preference('UseRecalls') ne "off" ) {
             my $maybe_recalls = Koha::Recalls->search(
                 { biblio_id => $issue->{biblionumber}, item_id => [ undef, $issue->{itemnumber} ], completed => 0 } );
             while ( my $recall = $maybe_recalls->next ) {
@@ -350,7 +350,7 @@ $template->param(
     showpriority   => $show_priority,
 );
 
-if ( C4::Context->preference('UseRecalls') ) {
+if ( C4::Context->preference('UseRecalls') ne "off" ) {
     my $recalls = Koha::Recalls->search( { patron_id => $borrowernumber, completed => 0 } );
     $template->param( RECALLS => $recalls );
 }

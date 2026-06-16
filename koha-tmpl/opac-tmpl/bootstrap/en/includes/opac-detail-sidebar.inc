@@ -13,7 +13,7 @@
         [% END %]
     [% END %]
 
-    [% IF Koha.Preference('UseRecalls') %]
+    [% IF Koha.Preference('UseRecalls').match('opac') %]
         <li
             ><a class="recall btn btn-link btn-lg" href="/cgi-bin/koha/opac-recall.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-solid fa-fw fa-book-bookmark" aria-hidden="true"></i> Place recall</a></li
         >

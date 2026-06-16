@@ -63,7 +63,7 @@
             <span class="item-status checkedout">Checked out</span>
         [% END %]
     [% END %]
-    [% IF show_recall_link %]
+    [% IF show_recall_link != "off" %]
         [% IF logged_in_user.borrowernumber != issue.borrowernumber %]
             <a href="/cgi-bin/koha/opac-recall.pl?biblionumber=[% item.biblionumber | uri %]" class="btn btn-default btn-xs">Recall</a>
         [% END %]
@@ -129,7 +129,7 @@
     <span class="item-status pendinghold">Pending hold</span>
 [% END %]
 
-[% IF Koha.Preference('UseRecalls') && item.has_pending_recall %]
+[% IF Koha.Preference('UseRecalls') != "off" && item.has_pending_recall %]
     [% SET itemavailable = 0 %]
     <span class="item-status pendingrecall">Pending recall</span>
 [% END %]

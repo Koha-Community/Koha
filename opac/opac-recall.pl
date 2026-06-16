@@ -36,7 +36,13 @@ my $op           = $query->param('op') || '';
 my $biblionumber = $query->param('biblionumber');
 my $biblio       = Koha::Biblios->find($biblionumber);
 
-if ( C4::Context->preference('UseRecalls') ) {
+if ( $op eq 'cud-cancel' ) {
+    my $recall_id = $query->param('recall_id');
+    Koha::Recalls->find($recall_id)->set_cancelled;
+    print $query->redirect('/cgi-bin/koha/opac-user.pl');
+}
+
+if ( C4::Context->preference('UseRecalls') =~ m/opac/ ) {
 
     my $patron = Koha::Patrons->find($borrowernumber);
     my $error;
@@ -123,10 +129,6 @@ if ( C4::Context->preference('UseRecalls') ) {
                 $error = 'failed';
             }
         }
-    } elsif ( $op eq 'cud-cancel' ) {
-        my $recall_id = $query->param('recall_id');
-        Koha::Recalls->find($recall_id)->set_cancelled;
-        print $query->redirect('/cgi-bin/koha/opac-user.pl');
     }
 
     my $branches           = Koha::Libraries->search();

@@ -44,7 +44,7 @@
                 <li [% IF holdshistoryview %]class="active"[% END %]> <a href="/cgi-bin/koha/opac-holdshistory.pl">Holds history</a></li>
             [% END %]
 
-            [% IF Koha.Preference('UseRecalls') %]
+            [% IF Koha.Preference('UseRecalls') != "off" %]
                 <li [% IF recallsview %]class="active"[% END %]> <a href="/cgi-bin/koha/opac-recalls.pl">Recalls history</a> </li>
             [% END %]
 
