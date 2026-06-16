@@ -938,13 +938,8 @@ sub login_core {
         return 0;
     }
 
-    # Store the active account configuration
-    $server->{account} = $server->{config}->{accounts}->{$uid};
-    my $inst = $server->{account}->{institution};
-    $server->{institution}  = $server->{config}->{institutions}->{$inst};
-    $server->{policy}       = $server->{institution}->{policy};
-    $server->{sip_username} = $uid;
-    $server->{sip_password} = $pwd;
+    # Authenticate before storing the account on the session
+    my $inst = $server->{config}->{accounts}->{$uid}->{institution};
 
     # Authenticate using Koha's internal authentication (checks hashed password in borrowers table)
     my $auth_status = api_auth( $uid, $pwd, $inst );
@@ -953,8 +948,19 @@ sub login_core {
             "LOG_WARNING", "Authentication failed for SIP terminal '%s' of '%s': %s",
             $uid,          $inst, ( $auth_status || 'unknown' )
         );
+
+        # Clear any session state, including anything left over from a previous connection on
+        # this preforked worker, so the caller can't act as an authenticated terminal
+        delete $server->{$_} foreach qw( account ils institution policy sip_username sip_password );
         return 0;
     }
+
+    # Store the active account configuration now user has authenticated
+    $server->{account}      = $server->{config}->{accounts}->{$uid};
+    $server->{institution}  = $server->{config}->{institutions}->{$inst};
+    $server->{policy}       = $server->{institution}->{policy};
+    $server->{sip_username} = $uid;
+    $server->{sip_password} = $pwd;
 
     siplog( "LOG_INFO", "Successful login/auth for '%s' of '%s'", $server->{account}->{id}, $inst );
 
