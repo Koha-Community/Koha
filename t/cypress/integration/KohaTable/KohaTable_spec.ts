@@ -336,7 +336,7 @@ describe("kohaTable (using REST API)", () => {
             build_libraries().then(() => {
                 cy.visit("/cgi-bin/koha/admin/branches.pl");
 
-                // default settings: hide "Code"
+                // default settings: Show "Code" and cannot be toggled, but feature is off (visibility_condition=false)
                 cy.mock_table_settings({
                     default_save_state: 1,
                     columns: {
@@ -360,8 +360,8 @@ describe("kohaTable (using REST API)", () => {
                 });
 
                 // Do not touch anything
-                // But turn on a syspref that would display the column
-                // Should be kept hidden after reload
+                // But turn on the feature that would display the column
+                // Should be displayed after reload
                 // This is the behaviour for the Export column of the checkouts table, and syspref ExportCircHistory
                 cy.mock_table_settings({
                     default_save_state: 1,
@@ -379,7 +379,61 @@ describe("kohaTable (using REST API)", () => {
                 cy.get("@columns").then(columns => {
                     cy.get(`#${table_id} th`).should(
                         "have.length",
+                        columns.length
+                    );
+                    cy.get(`#${table_id} th`).contains("Name");
+                    cy.get(`#${table_id} th`).contains("Code");
+                });
+            });
+        });
+
+        it("visibility_condition modified, can be toggled", () => {
+            build_libraries().then(() => {
+                cy.visit("/cgi-bin/koha/admin/branches.pl");
+
+                // default settings: Show "Code" and can be toggled, but feature is off (visibility_condition=false)
+                cy.mock_table_settings({
+                    default_save_state: 1,
+                    columns: {
+                        library_code: {
+                            visibility_condition: false,
+                            is_hidden: false,
+                            cannot_be_toggled: false,
+                        },
+                    },
+                });
+
+                cy.get("@columns").then(columns => {
+                    cy.get(`#${table_id} th`).should(
+                        "have.length",
                         columns.length - 1
+                    );
+                    cy.get(`#${table_id} th`).contains("Name");
+                    cy.get(`#${table_id} th`)
+                        .contains("Code")
+                        .should("not.exist");
+                });
+
+                // Do not touch anything
+                // But turn on a syspref that would display the column
+                // Should be kept hidden after reload
+                cy.mock_table_settings({
+                    default_save_state: 1,
+                    columns: {
+                        library_code: {
+                            visibility_condition: true,
+                            is_hidden: false,
+                            cannot_be_toggled: false,
+                        },
+                    },
+                });
+
+                cy.visit("/cgi-bin/koha/admin/branches.pl");
+
+                cy.get("@columns").then(columns => {
+                    cy.get(`#${table_id} th`).should(
+                        "have.length",
+                        columns.length
                     );
                     cy.get(`#${table_id} th`).contains("Name");
                     cy.get(`#${table_id} th`).contains("Code");

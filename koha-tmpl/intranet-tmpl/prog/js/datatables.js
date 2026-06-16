@@ -75,6 +75,7 @@ var dataTablesDefaults = {
     },
 };
 DataTable.defaults.column.orderSequence = ["asc", "desc"];
+var kohaTableUserChoices = {};
 
 function toggledClearFilter(searchText, tableId) {
     let clear_filter_button = $("#" + tableId + "_wrapper").find(
@@ -983,43 +984,72 @@ function _dt_buttons(params) {
     return buttons;
 }
 
+function _dt_get_expected_column_visibility(column) {
+    // Determine expected visibility based on table settings
+    // Priority: is_hidden > visibility_condition
+    if (column.is_hidden) {
+        return false;
+    }
+    if (column.visibility_condition !== undefined) {
+        return !!column.visibility_condition;
+    }
+    return true; // default to visible
+}
+
 function _dt_force_visibility(table_settings, table_dt, state) {
     var columns_settings = table_settings.columns;
-    let i = 0;
-    let force_vis_columns = table_settings.columns.filter(
-        c => c.force_visibility
-    );
-    if (!force_vis_columns.length) return state;
-
     let use_names = $(table_dt.table().node()).data("bKohaColumnsUseNames");
-    if (use_names) {
-        table_dt
-            .columns(
-                force_vis_columns
-                    .map(c => "[data-colname='%s']".format(c.columnname))
-                    .join(",")
-            )
-            .every(function () {
-                let column = table_settings.columns.find(
-                    c =>
-                        c.columnname ==
-                        this.header().getAttribute("data-colname")
-                );
-                let index = this.index();
-                if (column.visibility_condition !== undefined) {
-                    state.columns[index].visible =
-                        !!column.visibility_condition;
-                    state.columns[index].cannot_be_toggled = true;
-                } else if (column.is_hidden && column.cannot_be_toggled) {
-                    state.columns[index].visible = false;
-                    state.columns[index].cannot_be_toggled = true;
-                }
-            });
-    } else {
+    if (!use_names) {
         throw new Error(
             "Cannot force column visibility without bKohaColumnsUseNames!"
         );
     }
+
+    table_dt.columns().every(function () {
+        let column = table_settings.columns.find(
+            c => c.columnname == this.header().getAttribute("data-colname")
+        );
+        let index = this.index();
+        let expected_visible = _dt_get_expected_column_visibility(column);
+
+        const user_choice =
+            state.user_choices && state.user_choices[index] !== undefined
+                ? state.user_choices[index]
+                : undefined;
+
+        // Determine visibility based on priorities
+        if (column.cannot_be_toggled) {
+            // Admin lock => always use config
+            state.columns[index].visible = expected_visible;
+            state.columns[index].cannot_be_toggled = true;
+        } else if (column.visibility_condition !== undefined) {
+            // visibility_condition is set
+            if (column.visibility_condition === true) {
+                // If the column is displayed
+                if (user_choice !== undefined) {
+                    // We read user's choice
+                    // The following condition is needed, it is not the same as `state.columns[index].visible = user_choice`!
+                    if (user_choice === false) {
+                        state.columns[index].visible = false;
+                    } else {
+                        state.columns[index].visible = true;
+                    }
+                } else {
+                    state.columns[index].visible = expected_visible;
+                }
+            } else {
+                // If the column cannot be displayed, we keep it hidden
+                state.columns[index].visible = false;
+                state.columns[index].cannot_be_toggled = true;
+            }
+        } else if (user_choice !== undefined) {
+            state.columns[index].visible = user_choice;
+        } else {
+            // No user decision, apply table settings
+            state.columns[index].visible = expected_visible;
+        }
+    });
+
     return state;
 }
 
@@ -1030,21 +1060,6 @@ function _dt_visibility(table_settings, table_dt) {
         let i = 0;
         let use_names = $(table_dt.table().node()).data("bKohaColumnsUseNames");
         if (use_names) {
-            // Deal with visibility_condition (needed when state is not saved)
-            table_settings.columns = table_settings.columns.map(c => {
-                if (
-                    c.visibility_condition !== undefined &&
-                    !c.visibility_condition
-                ) {
-                    return {
-                        ...c,
-                        is_hidden: true,
-                        cannot_be_toggled: true,
-                    };
-                }
-                return c;
-            });
-
             let hidden_columns = table_settings.columns.filter(
                 c => c.is_hidden
             );
@@ -1238,16 +1253,21 @@ function _dt_save_restore_state(table_settings, external_filter_nodes = {}) {
     };
 
     function set_default(table_settings, table_dt) {
-        let columns = new Array(table_dt.columns()[0].length).fill({
-            visible: true,
-        });
+        let columns = Array.from(
+            { length: table_dt.columns()[0].length },
+            (_, i) => ({
+                visible: true,
+            })
+        );
         let hidden_ids = _dt_visibility(table_settings, table_dt);
         hidden_ids.forEach((id, i) => {
-            columns[id] = { visible: false };
+            columns[id].visible = false;
         });
+
         // State is not loaded if time is not passed
         return { columns, time: new Date() };
     }
+
     let stateLoadCallback = function (settings) {
         // Load state from URL
         const url = new URL(window.location.href);
@@ -1264,9 +1284,11 @@ function _dt_save_restore_state(table_settings, external_filter_nodes = {}) {
 
         state = JSON.parse(state);
 
-        if (default_save_state_search) {
+        if (default_save_state || default_save_state_search) {
             $("#" + settings.nTable.id).data("loaded_from_state", true);
-        } else {
+        }
+
+        if (!default_save_state_search) {
             delete state.search;
             state.columns.forEach(c => delete c.search);
         }
@@ -1301,6 +1323,9 @@ function _dt_save_restore_state(table_settings, external_filter_nodes = {}) {
             },
             {}
         );
+
+        const tableId = settings.nTable.id;
+        data.user_choices = kohaTableUserChoices[tableId] || {};
     };
     let stateLoadParams = function (settings, data) {
         if (!$("#" + settings.nTable.id).data("loaded_from_state")) return;
@@ -1335,6 +1360,11 @@ function _dt_save_restore_state(table_settings, external_filter_nodes = {}) {
                     }
                 }
             });
+        }
+
+        if (data.user_choices) {
+            const tableId = settings.nTable.id;
+            kohaTableUserChoices[tableId] = data.user_choices;
         }
     };
 
@@ -1554,11 +1584,28 @@ function update_search_description(
             _dt_add_filters(this, table_dt, filters_options);
         }
 
-        table_dt.on("column-visibility.dt", function () {
-            if (add_filters) {
-                _dt_add_filters(this, table_dt, filters_options);
+        table_dt.on(
+            "column-visibility.dt",
+            function (e, settings, column, visibility) {
+                if (add_filters) {
+                    _dt_add_filters(this, table_dt, filters_options);
+                }
+
+                // Mark the column as user-decided when visibility changes
+                // Only set for the specific column that was toggled
+                let current_state = table_dt.state();
+                if (
+                    current_state &&
+                    current_state.columns &&
+                    current_state.columns[column]
+                ) {
+                    const tableId = settings.nTable.id;
+                    kohaTableUserChoices[tableId] ??= {};
+                    kohaTableUserChoices[tableId][column] = visibility;
+                    table_dt.state.save();
+                }
             }
-        });
+        );
 
         table_dt.on("search.dt", function (e, settings) {
             // When the DataTables search function is triggered,

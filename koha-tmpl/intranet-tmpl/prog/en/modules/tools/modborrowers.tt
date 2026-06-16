@@ -519,21 +519,18 @@
                 let selections_column = table_settings.columns.find(c => c.columnname == "batch_patron_edit_selections");
                 const selections_column_available = op == "show";
                 selections_column.cannot_be_modified = 1;
-                selections_column.visibility_condition = selections_column_available;
-                selections_column.force_visibility = 1;
+                selections_column.visibility_condition = !!selections_column_available;
 
                 if (!Koha.permissions.CanUpdatePasswordExpiration) {
                     let password_expiration_date_column = table_settings.columns.find(c => c.columnname == "batch_patron_edit_password_expiration_date");
                     password_expiration_date_column.cannot_be_modified = 1;
-                    password_expiration_date_column.visibility_condition = 0;
-                    password_expiration_date_column.force_visibility = 1;
+                    password_expiration_date_column.visibility_condition = false;
                 }
 
                 if (!Koha.permissions.CanUpdateProtectPatron) {
                     let protected_column = table_settings.columns.find(c => c.columnname == "batch_patron_edit_protected");
                     protected_column.cannot_be_modified = 1;
-                    protected_column.visibility_condition = 0;
-                    protected_column.force_visibility = 1;
+                    protected_column.visibility_condition = false;
                 }
 
                 let patron_table = $("#borrowerst").kohaTable(
