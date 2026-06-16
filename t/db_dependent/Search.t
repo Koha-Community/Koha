@@ -161,7 +161,7 @@ $contextmodule->mock(
         } elsif ( $pref eq 'SearchLimitLibrary' ) {
             return 'both';
         } elsif ( $pref eq 'UseRecalls' ) {
-            return '0';
+            return 'off';
         } elsif ( $pref eq 'ContentWarningField' ) {
             return q{};
         } elsif ( $pref eq 'AuthorLinkSortBy' ) {

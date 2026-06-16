@@ -168,7 +168,7 @@ subtest 'transfer already at destination' => sub {
     is( $messages->{ResFound}->{itemnumber}, $item->itemnumber, "We got the reserve info" );
 
     # recalls
-    t::lib::Mocks::mock_preference( 'UseRecalls', 1 );
+    t::lib::Mocks::mock_preference( 'UseRecalls', 'opac' );
     my $recall = Koha::Recall->new(
         {
             biblio_id         => $item->biblionumber,

@@ -1871,10 +1871,10 @@ subtest 'Recalls tests' => sub {
     is( $recalls->count,                    3, 'Correctly get number of recalls for biblio' );
     is( $recalls->filter_by_current->count, 1, 'Correctly get number of active recalls for biblio' );
 
-    t::lib::Mocks::mock_preference( 'UseRecalls', 0 );
+    t::lib::Mocks::mock_preference( "UseRecalls", "off" );
     is( $biblio->can_be_recalled( { patron => $patron1 } ), 0, "Can't recall with UseRecalls disabled" );
 
-    t::lib::Mocks::mock_preference( "UseRecalls", 1 );
+    t::lib::Mocks::mock_preference( "UseRecalls", "opac" );
     $item1->update( { notforloan => 1 } );
     is( $biblio->can_be_recalled( { patron => $patron1 } ), 0, "Can't recall with no available items" );
 

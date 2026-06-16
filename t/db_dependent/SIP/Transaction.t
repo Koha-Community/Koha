@@ -1557,7 +1557,7 @@ subtest do_checkout_with_recalls => sub {
         }
     );
 
-    t::lib::Mocks::mock_preference( 'UseRecalls', 1 );
+    t::lib::Mocks::mock_preference( 'UseRecalls', 'opac' );
     Koha::CirculationRules->set_rule(
         {
             branchcode   => undef,
