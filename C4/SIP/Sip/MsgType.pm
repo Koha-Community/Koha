@@ -927,6 +927,13 @@ sub login_core {
     my $uid    = shift;
     my $pwd    = shift;
     my $status = 1;                 # Assume it all works
+
+    # Clear any session state up front, including anything left over from a previous connection
+    # on this preforked worker, so no login_core exit path can leave the caller acting as an
+    # authenticated terminal. Only a successful api_auth below re-establishes the session.
+    delete $server->{$_} foreach qw( account ils institution policy sip_username sip_password );
+
+
     if ( !exists( $server->{config}->{accounts}->{$uid} ) ) {
         siplog( "LOG_WARNING", "MsgType::login_core: Unknown login '$uid'" );
         $status = 0;
@@ -935,13 +942,8 @@ sub login_core {
         $status = 0;
     } else {
 
-        # Store the active account someplace handy for everybody else to find.
-        $server->{account} = $server->{config}->{accounts}->{$uid};
-        my $inst = $server->{account}->{institution};
-        $server->{institution}  = $server->{config}->{institutions}->{$inst};
-        $server->{policy}       = $server->{institution}->{policy};
-        $server->{sip_username} = $uid;
-        $server->{sip_password} = $pwd;
+        # Authenticate before storing the account on the session
+        my $inst = $server->{config}->{accounts}->{$uid}->{institution};
 
         my $auth_status = api_auth( $uid, $pwd, $inst );
         if ( !$auth_status or $auth_status !~ /^ok$/i ) {
@@ -951,6 +953,13 @@ sub login_core {
             );
             $status = 0;
         } else {
+            # Store the active account configuration now user has authenticated
+            $server->{account}      = $server->{config}->{accounts}->{$uid};
+            $server->{institution}  = $server->{config}->{institutions}->{$inst};
+            $server->{policy}       = $server->{institution}->{policy};
+            $server->{sip_username} = $uid;
+            $server->{sip_password} = $pwd;
+
             siplog( "LOG_INFO", "Successful login/auth for '%s' of '%s'", $server->{account}->{id}, $inst );
 
             #
