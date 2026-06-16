@@ -19,13 +19,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::NoWarnings;
 use Test::Warn;
 use Test::MockModule;
 
 use C4::SIP::Sip::MsgType;
 use C4::SIP::Sip::Constants qw(:all);
+use UNIVERSAL::require;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -348,4 +349,51 @@ subtest 'message parsing arrayref prevention' => sub {
     };
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'login_core() authentication tests' => sub {
+    plan tests => 9;
+
+    # A failed login must never leave the connection in an authenticated state.
+    my $uid = 'sip_bug_42847';
+
+    my $build_server = sub {
+        return {
+            config => {
+                accounts     => { $uid => { id => $uid,  institution    => 'CPL' } },
+                institutions => { CPL  => { id => 'CPL', implementation => 'ILS', policy => {} } },
+            },
+        };
+    };
+
+    my $auth_status = 'ok';
+    my $mock_auth   = Test::MockModule->new('C4::SIP::Sip::MsgType');
+    $mock_auth->mock( 'api_auth', sub { return $auth_status; } );
+
+    my $mock_ils = Test::MockModule->new('C4::SIP::ILS');
+    $mock_ils->mock( 'new', sub { return bless {}, 'C4::SIP::ILS'; } );
+
+    # Successful login stores the account and an ILS handle
+    $auth_status = 'ok';
+    my $server = $build_server->();
+    ok( C4::SIP::Sip::MsgType::login_core( $server, $uid, 'goodpw' ), 'login_core returns true on successful auth' );
+    is( $server->{account}->{id}, $uid, 'account stored on the session after a successful login' );
+    isa_ok( $server->{ils}, 'C4::SIP::ILS', 'ILS handle built after a successful login' );
+
+    # A wrong password must not store the account
+    $auth_status = 'failed';
+    $server      = $build_server->();
+    ok( !C4::SIP::Sip::MsgType::login_core( $server, $uid, 'badpw' ), 'login_core returns false on failed auth' );
+    is( $server->{account}, undef, 'account is not stored on the session after a failed login' );
+    is( $server->{ils},     undef, 'no ILS handle after a failed login' );
+
+    # A reused prefork worker that handled a successful login must not let the
+    # next connection inherit that session when its login fails
+    $auth_status = 'ok';
+    $server      = $build_server->();
+    C4::SIP::Sip::MsgType::login_core( $server, $uid, 'goodpw' );    # previous session on this worker
+    $auth_status = 'failed';
+    ok( !C4::SIP::Sip::MsgType::login_core( $server, $uid, 'badpw' ), 'failed login on a reused worker returns false' );
+    is( $server->{account}, undef, 'leftover account cleared after a failed login on a reused worker' );
+    is( $server->{ils},     undef, 'leftover ILS handle cleared after a failed login on a reused worker' );
 };
