@@ -1530,13 +1530,27 @@ function update_search_description(
             options
         );
 
-        settings["buttons"] = _dt_buttons({ settings, table_settings });
-
         if (add_filters) {
             settings["orderCellsTop"] = true;
         }
 
         if (table_settings) {
+            // Deal with visibility_condition
+            // Column must be hidden and cannot be toggled if condition is false
+            table_settings.columns = table_settings.columns.map(c => {
+                if (
+                    c.visibility_condition !== undefined &&
+                    !c.visibility_condition
+                ) {
+                    return {
+                        ...c,
+                        is_hidden: true,
+                        cannot_be_toggled: true,
+                    };
+                }
+                return c;
+            });
+
             let state_settings = _dt_save_restore_state(
                 table_settings,
                 external_filter_nodes
@@ -1561,6 +1575,8 @@ function update_search_description(
                 ];
             }
         }
+
+        settings["buttons"] = _dt_buttons({ settings, table_settings });
 
         var default_column_defs = [
             { targets: ["string-sort"], type: "string" },

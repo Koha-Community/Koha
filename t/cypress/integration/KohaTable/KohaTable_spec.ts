@@ -206,6 +206,38 @@ describe("kohaTable (using REST API)", () => {
             });
         });
 
+        it("One column hidden, feature is off {visibility_condition: false} - Save state is ON", () => {
+            build_libraries().then(() => {
+                cy.visit("/cgi-bin/koha/admin/branches.pl");
+
+                cy.mock_table_settings({
+                    default_save_state: 1,
+                    columns: {
+                        library_code: {
+                            is_hidden: true,
+                            visibility_condition: false,
+                        },
+                    },
+                });
+
+                cy.get("@columns").then(columns => {
+                    cy.get(`#${table_id} th`).should(
+                        "have.length",
+                        columns.length - 1
+                    );
+                    cy.get(`#${table_id} th`).contains("Name");
+                    cy.get(`#${table_id} th`)
+                        .contains("Code")
+                        .should("not.exist");
+                    cy.get(`#${table_id}_wrapper .buttons-colvis`).click();
+                    // The feature is off, the column cannot be displayed
+                    cy.get(`#${table_id}_wrapper .dt-button-collection`)
+                        .contains("Code")
+                        .should("not.exist");
+                });
+            });
+        });
+
         it("Force visibility of one column", () => {
             build_libraries().then(() => {
                 cy.visit("/cgi-bin/koha/admin/branches.pl");
