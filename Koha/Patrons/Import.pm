@@ -85,6 +85,7 @@ sub import_patrons {
     my $update_dateexpiry               = $params->{update_dateexpiry};
     my $update_dateexpiry_from_today    = $params->{update_dateexpiry_from_today};
     my $update_dateexpiry_from_existing = $params->{update_dateexpiry_from_existing};
+    my $step_callback                   = $params->{step_callback};
 
     my $extended            = C4::Context->preference('ExtendedPatronAttributes');
     my $set_messaging_prefs = C4::Context->preference('EnhancedMessagingPreferences');
@@ -172,9 +173,8 @@ LINE: while ( my $borrowerline = <$handle> ) {
                 $_->{surname}        = $borrower{surname}        || 'UNDEF';
             }
             $invalid++;
-            ( 25 > scalar @errors ) and push @errors, { missing_criticals => \@missing_criticals };
-
-            # The first 25 errors are enough.  Keeping track of 30,000+ would destroy performance.
+            push @errors, { missing_criticals => \@missing_criticals };
+            $step_callback->() if $step_callback;
             next LINE;
         }
 
@@ -239,6 +239,7 @@ LINE: while ( my $borrowerline = <$handle> ) {
                 cardnumber         => $borrower{cardnumber}
                 };
             $invalid++;
+            $step_callback->() if $step_callback;
             next;
         }
 
@@ -257,6 +258,7 @@ LINE: while ( my $borrowerline = <$handle> ) {
         {
             push @errors, { duplicate_userid => 1, userid => $borrower{userid} };
             $invalid++;
+            $step_callback->() if $step_callback;
             next LINE;
         }
 
@@ -288,6 +290,7 @@ LINE: while ( my $borrowerline = <$handle> ) {
                         value         => $borrower{'surname'} . ' / ' . $borrowernumber
                     }
                 );
+                $step_callback->() if $step_callback;
                 next LINE;
             }
             $borrower{'borrowernumber'} = $borrowernumber;
@@ -508,7 +511,10 @@ LINE: while ( my $borrowerline = <$handle> ) {
             };
         }
 
-        next LINE unless $success;
+        unless ($success) {
+            $step_callback->() if $step_callback;
+            next LINE;
+        }
 
         # Send WELCOME welcome email is the user is new and we're set to send mail
         if ( $send_welcome && $is_new ) {
@@ -575,6 +581,8 @@ LINE: while ( my $borrowerline = <$handle> ) {
                 )->store();
             }
         }
+
+        $step_callback->() if $step_callback;
     }
 
     $schema->storage->txn_rollback if $dry_run;
