@@ -229,6 +229,7 @@ sub process_request {
     Koha::Caches->flush_L1_caches();
 
     $self->{account} = undef;  # Clear out the account from the last request, it may be different
+    $self->{ils}     = undef;    # And the ILS handle, so a reused worker can't reuse a prior session's connection
     $self->{logger} = set_logger( Koha::Logger->get( { interface => 'sip' } ) );
 
     # Flush previous MDCs to prevent accidentally leaking incorrect MDC-entries
@@ -383,11 +384,11 @@ sub telnet_transport {
         siplog("LOG_DEBUG", "telnet_transport 2: uid length %s, pwd length %s", length($uid), length($pwd));
 
         if (exists ($config->{accounts}->{$uid})
-        && ($pwd eq $config->{accounts}->{$uid}->{password})) {
+            && ($pwd eq $config->{accounts}->{$uid}->{password})
+            && C4::SIP::Sip::MsgType::login_core( $self, $uid, $pwd ) )
+        {
             $account = $config->{accounts}->{$uid};
-            if ( C4::SIP::Sip::MsgType::login_core($self,$uid,$pwd) ) {
-                last;
-            }
+            last;
         }
         siplog("LOG_WARNING", "Invalid login attempt: '%s'", ($uid||''));
         print("Invalid login$CRLF");
