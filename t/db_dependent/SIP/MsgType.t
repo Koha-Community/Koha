@@ -26,7 +26,6 @@ use Test::MockModule;
 
 use C4::SIP::Sip::MsgType;
 use C4::SIP::Sip::Constants qw(:all);
-use UNIVERSAL::require;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;

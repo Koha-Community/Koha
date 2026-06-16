@@ -14,7 +14,6 @@ use Net::Server::PreFork;
 use IO::Socket::INET;
 use Socket       qw(:DEFAULT :crlf TCP_KEEPIDLE TCP_KEEPINTVL IPPROTO_TCP);
 use Scalar::Util qw(blessed);
-require UNIVERSAL::require;
 
 use C4::Context;
 use C4::SIP::Sip            qw(siplog);
