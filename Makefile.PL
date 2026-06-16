@@ -678,6 +678,8 @@ get_file_map( $target_map, $dirtree, $file_map );
 $file_map->{'koha-tmpl/intranet-tmpl/prog/css/calendar.css'}     = 'blib/INTRANET_TMPL_DIR/prog/css/calendar.css';
 $file_map->{'koha-tmpl/intranet-tmpl/prog/css/holds.css'}        = 'blib/INTRANET_TMPL_DIR/prog/css/holds.css';
 $file_map->{'koha-tmpl/intranet-tmpl/prog/css/ill-requests.css'} = 'blib/INTRANET_TMPL_DIR/prog/css/ill-requests.css';
+$file_map->{'koha-tmpl/intranet-tmpl/prog/css/ill-requests-rtl.css'} =
+    'blib/INTRANET_TMPL_DIR/prog/css/ill-requests-rtl.css';
 $file_map->{'koha-tmpl/intranet-tmpl/prog/css/installer.css'}    = 'blib/INTRANET_TMPL_DIR/prog/css/installer.css';
 $file_map->{'koha-tmpl/intranet-tmpl/prog/css/mainpage.css'}     = 'blib/INTRANET_TMPL_DIR/prog/css/mainpage.css';
 $file_map->{'koha-tmpl/intranet-tmpl/prog/css/staff-global.css'} = 'blib/INTRANET_TMPL_DIR/prog/css/staff-global.css';
