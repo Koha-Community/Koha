@@ -30,10 +30,35 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
+[% aside = BLOCK %]
+<div>
+                <div id="filters">
+                    <fieldset class="brief">
+                        <h4>Filter results</h4>
+                        <ol>
+                            <li>
+                                <label for="from">Deleted from:</label>
+                                <input type="text" size="10" id="from" name="from" class="flatpickr" data-date_to="to" />
+                                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                            </li>
+                            <li>
+                                <label for="to">Deleted to:</label>
+                                <input type="text" size="10" id="to" name="to" class="flatpickr" />
+                                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                            </li>
+                        </ol>
+                        <fieldset class="action">
+                            <button type="button" id="filter_table" class="btn btn-primary btn-sm">Apply</button>
+                            <button type="button" id="clear_filters" class="btn btn-default btn-sm">Clear</button>
+                        </fieldset>
+                    </fieldset>
+                </div>
+
+                [% INCLUDE 'cat-menu.inc' %]
+                </div>
+[% END %]
+
+[% WRAPPER 'main-container.inc' aside_block=aside %]
                 <h1>Restore deleted records</h1>
 
                 <div id="messages"></div>
@@ -69,38 +94,7 @@
                         </thead>
                     </table>
                 </div>
-            </main>
-        </div>
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                <div id="filters">
-                    <fieldset class="brief">
-                        <h4>Filter results</h4>
-                        <ol>
-                            <li>
-                                <label for="from">Deleted from:</label>
-                                <input type="text" size="10" id="from" name="from" class="flatpickr" data-date_to="to" />
-                                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                            </li>
-                            <li>
-                                <label for="to">Deleted to:</label>
-                                <input type="text" size="10" id="to" name="to" class="flatpickr" />
-                                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                            </li>
-                        </ol>
-                        <fieldset class="action">
-                            <button type="button" id="filter_table" class="btn btn-primary btn-sm">Apply</button>
-                            <button type="button" id="clear_filters" class="btn btn-default btn-sm">Clear</button>
-                        </fieldset>
-                    </fieldset>
-                </div>
-
-                [% INCLUDE 'cat-menu.inc' %]
-            </aside>
-        </div>
-    </div>
-</div>
+[% END %]
 
 <!-- Modal for deleted biblio warning -->
 <div class="modal" id="deletedBiblioModal" tabindex="-1" role="dialog" aria-labelledby="deletedBiblioModalLabel">
