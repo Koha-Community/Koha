@@ -269,6 +269,7 @@ sub process_request {
     Koha::Caches->flush_L1_caches();
 
     $self->{account} = undef;    # Clear out the account from the last request, it may be different
+    $self->{ils}     = undef;    # And the ILS handle, so a reused worker can't reuse a prior session's connection
     $self->{logger}  = set_logger( Koha::Logger->get( { interface => 'sip' } ) );
 
     # Flush previous MDCs to prevent accidentally leaking incorrect MDC-entries
@@ -468,12 +469,12 @@ sub telnet_transport {
             $pwd = get_clean_string($pwd);
             siplog( "LOG_DEBUG", "telnet_transport 2: uid length %s, pwd length %s", length($uid), length($pwd) );
 
-            # Check if user is authorized for SIP access, then authenticate via login_core
-            if ( exists( $config->{accounts}->{$uid} ) ) {
+            # Only log the terminal in once login_core actually authenticates it
+            if ( exists( $config->{accounts}->{$uid} )
+                && C4::SIP::Sip::MsgType::login_core( $self, $uid, $pwd ) )
+            {
                 $account = $config->{accounts}->{$uid};
-                if ( C4::SIP::Sip::MsgType::login_core( $self, $uid, $pwd ) ) {
-                    last;
-                }
+                last;
             }
             siplog( "LOG_WARNING", "Invalid login attempt: '%s'", ( $uid || '' ) );
             print("Invalid login$CRLF");
