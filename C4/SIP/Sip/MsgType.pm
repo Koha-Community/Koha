@@ -15,7 +15,8 @@ use C4::SIP::Sip::Constants qw(:all);
 use C4::SIP::Sip::Checksum  qw(verify_cksum);
 
 use Data::Dumper;
-use CGI qw ( -utf8 );
+use Module::Load::Conditional qw( can_load );
+use CGI                       qw ( -utf8 );
 use C4::Context;
 use C4::Auth  qw(&check_api_auth);
 use C4::Items qw(ModDateLastSeen);
@@ -975,8 +976,7 @@ sub login_core {
     if ( $module eq 'ILS' ) {
         $module = 'C4::SIP::ILS';
     }
-    $module->use;
-    if ($@) {
+    unless ( can_load( modules => { $module => undef } ) ) {
         siplog(
             "LOG_ERR", "%s: Loading ILS implementation '%s' for institution '%s' failed",
             $server->{service}, $module, $inst
