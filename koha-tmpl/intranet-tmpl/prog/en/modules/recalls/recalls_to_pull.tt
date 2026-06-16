@@ -35,7 +35,7 @@
 [% WRAPPER 'main-container.inc' aside='circ-nav' %]
     <h1>Recalls to pull</h1>
     The following recalls could be fulfilled by available items.
-    [% IF Koha.Preference('UseRecalls') %]
+    [% IF Koha.Preference('UseRecalls') != "off" %]
         [% IF recalls %]
             <div id="recalls" class="page-section">
                 <table id="recalls-table">

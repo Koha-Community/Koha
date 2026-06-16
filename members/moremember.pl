@@ -230,7 +230,7 @@ $template->param(
     WaitingHolds => $waiting_holds,
 );
 
-if ( C4::Context->preference('UseRecalls') ) {
+if ( C4::Context->preference('UseRecalls') ne "off" ) {
     my $waiting_recalls = $patron->recalls->search( { status => 'waiting' } );
     $template->param( waiting_recalls => $waiting_recalls );
 }
@@ -325,7 +325,7 @@ $template->param(
     patron_lists_count        => $patron_lists_count,
 );
 
-if ( C4::Context->preference('UseRecalls') ) {
+if ( C4::Context->preference('UseRecalls') ne "off" ) {
     $template->param(
         recalls         => $patron->recalls( {}, { order_by => { -asc => 'recalldate' } } )->filter_by_current,
         specific_patron => 1,

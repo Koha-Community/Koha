@@ -25,7 +25,7 @@
             [% NEXT IF !Koha.Preference('MembershipExpiryDaysNotice') && messaging_preference.Patron_Expiry %]
             [% NEXT IF messaging_preference.Patron_Expiry && (category.enforce_expiry_notice || patron.category.enforce_expiry_notice) %]
             [% NEXT IF messaging_preference.Auto_Renewals && Koha.Preference('AutoRenewalNotices') != 'preferences' %]
-            [% NEXT IF !Koha.Preference('UseRecalls') && messaging_preference.message_name.match('^Recall_') %]
+            [% NEXT IF Koha.Preference('UseRecalls') == "off" && messaging_preference.message_name.match('^Recall_') %]
             <tr id="[% messaging_preference.message_name _ "_message" | lower | html %]">
                 <td
                     >[% IF ( messaging_preference.Item_Due ) %]

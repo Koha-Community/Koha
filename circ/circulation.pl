@@ -568,7 +568,7 @@ if ( @$barcodes && $op eq 'cud-checkout' ) {
             }
             unless ($confirm_required) {
                 my $switch_onsite_checkout = exists $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED};
-                if ( C4::Context->preference('UseRecalls') && !$recall_id ) {
+                if ( C4::Context->preference('UseRecalls') ne "off" && !$recall_id ) {
                     my $recall = Koha::Recalls->find(
                         {
                             biblio_id => $item->biblionumber,
@@ -681,7 +681,7 @@ if ($patron) {
         WaitingHolds => $waiting_holds,
     );
 
-    if ( C4::Context->preference('UseRecalls') ) {
+    if ( C4::Context->preference('UseRecalls') ne "off" ) {
         my $waiting_recalls = $patron->recalls->search( { status => 'waiting' } );
         $template->param(
             recalls => $patron->recalls->filter_by_current->search( {}, { order_by => { -asc => 'created_date' } } ),

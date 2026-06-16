@@ -31,7 +31,7 @@
 
 [% WRAPPER 'main-container.inc' aside='circ-nav' %]
     <h1>Recalls queue</h1>
-    [% IF Koha.Preference('UseRecalls') %]
+    [% IF Koha.Preference('UseRecalls') != "off" %]
         [% IF recalls.count %]
             <div class="page-section">
                 <form method="post" action="/cgi-bin/koha/recalls/recalls_queue.pl">

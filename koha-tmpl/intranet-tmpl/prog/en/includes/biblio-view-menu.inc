@@ -91,7 +91,7 @@
             </li>
         [%- END -%]
 
-        [%- IF ( Koha.Preference('UseRecalls') && CAN_user_recalls ) -%]
+        [%- IF ( Koha.Preference('UseRecalls') != "off" && CAN_user_recalls ) -%]
             <li [% IF recallsview %]class="active"[% END %]>
                 <a href="/cgi-bin/koha/recalls/request.pl?biblionumber=[% biblio_object_id | url %]">Recalls ([% biblio.recalls.search( completed => 0 ).count | html %])</a>
             </li>

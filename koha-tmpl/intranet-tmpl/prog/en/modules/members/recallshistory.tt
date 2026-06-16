@@ -39,7 +39,7 @@
 [% WRAPPER 'main-container.inc' aside='circ-menu' %]
     [% INCLUDE 'members-toolbar.inc' %]
     <h1>Recalls history</h1>
-    [% IF Koha.Preference('UseRecalls') %]
+    [% IF Koha.Preference('UseRecalls') != "off" %]
         [% IF recalls.count %]
             <input type="checkbox" id="hide_old" name="hide_old" checked="checked" />
             <label for="hide_old">Show old recalls</label>

@@ -35,7 +35,7 @@
 [% WRAPPER 'main-container.inc' aside='biblio-view-menu' %]
     <h1>Existing recalls</h1>
 
-    [% IF Koha.Preference('UseRecalls') %]
+    [% IF Koha.Preference('UseRecalls') != "off" %]
         [% IF recalls.count %]
             <div class="page-section">
                 <form method="post" action="/cgi-bin/koha/recalls/request.pl">

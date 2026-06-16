@@ -137,7 +137,7 @@
             LocalCoverImages: [% Koha.Preference('LocalCoverImages') ? 1 : 0 | html %],
             OPACLocalCoverImages: [% Koha.Preference('OPACLocalCoverImages') ? 1 : 0 | html %],
             EnableItemGroups: [% Koha.Preference('EnableItemGroups') ? 1 : 0 | html %],
-            UseRecalls: [% Koha.Preference('UseRecalls') ? 1 : 0 | html %],
+            UseRecalls: [% Koha.Preference('UseRecalls') != "off" ? 1 : 0 | html %],
             UseCourseReserves: [% Koha.Preference('UseCourseReserves') ? 1 : 0 | html %],
             ClaimReturnedLostValue: [% Koha.Preference('ClaimReturnedLostValue') || 0 | html %],
             EasyAnalyticalRecords: [% Koha.Preference('EasyAnalyticalRecords') ? 1 : 0| html %],

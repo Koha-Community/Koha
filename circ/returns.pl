@@ -243,7 +243,7 @@ if ( $transit && $op eq 'cud-transfer' ) {
     my $transfer = Koha::Item::Transfers->find($transit);
     if ($canceltransfer) {
         $transfer->cancel( { reason => 'Manual', force => 1 } );
-        if ( C4::Context->preference('UseRecalls') ) {
+        if ( C4::Context->preference('UseRecalls') ne "off" ) {
             my $recall_transfer_deleted = Koha::Recalls->find( { item_id => $itemnumber, status => 'in_transit' } );
             if ( defined $recall_transfer_deleted ) {
                 $recall_transfer_deleted->revert_transfer;
@@ -257,7 +257,7 @@ if ( $transit && $op eq 'cud-transfer' ) {
     my $item     = Koha::Items->find($itemnumber);
     my $transfer = $item->get_transfer;
     $transfer->cancel( { reason => 'Manual', force => 1 } );
-    if ( C4::Context->preference('UseRecalls') ) {
+    if ( C4::Context->preference('UseRecalls') ne "off" ) {
         my $recall_transfer_deleted = Koha::Recalls->find( { item_id => $itemnumber, status => 'in_transit' } );
         if ( defined $recall_transfer_deleted ) {
             $recall_transfer_deleted->revert_transfer;

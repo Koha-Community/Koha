@@ -31,7 +31,7 @@
 
 [% WRAPPER 'main-container.inc' aside='circ-nav' %]
     <h1>Old recalls</h1>
-    [% IF Koha.Preference('UseRecalls') %]
+    [% IF Koha.Preference('UseRecalls') != "off" %]
         <div class="page-section"> [% INCLUDE 'recalls.inc' %] </div>
         <!-- /.page-section -->
     [% ELSE %]

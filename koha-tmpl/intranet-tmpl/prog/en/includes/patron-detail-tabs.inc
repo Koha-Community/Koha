@@ -49,7 +49,7 @@
             [% END %]
         [% END %]
 
-        [% IF Koha.Preference('UseRecalls') %]
+        [% IF Koha.Preference('UseRecalls') != "off" %]
             [% WRAPPER tab_item tabname= "recalls" %]
                 <span>Recalls</span>
                 [% IF ( recalls.count ) %]
@@ -239,7 +239,7 @@
             [% END %]
         [% END %]
 
-        [% IF Koha.Preference('UseRecalls') %]
+        [% IF Koha.Preference('UseRecalls') != "off" %]
             [% WRAPPER tab_panel tabname="recalls" %]
                 [% INCLUDE 'recalls.inc' %]
             [% END # /tab_panel# %]

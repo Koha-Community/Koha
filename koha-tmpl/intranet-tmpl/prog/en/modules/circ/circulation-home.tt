@@ -108,7 +108,7 @@
                 </ul>
             </div>
 
-            [% IF Koha.Preference('UseRecalls') and CAN_user_recalls %]
+            [% IF Koha.Preference('UseRecalls') != "off" and CAN_user_recalls %]
                 <div class="recalls">
                     <h3>Recalls</h3>
 
