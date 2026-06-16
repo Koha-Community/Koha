@@ -40,26 +40,22 @@ function LoadIssuesTable() {
     let renew_column = table_settings_issues_table.columns.find(
         c => c.columnname == "renew"
     );
-    renew_column.visibility_condition = AllowCirculate;
-    renew_column.force_visibility = 1;
+    renew_column.visibility_condition = !!AllowCirculate;
 
     let checkin_column = table_settings_issues_table.columns.find(
         c => c.columnname == "checkin"
     );
-    checkin_column.visibility_condition = AllowCirculate;
-    checkin_column.force_visibility = 1;
+    checkin_column.visibility_condition = !!AllowCirculate;
 
     let claims_returned_column = table_settings_issues_table.columns.find(
         c => c.columnname == "claims_returned"
     );
-    claims_returned_column.visibility_condition = ClaimReturnedLostValue;
-    claims_returned_column.force_visibility = 1;
+    claims_returned_column.visibility_condition = !!ClaimReturnedLostValue;
 
     let export_column = table_settings_issues_table.columns.find(
         c => c.columnname == "export"
     );
-    export_column.visibility_condition = exports_enabled;
-    export_column.force_visibility = 1;
+    export_column.visibility_condition = !!exports_enabled;
 
     issuesTable = $("#issues-table").kohaTable(
         {
