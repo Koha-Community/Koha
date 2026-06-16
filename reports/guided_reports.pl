@@ -968,15 +968,16 @@ if ( $op eq 'run' ) {
                     # builds list, depending on authorised value...
                     if ( $authorised_value eq "branches" ) {
                         my $library_search_params = {};
-                        if($limit_reports_by eq 'library') {
+                        if ( $limit_reports_by eq 'library' ) {
                             $library_search_params = { branchcode => C4::Context::mybranch };
                         }
-                        if($limit_reports_by eq 'library_group') {
+                        if ( $limit_reports_by eq 'library_group' ) {
                             my $report_groups = $report->library_group_limits;
-                            my @branchcodes = map { $_->branchcode } map { $_->all_libraries } @$report_groups;
+                            my @branchcodes   = map { $_->branchcode } map { $_->all_libraries } @$report_groups;
                             $library_search_params = { branchcode => { '-in' => \@branchcodes } };
                         }
-                        my $libraries = Koha::Libraries->search( $library_search_params, { order_by => ['branchname'] } );
+                        my $libraries =
+                            Koha::Libraries->search( $library_search_params, { order_by => ['branchname'] } );
                         while ( my $library = $libraries->next ) {
                             push @authorised_values, $library->branchcode;
                             $authorised_lib{ $library->branchcode } = $library->branchname;
