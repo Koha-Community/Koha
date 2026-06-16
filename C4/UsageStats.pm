@@ -359,6 +359,7 @@ sub _shared_preferences {
         ILS-DI
         OAI-PMH
         version
+        UseRecalls
         /;
 
     return \@preferences;
