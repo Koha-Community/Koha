@@ -2244,7 +2244,7 @@ Does biblio-level checks and returns the items attached to this biblio that are 
 sub can_be_recalled {
     my ( $self, $params ) = @_;
 
-    return 0 if !( C4::Context->preference('UseRecalls') );
+    return 0 if ( C4::Context->preference('UseRecalls') eq "off" );
 
     my $patron = $params->{patron};
 

@@ -1980,7 +1980,7 @@ sub searchResults {
                         )
                         : ( '', '', '' );
                     $reservestatus = C4::Reserves::GetReserveStatus( $item->{itemnumber} );
-                    if ( C4::Context->preference('UseRecalls') ) {
+                    if ( C4::Context->preference('UseRecalls') ne "off" ) {
                         if ( Koha::Recalls->search( { item_id => $item->{itemnumber}, status => 'waiting' } )->count ) {
                             $recallstatus = 'Waiting';
                         }

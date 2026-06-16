@@ -385,7 +385,7 @@ sub buildKohaItemsNamespace {
         my $substatus = '';
         my $recalls_count;
 
-        if ( C4::Context->preference('UseRecalls') ) {
+        if ( C4::Context->preference('UseRecalls') ne "off" ) {
             $recalls_count = Koha::Recalls->search( { item_id => $item->itemnumber, status => 'waiting' } )->count;
         }
 

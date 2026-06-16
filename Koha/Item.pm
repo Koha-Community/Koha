@@ -1777,7 +1777,7 @@ sub _status {
     if ( $self->first_hold ) {
         push @statuses, 'on_hold';
     }
-    if ( C4::Context->preference('UseRecalls') && $self->recall ) {
+    if ( C4::Context->preference('UseRecalls') ne "off" && $self->recall ) {
         push @statuses, 'recalled';
     }
 
@@ -2648,7 +2648,7 @@ Does item-level checks and returns if items can be recalled by this borrower
 sub can_be_recalled {
     my ( $self, $params ) = @_;
 
-    return 0 if !( C4::Context->preference('UseRecalls') );
+    return 0 if ( C4::Context->preference('UseRecalls') eq "off" );
 
     # check if this item is not for loan, withdrawn or lost
     return 0 if ( $self->notforloan != 0 );
@@ -2745,7 +2745,7 @@ At this point the item has already been recalled. We are now at the checkin and 
 sub can_be_waiting_recall {
     my ($self) = @_;
 
-    return 0 if !( C4::Context->preference('UseRecalls') );
+    return 0 if ( C4::Context->preference('UseRecalls') eq "off" );
 
     # check if this item is not for loan, withdrawn or lost
     return 0 if ( $self->notforloan != 0 );
