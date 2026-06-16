@@ -20,7 +20,7 @@
                         </button>
                     </div>
                     [% IF aside_block %]
-                        [% aside_block %]
+                        [% aside_block | $raw %]
                     [% ELSE %]
                         [% FOR aside IN asides %]
                             [% SWITCH aside %]
