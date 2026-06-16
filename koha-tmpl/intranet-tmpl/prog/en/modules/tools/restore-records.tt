@@ -31,69 +31,69 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% aside = BLOCK %]
-<div>
-                <div id="filters">
-                    <fieldset class="brief">
-                        <h4>Filter results</h4>
-                        <ol>
-                            <li>
-                                <label for="from">Deleted from:</label>
-                                <input type="text" size="10" id="from" name="from" class="flatpickr" data-date_to="to" />
-                                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                            </li>
-                            <li>
-                                <label for="to">Deleted to:</label>
-                                <input type="text" size="10" id="to" name="to" class="flatpickr" />
-                                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                            </li>
-                        </ol>
-                        <fieldset class="action">
-                            <button type="button" id="filter_table" class="btn btn-primary btn-sm">Apply</button>
-                            <button type="button" id="clear_filters" class="btn btn-default btn-sm">Clear</button>
-                        </fieldset>
-                    </fieldset>
-                </div>
+    <div>
+        <div id="filters">
+            <fieldset class="brief">
+                <h4>Filter results</h4>
+                <ol>
+                    <li>
+                        <label for="from">Deleted from:</label>
+                        <input type="text" size="10" id="from" name="from" class="flatpickr" data-date_to="to" />
+                        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                    </li>
+                    <li>
+                        <label for="to">Deleted to:</label>
+                        <input type="text" size="10" id="to" name="to" class="flatpickr" />
+                        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                    </li>
+                </ol>
+                <fieldset class="action">
+                    <button type="button" id="filter_table" class="btn btn-primary btn-sm">Apply</button>
+                    <button type="button" id="clear_filters" class="btn btn-default btn-sm">Clear</button>
+                </fieldset>
+            </fieldset>
+        </div>
 
-                [% INCLUDE 'cat-menu.inc' %]
-                </div>
+        [% INCLUDE 'cat-menu.inc' %]
+    </div>
 [% END %]
 
 [% WRAPPER 'main-container.inc' aside_block=aside %]
-                <h1>Restore deleted records</h1>
+    <h1>Restore deleted records</h1>
 
-                <div id="messages"></div>
+    <div id="messages"></div>
 
-                <h2>Deleted bibliographic records</h2>
-                <div class="page-section">
-                    <table id="deleted_biblios_table" class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>Biblio ID</th>
-                                <th>Title</th>
-                                <th>Author</th>
-                                <th>Deleted on</th>
-                                <th class="NoSort">Actions</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
+    <h2>Deleted bibliographic records</h2>
+    <div class="page-section">
+        <table id="deleted_biblios_table" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Biblio ID</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Deleted on</th>
+                    <th class="NoSort">Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
 
-                <h2>Deleted items</h2>
-                <div class="page-section">
-                    <table id="deleted_items_table" class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>Item ID</th>
-                                <th>Biblio ID</th>
-                                <th>Barcode</th>
-                                <th>Call number</th>
-                                <th>Home library</th>
-                                <th>Deleted on</th>
-                                <th class="NoSort">Actions</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
+    <h2>Deleted items</h2>
+    <div class="page-section">
+        <table id="deleted_items_table" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Item ID</th>
+                    <th>Biblio ID</th>
+                    <th>Barcode</th>
+                    <th>Call number</th>
+                    <th>Home library</th>
+                    <th>Deleted on</th>
+                    <th class="NoSort">Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
 [% END %]
 
 <!-- Modal for deleted biblio warning -->
