@@ -36,19 +36,16 @@
 
 use Modern::Perl;
 
+use Try::Tiny qw( catch try );
+
 use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_and_exit output_html_with_http_headers );
+use Koha::BackgroundJob::PatronImport;
 use Koha::Database::Columns;
-use Koha::Patrons;
 use Koha::DateUtils qw( dt_from_string );
-use Koha::Token;
-use Koha::Libraries;
-use Koha::Patron::Categories;
 use Koha::Patron::Attribute::Types;
-use Koha::List::Patron qw( AddPatronList AddPatronsToList );
-
-use Koha::Patrons::Import;
-my $Import = Koha::Patrons::Import->new();
+use Koha::Patron::Categories;
+use Koha::Patrons;
 
 use Text::CSV;
 
@@ -105,58 +102,48 @@ my $timestamp        = $dt->ymd('-') . ' ' . $dt->hms(':');
 
 if ( $op eq 'cud-import' && $uploadborrowers && length($uploadborrowers) > 0 ) {
 
-    my $patronlistname      = $uploadborrowers . ' (' . $timestamp . ')';
-    my $handle              = $input->upload('uploadborrowers');
-    my %defaults            = $input->Vars;
+    my $handle         = $input->upload('uploadborrowers');
+    my $file_content   = do { local $/; <$handle> };
+    my $patronlistname = $uploadborrowers . ' (' . $timestamp . ')';
+
+    my %defaults;
+    for my $k (@columnkeys) {
+        my $v = scalar $input->param($k);
+        $defaults{$k} = $v if defined $v && length $v;
+    }
+
     my $overwrite_passwords = defined $input->param('overwrite_passwords') ? 1 : 0;
     my $update_dateexpiry   = $input->param('update_dateexpiry') // "";
-    my $return              = $Import->import_patrons(
-        {
-            file                            => $handle,
-            defaults                        => \%defaults,
-            matchpoint                      => $matchpoint,
-            overwrite_cardnumber            => scalar $input->param('overwrite_cardnumber'),
-            overwrite_passwords             => $overwrite_passwords,
-            preserve_extended_attributes    => scalar $input->param('ext_preserve') || 0,
-            preserve_fields                 => \@preserve_fields,
-            update_dateexpiry               => $update_dateexpiry                 ? 1 : 0,
-            update_dateexpiry_from_today    => $update_dateexpiry eq "now"        ? 1 : 0,
-            update_dateexpiry_from_existing => $update_dateexpiry eq "dateexpiry" ? 1 : 0,
-            send_welcome                    => $welcome_new,
-        }
-    );
 
-    my $feedback           = $return->{feedback};
-    my $errors             = $return->{errors};
-    my $imported           = $return->{imported};
-    my $overwritten        = $return->{overwritten};
-    my $alreadyindb        = $return->{already_in_db};
-    my $invalid            = $return->{invalid};
-    my $imported_borrowers = $return->{imported_borrowers};
+    try {
+        my $job_id = Koha::BackgroundJob::PatronImport->new->enqueue(
+            {
+                file_content                    => $file_content,
+                defaults                        => \%defaults,
+                matchpoint                      => $matchpoint,
+                overwrite_cardnumber            => scalar $input->param('overwrite_cardnumber'),
+                overwrite_passwords             => $overwrite_passwords,
+                preserve_extended_attributes    => scalar $input->param('ext_preserve') || 0,
+                preserve_fields                 => \@preserve_fields,
+                update_dateexpiry               => $update_dateexpiry                 ? 1 : 0,
+                update_dateexpiry_from_today    => $update_dateexpiry eq "now"        ? 1 : 0,
+                update_dateexpiry_from_existing => $update_dateexpiry eq "dateexpiry" ? 1 : 0,
+                send_welcome                    => $welcome_new,
+                createpatronlist                => $createpatronlist,
+                patronlistname                  => $patronlistname,
+            }
+        );
 
-    if ( $imported && $createpatronlist ) {
-        my $patronlist = AddPatronList( { name => $patronlistname } );
-        AddPatronsToList( { list => $patronlist, borrowernumbers => $imported_borrowers } );
-        $template->param( 'patronlistname' => $patronlistname );
-    }
-
-    my $uploadinfo = $input->uploadInfo($uploadborrowers);
-    foreach ( keys %$uploadinfo ) {
-        push @$feedback, { feedback => 1, name => $_, value => $uploadinfo->{$_}, $_ => $uploadinfo->{$_} };
-    }
-
-    push @$feedback, { feedback => 1, name => 'filename', value => $uploadborrowers, filename => $uploadborrowers };
-
-    $template->param(
-        uploadborrowers => 1,
-        errors          => $errors,
-        feedback        => $feedback,
-        imported        => $imported,
-        overwritten     => $overwritten,
-        alreadyindb     => $alreadyindb,
-        invalid         => $invalid,
-        total           => $imported + $alreadyindb + $invalid + $overwritten,
-    );
+        $template->param(
+            op     => 'enqueued',
+            job_id => $job_id,
+        );
+    } catch {
+        $template->param(
+            op    => 'enqueued',
+            error => 'cannot_enqueue_job',
+        );
+    };
 
 } else {
     if ($extended) {
