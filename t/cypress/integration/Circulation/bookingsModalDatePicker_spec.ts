@@ -735,11 +735,15 @@ describe("Booking Modal Date Picker Tests", () => {
          * Phase 5: Select June 13, hover June 20 (max) → Trail June 21-23 (clear) → selectable
          */
 
-        // Fix the browser Date object to June 10, 2026 at 09:00 Europe/London
-        // Using ["Date"] to avoid freezing timers which breaks Select2 async operations
-        const fixedToday = new Date("2026-06-10T08:00:00Z"); // 09:00 BST (UTC+1)
+        // Anchor "today" to next month so bookings stay in the future ( the API drops past ones )
+        // ["Date"] avoids freezing timers, which breaks Select2
+        const fixedToday = dayjs()
+            .add(1, "month")
+            .startOf("month")
+            .hour(8)
+            .toDate();
         cy.clock(fixedToday, ["Date"]);
-        cy.log(`Fixed today: June 10, 2026`);
+        const today = dayjs(fixedToday);
 
         // Circulation rules with short periods for focused testing
         const circulationRules = {
@@ -759,9 +763,9 @@ describe("Booking Modal Date Picker Tests", () => {
             body: [circulationRules],
         }).as("getFixedDateRules");
 
-        // Create blocker booking: June 25-27, 2026
-        const blockerStart = "2026-06-25 00:00:00";
-        const blockerEnd = "2026-06-27 23:59:59";
+        // Create blocker booking 15-17 days out
+        const blockerStart = today.add(15, "day").format("YYYY-MM-DD 00:00:00");
+        const blockerEnd = today.add(17, "day").format("YYYY-MM-DD 23:59:59");
 
         cy.task("query", {
             sql: `INSERT INTO bookings (biblio_id, item_id, patron_id, start_date, end_date, pickup_library_id, status)
@@ -775,7 +779,6 @@ describe("Booking Modal Date Picker Tests", () => {
                 testData.libraries[0].library_id,
             ],
         });
-        cy.log(`Blocker booking created: June 25-27, 2026`);
 
         // Setup modal
         setupModalForDateTesting({ skipItemSelection: true });
@@ -788,11 +791,11 @@ describe("Booking Modal Date Picker Tests", () => {
         cy.get("#period").as("fp");
         cy.get("@fp").openFlatpickr();
 
-        // Helper to get a specific date element by ISO date string
-        const getDateByISO = (isoDate: string) => {
-            const date = new Date(isoDate);
-            return cy.get("@fp").getFlatpickrDate(date);
-        };
+        // Helper to get a flatpickr day cell N days from "today".
+        const getDate = (daysFromToday: number) =>
+            cy
+                .get("@fp")
+                .getFlatpickrDate(today.add(daysFromToday, "day").toDate());
 
         // ========================================================================
         // PHASE 1: Lead Period Clear - Visual Classes
@@ -805,19 +808,19 @@ describe("Booking Modal Date Picker Tests", () => {
          * Expected: leadRangeStart on June 11, leadRange on June 12, no leadDisable on June 13
          */
 
-        getDateByISO("2026-06-13").trigger("mouseover");
+        getDate(3).trigger("mouseover");
 
         // Check lead period classes
-        getDateByISO("2026-06-11")
+        getDate(1)
             .should("have.class", "leadRangeStart")
             .and("have.class", "leadRange");
 
-        getDateByISO("2026-06-12")
+        getDate(2)
             .should("have.class", "leadRange")
             .and("have.class", "leadRangeEnd");
 
         // Hovered date should NOT have leadDisable (lead period is clear)
-        getDateByISO("2026-06-13").should("not.have.class", "leadDisable");
+        getDate(3).should("not.have.class", "leadDisable");
 
         // ========================================================================
         // PHASE 2: Trail Period Clear - Visual Classes
@@ -833,24 +836,24 @@ describe("Booking Modal Date Picker Tests", () => {
          */
 
         // Select June 13 as start date (same date we just hovered - lead is clear)
-        getDateByISO("2026-06-13").click();
+        getDate(3).click();
 
         // Hover June 16 as potential end date
-        getDateByISO("2026-06-16").trigger("mouseover");
+        getDate(6).trigger("mouseover");
 
         // Check trail period classes
-        getDateByISO("2026-06-17")
+        getDate(7)
             .should("have.class", "trailRangeStart")
             .and("have.class", "trailRange");
 
-        getDateByISO("2026-06-18").should("have.class", "trailRange");
+        getDate(8).should("have.class", "trailRange");
 
-        getDateByISO("2026-06-19")
+        getDate(9)
             .should("have.class", "trailRangeEnd")
             .and("have.class", "trailRange");
 
         // Hovered date (June 16) should NOT have trailDisable (trail period is clear)
-        getDateByISO("2026-06-16").should("not.have.class", "trailDisable");
+        getDate(6).should("not.have.class", "trailDisable");
 
         // Clear selection for next phase
         cy.get("#period").clearFlatpickr();
@@ -868,10 +871,10 @@ describe("Booking Modal Date Picker Tests", () => {
          * Expected: leadDisable on June 11 because lead period extends into past
          */
 
-        getDateByISO("2026-06-11").trigger("mouseover");
+        getDate(1).trigger("mouseover");
 
         // June 11 should have leadDisable because lead period (June 9-10) includes past date
-        getDateByISO("2026-06-11").should("have.class", "leadDisable");
+        getDate(1).should("have.class", "leadDisable");
 
         /**
          * Hover June 29 as potential start date
@@ -880,10 +883,10 @@ describe("Booking Modal Date Picker Tests", () => {
          * Expected: leadDisable on June 29 because lead period extends into existing booking
          */
 
-        getDateByISO("2026-06-29").trigger("mouseover");
+        getDate(19).trigger("mouseover");
 
         // June 29 should have leadDisable because lead period (June 27-28) includes existing booking date
-        getDateByISO("2026-06-29").should("have.class", "leadDisable");
+        getDate(19).should("have.class", "leadDisable");
 
         // ========================================================================
         // PHASE 3c: BIDIRECTIONAL - Lead Period Conflicts with Existing Booking TRAIL
@@ -902,12 +905,12 @@ describe("Booking Modal Date Picker Tests", () => {
          */
 
         // Hover July 1 - lead period (June 29-30) overlaps blocker's trail (June 28-30)
-        getDateByISO("2026-07-01").trigger("mouseover");
-        getDateByISO("2026-07-01").should("have.class", "leadDisable");
+        getDate(21).trigger("mouseover");
+        getDate(21).should("have.class", "leadDisable");
 
         // Hover July 2 - lead period (June 30-July 1) still overlaps blocker's trail at June 30
-        getDateByISO("2026-07-02").trigger("mouseover");
-        getDateByISO("2026-07-02").should("have.class", "leadDisable");
+        getDate(22).trigger("mouseover");
+        getDate(22).should("have.class", "leadDisable");
 
         // ========================================================================
         // PHASE 3d: First Clear Start Date After Blocker's Protected Period
@@ -918,8 +921,8 @@ describe("Booking Modal Date Picker Tests", () => {
          * - July 3: Lead July 1-2 → completely clear of blocker trail (ends June 30) → no leadDisable
          */
 
-        getDateByISO("2026-07-03").trigger("mouseover");
-        getDateByISO("2026-07-03").should("not.have.class", "leadDisable");
+        getDate(23).trigger("mouseover");
+        getDate(23).should("not.have.class", "leadDisable");
 
         // ========================================================================
         // PHASE 4a: Trail Period Conflict - Existing Booking ACTUAL Dates
@@ -934,13 +937,13 @@ describe("Booking Modal Date Picker Tests", () => {
          */
 
         // Select June 20 as start date
-        getDateByISO("2026-06-20").click();
+        getDate(10).click();
 
         // Hover June 23 as potential end date
-        getDateByISO("2026-06-23").trigger("mouseover");
+        getDate(13).trigger("mouseover");
 
         // June 23 should have trailDisable because trail period (June 24-26) overlaps blocker ACTUAL (June 25-27)
-        getDateByISO("2026-06-23").should("have.class", "trailDisable");
+        getDate(13).should("have.class", "trailDisable");
 
         // Clear selection for next phase
         cy.get("#period").clearFlatpickr();
@@ -964,21 +967,21 @@ describe("Booking Modal Date Picker Tests", () => {
          */
 
         // Select June 13 as start date (lead June 11-12, both clear)
-        getDateByISO("2026-06-13").click();
+        getDate(3).click();
 
         // Hover June 21 as potential end date
         // Trail period: June 22-24, Blocker LEAD: June 23-24
         // Overlap at June 23-24 → should have trailDisable
-        getDateByISO("2026-06-21").trigger("mouseover");
-        getDateByISO("2026-06-21").should("have.class", "trailDisable");
+        getDate(11).trigger("mouseover");
+        getDate(11).should("have.class", "trailDisable");
 
         // Also test June 20 - trail June 21-23, June 23 overlaps blocker lead
-        getDateByISO("2026-06-20").trigger("mouseover");
-        getDateByISO("2026-06-20").should("have.class", "trailDisable");
+        getDate(10).trigger("mouseover");
+        getDate(10).should("have.class", "trailDisable");
 
         // Verify June 19 is clear - trail June 20-22, doesn't reach blocker lead (starts June 23)
-        getDateByISO("2026-06-19").trigger("mouseover");
-        getDateByISO("2026-06-19").should("not.have.class", "trailDisable");
+        getDate(9).trigger("mouseover");
+        getDate(9).should("not.have.class", "trailDisable");
 
         // Clear selection for next phase
         cy.get("#period").clearFlatpickr();
@@ -999,24 +1002,21 @@ describe("Booking Modal Date Picker Tests", () => {
          */
 
         // Select June 13 as start date
-        getDateByISO("2026-06-13").click();
+        getDate(3).click();
 
         // First, verify June 20 HAS trailDisable (trail June 21-23 overlaps blocker lead June 23-24)
-        getDateByISO("2026-06-20").trigger("mouseover");
-        getDateByISO("2026-06-20").should("have.class", "trailDisable");
+        getDate(10).trigger("mouseover");
+        getDate(10).should("have.class", "trailDisable");
 
         // June 19 should NOT have trailDisable (trail June 20-22 is clear of blocker lead)
-        getDateByISO("2026-06-19").trigger("mouseover");
-        getDateByISO("2026-06-19").should("not.have.class", "trailDisable");
+        getDate(9).trigger("mouseover");
+        getDate(9).should("not.have.class", "trailDisable");
 
         // June 19 should not be disabled by flatpickr
-        getDateByISO("2026-06-19").should(
-            "not.have.class",
-            "flatpickr-disabled"
-        );
+        getDate(9).should("not.have.class", "flatpickr-disabled");
 
         // Actually select June 19 to confirm booking can be made
-        getDateByISO("2026-06-19").click();
+        getDate(9).click();
 
         // Verify dates were accepted in the form
         cy.get("#booking_start_date").should("not.have.value", "");
@@ -1274,9 +1274,13 @@ describe("Booking Modal Date Picker Tests", () => {
          * - ITEM 3: Booked days 1-7, then 23-30
          */
 
-        // Fix the browser Date object to June 10, 2026 at 09:00 Europe/London
-        // Using ["Date"] to avoid freezing timers which breaks Select2 async operations
-        const fixedToday = new Date("2026-06-10T08:00:00Z"); // 09:00 BST (UTC+1)
+        // Anchor "today" to next month so bookings stay in the future ( the API drops past ones )
+        // ["Date"] avoids freezing timers, which breaks Select2
+        const fixedToday = dayjs()
+            .add(1, "month")
+            .startOf("month")
+            .hour(8)
+            .toDate();
         cy.clock(fixedToday, ["Date"]);
         const today = dayjs(fixedToday);
 
@@ -1581,9 +1585,12 @@ describe("Booking Modal Date Picker Tests", () => {
          * 4. Visual feedback: Check existingBookingLead on days 8-9 (June 9-10)
          */
 
-        // Fix the browser Date object to June 1, 2026 at 09:00 Europe/London
-        // This ensures all test dates (days 5-17) fall within June
-        const fixedToday = new Date("2026-06-01T08:00:00Z"); // 09:00 BST (UTC+1)
+        // Anchor "today" to next month so bookings stay in the future ( the API drops past ones )
+        const fixedToday = dayjs()
+            .add(1, "month")
+            .startOf("month")
+            .hour(8)
+            .toDate();
         cy.clock(fixedToday, ["Date"]);
 
         const today = dayjs(fixedToday);
@@ -1776,6 +1783,8 @@ describe("Booking Modal Date Picker Tests", () => {
                         "new",
                     ],
                 }).then(() => {
+                    // Re-arm the frozen clock so the reloaded page loads with the faked today
+                    cy.clock(fixedToday, ["Date"]);
                     // Reload page to get updated booking data
                     cy.visit(
                         `/cgi-bin/koha/catalogue/detail.pl?biblionumber=${testBiblio.biblio_id}`
