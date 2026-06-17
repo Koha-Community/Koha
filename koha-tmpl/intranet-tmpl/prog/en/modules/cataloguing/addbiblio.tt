@@ -34,7 +34,7 @@
     const lang = "[% lang | html %]";
     const logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
     var breedingid = [% breedingid || "null" | html %];
-    var biblionumber = [% biblionumber || "null" | html %];
+    var biblionumber = "[% biblionumber | html %]";
     var title = "[% title | html %]";
     const bib_doesnt_exist = [% bib_doesnt_exist ? 1 : 0 | html %];
     const biblionumberdata = "[% biblionumberdata | html %]";
