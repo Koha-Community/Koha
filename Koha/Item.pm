@@ -2643,6 +2643,8 @@ sub recall {
 
 Does item-level checks and returns if items can be recalled by this borrower
 
+If hold_convert $param is included, this is a check to convert a hold to a recall, so we should not check for an existing hold.
+
 =cut
 
 sub can_be_recalled {
@@ -2704,9 +2706,12 @@ sub can_be_recalled {
             ->count > 0 );
 
         # check if this patron has already reserved this item
-        return 0
-            if ( Koha::Holds->search( { itemnumber => $self->itemnumber, borrowernumber => $patron->borrowernumber } )
-            ->count > 0 );
+        unless ( $params->{hold_convert} ) {
+            return 0
+                if (
+                Koha::Holds->search( { itemnumber => $self->itemnumber, borrowernumber => $patron->borrowernumber } )
+                ->count > 0 );
+        }
     }
 
     # check item availability

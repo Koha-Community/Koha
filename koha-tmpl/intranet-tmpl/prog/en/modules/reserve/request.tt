@@ -327,6 +327,14 @@
                 <p>No club with this name, please, try another</p>
             </div>
         [% END %]
+
+        [% IF ( recallerror ) %]
+            <div class="alert alert-warning">
+                <h3>Hold cannot be converted to a recall</h3>
+                <p>A recall cannot be placed for one or more holds. Check your <a href="/cgi-bin/koha/admin/smart-rules.pl">circulation and fine rules</a>.</p>
+            </div>
+        [% END %]
+
         <fieldset>
             [% UNLESS multi_hold %]
                 [% IF clubcount %]
@@ -1383,6 +1391,11 @@
                             </ul>
                         </div>
                     [% END %]
+                    [% IF Koha.Preference('UseRecalls').match('staff') %]
+                        <div class="btn-group">
+                            <button class="btn convert_selected_holds" data-bulk="true"></button>
+                        </div>
+                    [% END %]
                 </div>
                 <div class="page-section">
                     [% FOREACH biblioloo IN biblioloop %]
@@ -1464,6 +1477,8 @@
 [% END %]
 
 [% PROCESS 'cancel-hold-modal' form_action = 'request.pl' %]
+
+[% PROCESS 'convert-to-recall-modal' form_action = 'modrequest.pl' %]
 
 <div id="moveHoldItemModal" class="modal modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
@@ -1599,6 +1614,7 @@
             },
             [% END %][% END %][% END %]
         };
+        var UseRecalls = [% ( Koha.Preference('UseRecalls').match('staff') ) ? 1 : 0 | html %];
 
         const active_tab = [% clubs ? 1 : 0 | html %];
 

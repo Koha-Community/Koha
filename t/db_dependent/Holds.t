@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 74;
+use Test::More tests => 75;
 use Test::NoWarnings;
 use Test::Exception;
 
@@ -2148,6 +2148,101 @@ subtest 'current_holds with future holds' => sub {
     ( $ok, $err ) = CanBookBeRenewed( $patron2, $issue );
     is( $ok,  0,            'Hold now blocks renewal' );
     is( $err, 'on_reserve', 'Code for blocking renewal' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'ModReserve to convert a hold to a recall' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $category = $builder->build( { source => 'Category' } );
+    my $branch   = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $biblio   = $builder->build_sample_biblio( { itemtype => 'DUMMY' } );
+    my $itype    = $builder->build( { source => 'Itemtype' } );
+    my $item     = $builder->build_sample_item(
+        { library => $branch, biblionumber => $biblio->biblionumber, itype => $itype->{itemtype} } );
+
+    my $patron = Koha::Patron->new(
+        {
+            firstname    => 'my firstname',
+            surname      => 'whatever surname',
+            categorycode => $category->{categorycode},
+            branchcode   => $branch,
+            email        => 'name@email.com',
+        }
+    )->store;
+    my $borrowernumber = $patron->borrowernumber;
+
+    my $patron2 = Koha::Patron->new(
+        {
+            firstname    => 'my firstname',
+            surname      => 'whatever surname',
+            categorycode => $category->{categorycode},
+            branchcode   => $branch,
+            email        => 'name2@email.com',
+        }
+    )->store;
+
+    t::lib::Mocks::mock_preference( "UseRecalls", 1 );
+    t::lib::Mocks::mock_userenv( { branchcode => $branch } );
+
+    C4::Circulation::AddIssue( $patron2, $item->barcode );
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+            rules        => {
+                recalls_allowed    => 5,
+                recalls_per_record => 1,
+                on_shelf_recalls   => 'any',
+            },
+        }
+    );
+
+    my $notice = Koha::Notice::Template->new(
+        {
+            name                   => 'Hold cancellation',
+            module                 => 'reserves',
+            code                   => 'HOLD_CANCELLATION',
+            title                  => 'Hold cancelled',
+            content                => 'Your hold was cancelled.',
+            message_transport_type => 'email',
+            branchcode             => q{},
+        }
+    )->store();
+
+    my $reserve_id = AddReserve(
+        {
+            branchcode     => $branch,
+            borrowernumber => $borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => C4::Reserves::CalculatePriority( $biblio->biblionumber ),
+            itemnumber     => $item->id,
+        }
+    );
+
+    my $hold           = Koha::Holds->find($reserve_id);
+    my $before_recalls = Koha::Recalls->search->filter_by_current->count;
+
+    ModReserve(
+        {
+            reserve_id     => $hold->id,
+            expirationdate => '1981-06-10',
+            priority       => 99,
+            rank           => "recall",
+            itemnumber     => $item->id,
+        }
+    );
+
+    $hold = Koha::Holds->find($reserve_id);
+    my $after_recalls = Koha::Recalls->search->filter_by_current->count;
+
+    ok( !defined $hold, 'Hold was cancelled' );
+    is( $after_recalls, $before_recalls + 1, 'Recall count increased by 1 as hold was converted to a recall' );
 
     $schema->storage->txn_rollback;
 };

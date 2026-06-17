@@ -46,6 +46,7 @@ my @branch          = $query->multi_param('pickup');
 my @itemnumber      = $query->multi_param('itemnumber');
 my @biblionumber    = $query->multi_param('biblionumber');
 my $count           = @rank;
+my $recallerror;
 
 @biblionumber = uniq @biblionumber;
 
@@ -99,6 +100,41 @@ if ( $op eq 'cud-cancelall' || $op eq 'cud-modifyall' ) {
     foreach my $biblio_id (@biblio_ids) {
         FixPriority( { biblionumber => $biblio_id } );
     }
+
+} elsif ( $op eq 'cud-convertall' ) {
+    for ( my $i = 0 ; $i < $count ; $i++ ) {
+        undef $itemnumber[$i] if !$itemnumber[$i];
+        my $cancellation_reason = $query->param("cancellation-reason");
+        my $params              = {
+            rank                => $rank[$i],
+            reserve_id          => $reserve_id[$i],
+            expirationdate      => $expirationdates[$i] || undef,
+            branchcode          => $branch[$i],
+            itemnumber          => $itemnumber[$i],
+            cancellation_reason => $cancellation_reason,
+        };
+
+        try {
+            ModReserve($params);
+        } catch {
+            if ( $_->isa('Koha::Exceptions::ObjectNotFound') ) {
+                warn $_;
+            } else {
+                $_->rethrow;
+            }
+        };
+
+        my $hold_still_exists = Koha::Holds->find( $reserve_id[$i] );
+        if ($hold_still_exists) {
+            $recallerror = 1;
+        }
+    }
+    my @biblio_ids = uniq @biblionumber;
+    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue( { biblio_ids => \@biblio_ids } )
+        if C4::Context->preference('RealTimeHoldsQueue');
+    foreach my $biblio_id (@biblio_ids) {
+        FixPriority( { biblionumber => $biblio_id } );
+    }
 }
 
 my $from = $query->param('from');
@@ -109,6 +145,10 @@ if ( $from eq 'borrower' ) {
     print $query->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrower[0]");
 } else {
     my $url = URI->new("/cgi-bin/koha/reserve/request.pl");
-    $url->query_form( biblionumber => [@biblionumber] );
+    if ($recallerror) {
+        $url->query_form( biblionumber => [@biblionumber], recallerror => 1 );
+    } else {
+        $url->query_form( biblionumber => [@biblionumber] );
+    }
     print $query->redirect($url);
 }

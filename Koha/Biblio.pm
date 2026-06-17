@@ -2239,6 +2239,8 @@ sub recalls {
 
 Does biblio-level checks and returns the items attached to this biblio that are available for recall
 
+If hold_convert $param is included, this is a check to convert a hold to a recall, so we should not check for an existing hold.
+
 =cut
 
 sub can_be_recalled {
@@ -2264,7 +2266,7 @@ sub can_be_recalled {
     my @all_itemnumbers;
     foreach my $item (@all_items) {
         push( @all_itemnumbers, $item->itemnumber );
-        if ( $item->can_be_recalled( { patron => $patron } ) ) {
+        if ( $item->can_be_recalled( { patron => $patron, hold_convert => $params->{hold_convert} } ) ) {
             push( @itemtypes,   $item->effective_itemtype );
             push( @itemnumbers, $item->itemnumber );
             push( @items,       $item );

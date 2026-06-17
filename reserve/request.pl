@@ -806,6 +806,11 @@ $template->param( pickup => $pickup || C4::Context->userenv->{branch} );
 $template->param( borrowernumber => $borrowernumber_hold );
 $template->param( failed_holds   => \@failed_holds, successful_biblionumbers => $successful_biblionumbers );
 
+my $recallerror = $input->param('recallerror');
+if ($recallerror) {
+    $template->param( recallerror => 1 );
+}
+
 # printout the page
 output_html_with_http_headers $input, $cookie, $template->output;
 

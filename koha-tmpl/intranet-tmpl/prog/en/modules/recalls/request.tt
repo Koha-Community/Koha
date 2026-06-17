@@ -2,18 +2,36 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE Branches %]
+[% USE Categories %]
+[% USE AuthorisedValues %]
+[% USE ItemTypes %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
+[% SET libraries = Branches.all %]
+[% SET categories = Categories.all.unblessed %]
+[% SET columns = ['name', 'cardnumber', 'dateofbirth', 'category', 'branch', 'address', 'phone'] %]
+[% PROCESS "patron-search.inc" %]
 <title
     >[% FILTER collapse %]
-        [% t("Existing recalls") | html %]
+        [% t("Place a recall") | html %]
         &rsaquo; [% t("Recalls") | html %] &rsaquo; [% t("Koha") | html %]
     [% END %]</title
 >
 [% INCLUDE 'doc-head-close.inc' %]
+[% FILTER collapse %]
+    <style nonce="[% Koha.CSPNonce | $raw %]">
+        .disabled {
+            opacity: 0.5;
+        }
+        #circ_request fieldset.disabled {
+            pointer-events: auto;
+        }
+    </style>
+[% END %]
 </head>
-<body id="recalls-request" class="catalog">
+<body id="circ_request" class="recall">
 [% WRAPPER 'header.inc' %]
     [% INCLUDE 'circ-search.inc' %]
 [% END %]
@@ -27,40 +45,264 @@
             [% INCLUDE 'biblio-title.inc' link = 1 %]
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>Existing recalls</span>
+            <span>Place a recall</span>
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-[% WRAPPER 'main-container.inc' aside='biblio-view-menu' %]
-    <h1>Existing recalls</h1>
+[% WRAPPER 'main-container.inc' aside='biblio-view-menu' wide_centered=1 %]
+    <h1>Recalls</h1>
 
-    [% IF Koha.Preference('UseRecalls') != "off" %]
-        [% IF recalls.count %]
-            <div class="page-section">
-                <form method="post" action="/cgi-bin/koha/recalls/request.pl">
-                    [% INCLUDE 'csrf-token.inc' %]
-                    <input type="hidden" name="op" value="cud-cancel_multiple_recalls" />
-                    <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />
-                    <input type="checkbox" id="select_all" /> <span id="select_all_text">Select all</span>
-                    [% INCLUDE 'recalls.inc' %]
-                    <fieldset class="action">
-                        <button type="submit" id="cancel_selected" class="btn btn-default btn-sm">Cancel selected recalls</button>
-                    </fieldset>
-                </form>
-            </div>
-            <!-- /.page-section -->
-        [% ELSE %]
-            <div class="alert alert-info">No recalls have been made.</div>
+    <h2>Place a recall on [% INCLUDE 'biblio-title.inc' link = 1 %]</h2>
+
+    [% IF patron %]
+
+        [% IF error %]
+            <div class="alert alert-warning"> <strong>Cannot place recalls:</strong> check your circulation rules. </div>
         [% END %]
-    [% ELSE %]
-        <div class="alert alert-info">Recalls have not been enabled. Enable the <a href="/cgi-bin/koha/admin/preferences.pl?tab=circulation">UseRecalls</a> system preference to use recalls.</div>
-    [% END %]
-[% END %]
+
+        [% IF patron_holds_count %]
+            <div class="alert alert-info"> Patron has placed one or more record-level holds. <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblio.biblionumber | uri %]">Convert a hold to a recall</a>. </div>
+        [% END %]
+
+        <form id="recallform" action="/cgi-bin/koha/recalls/request.pl" method="post">
+            <fieldset class="rows">
+                <legend>Recall details</legend>
+
+                <ol>
+                    <li>
+                        <label for="borrowernumber">Patron:</label> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% INCLUDE 'patron-title.inc' %]</a>
+                        <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
+                    </li>
+
+                    <li> <label for="expirationdate">Recall not needed after:</label> <input type="text" name="expirationdate" id="expirationdate" size="20" class="flatpickr" /> </li>
+                </ol>
+            </fieldset>
+
+            <fieldset class="rows enabled recall_next">
+                <legend>Recall next available item</legend>
+
+                <ol>
+                    [% UNLESS ( single_branch_mode ) %]
+                        <li>
+                            <label for="pickup">Pick up at:</label>
+                            <select name="pickup" id="pickup">
+                                [% FOREACH branch IN branches %]
+                                    [% IF branch.branchcode == patron.branchcode %]
+                                        <option value="[% branch.branchcode | html %]" selected>[% Branches.GetName( branch.branchcode ) | html %]</option>
+                                    [% ELSE %]
+                                        <option value="[% branch.branchcode | html %]">[% Branches.GetName( branch.branchcode ) | html %]</option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+                        </li>
+                    [% END %]
+                </ol>
+
+                <fieldset class="action enabled recall_next">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="op" value="cud-request" />
+                    <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />
+                    <input type="hidden" name="type" value="next" />
+                    [% IF error %]
+                        <input type="submit" class="btn btn-primary" value="Place recall" disabled="disabled" />
+                    [% ELSE %]
+                        <input type="submit" class="btn btn-primary" value="Place recall" />
+                    [% END %]
+                    <a href="/cgi-bin/koha/recalls/request.pl?biblionumber=[% biblio.biblionumber | uri %]" class="cancel">Cancel</a>
+                </fieldset>
+            </fieldset>
+
+            <fieldset class="rows disabled recall_specific">
+                <legend>Recall a specific item</legend>
+
+                <table id="items">
+                    <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>Item type</th>
+                            <th>Barcode</th>
+                            [% UNLESS ( single_branch_mode ) %]
+                                <th>Home library</th>
+                                <th>Holding library</th>
+                            [% END %]
+                            <th>Collection</th>
+                            <th>Call number</th>
+                            <th>Copy number</th>
+                            <th>Vol no.</th>
+                            <th>Information</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [% FOREACH item IN items %]
+                            <tr>
+                                <td>
+                                    [% IF item.can_be_recalled( patron => patron ) %]
+                                        <input type="radio" class="itemnumber" name="itemnumber" value="[% item.itemnumber | html %]" />
+                                    [% ELSE %]
+                                        <span class="error">
+                                            <i class="fa fa-times fa-lg" title="Cannot be recalled"></i>
+                                        </span>
+                                    [% END %]
+                                </td>
+                                <td>[% ItemTypes.GetDescription( item.effective_itemtype ) | html %]</td>
+                                <td>[% item.barcode | html %]</td>
+                                [% UNLESS ( single_branch_mode ) %]
+                                    <td>[% Branches.GetName( item.homebranch ) | html %]</td>
+                                    <td>[% Branches.GetName( item.holdingbranch) | html %]</td>
+                                [% END %]
+                                <td>[% AuthorisedValues.GetByCode( 'CCODE', item.ccode, 1 ) | html %]</td>
+                                <td>[% item.itemcallnumber | html %]</td>
+                                <td>[% item.copynumber | html %]</td>
+                                <td>[% item.enumchron | html %]</td>
+                                <td>
+                                    [% IF ( item.checkout ) %]
+                                        <span class="checkedout">Due [% item.checkout.date_due | $KohaDates %]</span>
+                                    [% ELSIF ( item.get_transfer ) %]
+                                        <span class="intransit"
+                                            >In transit from [% Branches.GetName( item.get_transfer.frombranch ) | html %] to [% Branches.GetName( item.get_transfer.tobranch ) | html %] since
+                                            [% item.get_transfer.datesent | $KohaDates %]</span
+                                        >
+                                    [% END %]
+                                    [% IF ( item.itemlost || item.withdrawn ) %]
+                                        <span class="lost">Unavailable (lost or withdrawn)</span>
+                                    [% END %]
+                                    [% IF ( item.notforloan ) %]
+                                        <span class="notforloan">Not for loan ([% item.notforloan | html %])</span>
+                                    [% END %]
+                                    [% hold = item.current_holds.next %]
+                                    [% IF ( item.recall ) %]
+                                        <span class="waiting">
+                                            [% IF ( item.recall.waiting_date ) %]
+                                                Waiting for patron at [% Branches.GetName( item.recall.pickup_library_id ) | html %] since [% item.recall.waiting_date | $KohaDates %].
+                                            [% ELSIF ( item.recall.item_id == item.itemnumber ) %]
+                                                Recalled by patron expected at [% Branches.GetName( item.recall.pickup_library_id ) | html %] since [% item.recall.created_date | $KohaDates %].
+                                            [% END %]
+                                        </span>
+                                    [% ELSIF ( hold.waitingdate ) %]
+                                        <span class="waiting"> Waiting for patron at [% Branches.GetName( hold.branchcode ) | html %] since [% hold.waitingdate | $KohaDates %]. </span>
+                                    [% ELSIF ( hold.borrowernumber == logged_in_user.borrowernumber ) %]
+                                        <span class="waiting"> Patron has already placed a <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% patron.borrowernumber | uri %]#reserves">hold</a> on this item. </span>
+                                    [% END # / IF ( item.recall or hold ) %]
+                                </td>
+                            </tr>
+                        [% END # FOREACH item IN items %]
+                    </tbody>
+                </table>
+
+                <fieldset class="action disabled recall_specific">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="op" value="cud-request" />
+                    <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />
+                    [% IF error %]
+                        <input type="submit" class="btn btn-primary" value="Place recall" disabled="disabled" />
+                    [% ELSE %]
+                        <input type="submit" class="btn btn-primary" value="Place recall" />
+                    [% END %]
+                    <a href="/cgi-bin/koha/recalls/request.pl?biblionumber=[% biblio.biblionumber | uri %]" class="cancel">Cancel</a>
+                </fieldset>
+            </fieldset>
+        </form>
+    [% ELSE # patron %]
+
+        [% IF Koha.Preference('UseRecalls') == 'opac' %]
+            <div class="alert alert-warning"> Due to the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UseRecalls">UseRecalls</a> system preference, recalls cannot be placed through the staff interface. </div>
+        [% ELSE %]
+            <fieldset>
+                <h2>Search patrons</h2>
+                [% WRAPPER tabs id= "circ_recalls_select" %]
+                    [% WRAPPER tabs_nav %]
+                        [% WRAPPER tab_item tabname= "recalls_patronsearch_pane" bt_active= 1 %]<span>Patrons</span>[% END %]
+                    [% END # /WRAPPER tabs_nav %]
+
+                    [% WRAPPER tab_panels %]
+                        [% WRAPPER tab_panel tabname="recalls_patronsearch_pane" bt_active= 1 %]
+                            [% PROCESS patron_search_filters_simple %]
+                            [% PROCESS patron_search_table table_id => 'table_borrowers', open_on_row_click => 1 %]
+                        [% END # /tab_panel# %]
+                    [% END # /WRAPPER tab_panels %]
+                [% END # /WRAPPER tabs %]
+            </fieldset>
+        [% END %]
+
+        <div class="page-section">
+            <h2>Existing recalls</h2>
+
+            [% IF Koha.Preference('UseRecalls') != "off" %]
+                [% IF recalls.count %]
+                    <div class="page-section">
+                        <form method="post" action="/cgi-bin/koha/recalls/request.pl">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="op" value="cud-cancel_multiple_recalls" />
+                            <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />
+                            <input type="checkbox" id="select_all" /> <span id="select_all_text">Select all</span>
+                            [% INCLUDE 'recalls.inc' %]
+                            <fieldset class="action">
+                                <button type="submit" id="cancel_selected" class="btn btn-default btn-sm">Cancel selected recalls</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <!-- /.page-section -->
+                [% ELSE %]
+                    <div class="alert alert-info">No recalls have been made.</div>
+                [% END %]
+            [% ELSE %]
+                <div class="alert alert-info">Recalls have not been enabled. Enable the <a href="/cgi-bin/koha/admin/preferences.pl?tab=circulation">UseRecalls</a> system preference to use recalls.</div>
+            [% END %]
+        </div>
+    [% END # patron %]
+[% END # WRAPPER %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/recalls.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'select2.inc' %]
+    [% SET url_biblio_params = "biblionumber=" _ biblio.biblionumber %]
+    [% UNLESS patron %]
+        [% SET search_results_block_id = 'recalls_patronsearch_pane_panel' %]
+        [%# adjusting variable for patron-search.inc %]
+        [% PROCESS patron_search_js table_id => 'table_borrowers', categories => categories, libraries => libraries, columns => columns, open_on_row_click => 1, on_click_url => '/cgi-bin/koha/recalls/request.pl?' _ url_biblio_params, redirect_if_one_result => 1, redirect_url => '/cgi-bin/koha/recalls/request.pl?' _ url_biblio_params, redirect_if_attribute_equal => 'cardnumber' %]
+        <script nonce="[% Koha.CSPNonce | $raw %]">
+            $(document).ready(function () {
+                $("#recalls_patronsearch").on("submit", filter);
+            });
+        </script>
+    [% END %]
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+        const apply_patron_autocomplete = [% !patron && PatronAutoComplete ? 1 : 0 | html %];
+        const url_biblio_params = '[% url_biblio_params | url %]';
+    </script>
+    <script nonce="[% Koha.CSPNonce | $raw %]">
+        $.fn.select2.defaults.set("width", "100%");
+        $.fn.select2.defaults.set("dropdownAutoWidth", true);
+        $(document).ready(function () {
+            if (apply_patron_autocomplete) {
+                patron_autocomplete($(".search_patron_filter"), { "link-to": "recall", "url-params": url_biblio_params });
+            }
+            $("#items").dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    paginate: false,
+                    dom: '<"top pager"ilf>t',
+                })
+            );
+
+            //Override fieldset styling for dataTables search box
+            $("div.top.pager").css("margin-left", "1em");
+            $(".dataTables_filter label").css({
+                width: "auto",
+                "margin-right": "0em",
+            });
+            $(".recall_specific").click(function () {
+                $(".recall_specific").removeClass("disabled").addClass("enabled");
+                $(".recall_next").removeClass("enabled").addClass("disabled");
+            });
+            $(".recall_next").click(function () {
+                $(".recall_next").removeClass("disabled").addClass("enabled");
+                $(".recall_specific").removeClass("enabled").addClass("disabled");
+            });
+        });
+    </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

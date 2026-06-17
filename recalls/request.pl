@@ -35,23 +35,123 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $op           = $input->param('op') || 'list';
-my @recall_ids   = $input->multi_param('recall_ids');
-my $biblionumber = $input->param('biblionumber');
-my $recalls      = Koha::Recalls->search( { biblio_id => $biblionumber, completed => 0 } );
-my $biblio       = Koha::Biblios->find($biblionumber);
+my $op             = $input->param('op') || 'list';
+my @recall_ids     = $input->multi_param('recall_ids');
+my $biblionumber   = $input->param('biblionumber');
+my $biblio         = Koha::Biblios->find($biblionumber);
+my $borrowernumber = $input->param('borrowernumber');
+my $error          = $input->param('error');
 
 if ( $op eq 'cud-cancel_multiple_recalls' ) {
     foreach my $id (@recall_ids) {
         Koha::Recalls->find($id)->set_cancelled;
     }
-    $op = 'list';
+    print $input->redirect( '/cgi-bin/koha/recalls/request.pl?biblionumber=' . $biblionumber );
+
+} elsif ( $op eq 'cud-request' ) {
+
+    if ( C4::Context->preference('UseRecalls') =~ m/staff/
+        and $borrowernumber )
+    {
+        my $patron = Koha::Patrons->find($borrowernumber);
+
+        unless ( $biblio->can_be_recalled( { patron => $patron } ) ) { $error = 'unavailable'; }
+        my $items = Koha::Items->search( { biblionumber => $biblionumber } )->as_list;
+
+        # check if already recalled
+        my $recalled = $biblio->recalls->filter_by_current->search( { patron_id => $borrowernumber } )->count;
+        if ( defined $recalled and $recalled > 0 ) {
+            my $recalls_per_record = Koha::CirculationRules->get_effective_rule(
+                {
+                    categorycode => $patron->categorycode,
+                    branchcode   => undef,
+                    itemtype     => undef,
+                    rule_name    => 'recalls_per_record'
+                }
+            );
+            if (    defined $recalls_per_record
+                and $recalls_per_record->rule_value
+                and $recalled >= $recalls_per_record->rule_value )
+            {
+                $error = 'duplicate';
+            }
+        }
+
+        if ( !defined $error ) {
+            my $pickuploc  = $input->param('pickup');
+            my $expdate    = $input->param('expirationdate');
+            my $level      = $input->param('type');
+            my $itemnumber = $input->param('itemnumber');
+
+            my ( $recall, $due_interval, $due_date );
+
+            if ( defined $level and defined $itemnumber ) {
+                my $item = Koha::Items->find($itemnumber);
+                if ( $item->can_be_recalled( { patron => $patron } ) ) {
+                    ( $recall, $due_interval, $due_date ) = Koha::Recalls->add_recall(
+                        {
+                            patron         => $patron,
+                            biblio         => $biblio,
+                            branchcode     => $pickuploc,
+                            item           => $item,
+                            expirationdate => $expdate,
+                            interface      => 'staff',
+                        }
+                    );
+                } else {
+                    $error = 'cannot';
+                }
+            } else {
+                if ( $biblio->can_be_recalled( { patron => $patron } ) ) {
+                    ( $recall, $due_interval, $due_date ) = Koha::Recalls->add_recall(
+                        {
+                            patron         => $patron,
+                            biblio         => $biblio,
+                            branchcode     => $pickuploc,
+                            expirationdate => $expdate,
+                            interface      => 'staff',
+                        }
+                    );
+                } else {
+                    $error = 'cannot';
+                }
+            }
+            if ( !defined $recall ) {
+                $error = 'failed';
+            } else {
+
+                # successful recall, go back to Recalls tab
+                print $input->redirect("/cgi-bin/koha/recalls/request.pl?biblionumber=$biblionumber");
+            }
+        }
+    }
 }
 
-if ( $op eq 'list' ) {
-    $recalls = Koha::Recalls->search( { biblio_id => $biblionumber, completed => 0 } );
-    $biblio  = Koha::Biblios->find($biblionumber);
+if ($borrowernumber) {
+    my $patron = Koha::Patrons->find($borrowernumber);
+
+    if (    C4::Context->preference('UseRecalls') =~ m/staff/
+        and $patron
+        and $patron->borrowernumber )
+    {
+        if ( !$biblio->can_be_recalled( { patron => $patron } ) ) {
+            $error = 1;
+        }
+
+        my $patron_holds_count = Koha::Holds->search(
+            { borrowernumber => $borrowernumber, biblionumber => $biblio->biblionumber, item_level_hold => 0 } )->count;
+
+        $template->param(
+            patron             => $patron,
+            patron_holds_count => $patron_holds_count,
+        );
+    }
 }
+
+my $recalls            = Koha::Recalls->search( { biblio_id => $biblionumber, completed => 0 } );
+my $branches           = Koha::Libraries->search;
+my $single_branch_mode = $branches->count == 1;
+my $items              = Koha::Items->search( { biblionumber => $biblionumber } );
 
 $template->param(
     recalls     => $recalls,
@@ -59,6 +159,15 @@ $template->param(
     biblio      => $biblio,
     checkboxes  => 1,
     C4::Search::enabled_staff_search_views,
+    branches             => $branches,
+    items                => $items,
+    error                => $error,
+    single_branch_mode   => $single_branch_mode,
+    attribute_type_codes => (
+        C4::Context->preference('ExtendedPatronAttributes')
+        ? [ Koha::Patron::Attribute::Types->search( { staff_searchable => 1 } )->get_column('code') ]
+        : []
+    ),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

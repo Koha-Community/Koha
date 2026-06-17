@@ -756,8 +756,12 @@ $(document).ready(function () {
     });
 
     var MSG_MOVE_SELECTED = __("Move selected (%s)");
+    var MSG_RECALL_SELECTED = __("Convert selected to recall (%s)");
     var MSG_CANCEL_ALERT = __(
         "This action will cancel <span class='badge bg-danger'>%s</span> hold(s)."
+    );
+    var MSG_CONVERT_ALERT = __(
+        "This action will cancel <span class='badge bg-danger'>%s</span> hold(s) and create <span class='badge bg-danger'>%s</span> recall(s)."
     );
 
     // Confirm cancellation of hold
@@ -820,10 +824,9 @@ $(document).ready(function () {
         var hasSelectedHolds = selectedHolds.length > 0;
         var hasMultipleSelectedHolds = selectedHolds.length >= 2;
 
-        $(".cancel_selected_holds, .suspend_selected_holds").prop(
-            "disabled",
-            !hasSelectedHolds
-        );
+        $(
+            ".cancel_selected_holds, .suspend_selected_holds, .convert_selected_holds"
+        ).prop("disabled", !hasSelectedHolds);
         $(".group_selected_holds").prop("disabled", !hasMultipleSelectedHolds);
     }
 
@@ -870,6 +873,26 @@ $(document).ready(function () {
                     .map(el =>
                         JSON.stringify({
                             hold: $(el).data("id"),
+                            borrowernumber: $(el).data("borrowernumber"),
+                            biblionumber: $(el).data("biblionumber"),
+                        })
+                    )
+                    .join(",") +
+                "]";
+            $("#convert_hold_alert").html(
+                MSG_CONVERT_ALERT.format(
+                    $(".holds_table .select_hold:checked").length,
+                    $(".holds_table .select_hold:checked").length
+                )
+            );
+            $("#convert_hold_alert").show();
+            localStorage.selectedHolds =
+                "[" +
+                $(".holds_table .select_hold:checked")
+                    .toArray()
+                    .map(el =>
+                        JSON.stringify({
+                            hold: $(el).data("reserve_id"),
                             borrowernumber: $(el).data("borrowernumber"),
                             biblionumber: $(el).data("biblionumber"),
                         })
@@ -932,6 +955,38 @@ $(document).ready(function () {
                 });
                 delete localStorage.selectedHolds;
                 $("#cancelModal").modal("show");
+            }
+            return false;
+        });
+
+        $(".convert_selected_holds").click(function (e) {
+            e.preventDefault();
+            if ($(".holds_table .select_hold:checked").length) {
+                $("#convert_to_recall_modal_form #inputs").empty();
+                $("#convert_to_recall_modal_form #inputs").append(
+                    '<input type="hidden" name="op" value="cud-convertall">'
+                );
+                $(
+                    "#convert_to_recall_modal_form #modal-cancellation-reason"
+                ).val("RECALLED");
+                let hold_data =
+                    "[" +
+                    $(".holds_table .select_hold:checked")
+                        .toArray()
+                        .map(el =>
+                            JSON.stringify({
+                                hold: $(el).data("reserve_id"),
+                                borrowernumber: $(el).data("borrowernumber"),
+                                biblionumber: $(el).data("biblionumber"),
+                            })
+                        )
+                        .join(",") +
+                    "]";
+                JSON.parse(hold_data).forEach(function (hold) {
+                    _append_patron_page_convert_hold_modal_data(hold);
+                });
+                delete localStorage.selectedHolds;
+                $("#convertModal").modal("show");
             }
             return false;
         });
@@ -1906,8 +1961,12 @@ async function load_patron_holds_table(biblio_id, split_data) {
         function updateMSGCounters() {
             var MSG_CANCEL_SELECTED = __("Cancel selected (%s)");
             var MSG_MOVE_SELECTED = __("Move selected (%s)");
+            var MSG_RECALL_SELECTED = __("Convert selected to recall (%s)");
             var MSG_CANCEL_ALERT = __(
                 "This action will cancel <span class='badge bg-danger'>%s</span> hold(s)."
+            );
+            var MSG_CONVERT_ALERT = __(
+                "This action will cancel <span class='badge bg-danger'>%s</span> hold(s) and create <span class='badge bg-danger'>%s</span> recall(s)."
             );
             var selectedCount = JSON.parse(
                 localStorage.selectedHolds || "[]"
@@ -1921,10 +1980,18 @@ async function load_patron_holds_table(biblio_id, split_data) {
             $("#cancel_hold_alert").html(
                 MSG_CANCEL_ALERT.format(selectedCount)
             );
+            $("#convert_hold_alert").html(
+                MSG_CONVERT_ALERT.format(selectedCount, selectedCount)
+            );
+            $(".convert_selected_holds").html(
+                MSG_RECALL_SELECTED.format(selectedCount)
+            );
             if (selectedCount > 0) {
                 $("#cancel_hold_alert").show();
+                $("#convert_hold_alert").show();
             } else {
                 $("#cancel_hold_alert").hide();
+                $("#convert_hold_alert").hide();
             }
         }
 
@@ -2076,6 +2143,29 @@ async function load_patron_holds_table(biblio_id, split_data) {
             }
             return false;
         });
+        $(".convert_selected_holds").click(function (e) {
+            e.preventDefault();
+            const selectedHolds = JSON.parse(
+                localStorage.selectedHolds || "[]"
+            );
+            if (selectedHolds.length) {
+                $("#convert_to_recall_modal_form #inputs").empty();
+                $("#convert_to_recall_modal_form #inputs").append(
+                    '<input type="hidden" name="op" value="cud-convertall">'
+                );
+                $(
+                    "#convert_to_recall_modal_form #modal-cancellation-reason"
+                ).val("RECALLED");
+
+                selectedHolds.forEach(function (hold) {
+                    _append_patron_page_convert_hold_modal_data(hold);
+                });
+
+                //delete localStorage.selectedHolds;
+                $("#convertModal").modal("show");
+            }
+            return false;
+        });
         function _append_patron_page_cancel_hold_modal_data(hold) {
             $("#cancel_modal_form #inputs").append(
                 '<input type="hidden" name="rank-request" value="del">'
@@ -2091,6 +2181,26 @@ async function load_patron_holds_table(biblio_id, split_data) {
                     '">'
             );
             $("#cancel_modal_form #inputs").append(
+                '<input type="hidden" name="reserve_id" value="' +
+                    hold.hold +
+                    '">'
+            );
+        }
+        function _append_patron_page_convert_hold_modal_data(hold) {
+            $("#convert_to_recall_modal_form #inputs").append(
+                '<input type="hidden" name="rank-request" value="recall">'
+            );
+            $("#convert_to_recall_modal_form #inputs").append(
+                '<input type="hidden" name="biblionumber" value="' +
+                    hold.biblionumber +
+                    '">'
+            );
+            $("#convert_to_recall_modal_form #inputs").append(
+                '<input type="hidden" name="borrowernumber" value="' +
+                    hold.borrowernumber +
+                    '">'
+            );
+            $("#convert_to_recall_modal_form #inputs").append(
                 '<input type="hidden" name="reserve_id" value="' +
                     hold.hold +
                     '">'
