@@ -34,7 +34,7 @@ BEGIN {
 
 use Carp qw( carp );
 use CGI;
-use List::MoreUtils qw( any );
+use List::MoreUtils qw( any uniq );
 use C4::Context;
 use Koha::Caches;
 use Koha::Cache::Memory::Lite;
@@ -123,6 +123,10 @@ sub getTranslatedLanguages {
         } elsif ( $interface eq 'opac' ) {
             @enabled_languages = split ",", C4::Context->preference('OPACLanguages');
         }
+    } else {
+        @enabled_languages = split ",",
+            join( ',', C4::Context->preference( 'StaffInterfaceLanguages', C4::Context->preference('OPACLanguages') ) );
+        @enabled_languages = uniq @enabled_languages;
     }
 
     my $cache     = Koha::Caches->get_instance;
@@ -152,9 +156,7 @@ sub getTranslatedLanguages {
         $htdocs = C4::Context->config('opachtdocs');
         push @languages, _get_opac_language_dirs($htdocs);
 
-        my %seen;
-        $seen{$_}++ for @languages;
-        @languages = keys %seen;
+        @languages = uniq @languages;
     }
     return _build_languages_arrayref( \@languages, $current_language, \@enabled_languages );
 }
