@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2020 Koha Development Team
+# Copyright 2026 Koha Development Team
 #
 # This file is part of Koha.
 #
@@ -25,16 +25,59 @@ use File::Spec;
 use File::Slurp qw( read_file );
 use Data::Dumper;
 
-my $curdir = File::Spec->curdir();
-my @dirs   = `git ls-tree -d --name-only HEAD`;
-ok( @dirs > 0, 'We should test something' );
-my $makefile = read_file("$curdir/Makefile.PL");
-my @missing;
-for my $d ( sort @dirs ) {
-    chomp $d;
-    next if $d        =~ /^debian$/;
-    next if $makefile =~ m{'\./$d('|\/)}xms;
-    push @missing, $d;
-}
+subtest 'All files should be mapped in Makefile.pl' => sub {
+    plan tests => 2;
+    my @files = `git ls-tree --name-only HEAD`;
+    ok( @files > 0, 'We should test something' );
+    my @MakeFile = read_file('Makefile.PL');
+    my @ignored  = qw(
+        .editorconfig
+        .gitignore
+        .mailmap
+        .nvmrc
+        .perlcriticrc
+        .proverc
+        .proverc.dist
+        .stylelintrc.json
+        LICENSE
+        README.md
+        SECURITY.md
+        README.robots
+        debian
+        install-CPAN.pl
+        koha_perl_deps.pl
+    );
 
-is( scalar @missing, 0, 'All directories must be listed in Makefile.PL' ) or diag Dumper \@missing;
+    my @not_mapped;
+    for my $file (@files) {
+        chomp $file;
+        unless ( grep { /$file/ } @MakeFile or grep { $_ eq $file } @ignored ) {
+            push @not_mapped, $file;
+        }
+    }
+
+    is( @not_mapped, 0, 'All directories should be mapped' . ( @not_mapped ? ': ' . join ',', @not_mapped : '' ) );
+
+};
+
+subtest 'All CSS files should be mapped' => sub {
+    plan tests => 2;
+
+    my @css_files =
+        `git ls-tree --name-only HEAD koha-tmpl/intranet-tmpl/prog/css/src/ koha-tmpl/opac-tmpl/bootstrap/css/src/`;
+    ok( @css_files > 0, 'We should test something' );
+    my @MakeFile = read_file('Makefile.PL');
+
+    my @not_mapped;
+    for my $file (@css_files) {
+        chomp $file;
+        next if $file =~ m{/_[^/]*};
+        my $css = $file;
+        $css =~ s#/css/src/(.*).scss$#/css/$1.css#;
+        unless ( grep { /$css/ } @MakeFile ) {
+            push @not_mapped, $css;
+        }
+    }
+
+    is( @not_mapped, 0, 'All directories should be mapped' . ( @not_mapped ? ': ' . join ',', @not_mapped : '' ) );
+};
