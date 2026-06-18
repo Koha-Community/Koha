@@ -24,6 +24,7 @@ use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
+use C4::Context;
 use Koha::Database;
 
 BEGIN { use_ok('Koha::Policy::Circulation'); }
@@ -33,7 +34,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'circ_control_library() - PickupLibrary' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -58,6 +59,16 @@ subtest 'circ_control_library() - PickupLibrary' => sub {
         ),
         $other_library->branchcode,
         'Uses explicit pickup_library_id when provided'
+    );
+
+    # No userenv and no pickup_library_id: falls back to ItemHomeLibrary behaviour
+    C4::Context->unset_userenv;
+    t::lib::Mocks::mock_preference( 'HomeOrHoldingBranch', 'homebranch' );
+
+    is(
+        Koha::Policy::Circulation->circ_control_library( $item, $patron ),
+        $item->homebranch,
+        'Falls back to item home library when no userenv and no pickup_library_id'
     );
 
     $schema->storage->txn_rollback;
