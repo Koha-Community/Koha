@@ -49,7 +49,6 @@ BEGIN {
         GetUpcomingDueIssues
         CheckIfIssuedToPatron
         IsItemIssued
-        GetAgeRestriction
         GetTopIssues
 
         AddReturn
@@ -108,6 +107,7 @@ use Koha::ILL::ISO18626::Requests;
 use Koha::Bookings;
 use Koha::Items;
 use Koha::Patrons;
+use Koha::Policy::Biblio::AgeRestriction;
 use Koha::Patron::Debarments qw( DelUniqueDebarment AddUniqueDebarment );
 use Koha::Database;
 use Koha::Libraries;
@@ -1344,9 +1344,9 @@ sub CanBookBeIssued {
     }
 
     ## CHECK AGE RESTRICTION
-    my $agerestriction  = $biblioitem->agerestriction;
-    my $restriction_age = GetAgeRestriction($agerestriction);
-    if ( $restriction_age && $patron->dateofbirth && $restriction_age > $patron->get_age() ) {
+    my $age_check = Koha::Policy::Biblio::AgeRestriction->check( $biblio, $patron );
+    if ( !$age_check ) {
+        my $agerestriction = $biblioitem->agerestriction;
         if ( C4::Context->preference('AgeRestrictionOverride') ) {
             $needsconfirmation{AGE_RESTRICTION} = "$agerestriction";
         } else {

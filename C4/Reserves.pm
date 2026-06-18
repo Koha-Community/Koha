@@ -66,7 +66,8 @@ use JSON qw( to_json );
 
 use C4::Accounts;
 use C4::Biblio      qw( GetMarcFromKohaField );
-use C4::Circulation qw( CheckIfIssuedToPatron GetAgeRestriction GetBranchItemRule );
+use C4::Circulation qw( CheckIfIssuedToPatron GetBranchItemRule );
+use Koha::Policy::Biblio::AgeRestriction;
 use C4::Context;
 use C4::Items qw( CartToShelf get_hostitemnumbers_of );
 use C4::Letters;
@@ -537,9 +538,9 @@ sub CanItemBeReserved {
         my $biblio = $item->biblio;
 
         # Check for the age restriction
-        my $ageRestriction = C4::Circulation::GetAgeRestriction( $biblio->biblioitem->agerestriction );
+        my $age_check = Koha::Policy::Biblio::AgeRestriction->check( $biblio, $patron );
         return _cache { status => 'ageRestricted' }
-            if $ageRestriction && $patron->dateofbirth && $ageRestriction > $patron->get_age();
+            if !$age_check;
     }
 
     # Check that the patron doesn't have an item level hold on this item already
