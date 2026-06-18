@@ -186,7 +186,7 @@
                 <input type="hidden" id="srchany" name="srchany" value="[% srchany | html %]" />
                 <input type="hidden" id="controlnumber" name="controlnumber" value="[% controlnumber | html %]" />
                 <input type="hidden" name="authid" value="[% authid | html %]" />
-
+                <input type="hidden" name="index" value="[% index | html %]" />
                 [% FOREACH server IN servers %]
                     <input type="hidden" name="id" id="z3950_[% server.id | html %]" value="[% server.id | html %]" />
                 [% END %]
@@ -216,6 +216,7 @@
                     <input type="hidden" id="srchany" name="srchany" value="[% srchany | html %]" />
                     <input type="hidden" id="controlnumber" name="controlnumber" value="[% controlnumber | html %]" />
                     <input type="hidden" name="authid" value="[% authid | html %]" />
+                    <input type="hidden" name="index" value="[% index | html %]" />
                     <input type="submit" class="btn btn-primary" value="Try another search" />
                 </form>
             </div>
@@ -249,6 +250,7 @@
                     <input type="hidden" id="srchany" name="srchany" value="[% srchany | html %]" />
                     <input type="hidden" id="controlnumber" name="controlnumber" value="[% controlnumber | html %]" />
                     <input type="hidden" name="authid" value="[% authid | html %]" />
+                    <input type="hidden" name="index" value="[% index | html %]" />
                     <input type="submit" class="btn btn-primary" value="Try another search" />
                 </form>
             </div>
