@@ -4908,54 +4908,6 @@ sub IsItemIssued {
     return $sth->fetchrow;
 }
 
-=head2 GetAgeRestriction
-
-  my $ageRestriction = GetAgeRestriction($record_restrictions);
-
-@PARAM1 the koha.biblioitems.agerestriction value, like K18, PEGI 13, ...
-@RETURNS The age restriction age in years.
-
-=cut
-
-sub GetAgeRestriction {
-    my ($record_restrictions) = @_;
-    my $markers = C4::Context->preference('AgeRestrictionMarker');
-
-    return unless $record_restrictions;
-
-    # Split $record_restrictions to something like FSK 16 or PEGI 6
-    my @values = split ' ', uc($record_restrictions);
-    return unless @values;
-
-    # Search first occurrence of one of the markers
-    my @markers = split /\|/, uc($markers);
-    return unless @markers;
-
-    my $index            = 0;
-    my $restriction_year = 0;
-    for my $value (@values) {
-        $index++;
-        for my $marker (@markers) {
-            $marker =~ s/^\s+//;    #remove leading spaces
-            $marker =~ s/\s+$//;    #remove trailing spaces
-            if ( $marker eq $value ) {
-                if ( $index <= $#values ) {
-                    $restriction_year += $values[$index];
-                }
-                last;
-            } elsif ( $value =~ /^\Q$marker\E(\d+)$/ ) {
-
-                # Perhaps it is something like "K16" (as in Finland)
-                $restriction_year += $1;
-                last;
-            }
-        }
-        last if ( $restriction_year > 0 );
-    }
-
-    return $restriction_year;
-}
-
 =head2 GetPendingOnSiteCheckouts
 
 =cut
