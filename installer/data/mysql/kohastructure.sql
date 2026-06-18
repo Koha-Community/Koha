@@ -3552,6 +3552,7 @@ CREATE TABLE `file_transports` (
   `upload_directory` mediumtext DEFAULT NULL,
   `status` longtext DEFAULT NULL,
   `debug` tinyint(1) NOT NULL DEFAULT 0,
+  `copy_file_attrs` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`file_transport_id`),
   KEY `host_idx` (`host`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
