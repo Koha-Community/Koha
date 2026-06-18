@@ -95,15 +95,23 @@ sub search_for_display {
     my ( $self, $params ) = @_;
     my $lang = $params->{lang} || q{};
 
-    # If lang is not default, we will search for entries matching $lang but fallback to default if $lang is not found
-    # Then we need a subquery count in where clause; DBIx::Class/SQL::Abstract does not support it, fallback to literal SQL
-    my $subquery =
-        qq|(SELECT COUNT(*) FROM additional_contents_localizations WHERE lang='$lang' AND additional_content_id=me.additional_content_id)=0|;
-
     my $search_params = get_public_query_search_params($params);
     $search_params->{lang} = 'default' if !$lang || $lang eq 'default';
-    $search_params->{-or} = [ { 'lang' => $lang }, '-and' => [ 'lang', 'default', \$subquery ] ]
-        if !$search_params->{lang};
+
+    unless ( $search_params->{lang} ) {
+        $search_params->{-or} = [
+            { lang => $lang },
+            {
+                -and => [
+                    { lang => 'default' },
+                    \[
+                        '(SELECT COUNT(*) FROM additional_contents_localizations WHERE lang = ? AND additional_content_id = me.additional_content_id) = 0',
+                        $lang
+                    ]
+                ]
+            }
+        ];
+    }
 
     my $attribs = { prefetch => 'additional_content', order_by => 'additional_content.number' };
     return Koha::AdditionalContentsLocalizations->search( $search_params, $attribs );

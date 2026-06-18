@@ -186,7 +186,7 @@ subtest '->author' => sub {
 
 subtest '->search_for_display' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -287,6 +287,15 @@ subtest '->search_for_display' => sub {
     # TODO We should add more tests here
 
     $schema->storage->txn_rollback;
+
+    subtest 'prevent SQL injections' => sub {
+        plan tests => 1;
+        $schema->storage->txn_begin;
+        my $lang = q{' OR Booh!};
+        Koha::AdditionalContents->search_for_display( { lang => $lang } )->count;
+        pass(q{Shouldn't get a warning or exception});
+        $schema->storage->txn_rollback;
+    };
 };
 
 subtest 'find_best_match' => sub {
