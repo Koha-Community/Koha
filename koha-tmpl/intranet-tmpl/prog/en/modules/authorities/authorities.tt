@@ -87,7 +87,7 @@
         $("#z3950submit").click(function () {
             var strQuery = GetZ3950Terms();
             if (strQuery) {
-                window.open(`/cgi-bin/koha/cataloguing/z3950_auth_search.pl?authid=${authid}${strQuery}&${index}`, "z3950search", "width=800,height=500,location=yes,toolbar=no,scrollbars=yes,resize=yes");
+                window.open(`/cgi-bin/koha/cataloguing/z3950_auth_search.pl?authid=${authid}${strQuery}&index=${index}`, "z3950search", "width=800,height=500,location=yes,toolbar=no,scrollbars=yes,resize=yes");
             }
             return false;
         });
