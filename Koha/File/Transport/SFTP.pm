@@ -91,7 +91,14 @@ sub _upload_file {
     my ( $self, $local_file, $remote_file ) = @_;
     my $operation = "upload";
 
-    $self->{connection}->put( $local_file, $remote_file ) or return $self->_abort_operation($operation);
+    # copy_file_attrs controls whether Net::SFTP::Foreign copies the local file's
+    # permissions and timestamps onto the remote file after upload (an SFTP setstat).
+    # Some servers reject setstat with "Couldn't setstat remote file"; turning it off
+    # skips that step.
+    my $copy = $self->copy_file_attrs ? 1 : 0;
+
+    $self->{connection}->put( $local_file, $remote_file, copy_perm => $copy, copy_time => $copy )
+        or return $self->_abort_operation($operation);
 
     $self->add_message(
         {
