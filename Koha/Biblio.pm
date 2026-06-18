@@ -2154,6 +2154,51 @@ sub link_marc_host {
     return $self;
 }
 
+=head3 age_restriction
+
+    my $age = $biblio->age_restriction;
+
+Extracts the numeric age restriction from the biblio's agerestriction field
+using the AgeRestrictionMarker system preference.
+
+Returns the age (integer) or undef if no restriction is found.
+
+=cut
+
+sub age_restriction {
+    my ($self) = @_;
+
+    my $restriction_string = $self->biblioitem->agerestriction;
+    return unless $restriction_string;
+
+    my @values = split ' ', uc($restriction_string);
+    return unless @values;
+
+    my @markers = map { my $m = uc($_); $m =~ s/^\s+//; $m =~ s/\s+$//; $m }
+        @{ C4::Context->multivalue_preference('AgeRestrictionMarker') };
+    return unless @markers;
+
+    my $index           = 0;
+    my $restriction_age = 0;
+    for my $value (@values) {
+        $index++;
+        for my $marker (@markers) {
+            if ( $marker eq $value ) {
+                if ( $index <= $#values ) {
+                    $restriction_age += $values[$index];
+                }
+                last;
+            } elsif ( $value =~ /^\Q$marker\E(\d+)$/ ) {
+                $restriction_age += $1;
+                last;
+            }
+        }
+        last if ( $restriction_age > 0 );
+    }
+
+    return $restriction_age || undef;
+}
+
 =head3 recalls
 
     my $recalls = $biblio->recalls;
