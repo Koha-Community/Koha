@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::Exception;
 use Test::NoWarnings;
 use Test::Warn;
@@ -224,6 +224,53 @@ subtest 'upload_file() tests' => sub {
     );
 
     can_ok( $transport, 'upload_file' );
+};
+
+subtest '_upload_file() copy_file_attrs tests' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    # Mock the SFTP connection and capture the options passed to put()
+    my %put_options;
+    my $undef;
+    my $mock_sftp = Test::MockModule->new('Net::SFTP::Foreign');
+    $mock_sftp->mock( 'new', sub { my $class = shift; return bless {}, $class; } );
+    $mock_sftp->mock(
+        'put',
+        sub {
+            my ( $connection, $local_file, $remote_file, %options ) = @_;
+            %put_options = %options;
+            return 1;
+        }
+    );
+    $mock_sftp->mock( 'error',  sub { return $undef; } );
+    $mock_sftp->mock( 'status', sub { return 0; } );
+    $mock_sftp->mock( 'cwd',    sub { return '/'; } );
+
+    my $transport_on = $builder->build_object(
+        {
+            class => 'Koha::File::Transports',
+            value => { transport => 'sftp', password => undef, key_file => undef, copy_file_attrs => 1 }
+        }
+    );
+    $transport_on->connect;
+    $transport_on->_upload_file( '/tmp/local_file', 'remote_file' );
+    is( $put_options{copy_perm}, 1, 'copy_file_attrs on: put() copies permissions' );
+    is( $put_options{copy_time}, 1, 'copy_file_attrs on: put() copies timestamps' );
+
+    my $transport_off = $builder->build_object(
+        {
+            class => 'Koha::File::Transports',
+            value => { transport => 'sftp', password => undef, key_file => undef, copy_file_attrs => 0 }
+        }
+    );
+    $transport_off->connect;
+    $transport_off->_upload_file( '/tmp/local_file', 'remote_file' );
+    is( $put_options{copy_perm}, 0, 'copy_file_attrs off: put() does not copy permissions' );
+    is( $put_options{copy_time}, 0, 'copy_file_attrs off: put() does not copy timestamps' );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'download_file() tests' => sub {
