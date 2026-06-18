@@ -48,7 +48,7 @@ print "Searching for statistics before $before\n" if $verbose;
 my $statistics = Koha::Statistics->search(
     {
         datetime       => { '<='  => $before },
-        type           => { '-in' => \@Koha::Statistic::pseudonymization_types },
+        type           => { '-in' => [ 'renew', 'issue', 'return', 'onsite_checkout' ] },
         borrowernumber => { '!='  => undef }
     }
 );
