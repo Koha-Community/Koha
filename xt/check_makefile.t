@@ -72,10 +72,13 @@ subtest 'All CSS files should be mapped' => sub {
     for my $file (@css_files) {
         chomp $file;
         next if $file =~ m{/_[^/]*};
-        my $css = $file;
-        $css =~ s#/css/src/(.*).scss$#/css/$1.css#;
+        ( my $css = $file ) =~ s#/css/src/(.*).scss$#/css/$1.css#;
+        ( my $rtl = $css )  =~ s#\.css$#-rtl.css#;
         unless ( grep { /$css/ } @MakeFile ) {
             push @not_mapped, $css;
+        }
+        unless ( grep { /$rtl/ } @MakeFile ) {
+            push @not_mapped, $rtl;
         }
     }
 
