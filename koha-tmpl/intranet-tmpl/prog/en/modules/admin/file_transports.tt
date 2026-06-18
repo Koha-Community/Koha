@@ -168,6 +168,14 @@
                         <span class="hint">Only applies to FTP connections</span>
                     </li>
                     <li>
+                        <label for="copy_file_attrs">Copy file attributes: </label>
+                        <select name="copy_file_attrs" id="copy_file_attrs" disabled="disabled">
+                            <option value="1" selected="selected">Enabled</option>
+                            <option value="0">Disabled</option>
+                        </select>
+                        <span class="hint">Only applies to SFTP connections</span>
+                    </li>
+                    <li>
                         <label for="auth_mode">Authentication mode: </label>
                         <select name="auth_mode" id="auth_mode">
                             <option value="password" selected="selected">Password-based</option>
@@ -324,6 +332,22 @@
                             [% END %]
                         </select>
                         <span class="hint">Only applies to FTP connections</span>
+                    </li>
+                    <li>
+                        <label for="copy_file_attrs">Copy file attributes: </label>
+                        <select name="copy_file_attrs" id="copy_file_attrs" disabled="disabled">
+                            [% IF file_transport.copy_file_attrs == 1 %]
+                                <option value="1" selected="selected">Enabled</option>
+                            [% ELSE %]
+                                <option value="1">Enabled</option>
+                            [% END %]
+                            [% IF file_transport.copy_file_attrs == 0 %]
+                                <option value="0" selected="selected">Disabled</option>
+                            [% ELSE %]
+                                <option value="0">Disabled</option>
+                            [% END %]
+                        </select>
+                        <span class="hint">Only applies to SFTP connections</span>
                     </li>
                     <li>
                         <label for="auth_mode">Authentication mode: </label>
@@ -732,6 +756,7 @@
                 $("#host").removeAttr("disabled");
                 $("#port").removeAttr("disabled");
                 $("#passive").removeAttr("disabled");
+                $("#copy_file_attrs").attr("disabled", "disabled");
                 $("#auth_mode").removeAttr("disabled");
                 $("#user_name").removeAttr("disabled");
                 $("#password").removeAttr("disabled");
@@ -752,6 +777,7 @@
                 $("#host").removeAttr("disabled");
                 $("#port").removeAttr("disabled");
                 $("#passive").attr("disabled", "disabled");
+                $("#copy_file_attrs").removeAttr("disabled");
                 $("#auth_mode").removeAttr("disabled");
                 $("#user_name").removeAttr("disabled");
                 $("#password").removeAttr("disabled");
