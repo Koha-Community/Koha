@@ -105,6 +105,12 @@ __PACKAGE__->table("file_transports");
   default_value: 0
   is_nullable: 0
 
+=head2 copy_file_attrs
+
+  data_type: 'tinyint'
+  default_value: 1
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -151,6 +157,8 @@ __PACKAGE__->add_columns(
   { data_type => "longtext", is_nullable => 1 },
   "debug",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "copy_file_attrs",
+  { data_type => "tinyint", default_value => 1, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -183,8 +191,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-10-14 20:25:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aepVBfAwINe8dLAE5xLi1A
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-06-18 12:46:51
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yvMzMo79PfsSv7sSbppp6A
 
 __PACKAGE__->add_columns(
     '+passive'         => { is_boolean => 1 },
