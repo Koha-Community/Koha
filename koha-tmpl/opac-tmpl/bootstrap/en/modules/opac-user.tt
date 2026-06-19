@@ -1178,11 +1178,13 @@
                 var reserve_id = $(this).data("reserve_id");
                 $("#suspendHoldReserveId").val(reserve_id);
                 $("#suspendHoldTitle").html("<em>" + title + "</em>");
+                $("#suspendHoldTitle").prop("hidden", false);
                 $("#suspendHoldModal").modal("show");
             });
 
             $("#suspendHoldModal").on("hidden.bs.modal", function () {
                 $("#suspendHoldTitle").html("");
+                $("#suspendHoldTitle").prop("hidden", true);
                 $("#suspendHoldReserveId").val("");
                 suspend_until_date.clear();
             });
@@ -1358,6 +1360,7 @@
                 $("#addNote").val(note);
                 $("#addNoteIssueId").val(issue_id);
                 $("#addNoteTitle").text(title);
+                $("#addNoteTitle").prop("hidden", false);
                 $("#addNoteModal").modal("show");
             });
 
@@ -1371,6 +1374,7 @@
 
             $("#addNoteModal").on("hidden.bs.modal", function () {
                 $("#addNoteTitle").text("");
+                $("#addNoteTitle").prop("hidden", true);
                 $("#addNote").val("");
             });
 
