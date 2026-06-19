@@ -928,6 +928,11 @@ sub login_core {
     my $pwd    = shift;
     my $status = 1;                 # Assume it all works
 
+    # Clear any session state up front, including anything left over from a previous connection
+    # on this preforked worker, so no login_core exit path can leave the caller acting as an
+    # authenticated terminal. Only a successful api_auth below re-establishes the session.
+    delete $server->{$_} foreach qw( account ils institution policy sip_username sip_password );
+
     # Check if this userid is authorized for SIP access
     if ( !exists( $server->{config}->{accounts}->{$uid} ) ) {
         siplog( "LOG_WARNING", "MsgType::login_core: SIP access not authorized for user '$uid'" );
@@ -944,10 +949,6 @@ sub login_core {
             "LOG_WARNING", "Authentication failed for SIP terminal '%s' of '%s': %s",
             $uid,          $inst, ( $auth_status || 'unknown' )
         );
-
-        # Clear any session state, including anything left over from a previous connection on
-        # this preforked worker, so the caller can't act as an authenticated terminal
-        delete $server->{$_} foreach qw( account ils institution policy sip_username sip_password );
         return 0;
     }
 

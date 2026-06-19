@@ -352,7 +352,7 @@ subtest 'message parsing arrayref prevention' => sub {
 };
 
 subtest 'login_core() authentication tests' => sub {
-    plan tests => 9;
+    plan tests => 12;
 
     # A failed login must never leave the connection in an authenticated state.
     my $uid = 'sip_bug_42847';
@@ -396,4 +396,16 @@ subtest 'login_core() authentication tests' => sub {
     ok( !C4::SIP::Sip::MsgType::login_core( $server, $uid, 'badpw' ), 'failed login on a reused worker returns false' );
     is( $server->{account}, undef, 'leftover account cleared after a failed login on a reused worker' );
     is( $server->{ils},     undef, 'leftover ILS handle cleared after a failed login on a reused worker' );
+
+    # A reused worker whose next connection presents an unknown terminal id must
+    # also have the leftover session cleared, not just the wrong-password case
+    $auth_status = 'ok';
+    $server      = $build_server->();
+    C4::SIP::Sip::MsgType::login_core( $server, $uid, 'goodpw' );    # previous session on this worker
+    ok(
+        !C4::SIP::Sip::MsgType::login_core( $server, 'unknown_terminal', 'badpw' ),
+        'login for an unknown terminal returns false'
+    );
+    is( $server->{account}, undef, 'leftover account cleared after an unknown-terminal login on a reused worker' );
+    is( $server->{ils},     undef, 'leftover ILS handle cleared after an unknown-terminal login on a reused worker' );
 };
