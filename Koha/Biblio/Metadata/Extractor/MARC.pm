@@ -104,6 +104,29 @@ sub get_control_number {
     return $control_number;
 }
 
+=head3 get_normalized_oclc
+
+    my $normalized_oclc = $extractor->get_normalized_oclc();
+
+Returns a normalized OCLC number from 035$a (field is flavor-independent).
+
+=cut
+
+sub get_normalized_oclc {
+    my ($self) = @_;
+
+    my $record = $self->metadata;
+    my @fields = $record->field('035');
+    foreach my $field (@fields) {
+        my $oclc = $field->subfield('a');
+        if ( $oclc && $oclc =~ /OCoLC/i ) {
+            $oclc =~ s/^\([^)]*\)\s*//;
+            return $oclc;
+        }
+    }
+    return q{};
+}
+
 =head3 _normalize_string
 
     my $normalized_string = $self->_normalize_string($string);

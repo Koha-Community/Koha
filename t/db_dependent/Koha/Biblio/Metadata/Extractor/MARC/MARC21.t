@@ -74,18 +74,29 @@ subtest 'get_normalized_upc() tests' => sub {
 
 subtest 'get_normalized_oclc() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 4;
 
     my $record = MARC::Record->new();
     $record->append_fields( MARC::Field->new( '035', ' ', ' ', a => "(OCoLC)902632762" ) );
 
     my $extractor = Koha::Biblio::Metadata::Extractor->new( { metadata => $record } );
-    is( $extractor->get_normalized_oclc, '902632762' );
+    is( $extractor->get_normalized_oclc, '902632762', 'Standard (OCoLC) prefix stripped' );
 
     $record    = MARC::Record->new();
     $extractor = Koha::Biblio::Metadata::Extractor->new( { metadata => $record } );
+    is( $extractor->get_normalized_oclc, '', 'Returns empty string when no 035 present' );
 
-    is( $extractor->get_normalized_oclc, "" );
+    # Case-insensitive match
+    $record = MARC::Record->new();
+    $record->append_fields( MARC::Field->new( '035', ' ', ' ', a => '(ocolc)12345' ) );
+    $extractor = Koha::Biblio::Metadata::Extractor->new( { metadata => $record } );
+    is( $extractor->get_normalized_oclc, '12345', 'Case-insensitive OCoLC match' );
+
+    # Generic org code prefix
+    $record = MARC::Record->new();
+    $record->append_fields( MARC::Field->new( '035', ' ', ' ', a => '(OCoLC-M)67890' ) );
+    $extractor = Koha::Biblio::Metadata::Extractor->new( { metadata => $record } );
+    is( $extractor->get_normalized_oclc, '67890', 'Generic parenthesized prefix stripped' );
 
 };
 

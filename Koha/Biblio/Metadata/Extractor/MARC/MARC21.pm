@@ -74,28 +74,6 @@ sub get_normalized_upc {
     }
 }
 
-=head2 get_normalized_oclc
-
-    my $normalized_oclc = $extractor->get_normalized_oclc();
-
-Returns a normalized OCLC number.
-
-=cut
-
-sub get_normalized_oclc {
-    my ($self) = @_;
-
-    my $record = $self->metadata;
-    my @fields = $record->field('035');
-    foreach my $field (@fields) {
-        my $oclc = $field->subfield('a');
-        if ( $oclc && $oclc =~ /OCoLC/ ) {
-            $oclc =~ s/\(OCoLC\)//;
-            return $oclc;
-        }
-    }
-}
-
 =head2 check_fixed_length
 
     my $info = $extractor->check_fixed_length;
