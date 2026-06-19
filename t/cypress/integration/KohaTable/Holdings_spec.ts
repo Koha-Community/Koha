@@ -283,6 +283,82 @@ describe("catalogue/detail/holdings_table with items", () => {
             });
         });
     });
+
+    it("Filters by code and description - BEA/Bearville vs BCH/Beachville", function () {
+        const biblio_id = this.objects.biblio.biblio_id;
+
+        cy.task("buildSampleObject", {
+            object: "library",
+            values: { library_id: "BCH", name: "Beachville" },
+        })
+            .then(generatedLibrary => {
+                return cy.task("insertObject", {
+                    type: "library",
+                    object: generatedLibrary,
+                });
+            })
+            .then(library => {
+                this.objects.libraries.push(library);
+                cy.task("query", {
+                    sql: "UPDATE items SET homebranch=?, holdingbranch=? WHERE itemnumber=?",
+                    values: [
+                        library.library_id,
+                        library.library_id,
+                        this.objects.items[0].item_id,
+                    ],
+                });
+            });
+        cy.task("buildSampleObject", {
+            object: "library",
+            values: { library_id: "BEA", name: "Bearville" },
+        })
+            .then(generatedLibrary => {
+                return cy.task("insertObject", {
+                    type: "library",
+                    object: generatedLibrary,
+                });
+            })
+            .then(library => {
+                this.objects.libraries.push(library);
+            });
+
+        cy.intercept("get", `/api/v1/biblios/${biblio_id}/items*`).as(
+            "searchItems"
+        );
+
+        cy.visit("/cgi-bin/koha/catalogue/detail.pl?biblionumber=" + biblio_id);
+
+        cy.wait("@searchItems");
+
+        // Show filters if not there already
+        cy.get(`.${table_id}_table_controls .show_filters`)
+            .then(link => {
+                if (link.is(":visible")) {
+                    cy.wrap(link).click();
+                    cy.wait("@searchItems");
+                }
+            })
+            .then(() => {
+                cy.get(
+                    `#${table_id}_wrapper th#holdings_holdingbranch select`
+                ).select("^BEA$", { force: true });
+                cy.wait("@searchItems");
+                // There is no item for BEA/Bearville
+                // The item from BCH/Beachville is filtered out
+                cy.get(`#${table_id}_wrapper .dt-info`).contains(
+                    `No entries to show (filtered from ${baseTotalCount} total entries)`
+                );
+
+                cy.get(
+                    `#${table_id}_wrapper th#holdings_holdingbranch select`
+                ).select("^BCH$", { force: true });
+                cy.wait("@searchItems");
+                // There is one item for BCH/Beachville
+                cy.get(`#${table_id}_wrapper .dt-info`).contains(
+                    `Showing 1 to 1 of 1 entries (filtered from ${baseTotalCount} total entries)`
+                );
+            });
+    });
 });
 
 describe("catalogue/detail/holdings_table without items", () => {
