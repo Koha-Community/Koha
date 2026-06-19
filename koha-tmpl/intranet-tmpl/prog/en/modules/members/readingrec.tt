@@ -169,7 +169,7 @@
 
         var table_settings = [% TablesSettings.GetTableSettings('members', 'checkouthistory', 'checkouthistory-table', 'json') | $raw %];
     </script>
-    [% Asset.js("js/members/readingrec.js") %]
+    [% Asset.js("js/members/readingrec.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
