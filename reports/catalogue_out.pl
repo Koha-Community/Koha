@@ -50,7 +50,7 @@ my @filters_input = $input->multi_param("Filter");
 #NOTE: Validate Filter parameter
 if (@filters_input) {
     foreach my $filter (@filters_input) {
-        if ( Koha::Libraries->find($filter) || Koha::ItemTypes->find($filter) || !$filter ) {
+        if ( !$filter || Koha::Libraries->find($filter) || Koha::ItemTypes->find($filter) ) {
             push( @filters, $filter );
         }
     }
