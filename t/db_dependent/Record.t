@@ -3,7 +3,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 17;
+use Test::More tests => 18;
 use MARC::Record;
 
 use t::lib::Mocks;
@@ -160,3 +160,11 @@ is(
     $cites->{'Chicago'}, 'Rowling J.K, . 2011. Harry potter: the cursed child. Hogwarts: Reprints.',
     'testing marc2cites'
 );
+
+subtest 'prevent warnings in marc2cites' => sub {
+    plan tests => 1;
+    my $marc_record = MARC::Record->new();
+    $marc_record->append_fields( MARC::Field->new( '100', ' ', ' ', a => 'Aristotle.' ) );
+    marc2cites($marc_record);
+    pass("Test should not have generated a warning");
+};
