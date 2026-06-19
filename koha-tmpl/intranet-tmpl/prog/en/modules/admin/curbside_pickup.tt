@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE KohaSpan %]
 [% USE Koha %]
+[% USE LinkPref %]
 [% USE Asset %]
 [% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
@@ -57,7 +58,7 @@
 
         [% UNLESS Koha.Preference('CurbsidePickup') %]
             [% SET pref_CurbsidePickup_link = '<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=CurbsidePickup">CurbsidePickup</a>' %]
-            <div class="alert alert-info">The [% pref_CurbsidePickup_link | $raw | $KohaSpan %] preference is not enabled, do not forget to enable it to turn the feature on.</div>
+            <div class="alert alert-info">The [% "CurbsidePickup" | html | $LinkPref %] preference is not enabled, do not forget to enable it to turn the feature on.</div>
         [% END %]
         <form method="post" class="form">
             [% INCLUDE 'csrf-token.inc' %]
