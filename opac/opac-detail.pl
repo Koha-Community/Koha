@@ -28,7 +28,6 @@ use C4::Koha        qw(
     getitemtypeimagelocation
     GetNormalizedEAN
     GetNormalizedISBN
-    GetNormalizedOCLCNumber
     GetNormalizedUPC
 );
 use C4::Search  qw( new_record_from_zebra searchResults getRecords );
@@ -114,8 +113,6 @@ unless ( $biblio && $record ) {
 redirect_if_opac_suppressed( $query, $biblio )
     if C4::Context->preference('OpacSuppression');
 
-my $metadata_extractor = $biblio->metadata_extractor;
-
 my $items = $biblio->items->search_ordered;
 if ($specific_item) {
     $items = $items->search( { itemnumber => scalar $query->param('itemnumber') } );
@@ -146,6 +143,7 @@ my $record_processor = Koha::RecordProcessor->new(
     }
 );
 $record_processor->process($record);
+my $extractor = Koha::Biblio::Metadata::Extractor->new( { metadata => $record } );
 
 $template->param( biblio => $biblio );
 
@@ -877,7 +875,7 @@ foreach ( keys %{$dat} ) {
 # in each case, we're grabbing the first value we find in
 # the record and normalizing it
 my $upc  = GetNormalizedUPC( $record, $marcflavour );
-my $oclc = GetNormalizedOCLCNumber( $record, $marcflavour );
+my $oclc = $extractor->get_normalized_oclc;
 my $isbn = GetNormalizedISBN( undef, $record, $marcflavour );
 my $content_identifier_exists;
 if ( $isbn or $ean or $oclc or $upc ) {
@@ -1171,14 +1169,14 @@ if ( C4::Context->preference('OpacStarRatings') !~ /disable/ ) {
 }
 
 #Search for title in links
-my $control_number = $metadata_extractor->get_control_number();
+my $control_number = $extractor->get_control_number();
 my $marcissns      = GetMarcISSN( $record, $marcflavour );
 my $issn           = $marcissns->[0] || '';
 
 if ( my $search_for_title = C4::Context->preference('OPACSearchForTitleIn') ) {
     $dat->{title} =~ s/\/+$//;    # remove trailing slash
     $dat->{title} =~ s/\s+$//;    # remove trailing space
-    my $oclc_no = Koha::Util::MARC::oclc_number($record);
+    my $oclc_no = $extractor->get_normalized_oclc;
     $search_for_title = parametrized_url(
         $search_for_title,
         {

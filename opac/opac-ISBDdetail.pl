@@ -56,7 +56,6 @@ use C4::Serials  qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLa
 use C4::Koha     qw(
     GetNormalizedEAN
     GetNormalizedISBN
-    GetNormalizedOCLCNumber
     GetNormalizedUPC
 );
 use Koha::CirculationRules;
@@ -106,7 +105,6 @@ unless ( $patron and $patron->category->override_hidden_items ) {
 my $record = $biblio->metadata->record;
 my @items  = $biblio->items->filter_by_visible_in_opac( { patron => $patron } )->as_list;
 
-my $metadata_extractor = $biblio->metadata_extractor;
 
 my $record_processor = Koha::RecordProcessor->new(
     {
@@ -119,6 +117,7 @@ my $record_processor = Koha::RecordProcessor->new(
     }
 );
 $record_processor->process($record);
+my $extractor = Koha::Biblio::Metadata::Extractor->new( { metadata => $record } );
 
 # get biblionumbers stored in the cart
 if ( my $cart_list = $query->cookie("bib_list") ) {
@@ -135,7 +134,7 @@ my $marcflavour = C4::Context->preference("marcflavour");
 # the record and normalizing it
 my $upc  = GetNormalizedUPC( $record, $marcflavour );
 my $ean  = GetNormalizedEAN( $record, $marcflavour );
-my $oclc = GetNormalizedOCLCNumber( $record, $marcflavour );
+my $oclc = $extractor->get_normalized_oclc;
 my $isbn = GetNormalizedISBN( undef, $record, $marcflavour );
 my $content_identifier_exists;
 if ( $isbn or $ean or $oclc or $upc ) {
@@ -205,14 +204,14 @@ $template->param(
 );
 
 #Search for title in links
-my $control_number = $metadata_extractor->get_control_number();
+my $control_number = $extractor->get_control_number();
 my $marcissns      = GetMarcISSN( $record, $marcflavour );
 my $issn           = $marcissns->[0] || '';
 
 if ( my $search_for_title = C4::Context->preference('OPACSearchForTitleIn') ) {
     $dat->{title} =~ s/\/+$//;    # remove trailing slash
     $dat->{title} =~ s/\s+$//;    # remove trailing space
-    my $oclc_no = Koha::Util::MARC::oclc_number($record);
+    my $oclc_no = $extractor->get_normalized_oclc;
     $search_for_title = parametrized_url(
         $search_for_title,
         {

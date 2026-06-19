@@ -25,7 +25,6 @@ use C4::Koha qw(
     getitemtypeimagelocation
     GetNormalizedEAN
     GetNormalizedISBN
-    GetNormalizedOCLCNumber
     GetNormalizedUPC
 );
 use C4::Serials qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
@@ -171,7 +170,7 @@ $template->param( ocoins => !$invalid_marc_record ? $biblio->get_coins : undef )
 # the record and normalizing it
 my $upc  = GetNormalizedUPC( $marc_record, $marcflavour );
 my $ean  = GetNormalizedEAN( $marc_record, $marcflavour );
-my $oclc = GetNormalizedOCLCNumber( $marc_record, $marcflavour );
+my $oclc = $biblio->normalized_oclc;
 my $isbn = GetNormalizedISBN( undef, $marc_record, $marcflavour );
 my $content_identifier_exists;
 if ( $isbn or $ean or $oclc or $upc ) {

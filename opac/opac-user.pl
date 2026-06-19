@@ -26,7 +26,6 @@ use C4::Koha qw(
     getitemtypeimagelocation
     GetNormalizedISBN
     GetNormalizedUPC
-    GetNormalizedOCLCNumber
 );
 use C4::Circulation qw( CanBookBeRenewed GetRenewCount GetIssuingCharges );
 use C4::Reserves    qw( GetReserveStatus );
@@ -307,8 +306,9 @@ if ( $pending_checkouts->count ) {    # Useless test
                     patron      => $patron
                 }
             );
-            $issue->{normalized_upc}  = GetNormalizedUPC( $marcrecord, C4::Context->preference('marcflavour') );
-            $issue->{normalized_oclc} = GetNormalizedOCLCNumber( $marcrecord, C4::Context->preference('marcflavour') );
+            $issue->{normalized_upc} = GetNormalizedUPC( $marcrecord, C4::Context->preference('marcflavour') );
+            $issue->{normalized_oclc} =
+                Koha::Biblio::Metadata::Extractor->new( { metadata => $marcrecord } )->get_normalized_oclc;
         }
 
         if ( C4::Context->preference('UseRecalls') ) {

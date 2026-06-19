@@ -25,7 +25,6 @@ use C4::Biblio qw( GetBiblioData GetFrameworkCode );
 use C4::Koha   qw(
     GetNormalizedEAN
     GetNormalizedISBN
-    GetNormalizedOCLCNumber
     GetNormalizedUPC
 );
 use C4::Members;
@@ -389,10 +388,11 @@ if ( $op eq 'view' ) {
                     $this_item->{description} = $itemtype->description;  #FIXME Should not it be translated_description?
                     $this_item->{notforloan}  = $itemtype->notforloan;
                 }
-                $this_item->{'coins'}           = $biblio->get_coins;
-                $this_item->{'normalized_upc'}  = GetNormalizedUPC( $record, $marcflavour );
-                $this_item->{'normalized_ean'}  = GetNormalizedEAN( $record, $marcflavour );
-                $this_item->{'normalized_oclc'} = GetNormalizedOCLCNumber( $record, $marcflavour );
+                $this_item->{'coins'}          = $biblio->get_coins;
+                $this_item->{'normalized_upc'} = GetNormalizedUPC( $record, $marcflavour );
+                $this_item->{'normalized_ean'} = GetNormalizedEAN( $record, $marcflavour );
+                $this_item->{'normalized_oclc'} =
+                    Koha::Biblio::Metadata::Extractor->new( { metadata => $record } )->get_normalized_oclc;
                 $this_item->{'normalized_isbn'} = GetNormalizedISBN( undef, $record, $marcflavour );
 
                 # BZ17530: 'Intelligent' guess if result can be article requested

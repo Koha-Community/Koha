@@ -341,7 +341,7 @@ my $issn           = $marcissns->[0] || '';
 if ( my $search_for_title = C4::Context->preference('OPACSearchForTitleIn') ) {
     $dat->{title} =~ s/\/+$//;    # remove trailing slash
     $dat->{title} =~ s/\s+$//;    # remove trailing space
-    my $oclc_no = Koha::Util::MARC::oclc_number($record);
+    my $oclc_no = $metadata_extractor->get_normalized_oclc;
     $search_for_title = parametrized_url(
         $search_for_title,
         {

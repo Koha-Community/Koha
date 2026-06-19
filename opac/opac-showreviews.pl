@@ -25,7 +25,6 @@ use C4::Auth qw( get_template_and_user );
 use C4::Koha qw(
     GetNormalizedEAN
     GetNormalizedISBN
-    GetNormalizedOCLCNumber
     GetNormalizedUPC
 );
 use C4::Output      qw( output_html_with_http_headers );
@@ -96,7 +95,7 @@ for my $result (@$reviews) {
     my $record       = $biblio->metadata->record;
     $result->{normalized_upc}  = GetNormalizedUPC( $record, $marcflavour );
     $result->{normalized_ean}  = GetNormalizedEAN( $record, $marcflavour );
-    $result->{normalized_oclc} = GetNormalizedOCLCNumber( $record, $marcflavour );
+    $result->{normalized_oclc} = Koha::Biblio::Metadata::Extractor->new( { metadata => $record } )->get_normalized_oclc;
     $result->{normalized_isbn} = GetNormalizedISBN( undef, $record, $marcflavour );
     $result->{title}           = $biblio->title;
     $result->{subtitle}        = $biblio->subtitle;

@@ -28,7 +28,8 @@ BEGIN {
 
 use C4::Biblio qw( GetAuthorisedValueDesc );
 use C4::Context;
-use C4::Koha qw( GetNormalizedUPC GetNormalizedOCLCNumber GetNormalizedISBN GetNormalizedEAN );
+use C4::Koha qw( GetNormalizedUPC GetNormalizedISBN GetNormalizedEAN );
+use Koha::Biblio::Metadata::Extractor;
 use Koha::Biblios;
 use Koha::Libraries;
 
@@ -235,8 +236,9 @@ sub GetShelfInfo {
         $item->{part_number}   = $biblio->part_number;
         $item->{part_name}     = $biblio->part_name;
         my $this_record = $biblio->metadata->record;
-        $item->{'browser_normalized_upc'}  = GetNormalizedUPC( $this_record, $marcflavour );
-        $item->{'browser_normalized_oclc'} = GetNormalizedOCLCNumber( $this_record, $marcflavour );
+        $item->{'browser_normalized_upc'} = GetNormalizedUPC( $this_record, $marcflavour );
+        $item->{'browser_normalized_oclc'} =
+            Koha::Biblio::Metadata::Extractor->new( { metadata => $this_record } )->get_normalized_oclc;
         $item->{'browser_normalized_isbn'} = GetNormalizedISBN( undef, $this_record, $marcflavour );
         $item->{'browser_normalized_ean'}  = GetNormalizedEAN( $this_record, $marcflavour );
         push @valid_items, $item;

@@ -2040,20 +2040,21 @@ subtest 'normalized_upc() tests' => sub {
 };
 
 subtest 'normalized_oclc() tests' => sub {
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
-    # We will move the tests from GetNormalizedOCLC here when it will get replaced
-    # Note that only a single test exist and it's not really meaningful...
     my $biblio = $builder->build_sample_biblio();
-    is(
-        $biblio->normalized_oclc, C4::Koha::GetNormalizedOCLCNumber( $biblio->metadata->record ),
-        'normalized_oclc is a wrapper around C4::Koha::GetNormalizedOCLCNumber'
-    );
+    is( $biblio->normalized_oclc, '', 'normalized_oclc returns empty string when no 035 with OCoLC' );
+
+    my $record = $biblio->metadata->record;
+    $record->append_fields( MARC::Field->new( '035', ' ', ' ', a => '(OCoLC)902632762' ) );
+    C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
+    $biblio = Koha::Biblios->find( $biblio->biblionumber );
+
+    is( $biblio->normalized_oclc, '902632762', 'normalized_oclc extracts OCLC number' );
 
     $schema->storage->txn_rollback;
-
 };
 
 subtest 'opac_suppressed() tests' => sub {

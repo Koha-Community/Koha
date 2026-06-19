@@ -25,7 +25,6 @@ use C4::Context;
 use C4::Koha qw(
     GetNormalizedEAN
     GetNormalizedISBN
-    GetNormalizedOCLCNumber
     GetNormalizedUPC
 );
 use C4::Members;
@@ -355,7 +354,7 @@ if ( $op eq 'view' ) {
                 $this_item->{'coins'}           = $biblio->get_coins;
                 $this_item->{'normalized_upc'}  = GetNormalizedUPC( $record, $marcflavour );
                 $this_item->{'normalized_ean'}  = GetNormalizedEAN( $record, $marcflavour );
-                $this_item->{'normalized_oclc'} = GetNormalizedOCLCNumber( $record, $marcflavour );
+                $this_item->{'normalized_oclc'} = $biblio->normalized_oclc;
                 $this_item->{'normalized_isbn'} = GetNormalizedISBN( undef, $record, $marcflavour );
 
                 unless ( defined $this_item->{size} ) {
