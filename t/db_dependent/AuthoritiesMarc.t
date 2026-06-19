@@ -508,9 +508,6 @@ subtest 'Authority action logs include MARC-in-JSON diff' => sub {
 subtest 'BuildSummary/_marc21_sort_hierarchy_alpha' => sub {
     plan tests => 2;
 
-    #$schema->storage->txn_begin;
-    #t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
-
     my @fields;
     push @fields, MARC::Field->new( '550', '', '', a => 'zzz', w => 'h' );
     push @fields, MARC::Field->new( '550', '', '', a => 'yyy', w => 'g' );
@@ -539,6 +536,4 @@ subtest 'BuildSummary/_marc21_sort_hierarchy_alpha' => sub {
         [ 'vvv', 'yyy', 'www', 'xxx', 'uuu', 'zzz' ],
         'Multi-position $w classified by position 0 only'
     );
-
-    #$schema->storage->txn_rollback;
 };
