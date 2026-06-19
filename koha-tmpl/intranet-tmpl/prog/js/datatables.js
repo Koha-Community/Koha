@@ -552,16 +552,13 @@ function _dt_default_ajax(params) {
                             coded_datatype &&
                             coded_datatype.length > 1
                         ) {
-                            if (global_search.length || value.length) {
+                            if (global_search.length) {
                                 coded_datatype = coded_datatype[1];
-                                const search_value = value.length
-                                    ? value
-                                    : global_search;
 
                                 // Escape all regex metachars . * + ? ^ $ { } ( ) | [ ] \
                                 const regex = new RegExp(
                                     "^" +
-                                        search_value.replace(
+                                        global_search.replace(
                                             /[.*+?^${}()|[\]\\]/g,
                                             "\\$&"
                                         ),
