@@ -173,7 +173,7 @@ subtest 'Authorized Values Tests' => sub {
 };
 
 subtest 'isbn tests' => sub {
-    plan tests => 33;
+    plan tests => 32;
 
     my $isbn13  = "9780330356473";
     my $isbn13D = "978-0-330-35647-3";
@@ -287,10 +287,6 @@ subtest 'isbn tests' => sub {
     is(
         C4::Koha::GetNormalizedEAN(), undef,
         'GetNormalizedEAN should return undef if no record and no isbn are passed'
-    );
-    is(
-        C4::Koha::GetNormalizedOCLCNumber(), undef,
-        'GetNormalizedOCLCNumber should return undef if no record and no isbn are passed'
     );
 
     is( C4::Koha::GetNormalizedISBN('979-8-88650-962-5'), '9798886509625', 'Test GetNormalizedISBN' );

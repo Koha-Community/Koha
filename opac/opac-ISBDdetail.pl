@@ -105,7 +105,6 @@ unless ( $patron and $patron->category->override_hidden_items ) {
 my $record = $biblio->metadata->record;
 my @items  = $biblio->items->filter_by_visible_in_opac( { patron => $patron } )->as_list;
 
-
 my $record_processor = Koha::RecordProcessor->new(
     {
         filters => [ 'EmbedItems', 'ViewPolicy' ],

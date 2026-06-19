@@ -36,7 +36,6 @@ BEGIN {
         GetNormalizedUPC
         GetNormalizedISBN
         GetNormalizedEAN
-        GetNormalizedOCLCNumber
         xml_escape
 
         GetVariationsOfISBN
@@ -702,33 +701,6 @@ sub GetNormalizedEAN {
                 return $ean;
             }
         }
-    }
-}
-
-=head2 GetNormalizedOCLCNumber
-
-Missing POD for GetNormalizedOCLCNumber.
-
-=cut
-
-sub GetNormalizedOCLCNumber {
-    my ( $marcrecord, $marcflavour ) = @_;
-    return unless $marcrecord;
-
-    $marcflavour ||= C4::Context->preference('marcflavour');
-
-    if ( $marcflavour ne 'UNIMARC' ) {
-        my @fields = $marcrecord->field('035');
-        foreach my $field (@fields) {
-            my $oclc = $field->subfield('a');
-            if ( $oclc && $oclc =~ /OCoLC/ ) {
-                $oclc =~ s/\(OCoLC\)//;
-                return $oclc;
-            }
-        }
-    } else {
-
-        # TODO for UNIMARC
     }
 }
 

@@ -44,8 +44,8 @@ subtest 'set_marc_field' => sub {
     is( $subfields[0],     'foobaz', 'Subfield value has been changed' );
 };
 
-subtest 'find_marc_info, strip_orgcode, oclc_number' => sub {
-    plan tests => 9;
+subtest 'find_marc_info' => sub {
+    plan tests => 4;
 
     my $record = MARC::Record->new;
     $record->append_fields(
@@ -89,20 +89,5 @@ subtest 'find_marc_info, strip_orgcode, oclc_number' => sub {
         }
     );
     is_deeply( \@list, [ '(change)456', '(change) 567' ], '035a, match, list' );
-
-    @list = map { Koha::Util::MARC::strip_orgcode($_) } @list;
-    is_deeply( \@list, [ '456', '567' ], 'strip the orgcodes' );
-    @list = map { Koha::Util::MARC::strip_orgcode($_) } ( '() a', '(a)(b) c', '(abc', ' (a)b' );
-    is_deeply( \@list, [ 'a', '(b) c', '(abc', ' (a)b' ], 'edge cases for strip_orgcode' );
-
-    is( Koha::Util::MARC::oclc_number(), undef, 'No arg for oclc_number' );
-    $record->append_fields(
-        MARC::Field->new( '035', '', '', a => '(OCoLC) 678' ),
-    );
-    is( Koha::Util::MARC::oclc_number($record), '678', 'orgcode mixed case' );
-    $record->insert_fields_ordered(
-        MARC::Field->new( '035', '', '', a => '(ocolc) 789' ),
-    );
-    is( Koha::Util::MARC::oclc_number($record), '789', 'orgcode lower case' );
 
 };

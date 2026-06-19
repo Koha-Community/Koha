@@ -19,8 +19,6 @@ package Koha::Util::MARC;
 
 use Modern::Perl;
 
-use constant OCLC_REGEX => qr/OCoLC/i;    # made it case insensitive, includes the various oclc suffixes too
-
 =head1 NAME
 
 Koha::Util::MARC - utility class with routines for working with MARC records
@@ -247,41 +245,6 @@ sub find_marc_info {
     }
     return @rv    if wantarray;
     return $rv[0] if @rv;
-}
-
-=head2 strip_orgcode
-
-    my $id = strip_orgcode( '(code) 123' ); # returns '123'
-
-    Strips from starting left paren to first right paren and trailing whitespace.
-
-=cut
-
-sub strip_orgcode {
-    my $arg = shift;
-    $arg =~ s/^\([^)]*\)\s*// if $arg;
-    return $arg;
-}
-
-=head2 oclc_number
-
-    my $id = oclc_number( $record );
-
-    Based on applying strip_orgcode on first occurrence of find_marc_info
-    with orgcode matching regex in 035$a.
-
-=cut;
-
-sub oclc_number {
-    my $record = shift;
-    return strip_orgcode(
-        scalar find_marc_info(
-            {
-                # Note: Field 035 same for MARC21 and UNIMARC
-                record => $record, field => '035', subfield => 'a', match => OCLC_REGEX,
-            }
-        )
-    );
 }
 
 1;
