@@ -36,20 +36,26 @@ sub new {
     my $dbh            = C4::Context->dbh;
     my $sql;
     my @bind_params = ($biblionumber);
+
+    # Primary table in select aliased to `main` so we can reuse this WHERE clause
+    my $where = 'main.biblionumber = ?';
+    $where .=
+        ' AND EXISTS (SELECT 1 FROM biblio WHERE biblio.biblionumber = main.biblionumber AND NOT biblio.opac_suppressed)'
+        if C4::Context->is_opac_suppressed;
     if ($items_included) {
 
         # Take latest timestamp of biblio and any items
         # Or timestamp of deleted items where bib not deleted
         $sql .= "
             SELECT timestamp
-            FROM   biblio_metadata
-            WHERE  biblionumber=?
+            FROM   biblio_metadata main
+            WHERE  $where
               UNION
-            SELECT deleteditems.timestamp FROM deleteditems JOIN biblio USING (biblionumber)
-            WHERE  deleteditems.biblionumber=?
+            SELECT deleteditems.timestamp FROM deleteditems main JOIN biblio USING (biblionumber)
+            WHERE  $where
               UNION
-            SELECT timestamp from items
-            WHERE  biblionumber=?
+            SELECT timestamp from items main
+            WHERE  $where
         ";
         push @bind_params, $biblionumber;
         push @bind_params, $biblionumber;
@@ -60,8 +66,8 @@ sub new {
     } else {
         $sql = "
             SELECT max(timestamp) as timestamp
-            FROM   biblio_metadata
-            WHERE  biblionumber=?
+            FROM   biblio_metadata main
+            WHERE  $where
         ";
     }
 

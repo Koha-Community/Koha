@@ -84,6 +84,10 @@ STAGELOOP:
             push @part_bind_params, $set->{'id'};
         }
 
+        $where .=
+            " AND EXISTS (SELECT 1 FROM biblio WHERE biblio.biblionumber = main.biblionumber AND NOT biblio.opac_suppressed)"
+            if C4::Context->is_opac_suppressed;
+
         my @bind_params = @part_bind_params;
 
         my $order_limit = 'ORDER BY main.biblionumber LIMIT ' . ( $max + 1 );
