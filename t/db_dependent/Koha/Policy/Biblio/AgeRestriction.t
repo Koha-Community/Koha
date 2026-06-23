@@ -27,6 +27,7 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Policy::Biblio::AgeRestriction;
 
 my $schema  = Koha::Database->new->schema;
@@ -78,8 +79,13 @@ subtest 'Koha::Policy::Biblio::AgeRestriction->check' => sub {
     my $biblio = $builder->build_sample_biblio;
     $biblio->biblioitem->agerestriction('FSK 16')->store;
 
-    my $young_patron = $builder->build_object( { class => 'Koha::Patrons', value => { dateofbirth => '2016-01-01' } } );
-    my $adult_patron = $builder->build_object( { class => 'Koha::Patrons', value => { dateofbirth => '1990-01-01' } } );
+    # Young patron is 15y old
+    my $young_patron = $builder->build_object(
+        { class => 'Koha::Patrons', value => { dateofbirth => dt_from_string->subtract( years => 15 )->ymd } } );
+
+    # Adult patron is 25y old
+    my $adult_patron = $builder->build_object(
+        { class => 'Koha::Patrons', value => { dateofbirth => dt_from_string->subtract( years => 25 )->ymd } } );
     my $no_dob_patron = $builder->build_object( { class => 'Koha::Patrons', value => { dateofbirth => undef } } );
 
     my $result = Koha::Policy::Biblio::AgeRestriction->check( $biblio, $young_patron );
