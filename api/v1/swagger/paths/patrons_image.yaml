@@ -12,7 +12,10 @@
       - image/png
     responses:
       "200":
-        description: Patron's image
+        description: Patron image
+        schema:
+          type: string
+          format: binary
       "401":
         description: Authentication required
         schema:

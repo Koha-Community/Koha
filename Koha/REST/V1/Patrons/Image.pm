@@ -23,8 +23,6 @@ use Koha::Patrons;
 
 use Try::Tiny qw( catch try );
 
-use MIME::Base64 qw( encode_base64 );
-
 =head1 NAME
 
 Koha::REST::V1::Patrons::Image
@@ -41,6 +39,13 @@ Controller method that gets a patron's image
 
 sub get {
     my $c = shift->openapi->valid_input or return;
+
+    unless ( C4::Context->preference('patronimages') ) {
+        return $c->render(
+            status  => 403,
+            openapi => { error => "Patron images are disabled." }
+        );
+    }
 
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
 

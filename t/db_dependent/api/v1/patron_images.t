@@ -35,20 +35,46 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'Image tests' => sub {
 
-    plan tests => 16;
+    plan tests => 19;
 
     $schema->storage->txn_begin;
 
     my $privileged_patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { flags => 1 }
+            value => { flags => 0 }
+        }
+    );
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $privileged_patron->borrowernumber,
+                module_bit     => 4,
+                code           => 'list_borrowers',
+            },
+        }
+    );
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $privileged_patron->borrowernumber,
+                module_bit     => 4,
+                code           => 'edit_borrowers',
+            },
         }
     );
     my $password = 'thePassword123';
     $privileged_patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid         = $privileged_patron->userid;
     my $borrowernumber = $privileged_patron->borrowernumber;
+
+    $t->get_ok("//$userid:$password@/api/v1/patrons/$borrowernumber/default_image")
+        ->status_is(403)
+        ->json_is( '/error' => 'Patron images are disabled.' );
+
+    t::lib::Mocks::mock_preference( 'patronimages', 1 );
 
     $t->get_ok("//$userid:$password@/api/v1/patrons/$borrowernumber/default_image")
         ->status_is(404)
@@ -58,9 +84,9 @@ subtest 'Image tests' => sub {
     my $non_existent_patron_borrower_number = $non_existent_patron->borrowernumber;
     $non_existent_patron->delete;
 
-    $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $non_existent_patron_borrower_number . '/checkouts' )
+    $t->get_ok("//$userid:$password@/api/v1/patrons/$non_existent_patron_borrower_number/default_image")
         ->status_is(404)
-        ->json_is( '/error' => 'Patron not found' );
+        ->json_is( '/error' => 'Patron not found.' );
 
     my $new_image = Koha::Patron::Image->new(
         {
