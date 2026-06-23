@@ -983,6 +983,26 @@ sub is_internal_PSGI_request {
     return $is_internal;
 }
 
+=head3 is_opac_suppressed
+
+    return if C4::Context->is_opac_suppressed;
+
+is_opac_suppressed returns true if and only if OPAC suppression is enabled for
+the current request, based on the sysprefs OpacSuppression and
+OpacSuppressionByIPRange.
+
+=cut
+
+sub is_opac_suppressed {
+    return 0 unless C4::Context->preference('OpacSuppression');
+
+    my $IPAddress = $ENV{'REMOTE_ADDR'};
+    my $IPRange   = C4::Context->preference('OpacSuppressionByIPRange');
+    return 1 unless $IPRange;
+
+    return $IPAddress !~ /^$IPRange/;
+}
+
 __END__
 
 =head1 ENVIRONMENT

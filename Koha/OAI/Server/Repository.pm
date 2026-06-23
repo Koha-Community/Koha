@@ -216,10 +216,7 @@ sub get_biblio_marcxml {
     }
     if ($record) {
 
-        # Check if the bibliographic record is suppressed in OPAC
-        if ( C4::Context->preference('OpacSuppression') && $biblio->opac_suppressed ) {
-            return;
-        }
+        return if C4::Context->is_opac_suppressed && $biblio->opac_suppressed;
 
         my $rules = C4::Context->yaml_preference('OpacHiddenItems') // {};
         if ( $biblio->hidden_in_opac( { rules => $rules } ) ) {

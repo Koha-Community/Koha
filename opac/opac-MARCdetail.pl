@@ -97,8 +97,7 @@ if ( !$biblio ) {
 }
 
 # If record should be suppressed, handle it early
-redirect_if_opac_suppressed( $query, $biblio )
-    if C4::Context->preference('OpacSuppression');
+redirect_if_opac_suppressed( $query, $biblio );
 
 unless ( $patron and $patron->category->override_hidden_items ) {
 

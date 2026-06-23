@@ -73,8 +73,7 @@ if ( !$biblio ) {
 }
 
 # If record should be suppressed, handle it early
-redirect_if_opac_suppressed( $query, $biblio )
-    if C4::Context->preference('OpacSuppression');
+redirect_if_opac_suppressed( $query, $biblio );
 
 #open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

@@ -438,8 +438,7 @@ sub parametrized_url {
 
 =item redirect_if_opac_suppressed
 
-    redirect_if_opac_suppressed( $query, $biblio )
-        if C4::Context->preference('OpacSuppression');
+    redirect_if_opac_suppressed( $query, $biblio );
 
 For a given I<Koha::Biblio> object, it handles redirection if it is suppressed
 from the OPAC.
@@ -456,20 +455,9 @@ sub redirect_if_opac_suppressed {
     } else {
         $redirect_url = "/cgi-bin/koha/errors/404.pl";
     }
-    if ( $biblio->opac_suppressed() ) {
-
-        # if OPAC suppression by IP address
-        if ( C4::Context->preference('OpacSuppressionByIPRange') ) {
-            my $IPAddress = $ENV{'REMOTE_ADDR'};
-            my $IPRange   = C4::Context->preference('OpacSuppressionByIPRange');
-            if ( $IPAddress !~ /^$IPRange/ ) {
-                print $query->redirect($redirect_url);
-                C4::Auth::safe_exit();
-            }
-        } else {
-            print $query->redirect($redirect_url);
-            C4::Auth::safe_exit();
-        }
+    if ( C4::Context->is_opac_suppressed && $biblio->opac_suppressed() ) {
+        print $query->redirect($redirect_url);
+        C4::Auth::safe_exit();
     }
 }
 

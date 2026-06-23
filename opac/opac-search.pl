@@ -502,18 +502,7 @@ my $weight_search = $cgi->param('weight_search_submitted')
 # Define some global variables
 my ( $error, $query, $simple_query, $query_cgi, $query_desc, $limit, $limit_cgi, $limit_desc, $query_type );
 
-my $suppress = 0;
-if ( C4::Context->preference('OpacSuppression') ) {
-
-    # OPAC suppression by IP address
-    if ( C4::Context->preference('OpacSuppressionByIPRange') ) {
-        my $IPAddress = $ENV{'REMOTE_ADDR'};
-        my $IPRange   = C4::Context->preference('OpacSuppressionByIPRange');
-        $suppress = ( $IPAddress !~ /^$IPRange/ );
-    } else {
-        $suppress = 1;
-    }
-}
+my $suppress = C4::Context->is_opac_suppressed;
 
 ## I. BUILD THE QUERY
 ( $error, $query, $simple_query, $query_cgi, $query_desc, $limit, $limit_cgi, $limit_desc, $query_type ) =

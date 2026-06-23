@@ -163,7 +163,7 @@ sub get_public {
         my $patron = $c->stash('koha.user');
 
         # Check if the bibliographic record is suppressed in OPAC
-        if ( C4::Context->preference('OpacSuppression') && $biblio->opac_suppressed ) {
+        if ( C4::Context->is_opac_suppressed && $biblio->opac_suppressed ) {
             return $c->render_resource_not_found("Bibliographic record");
         }
 

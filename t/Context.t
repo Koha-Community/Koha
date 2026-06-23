@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use DBI;
 use Test::NoWarnings;
-use Test::More tests => 36;
+use Test::More tests => 37;
 use Test::MockModule;
 use Test::Warn;
 use YAML::XS;
@@ -271,3 +271,33 @@ subtest 'psgi_env and is_internal_PSGI_request' => sub {
     delete $ENV{'PSGI.UPPERCASE'};
     ok( !C4::Context->is_internal_PSGI_request, 'api but no longer PSGI' );
 };
+
+subtest 'is_opac_suppressed' => sub {
+    plan tests => 6;
+
+    $ENV{REMOTE_ADDR} = '200.16.23.1';
+
+    t::lib::Mocks::mock_preference( 'OpacSuppression',          0 );
+    t::lib::Mocks::mock_preference( 'OpacSuppressionByIPRange', '' );
+    ok( !C4::Context->is_opac_suppressed, 'suppression disabled' );
+
+    t::lib::Mocks::mock_preference( 'OpacSuppression',          0 );
+    t::lib::Mocks::mock_preference( 'OpacSuppressionByIPRange', '127.' );
+    ok( !C4::Context->is_opac_suppressed, 'suppression disabled with non-matching ip range' );
+
+    t::lib::Mocks::mock_preference( 'OpacSuppression',          1 );
+    t::lib::Mocks::mock_preference( 'OpacSuppressionByIPRange', '200.' );
+    ok( !C4::Context->is_opac_suppressed, 'suppression enabled with matching ip range' );
+
+    t::lib::Mocks::mock_preference( 'OpacSuppression',          1 );
+    t::lib::Mocks::mock_preference( 'OpacSuppressionByIPRange', '' );
+    ok( C4::Context->is_opac_suppressed, 'suppression enabled' );
+
+    t::lib::Mocks::mock_preference( 'OpacSuppression',          1 );
+    t::lib::Mocks::mock_preference( 'OpacSuppressionByIPRange', '127.' );
+    ok( C4::Context->is_opac_suppressed, 'suppression enabled with non-matching ip range' );
+
+    t::lib::Mocks::mock_preference( 'OpacSuppression',          1 );
+    t::lib::Mocks::mock_preference( 'OpacSuppressionByIPRange', '200.' );
+    ok( !C4::Context->is_opac_suppressed, 'suppression enabled with matching ip range' );
+    }

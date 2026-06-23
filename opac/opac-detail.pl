@@ -108,8 +108,7 @@ unless ( $biblio && $record ) {
 }
 
 # If record should be suppressed, handle it early
-redirect_if_opac_suppressed( $query, $biblio )
-    if C4::Context->preference('OpacSuppression');
+redirect_if_opac_suppressed( $query, $biblio );
 
 my $items = $biblio->items->search_ordered;
 if ($specific_item) {
