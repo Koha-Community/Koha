@@ -45,6 +45,7 @@ use Koha::Items;
 use Koha::Libraries;
 use Koha::AdditionalContents;
 use Koha::Patron;
+use Koha::Statistic;
 
 use C4::Circulation qw( CanBookBeIssued AddIssue );
 
@@ -2275,7 +2276,7 @@ Actions to be done after the request has been completed
 sub after_completed {
     my ($self) = @_;
 
-    C4::Stats::UpdateStats(
+    Koha::Statistic->new(
         {
             borrowernumber => $self->borrowernumber // undef,
             branch         => $self->branchcode,
@@ -2287,7 +2288,7 @@ sub after_completed {
             location       => undef,
             type           => 'illreq_comp',
         }
-    );
+    )->store();
 }
 
 =head3 after_created
@@ -2301,7 +2302,7 @@ Actions to be done after the request has been fully created
 sub after_created {
     my ($self) = @_;
 
-    C4::Stats::UpdateStats(
+    Koha::Statistic->new(
         {
             borrowernumber => $self->borrowernumber // undef,
             branch         => $self->branchcode,
@@ -2313,7 +2314,7 @@ sub after_created {
             location       => undef,
             type           => 'illreq_created',
         }
-    );
+    )->store();
 }
 
 =head3 requested_partners

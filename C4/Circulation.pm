@@ -83,7 +83,6 @@ use Try::Tiny;
 use JSON;
 
 use C4::Context;
-use C4::Stats qw( UpdateStats );
 use C4::Reserves
     qw( CheckReserves CanItemBeReserved MoveReserve ModReserve ModReserveMinusPriority IsAvailableForItemLevelRequest );
 use C4::Biblio qw( UpdateTotalIssues );
@@ -123,6 +122,7 @@ use Koha::SearchEngine::Indexer;
 use Koha::Exceptions::Checkout;
 use Koha::Plugins;
 use Koha::Recalls;
+use Koha::Statistic;
 use Koha::Library::Hours;
 use Koha::Library::FloatLimits;
 use Carp            qw( carp );
@@ -885,7 +885,7 @@ sub CanBookBeIssued {
     if ( $patron->category->category_type eq 'X' && ( $item_object->barcode ) ) {
 
         # stats only borrower -- add entry to statistics table, and return issuingimpossible{STATS} = 1  .
-        C4::Stats::UpdateStats(
+        Koha::Statistic->new(
             {
                 branch         => C4::Context->userenv->{'branch'},
                 type           => 'localuse',
@@ -897,7 +897,7 @@ sub CanBookBeIssued {
                 location       => $item_object->location,
                 interface      => C4::Context->interface,
             }
-        );
+        )->store();
         my $block_lost_return = C4::Context->preference("BlockReturnOfLostItems") ? 1 : 0;
         ModDateLastSeen( $item_object->itemnumber, $block_lost_return );    # FIXME Move to Koha::Item
         return ( { STATS => 1, }, {} );
@@ -1985,7 +1985,7 @@ sub AddIssue {
             }
 
             # Record the fact that this book was issued.
-            C4::Stats::UpdateStats(
+            Koha::Statistic->new(
                 {
                     branch         => C4::Context->userenv->{'branch'},
                     type           => ( $onsite_checkout ? 'onsite_checkout' : 'issue' ),
@@ -1998,7 +1998,7 @@ sub AddIssue {
                     ccode          => $item_object->ccode,
                     categorycode   => $patron->categorycode
                 }
-            );
+            )->store();
 
             # Send a checkout slip.
             my $circulation_alert = 'C4::ItemCirculationAlertPreference';
@@ -2717,7 +2717,7 @@ sub AddReturn {
 
     # Record the fact that this book was returned.
     my $categorycode = $patron_unblessed ? $patron_unblessed->{categorycode} : undef;
-    C4::Stats::UpdateStats(
+    Koha::Statistic->new(
         {
             branch         => $branch,
             type           => $stat_type,
@@ -2729,7 +2729,8 @@ sub AddReturn {
             categorycode   => $categorycode,
             interface      => C4::Context->interface,
         }
-    ) unless ( $skip_localuse && !$issue );
+    )->store()
+        unless ( $skip_localuse && !$issue );
 
     # Send a check-in slip. # NOTE: borrower may be undef. Do not try to send messages then.
     if ($patron) {
@@ -3747,7 +3748,7 @@ sub AddRenewal {
             )->store();
 
             # Add the renewal to stats
-            C4::Stats::UpdateStats(
+            Koha::Statistic->new(
                 {
                     branch         => $item_object->renewal_branchcode( { branch => $branch } ),
                     type           => 'renew',
@@ -3760,7 +3761,7 @@ sub AddRenewal {
                     categorycode   => $patron->categorycode,
                     interface      => C4::Context->interface,
                 }
-            );
+            )->store();
 
             #Update borrowers.lastseen
             try {

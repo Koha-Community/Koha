@@ -35,7 +35,6 @@ use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_htt
 use CGI        qw ( -utf8 );
 use C4::Members;
 use C4::Accounts;
-use C4::Stats;
 use C4::Koha;
 use C4::Overdues;
 use Koha::Patrons;

@@ -59,6 +59,7 @@ use Koha::Account::Offsets;
 use Koha::ActionLogs;
 use Koha::Notice::Messages;
 use Koha::Cache::Memory::Lite;
+use Koha::Statistics;
 
 my $builder = t::lib::TestBuilder->new;
 

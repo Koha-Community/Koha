@@ -25,6 +25,7 @@ use Test::Exception;
 
 use C4::Context;
 use Koha::Database;
+use Koha::Statistic;
 use Koha::Statistics;
 
 use t::lib::TestBuilder;

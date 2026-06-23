@@ -27,7 +27,6 @@ use C4::Context;
 use C4::Accounts;
 use C4::Circulation qw( AddOfflineOperation );
 use C4::Members;
-use C4::Stats;
 use Koha::Checkouts;
 use Koha::UploadedFiles;
 use Koha::Items;
