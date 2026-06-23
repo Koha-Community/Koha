@@ -24,8 +24,7 @@ use Koha::Database;
 use Koha::Recall;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Plugins;
-
-use C4::Stats qw( UpdateStats );
+use Koha::Statistic;
 
 use base qw(Koha::Objects);
 
@@ -191,7 +190,7 @@ sub add_recall {
         $item = Koha::Items->find($itemnumber);
 
         # add to statistics table
-        C4::Stats::UpdateStats(
+        Koha::Statistic->new(
             {
                 branch         => C4::Context->userenv->{'branch'},
                 type           => 'recall',
@@ -202,7 +201,7 @@ sub add_recall {
                 categorycode   => $checkout->patron->categorycode,
                 interface      => $interface,
             }
-        );
+        )->store();
 
         Koha::Plugins->call(
             'after_recall_action',

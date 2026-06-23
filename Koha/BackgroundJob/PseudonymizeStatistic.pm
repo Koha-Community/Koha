@@ -18,6 +18,7 @@ package Koha::BackgroundJob::PseudonymizeStatistic;
 use Modern::Perl;
 
 use Koha::PseudonymizedTransactions;
+use Koha::Statistic;
 
 use base 'Koha::BackgroundJob';
 

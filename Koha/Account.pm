@@ -25,7 +25,6 @@ use Try::Tiny    qw( catch try );
 
 use C4::Letters;
 use C4::Log      qw( logaction );
-use C4::Stats    qw( UpdateStats );
 use C4::Overdues qw(GetFine);
 use C4::Context;
 
@@ -38,6 +37,7 @@ use Koha::Account::DebitTypes;
 use Koha::Exceptions;
 use Koha::Exceptions::Account;
 use Koha::Plugins;
+use Koha::Statistic;
 
 =head1 NAME
 
@@ -286,7 +286,7 @@ sub add_credit {
                     }
                 )->store();
 
-                C4::Stats::UpdateStats(
+                Koha::Statistic->new(
                     {
                         branch         => $library_id,
                         type           => lc($credit_type),
@@ -294,7 +294,8 @@ sub add_credit {
                         borrowernumber => $self->{patron_id},
                         interface      => $interface,
                     }
-                ) if grep { $credit_type eq $_ } ( 'PAYMENT', 'WRITEOFF' );
+                )->store()
+                    if grep { $credit_type eq $_ } ( 'PAYMENT', 'WRITEOFF' );
 
                 Koha::Plugins->call(
                     'after_account_action',

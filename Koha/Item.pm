@@ -58,6 +58,7 @@ use Koha::StockRotationItem;
 use Koha::StockRotationRotas;
 use Koha::TrackedLinks;
 use Koha::Policy::Holds;
+use Koha::Statistic;
 
 use base qw(Koha::Object);
 
@@ -268,7 +269,7 @@ Record a statistics entry for this item (e.g. on store or delete).
 
 sub _add_statistic {
     my ( $self, $type ) = @_;
-    C4::Stats::UpdateStats(
+    Koha::Statistic->new(
         {
             borrowernumber => undef,
             branch         => C4::Context->userenv ? C4::Context->userenv->{branch} : undef,
@@ -279,7 +280,7 @@ sub _add_statistic {
             location       => $self->location,
             type           => $type,
         }
-    );
+    )->store();
 }
 
 =head3 delete

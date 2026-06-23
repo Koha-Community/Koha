@@ -28,7 +28,6 @@ BEGIN {
 }
 
 use C4::Context;
-use C4::Stats;
 use C4::Members;
 use Koha::Account;
 use Koha::Account::Lines;
