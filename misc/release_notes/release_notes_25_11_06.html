@@ -1,0 +1,458 @@
+<h1 id="releasenotesforkoha25.11.06">RELEASE NOTES FOR KOHA 25.11.06</h1>
+
+<p>24 Jun 2026</p>
+
+<p>Koha is the first free and open source software library automation
+package (ILS). Development is sponsored by libraries of varying types
+and sizes, volunteers, and support companies from around the world. The
+website for the Koha project is:</p>
+
+<ul>
+<li><a href="https://koha-community.org">Koha Community</a></li>
+</ul>
+
+<p>Koha 25.11.06 can be downloaded from:</p>
+
+<ul>
+<li><a href="https://download.koha-community.org/koha-25.11.06.tar.gz">Download</a></li>
+</ul>
+
+<p>Installation instructions can be found at:</p>
+
+<ul>
+<li><a href="https://wiki.koha-community.org/wiki/Installation_Documentation">Koha Wiki</a></li>
+<li>OR in the INSTALL files that come in the tarball</li>
+</ul>
+
+<p>Koha 25.11.06 is a bugfix/maintenance release with security patches.</p>
+
+<p>It includes 25 bugfixes (5 security).</p>
+
+<p><strong>System requirements</strong></p>
+
+<p>You can learn about the system components (like OS and database) needed for running Koha on the <a href="https://wiki.koha-community.org/wiki/System_requirements_and_recommendations">community wiki</a>.</p>
+
+<h4 id="securitybugs">Security bugs</h4>
+
+<ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42360">42360</a> SQL Injection in reports/acquisitions_stats.pl via Filter parameter</li>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42363">42363</a> SQL Injection in reports/catalogue_stats.pl via the Line request parameter</li>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42368">42368</a> SQL Injection in reports/issues_avg_stats.pl via the Filter request parameter (unvalidated string context, no placeholders)</li>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42369">42369</a> SQL Injection in reports/bor_issues_top.pl via the Filter request parameter (unvalidated string context, no placeholders)</li>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42735">42735</a> SQL Injection in reports/issues_stats.pl via PeriodTypeSel / PeriodDaySel / PeriodMonthSel / Filter parameters (unvalidated string context, no placeholders)</li>
+</ul>
+
+<h2 id="bugfixes">Bugfixes</h2>
+
+<h3 id="about">About</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42726">42726</a> Release team 26.11</p>
+
+<blockquote>
+  <p>Updates changes to the 25.11 release team, and adds the details of people in the 26.05 release team. (More > About Koha > Koha team.)</li>
+  </ul></p>
+  
+  <h3 id="accessibility">Accessibility</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><p><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42498">42498</a> Accessibility - Page tabs/pagination on results in opac produces accessibility error  "Aria state or property has invalid value"</p>
+
+<p><strong>Sponsored by</strong> <em>Athens County Public Libraries</em></p></li>
+</ul>
+
+<h3 id="acquisitions">Acquisitions</h3>
+
+<h4 id="criticalbugsfixed">Critical bugs fixed</h4>
+
+<p><ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42723">42723</a> Purchase suggestion 500 page error when EmailPurchaseSuggestions is set to "email address of library"</p>
+
+<blockquote>
+  <p>This fixes a 500 page error[1] when creating a suggestion in the staff interface if:
+  - the EmailPurchaseSuggestions system preference is set to "email address of library", and
+  - the library for acquisition information is set to "Any".</p>
+  
+  <p>[1] Can't call method "inbound_email_address" on an undefined value at /kohadevbox/koha/Koha/Suggestion.pm line 107</li>
+  </ul></p>
+  
+  <h4 id="otherbugsfixed">Other bugs fixed</h4>
+</blockquote>
+
+<p><ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=41998">41998</a> Some templates in suggestion.pl are computed even through a redirection</li>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42710">42710</a> Purchase suggestion creation form (staff interface) no longer defaults to logged-in library</p>
+
+<blockquote>
+  <p>This fixes entering suggestions using the staff interface. When making a suggestion the default library selected was "Any". The default library is now the current library you are logged in as.</li>
+  <li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42740">42740</a> Suggestion status is not kept when editing a suggestion</li>
+  <li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42750">42750</a> Purchase suggestions made from members/purchase-suggestions.pl no longer redirect back
+  This fixes the redirect when making a suggestion for a patron (Patrons > [Selected patron] > Purchase suggestions).</p>
+  
+  <p>After creating a suggestion, the staff patron is now redirected back to the patron's purchase suggestion page. Previously, they stayed on the list of suggestions on the suggestion management page in acquisitions.</p>
+  
+  <p>(This fixes an error introduced by Bug 39721 - Remove GetSuggestion from C4/Suggestions.pm, added to Koha 26.05 and 25.11.)</li>
+  </ul></p>
+  
+  <h3 id="cataloging">Cataloging</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42701">42701</a> Ability to click anywhere in item row for edit and delete options is missing</li>
+</ul>
+
+<h3 id="circulation">Circulation</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><p><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=41705">41705</a> Popup blockers may be triggered by options to automatically display payment receipt for printing after making a payments</p></p>
+
+<p><strong>Sponsored by</strong> <em>OpenFifth</em></p>
+
+<p></li>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42454">42454</a> Terminology: Use "and" instead of "&amp;" for curbside pickups "Staged &amp; ready (0)" tab</p>
+
+<blockquote>
+  <p>This fixes the "Staged &amp; ready (0)" tab for curbside pickups (Circulation > Holds and bookings > Curbside pickup) so that it uses "and" instead of "&amp;" in the table title, as per the terminology guidelines (when CurbsidePickup is enabled).</li>
+  </ul></p>
+  
+  <h3 id="erm">ERM</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42130">42130</a> Holdings created in ERM with a linked bibliographic record does not index the record</p>
+
+<blockquote>
+  <p>This fixes indexing of records, so that when a new title is added in the ERM module (ERM > eHoldings > Local > Titles) and 'Create bibliographic record' is selected, the new record can be found when searching.</li>
+  </ul></p>
+  
+  <h3 id="mana-kb">Mana-kb</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42194">42194</a> Sharing a report to Mana does not give feedback</li>
+</ul>
+
+<h3 id="opac">OPAC</h3>
+
+<h4 id="criticalbugsfixed">Critical bugs fixed</h4>
+
+<p><ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42555">42555</a> (Bug 25314 follow-up) ID incorrectly used for facet label for customized facets in the OPAC</p>
+
+<blockquote>
+  <p>This fixes the labels for facets in the OPAC. Customized facets generated from mappings.yaml were displayed with the technical type_id instead of the proper label.</p>
+  
+  <p>For example, for a facet defined as "su-gen" with a label of "Genre/Form", "su-gen" was used as the label instead of "Genre/Form".</p>
+  
+  <p>(This is related to Bug 25314 - Make OPAC facets collapse, added to Koha 26.05.00,25.11.04.)</li>
+  </ul></p>
+  
+  <h4 id="otherbugsfixed">Other bugs fixed</h4>
+</blockquote>
+
+<ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42193">42193</a> The "Suspend hold" modal in the OPAC sometimes tries to resume hold</li>
+</ul>
+
+<h3 id="staffinterface">Staff interface</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42084">42084</a> Incorrect interface shown in log viewer for system preference changes</li>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42133">42133</a> Cataloguing plugins are broken on the batch item mod tool (again)</li>
+</ul>
+
+<h3 id="templates">Templates</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><p><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42154">42154</a> Bug 38714 hid the "New match check" link in record matching rules</p></p>
+
+<p><strong>Sponsored by</strong> <em>Athens County Public Libraries</em></p>
+
+<p></li>
+<li><p><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42441">42441</a> Remove event attributes from authority merge template</p></p>
+
+<p><strong>Sponsored by</strong> <em>Athens County Public Libraries</em></p>
+
+<p></li>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42475">42475</a> Terminology: OPAC is an abbreviation</p>
+
+<blockquote>
+  <p>Changes opac to OPAC for these system preference descriptions:
+  - NovelistSelectProfile
+  - item-level_itypes
+  - OpacSuppressionByIPRange</li>
+  </ul></p>
+  
+  <h3 id="testsuite">Test Suite</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42733">42733</a> Tools/ManageMarcImport_spec.ts is failing (again)</li>
+</ul>
+
+<h2 id="documentation">Documentation</h2>
+
+<p>The Koha manual is maintained in Sphinx. The home page for Koha
+documentation is</p>
+
+<ul>
+<li><p><a href="https://koha-community.org/documentation/">Koha Documentation</a>
+As of the date of these release notes, the Koha manual is available in the following languages:</p></li>
+<li><p><a href="https://koha-community.org/manual/25.11/en/html/">English (USA)</a></p></li>
+<li><a href="https://koha-community.org/manual/25.11/fr/html/">French</a> (80%)</li>
+<li><a href="https://koha-community.org/manual/25.11/de/html/">German</a> (87%)</li>
+<li><a href="https://koha-community.org/manual/25.11/el/html/">Greek</a> (92%)</li>
+<li><a href="https://koha-community.org/manual/25.11/hi/html/">Hindi</a> (62%)</li>
+</ul>
+
+<p>The Git repository for the Koha manual can be found at</p>
+
+<ul>
+<li><a href="https://gitlab.com/koha-community/koha-manual">Koha Git Repository</a></li>
+</ul>
+
+<h2 id="translations">Translations</h2>
+
+<p>Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:</p>
+
+<div style="column-count: 2;">
+
+- Arabic (ar_ARAB) (89%)
+- Armenian (hy_ARMN) (100%)
+- Bulgarian (bg_CYRL) (100%)
+- Chinese (Simplified Han script) (81%)
+- Chinese (Traditional Han script) (94%)
+- Czech (65%)
+- Dutch (87%)
+- English (100%)
+- English (New Zealand) (60%)
+- English (USA)
+- Finnish (99%)
+- French (100%)
+- French (Canada) (96%)
+- German (99%)
+- Greek (64%)
+- Hindi (92%)
+- Italian (79%)
+- Norwegian Bokmål (69%)
+- Persian (fa_ARAB) (90%)
+- Polish (99%)
+- Portuguese (Brazil) (99%)
+- Portuguese (Portugal) (88%)
+- Russian (90%)
+- Slovak (57%)
+- Spanish (96%)
+- Swedish (88%)
+- Telugu (63%)
+- Turkish (78%)
+- Ukrainian (72%)
+- Western Armenian (hyw_ARMN) (59%)
+</div>
+
+<p>Partial translations are available for various other languages.</p>
+
+<p>The Koha team welcomes additional translations; please see</p>
+
+<ul>
+<li><a href="https://wiki.koha-community.org/wiki/Translating_Koha">Koha Translation Info</a></li>
+</ul>
+
+<p>For information about translating Koha, and join the koha-translate 
+list to volunteer:</p>
+
+<ul>
+<li><a href="https://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate">Koha Translate List</a></li>
+</ul>
+
+<p>The most up-to-date translations can be found at:</p>
+
+<ul>
+<li><a href="https://translate.koha-community.org/">Koha Translation</a></li>
+</ul>
+
+<h2 id="releaseteam">Release Team</h2>
+
+<p>The release team for Koha 25.11.06 is</p>
+
+<ul>
+<li><p>Release Manager: Lucas Gass</p></li>
+<li><p>QA Manager: Martin Renvoize</p></li>
+<li><p>QA Team:</p>
+
+<ul>
+<li>Andrew Fuerste-Henry</li>
+<li>Andrii Nugged</li>
+<li>Baptiste Wojtkowski</li>
+<li>Brendan Lawlor</li>
+<li>David Cook</li>
+<li>Emily Lamancusa</li>
+<li>Jonathan Druart</li>
+<li>Julian Maurice</li>
+<li>Kyle Hall</li>
+<li>Laura Escamilla</li>
+<li>Lisette Scheer</li>
+<li>Marcel de Rooy</li>
+<li>Nick Clemens</li>
+<li>Paul Derscheid</li>
+<li>Petro V</li>
+<li>Tomás Cohen Arazi</li>
+<li>Victor Grousset</li>
+</ul></li>
+<li><p>Documentation Manager: David Nind</p></li>
+<li><p>Documentation Team:</p>
+
+<ul>
+<li>Aude Charillon</li>
+<li>Caroline Cyr La Rose</li>
+<li>Donna Bachowski</li>
+<li>Heather Hernandez</li>
+<li>Kristi Krueger</li>
+<li>Philip Orr</li>
+</ul></li>
+<li><p>Translation Manager: Jonathan Druart</p></li>
+<li><p>Wiki curators: </p>
+
+<ul>
+<li>George Williams</li>
+<li>Thomas Dukleth</li>
+</ul></li>
+<li><p>Release Maintainers:</p>
+
+<ul>
+<li>25.11 -- Baptiste Wojtkowski</li>
+<li>25.05 -- Paul Derscheid</li>
+<li>24.11 -- Fridolin Somers</li>
+<li>24.05 -- Jesse Maseto</li>
+<li>22.11 -- Catalyst IT (Wainui, Alex, Aleisha)</li>
+</ul></li>
+<li><p>Release Maintainer assistants:</p>
+
+<ul>
+<li>25.05 -- Martin Renvoize</li>
+<li>24.05 -- Laura Escamilla</li>
+</ul></li>
+</ul>
+
+<h2 id="credits">Credits</h2>
+
+<p>We thank the following libraries, companies, and other institutions who are known to have sponsored
+new features in Koha 25.11.06</p>
+
+<div style="column-count: 2;">
+
+- Athens County Public Libraries
+- [OpenFifth](https://openfifth.co.uk)
+</div>
+
+<p>We thank the following individuals who contributed patches to Koha 25.11.06</p>
+
+<div style="column-count: 2;">
+
+- Pedro Amorim (2)
+- David Cook (5)
+- Jonathan Druart (8)
+- Lucas Gass (3)
+- Janusz Kaczmarek (1)
+- Emily Lamancusa (1)
+- Owen Leonard (4)
+- Julian Maurice (1)
+- David Nind (1)
+- Eric Phetteplace (1)
+- Martin Renvoize (5)
+- Marcel de Rooy (1)
+- Maryse Simard (1)
+- Hammat Wele (1)
+- Baptiste Wojtkowski (3)
+</div>
+
+<p>We thank the following libraries, companies, and other institutions who contributed
+patches to Koha 25.11.06</p>
+
+<div style="column-count: 2;">
+
+- Athens County Public Libraries (4)
+- [BibLibre](https://www.biblibre.com) (4)
+- [ByWater Solutions](https://bywatersolutions.com) (3)
+- David Nind (1)
+- Independant Individuals (2)
+- Koha Community Developers (8)
+- [Montgomery County Public Libraries](https://montgomerycountymd.gov) (1)
+- [OpenFifth](https://openfifth.co.uk) (7)
+- [Prosentient Systems](https://www.prosentient.com.au) (5)
+- Rijksmuseum, Netherlands (1)
+- [Solutions inLibro inc](https://inlibro.com) (2)
+</div>
+
+<p>We also especially thank the following individuals who tested patches
+for Koha</p>
+
+<div style="column-count: 2;">
+
+- Alex Carver [Acerock7] (1)
+- Tomás Cohen Arazi (1)
+- Emmanuel Bétemps (1)
+- Nick Clemens (1)
+- Roman Dolny (1)
+- Jonathan Druart (9)
+- Laura Escamilla (4)
+- Andrew Fuerste-Henry (2)
+- Lucas Gass (23)
+- Barbara Johnson (1)
+- Owen Leonard (3)
+- David Nind (11)
+- Sanjar Tulkinov Anvar o'g'li (6)
+- Martin Renvoize (5)
+- Phil Ringnalda (1)
+- Marcel de Rooy (5)
+- Emmi Takkinen (1)
+- Baptiste Wojtkowski (25)
+</div>
+
+<p>We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to koha-devel@lists.koha-community.org.</p>
+
+<h2 id="revisioncontrolnotes">Revision control notes</h2>
+
+<p>The Koha project uses Git for version control.  The current development
+version of Koha can be retrieved by checking out the main branch of:</p>
+
+<ul>
+<li><a href="https://git.koha-community.org/koha-community/koha">Koha Git Repository</a></li>
+</ul>
+
+<p>The branch for this version of Koha and future bugfixes in this release
+line is 25.11.x.</p>
+
+<h2 id="bugsandfeaturerequests">Bugs and feature requests</h2>
+
+<p>Bug reports and feature requests can be filed at the Koha bug
+tracker at:</p>
+
+<ul>
+<li><a href="https://bugs.koha-community.org">Koha Bugzilla</a></li>
+</ul>
+
+<p>He rau ringa e oti ai.
+(Many hands finish the work)</p>
+
+<p>Autogenerated release notes updated last on 24 Jun 2026 11:52:40.</p>
