@@ -488,7 +488,7 @@
         var theme = "[% theme | html %]";
         const firstPage = [% firstPage ? 1 : 0 | html %];
         Koha.addPrefs({
-            OpacHighlightedWords: "[% Koha.Preference('OpacHighlightedWords') | html %]",
+            OpacHighlightedWords: [% Koha.Preference('OpacHighlightedWords') ? 1 : 0 | html %],
             NotHighlightedWords: "[% Koha.Preference("NotHighlightedWords") | html %]",
             GoogleJackets: [% Koha.Preference("GoogleJackets") ? 1 : 0 | html %],
             OpenLibraryCovers: [% Koha.Preference("OpenLibraryCovers") ? 1 : 0 | html %],
