@@ -83,10 +83,11 @@ sub AddDebarment {
             manager_id     => $manager_id,
         }
     )->store();
+    $restriction->discard_changes if $restriction;
 
     UpdateBorrowerDebarmentFlags($borrowernumber);
 
-    logaction( "MEMBERS", "CREATE_RESTRICTION", $borrowernumber, $restriction )
+    logaction( "MEMBERS", "CREATE_RESTRICTION", $borrowernumber, 'restriction', undef, $restriction )
         if C4::Context->preference("BorrowersLog");
 
     return $restriction ? 1 : 0;
@@ -110,7 +111,7 @@ sub DelDebarment {
     Koha::Database->new->schema->txn_do(
         sub {
             my $borrowernumber = $restriction->borrowernumber;
-            logaction( "MEMBERS", "DELETE_RESTRICTION", $borrowernumber, $restriction )
+            logaction( "MEMBERS", "DELETE_RESTRICTION", $borrowernumber, 'restriction', undef, $restriction )
                 if C4::Context->preference("BorrowersLog");
 
             $restriction->delete;
@@ -143,6 +144,8 @@ sub ModDebarment {
 
     return unless ($borrower_debarment_id);
 
+    my $original = Koha::Patron::Restrictions->find($borrower_debarment_id);
+
     delete( $params->{'borrower_debarment_id'} );
 
     delete( $params->{'created'} );
@@ -164,7 +167,8 @@ sub ModDebarment {
 
     logaction(
         "MEMBERS", "MODIFY_RESTRICTION", $borrowernumber,
-        Koha::Patron::Restrictions->find($borrower_debarment_id)
+        Koha::Patron::Restrictions->find($borrower_debarment_id),
+        undef, $original
     ) if C4::Context->preference("BorrowersLog");
 
     return $r;

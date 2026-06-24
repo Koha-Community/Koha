@@ -53,15 +53,20 @@ sub store {
         $self->manager_id( $userenv ? $userenv->{number} : undef );
     }
 
+    my $original = Koha::Patron::Messages->find( $self->message_id );
+    my $is_mod   = $self->in_storage;
+    my $result   = $self->SUPER::store($self);
+    $self->discard_changes;
+
     if ( C4::Context->preference("BorrowersLog") ) {
-        if ( $self->in_storage ) {
-            C4::Log::logaction( "MEMBERS", "MODCIRCMESSAGE", $self->borrowernumber, $self->message );
+        if ($is_mod) {
+            C4::Log::logaction( "MEMBERS", "MODCIRCMESSAGE", $self->borrowernumber, $self, undef, $original );
         } else {
-            C4::Log::logaction( "MEMBERS", "ADDCIRCMESSAGE", $self->borrowernumber, $self->message );
+            C4::Log::logaction( "MEMBERS", "ADDCIRCMESSAGE", $self->borrowernumber, 'message', undef, $self );
         }
     }
 
-    return $self->SUPER::store($self);
+    return $result;
 }
 
 =head3 delete
@@ -71,7 +76,7 @@ sub store {
 sub delete {
     my ($self) = @_;
 
-    C4::Log::logaction( "MEMBERS", "DELCIRCMESSAGE", $self->borrowernumber, $self->message )
+    C4::Log::logaction( "MEMBERS", "DELCIRCMESSAGE", $self->borrowernumber, 'message', undef, $self )
         if C4::Context->preference("BorrowersLog");
 
     return $self->SUPER::delete($self);

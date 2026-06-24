@@ -333,7 +333,7 @@ $schema->storage->txn_rollback;
 
 subtest 'BorrowersLog tests' => sub {
 
-    plan tests => 16;
+    plan tests => 19;
 
     $schema->storage->txn_begin;
 
@@ -430,13 +430,19 @@ subtest 'BorrowersLog tests' => sub {
         Koha::ActionLogs->search( { module => 'MEMBERS', action => 'DELETE_RESTRICTION', object => $patron->id } );
 
     is( $add_logs->count, 1, 'Restriction creation logged' );
-    like( $add_logs->next->info, qr/$add_comment/ );
+    my $log = $add_logs->next;
+    is( $log->info, 'restriction' );
+    ok( $log->diff, 'Restriction creation diffed' );
 
     is( $mod_logs->count, 1, 'Restriction modification logged' );
-    like( $mod_logs->next->info, qr/$mod_comment/ );
+    $log = $mod_logs->next;
+    like( $log->info, qr/$mod_comment/ );
+    ok( $log->diff, 'Restriction modification diffed' );
 
     is( $del_logs->count, 1, 'Restriction deletion logged' );
-    like( $del_logs->next->info, qr/$mod_comment/, 'Deleted restriction contains last known comment' );
+    $log = $del_logs->next;
+    is( $log->info, 'restriction' );
+    ok( $log->diff, 'Restriction deletion diffed' );
 
     $schema->storage->txn_rollback;
 };
