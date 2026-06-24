@@ -970,17 +970,16 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                                 );
                                 $("#booking_start_date").val(
                                     dayjs
-                                        .utc(startDate)
+                                        .tz(startDate, $timezone())
                                         .startOf("day")
                                         .toISOString()
                                 );
                                 $("#booking_end_date").val(
                                     dayjs
-                                        .utc(endDate)
+                                        .tz(endDate, $timezone())
                                         .endOf("day")
                                         .toISOString()
                                 );
-
                                 // set available items in select2
                                 let booked_items = bookings.filter(
                                     function (booking) {
