@@ -107,7 +107,7 @@ sub store {
                 # can be undef for branch=any suggestions
                 my $library = $result->library;
                 if ( $library && $library->inbound_email_address ) {
-                $toaddress = $library->inbound_email_address;
+                    $toaddress = $library->inbound_email_address;
                 }
             } elsif ( $emailpurchasesuggestions eq "KohaAdminEmailAddress" ) {
                 $toaddress = C4::Context->preference('ReplytoDefault')
