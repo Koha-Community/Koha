@@ -1,6 +1,7 @@
 (function () {
     window.$toggle_sidebar = function () {
         var sidebar = $("#sidebar-container");
+        var toggle_button = $("#toggle-sidebar");
         var icon = $("#toggle-sidebar i");
         var mainContainer = $("main").parent();
 
@@ -11,7 +12,7 @@
                 .removeClass("col-md-12")
                 .addClass("col-md-10")
                 .removeAttr("style");
-            $(this).attr("aria-expanded", "true");
+            toggle_button.attr("aria-expanded", "true");
         } else {
             sidebar.addClass("collapsed");
             icon.removeClass("fa-chevron-left").addClass("fa-chevron-right");
@@ -19,7 +20,7 @@
                 .removeClass("col-md-10")
                 .addClass("col-md-12")
                 .css("width", "90%");
-            $(this).attr("aria-expanded", "false");
+            toggle_button.attr("aria-expanded", "false");
         }
     };
 })();
