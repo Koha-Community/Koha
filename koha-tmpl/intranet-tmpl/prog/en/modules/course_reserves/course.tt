@@ -7,7 +7,7 @@
 <title
     >[% FILTER collapse %]
         [% IF ( course_name ) %]
-            [% tx("Edit course {course_name}", { course_name = course_name }) | html %][% IF section %]-[% section | html %][% END %]
+            [% tx("Edit course {course_name}", { course_name = course_name }) | html %][% IF section %] - [% section | html %][% END %]
         [% ELSE %]
             [% t("New course") | html %]
         [% END %]
@@ -52,7 +52,7 @@
     [% WRAPPER 'main-container.inc' %]
         <h1>
             [% IF course_name %]
-                [% course_em = ( section ? course_name _"-"_ section : course_name ) | html | $HtmlTags tag="em" %]
+                [% course_em = ( section ? course_name _" - "_ section : course_name ) | html | $HtmlTags tag="em" %]
                 [% tx("Edit course {course_name}", { course_name = course_em }) | $raw %]
             [% ELSE %]
                 <span>New course</span>
