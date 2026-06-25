@@ -79,13 +79,13 @@ sub _apply_substitution {
     my ( $pattern, $replacement, $flags ) = ( $2, $3, $4 );
 
     return if $flags =~ /e/;    # never evaluate the replacement as code
-    my $global = $flags =~ /g/ ? 1 : 0;
+    my $global = $flags =~ /g/ ? 1      : 0;
     my $ci     = $flags =~ /i/ ? '(?i)' : '';
 
     my $compiled = eval { qr/$ci$pattern/ };
     return unless defined $compiled;
 
-    my $expand = sub { Koha::Regex::Replacement::expand_template( $replacement, [@{^CAPTURE}], {%+} ) };
+    my $expand = sub { Koha::Regex::Replacement::expand_template( $replacement, [ @{^CAPTURE} ], {%+} ) };
 
     if ($global) {
         ${$ref} =~ s/$compiled/$expand->()/ge;
