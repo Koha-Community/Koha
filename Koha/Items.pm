@@ -32,6 +32,7 @@ use Koha::SearchEngine::Indexer;
 use Koha::Item::Attributes;
 use Koha::Item;
 use Koha::CirculationRules;
+use Koha::Regex::Replacement;
 
 use base qw(Koha::Objects);
 
@@ -633,22 +634,24 @@ sub apply_regex {
     my $modifiers = $params->{modifiers} || q{};
     my $value     = $params->{value};
 
-    $replace =~ s/"/\\"/g;              # Protection from embedded code
-    $replace = '"' . $replace . '"';    # Put in a string for /ee
     my @available_modifiers = qw( i g );
     my $retained_modifiers  = q||;
     for my $modifier ( split //, $modifiers ) {
         $retained_modifiers .= $modifier
             if grep { /$modifier/ } @available_modifiers;
     }
+
+    # The replacement is expanded as DATA (capture-group backreferences and the
+    # \n \r \t escapes) and never evaluated as code, so @{...}/${...}
+    # interpolation blocks are inert text, not Perl.
     if ( $retained_modifiers =~ m/^(ig|gi)$/ ) {
-        $value =~ s/$search/$replace/igee;
+        $value =~ s/$search/Koha::Regex::Replacement::expand_template( $replace, [@{^CAPTURE}], {%+} )/ige;
     } elsif ( $retained_modifiers eq 'i' ) {
-        $value =~ s/$search/$replace/iee;
+        $value =~ s/$search/Koha::Regex::Replacement::expand_template( $replace, [@{^CAPTURE}], {%+} )/ie;
     } elsif ( $retained_modifiers eq 'g' ) {
-        $value =~ s/$search/$replace/gee;
+        $value =~ s/$search/Koha::Regex::Replacement::expand_template( $replace, [@{^CAPTURE}], {%+} )/ge;
     } else {
-        $value =~ s/$search/$replace/ee;
+        $value =~ s/$search/Koha::Regex::Replacement::expand_template( $replace, [@{^CAPTURE}], {%+} )/e;
     }
 
     return $value;
