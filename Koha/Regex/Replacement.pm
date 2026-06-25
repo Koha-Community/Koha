@@ -40,6 +40,16 @@ fields and call numbers. The replacement half of those substitutions used to be
 run through Perl's C<s///ee>, which evaluated the replacement as Perl code and
 so allowed arbitrary code execution (see bug 30233).
 
+Note: It was necessary to use C<s///ee> because Perl does not provide a native
+way of processing backreferences and backslash escapes in the replacement string
+at runtime. While this doesn't matter when running hard-coded regular expressions,
+it does make it difficult to support replacement strings provided by end users.
+
+Note: While the "expand_template" may seem bespoke, it works similarly to
+how Python's own template expansion works in Python's re.sub() regular
+expression substitution function:
+https://github.com/python/cpython/blob/3.15/Modules/_sre/sre.c#L3022
+
 This module expands the replacement string as B<data> instead of evaluating it.
 It walks the string once, from left to right, and only acts on the handful of
 placeholders a replacement legitimately contains:
@@ -98,14 +108,13 @@ sub expand_template {
         if ( $character eq '\\' && $position + 1 < @characters ) {
             my $escaped = $characters[ $position + 1 ];
 
-            if    ( $escaped eq 'n' )     { $output .= "\n"; }
-            elsif ( $escaped eq 'r' )     { $output .= "\r"; }
-            elsif ( $escaped eq 't' )     { $output .= "\t"; }
-            elsif ( $escaped =~ /[1-9]/ ) {                    # legacy \1 .. \9 backreference
+            if    ( $escaped eq 'n' ) { $output .= "\n"; }
+            elsif ( $escaped eq 'r' ) { $output .= "\r"; }
+            elsif ( $escaped eq 't' ) { $output .= "\t"; }
+            elsif ( $escaped =~ /[1-9]/ ) {    # legacy \1 .. \9 backreference
                 my $group_value = $captures->[ $escaped - 1 ];
                 $output .= defined $group_value ? $group_value : '';
-            }
-            else {                                             # \\ -> \, \$ -> $, any other \X -> X
+            } else {                           # \\ -> \, \$ -> $, any other \X -> X
                 $output .= $escaped;
             }
 
