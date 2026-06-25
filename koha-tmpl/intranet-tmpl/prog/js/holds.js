@@ -1315,6 +1315,11 @@ async function load_patron_holds_table(biblio_id, split_data) {
     const totalHoldsSelect = parseInt(totalHolds) + 1;
     var holdsQueueTable = $(table_id).kohaTable(
         {
+            createdRow: function (row, data, dataIndex) {
+                if (data.suspended) {
+                    $(row).addClass("suspend");
+                }
+            },
             language: {
                 infoFiltered: "",
             },
