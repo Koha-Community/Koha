@@ -474,7 +474,7 @@ div {
             border: 1px solid transparent;
             display: unset;
             font-size: .9rem;
-            padding: .3rem .5rem;
+            padding: .5rem 1rem;
             position: unset;
 
             &:hover:not( .disabled ) {
@@ -536,13 +536,6 @@ div {
                         content: "\f100";
                         padding-right: .5em;
                     }
-                    /*rtl:raw:
-                      &::before{
-                        transform: scaleX(-1);
-                        padding-left: 0em;
-                        padding-right: .5em;
-                     }
-                      */
                 }
 
                 &.previous {
@@ -550,13 +543,6 @@ div {
                         content: "\f104";
                         padding-right: .5em;
                     }
-                  /*rtl:raw:
-                    &::before{
-                      transform: scaleX(-1);
-                      padding-left: 0em;
-                      padding-right: .5em;
-                   }
-                    */
                 }
 
                 &.next {
@@ -564,14 +550,6 @@ div {
                         content: "\f105";
                         padding-left: .5em;
                     }
-
-                 /*rtl:raw:
-                   &::after{
-                     transform: scaleX(-1);
-                     padding-left: 0.9em;
-                     padding-right: 0;
-                  }
-                   */
                 }
 
                 &.last {
@@ -579,14 +557,6 @@ div {
                         content: "\f101";
                         padding-left: .5em;
                     }
-
-                    /*rtl:raw:
-                      &::after{
-                        transform: scaleX(-1);
-                        padding-left: 0.9em;
-                        padding-right: 0;
-                     }
-                      */
                 }
             }
         }
@@ -596,6 +566,30 @@ div {
                 .dt-buttons {
                     /* Override left margin to keep "Clear" button next to search field */
                     margin-left: 0;
+                }
+            }
+        }
+    }
+
+    .dt-paging-row {
+        container-name: dt-paging-row;
+        container-type: inline-size;
+        flex-wrap: wrap;
+        font-size: 90%;
+        gap: 1rem;
+
+        .dt-paging-button {
+            &.first,
+            &.last {
+                display: none;
+            }
+        }
+
+        @container dt-paging-row ( width > 790px ) {
+            .dt-paging-button {
+                &.first,
+                &.last {
+                    display: inline-block;
                 }
             }
         }
@@ -698,12 +692,6 @@ div {
     color: #787878;
     font-size: 90%;
     padding-left: .3rem;
-}
-
-.dt-paging-row {
-    flex-wrap: wrap;
-    font-size: 90%;
-    gap: 1rem;
 }
 
 .dt-length,
