@@ -50,9 +50,9 @@ var dataTablesDefaults = {
         $("#" + tableId + "_wrapper")
             .find(".dt-search .dt-input")
             .after(
-                '<i class="fa fa-lg fa-times dt-search-clear" title="' +
+                '<a href="#" class="dt-search-clear"><i class="fa fa-lg fa-times" title="' +
                     __("Clear filter") +
-                    '"></i>'
+                    '"></i></a>'
             );
 
         $("#" + tableId + "_wrapper")

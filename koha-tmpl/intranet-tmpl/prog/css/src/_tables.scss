@@ -769,14 +769,15 @@ div {
     .dt-search-clear {
         position: absolute;
         right: 5px;
-        top: 50%;
+        top: 30%;
         cursor: pointer;
         color: #999;
         display: none;
         font-size: 85%;
 
-        &:hover {
-            color: #666;
+        &:hover,
+        &:focus {
+            color: var( --bs-link-color );
         }
 
         &.visible {
