@@ -21,6 +21,9 @@ use constant LAST_TRANSACTION_FIELD => q/005/;    # MARC21/UNIMARC
 
 our ( @ISA, @EXPORT_OK );
 
+use Koha::Exceptions;
+use Koha::Regex::Replacement;
+
 BEGIN {
     require Exporter;
     our @ISA = qw(Exporter);
@@ -721,8 +724,6 @@ sub _modify_values {
 
     if ( $regex and $regex->{search} ) {
         my $replace = $regex->{replace};
-        $replace =~ s/"/\\"/g;              # Protection from embedded code
-        $replace = '"' . $replace . '"';    # Put in a string for /ee
         $regex->{modifiers} //= q||;
         my @available_modifiers = qw( i g );
         my $modifiers           = q||;
@@ -730,15 +731,20 @@ sub _modify_values {
             $modifiers .= $modifier
                 if grep { /$modifier/ } @available_modifiers;
         }
+        my $search = $regex->{search};
         foreach my $value (@$values) {
+
+            # The replacement is expanded as DATA (capture-group backreferences
+            # and the \n \r \t escapes) and never evaluated as code, so
+            # @{...}/${...} interpolation blocks are inert text, not Perl.
             if ( $modifiers =~ m/^(ig|gi)$/ ) {
-                $value =~ s/$regex->{search}/$replace/igee;
+                $value =~ s/$search/Koha::Regex::Replacement::expand_template( $replace, [@{^CAPTURE}], {%+} )/ige;
             } elsif ( $modifiers eq 'i' ) {
-                $value =~ s/$regex->{search}/$replace/iee;
+                $value =~ s/$search/Koha::Regex::Replacement::expand_template( $replace, [@{^CAPTURE}], {%+} )/ie;
             } elsif ( $modifiers eq 'g' ) {
-                $value =~ s/$regex->{search}/$replace/gee;
+                $value =~ s/$search/Koha::Regex::Replacement::expand_template( $replace, [@{^CAPTURE}], {%+} )/ge;
             } else {
-                $value =~ s/$regex->{search}/$replace/ee;
+                $value =~ s/$search/Koha::Regex::Replacement::expand_template( $replace, [@{^CAPTURE}], {%+} )/e;
             }
         }
     }
