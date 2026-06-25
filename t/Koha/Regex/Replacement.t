@@ -30,7 +30,7 @@ use Koha::Regex::Replacement;
 sub subst {
     my ( $value, $search, $replacement, $modifiers ) = @_;
     $modifiers //= '';
-    my $expand = sub { Koha::Regex::Replacement::expand_template( $replacement, [@{^CAPTURE}], {%+} ) };
+    my $expand = sub { Koha::Regex::Replacement::expand_template( $replacement, [ @{^CAPTURE} ], {%+} ) };
     if    ( $modifiers eq 'g' ) { $value =~ s/$search/$expand->()/ge }
     elsif ( $modifiers eq 'i' ) { $value =~ s/$search/$expand->()/ie }
     else                        { $value =~ s/$search/$expand->()/e }
@@ -74,9 +74,9 @@ subtest 'legacy \1 backreferences and fixed escapes' => sub {
         'the $1-$2-$3 form gives the same result'
     );
 
-    is( subst( 'z', '.', 'a\nb' ), "a\nb", '\n becomes a newline' );
-    is( subst( 'z', '.', 'a\tb' ), "a\tb", '\t becomes a tab' );
-    is( subst( 'x', '(x)', '\$1' ), '$1', '\$ emits a literal dollar, not a backref' );
+    is( subst( 'z', '.',   'a\nb' ), "a\nb", '\n becomes a newline' );
+    is( subst( 'z', '.',   'a\tb' ), "a\tb", '\t becomes a tab' );
+    is( subst( 'x', '(x)', '\$1' ),  '$1',   '\$ emits a literal dollar, not a backref' );
 };
 
 subtest 'malicious replacements are inert (no code execution)' => sub {
