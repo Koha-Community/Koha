@@ -1177,12 +1177,14 @@ subtest 'process_invoice' => sub {
         {
             'section' =>
                 "QTY+47:1\nGIR+001+WID:LLO+34148000123459:LAC+P28840:LCO+WIDATB:LFN\nPRI+AAA:30.00\nPRI+AAB:35.00\nMOA+203:600.00\nMOA+52:5.00\nRFF+LI:$ordernumber2",
-            'details' => 'No matching item found for invoice line 4:0 at branch WID'
+            'details' =>
+                qr/^No matching item found for invoice line 4:0 at branch WID \(order \d+ has items at: WID\)\. Check whether the ordernumber in the invoice \(RFF\+LI\) is correct\.$/
         },
         {
             'section' =>
                 "QTY+47:1\nGIR+001+DIT:LLO+34148000123460:LAC+P54322:LCO+DITATB:LFN\nPRI+AAA:5.00\nPRI+AAB:6.00\nMOA+203:5.00\nMOA+52:1.00\nRFF+LI:$ordernumber2",
-            'details' => 'No matching item found for invoice line 5:0 at branch DIT'
+            'details' =>
+                qr/^No matching item found for invoice line 5:0 at branch DIT \(order \d+ has items at: DIT\)\. Check whether the ordernumber in the invoice \(RFF\+LI\) is correct\.$/
         },
         {
             'section' => "NAD+SU+9999999999999",
@@ -1193,7 +1195,12 @@ subtest 'process_invoice' => sub {
     my $index = 0;
     while ( my $error = $errors->next ) {
         is( $error->section, $expected_errors[$index]->{section}, "Error $index section is correct" );
-        is( $error->details, $expected_errors[$index]->{details}, "Error $index details is correct" );
+        my $expected_details = $expected_errors[$index]->{details};
+        if ( ref $expected_details eq 'Regexp' ) {
+            like( $error->details, $expected_details, "Error $index details is correct" );
+        } else {
+            is( $error->details, $expected_details, "Error $index details is correct" );
+        }
         $index++;
     }
 
