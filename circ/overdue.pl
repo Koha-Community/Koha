@@ -352,7 +352,7 @@ if ($noreport) {
                 preferred_name => $data->{preferred_name},
                 middle_name    => $data->{middle_name},
                 cardnumber     => $data->{cardnumber},
-                title          => $data->{title}
+                title          => $data->{borrowertitle}
             },
             duedate                 => $data->{date_due},
             borrowernumber          => $data->{borrowernumber},
