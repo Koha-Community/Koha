@@ -220,6 +220,20 @@ sub process_ordrsp {
                     my $order  = Koha::Acquisition::Orders->find($ordernumber);
                     if ($order) {
                         $order->cancel( { reason => $reason } );
+
+                        # cancel() records item deletion failures ( e.g. an item still has holds )
+                        # as object messages instead of dying; log any such messages so they are
+                        # not lost in the automated flow
+                        for my $message ( @{ $order->object_messages } ) {
+                            my $item = $message->payload->{item};
+                            $logger->warn(
+                                sprintf(
+                                    'EDI ORDRSP: order %s cancellation issue: %s%s',
+                                    $ordernumber, $message->message,
+                                    $item ? ' for itemnumber ' . $item->itemnumber : q{}
+                                )
+                            );
+                        }
                     } else {
                         $logger->error("EDI ORDRSP: ordernumber $ordernumber not found, cannot process cancellation");
                     }
