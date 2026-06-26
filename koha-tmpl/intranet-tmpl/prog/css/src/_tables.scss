@@ -492,21 +492,17 @@ div {
             display: flex;
             flex-grow: 1;
             justify-content: flex-end;
+        }
 
-            > .dt-button {
-                background: transparent none;
-                border: 1px solid transparent;
-                font-size: .9rem;
-                padding: .3rem .5rem;
+        .dt-button {
+            background: transparent none;
+            border: 1px solid transparent;
+            font-size: .9rem;
+            padding: .3rem .5rem;
 
-                &:hover:not( .disabled ) {
-                    background: #EEE none;
-                    border: 1px solid #666;
-                }
-
-                &.dt_button_clear_filter {
-                    margin-right: auto;
-                }
+            &:hover:not( .disabled ) {
+                background: #EEE none;
+                border: 1px solid #666;
             }
         }
 
@@ -759,6 +755,33 @@ div {
     &:empty {
         border: 0;
         padding: 0;
+    }
+}
+
+.dt-search {
+    position: relative;
+
+    // Hide native clear button if exists (Chrome)
+    input[type="search"]::-webkit-search-cancel-button {
+        display: none;
+    }
+
+    .dt-search-clear {
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        cursor: pointer;
+        color: #999;
+        display: none;
+        font-size: 85%;
+
+        &:hover {
+            color: #666;
+        }
+
+        &.visible {
+            display: block;
+        }
     }
 }
 

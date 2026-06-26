@@ -37,29 +37,7 @@ var dataTablesDefaults = {
         },
     },
     dom: '<"dt-info"i><"top pager"<"table_entries"lp><"table_controls"fB>>tr<"bottom pager"ip>',
-    buttons: [
-        {
-            fade: 100,
-            className: "dt_button_clear_filter",
-            titleAttr: __("Clear filter"),
-            enabled: false,
-            text:
-                '<i class="fa fa-lg fa-times"></i> <span class="dt-button-text">' +
-                __("Clear filter") +
-                "</span>",
-            available: function (dt) {
-                // The "clear filter" button is made available if this test returns true
-                if (dt.settings()[0].aanFeatures.f) {
-                    // aanFeatures.f is null if there is no search form
-                    return true;
-                }
-            },
-            action: function (e, dt, node) {
-                dt.search("").draw("page");
-                node.addClass("disabled");
-            },
-        },
-    ],
+    buttons: [],
     lengthMenu: [
         [10, 20, 50, 100, -1],
         [10, 20, 50, 100, __("All")],
@@ -68,6 +46,25 @@ var dataTablesDefaults = {
     fixedHeader: true,
     initComplete: function (settings) {
         var tableId = settings.nTable.id;
+        // Add clear icon 'x' xinside search input
+        $("#" + tableId + "_wrapper")
+            .find(".dt-search .dt-input")
+            .after(
+                '<i class="fa fa-lg fa-times dt-search-clear" title="' +
+                    __("Clear filter") +
+                    '"></i>'
+            );
+
+        $("#" + tableId + "_wrapper")
+            .find(".dt-search .dt-search-clear")
+            .on("click", function () {
+                let dt = $(`#${tableId}`).DataTable();
+                var input = $(this).siblings("input[type='search']");
+                input.val("");
+                dt.search("").draw("page");
+                $(this).removeClass("visible");
+                input.focus();
+            });
         state = settings.oLoadedState;
         state &&
             state.search &&
@@ -78,13 +75,11 @@ DataTable.defaults.column.orderSequence = ["asc", "desc"];
 var kohaTableUserChoices = {};
 
 function toggledClearFilter(searchText, tableId) {
-    let clear_filter_button = $("#" + tableId + "_wrapper").find(
-        ".dt_button_clear_filter"
-    );
+    let clearIcon = $("#" + tableId + "_wrapper").find(".dt-search-clear");
     if (searchText == "") {
-        clear_filter_button.addClass("disabled");
+        clearIcon.removeClass("visible");
     } else {
-        clear_filter_button.removeClass("disabled");
+        clearIcon.addClass("visible");
     }
 }
 
@@ -868,20 +863,6 @@ function _dt_buttons(params) {
     ];
 
     let buttons = [];
-    buttons.push({
-        fade: 100,
-        className: "dt_button_clear_filter",
-        titleAttr: __("Clear filter"),
-        enabled: false,
-        text:
-            '<i class="fa fa-lg fa-remove"></i> <span class="dt-button-text">' +
-            __("Clear filter") +
-            "</span>",
-        action: function (e, dt, node, config) {
-            dt.search("").draw("page");
-            node.addClass("disabled");
-        },
-    });
 
     // Retrieving bKohaColumnsUseNames from the options passed to the constructor, not DT's settings
     // But ideally should be retrieved using table.data()
