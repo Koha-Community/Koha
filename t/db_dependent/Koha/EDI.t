@@ -1914,7 +1914,7 @@ subtest 'LSL and LSQ field copy to item_hash' => sub {
 };
 
 subtest 'process_ordrsp' => sub {
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -2040,6 +2040,76 @@ subtest 'process_ordrsp' => sub {
 
         lives_ok { process_ordrsp($edi_msg) }
         'process_ordrsp does not die when ordernumber not found';
+    };
+
+    subtest 'cancellation retains items that cannot be safely deleted' => sub {
+        plan tests => 4;
+
+        my $biblio        = $builder->build_sample_biblio();
+        my $item          = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+        my $bookseller    = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
+        my $budget_period = $builder->build( { source => 'Aqbudgetperiod', value => { budget_period_active => 1 } } );
+        my $budget        = $builder->build(
+            { source => 'Aqbudget', value => { budget_period_id => $budget_period->{budget_period_id} } } );
+        my $basket = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Baskets',
+                value => { booksellerid => $bookseller->id },
+            }
+        );
+        my $order = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Orders',
+                value => {
+                    basketno     => $basket->basketno,
+                    biblionumber => $biblio->biblionumber,
+                    budget_id    => $budget->{budget_id},
+                    orderstatus  => 'ordered',
+                },
+            }
+        );
+
+        $builder->build(
+            {
+                source => 'AqordersItem',
+                value  => {
+                    ordernumber => $order->ordernumber,
+                    itemnumber  => $item->itemnumber,
+                },
+            }
+        );
+
+        # A hold on the on-order item stops safe_delete from removing it
+        $builder->build_object(
+            {
+                class => 'Koha::Holds',
+                value => {
+                    biblionumber => $biblio->biblionumber,
+                    itemnumber   => $item->itemnumber,
+                    found        => undef,
+                },
+            }
+        );
+
+        my $edi_msg = $schema->resultset('EdifactMessage')->create(
+            {
+                message_type => 'ORDRSP',
+                raw_msg      => _build_ordrsp_msg( $order->ordernumber, 2, 'OP' ),
+                status       => 'new',
+            }
+        );
+
+        $logger->clear();
+        process_ordrsp($edi_msg);
+
+        $order->discard_changes;
+        is( $order->orderstatus,  'cancelled', 'Order with a held item is still cancelled' );
+        is( $order->items->count, 1,           'Held on-order item is not deleted' );
+        ok( $item->get_from_storage, 'Held item still exists in the catalog' );
+        $logger->warn_like(
+            qr/cancellation issue: error_delitem/,
+            'Item deletion failure recorded in the EDI log'
+        );
     };
 
     $schema->storage->txn_rollback;
