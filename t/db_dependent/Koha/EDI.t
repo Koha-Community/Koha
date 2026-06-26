@@ -1012,7 +1012,7 @@ subtest 'process_quote' => sub {
 };
 
 subtest 'process_invoice' => sub {
-    plan tests => 32;
+    plan tests => 38;
 
     $schema->storage->txn_begin;
 
@@ -1160,35 +1160,41 @@ subtest 'process_invoice' => sub {
 
     my @expected_errors = (
         {
-            'section' =>
+            'invoicenumber' => 'INV00003',
+            'section'       =>
                 "QTY+47:5\nGIR+001+DIT:LLO+34148000123456:LAC+P28837:LCO+DITATB:LFN\nPRI+AAA:9.99\nPRI+AAB:12.99\nMOA+203:49.95\nMOA+52:15.00",
             'details' => 'Skipped invoice line 1, missing ordernumber'
         },
         {
-            'section' =>
+            'invoicenumber' => 'INV00003',
+            'section'       =>
                 "QTY+47:5\nGIR+001+HLE:LLO+34148000123457:LAC+P28838:LCO+HLEATB:LFN\nPRI+AAA:9.99\nPRI+AAB:12.99\nMOA+203:49.95\nMOA+52:15.00\nRFF+LI:P28837",
             'details' => 'Skipped invoice line 2, cannot find order with ordernumber P28837'
         },
         {
-            'section' =>
+            'invoicenumber' => 'INV00003',
+            'section'       =>
                 "QTY+47:10\nGIR+001+RUN:LLO+34148000123458:LAC+P28839:LCO+RUNATB:LFN\nPRI+AAA:15.00\nPRI+AAB:18.00\nMOA+203:150.00\nMOA+52:30.00\nRFF+LI:$ordernumber1",
             'details' => "Skipped invoice line 3, cannot find biblio for ordernumber $ordernumber1"
         },
         {
-            'section' =>
+            'invoicenumber' => 'INV00003',
+            'section'       =>
                 "QTY+47:1\nGIR+001+WID:LLO+34148000123459:LAC+P28840:LCO+WIDATB:LFN\nPRI+AAA:30.00\nPRI+AAB:35.00\nMOA+203:600.00\nMOA+52:5.00\nRFF+LI:$ordernumber2",
             'details' =>
                 qr/^No matching item found for invoice line 4:0 at branch WID \(order \d+ has items at: WID\)\. Check whether the ordernumber in the invoice \(RFF\+LI\) is correct\.$/
         },
         {
-            'section' =>
+            'invoicenumber' => 'INV00003',
+            'section'       =>
                 "QTY+47:1\nGIR+001+DIT:LLO+34148000123460:LAC+P54322:LCO+DITATB:LFN\nPRI+AAA:5.00\nPRI+AAB:6.00\nMOA+203:5.00\nMOA+52:1.00\nRFF+LI:$ordernumber2",
             'details' =>
                 qr/^No matching item found for invoice line 5:0 at branch DIT \(order \d+ has items at: DIT\)\. Check whether the ordernumber in the invoice \(RFF\+LI\) is correct\.$/
         },
         {
-            'section' => "NAD+SU+9999999999999",
-            'details' => 'Skipped invoice INV00002 with unmatched vendor san: 9999999999999'
+            'invoicenumber' => 'INV00002',
+            'section'       => "NAD+SU+9999999999999",
+            'details'       => 'Skipped invoice INV00002 with unmatched vendor san: 9999999999999'
         }
     );
 
@@ -1201,6 +1207,7 @@ subtest 'process_invoice' => sub {
         } else {
             is( $error->details, $expected_details, "Error $index details is correct" );
         }
+        is( $error->invoicenumber, $expected_errors[$index]->{invoicenumber}, "Error $index invoicenumber is correct" );
         $index++;
     }
 
