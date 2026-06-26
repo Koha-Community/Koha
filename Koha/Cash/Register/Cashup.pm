@@ -23,7 +23,7 @@ use base qw(Koha::Cash::Register::Action);
 
 =head1 NAME
 
-Koha::Cash::Register::Actions - Koha Cash Register Action Object set class
+Koha::Cash::Register::Cashup - Koha Cash Register Cashup Object class
 
 =head1 API
 
