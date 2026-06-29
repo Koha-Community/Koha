@@ -19,8 +19,6 @@ my $dev_files = Koha::Devel::Files->new( { context => 'strict' } );
 my @files     = $dev_files->ls_perl_files;
 plan tests => scalar @files + 1;
 
-$Test::Strict::TEST_STRICT = 0;
-
 my $ncpu;
 if ( $ENV{KOHA_PROVE_CPUS} ) {
     $ncpu = $ENV{KOHA_PROVE_CPUS};    # set number of cpus to use
