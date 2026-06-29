@@ -269,6 +269,7 @@ sub process_invoice {
     my $schema = Koha::Database->new()->schema();
     my $logger = Koha::Logger->get( { interface => 'edi' } );
     my $vendor_acct;
+    my $invoice_blocked;
 
     my $plugin_class = $invoice_message->edi_acct()->plugin();
 
@@ -378,6 +379,7 @@ sub process_invoice {
                     );
 
                     # Mark message as error and stop processing this invoice
+                    $invoice_blocked = 1;
                     $invoice_message->status('error');
                     $invoice_message->update;
 
@@ -546,11 +548,8 @@ sub process_invoice {
         }
     }
 
-    # Only set status to 'received' if not already set to 'error'
-    $invoice_message->discard_changes;
-    if ( $invoice_message->status ne 'error' ) {
-        $invoice_message->status('received');
-    }
+    # Don't override the 'error' status set when a duplicate invoice was blocked
+    $invoice_message->status('received') unless $invoice_blocked;
     $invoice_message->update;    # status and basketno link
     return;
 }
