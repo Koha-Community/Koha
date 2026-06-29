@@ -61,7 +61,7 @@ use Koha::Session;
 
 use base qw(Class::Accessor);
 use constant HMAC_SHA1_LENGTH    => 20;
-use constant CSRF_EXPIRY_HOURS   => 8;             # 8 hours instead of 7 days..
+use constant CSRF_EXPIRY_HOURS   => 168;           # 168 hours (ie 7 days..)
 use constant DEFA_SESSION_ID     => 0;
 use constant DEFA_SESSION_USERID => 'anonymous';
 
