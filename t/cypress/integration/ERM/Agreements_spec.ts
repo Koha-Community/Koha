@@ -341,6 +341,13 @@ describe("Agreement CRUD operations", () => {
             .eq(0)
             .click({ force: true }); //click first license suggestion
         cy.get(
+            "#agreement_licenses_0 label[for='agreement_licenses_status_0'].required"
+        ).contains("Status");
+        cy.get("#agreement_licenses_0 #agreement_licenses_status_0").should(
+            "have.attr",
+            "required"
+        );
+        cy.get(
             "#agreement_licenses_0 #agreement_licenses_status_0 .vs__search"
         ).type(related_license.status + "{enter}", { force: true });
         cy.get(
