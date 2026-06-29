@@ -444,6 +444,7 @@ export default {
                             type: "select",
                             label: $__("Status"),
                             avCat: "av_agreement_license_statuses",
+                            required: true,
                             indexRequired: true,
                         },
                         {
