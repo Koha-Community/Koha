@@ -998,6 +998,14 @@ function _dt_get_expected_column_visibility(column) {
 
 function _dt_force_visibility(table_settings, table_dt, state) {
     var columns_settings = table_settings.columns;
+
+    if (
+        !table_settings.columns.filter(
+            c => c.visibility_condition !== undefined
+        ).length
+    )
+        return state;
+
     let use_names = $(table_dt.table().node()).data("bKohaColumnsUseNames");
     if (!use_names) {
         throw new Error(
