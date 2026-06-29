@@ -1,4 +1,5 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_success say_failure);
 
 return {
     bug_number  => "41297",
@@ -6,35 +7,53 @@ return {
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
+        my $ok;
 
         # Master preference to enable duplicate blocking
-        $dbh->do(
+        $ok = $dbh->do(
             q{
-            INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
-            VALUES (
-                'EdifactInvoiceImportBlockDuplicates',
-                '0',
-                NULL,
-                'Block automatic processing of EDIFACT invoices when a duplicate invoice number is detected for the same supplier. Similar to AcqWarnOnDuplicateInvoice for manually created invoices, but applies to invoices received via EDI.',
-                'YesNo'
-            )
-        }
+                INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
+                VALUES (
+                    'EdifactInvoiceImportBlockDuplicates',
+                    '0',
+                    NULL,
+                    'Block automatic processing of EDIFACT invoices when a duplicate invoice number is detected for the same supplier. Similar to AcqWarnOnDuplicateInvoice for manually created invoices, but applies to invoices received via EDI.',
+                    'YesNo'
+                )
+            }
         );
-        say $out "Added system preference 'EdifactInvoiceImportBlockDuplicates'";
+        if ($ok) {
+            say_success( $out, "Added system preference 'EdifactInvoiceImportBlockDuplicates'" );
+        } else {
+            say_failure(
+                $out,
+                "Failed to add system preference 'EdifactInvoiceImportBlockDuplicates': " . $dbh->errstr
+            );
+        }
 
         # Email notification destination
-        $dbh->do(
+        $ok = $dbh->do(
             q{
-            INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
-            VALUES (
-                'EdifactInvoiceImportBlockDuplicatesEmailNotice',
-                '0',
-                '0|AcquisitionsDefaultEmailAddress|EdifactInvoiceImportBlockDuplicatesEmailAddresses|KohaAdminEmailAddress',
-                'Send duplicate EDIFACT invoice block notifications using the EDI_DUP_INV_LIBRARY notice template to the selected address. Vendor EDI contacts are always notified separately via EDI_DUP_INV_VENDOR. Requires EdifactInvoiceImportBlockDuplicates to be enabled.',
-                'Choice'
-            )
-        }
+                INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
+                VALUES (
+                    'EdifactInvoiceImportBlockDuplicatesEmailNotice',
+                    '0',
+                    '0|AcquisitionsDefaultEmailAddress|EdifactInvoiceImportBlockDuplicatesEmailAddresses|KohaAdminEmailAddress',
+                    'Send duplicate EDIFACT invoice block notifications using the EDI_DUP_INV_LIBRARY notice template to the selected address. Vendor EDI contacts are always notified separately via EDI_DUP_INV_VENDOR. Requires EdifactInvoiceImportBlockDuplicates to be enabled.',
+                    'Choice'
+                )
+            }
         );
+        if ($ok) {
+            say_success( $out, "Added system preference 'EdifactInvoiceImportBlockDuplicatesEmailNotice'" );
+        } else {
+            say_failure(
+                $out,
+                "Failed to add system preference 'EdifactInvoiceImportBlockDuplicatesEmailNotice': " . $dbh->errstr
+            );
+        }
+
+        # Migrate any pre-release YesNo value to the Choice type
         $dbh->do(
             q{
             UPDATE systempreferences
@@ -46,22 +65,28 @@ return {
               AND type = 'YesNo'
         }
         );
-        say $out "Added system preference 'EdifactInvoiceImportBlockDuplicatesEmailNotice'";
 
         # Email recipient list
-        $dbh->do(
+        $ok = $dbh->do(
             q{
-            INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
-            VALUES (
-                'EdifactInvoiceImportBlockDuplicatesEmailAddresses',
-                '',
-                NULL,
-                'Comma-separated list of acquisitions staff email addresses to use when EdifactInvoiceImportBlockDuplicatesEmailNotice is set to specific email addresses.',
-                'Textarea'
-            )
-        }
+                INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
+                VALUES (
+                    'EdifactInvoiceImportBlockDuplicatesEmailAddresses',
+                    '',
+                    NULL,
+                    'Comma-separated list of acquisitions staff email addresses to use when EdifactInvoiceImportBlockDuplicatesEmailNotice is set to specific email addresses.',
+                    'Textarea'
+                )
+            }
         );
-        say $out "Added system preference 'EdifactInvoiceImportBlockDuplicatesEmailAddresses'";
+        if ($ok) {
+            say_success( $out, "Added system preference 'EdifactInvoiceImportBlockDuplicatesEmailAddresses'" );
+        } else {
+            say_failure(
+                $out,
+                "Failed to add system preference 'EdifactInvoiceImportBlockDuplicatesEmailAddresses': " . $dbh->errstr
+            );
+        }
 
         # Add database index for performance
         my $index_exists = $dbh->selectrow_array(
@@ -75,32 +100,43 @@ return {
         );
 
         unless ($index_exists) {
-            $dbh->do(
+            $ok = $dbh->do(
                 q{
-                CREATE INDEX idx_invoicenumber_booksellerid
-                ON aqinvoices (invoicenumber(100), booksellerid)
-            }
+                    CREATE INDEX idx_invoicenumber_booksellerid
+                    ON aqinvoices (invoicenumber(100), booksellerid)
+                }
             );
-            say $out "Added index idx_invoicenumber_booksellerid to aqinvoices table";
+            if ($ok) {
+                say_success( $out, "Added index idx_invoicenumber_booksellerid to aqinvoices table" );
+            } else {
+                say_failure(
+                    $out,
+                    "Failed to add index idx_invoicenumber_booksellerid to aqinvoices: " . $dbh->errstr
+                );
+            }
         }
 
         # Add edi_error_notification column to aqcontacts
         unless ( column_exists( 'aqcontacts', 'edi_error_notification' ) ) {
-            $dbh->do(
+            $ok = $dbh->do(
                 q{
-                ALTER TABLE aqcontacts
-                ADD COLUMN edi_error_notification TINYINT(1) NOT NULL DEFAULT 0
-                AFTER serialsprimary
-            }
+                    ALTER TABLE aqcontacts
+                    ADD COLUMN edi_error_notification TINYINT(1) NOT NULL DEFAULT 0
+                    AFTER serialsprimary
+                }
             );
-            say $out "Added edi_error_notification column to aqcontacts table";
+            if ($ok) {
+                say_success( $out, "Added edi_error_notification column to aqcontacts table" );
+            } else {
+                say_failure( $out, "Failed to add edi_error_notification column to aqcontacts: " . $dbh->errstr );
+            }
         }
 
         # Delete any truncated templates first
         $dbh->do(q{DELETE FROM letter WHERE code = 'EDI_DUPLICATE_INVOIC' AND module = 'acquisition'});
 
         # Add notice templates for duplicate invoice notifications
-        $dbh->do(
+        $ok = $dbh->do(
             q{
             INSERT IGNORE INTO letter (module, code, branchcode, name, is_html, title, content, message_transport_type, lang)
             VALUES (
@@ -132,9 +168,13 @@ This is an automated notification from your Koha system.',
             )
         }
         );
-        say $out "Added letter template 'EDI_DUP_INV_LIBRARY'";
+        if ($ok) {
+            say_success( $out, "Added letter template 'EDI_DUP_INV_LIBRARY'" );
+        } else {
+            say_failure( $out, "Failed to add letter template 'EDI_DUP_INV_LIBRARY': " . $dbh->errstr );
+        }
 
-        $dbh->do(
+        $ok = $dbh->do(
             q{
             INSERT IGNORE INTO letter (module, code, branchcode, name, is_html, title, content, message_transport_type, lang)
             VALUES (
@@ -169,6 +209,10 @@ This is an automated notification. Please do not reply to this email.',
             )
         }
         );
-        say $out "Added letter template 'EDI_DUP_INV_VENDOR'";
+        if ($ok) {
+            say_success( $out, "Added letter template 'EDI_DUP_INV_VENDOR'" );
+        } else {
+            say_failure( $out, "Failed to add letter template 'EDI_DUP_INV_VENDOR': " . $dbh->errstr );
+        }
     },
 };
