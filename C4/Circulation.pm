@@ -122,7 +122,7 @@ use Koha::SearchEngine::Indexer;
 use Koha::Exceptions::Checkout;
 use Koha::Plugins;
 use Koha::Recalls;
-use Koha::Statistic;
+use Koha::Statistics;
 use Koha::Library::Hours;
 use Koha::Library::FloatLimits;
 use Carp            qw( carp );

@@ -24,7 +24,7 @@ use Koha::Database;
 use Koha::Recall;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Plugins;
-use Koha::Statistic;
+use Koha::Statistics;
 
 use base qw(Koha::Objects);
 

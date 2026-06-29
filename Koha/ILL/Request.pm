@@ -45,7 +45,7 @@ use Koha::Items;
 use Koha::Libraries;
 use Koha::AdditionalContents;
 use Koha::Patron;
-use Koha::Statistic;
+use Koha::Statistics;
 
 use C4::Circulation qw( CanBookBeIssued AddIssue );
 

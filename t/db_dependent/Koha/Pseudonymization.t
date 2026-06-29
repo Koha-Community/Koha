@@ -30,7 +30,6 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Patrons;
 use Koha::PseudonymizedTransactions;
-use Koha::Statistic;
 use Koha::Statistics;
 
 use t::lib::TestBuilder;
