@@ -23,7 +23,6 @@ use Test::More tests => 3;
 use Test::Warn;
 
 use Koha::DateUtils qw(dt_from_string);
-use Koha::Statistic;
 use Koha::Statistics;
 use Koha::Database;
 

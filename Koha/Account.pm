@@ -37,7 +37,7 @@ use Koha::Account::DebitTypes;
 use Koha::Exceptions;
 use Koha::Exceptions::Account;
 use Koha::Plugins;
-use Koha::Statistic;
+use Koha::Statistics;
 
 =head1 NAME
 

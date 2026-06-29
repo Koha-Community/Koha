@@ -58,7 +58,7 @@ use Koha::StockRotationItem;
 use Koha::StockRotationRotas;
 use Koha::TrackedLinks;
 use Koha::Policy::Holds;
-use Koha::Statistic;
+use Koha::Statistics;
 
 use base qw(Koha::Object);
 

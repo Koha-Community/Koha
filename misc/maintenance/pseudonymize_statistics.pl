@@ -21,7 +21,6 @@ use Pod::Usage   qw( pod2usage );
 
 use Koha::DateUtils qw( dt_from_string format_sqldatetime );
 use Koha::Script;
-use Koha::Statistic;
 use Koha::Statistics;
 use Koha::PseudonymizedTransactions;
 
