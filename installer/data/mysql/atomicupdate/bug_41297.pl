@@ -146,10 +146,10 @@ return {
                 'EDIFACT duplicate invoice detected - library notification',
                 0,
                 'EDIFACT Duplicate Invoice Blocked - [% invoicenumber | html %]',
-                'Duplicate EDIFACT Invoice Detected and Blocked
+                "[%- USE Koha -%]Duplicate EDIFACT Invoice Detected and Blocked
 
 Invoice Number: [% invoicenumber | html %]
-Vendor: [% aqbooksellers.name | html %] (ID: [% vendor_id | html %])
+Vendor: [% bookseller.name | html %] (ID: [% vendor_id | html %])
 EDI Message File: [% filename | html %]
 Original Invoice ID: [% original_invoiceid | html %]
 Original Invoice Date: [% original_shipmentdate | html %]
@@ -159,10 +159,10 @@ Status: Processing has been blocked. The invoice was NOT created in Koha.
 Action Required:
 The supplier must resend this invoice with a unique invoice number.
 
-View EDI Message: [% OPACBaseURL | uri %]/cgi-bin/koha/acqui/edimsg.pl?id=[% message_id | uri %]
-View Original Invoice: [% OPACBaseURL | uri %]/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% original_invoiceid | uri %]
+View EDI Message: [% Koha.Preference('staffClientBaseURL') %]/cgi-bin/koha/acqui/edimsg.pl?id=[% message_id | uri %]
+View Original Invoice: [% Koha.Preference('staffClientBaseURL') %]/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% original_invoiceid | uri %]
 
-This is an automated notification from your Koha system.',
+This is an automated notification from your Koha system.",
                 'email',
                 'default'
             )
@@ -201,7 +201,7 @@ Please resend this invoice using a UNIQUE invoice number. Duplicate invoice numb
 
 If you believe this is in error, please contact our acquisitions department.
 
-Library: [% aqbooksellers.name | html %]
+Library: [% bookseller.name | html %]
 
 This is an automated notification. Please do not reply to this email.',
                 'email',
