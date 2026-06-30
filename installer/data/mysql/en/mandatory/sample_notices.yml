@@ -109,10 +109,10 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "Duplicate EDIFACT Purchase Order Detected and Blocked"
+            - "[%- USE Koha -%]Duplicate EDIFACT Purchase Order Detected and Blocked"
             - ""
             - "Purchase Order Number: [% po_number %]"
-            - "Vendor: [% aqbooksellers.name %] (ID: [% vendor_id %])"
+            - "Vendor: [% bookseller.name %] (ID: [% vendor_id %])"
             - "Basket No: [% basketno %]"
             - "Existing Basket No: [% existing_basketno %]"
             - ""
@@ -124,8 +124,8 @@ tables:
             - "Action Required:"
             - "Rename the basket to use a unique purchase order number, then resend the EDI order."
             - ""
-            - "View Basket: [% OPACBaseURL %]/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]"
-            - "View Existing Basket: [% OPACBaseURL %]/cgi-bin/koha/acqui/basket.pl?basketno=[% existing_basketno %]"
+            - "View Basket: [% Koha.Preference('staffClientBaseURL') %]/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | uri %]"
+            - "View Existing Basket: [% Koha.Preference('staffClientBaseURL') %]/cgi-bin/koha/acqui/basket.pl?basketno=[% existing_basketno | uri %]"
             - ""
             - "This is an automated notification from your Koha system."
 
@@ -152,7 +152,7 @@ tables:
             - ""
             - "If you have any questions, please contact our acquisitions department."
             - ""
-            - "Library: [% aqbooksellers.name %]"
+            - "Library: [% bookseller.name %]"
             - ""
             - "This is an automated notification. Please do not reply to this email."
 

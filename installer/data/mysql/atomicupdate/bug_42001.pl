@@ -77,10 +77,10 @@ return {
                 'EDIFACT duplicate order detected - library notification',
                 0,
                 'EDIFACT Duplicate Purchase Order Blocked - [% po_number | html %]',
-                'Duplicate EDIFACT Purchase Order Detected and Blocked
+                '[%- USE Koha -%]Duplicate EDIFACT Purchase Order Detected and Blocked
 
 Purchase Order Number: [% po_number | html %]
-Vendor: [% aqbooksellers.name | html %] (ID: [% vendor_id | html %])
+Vendor: [% bookseller.name | html %] (ID: [% vendor_id | html %])
 Basket No: [% basketno | html %]
 Existing Basket No: [% existing_basketno | html %]
 
@@ -92,8 +92,8 @@ A basket name/PO number must be unique per vendor when the vendor EDI account ha
 Action Required:
 Rename the basket to use a unique purchase order number, then resend the EDI order.
 
-View Basket: [% OPACBaseURL | uri %]/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | uri %]
-View Existing Basket: [% OPACBaseURL | uri %]/cgi-bin/koha/acqui/basket.pl?basketno=[% existing_basketno | uri %]
+View Basket: [% Koha.Preference(''staffClientBaseURL'') %]/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | uri %]
+View Existing Basket: [% Koha.Preference(''staffClientBaseURL'') %]/cgi-bin/koha/acqui/basket.pl?basketno=[% existing_basketno | uri %]
 
 This is an automated notification from your Koha system.',
                 'email',
@@ -132,7 +132,7 @@ No action is required from you at this stage. Our acquisitions team has been not
 
 If you have any questions, please contact our acquisitions department.
 
-Library: [% aqbooksellers.name | html %]
+Library: [% bookseller.name | html %]
 
 This is an automated notification. Please do not reply to this email.',
                 'email',
