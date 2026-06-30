@@ -3823,7 +3823,7 @@ subtest 'duplicate_order_email_notifications' => sub {
 
     # Test 2: Library staff email notification
     subtest 'library_email_notification' => sub {
-        plan tests => 5;
+        plan tests => 7;
 
         $schema->storage->txn_begin;
 
@@ -3833,29 +3833,13 @@ subtest 'duplicate_order_email_notifications' => sub {
         );
         t::lib::Mocks::mock_preference( 'EdifactOrderSendBlockDuplicatesEmailAddresses', 'acq@library.org' );
 
-        $schema->resultset('Letter')
-            ->search( { module => 'acquisition', code => [ 'EDI_DUP_ORD_LIBRARY', 'EDI_DUP_ORD_VENDOR' ] } )
-            ->delete;
-
-        $builder->build(
-            {
-                source => 'Letter',
-                value  => {
-                    module     => 'acquisition',
-                    code       => 'EDI_DUP_ORD_LIBRARY',
-                    branchcode => '',
-                    name       => 'Test library order notification',
-                    is_html    => 0,
-                    title      => 'Duplicate Order - [% po_number %]',
-                    content    =>
-                        'Duplicate PO [% po_number %] blocked. Basket [% basketno %], existing basket [% existing_basketno %].',
-                    message_transport_type => 'email',
-                    lang                   => 'default',
-                }
-            }
-        );
+        # Use the EDI_DUP_ORD_LIBRARY notice that ships in sample_notices.yml so a
+        # regression in the template (e.g. a base url that doesn't resolve, or the
+        # wrong bookseller table variable) is caught here rather than rendering blank.
+        t::lib::Mocks::mock_preference( 'staffClientBaseURL', 'https://staff.example' );
 
         my ( $bookseller, $new_basket, $ean ) = $_setup_duplicate_order->();
+        $bookseller->set( { name => 'Test Vendor' } )->store;
 
         $logger->clear();
 
@@ -3869,8 +3853,10 @@ subtest 'duplicate_order_email_notifications' => sub {
         is( $messages->count, 1, 'Library notification was queued' );
 
         my $msg = $messages->next;
-        like( $msg->subject, qr/Duplicate Order/, 'Library email has correct subject' );
-        like( $msg->content, qr/DUP-PO-42001/,    'Library email contains the PO number' );
+        like( $msg->subject, qr/Duplicate Purchase Order Blocked/, 'Library email has correct subject' );
+        like( $msg->content, qr/DUP-PO-42001/,                     'Library email contains the PO number' );
+        like( $msg->content, qr{https://staff.example},            'Library links use the staff client base URL' );
+        like( $msg->content, qr{Vendor: Test Vendor},              'Library email shows the vendor name' );
 
         $logger->clear();
         $schema->storage->txn_rollback;
