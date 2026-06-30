@@ -1488,12 +1488,51 @@ tables:
             - "[% branch.branchname %]"
 
         - module: members
+          code: MEMBERSHIP_EXPIRY
+          branchcode: ""
+          name: "Account expiration"
+          is_html: 0
+          title: "Account expiration"
+          message_transport_type: print
+          lang: default
+          content:
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
+            - ""
+            - "Your library card will expire soon, on:"
+            - ""
+            - "[% borrower.dateexpiry %]"
+            - ""
+            - "Thank you,"
+            - ""
+            - "[% branch.branchname %]"
+
+        - module: members
           code: MEMBERSHIP_RENEWED
           branchcode: ""
           name: "Account renewal"
           is_html: 0
           title: "Account renewal"
           message_transport_type: email
+          lang: default
+          content:
+            - "[%- USE Price -%]"
+            - "Dear [% borrower.title %] [% borrower.firstname %] [% borrower.surname %],"
+            - ""
+            - "Your library account has been renewed. The new expiry date is: [% borrower.dateexpiry %]."
+            - "[% IF borrower.category.enrolmentfee > 0 %]\nAn enrollment fee of [% borrower.category.enrolmentfee | $Price with_symbol => 1 %] has been applied.\n[% END %]"
+            - "Thank you,"
+            - ""
+            - "Your library,"
+            - ""
+            - "[% branch.branchname %]"
+
+        - module: members
+          code: MEMBERSHIP_RENEWED
+          branchcode: ""
+          name: "Account renewal"
+          is_html: 0
+          title: "Account renewal"
+          message_transport_type: print
           lang: default
           content:
             - "[%- USE Price -%]"
