@@ -105,6 +105,10 @@ function display_pickup_location(state) {
     };
 })(jQuery);
 
+var coded_values = {
+    library: new Map(all_libraries.map(l => [l.branchname, l.branchcode])),
+};
+
 /* global __ borrowernumber SuspendHoldsIntranet */
 $(document).ready(function () {
     let patron_page = holds_table_patron_page();
@@ -147,6 +151,11 @@ $(document).ready(function () {
         var holds = new Array();
         if (!holdsTable) {
             var title;
+
+            let filters_options = {
+                libraries: all_libraries,
+            };
+
             holdsTable = $("#holds-table").kohaTable(
                 {
                     autoWidth: false,
@@ -1598,8 +1607,9 @@ async function load_patron_holds_table(biblio_id, split_data) {
                 },
                 {
                     data: "pickup_library_id",
+                    datatype: "coded_value:library",
                     orderable: true,
-                    searchable: false,
+                    searchable: true,
                     render: function (data, type, row, meta) {
                         var branchSelect =
                             "<select priority=" +
