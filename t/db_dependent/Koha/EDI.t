@@ -40,7 +40,7 @@ my $builder = t::lib::TestBuilder->new;
 my $logger  = t::lib::Mocks::Logger->new();
 
 subtest 'process_quote' => sub {
-    plan tests => 8;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
@@ -737,6 +737,227 @@ subtest 'process_quote' => sub {
 
         my $orders = $baskets->next->orders;
         is( $orders->count, 0, 'No orders created with invalid fund' );
+
+        $logger->clear();
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'unprocessable_line_handling' => sub {
+        plan tests => 12;
+
+        $schema->storage->txn_begin;
+
+        # Create file transport for local testing
+        my $file_transport = $builder->build(
+            {
+                source => 'FileTransport',
+                value  => {
+                    name               => 'Test Bad Branch Transport',
+                    transport          => 'local',
+                    download_directory => $dirname,
+                    upload_directory   => $dirname,
+                }
+            }
+        );
+
+        my $account = $builder->build(
+            {
+                source => 'VendorEdiAccount',
+                value  => {
+                    description       => 'bad branch test vendor',
+                    file_transport_id => $file_transport->{file_transport_id},
+                    plugin            => '',
+                    san               => $test_san,
+                    orders_enabled    => 1,
+                    auto_orders       => 1,
+                    po_is_basketname  => 0
+                }
+            }
+        );
+        $builder->build(
+            {
+                source => 'EdifactEan',
+                value  => {
+                    description => 'test ean',
+                    branchcode  => undef,
+                    ean         => $test_san
+                }
+            }
+        );
+
+        # Fund used by both line items
+        $builder->build(
+            {
+                source => 'Aqbudget',
+                value  => {
+                    budget_code      => 'REF',
+                    budget_period_id => $active_period->{budget_period_id}
+                }
+            }
+        );
+
+        my $description = <<~"END";
+            Loading a QUOTE file whose first LIN references a non-existent
+            branchcode (LLO+ZZ). Item creation for that line raises a foreign
+            key constraint violation. The line should be reported and skipped,
+            and the second, valid LIN should still be processed. As the basket
+            held an unprocessable line, auto-ordering should be blocked.
+        END
+        diag($description);
+
+        my $filename = 'QUOTES_BAD_BRANCH.CEQ';
+        ok( -e $dirname . $filename, 'File QUOTES_BAD_BRANCH.CEQ found' );
+
+        my $trans = Koha::Edifact::Transport->new( $account->{id} );
+        $trans->working_directory($dirname);
+
+        my $mhash = $trans->message_hash();
+        $mhash->{message_type} = 'QUOTE';
+        $trans->ingest( $mhash, $filename );
+
+        my $quote = $schema->resultset('EdifactMessage')->find( { filename => $filename } );
+
+        t::lib::Mocks::mock_preference( 'AcqCreateItem', 'ordering' );
+
+        # The whole point of the bug: processing must complete rather than die.
+        # Koha::Object->store deliberately warns the raw DBI error before
+        # translating it, so capture warnings here to keep Test::NoWarnings happy.
+        my $die;
+        my @warnings;
+        {
+            local $SIG{__WARN__} = sub { push @warnings, $_[0]; };
+            eval {
+                process_quote($quote);
+                1;
+            } or do {
+                $die = $@;
+            };
+        }
+        ok( !$die, 'Quote with an unprocessable line processed without dying' );
+
+        # The bad line is reported through the EDI error infrastructure, and the
+        # offending field (the invalid branchcode) is surfaced to the user.
+        my $errors =
+            Koha::Edifact::File::Errors->search( { details => { -like => 'Failed to create item for order%' } } );
+        is( $errors->count, 1, 'Unprocessable item recorded as an EDI error' );
+        like(
+            $errors->next->details, qr/invalid value for field 'homebranch'/,
+            'Offending field surfaced in the EDI error detail'
+        );
+
+        # Status must resolve to 'error', never remain stuck on 'processing'
+        $quote->get_from_storage;
+        is( $quote->status, 'error', "Quote status set to 'error', not left as 'processing'" );
+
+        # The valid second line should still have been processed
+        my $baskets = Koha::Acquisition::Baskets->search( { booksellerid => $account->{vendor_id} } );
+        is( $baskets->count, 1, 'Basket created' );
+
+        my $basket = $baskets->next;
+        my $orders = $basket->orders->search( {}, { order_by => 'ordernumber' } );
+
+        my $good_order = $orders->search( { listprice => '14.99' } )->single;
+        ok( $good_order,               'Order line for the valid record was created' );
+        ok( $good_order->biblionumber, 'Valid order line has a biblio' );
+        is( $good_order->items->count,            1,     'Item created for the valid order line' );
+        is( $good_order->items->next->homebranch, 'CPL', 'Valid item created at the requested branch' );
+
+        # The order line for the bad branch is kept but has no item attached
+        my $bad_order = $orders->search( { listprice => '22.00' } )->single;
+        is( $bad_order->items->count, 0, 'No item attached to the unprocessable order line' );
+
+        # Auto-ordering must be blocked for a basket that held an error
+        is( $basket->closedate, undef, 'Basket left open (auto-order blocked) after an unprocessable line' );
+
+        $logger->clear();
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'biblio_creation_failure_reporting' => sub {
+        plan tests => 5;
+
+        $schema->storage->txn_begin;
+
+        # Force AddBiblio to fail the way it does in production: it traps its own
+        # exception, emits it via warn and returns an undef biblionumber.
+        my $edi_module = Test::MockModule->new('Koha::EDI');
+        $edi_module->mock(
+            'AddBiblio',
+            sub {
+                warn "Mocked AddBiblio failure: invalid field value\n";
+                return ( undef, undef );
+            }
+        );
+
+        my $file_transport = $builder->build(
+            {
+                source => 'FileTransport',
+                value  => {
+                    name               => 'Test Biblio Failure Transport',
+                    transport          => 'local',
+                    download_directory => $dirname,
+                    upload_directory   => $dirname,
+                }
+            }
+        );
+
+        my $account = $builder->build(
+            {
+                source => 'VendorEdiAccount',
+                value  => {
+                    description       => 'biblio failure test vendor',
+                    file_transport_id => $file_transport->{file_transport_id},
+                    plugin            => '',
+                    san               => $test_san,
+                    orders_enabled    => 1,
+                    auto_orders       => 0,
+                    po_is_basketname  => 0
+                }
+            }
+        );
+        $builder->build(
+            {
+                source => 'EdifactEan',
+                value  => { description => 'test ean', branchcode => undef, ean => $test_san }
+            }
+        );
+        $builder->build(
+            {
+                source => 'Aqbudget',
+                value  => {
+                    budget_code      => 'REF',
+                    budget_period_id => $active_period->{budget_period_id}
+                }
+            }
+        );
+
+        my $filename = 'QUOTES_SMALL.CEQ';
+        my $trans    = Koha::Edifact::Transport->new( $account->{id} );
+        $trans->working_directory($dirname);
+        my $mhash = $trans->message_hash();
+        $mhash->{message_type} = 'QUOTE';
+        $trans->ingest( $mhash, $filename );
+
+        my $quote = $schema->resultset('EdifactMessage')->find( { filename => $filename } );
+        t::lib::Mocks::mock_preference( 'AcqCreateItem', 'ordering' );
+
+        my $die;
+        eval { process_quote($quote); 1; } or do { $die = $@; };
+        ok( !$die, 'Quote processed without dying when biblio creation fails' );
+
+        my $errors = Koha::Edifact::File::Errors->search(
+            { details => { -like => 'Skipped order line, could not add biblio%' } } );
+        is( $errors->count, 1, 'Biblio creation failure recorded as an EDI error' );
+        like(
+            $errors->next->details, qr/Mocked AddBiblio failure: invalid field value/,
+            'Underlying AddBiblio warning captured in the EDI error detail'
+        );
+
+        $quote->get_from_storage;
+        is( $quote->status, 'error', "Quote status set to 'error' when biblio creation fails" );
+
+        my $baskets = Koha::Acquisition::Baskets->search( { booksellerid => $account->{vendor_id} } );
+        is( $baskets->next->orders->count, 0, 'No order line created against a missing biblio' );
 
         $logger->clear();
         $schema->storage->txn_rollback;
