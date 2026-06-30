@@ -55,17 +55,15 @@
         [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cataloging</a>
         [% END %]
-        [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblio.biblionumber | uri %]">
-                [% IF ( biblio.author ) %]
-                    [% tx('Edit {title} by {author}', { title = biblio.title, author = biblio.author }) | html %]
-                    ([% tp('Bibliographic record number', 'Record #') | html %] [% biblio.biblionumber | html %])
-                [% ELSE %]
-                    [% tx('Edit {title}', title = biblio.title) | html %]
-                    ([% tp('Bibliographic record number', 'Record #') | html %] [% biblio.biblionumber | html %])
-                [% END %]
-            </a>
-        [% END %]
+	[% IF ( unknownbiblionumber ) %]
+		[% WRAPPER breadcrumb_item bc_active= 1 %]
+			<span>Unknown record</span>
+		[% END %]
+	[% ELSE %]
+		[% WRAPPER breadcrumb_item %]
+			[% INCLUDE 'biblio-title.inc' link = 1 %] <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblio.biblionumber | uri %]">[edit]</a>
+		[% END %]
+	[% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             [% tp('Items attached to a bibliographic record', 'Items') | html %]
         [% END %]
