@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Koha %]
+[% USE HtmlScrubber %]
 [% PROCESS 'restriction-types.inc' %]
 
 [% IF ( patron.restrictions.count == 0 ) %]
@@ -23,9 +24,9 @@
                     <td> [% PROCESS restriction_type_description restriction_type=restriction.type %] </td>
                     <td>
                         [% IF restriction.comment.search('OVERDUES_PROCESS') %]
-                            <span>Restriction added by overdues process [% restriction.comment.remove('OVERDUES_PROCESS ') | $raw %]</span>
+                            <span>Restriction added by overdues process [% restriction.comment.remove('OVERDUES_PROCESS ') | scrub_html type => 'comment' | $raw %]</span>
                         [% ELSE %]
-                            [% restriction.comment | $raw %]
+                            [% restriction.comment | scrub_html type => 'comment' | $raw %]
                         [% END %]
                     </td>
                     <td>
