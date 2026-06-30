@@ -2,6 +2,7 @@
 [% USE Koha %]
 [% USE Branches %]
 [% USE KohaDates %]
+[% USE HtmlScrubber %]
 [% USE Price %]
 [% USE ItemTypes %]
 [% USE AuthorisedValues %]
@@ -59,7 +60,7 @@
                                             [% ELSE %]
                                                 [% FOR restriction IN logged_in_user.restrictions %]
                                                     <div class="patron_restriction">
-                                                        [%- restriction.type.display_text | html -%][%- IF restriction.comment -%]: <span class="restriction_comment">[% restriction.comment | html_line_break %]</span>, frozen until:
+                                                        [%- restriction.type.display_text | html -%][%- IF restriction.comment -%]: <span class="restriction_comment">[% restriction.comment | scrub_html type => 'comment' | html_line_break %]</span>, frozen until:
                                                         <span class="restriction_expiration">
                                                         [%- IF restriction.expiration -%]
                                                             [%- restriction.expiration | $KohaDates -%]

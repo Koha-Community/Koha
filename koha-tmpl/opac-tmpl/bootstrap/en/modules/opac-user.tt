@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE HtmlScrubber %]
 [% USE Branches %]
 [% USE I18N %]
 [% USE ItemTypes %]
@@ -177,10 +178,10 @@
                                                         <li class="patron_restriction">
                                                             <strong>[%- restriction.type.display_text | html -%]: </strong>
                                                             [% IF restriction.comment.search('OVERDUES_PROCESS') %]
-                                                                Restriction added by overdues process [% restriction.comment.remove('OVERDUES_PROCESS ') | html_line_break %]
+                                                                Restriction added by overdues process [% restriction.comment.remove('OVERDUES_PROCESS ') | scrub_html type => 'comment' | html_line_break %]
                                                             [% ELSE %]
                                                                 [%- IF restriction.comment -%]
-                                                                    <span class="restriction_comment">[% restriction.comment | html_line_break %]</span>.
+                                                                    <span class="restriction_comment">[% restriction.comment | scrub_html type => 'comment' | html_line_break %]</span>.
                                                                 [%- END -%]
                                                             [% END %]
                                                             [%- IF restriction.expiration -%]

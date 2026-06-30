@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Branches %]
+[% USE HtmlScrubber %]
 [% USE Categories %]
 [% SET ClaimReturnedWarningThreshold = Koha.Preference('ClaimReturnedWarningThreshold') || 0 %]
 [% SET return_claims = patron.return_claims %]
@@ -104,7 +105,7 @@
                                 [% END %]
                                 </span>
                                 <span class="restriction_detail">
-                                [%- restriction.type.display_text | html -%][%- IF restriction.comment -%]: [%- restriction.comment | html_line_break -%][%- END -%]
+                                [%- restriction.type.display_text | html -%][%- IF restriction.comment -%]: [%- restriction.comment | scrub_html type => 'comment' | html_line_break -%][%- END -%]
                                 </span>
                                 </div>
                             [% END %]
