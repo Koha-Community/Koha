@@ -3379,8 +3379,24 @@ sub queue_notice {
         @message_transports = @{ $params->{message_transports} };
     }
     return unless defined $letter_code;
-    if ( $params->{expiry_notice_mandatory} ) {
-        push( @message_transports, $params->{primary_contact_method} || 'print' ) if scalar(@message_transports) == 0;
+
+    # If expiry notice is mandatory and the patron has no message transports defined, determine a fallback transport method
+    if ( $params->{expiry_notice_mandatory} && scalar(@message_transports) == 0 ) {
+
+        if ( $self->notice_email_address ) {
+            push( @message_transports, 'email' );
+        } elsif (
+            $self->phone
+            and (  C4::Context->preference('PhoneNotification')
+                || C4::Context->preference('TalkingTechItivaPhoneNotification') )
+            )
+        {
+            push( @message_transports, 'phone' );
+        } elsif ( $self->smsalertnumber and C4::Context->preference('SMSSendDriver') ) {
+            push( @message_transports, 'sms' );
+        } else {
+            push( @message_transports, 'print' );
+        }
     }
     push @message_transports, 'print' if $params->{forceprint};
 
@@ -4094,15 +4110,11 @@ sub create_expiry_notice_parameters {
     };
 
     my $sending_params = {
-        letter_params => $letter_params,
-        message_name  => 'Patron_Expiry',
-        forceprint    => $forceprint
+        letter_params           => $letter_params,
+        message_name            => 'Patron_Expiry',
+        forceprint              => $forceprint,
+        expiry_notice_mandatory => $is_notice_mandatory,
     };
-
-    if ($is_notice_mandatory) {
-        $sending_params->{expiry_notice_mandatory} = 1;
-        $sending_params->{primary_contact_method}  = $forceprint ? 'print' : $self->primary_contact_method;
-    }
 
     return $sending_params;
 }
