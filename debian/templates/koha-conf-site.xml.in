@@ -366,6 +366,23 @@ __END_SRU_PUBLICSERVER__
  <enable_trusted_proxy_for_headers>1</enable_trusted_proxy_for_headers>
  -->
 
+ <!-- Send an x-complexity-score response header weighting expensive OPAC endpoints so a
+      reverse proxy or WAF (for example Cloudflare Rate Limiting) can throttle them harder.
+      Set complexity_score_header to 1 to enable. complexity_score_header_name is optional
+      and defaults to x-complexity-score; override it if your WAF expects a different field. -->
+ <!--
+ <complexity_score_header>1</complexity_score_header>
+ <complexity_score_header_name>x-complexity-score</complexity_score_header_name>
+ -->
+ <!-- Optionally override or extend the built-in endpoint weights. Any script listed here
+      replaces its default weight; scripts that are not listed keep their default. -->
+ <!--
+ <complexity_score_weights>
+   <opac-search.pl>30</opac-search.pl>
+   <opac-detail.pl>25</opac-detail.pl>
+ </complexity_score_weights>
+ -->
+
  <!-- Elasticsearch Configuration -->
  <elasticsearch>
      <server>__ELASTICSEARCH_SERVER__</server> <!-- may be repeated to include all servers on your cluster -->

@@ -58,6 +58,7 @@ builder {
     enable '+Koha::Middleware::SetEnv';
     enable '+Koha::Middleware::ContentSecurityPolicy';
     enable '+Koha::Middleware::RealIP';
+    enable '+Koha::Middleware::ComplexityScore';
 
     sub {
         my $env = shift;

@@ -80,6 +80,7 @@ builder {
     enable "+Koha::Middleware::UserEnv";
     enable "+Koha::Middleware::SetEnv";
     enable "+Koha::Middleware::RealIP";
+    enable "+Koha::Middleware::ComplexityScore";
 
     mount '/opac'          => builder {
         #NOTE: it is important that these are relative links
