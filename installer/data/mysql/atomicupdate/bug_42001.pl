@@ -1,4 +1,5 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_success say_failure);
 
 return {
     bug_number  => "42001",
@@ -6,9 +7,10 @@ return {
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
+        my $ok;
 
         # Email notification destination
-        $dbh->do(
+        $ok = $dbh->do(
             q{
             INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
             VALUES (
@@ -20,6 +22,16 @@ return {
             )
         }
         );
+        if ($ok) {
+            say_success( $out, "Added system preference 'EdifactOrderSendBlockDuplicatesEmailNotice'" );
+        } else {
+            say_failure(
+                $out,
+                "Failed to add system preference 'EdifactOrderSendBlockDuplicatesEmailNotice': " . $dbh->errstr
+            );
+        }
+
+        # Migrate any pre-release YesNo value to the Choice type
         $dbh->do(
             q{
             UPDATE systempreferences
@@ -31,10 +43,9 @@ return {
               AND type = 'YesNo'
         }
         );
-        say $out "Added system preference 'EdifactOrderSendBlockDuplicatesEmailNotice'";
 
         # Email recipient list
-        $dbh->do(
+        $ok = $dbh->do(
             q{
             INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
             VALUES (
@@ -46,10 +57,17 @@ return {
             )
         }
         );
-        say $out "Added system preference 'EdifactOrderSendBlockDuplicatesEmailAddresses'";
+        if ($ok) {
+            say_success( $out, "Added system preference 'EdifactOrderSendBlockDuplicatesEmailAddresses'" );
+        } else {
+            say_failure(
+                $out,
+                "Failed to add system preference 'EdifactOrderSendBlockDuplicatesEmailAddresses': " . $dbh->errstr
+            );
+        }
 
         # Add notice template - library staff notification
-        $dbh->do(
+        $ok = $dbh->do(
             q{
             INSERT IGNORE INTO letter (module, code, branchcode, name, is_html, title, content, message_transport_type, lang)
             VALUES (
@@ -83,10 +101,14 @@ This is an automated notification from your Koha system.',
             )
         }
         );
-        say $out "Added letter template 'EDI_DUP_ORD_LIBRARY'";
+        if ($ok) {
+            say_success( $out, "Added letter template 'EDI_DUP_ORD_LIBRARY'" );
+        } else {
+            say_failure( $out, "Failed to add letter template 'EDI_DUP_ORD_LIBRARY': " . $dbh->errstr );
+        }
 
         # Add notice template - vendor notification
-        $dbh->do(
+        $ok = $dbh->do(
             q{
             INSERT IGNORE INTO letter (module, code, branchcode, name, is_html, title, content, message_transport_type, lang)
             VALUES (
@@ -118,6 +140,10 @@ This is an automated notification. Please do not reply to this email.',
             )
         }
         );
-        say $out "Added letter template 'EDI_DUP_ORD_VENDOR'";
+        if ($ok) {
+            say_success( $out, "Added letter template 'EDI_DUP_ORD_VENDOR'" );
+        } else {
+            say_failure( $out, "Failed to add letter template 'EDI_DUP_ORD_VENDOR': " . $dbh->errstr );
+        }
     },
 };
