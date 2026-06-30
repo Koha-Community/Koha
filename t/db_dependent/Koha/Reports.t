@@ -20,7 +20,7 @@ use Modern::Perl;
 use Test::Exception;
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 13;
+use Test::More tests => 16;
 
 use Koha::Report;
 use Koha::Reports;
@@ -287,6 +287,9 @@ subtest 'apply_execution_time_limit' => sub {
         Koha::Report->apply_execution_time_limit($sql),
         qr!^(?i:select) /\*\+ MAX_EXECUTION_TIME\(1500\) \*/ \* FROM biblio$!,
         'MySQL max execution time hint applied'
+    );
+};
+
 subtest 'reports_branches are added and removed from report_branches table' => sub {
     plan tests => 4;
 
@@ -333,8 +336,10 @@ subtest 'can_manage_limits and can_access' => sub {
 
     my $super_patron =
         $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1, branchcode => $branchA } } );
-    my $mgr_patron   = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $branchA } } );
-    my $basic_patron = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $branchA } } );
+    my $mgr_patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0, branchcode => $branchA } } );
+    my $basic_patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0, branchcode => $branchA } } );
 
     # Grant reports => manage_report_limits to manager patron (create permission if missing)
     my $perm = $schema->resultset('Permission')->find( { module_bit => 16, code => 'manage_report_limits' } )

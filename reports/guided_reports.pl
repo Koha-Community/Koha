@@ -107,6 +107,8 @@ my $logged_in_user           = Koha::Patrons->find($borrowernumber);
 my $limit_reports_by_library = C4::Context->preference('LimitReportsByLibrary');
 my $can_manage_report_limits = $logged_in_user && Koha::Report->can_manage_limits($logged_in_user);
 
+$template->param( templates => Koha::Notice::Templates->search( { module => 'report' } ) );
+
 my $filter;
 if ( $input->param("filter_set") or $input->param('clear_filters') ) {
     $filter = {};
@@ -799,24 +801,16 @@ if ( !$op ) {
                     print $_ while <$ods_fh>;
                     unlink $ods_filepath;
                 } elsif ( $format eq 'template' ) {
-                    my $template_id     = $input->param('template');
-                    my $notice_template = Koha::Notice::Templates->find($template_id);
-                    my $data            = $sth->fetchall_arrayref( {} );
-                    $content = process_tt(
-                        $notice_template->content,
-                        {
-                            data         => $data,
-                            report_id    => $report_id,
-                            for_download => 1,
-                        }
+                    my $template_code = $input->param('template_code');
+                    my $data          = $sth->fetchall_arrayref( {} );
+
+                    my $rendered = GetPreparedLetter(
+                        module      => 'report',
+                        letter_code => $template_code,
+                        objects     => { data => $data, report_id => $report_id, for_download => 1 }
                     );
-                    $reportfilename = process_tt(
-                        $notice_template->title,
-                        {
-                            data      => $data,
-                            report_id => $report_id,
-                        }
-                    );
+                    $content        = $rendered->{content};
+                    $reportfilename = $rendered->{title};
                 }
             }
 
