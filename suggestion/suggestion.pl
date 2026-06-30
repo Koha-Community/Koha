@@ -32,6 +32,7 @@ use Koha::AuthorisedValues;
 use Koha::Acquisition::Currencies;
 use Koha::Libraries;
 use Koha::Patrons;
+use Koha::Suggestion;
 use Koha::Suggestions;
 use Koha::Token;
 
@@ -177,6 +178,9 @@ if ( $op =~ /cud-save/ ) {
     {
         push @messages,
             { type => 'error', code => 'biblio_exists', id => $duplicatebiblionumber, title => $duplicatetitle };
+
+        $stored_suggestion = Koha::Suggestion->new($suggestion_only);
+
         $template->param(
             messages     => \@messages,
             need_confirm => 1
