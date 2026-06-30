@@ -16,7 +16,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
+use Test::NoWarnings;
 
 use File::Spec;
 use FindBin  qw( $Bin );
