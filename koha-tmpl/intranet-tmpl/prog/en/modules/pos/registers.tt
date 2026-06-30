@@ -237,18 +237,33 @@
                                             ><i class="fa-solid fa-check"></i> Complete cashup</button
                                         >
                                     [% ELSE %]
-                                        <button
-                                            type="button"
-                                            class="cashup_individual btn btn-xs btn-default"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#triggerCashupModalRegister"
-                                            data-register="[% register.description | html %]"
-                                            data-bankable="[% rbankable | $Price %]"
-                                            data-float="[% register.starting_float | $Price %]"
-                                            data-registerid="[% register.id | html %]"
-                                            [% IF rtotal == 0 %]disabled title="No transactions"[% END %]
-                                            ><i class="fa-solid fa-money-bill-1"></i> Record cashup</button
-                                        >
+                                        [% IF rtotal == 0 %]
+                                            <button
+                                                type="button"
+                                                class="cashup_individual btn btn-xs btn-default"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#triggerCashupModalRegister"
+                                                data-register="[% register.description | html %]"
+                                                data-bankable="[% rbankable | $Price %]"
+                                                data-float="[% register.starting_float | $Price %]"
+                                                data-registerid="[% register.id | html %]"
+                                                disabled
+                                                title="No transactions"
+                                                ><i class="fa-solid fa-money-bill-1"></i> Record cashup</button
+                                            >
+                                        [% ELSE %]
+                                            <button
+                                                type="button"
+                                                class="cashup_individual btn btn-xs btn-default"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#triggerCashupModalRegister"
+                                                data-register="[% register.description | html %]"
+                                                data-bankable="[% rbankable | $Price %]"
+                                                data-float="[% register.starting_float | $Price %]"
+                                                data-registerid="[% register.id | html %]"
+                                                ><i class="fa-solid fa-money-bill-1"></i> Record cashup</button
+                                            >
+                                        [% END %]
                                     [% END %]
                                 </td>
                             [% END %]

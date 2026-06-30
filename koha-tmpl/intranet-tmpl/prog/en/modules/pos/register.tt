@@ -119,9 +119,11 @@
                 [% IF cashup_in_progress %]
                     <button id="pos_complete_cashup" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmCashupModal"> <i class="fa-solid fa-check"></i> Complete cashup </button>
                 [% ELSE %]
-                    <button type="button" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#triggerCashupModal" [% IF total_transactions == 0 %]disabled title="No transactions"[% END %]>
-                        <i class="fa fa-money-bill-alt"></i> Record cashup
-                    </button>
+                    [% IF total_transactions == 0 %]
+                        <button type="button" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#triggerCashupModal" disabled title="No transactions"> <i class="fa fa-money-bill-alt"></i> Record cashup </button>
+                    [% ELSE %]
+                        <button type="button" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#triggerCashupModal"> <i class="fa fa-money-bill-alt"></i> Record cashup </button>
+                    [% END %]
                 [% END %]
             </div>
         [% END %]
