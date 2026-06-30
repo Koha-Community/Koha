@@ -31,7 +31,8 @@ BEGIN {
 }
 
 use utf8;
-use English qw{ -no_match_vars };
+use English   qw{ -no_match_vars };
+use Try::Tiny qw( catch try );
 use Business::ISBN;
 use DateTime;
 use JSON qw( encode_json );
@@ -760,6 +761,7 @@ sub process_quote {
     my $split_message;
     my @added_baskets;                # if auto & multiple baskets need to order all
     my %baskets_with_po_conflicts;    # track baskets that have PO number conflicts
+    my %baskets_with_errors;          # track baskets that had unprocessable order lines
 
     # Get vendor EDI account configuration
     my $v = $schema->resultset('VendorEdiAccount')->search(
@@ -848,8 +850,27 @@ sub process_quote {
 
             for my $item ( @{$items} ) {
                 my $message = $split_message // $quote_message;
-                if ( !quote_item( $item, $message, $basketno ) ) {
+
+                # Process each order line inside try/catch so that a single
+                # problematic line (e.g. a mismatched branchcode or other
+                # enumerated coded value that triggers a database constraint)
+                # is reported and skipped rather than aborting the whole file.
+                my $success = try {
+                    quote_item( $item, $message, $basketno );
+                } catch {
+                    my $error = _format_store_error($_);
+                    $logger->error("Skipped order line that could not be processed: $error");
+                    $message->add_to_edifact_errors(
+                        {
+                            section => join( "\n", map { $_->as_string } @{ $item->{segs} } ),
+                            details => "Skipped order line that could not be processed: $error",
+                        }
+                    );
+                    return 0;
+                };
+                if ( !$success ) {
                     ++$process_errors;
+                    ++$baskets_with_errors{$basketno};
                 }
             }
         }
@@ -875,6 +896,17 @@ sub process_quote {
                         . $conflict_info->{existing_basket}
                         . ")" );
                 $logger->info("Basket $basketno remains open due to PO number conflict");
+                next;
+            }
+
+            # Check if this basket had order lines that could not be processed.
+            # Auto-submitting an incomplete order to the vendor would be wrong,
+            # so leave the basket open for staff to review and correct.
+            if ( exists $baskets_with_errors{$basketno} ) {
+                $logger->warn( "Auto-order blocked for basket $basketno due to "
+                        . $baskets_with_errors{$basketno}
+                        . " unprocessable order line(s)" );
+                $logger->info("Basket $basketno remains open - please review errors and correct the affected lines");
                 next;
             }
 
@@ -933,8 +965,34 @@ sub quote_item {
         # Check for and add default 008 as this is a mandatory field
         $bib_record = _handle_008_field($bib_record);
 
-        ( $bib->{biblionumber}, $bib->{biblioitemnumber} ) =
-            AddBiblio( $bib_record, q{} );
+        # AddBiblio traps its own exceptions internally, emits them via warn and
+        # returns an undef biblionumber on failure. Capture any warning so we can
+        # surface the underlying cause (e.g. an invalid field value) to the end
+        # user rather than losing it to the error log.
+        my $biblio_error = q{};
+        {
+            local $SIG{__WARN__} = sub { $biblio_error .= $_[0]; };
+            ( $bib->{biblionumber}, $bib->{biblioitemnumber} ) =
+                AddBiblio( $bib_record, q{} );
+        }
+
+        # Skip and report the line rather than going on to create an orphan
+        # order line and items against a non-existent biblio.
+        if ( !defined $bib->{biblionumber} ) {
+            my $details = "Skipped order line, could not add biblio for " . $item->item_number_id;
+            if ( $biblio_error =~ /\S/ ) {
+                $biblio_error =~ s/\s+\z//;
+                $details .= ": $biblio_error";
+            }
+            $quote_message->add_to_edifact_errors(
+                {
+                    section => join( "\n", map { $_->as_string } @{ $item->{segs} } ),
+                    details => $details,
+                }
+            );
+            $logger->error( "Failed to add biblio for " . $item->item_number_id . ": $biblio_error" );
+            return;
+        }
         $logger->trace( "Added biblio: " . $bib->{biblionumber} );
     } else {
         $logger->trace( "Match found: " . $bib->{biblionumber} );
@@ -1093,9 +1151,18 @@ sub quote_item {
     my %ordernumber;
     my %budgets;
     my $item_hash;
+    my $line_errors = 0;
 
     if ( !$skip ) {
         $order_hash->{budget_id} = $budget->budget_id;
+
+        # FIXME: The order line is created before its items, so an item that
+        # fails to store leaves a partial (item-less) order line behind. Bug
+        # 41087 (EDI Retry) should wrap the order + item creation below in a
+        # transaction so a failed line rolls back cleanly and can be retried.
+        # Note it must scope the order/item creation only: AddBiblio above runs
+        # its own transaction and indexes/fires hooks after committing, so it
+        # cannot be enclosed in an outer transaction.
         my $first_order = $schema->resultset('Aqorder')->create($order_hash);
         my $o           = $first_order->ordernumber();
         $logger->trace("Order created: $o");
@@ -1113,40 +1180,56 @@ sub quote_item {
         if ( C4::Context->preference('AcqCreateItem') eq 'ordering' ) {
             $item_hash = _create_item_from_quote( $item, $quote_message );
 
-            my $created = 0;
-            while ( $created < $order_quantity ) {
+            my $copy_number = 0;
+            while ( $copy_number < $order_quantity ) {
                 $item_hash->{biblionumber}     = $bib->{biblionumber};
                 $item_hash->{biblioitemnumber} = $bib->{biblioitemnumber};
-                my $kitem      = Koha::Item->new($item_hash)->store;
-                my $itemnumber = $kitem->itemnumber;
-                $logger->trace( "Added item: " . $itemnumber );
-                $schema->resultset('AqordersItem')->create(
-                    {
-                        ordernumber => $first_order->ordernumber,
-                        itemnumber  => $itemnumber,
-                    }
-                );
-                ++$created;
 
-                my $lrp = $item->girfield('library_rotation_plan');
-                if ($lrp) {
-                    my $rota = Koha::StockRotationRotas->find(
-                        { title => $lrp },
-                        { key   => 'stockrotationrotas_title' }
+                # Wrap item creation so a single failing item (e.g. an invalid
+                # branchcode that breaches a foreign key constraint) is reported
+                # and skipped rather than aborting the whole quote.
+                try {
+                    my $kitem      = Koha::Item->new($item_hash)->store;
+                    my $itemnumber = $kitem->itemnumber;
+                    $logger->trace( "Added item: " . $itemnumber );
+                    $schema->resultset('AqordersItem')->create(
+                        {
+                            ordernumber => $first_order->ordernumber,
+                            itemnumber  => $itemnumber,
+                        }
                     );
-                    if ($rota) {
-                        $rota->add_item($itemnumber);
-                        $logger->trace( "Item added to rota " . $rota->title );
-                    } else {
-                        $quote_message->add_to_edifact_errors(
-                            {
-                                section => "$item->{GIR}->[0]",
-                                details => "No rota found for passed LRP:$lrp in orderline"
-                            }
+
+                    my $lrp = $item->girfield('library_rotation_plan');
+                    if ($lrp) {
+                        my $rota = Koha::StockRotationRotas->find(
+                            { title => $lrp },
+                            { key   => 'stockrotationrotas_title' }
                         );
-                        $logger->error("No rota found matching $lrp in orderline");
+                        if ($rota) {
+                            $rota->add_item($itemnumber);
+                            $logger->trace( "Item added to rota " . $rota->title );
+                        } else {
+                            $quote_message->add_to_edifact_errors(
+                                {
+                                    section => "$item->{GIR}->[0]",
+                                    details => "No rota found for passed LRP:$lrp in orderline"
+                                }
+                            );
+                            $logger->error("No rota found matching $lrp in orderline");
+                        }
                     }
-                }
+                } catch {
+                    my $error = _format_store_error($_);
+                    ++$line_errors;
+                    $quote_message->add_to_edifact_errors(
+                        {
+                            section => join( "\n", map { $_->as_string } @{ $item->{segs} } ),
+                            details => "Failed to create item for order " . $first_order->ordernumber . ": $error",
+                        }
+                    );
+                    $logger->error( "Failed to create item for order " . $first_order->ordernumber . ": $error" );
+                };
+                ++$copy_number;
             }
         }
     }
@@ -1264,35 +1347,47 @@ sub quote_item {
 
                     $item_hash->{biblionumber}     = $bib->{biblionumber};
                     $item_hash->{biblioitemnumber} = $bib->{biblioitemnumber};
-                    my $kitem      = Koha::Item->new($item_hash)->store;
-                    my $itemnumber = $kitem->itemnumber;
-                    $logger->trace("New item $itemnumber added");
-                    $schema->resultset('AqordersItem')->create(
-                        {
-                            ordernumber => $new_order->ordernumber,
-                            itemnumber  => $itemnumber,
-                        }
-                    );
-
-                    my $lrp = $item->girfield( 'library_rotation_plan', $occurrence );
-                    if ($lrp) {
-                        my $rota = Koha::StockRotationRotas->find(
-                            { title => $lrp },
-                            { key   => 'stockrotationrotas_title' }
+                    try {
+                        my $kitem      = Koha::Item->new($item_hash)->store;
+                        my $itemnumber = $kitem->itemnumber;
+                        $logger->trace("New item $itemnumber added");
+                        $schema->resultset('AqordersItem')->create(
+                            {
+                                ordernumber => $new_order->ordernumber,
+                                itemnumber  => $itemnumber,
+                            }
                         );
-                        if ($rota) {
-                            $rota->add_item($itemnumber);
-                            $logger->trace( "Item added to rota " . $rota->id );
-                        } else {
-                            $quote_message->add_to_edifact_errors(
-                                {
-                                    section => "$item->{GIR}->[$occurrence]",
-                                    details => "No rota found for passed LRP:$lrp in orderline"
-                                }
+
+                        my $lrp = $item->girfield( 'library_rotation_plan', $occurrence );
+                        if ($lrp) {
+                            my $rota = Koha::StockRotationRotas->find(
+                                { title => $lrp },
+                                { key   => 'stockrotationrotas_title' }
                             );
-                            $logger->error("No rota found matching $lrp in orderline");
+                            if ($rota) {
+                                $rota->add_item($itemnumber);
+                                $logger->trace( "Item added to rota " . $rota->id );
+                            } else {
+                                $quote_message->add_to_edifact_errors(
+                                    {
+                                        section => "$item->{GIR}->[$occurrence]",
+                                        details => "No rota found for passed LRP:$lrp in orderline"
+                                    }
+                                );
+                                $logger->error("No rota found matching $lrp in orderline");
+                            }
                         }
-                    }
+                    } catch {
+                        my $error = _format_store_error($_);
+                        ++$line_errors;
+                        $quote_message->add_to_edifact_errors(
+                            {
+                                section => "$item->{GIR}->[$occurrence]",
+                                details => "Failed to create item for order " . $new_order->ordernumber . ": $error",
+                            }
+                        );
+                        $logger->error( "Failed to create item for order " . $new_order->ordernumber . ": $error" );
+                    };
                 }
 
                 ++$occurrence;
@@ -1353,42 +1448,73 @@ sub quote_item {
                     }
                     $new_item->{biblionumber}     = $bib->{biblionumber};
                     $new_item->{biblioitemnumber} = $bib->{biblioitemnumber};
-                    my $kitem      = Koha::Item->new($new_item)->store;
-                    my $itemnumber = $kitem->itemnumber;
-                    $logger->trace("New item $itemnumber added");
-                    $schema->resultset('AqordersItem')->create(
-                        {
-                            ordernumber => $ordernumber{ $budget->budget_id },
-                            itemnumber  => $itemnumber,
-                        }
-                    );
-
-                    my $lrp = $item->girfield( 'library_rotation_plan', $occurrence );
-                    if ($lrp) {
-                        my $rota = Koha::StockRotationRotas->find(
-                            { title => $lrp },
-                            { key   => 'stockrotationrotas_title' }
+                    try {
+                        my $kitem      = Koha::Item->new($new_item)->store;
+                        my $itemnumber = $kitem->itemnumber;
+                        $logger->trace("New item $itemnumber added");
+                        $schema->resultset('AqordersItem')->create(
+                            {
+                                ordernumber => $ordernumber{ $budget->budget_id },
+                                itemnumber  => $itemnumber,
+                            }
                         );
-                        if ($rota) {
-                            $rota->add_item($itemnumber);
-                            $logger->trace("Item added to rota $rota->id");
-                        } else {
-                            $quote_message->add_to_edifact_errors(
-                                {
-                                    section => "$item->{GIR}->[$occurrence]",
-                                    details => "No rota found for passed LRP:$lrp in orderline"
-                                }
+
+                        my $lrp = $item->girfield( 'library_rotation_plan', $occurrence );
+                        if ($lrp) {
+                            my $rota = Koha::StockRotationRotas->find(
+                                { title => $lrp },
+                                { key   => 'stockrotationrotas_title' }
                             );
-                            $logger->error("No rota found matching $lrp in orderline");
+                            if ($rota) {
+                                $rota->add_item($itemnumber);
+                                $logger->trace("Item added to rota $rota->id");
+                            } else {
+                                $quote_message->add_to_edifact_errors(
+                                    {
+                                        section => "$item->{GIR}->[$occurrence]",
+                                        details => "No rota found for passed LRP:$lrp in orderline"
+                                    }
+                                );
+                                $logger->error("No rota found matching $lrp in orderline");
+                            }
                         }
-                    }
+                    } catch {
+                        my $error = _format_store_error($_);
+                        ++$line_errors;
+                        $quote_message->add_to_edifact_errors(
+                            {
+                                section => "$item->{GIR}->[$occurrence]",
+                                details => "Failed to create item for order "
+                                    . $ordernumber{ $budget->budget_id }
+                                    . ": $error",
+                            }
+                        );
+                        $logger->error(
+                            "Failed to create item for order " . $ordernumber{ $budget->budget_id } . ": $error" );
+                    };
                 }
 
                 ++$occurrence;
             }
         }
     }
-    return 1;
+    return $line_errors ? 0 : 1;
+}
+
+# Turn an exception raised while storing a quote line into a concise, end-user
+# friendly string for the EDI error report. Koha::Object->store translates
+# database errors into Koha::Exceptions which stringify to terse descriptions
+# (e.g. 'Broken FK constraint'); surface the offending field where we can so
+# library staff can identify the problem data in the quote.
+sub _format_store_error {
+    my ($error) = @_;
+
+    if ( ref($error) && eval { $error->isa('Koha::Exceptions::Object::FKConstraint') } ) {
+        return "invalid value for field '" . $error->broken_fk . "'";
+    }
+
+    ( my $message = "$error" ) =~ s/\s+\z//;
+    return $message;
 }
 
 sub get_edifact_ean {
@@ -1971,6 +2097,15 @@ Koha::EDI
      Checks whether an 008 field exists on the record and adds a default field it does not
 
      Returns the bib_record
+
+=head2 _format_store_error
+
+     message = _format_store_error($error)
+
+     Turns an exception raised while storing a quote line into a concise,
+     end-user friendly string for the EDIFACT error report. Where the error is
+     a known Koha::Exceptions::Object exception the offending field is surfaced
+     so that library staff can identify the problem data in the quote.
 
 =head2 _validate_location_code
 
