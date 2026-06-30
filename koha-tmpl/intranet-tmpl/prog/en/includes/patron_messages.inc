@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Branches %]
+[% USE HtmlScrubber %]
 [% USE Categories %]
 [% SET ClaimReturnedWarningThreshold = Koha.Preference('ClaimReturnedWarningThreshold') || 0 %]
 [% SET return_claims = patron.return_claims %]
@@ -104,10 +105,10 @@
                                 [% END %]
                             </span>
                             [% IF restriction.comment.search('OVERDUES_PROCESS') %]
-                                Restriction added by overdues process [% restriction.comment.remove('OVERDUES_PROCESS ') | $raw | html_line_break %]
+                                Restriction added by overdues process [% restriction.comment.remove('OVERDUES_PROCESS ') | scrub_html type => 'comment' | $raw | html_line_break %]
                             [% ELSE %]
                                 [% IF restriction.comment %]
-                                    <span class="restriction_detail">[%- restriction.comment | html_line_break -%]</span>
+                                    <span class="restriction_detail">[%- restriction.comment | scrub_html type => 'comment' | html_line_break -%]</span>
                                 [% END %]
                             [% END %]
                             <span class="restriction_type">([%- restriction.type.display_text | html -%])</span>

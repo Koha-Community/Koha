@@ -1,3 +1,4 @@
+[% USE HtmlScrubber %]
 <li class="userdebarred blocker">
     <strong>Your account has been frozen</strong>
     <ul>
@@ -11,10 +12,10 @@
                     [% END %]
                 </span>
                 [% IF restriction.comment.search('OVERDUES_PROCESS') %]
-                    <span class="restriction_detail">Restriction added by overdues process [% restriction.comment.remove('OVERDUES_PROCESS ') | $raw | html_line_break %]</span>
+                    <span class="restriction_detail">Restriction added by overdues process [% restriction.comment.remove('OVERDUES_PROCESS ') | scrub_html type => 'comment' | $raw | html_line_break %]</span>
                 [% ELSE %]
                     [% IF restriction.comment %]
-                        <span class="restriction_detail">[%- restriction.comment | html_line_break -%]</span>
+                        <span class="restriction_detail">[%- restriction.comment | scrub_html type => 'comment' | html_line_break -%]</span>
                     [% END %]
                 [% END %]
             </li>
