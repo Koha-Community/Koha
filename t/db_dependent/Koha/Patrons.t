@@ -3264,7 +3264,7 @@ subtest "search_patrons_to_update_category tests" => sub {
 };
 
 subtest 'queue_notice' => sub {
-    plan tests => 11;
+    plan tests => 15;
 
     my $dbh = C4::Context->dbh;
     t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'email' );
@@ -3377,6 +3377,114 @@ subtest 'queue_notice' => sub {
         Koha::Notice::Messages->search( { borrowernumber => $patron->borrowernumber } )->count, $counter,
         "Count of queued notices not increased in test mode"
     );
+
+    # Test mandatory patron expiry notice fallbacks if patron does not have a messaging preference defined
+
+    my $expiry_phone =
+        Koha::Notice::Templates->search( { code => 'MEMBERSHIP_RENEWED', message_transport_type => 'phone' } )->count;
+    my $expiry_sms =
+        Koha::Notice::Templates->search( { code => 'MEMBERSHIP_RENEWED', message_transport_type => 'sms' } )->count;
+
+    $expiry_phone = $builder->build_object(
+        {
+            class => 'Koha::Notice::Templates',
+            value => {
+                code                   => 'MEMBERSHIP_RENEWED',
+                module                 => 'members',
+                branchcode             => $patron->branchcode,
+                message_transport_type => 'phone',
+                lang                   => 'default'
+            }
+        }
+    )->store();
+
+    $expiry_sms = $builder->build_object(
+        {
+            class => 'Koha::Notice::Templates',
+            value => {
+                code                   => 'MEMBERSHIP_RENEWED',
+                module                 => 'members',
+                branchcode             => $patron->branchcode,
+                message_transport_type => 'sms',
+                lang                   => 'default'
+            }
+        }
+    )->store();
+
+    my $expiry_notice_params = $patron->create_expiry_notice_parameters(
+        { letter_code => 'MEMBERSHIP_RENEWED', forceprint => 0, is_notice_mandatory => 1 } );
+
+    $patron->phone('123-456-7890')->store;
+    $patron->smsalertnumber('+11234567890')->store;
+
+    t::lib::Mocks::mock_preference( 'SMSSendDriver',     'Email' );
+    t::lib::Mocks::mock_preference( 'PhoneNotification', '1' );
+
+    # Delete all of the test patron's messaging preferences
+    $dbh->do(
+        q|DELETE FROM borrower_message_transport_preferences WHERE borrower_message_preference_id IN (SELECT borrower_message_preference_id FROM borrower_message_preferences WHERE borrowernumber = ?)|,
+        undef, $patron->borrowernumber
+    );
+
+    $counter = Koha::Notice::Messages->search(
+        { borrowernumber => $patron->borrowernumber, message_transport_type => 'email' } )->count;
+
+    $patron->queue_notice($expiry_notice_params);
+
+    is(
+        Koha::Notice::Messages->search(
+            { borrowernumber => $patron->borrowernumber, message_transport_type => 'email' }
+        )->count,
+        $counter + 1,
+        "Mandatory expiry notice falls back to email if patron email is defined"
+    );
+
+    $patron->email("")->store;
+
+    $counter = Koha::Notice::Messages->search(
+        { borrowernumber => $patron->borrowernumber, message_transport_type => 'phone' } )->count;
+
+    $patron->queue_notice($expiry_notice_params);
+
+    is(
+        Koha::Notice::Messages->search(
+            { borrowernumber => $patron->borrowernumber, message_transport_type => 'phone' }
+        )->count,
+        $counter + 1,
+        "Mandatory expiry notice falls back to phone if patron email undefined and phone allowed"
+    );
+
+    t::lib::Mocks::mock_preference( 'PhoneNotification', '0' );
+
+    $counter =
+        Koha::Notice::Messages->search( { borrowernumber => $patron->borrowernumber, message_transport_type => 'sms' } )
+        ->count;
+
+    $patron->queue_notice($expiry_notice_params);
+
+    is(
+        Koha::Notice::Messages->search(
+            { borrowernumber => $patron->borrowernumber, message_transport_type => 'sms' }
+        )->count,
+        $counter + 1,
+        "Mandatory expiry notice falls back to sms if patron email undefined, phone not allowed, and sms allowed"
+    );
+
+    t::lib::Mocks::mock_preference( 'SMSSendDriver', '' );
+
+    $counter = Koha::Notice::Messages->search(
+        { borrowernumber => $patron->borrowernumber, message_transport_type => 'print' } )->count;
+
+    $patron->queue_notice($expiry_notice_params);
+
+    is(
+        Koha::Notice::Messages->search(
+            { borrowernumber => $patron->borrowernumber, message_transport_type => 'print' }
+        )->count,
+        $counter + 1,
+        "Mandatory expiry notice falls back to print if patron email undefined and phone and sms not allowed"
+    );
+
 };
 
 subtest 'filter_by_amount_owed' => sub {
