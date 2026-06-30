@@ -23,7 +23,6 @@
         [% FOREACH messaging_preference IN messaging_preferences %]
             [% NEXT IF !Koha.Preference( 'ILLModule' ) && messaging_preference.message_name.match('^Ill_') %]
             [% NEXT IF !Koha.Preference('MembershipExpiryDaysNotice') && messaging_preference.Patron_Expiry %]
-            [% NEXT IF messaging_preference.Patron_Expiry && (category.enforce_expiry_notice || patron.category.enforce_expiry_notice) %]
             [% NEXT IF messaging_preference.Auto_Renewals && Koha.Preference('AutoRenewalNotices') != 'preferences' %]
             [% NEXT IF Koha.Preference('UseRecalls') == "off" && messaging_preference.message_name.match('^Recall_') %]
             <tr id="[% messaging_preference.message_name _ "_message" | lower | html %]">
@@ -45,7 +44,11 @@
                             <span>Item checkout</span>
                         [% END %]
                     [% ELSIF ( messaging_preference.Patron_Expiry ) %]
-                        <span>Patron account expiry</span>
+                        [% IF (category.enforce_expiry_notice || patron.category.enforce_expiry_notice) %]
+                            <span>Patron account expiry (mandatory)</span>
+                        [% ELSE %]
+                            <span>Patron account expiry</span>
+                        [% END %]
                     [% ELSIF ( messaging_preference.Ill_ready ) %]
                         <span>Interlibrary loan ready</span>
                     [% ELSIF ( messaging_preference.Ill_unavailable ) %]
