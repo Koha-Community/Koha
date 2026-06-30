@@ -1537,24 +1537,17 @@ async function load_patron_holds_table(biblio_id, split_data) {
                     },
                 },
                 {
-                    data: "patron.cardnumber",
+                    data: HidePatronName
+                        ? "patron.cardnumber"
+                        : "patron.surname:patron.firstname:patron.cardnumber",
                     orderable: true,
                     searchable: true,
                     render: function (data, type, row, meta) {
-                        if (data == null) {
-                            let library = libraries.find(
-                                library => library._id == row.pickup_library_id
-                            );
-                            return __("A patron from library %s").format(
-                                library.name
-                            );
-                        } else {
-                            return $patron_to_html(row.patron, {
-                                url: true,
-                                display_cardnumber: true,
-                                hide_patron_name: HidePatronName,
-                            });
-                        }
+                        return $patron_to_html(row.patron, {
+                            url: true,
+                            display_cardnumber: true,
+                            hide_patron_name: HidePatronName,
+                        });
                     },
                 },
                 {
