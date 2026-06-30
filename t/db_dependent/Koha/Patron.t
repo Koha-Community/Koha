@@ -3925,8 +3925,9 @@ subtest "create_expiry_notice_parameters" => sub {
             'letter_code' => 'MEMBERSHIP_RENEWED',
             'lang'        => $patron->lang
         },
-        'message_name' => 'Patron_Expiry',
-        'forceprint'   => 0
+        'message_name'            => 'Patron_Expiry',
+        'forceprint'              => 0,
+        'expiry_notice_mandatory' => 0,
     };
 
     my $letter_params = $patron->create_expiry_notice_parameters(
