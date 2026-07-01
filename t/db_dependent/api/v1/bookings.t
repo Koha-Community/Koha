@@ -18,8 +18,9 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::Mojo;
+use Test::MockModule;
 use Test::Warn;
 
 use t::lib::TestBuilder;
@@ -651,6 +652,80 @@ subtest 'add() with itemtype_id tests' => sub {
     $t->post_ok( "//$userid:$password@/api/v1/bookings" => json => $booking_should_fail )
         ->status_is(400)
         ->json_is( '/error' => 'Booking would conflict' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'add() applies the library timezone to start_date/end_date (Bug 42868)' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    # Regression test for Bug 42868: the API converts the incoming RFC3339
+    # instant to C4::Context->tz before storing it in the timezone-naive
+    # 'datetime' column (see Koha::Object::_recursive_fixup), so a client
+    # must anchor day boundaries to the library's configured timezone, not
+    # UTC, or the stored date shifts whenever that timezone isn't UTC.
+    my $context = Test::MockModule->new('C4::Context');
+    $context->mock( 'tz', sub { 'America/New_York' } );
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }     # no additional permissions
+        }
+    );
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $librarian->borrowernumber,
+                module_bit     => 1,
+                code           => 'manage_bookings',
+            },
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $patron         = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $biblio         = $builder->build_sample_biblio;
+    my $item           = $builder->build_sample_item( { bookable => 1, biblionumber => $biblio->id } );
+    my $pickup_library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    # 2026-07-01T00:00:00 and 2026-07-01T23:59:59 in America/New_York (EDT, UTC-4) -
+    # exactly what place_booking.js sends via dayjs.tz(date, $timezone()).
+    my $booking = {
+        biblio_id         => $biblio->id,
+        item_id           => $item->itemnumber,
+        pickup_library_id => $pickup_library->branchcode,
+        patron_id         => $patron->id,
+        start_date        => '2026-07-01T04:00:00Z',
+        end_date          => '2026-07-02T03:59:59Z',
+    };
+
+    my $booking_id =
+        $t->post_ok( "//$userid:$password@/api/v1/bookings" => json => $booking )
+        ->status_is(201)
+        ->tx->res->json->{booking_id};
+
+    my ( $start_date, $end_date ) = $schema->storage->dbh->selectrow_array(
+        q{SELECT start_date, end_date FROM bookings WHERE booking_id = ?},
+        undef, $booking_id
+    );
+
+    is(
+        $start_date, '2026-07-01 00:00:00',
+        'start_date is stored as library-local midnight, not shifted by the UTC offset'
+    );
+    is(
+        $end_date, '2026-07-01 23:59:59',
+        'end_date is stored as library-local end of day, not shifted by the UTC offset'
+    );
+
+    $context->unmock('tz');
 
     $schema->storage->txn_rollback;
 };
