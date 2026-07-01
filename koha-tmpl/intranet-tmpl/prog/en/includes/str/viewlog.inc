@@ -35,7 +35,7 @@
         RESTORE: _("Restore"),
         REVOKE: _("Revoke"),
         ISSUE: _("Checkout"),
-        RETURN: _("Return"),
+        RETURN: _("Check-in"),
         CREATE: _("Create"),
         CANCEL: _("Cancel"),
         FILL: _("Fill"),
