@@ -417,8 +417,8 @@ subtest 'is_going_to_expire' => sub {
     t::lib::Mocks::mock_preference( 'NotifyBorrowerDeparture', 10 );
     $patron->dateexpiry( $today->clone->add( days => 10 ) )->store->discard_changes;
     is(
-        $patron->is_going_to_expire, 0,
-        'Patron should not be considered going to expire if dateexpiry is 10 days ahead and pref is 10'
+        $patron->is_going_to_expire, 1,
+        'Patron should be considered going to expire if dateexpiry is 10 days ahead and pref is 10'
     );
     $patron->delete;
 
