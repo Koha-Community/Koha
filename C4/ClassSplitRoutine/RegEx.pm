@@ -19,6 +19,7 @@ package C4::ClassSplitRoutine::RegEx;
 
 use Modern::Perl;
 
+use Koha::Logger;
 use Koha::Regex::Replacement;
 
 =head1 NAME
@@ -83,7 +84,10 @@ sub _apply_substitution {
     my $ci     = $flags =~ /i/ ? '(?i)' : '';
 
     my $compiled = eval { qr/$ci$pattern/ };
-    return unless defined $compiled;
+    unless ( defined $compiled ) {
+        Koha::Logger->get->warn("C4::ClassSplitRoutine::RegEx: failed to compile pattern [$pattern]: $@");
+        return;
+    }
 
     my $expand = sub { Koha::Regex::Replacement::expand_template( $replacement, [ @{^CAPTURE} ], {%+} ) };
 
