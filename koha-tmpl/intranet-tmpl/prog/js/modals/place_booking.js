@@ -959,9 +959,10 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                             // Range set, update hidden fields and set available items
                             else if (selectedDates[0] && selectedDates[1]) {
                                 // set form fields from picker
-                                // Extract local date and send as explicit UTC day boundaries
-                                // This preserves the user's selected DATE regardless of browser timezone
-                                // Using dayjs.utc() ensures startOf/endOf operate in UTC, not browser TZ
+                                // Send day boundaries anchored to the library's configured
+                                // timezone ($timezone()), not UTC or the browser's local timezone.
+                                // This preserves the user's selected DATE through the server's
+                                // round-trip conversion back to library time (see Bug 42868).
                                 let startDate = dayjs(selectedDates[0]).format(
                                     "YYYY-MM-DD"
                                 );
