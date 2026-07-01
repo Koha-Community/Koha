@@ -264,7 +264,7 @@
                                         [% ELSIF borrower.sex == 'M' %]
                                             Male
                                         [% ELSIF borrower.sex == 'O' %]
-                                            Other
+                                            [% tp('gender', 'Other') | html %]
                                         [% END %]
                                     </td>
                                     <td>[% Branches.GetName( borrower.branchcode ) | html %]</td>
@@ -421,7 +421,17 @@
                                             [% IF field.option.size %]
                                                 <select id="[% field.name | html %]" name="[% field.name | html %]">
                                                     [% FOREACH opt IN field.option %]
-                                                        <option value="[% opt.value | html %]">[% opt.lib | html %]</option>
+                                                        <option value="[% opt.value | html %]">
+                                                            [% IF field.name == 'sex' && opt.value == 'F' %]
+                                                                Female
+                                                            [% ELSIF field.name == 'sex' && opt.value == 'M' %]
+                                                                Male
+                                                            [% ELSIF field.name == 'sex' && opt.value == 'O' %]
+                                                                [% tp('gender', 'Other') | html %]
+                                                            [% ELSE %]
+                                                                [% opt.lib | html %]
+                                                            [% END %]
+                                                        </option>
                                                     [% END %]
                                                 </select>
                                             [% ELSE %]
