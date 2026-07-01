@@ -115,7 +115,11 @@ sub search_for_display {
 
     my $attribs = {
         prefetch => 'additional_content',
-        order_by => { -desc => 'additional_content.published_on' }
+        order_by => [
+            \['ISNULL(additional_content.number)'],
+            { -asc  => 'additional_content.number' },
+            { -desc => 'additional_content.published_on' },
+        ],
     };
     return Koha::AdditionalContentsLocalizations->search( $search_params, $attribs );
 }
