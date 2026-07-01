@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Koha::Installer::Output qw(say_warning say_success say_info);
+use Koha::Installer::Output qw(say_success say_info);
 
 return {
     bug_number  => "41029",
@@ -8,16 +8,18 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        my $existing_batchimport_rules_count = (
-            $dbh->selectrow_array(
-                'SELECT COUNT(*) FROM marc_overlay_rules WHERE module="source" and filter="batchimport"', undef
-            )
-        )[0];
-        my $existing_add_to_basket_rules_count = (
-            $dbh->selectrow_array(
-                'SELECT COUNT(*) FROM marc_overlay_rules WHERE module="source" and filter="add_to_basket"', undef
-            )
-        )[0];
+        $dbh->do(
+            q{
+            INSERT IGNORE INTO record_sources (`name`, `can_be_edited`, `is_system`)
+            VALUES ('add_to_basket', 1, 1)
+        }
+        );
+        say_success( $out, "Added 'add_to_basket' record source" );
+
+        my $existing_batchimport_rules_count = scalar $dbh->selectrow_array(
+            'SELECT COUNT(*) FROM marc_overlay_rules WHERE module="source" AND filter="batchimport"');
+        my $existing_add_to_basket_rules_count = scalar $dbh->selectrow_array(
+            'SELECT COUNT(*) FROM marc_overlay_rules WHERE module="source" AND filter="add_to_basket"');
         if ( $existing_batchimport_rules_count > 0 && $existing_add_to_basket_rules_count == 0 ) {
             say_info( $out, "Existing batchimport marc_overlay_rules found and no add_to_basket rules found" );
             $dbh->do(
@@ -28,7 +30,7 @@ return {
                 WHERE module = 'source' AND filter = 'batchimport'
         }
             );
-            say $out "Added existing batchimport overlay rules as add_to_basket rules";
+            say_success( $out, "Added existing batchimport overlay rules as add_to_basket rules" );
         } else {
             say_info(
                 $out,
