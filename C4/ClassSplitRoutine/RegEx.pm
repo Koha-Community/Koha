@@ -57,7 +57,7 @@ sub split_callnumber {
 
 Applies a single admin-configured s/// substitution to $string in place,
 without ever evaluating the input as code. The rule is parsed as
-s<DELIM>PATTERN<DELIM>REPLACEMENT<DELIM>FLAGS; the pattern is compiled with
+C<s/PATTERN/REPLACEMENT/FLAGS> (any non-space delimiter is accepted); the pattern is compiled with
 qr// (so embedded-code assertions are treated as a runtime pattern and blocked
 by Perl), and the replacement is expanded as data via
 Koha::Regex::Replacement::expand_template. The
