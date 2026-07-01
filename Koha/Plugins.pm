@@ -26,7 +26,6 @@ use Module::Load::Conditional qw( can_load );
 use Module::Load;
 use Module::Pluggable search_path => ['Koha::Plugin'],
     except                        => qr/::Edifact(|::Line|::Message|::Order|::Segment|::Transport)$/;
-use Symbol qw( delete_package );
 use Try::Tiny;
 use POSIX qw(getpid);
 
@@ -335,10 +334,7 @@ sub InstallPlugins {
         # symbol table during an upgrade, so plugin_methods ends up out of
         # sync with the installed .pm (e.g. missing newly-added methods or
         # retaining methods that were renamed or removed).
-        ( my $plugin_inc_key = $plugin_class ) =~ s{::}{/}g;
-        $plugin_inc_key .= '.pm';
-        delete $INC{$plugin_inc_key};
-        delete_package($plugin_class);
+        $self->_forget_plugin_class($plugin_class);
 
         if ( can_load( modules => { $plugin_class => undef }, verbose => $verbose, nocache => 1 ) ) {
             next unless $plugin_class->isa('Koha::Plugins::Base');
@@ -375,6 +371,43 @@ sub InstallPlugins {
     $self->_restart_after_change();
 
     return @plugins;
+}
+
+=head3 _forget_plugin_class
+
+Force Perl to forget an in-memory plugin class, so a subsequent re-require
+picks up the .pm file as it currently exists on disk, rather than whatever
+was loaded into this worker previously.
+
+We deliberately do not use Symbol::delete_package here: it clears the
+whole symbol table, including any already-loaded packages nested under
+it (e.g. Koha::Plugin::Foo::Controller, bundled by the plugin in its own
+Koha/Plugin/Foo/Controller.pm). Since those keep their own %INC entry,
+they are never re-required afterwards and are left permanently blanked
+out. Module::Pluggable discovers them as their own entries in the plugin
+list regardless, so they get reloaded on their own turn; this helper
+only ever clears the target class's own symbols, leaving any nested
+packages alone.
+
+=cut
+
+sub _forget_plugin_class {
+    my ( $self, $plugin_class ) = @_;
+
+    return unless Class::Inspector->loaded($plugin_class);
+
+    no strict 'refs';    ## no critic (ProhibitNoStrict)
+    @{"${plugin_class}::ISA"} = ();
+    my $stash = \%{"${plugin_class}::"};
+    for my $symbol ( keys %$stash ) {
+        next if $symbol =~ /::\z/;    # leave nested packages alone
+        delete $stash->{$symbol};
+    }
+
+    ( my $plugin_inc_key = $plugin_class ) =~ s{::}{/}g;
+    delete $INC{"$plugin_inc_key.pm"};
+
+    return;
 }
 
 =head2 RemovePlugins

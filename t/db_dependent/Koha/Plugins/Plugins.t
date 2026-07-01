@@ -284,7 +284,7 @@ subtest 'InstallPlugins() reloads stale symbol tables tests' => sub {
     # A run of InstallPlugins should reload from disk and the phantom method
     # should disappear.
     {
-        no strict 'refs';
+        no strict 'refs';    ## no critic (ProhibitNoStrict)
         *{'Koha::Plugin::Test::stale_phantom_method'} = sub { 1 };
     }
 
