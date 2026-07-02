@@ -189,11 +189,11 @@
                         </li>
                         <li>
                             <label for="lib">Description: </label>
-                            <input type="text" name="lib" id="lib" value="[% av.lib | html %]" maxlength="200" />
+                            <input type="text" name="lib" id="lib" value="[% av.lib | html %]" maxlength="400" />
                         </li>
                         <li>
                             <label for="lib_opac">Description (OPAC): </label>
-                            <input type="text" name="lib_opac" id="lib_opac" value="[% av.lib_opac | html %]" maxlength="200" />
+                            <input type="text" name="lib_opac" id="lib_opac" value="[% av.lib_opac | html %]" maxlength="400" />
                         </li>
                         <li
                             ><label for="library_limitation">Library limitations: </label>
@@ -413,7 +413,7 @@
     [% CASE 'Asort2' %]
         <p>Used for acquisitions statistical purposes</p>
     [% CASE 'BOR_NOTES' %]
-        <p>Values for custom patron messages that appear on the circulation screen and the OPAC. The value in the description field should be the message text and is limited to 200 characters</p>
+        <p>Values for custom patron messages that appear on the circulation screen and the OPAC. The value in the description field should be the message text and is limited to 400 characters</p>
     [% CASE 'branches' %]
         <p></p>
     [% CASE 'Bsort1' %]
