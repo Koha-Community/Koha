@@ -575,7 +575,7 @@
                         [% IF (category.self_renewal_failure_message) %]
                             <textarea type="text" name="self_renewal_failure_message" id="self_renewal_failure_message" cols="40" rows="2">[% category.self_renewal_failure_message | html %]</textarea>
                         [% ELSE %]
-                            [% SET default_message = t("Your self-renewal can't be processed at this time. Please visit your local branch to complete your renewal.") %]
+                            [% SET default_message = t("Your self-renewal can't be processed at this time. Please visit your library to complete your renewal.") %]
                             <textarea type="text" name="self_renewal_failure_message" id="self_renewal_failure_message" cols="40" rows="4">[% default_message | html %]</textarea>
                         [% END %]
                     </li>
