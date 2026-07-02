@@ -6327,7 +6327,7 @@ CREATE TABLE `sip_accounts` (
   `format_due_date` tinyint(1) DEFAULT NULL,
   `hide_fields` varchar(255) DEFAULT NULL,
   `holds_block_checkin` tinyint(1) DEFAULT NULL,
-  `holds_get_captured` tinyint(1) DEFAULT NULL,
+  `holds_get_captured` tinyint(1) DEFAULT 1,
   `inhouse_item_types` varchar(255) DEFAULT NULL,
   `inhouse_patron_categories` varchar(255) DEFAULT NULL,
   `login_id` varchar(255) NOT NULL COMMENT 'Staff userid for SIP2 authentication',
