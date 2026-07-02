@@ -336,6 +336,7 @@ export default {
                 toolTip: __(
                     "If enabled, items are automatically assigned to holds at SIP check-in; The alerts messages will continue to show, however, to allow items to be put to one side and then captured by a subsequent staff check-in."
                 ),
+                defaultValue: true,
             },
             {
                 name: "inhouse_item_types",
