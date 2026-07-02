@@ -1163,7 +1163,10 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
                         if (
                             existing_search === this._id ||
                             (existing_search &&
-                                this._id.toLowerCase().match(existing_search))
+                                this._id
+                                    .toString()
+                                    .toLowerCase()
+                                    .match(existing_search))
                         ) {
                             o.prop("selected", "selected");
                         }
