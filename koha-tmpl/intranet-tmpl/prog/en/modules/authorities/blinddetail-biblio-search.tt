@@ -40,10 +40,7 @@
                         [%- FOREACH marc_value IN SUBFIELD_LOO.marc_values -%]
                             [%- To.json( marc_value ) | html -%]
                         [%- END -%]
-                    [%- END -%]
-                    [% IF ( marcflavour == 'UNIMARC' ) %]‡3[% authid | html %]";
-                    [% ELSIF ( marcflavour == 'MARC21' ) %]‡9[% authid | html %]";
-                    [% END %]
+                    [%- END -%]‡9[% authid | html %]";
                 [% END %]
                 RancorReplaceField( new_line, "[% indicator1 | html %]", "[% indicator2 | html %]" );
             [% ELSE %]
