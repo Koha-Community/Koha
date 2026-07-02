@@ -276,7 +276,9 @@ sub get_items {
                 qw( available checked_out local_use in_transit lost withdrawn damaged not_for_loan on_hold recalled in_bundle restricted )
                 )
             {
-                push @item_ids, $items_rs->search( { _status => $status } )->get_column('itemnumber');
+                push @item_ids,
+                    $items_rs->search( { _status => $status }, { order_by => { '-asc' => 'me.itemnumber' } } )
+                    ->get_column('itemnumber');
             }
             $items_rs = $items_rs->search(
                 {},
