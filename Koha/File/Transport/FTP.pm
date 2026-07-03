@@ -158,34 +158,63 @@ Internal method that performs the FTP-specific file listing operation.
 Returns an array reference of hashrefs with file information.
 Each hashref contains: filename, longname, size, perms.
 
+The listing is obtained with MLSD (RFC 3659), whose machine-readable output
+is locale- and platform-independent and gives us the filename unambiguously
+(the pathname is the entire text after the "facts" and a single space, so
+filenames containing spaces are handled correctly). Servers that do not
+support MLSD fall back to NLST, which returns bare filenames only.
+
+This mirrors what Net::FTP does internally for rmdir(). Net::FTP 3.x exposes
+no public MLSD method, so we drive it through its _list_cmd() helper - the
+same private method that backs the public ls()/dir() and that Net::FTP's own
+rmdir() uses for MLSD. That interface has been stable for many releases.
+
+The hashref shape is kept consistent with the SFTP and Local transports so
+that consumers of list_files() (including out-of-tree ones) can rely on the
+same structure regardless of transport type. Note that over MLSD the perms
+value is the RFC 3659 "perm" fact (e.g. "adfr"), not a Unix mode string, and
+size is only present when the server reports it.
+
 =cut
 
 sub _list_files {
     my ($self) = @_;
     my $operation = "list";
 
-    # Get detailed listing using dir() for consistency with SFTP format
-    my $detailed_list = $self->{connection}->dir or return $self->_abort_operation($operation);
-
-    # Convert to hash format consistent with SFTP
     my @file_list;
-    foreach my $line ( @{$detailed_list} ) {
 
-        # Parse FTP dir output (similar to ls -l format)
-        # Example: "-rw-r--r-- 1 user group 1234 Jan 01 12:00 filename.txt"
-        if ( $line =~ /^([d\-rwx]+)\s+\S+\s+\S+\s+\S+\s+(\d+)\s+(.+?)\s+(.+)$/ ) {
-            my ( $perms, $size, $date_part, $filename ) = ( $1, $2, $3, $4 );
+    # Prefer MLSD: machine-readable, no locale/format guessing. Net::FTP has
+    # no public MLSD method, so use its internal _list_cmd() (as its own
+    # rmdir() does). Returns an arrayref of "facts filename" lines, or undef.
+    my $mlsd = $self->{connection}->_list_cmd("MLSD");
 
-            # Skip directories (start with 'd')
-            next if $perms =~ /^d/;
+    if ( $mlsd && @{$mlsd} ) {
+        foreach my $line ( @{$mlsd} ) {
+
+            # Each line is "fact1=val;fact2=val;...; pathname"; the pathname is
+            # everything after the facts and the single separating space.
+            next unless $line =~ /^(.*?;)\s(.+)$/;
+            my ( $facts_str, $filename ) = ( $1, $2 );
+
+            my %fact =
+                map { my ( $k, $v ) = split /=/, $_, 2; ( lc($k) => $v ) }
+                grep { length } split /;/, $facts_str;
+
+            # Skip the directory itself, its parent and any subdirectories
+            next if ( $fact{type} // q{} ) =~ /^(?:dir|cdir|pdir)$/i;
 
             push @file_list, {
                 filename => $filename,
                 longname => $line,
-                size     => $size,
-                perms    => $perms
+                size     => $fact{size},
+                perms    => $fact{perm}
             };
         }
+    } else {
+
+        # Fallback for servers without MLSD: NLST returns bare filenames only.
+        my $names = $self->{connection}->ls or return $self->_abort_operation($operation);
+        @file_list = map { { filename => $_ } } grep { !/^[.]{1,2}$/ } @{$names};
     }
 
     $self->add_message(
@@ -257,6 +286,16 @@ sub _is_connected {
 
     return $self->{connection} && $self->{connection}->pwd();
 }
+
+=head3 _abort_operation
+
+    return $self->_abort_operation($operation);
+
+Records an error message for the named operation, aborts any in-progress
+transfer on the current connection and returns nothing, so callers can
+C<return $self-E<gt>_abort_operation($operation)> on failure.
+
+=cut
 
 sub _abort_operation {
     my ( $self, $operation ) = @_;

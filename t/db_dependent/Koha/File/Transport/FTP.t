@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Exception;
 use Test::NoWarnings;
 use Test::Warn;
@@ -135,8 +135,11 @@ subtest 'change_directory() tests' => sub {
     can_ok( $transport, 'change_directory' );
 };
 
-subtest 'list_files() tests' => sub {
-    plan tests => 1;
+subtest 'list_files() MLSD tests' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
     my $transport = $builder->build_object(
         {
             class => 'Koha::File::Transports',
@@ -145,6 +148,89 @@ subtest 'list_files() tests' => sub {
     );
 
     can_ok( $transport, 'list_files' );
+
+    # MLSD output: "facts filename" per RFC 3659. Facts are locale-independent,
+    # the filename is everything after the facts and a single space (so spaces
+    # in filenames are handled), and cdir/pdir/dir entries must be skipped.
+    my @mlsd_output = (
+        'type=file;size=1234;modify=20250101120000;perm=adfr; QUOTES_413514.CEQ',
+        'type=file;size=4096;modify=20250214093000; INVOICE_99.CEI',
+        'type=dir;modify=20250303080000; subdir',
+        'type=cdir;modify=20250303080000; .',
+        'type=pdir;modify=20250303080000; ..',
+        'type=file;size=55;modify=20250405091000; name with spaces.CEA',
+    );
+
+    my $mock_ftp = Test::MockModule->new('Net::FTP');
+    $mock_ftp->mock( '_list_cmd', sub { my ( $s, $cmd ) = @_; return $cmd eq 'MLSD' ? [@mlsd_output] : undef; } );
+    $mock_ftp->mock( 'ls',        sub { die 'MLSD succeeded, fallback ls() must not be called'; } );
+    $mock_ftp->mock( 'pwd',       sub { return '/incoming/'; } );
+
+    # Pretend we are already connected so list_files() skips (re)connection
+    $transport->{connection}          = bless {}, 'Net::FTP';
+    $transport->{_user_set_directory} = 1;
+
+    my $files = $transport->list_files();
+
+    is( ref($files), 'ARRAY', 'list_files() returns an arrayref' );
+
+    my @names = sort map { $_->{filename} } @{$files};
+    is( scalar @names, 3, 'directory, cdir and pdir entries are skipped' );
+
+    is_deeply(
+        \@names,
+        [ 'INVOICE_99.CEI', 'QUOTES_413514.CEQ', 'name with spaces.CEA' ],
+        'filenames parsed from MLSD, spaces preserved'
+    );
+
+    my ($quote) = grep { $_->{filename} eq 'QUOTES_413514.CEQ' } @{$files};
+    is( $quote->{size},  1234,   'size fact parsed correctly' );
+    is( $quote->{perms}, 'adfr', 'perm fact captured' );
+
+    $transport->{connection} = undef;
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'list_files() NLST fallback tests' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $transport = $builder->build_object(
+        {
+            class => 'Koha::File::Transports',
+            value => { transport => 'ftp', password => 'testpass' }
+        }
+    );
+
+    # Server without MLSD support: _list_cmd('MLSD') returns nothing, so
+    # list_files() must fall back to NLST (ls) and return bare filenames.
+    my $ls_called = 0;
+    my $mock_ftp  = Test::MockModule->new('Net::FTP');
+    $mock_ftp->mock( '_list_cmd', sub { return; } );
+    $mock_ftp->mock( 'ls',        sub { $ls_called = 1; return [ 'QUOTES_1.CEQ', '.', '..', 'INVOICE_2.CEI' ]; } );
+    $mock_ftp->mock( 'pwd',       sub { return '/incoming/'; } );
+
+    $transport->{connection}          = bless {}, 'Net::FTP';
+    $transport->{_user_set_directory} = 1;
+
+    my $files = $transport->list_files();
+
+    is( $ls_called, 1, 'falls back to ls() when MLSD is unsupported' );
+
+    my @names = sort map { $_->{filename} } @{$files};
+    is( scalar @names, 2, 'current/parent dir entries filtered from NLST output' );
+    is_deeply(
+        \@names,
+        [ 'INVOICE_2.CEI', 'QUOTES_1.CEQ' ],
+        'bare filenames returned from NLST fallback'
+    );
+    ok( ( exists $files->[0]{filename} ), 'fallback entries expose a filename key' );
+
+    $transport->{connection} = undef;
+
+    $schema->storage->txn_rollback;
 };
 
 1;
