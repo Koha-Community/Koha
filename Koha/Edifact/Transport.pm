@@ -28,6 +28,7 @@ use File::Slurp qw( read_file );
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::File::Transports;
+use Koha::Logger;
 
 sub new {
     my ( $class, $account_id ) = @_;
@@ -42,8 +43,9 @@ sub new {
         account        => $acct,
         schema         => $schema,
         file_transport => $file_transport,
-        working_dir    => C4::Context::temporary_directory,    #temporary work directory
+        working_dir    => C4::Context::temporary_directory,              #temporary work directory
         transfer_date  => dt_from_string(),
+        logger         => Koha::Logger->get( { interface => 'edi' } ),
     };
 
     bless $self, $class;
@@ -63,7 +65,7 @@ sub download_messages {
     $self->{message_type} = $message_type;
 
     unless ( $self->{file_transport} ) {
-        carp "No file transport configured for EDI account " . $self->{account}->id;
+        $self->{logger}->error( "No file transport configured for EDI account " . $self->{account}->id );
         return;
     }
 
@@ -73,21 +75,21 @@ sub download_messages {
 
     # Connect to the transport
     unless ( $self->{file_transport}->connect() ) {
-        carp "Failed to connect to file transport: " . $self->{file_transport}->id;
+        $self->{logger}->error( "Failed to connect to file transport: " . $self->{file_transport}->id );
         return;
     }
 
     # Change to download directory
     my $download_dir = $self->{file_transport}->download_directory;
     if ( $download_dir && !$self->{file_transport}->change_directory($download_dir) ) {
-        carp "Failed to change to download directory: $download_dir";
+        $self->{logger}->error("Failed to change to download directory: $download_dir");
         return;
     }
 
     # Get file list
     my $file_list = $self->{file_transport}->list_files();
     unless ($file_list) {
-        carp "Failed to get file list from transport";
+        $self->{logger}->error("Failed to get file list from transport");
         return;
     }
 
@@ -109,7 +111,7 @@ sub download_messages {
                 # Mark file as processed using the transport's rename functionality
                 $self->{file_transport}->rename_file( $filename, $processed_name );
             } else {
-                carp "Failed to download file: $filename";
+                $self->{logger}->error("Failed to download file: $filename");
             }
         }
     }
@@ -131,20 +133,20 @@ sub upload_messages {
     }
 
     unless ( $self->{file_transport} ) {
-        carp "No file transport configured for EDI account " . $self->{account}->id;
+        $self->{logger}->error( "No file transport configured for EDI account " . $self->{account}->id );
         return;
     }
 
     # Connect to the transport
     unless ( $self->{file_transport}->connect() ) {
-        carp "Failed to connect to file transport: " . $self->{file_transport}->id;
+        $self->{logger}->error( "Failed to connect to file transport: " . $self->{file_transport}->id );
         return;
     }
 
     # Change to upload directory
     my $upload_dir = $self->{file_transport}->upload_directory;
     if ( $upload_dir && !$self->{file_transport}->change_directory($upload_dir) ) {
-        carp "Failed to change to upload directory: $upload_dir";
+        $self->{logger}->error("Failed to change to upload directory: $upload_dir");
         return;
     }
 
@@ -165,13 +167,13 @@ sub upload_messages {
                     $m->status('sent');
                     $m->update;
                 } else {
-                    carp "Failed to upload file: " . $m->filename;
+                    $self->{logger}->error( "Failed to upload file: " . $m->filename );
                 }
 
                 # Clean up temp file
                 unlink $temp_file;
             } else {
-                carp "Could not create temporary file for upload: " . $m->filename;
+                $self->{logger}->error( "Could not create temporary file for upload: " . $m->filename );
             }
         }
     }
