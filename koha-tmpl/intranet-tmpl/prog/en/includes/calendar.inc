@@ -5,7 +5,6 @@
 [% FILTER collapse %]
     <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var debug    = "[% debug | html %]";
-        var bidy = [% bidy ? 'true' : 'false' | $raw %];
         Koha.addPrefs({
             dateformat: "[% Koha.Preference('dateformat') | html %]",
             CalendarFirstDayOfWeek: "[% Koha.Preference('CalendarFirstDayOfWeek') | html %]",
