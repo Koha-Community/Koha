@@ -229,7 +229,7 @@
 
         function getFieldHelpURL(tag) {
             if (Koha.prefs.MarcFieldDocURL) {
-                var docurl = Koha.prefs.MarcFieldDocURL.replace('"', "&quot;");
+                var docurl = Koha.prefs.MarcFieldDocURL;
                 docurl = docurl.replace("{MARC}", Koha.prefs.marcflavour);
                 docurl = docurl.replace("{FIELD}", "" + tag);
                 docurl = docurl.replace("{LANG}", lang);
