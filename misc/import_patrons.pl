@@ -165,7 +165,7 @@ Field on which to match incoming patrons to existing patrons
 
 Set defaults to patron fields, repeatable e.g. --default branchcode=MPL --default categorycode=PT
 
-=item B<-k|--preserve-field>
+=item B<-pf|--preserve-field>
 
 Prevent specified patron fields for existing patrons from being overwritten
 
