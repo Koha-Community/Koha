@@ -290,6 +290,10 @@
         [% END %]
     [% END %]
 
+    [%- IF ( Koha.Preference('UseRecalls').match('staff') && CAN_user_recalls ) -%]
+        <a id="placerecall" class="btn btn-default" href="/cgi-bin/koha/recalls/request.pl?biblionumber=[% biblionumber | html %]" role="button"> <i class="fa-solid fa-book-bookmark"></i> Place recall</a>
+    [%- END -%]
+
     <div class="btn-group">
         <a id="audit_record" class="btn btn-default" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | html %]&audit=1" role="button"> <i class="fa-solid fa-stethoscope"></i> Audit</a>
     </div>
