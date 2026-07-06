@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Mojo;
 use Test::Warn;
 
@@ -509,6 +509,85 @@ subtest 'delete() tests' => sub {
         ->status_is( 204, 'REST3.2.4' )
         ->content_is( '', 'REST3.3.4' );
     $t->delete_ok( "//$auth_userid:$password@/api/v1/acquisitions/orders/" . $order->ordernumber )->status_is(404);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Bug 42995 - nested +count embeds with has_many prefetch and pagination' => sub {
+
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 }
+        }
+    );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+
+    my $basket = $builder->build_object( { class => 'Koha::Acquisition::Baskets', value => { is_standing => 1 } } );
+    my $biblio = $builder->build_sample_biblio;
+
+    # Add items to the biblio so items+count has something to count
+    my $item = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+
+    # Add a suggestion so biblio.suggestions.suggester prefetch is exercised
+    my $suggester = $builder->build_object( { class => 'Koha::Patrons' } );
+    $builder->build_object(
+        {
+            class => 'Koha::Suggestions',
+            value => {
+                biblionumber => $biblio->biblionumber,
+                suggestedby  => $suggester->borrowernumber,
+                STATUS       => 'ACCEPTED',
+            }
+        }
+    );
+
+    my $order = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                basketno         => $basket->basketno,
+                orderstatus      => 'new',
+                biblionumber     => $biblio->biblionumber,
+                quantityreceived => 0,
+                quantity         => 1,
+            }
+        }
+    );
+
+    # Nested +count embeds under a joined parent combined with a has_many
+    # prefetch and pagination trigger DBIC's limiting subquery, which moves
+    # +select into the inner query where the parent alias is unavailable.
+    my $embed_header =
+        'biblio.items+count,biblio.holds+count,biblio.uncancelled_orders+count,biblio.suggestions.suggester';
+
+    # With default pagination (_per_page defaults to 20) and nested +count under
+    # a parent that also has a has_many child in prefetch.
+    # Filter by order_id via the q parameter with me. prefix to avoid column
+    # ambiguity when biblio is joined (biblioitem is has_many from biblio,
+    # triggering DBIC subselect).
+    my $query = encode_json( { "me.order_id" => $order->ordernumber } );
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/orders?q=$query" => { 'x-koha-embed' => $embed_header } )
+        ->status_is( 200, 'Nested +count embeds with has_many prefetch and pagination does not explode' )
+        ->json_has( '/0/biblio',             'biblio embedded' )
+        ->json_has( '/0/biblio/items_count', 'items_count present' )
+        ->json_is( '/0/biblio/items_count', 1, 'items_count is correct' );
+
+    # Also test with only_active which adds an extra join (filter_by_active joins basket).
+    $embed_header =
+        'basket.basket_group,biblio.uncancelled_orders+count,biblio.holds+count,biblio.items+count,biblio.suggestions.suggester,fund,current_item_level_holds+count,items';
+
+    $t->get_ok(
+        "//$userid:$password@/api/v1/acquisitions/orders?only_active=1&q=$query" => { 'x-koha-embed' => $embed_header }
+        )
+        ->status_is( 200, 'Full parcel page embed combination does not cause 500' )
+        ->json_has( '/0/biblio', 'biblio embedded with full parcel page embeds' );
 
     $schema->storage->txn_rollback;
 };
