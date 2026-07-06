@@ -750,7 +750,14 @@ sub check_booking {
     my $booking_id = $params->{booking_id};
 
     if ( my $checkout = $self->checkout ) {
-        return 0 if ( $start_date <= dt_from_string( $checkout->date_due ) );
+
+        # A checkout linked to the booking under consideration must not block
+        # that booking's own updates (i.e. extending an issued booking)
+        my $is_own_checkout =
+               defined($booking_id)
+            && defined( $checkout->booking_id )
+            && $checkout->booking_id == $booking_id;
+        return 0 if !$is_own_checkout && $start_date <= dt_from_string( $checkout->date_due );
     }
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;

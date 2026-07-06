@@ -3697,7 +3697,7 @@ subtest 'find_booking' => sub {
 };
 
 subtest 'check_booking tests' => sub {
-    plan tests => 6;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -3826,6 +3826,63 @@ subtest 'check_booking tests' => sub {
         $can_book,
         1,
         "Koha::Item->check_booking returns true when we don't conflict with a future booking"
+    );
+
+    # Checkout on the item blocks proposed bookings that start before it is due back
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                borrowernumber => $patron->borrowernumber,
+                itemnumber     => $item->itemnumber,
+                booking_id     => undef,
+                date_due       => dt_from_string()->add( days => 5 ),
+            }
+        }
+    );
+
+    $can_book = $item->check_booking(
+        {
+            start_date => dt_from_string(),
+            end_date   => dt_from_string()->add( days => 7 ),
+        }
+    );
+    is(
+        $can_book,
+        0,
+        "Koha::Item->check_booking returns false when the item is checked out and due within the proposed period"
+    );
+
+    # ... but the booking's own linked checkout must not block it (extending an issued booking)
+    my $booking4 = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                biblio_id  => $biblio->biblionumber,
+                item_id    => $item->itemnumber,
+                start_date => dt_from_string(),
+                end_date   => dt_from_string()->add( days => 5 ),
+                status     => 'issued',
+            }
+        }
+    );
+    $checkout->booking_id( $booking4->booking_id )->store();
+
+    # Refresh the item to drop the checkout relation cached by the previous check_booking call
+    $item->discard_changes;
+
+    $can_book = $item->check_booking(
+        {
+            start_date => dt_from_string(),
+            end_date   => dt_from_string()->add( days => 7 ),
+            booking_id => $booking4->booking_id,
+        }
+    );
+    is(
+        $can_book,
+        1,
+        "Koha::Item->check_booking returns true when the only blocking checkout is linked to the booking being updated"
     );
 
     $schema->storage->txn_rollback;
