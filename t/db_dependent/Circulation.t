@@ -5711,7 +5711,7 @@ subtest 'CanBookBeIssued | recalls' => sub {
 };
 
 subtest 'CanBookBeIssued | bookings' => sub {
-    plan tests => 4;
+    plan tests => 7;
 
     my $schema = Koha::Database->schema;
     $schema->storage->txn_begin;
@@ -5778,6 +5778,50 @@ subtest 'CanBookBeIssued | bookings' => sub {
         $needsconfirmation->{BOOKED_EARLY}->booking_id,
         $booking->booking_id,
         "Booked to this user, but they're collecting early"
+    );
+
+    # Requested due date runs into the next booking for this item
+    $booking->start_date( dt_from_string()->subtract( days => 1 ) )->store();
+
+    my $subsequent_booking = Koha::Booking->new(
+        {
+            patron_id         => $patron2->borrowernumber,
+            pickup_library_id => $pickup_library->branchcode,
+            item_id           => $item->itemnumber,
+            biblio_id         => $item->biblio->biblionumber,
+            start_date        => dt_from_string()->add( days => 8 ),
+            end_date          => dt_from_string()->add( days => 12 ),
+        }
+    )->store();
+
+    ( $issuingimpossible, $needsconfirmation, $alerts, $messages ) = CanBookBeIssued(
+        $patron1, $item->barcode,
+        dt_from_string()->add( days => 9 ),
+        undef, undef, undef
+    );
+    is(
+        $needsconfirmation->{BOOKED_DUE_DATE_CLASH}->booking_id,
+        $subsequent_booking->booking_id,
+        "Requested due date running into the next booking needs confirmation"
+    );
+
+    ( $issuingimpossible, $needsconfirmation, $alerts, $messages ) = CanBookBeIssued(
+        $patron1, $item->barcode,
+        dt_from_string()->add( days => 5 ),
+        undef, undef, undef
+    );
+    is(
+        $needsconfirmation->{BOOKED_DUE_DATE_CLASH}, undef,
+        "No confirmation needed when the requested due date stays clear of the next booking"
+    );
+
+    ( $issuingimpossible, $needsconfirmation, $alerts, $messages ) = CanBookBeIssued(
+        $patron1, $item->barcode,
+        undef,    undef, undef, undef
+    );
+    is(
+        $needsconfirmation->{BOOKED_DUE_DATE_CLASH}, undef,
+        "No confirmation triggered by a calculated due date; only explicit overrides are checked"
     );
 
     $schema->storage->txn_rollback;

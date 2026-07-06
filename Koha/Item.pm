@@ -629,11 +629,16 @@ sub bookings {
 
 =head3 find_booking
 
-  my $booking = $item->find_booking( { checkout_date => $now, due_date => $future_date } );
+  my $booking = $item->find_booking(
+      { checkout_date => $now, due_date => $future_date, [ exclude_booking_id => $booking_id ] } );
 
 Find the first booking that would conflict with the passed checkout dates for this item.  If a booking
 lead period is configured for the itemtype we will also take that into account here, counting bookings
 that fall in that lead period as conflicts too.
+
+Optionally, you may pass an exclude_booking_id to leave a specific booking out of the checks; this is
+helpful when looking for bookings that would clash with an extension of the checkout that is already
+satisfying that booking.
 
 FIXME: This can be simplified, it was originally intended to iterate all biblio level bookings
 to catch cases where this item may be the last available to satisfy a biblio level only booking.
@@ -645,9 +650,10 @@ implementation.
 sub find_booking {
     my ( $self, $params ) = @_;
 
-    my $start_date = $params->{checkout_date};
-    my $end_date   = $params->{due_date};
-    my $biblio     = $self->biblio;
+    my $start_date         = $params->{checkout_date};
+    my $end_date           = $params->{due_date};
+    my $exclude_booking_id = $params->{exclude_booking_id};
+    my $biblio             = $self->biblio;
 
     my $rule = Koha::CirculationRules->get_effective_rule(
         {
@@ -689,7 +695,8 @@ sub find_booking {
                         }
                     ]
                 },
-                { status => { '-not_in' => [ 'cancelled', 'completed' ] } }
+                { status => { '-not_in' => [ 'cancelled', 'completed' ] } },
+                ( $exclude_booking_id ? { booking_id => { '!=' => $exclude_booking_id } } : () ),
             ]
         },
         { order_by => { '-asc' => 'start_date' } }

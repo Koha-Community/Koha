@@ -3499,7 +3499,7 @@ subtest 'bookings' => sub {
 };
 
 subtest 'find_booking' => sub {
-    plan tests => 9;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
@@ -3604,6 +3604,31 @@ subtest 'find_booking' => sub {
     is(
         $found_booking->booking_id, $booking2->booking_id,
         "Koha::Item->find_booking returns the current booking not a future one"
+    );
+
+    # Exclusion of a specific booking
+    $found_booking = $item->find_booking(
+        {
+            checkout_date      => dt_from_string(),
+            due_date           => dt_from_string()->add( days => 7 ),
+            exclude_booking_id => $booking2->booking_id,
+        }
+    );
+    is(
+        $found_booking, undef,
+        "Koha::Item->find_booking skips the excluded booking when nothing else clashes"
+    );
+
+    $found_booking = $item->find_booking(
+        {
+            checkout_date      => dt_from_string(),
+            due_date           => dt_from_string()->add( days => 9 ),
+            exclude_booking_id => $booking2->booking_id,
+        }
+    );
+    is(
+        $found_booking->booking_id, $booking3->booking_id,
+        "Koha::Item->find_booking returns the next clashing booking when the excluded one is skipped"
     );
 
     # Cancelled booking

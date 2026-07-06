@@ -317,6 +317,13 @@
                 [% IF ( BOOKED_EARLY ) %]
                     <li class="needsconfirm booked_early"> Patron has this item booked for checkout on [% BOOKED_EARLY.start_date | $KohaDates %] </li>
                 [% END %]
+
+                [% IF ( BOOKED_DUE_DATE_CLASH ) %]
+                    <li class="needsconfirm booked_due_date_clash">
+                        The requested due date falls within the next booking for this item (booked from [% BOOKED_DUE_DATE_CLASH.start_date | $KohaDates %]). If you continue, the booking linked to this checkout will keep its original end
+                        date.
+                    </li>
+                [% END %]
             </ul>
 
             [% IF CAN_user_circulate_force_checkout or HIGHHOLDS %]

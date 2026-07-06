@@ -864,6 +864,7 @@ sub CanBookBeIssued {
 
     my $now = dt_from_string();
 
+    my $requested_duedate = $duedate ? 1 : 0;
     $duedate ||= CalcDateDue( $now, $effective_itemtype, $circ_library->branchcode, $patron );
 
     if ( DateTime->compare( $duedate, $now ) == -1 ) {    # duedate cannot be before now
@@ -1326,6 +1327,21 @@ sub CanBookBeIssued {
                 $needsconfirmation{'BOOKED_EARLY'} = $booking;
             } else {
                 $alerts{'BOOKED'} = $booking;
+            }
+
+            # An explicitly requested due date that runs into the next booking
+            # for this item, regardless of whose booking that is, needs staff
+            # confirmation; the booking end date will not be extended past that
+            # booking (see AddIssue)
+            if ($requested_duedate) {
+                my $next_booking = $item_object->find_booking(
+                    {
+                        checkout_date      => $now,
+                        due_date           => $duedate,
+                        exclude_booking_id => $booking->booking_id,
+                    }
+                );
+                $needsconfirmation{'BOOKED_DUE_DATE_CLASH'} = $next_booking if $next_booking;
             }
         }
 
