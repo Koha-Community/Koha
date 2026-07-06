@@ -3331,7 +3331,7 @@ sub GetUpcomingDueIssues {
 
 =head2 CanBookBeRenewed
 
-  ($ok,$error,$info) = &CanBookBeRenewed($patron, $issue, $override_limit, $cron);
+  ($ok,$error,$info) = &CanBookBeRenewed($patron, $issue, $override_limit, $cron, $date_due);
 
 Find out whether a borrowed item may be renewed.
 
@@ -3348,6 +3348,11 @@ the limit on the number of times that the loan can be renewed
 to renew sooner than "No renewal before" and to manually renew loans
 that are automatically renewed.
 
+C<$date_due>, optional, is the requested due date for the renewal when
+the caller intends to renew to a specific date rather than let the
+circulation rules calculate one. It is used in place of the calculated
+due date when checking the renewal against bookings for the item.
+
 C<$CanBookBeRenewed> returns a true value if the item may be renewed. The
 item must currently be on loan to the specified borrower; renewals
 must be allowed for the item's type; and the borrower must not have
@@ -3359,7 +3364,7 @@ already renewed the loan.
 =cut
 
 sub CanBookBeRenewed {
-    my ( $patron, $issue, $override_limit, $cron ) = @_;
+    my ( $patron, $issue, $override_limit, $cron, $date_due ) = @_;
 
     my $auto_renew = "no";
     my $soonest;
@@ -3524,7 +3529,10 @@ sub CanBookBeRenewed {
             ( C4::Context->preference('ManualRenewalPeriodBase') eq 'date_due' )
             ? dt_from_string( $issue->date_due, 'sql' )
             : dt_from_string();
-        my $datedue = CalcDateDue( $startdate, $item->effective_itemtype, $branchcode, $patron, 'is a renewal' );
+        my $datedue =
+            $date_due
+            ? dt_from_string($date_due)
+            : CalcDateDue( $startdate, $item->effective_itemtype, $branchcode, $patron, 'is a renewal' );
         if (
             my $booking = $item->find_booking(
                 { checkout_date => $startdate, due_date => $datedue, patron_id => $patron->borrowernumber }
@@ -3532,6 +3540,19 @@ sub CanBookBeRenewed {
             )
         {
             return ( 0, 'booked' ) unless ( $booking->patron_id == $patron->borrowernumber );
+
+            # The renewal must not run into the next booking for this item,
+            # regardless of whose booking that is; the patron's own booking
+            # hides any subsequent ones from the lookup above, so repeat it
+            # with their booking excluded
+            return ( 0, 'booked' )
+                if $item->find_booking(
+                {
+                    checkout_date      => $startdate,
+                    due_date           => $datedue,
+                    exclude_booking_id => $booking->booking_id,
+                }
+                );
         }
 
     }

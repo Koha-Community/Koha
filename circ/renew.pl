@@ -72,7 +72,12 @@ if ( $op eq 'cud-renew' && $barcode ) {
                 my $confirmations;
                 my $can_renew;
                 my $info;
-                ( $can_renew, $error, $info ) = CanBookBeRenewed( $patron, $checkout, $override_limit );
+                my $requested_due_date =
+                    ( C4::Context->preference('SpecifyDueDate') && $hard_due_date )
+                    ? $hard_due_date
+                    : undef;
+                ( $can_renew, $error, $info ) =
+                    CanBookBeRenewed( $patron, $checkout, $override_limit, undef, $requested_due_date );
                 push @{$confirmations}, 'RENEWAL_LIMIT' if $override_limit;
 
                 if ( $error && ( $error eq 'on_reserve' ) ) {

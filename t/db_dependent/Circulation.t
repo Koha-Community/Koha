@@ -2009,7 +2009,7 @@ subtest "CanBookBeRenewed tests" => sub {
 };
 
 subtest "CanBookBeRenewed | bookings" => sub {
-    plan tests => 3;
+    plan tests => 8;
 
     my $schema = Koha::Database->schema;
     $schema->storage->txn_begin;
@@ -2043,6 +2043,61 @@ subtest "CanBookBeRenewed | bookings" => sub {
     my ( $renewok, $error ) = CanBookBeRenewed( $renewing_patron, $issue, 0 );
     is( $renewok, 0,        "Renewal not allowed as it would mean the item was not returned before the next booking" );
     is( $error,   'booked', "Error is 'booked'" );
+
+    # Renewing patron has their own booking satisfied by this checkout;
+    # the renewal still must not run into the next booking for the item
+    $booking->delete();
+
+    my $own_booking = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                patron_id         => $renewing_patron->borrowernumber,
+                pickup_library_id => $pickup_library->branchcode,
+                item_id           => $item->itemnumber,
+                biblio_id         => $item->biblio->biblionumber,
+                start_date        => dt_from_string()->subtract( days => 1 ),
+                end_date          => $datedue->clone(),
+                status            => 'issued',
+            }
+        }
+    );
+    $issue->booking_id( $own_booking->booking_id )->store();
+    $issue->discard_changes;
+
+    my $next_booking = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                patron_id         => $booked_patron->borrowernumber,
+                pickup_library_id => $pickup_library->branchcode,
+                item_id           => $item->itemnumber,
+                biblio_id         => $item->biblio->biblionumber,
+                start_date        => $datedue->clone()->add( days => 2 ),
+                end_date          => $datedue->clone()->add( days => 10 ),
+                status            => 'new',
+            }
+        }
+    );
+
+    # Calculated renewal due date (date_due + renewal period) runs into the next booking
+    ( $renewok, $error ) = CanBookBeRenewed( $renewing_patron, $issue, 0 );
+    is( $renewok, 0,        "Renewal with own booking not allowed when it would run into the next booking" );
+    is( $error,   'booked', "Error is 'booked'" );
+
+    # An explicitly requested due date is checked instead of the calculated one
+    ( $renewok, $error ) = CanBookBeRenewed(
+        $renewing_patron, $issue, 0, undef,
+        $datedue->clone()->add( days => 3 )
+    );
+    is( $renewok, 0,        "Requested due date running into the next booking is refused" );
+    is( $error,   'booked', "Error is 'booked'" );
+
+    ( $renewok, $error ) = CanBookBeRenewed(
+        $renewing_patron, $issue, 0, undef,
+        $datedue->clone()->add( days => 1 )
+    );
+    is( $renewok, 1, "Requested due date clear of the next booking is allowed" );
 
     $schema->storage->txn_rollback;
 };

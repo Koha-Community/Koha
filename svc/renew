@@ -66,7 +66,7 @@ my $item   = Koha::Items->find($itemnumber);
 
 my $confirmations;
 ( $data->{renew_okay}, $data->{error} ) =
-    CanBookBeRenewed( $patron, $item->checkout, $override_limit );
+    CanBookBeRenewed( $patron, $item->checkout, $override_limit, undef, $date_due );
 
 # If we're allowing reserved items to be renewed...
 if ( $data->{error} && $data->{error} eq 'on_reserve' && C4::Context->preference('AllowRenewalOnHoldOverride') ) {
