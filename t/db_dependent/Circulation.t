@@ -19,7 +19,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 87;
+use Test::More tests => 88;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -7435,6 +7435,98 @@ subtest 'AddIssue/AddReturn | booking status handling' => sub {
     my $issue5 = AddIssue( $patron1, $item->barcode, dt_from_string()->add( days => 7 ) );
 
     ok( $issue5, "AddIssue works normally when no booking is found" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'AddIssue | booking end_date sync with due date override' => sub {
+    plan tests => 5;
+
+    my $schema = Koha::Database->schema;
+    $schema->storage->txn_begin;
+
+    my $patron         = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron2        = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $pickup_library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $item           = $builder->build_sample_item( { bookable => 1 } );
+
+    # Case 1: Due date matches booking end_date - no sync needed
+    my $end_date = dt_from_string()->add( days => 7 )->truncate( to => 'minute' );
+    my $booking  = Koha::Booking->new(
+        {
+            patron_id         => $patron->borrowernumber,
+            pickup_library_id => $pickup_library->branchcode,
+            item_id           => $item->itemnumber,
+            biblio_id         => $item->biblio->biblionumber,
+            start_date        => dt_from_string(),
+            end_date          => $end_date,
+        }
+    )->store();
+
+    AddIssue( $patron, $item->barcode, $end_date->clone );
+    $booking->discard_changes();
+    is(
+        dt_from_string( $booking->end_date )->compare($end_date), 0,
+        "Booking end_date unchanged when due date matches"
+    );
+
+    AddReturn( $item->barcode, $pickup_library->branchcode );
+    $booking->delete();
+
+    # Case 2: Due date overridden at checkout - booking end_date follows
+    $booking = Koha::Booking->new(
+        {
+            patron_id         => $patron->borrowernumber,
+            pickup_library_id => $pickup_library->branchcode,
+            item_id           => $item->itemnumber,
+            biblio_id         => $item->biblio->biblionumber,
+            start_date        => dt_from_string(),
+            end_date          => $end_date,
+        }
+    )->store();
+
+    my $override_due = dt_from_string()->add( days => 10 )->truncate( to => 'minute' );
+    AddIssue( $patron, $item->barcode, $override_due->clone );
+    $booking->discard_changes();
+    is( $booking->status, 'issued', "Booking marked issued on checkout" );
+    is(
+        dt_from_string( $booking->end_date )->compare($override_due), 0,
+        "Booking end_date synced to overridden due date"
+    );
+
+    AddReturn( $item->barcode, $pickup_library->branchcode );
+    $booking->delete();
+
+    # Case 3: Override clashes with a subsequent booking - original end_date kept
+    $booking = Koha::Booking->new(
+        {
+            patron_id         => $patron->borrowernumber,
+            pickup_library_id => $pickup_library->branchcode,
+            item_id           => $item->itemnumber,
+            biblio_id         => $item->biblio->biblionumber,
+            start_date        => dt_from_string(),
+            end_date          => $end_date,
+        }
+    )->store();
+
+    my $subsequent_booking = Koha::Booking->new(
+        {
+            patron_id         => $patron2->borrowernumber,
+            pickup_library_id => $pickup_library->branchcode,
+            item_id           => $item->itemnumber,
+            biblio_id         => $item->biblio->biblionumber,
+            start_date        => dt_from_string()->add( days => 8 ),
+            end_date          => dt_from_string()->add( days => 12 ),
+        }
+    )->store();
+
+    AddIssue( $patron, $item->barcode, $override_due->clone );
+    $booking->discard_changes();
+    is( $booking->status, 'issued', "Booking still marked issued when override clashes" );
+    is(
+        dt_from_string( $booking->end_date )->compare($end_date), 0,
+        "Booking end_date kept when override would clash with a subsequent booking"
+    );
 
     $schema->storage->txn_rollback;
 };

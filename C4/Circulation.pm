@@ -1856,7 +1856,27 @@ sub AddIssue {
                         if ( $booking->patron_id == $patron->borrowernumber ) {
 
                             # Patron's own booking - mark as issued and link checkout to booking
-                            $booking->status('issued')->store;
+                            $booking->status('issued');
+
+                            # Sync any due date override back to the booking end_date so the
+                            # booking and checkout agree from the moment of issue
+                            my $booking_end = dt_from_string( $booking->end_date );
+                            $booking->end_date($datedue) if $datedue->compare($booking_end) != 0;
+
+                            try {
+                                $booking->store;
+                            } catch {
+                                my $error = $_;
+                                if ( blessed $error && $error->isa('Koha::Exceptions::Booking::Clash') ) {
+
+                                    # The overridden due date would clash with a subsequent
+                                    # booking; proceed with the booking's original end_date
+                                    $booking->discard_changes;
+                                    $booking->status('issued')->store;
+                                } else {
+                                    die $error;
+                                }
+                            };
                             $issue_attributes->{'booking_id'} = $booking->booking_id;
                         } else {
 
