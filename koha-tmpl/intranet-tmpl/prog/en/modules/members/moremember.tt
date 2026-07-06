@@ -851,6 +851,7 @@
 [% IF Koha.Preference('EnableBooking') %]
     [% INCLUDE modals/cancel_booking.inc %]
     [% INCLUDE modals/place_booking.inc %]
+    [% INCLUDE modals/extend_booking.inc %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
@@ -917,6 +918,7 @@
         </script>
         [% Asset.js("js/additional-filters.js") | $raw %]
         [% Asset.js("js/cancel_booking_modal.js") | $raw %]
+        [% Asset.js("js/extend_booking_modal.js") | $raw %]
         [% Asset.js("js/modals/place_booking.js") | $raw %]
         [% Asset.js("js/bookings/common.js") | $raw %]
         [% Asset.js("js/tables/bookings.js") | $raw %]

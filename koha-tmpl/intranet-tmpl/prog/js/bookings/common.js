@@ -151,6 +151,36 @@ window.BookingsTable = (function () {
             }
         }
 
+        if (row.status === "issued") {
+            // Extending is a staff authorised renewal of the linked checkout,
+            // so it requires both the circulate permission and a checkout
+            if (
+                permissions.CAN_user_circulate_circulate_remaining_permissions &&
+                row.item?.checkout
+            ) {
+                actions += `
+                    <button type="button" class="btn btn-default btn-xs extend-action"
+                        data-bs-toggle="modal"
+                        data-bs-target="#extendBookingModal"
+                        data-booking="%s"
+                        data-checkout_id="%s"
+                        data-item_id="%s"
+                        data-end_date="%s"
+                        data-due_date="%s"
+                    >
+                        <i class="fa fa-calendar-plus" aria-hidden="true"></i> %s
+                    </button>
+                `.format(
+                    escape_str(row.booking_id),
+                    escape_str(row.item.checkout.checkout_id),
+                    escape_str(row.item_id),
+                    escape_str(row.end_date),
+                    escape_str(row.item.checkout.due_date),
+                    __("Extend")
+                );
+            }
+        }
+
         return actions;
     }
 

@@ -46,6 +46,7 @@
     </div>
 [% END %]
 [% INCLUDE modals/cancel_booking.inc %]
+[% INCLUDE modals/extend_booking.inc %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("lib/vis-timeline/vis-timeline-graph2d.min.js") | $raw %]
@@ -63,6 +64,7 @@
     </script>
     [% Asset.js("js/modals/place_booking.js") | $raw %]
     [% Asset.js("js/cancel_booking_modal.js") | $raw %]
+    [% Asset.js("js/extend_booking_modal.js") | $raw %]
     [% Asset.js("js/combobox.js") | $raw %]
     [% Asset.js("js/additional-filters.js") | $raw %]
     [% Asset.js("js/bookings/common.js") | $raw %]
