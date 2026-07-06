@@ -36,7 +36,7 @@ use Koha::AuthorisedValues;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 
 use Test::Warn;
 
@@ -618,6 +618,12 @@ subtest 'SearchItems test' => sub {
     };
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'SearchItems security tests' => sub {
+    plan tests => 1;
+    my ($items) = SearchItems( { field => 'homebranch', operator => 'is', query => 'test' } );
+    pass("Invalid 'is' query no longer throws fatal error");
 };
 
 subtest 'Koha::Item(s) tests' => sub {

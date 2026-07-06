@@ -1124,10 +1124,18 @@ sub _SearchItems_build_where_fragment {
                     };
                 }
             } elsif ( $op eq 'is' ) {
-                $where_fragment = {
-                    str => "$column $op $query",
-                    args => [],
-                };
+                my $str = "";
+                if ( $query =~ /^null$/i ) {
+                    $str = "$column is null";
+                } elsif ( $query =~ /^not null$/i ) {
+                    $str = "$column is not null";
+                }
+                if ($str) {
+                    $where_fragment = {
+                        str  => $str,
+                        args => [],
+                    };
+                }
             } else {
                 $where_fragment = {
                     str => "$column $op ?",
@@ -1206,6 +1214,8 @@ sub SearchItems {
     $params->{sortorder} ||= 'ASC';
 
     my ($where_str, @where_args);
+
+    #FIXME: Use SQL::Abstract to build the WHERE clause rather than this custom function
     my $where_fragment = _SearchItems_build_where_fragment($filter);
     if ($where_fragment) {
         $where_str = $where_fragment->{str};
