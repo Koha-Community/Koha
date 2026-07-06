@@ -19,7 +19,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 88;
+use Test::More tests => 89;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -7838,6 +7838,107 @@ subtest 'AddRenewal | booking_id preservation' => sub {
     is( $issue->booking_id,     $booking->booking_id, "booking_id preserved after renewal" );
     is( $issue->renewals_count, 1,                    "Renewal count incremented" );
     ok( defined $issue->booking_id, "booking_id field is not null after renewal" );
+};
+
+subtest 'AddRenewal | booking end_date sync' => sub {
+    plan tests => 4;
+
+    my $schema = Koha::Database->schema;
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron2 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item    = $builder->build_sample_item( { library => $library->branchcode, bookable => 1 } );
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => $library->branchcode,
+            categorycode => $patron->categorycode,
+            itemtype     => $item->effective_itemtype,
+            rules        => {
+                renewalsallowed => 10,
+                renewalperiod   => 7,
+                issuelength     => 7,
+            }
+        }
+    );
+
+    my $start_date = dt_from_string()->truncate( to => 'minute' );
+    my $end_date   = $start_date->clone->add( days => 7 );
+
+    my $booking = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                patron_id         => $patron->borrowernumber,
+                item_id           => $item->itemnumber,
+                biblio_id         => $item->biblio->biblionumber,
+                pickup_library_id => $library->branchcode,
+                start_date        => $start_date,
+                end_date          => $end_date,
+                status            => 'issued',
+            }
+        }
+    );
+
+    my $issue = AddIssue( $patron, $item->barcode, $end_date->clone );
+    $issue->booking_id( $booking->booking_id )->store;
+
+    # Renewal to a specific due date pulls the booking end_date along
+    my $new_due_date = $end_date->clone->add( days => 3 );
+    AddRenewal(
+        {
+            borrowernumber => $patron->borrowernumber,
+            itemnumber     => $item->itemnumber,
+            branch         => $library->branchcode,
+            datedue        => $new_due_date->clone,
+        }
+    );
+    $booking->discard_changes;
+    is(
+        dt_from_string( $booking->end_date )->compare($new_due_date), 0,
+        "Booking end_date synced to the renewal due date"
+    );
+    is( $booking->status, 'issued', "Booking remains issued after renewal" );
+
+    # A renewal that would clash with the next booking keeps the original end_date
+    my $next_booking = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                patron_id         => $patron2->borrowernumber,
+                item_id           => $item->itemnumber,
+                biblio_id         => $item->biblio->biblionumber,
+                pickup_library_id => $library->branchcode,
+                start_date        => $new_due_date->clone->add( days => 5 ),
+                end_date          => $new_due_date->clone->add( days => 9 ),
+                status            => 'new',
+            }
+        }
+    );
+
+    my $clashing_due_date = $new_due_date->clone->add( days => 6 );
+    AddRenewal(
+        {
+            borrowernumber => $patron->borrowernumber,
+            itemnumber     => $item->itemnumber,
+            branch         => $library->branchcode,
+            datedue        => $clashing_due_date->clone,
+        }
+    );
+    my $renewed_issue = Koha::Checkouts->find( $issue->issue_id );
+    $booking->discard_changes;
+    is(
+        dt_from_string( $renewed_issue->date_due )->compare($clashing_due_date), 0,
+        "Checkout renewed to the requested due date"
+    );
+    is(
+        dt_from_string( $booking->end_date )->compare($new_due_date), 0,
+        "Booking end_date kept when the renewal clashes with the next booking"
+    );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest "GetSoonestRenewDate tests" => sub {

@@ -3743,6 +3743,29 @@ sub AddRenewal {
                     error => 'Update of issue# ' . $issue->issue_id . ' failed with error: ' . $sth->errstr );
             }
 
+            # Keep any linked booking's end_date in sync with the renewed due date
+            if ( $issue->booking_id ) {
+                my $booking = Koha::Bookings->find( $issue->booking_id );
+                if ( $booking && $booking->status eq 'issued' ) {
+                    my $booking_end = dt_from_string( $booking->end_date );
+                    if ( $datedue->compare($booking_end) != 0 ) {
+                        try {
+                            $booking->end_date($datedue)->store;
+                        } catch {
+                            my $error = $_;
+                            if ( blessed $error && $error->isa('Koha::Exceptions::Booking::Clash') ) {
+
+                                # The renewal was explicitly allowed past a clash;
+                                # keep the booking's original end_date
+                                $booking->discard_changes;
+                            } else {
+                                die $error;
+                            }
+                        };
+                    }
+                }
+            }
+
             # Update the renewal count on the item, and tell zebra to reindex
             $renews = ( $item_object->renewals || 0 ) + 1;
             $item_object->renewals($renews);
