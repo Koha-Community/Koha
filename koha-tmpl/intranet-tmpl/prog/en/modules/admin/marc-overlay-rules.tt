@@ -322,24 +322,7 @@
     [% INCLUDE 'datatables.inc' %]
     <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var categories = [% To.json( categories ) | $raw %];
-        var module_filter_options = {
-            source: {
-                '*': '*',
-                [% FOREACH record_source IN record_sources %]
-                    [% SWITCH record_source %]
-                      [% CASE 'batchmod' %]'[% record_source | html %]': _("Batch record modification"),
-                      [% CASE 'intranet' %]'[% record_source | html %]': _("Staff interface MARC editor"),
-                      [% CASE 'batchimport' %]'[% record_source | html %]': _("Staged MARC import"),
-                      [% CASE 'add_to_basket' %]'[% record_source | html %]': _("Add to basket"),
-                      [% CASE 'z3950' %]'[% record_source | html %]': _("Z39.50"),
-                      [% CASE 'bulkmarcimport' %]'[% record_source | html %]': _("bulkmarcimport.pl"),
-                      [% CASE 'import_lexile' %]'[% record_source | html %]': _("import_lexile.pl"),
-                      [% CASE %] '[% record_source | html %]' : '[% record_source | html %]',
-                    [% END %]
-                [% END %]
-            },
-            categorycode: categories,
-        };
+        var record_sources = [% To.json( record_sources || []) | $raw %];
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
@@ -510,6 +493,40 @@
             // Note: This allows displaying a sorted list of categories later, but we still depend on an object!
             categories.unshift({ categorycode: "*", description: "*" });
             categories = categories.reduce((a, c) => ({ ...a, [c.categorycode]: c.description }), {});
+
+            const source = { "*": "*" };
+
+            record_sources.forEach(recordSource => {
+                switch (recordSource) {
+                    case "batchmod":
+                        source[recordSource] = _("Batch record modification");
+                        break;
+                    case "intranet":
+                        source[recordSource] = _("Staff interface MARC editor");
+                        break;
+                    case "batchimport":
+                        source[recordSource] = _("Staged MARC import");
+                        break;
+                    case "add_to_basket":
+                        source[recordSource] = _("Add to basket");
+                        break;
+                    case "z3950":
+                        source[recordSource] = _("Z39.50");
+                        break;
+                    case "bulkmarcimport":
+                        source[recordSource] = _("bulkmarcimport.pl");
+                        break;
+                    case "import_lexile":
+                        source[recordSource] = _("import_lexile.pl");
+                        break;
+                    default:
+                        source[recordSource] = recordSource;
+                }
+            });
+            var module_filter_options = {
+                source,
+                categorycode: categories,
+            };
 
             //Kind of hack: Replace filter value with label when one exist
             $(".rule-module").each(function () {
