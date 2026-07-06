@@ -500,7 +500,7 @@
                     cash_register: cash_register_rule,
                 },
                 submitHandler: function (form) {
-                    if (change.innerHTML > 0.0) {
+                    if (change && change.innerHTML > 0.0) {
                         $("#confirm_change_form").modal("show");
                     } else {
                         return true;
