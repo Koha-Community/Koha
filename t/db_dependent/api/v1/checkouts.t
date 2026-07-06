@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 113;
+use Test::More tests => 114;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::Mocks;
@@ -29,6 +29,7 @@ use DateTime;
 use C4::Context;
 use C4::Circulation qw( AddIssue AddReturn CanBookBeIssued );
 
+use Koha::CirculationRules;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Token;
@@ -257,7 +258,7 @@ $t->post_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/re
 
 $t->post_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id . "/renewal" )
     ->status_is(403)
-    ->json_is( { error => 'Renewal not authorized (too_many)' } );
+    ->json_is( { error => 'Renewal not authorized (too_many)', error_code => 'too_many' } );
 
 $t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/allows_renewal" )
     ->status_is(200)
@@ -813,6 +814,147 @@ subtest 'list checkouts that have been checked in and the patron has been delete
     $t->get_ok("//$userid:$password@/api/v1/checkouts?checked_in=1&q=$old_checkout_2_id")
         ->status_is(200)
         ->json_is( '/0/patron_id' => undef );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'renew() with requested due_date and bookings' => sub {
+    plan tests => 21;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'AllowRenewalLimitOverride', 1 );
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2 }     # circulate
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron2 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item    = $builder->build_sample_item( { library => $library->branchcode, bookable => 1 } );
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => $library->branchcode,
+            categorycode => $patron->categorycode,
+            itemtype     => $item->effective_itemtype,
+            rules        => {
+                renewalsallowed => 1,
+                renewalperiod   => 7,
+                issuelength     => 7,
+            }
+        }
+    );
+
+    my $start_date = dt_from_string()->truncate( to => 'minute' );
+    my $end_date   = $start_date->clone->add( days => 7 );
+
+    my $booking = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                patron_id         => $patron->borrowernumber,
+                item_id           => $item->itemnumber,
+                biblio_id         => $item->biblio->biblionumber,
+                pickup_library_id => $library->branchcode,
+                start_date        => $start_date,
+                end_date          => $end_date,
+                status            => 'new',
+            }
+        }
+    );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
+    my $checkout = AddIssue( $patron, $item->barcode, $end_date->clone );
+    is( $checkout->booking_id, $booking->booking_id, 'Checkout linked to the booking at issue' );
+    my $checkout_id = $checkout->issue_id;
+
+    # Renewal with a requested due date syncs the booking end_date
+    my $renewal_due = $end_date->clone->add( days => 3 );
+    $t->post_ok( "//$userid:$password@/api/v1/checkouts/$checkout_id/renewal" => json =>
+            { due_date => output_pref( { dateformat => 'rfc3339', dt => $renewal_due } ) } )
+        ->status_is(201)
+        ->json_is( '/due_date' => output_pref( { dateformat => 'rfc3339', dt => $renewal_due } ) );
+
+    $booking->discard_changes;
+    is(
+        dt_from_string( $booking->end_date )->compare($renewal_due), 0,
+        'Booking end_date synced to the renewed due date'
+    );
+
+    # Renewal count limit reached; renewal_limit override required
+    my $second_renewal_due = $end_date->clone->add( days => 5 );
+    $t->post_ok( "//$userid:$password@/api/v1/checkouts/$checkout_id/renewal" => json =>
+            { due_date => output_pref( { dateformat => 'rfc3339', dt => $second_renewal_due } ) } )
+        ->status_is(403)
+        ->json_is( '/error_code' => 'too_many' );
+
+    $t->post_ok(
+        "//$userid:$password@/api/v1/checkouts/$checkout_id/renewal" => { 'x-koha-override' => 'renewal_limit' } =>
+            json => { due_date => output_pref( { dateformat => 'rfc3339', dt => $second_renewal_due } ) } )
+        ->status_is(201)
+        ->json_is( '/due_date' => output_pref( { dateformat => 'rfc3339', dt => $second_renewal_due } ) );
+
+    $booking->discard_changes;
+    is(
+        dt_from_string( $booking->end_date )->compare($second_renewal_due), 0,
+        'Booking end_date follows the overridden renewal'
+    );
+
+    # A requested due date running into the next booking is refused
+    my $next_booking = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                patron_id         => $patron2->borrowernumber,
+                item_id           => $item->itemnumber,
+                biblio_id         => $item->biblio->biblionumber,
+                pickup_library_id => $library->branchcode,
+                start_date        => $second_renewal_due->clone->add( days => 3 ),
+                end_date          => $second_renewal_due->clone->add( days => 7 ),
+                status            => 'new',
+            }
+        }
+    );
+
+    my $clashing_due = $second_renewal_due->clone->add( days => 4 );
+    $t->post_ok(
+        "//$userid:$password@/api/v1/checkouts/$checkout_id/renewal" => { 'x-koha-override' => 'renewal_limit' } =>
+            json => { due_date => output_pref( { dateformat => 'rfc3339', dt => $clashing_due } ) } )
+        ->status_is(403)
+        ->json_is( '/error_code' => 'booked' );
+
+    $booking->discard_changes;
+    $checkout->discard_changes;
+    is(
+        dt_from_string( $booking->end_date )->compare($second_renewal_due), 0,
+        'Booking end_date unchanged after refused renewal'
+    );
+    is(
+        dt_from_string( $checkout->date_due )->compare($second_renewal_due), 0,
+        'Checkout due date unchanged after refused renewal'
+    );
+
+    # The newer plural endpoint accepts due_date too (same controller)
+    my $plural_renewal_due = $second_renewal_due->clone->add( days => 1 );
+    $t->post_ok(
+        "//$userid:$password@/api/v1/checkouts/$checkout_id/renewals" => { 'x-koha-override' => 'renewal_limit' } =>
+            json => { due_date => output_pref( { dateformat => 'rfc3339', dt => $plural_renewal_due } ) } )
+        ->status_is(201)
+        ->json_is( '/due_date' => output_pref( { dateformat => 'rfc3339', dt => $plural_renewal_due } ) );
+
+    $booking->discard_changes;
+    is(
+        dt_from_string( $booking->end_date )->compare($plural_renewal_due), 0,
+        'Booking end_date synced by a renewal through the plural endpoint'
+    );
 
     $schema->storage->txn_rollback;
 };

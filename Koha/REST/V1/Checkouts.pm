@@ -24,6 +24,7 @@ use C4::Auth qw( haspermission );
 use C4::Context;
 use C4::Circulation qw( AddIssue AddRenewal CanBookBeRenewed );
 use Koha::Checkouts;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Old::Checkouts;
 use Koha::Token;
 
@@ -387,11 +388,19 @@ sub renew {
         unless $checkout;
 
     return try {
-        my ( $can_renew, $error ) = CanBookBeRenewed( $checkout->patron, $checkout );
+        my $body     = $c->req->json;
+        my $due_date = $body && $body->{due_date} ? dt_from_string( $body->{due_date}, 'rfc3339' ) : undef;
+
+        my $overrides = $c->stash('koha.overrides');
+        my $override_limit =
+            ( $overrides->{renewal_limit} && C4::Context->preference("AllowRenewalLimitOverride") )
+            ? 1
+            : 0;
+
+        my ( $can_renew, $error ) = CanBookBeRenewed( $checkout->patron, $checkout, $override_limit, undef, $due_date );
 
         # Check if error is due to excessive fines and override is requested
         if ( !$can_renew && ( $error eq 'too_much_owing' or $error eq 'auto_too_much_owing' ) ) {
-            my $overrides = $c->stash('koha.overrides');
             if ( $overrides->{debt_limit} && C4::Context->preference("AllowFineOverrideRenewing") ) {
 
                 # Override is allowed, proceed with renewal
@@ -403,7 +412,10 @@ sub renew {
         if ( !$can_renew ) {
             return $c->render(
                 status  => 403,
-                openapi => { error => "Renewal not authorized ($error)" }
+                openapi => {
+                    error      => "Renewal not authorized ($error)",
+                    error_code => $error,
+                }
             );
         }
 
@@ -412,7 +424,8 @@ sub renew {
                 borrowernumber => $checkout->borrowernumber,
                 itemnumber     => $checkout->itemnumber,
                 branch         => $checkout->branchcode,
-                seen           => $seen
+                seen           => $seen,
+                datedue        => $due_date,
             }
         );
         $checkout = Koha::Checkouts->find($checkout_id);

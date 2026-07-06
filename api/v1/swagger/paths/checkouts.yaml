@@ -200,6 +200,16 @@
     tags:
       - checkouts
     summary: Renew a checkout
+    description: |
+      Renew a checkout. An optional request body may carry a requested
+      `due_date`; when passed it is used instead of the due date calculated
+      from the circulation rules and is validated against any bookings for
+      the item. When the checkout is linked to a booking, the booking end
+      date is kept in sync with the renewed due date.
+
+      The `renewal_limit` override skips the renewal count limits when the
+      AllowRenewalLimitOverride system preference is enabled, allowing staff
+      to explicitly authorise an extension of a booked loan.
     parameters:
       - $ref: "../swagger.yaml#/parameters/checkout_id_pp"
       - $ref: "../swagger.yaml#/parameters/seen_pp"
@@ -212,7 +222,22 @@
           type: string
           enum:
             - debt_limit
+            - renewal_limit
         collectionFormat: csv
+      - description: A JSON object containing optional renewal request attributes
+        in: body
+        name: body
+        required: false
+        schema:
+          type: object
+          properties:
+            due_date:
+              description: Requested due date and time for the renewal
+              format: date-time
+              type: string
+          additionalProperties: false
+    consumes:
+      - application/json
     produces:
       - application/json
     responses:
@@ -253,6 +278,16 @@
     tags:
       - checkouts
     summary: Renew a checkout
+    description: |
+      Renew a checkout. An optional request body may carry a requested
+      `due_date`; when passed it is used instead of the due date calculated
+      from the circulation rules and is validated against any bookings for
+      the item. When the checkout is linked to a booking, the booking end
+      date is kept in sync with the renewed due date.
+
+      The `renewal_limit` override skips the renewal count limits when the
+      AllowRenewalLimitOverride system preference is enabled, allowing staff
+      to explicitly authorise an extension of a booked loan.
     parameters:
       - $ref: "../swagger.yaml#/parameters/checkout_id_pp"
       - $ref: "../swagger.yaml#/parameters/seen_pp"
@@ -265,7 +300,22 @@
           type: string
           enum:
             - debt_limit
+            - renewal_limit
         collectionFormat: csv
+      - description: A JSON object containing optional renewal request attributes
+        in: body
+        name: body
+        required: false
+        schema:
+          type: object
+          properties:
+            due_date:
+              description: Requested due date and time for the renewal
+              format: date-time
+              type: string
+          additionalProperties: false
+    consumes:
+      - application/json
     produces:
       - application/json
     responses:
