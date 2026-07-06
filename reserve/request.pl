@@ -578,9 +578,6 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                         )
                     {
                         $valid_items = 1;
-                    }
-
-                    if ($valid_items) {
 
                         # Send the pickup locations count to the UI, the pickup locations will be pulled using the API
                         my $pickup_locations = $item_object->pickup_locations( { patron => $patron } );
