@@ -850,6 +850,7 @@
 [% INCLUDE 'hold-group-modal.inc' %]
 [% IF Koha.Preference('EnableBooking') %]
     [% INCLUDE modals/cancel_booking.inc %]
+    [% INCLUDE modals/place_booking.inc %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
@@ -891,7 +892,10 @@
         hold_group_column.visibility_condition = [% Koha.Preference('DisplayAddHoldGroups') ? 'true' : 'false' | html %];
 
         table_settings_bookings_table = [% TablesSettings.GetTableSettings( 'members', 'moremember', 'bookings-table', 'json' ) | $raw %]
-        CAN_user_circulate_manage_bookings = [% CAN_user_circulate_manage_bookings | $raw %]
+        Koha.addPermissions({
+            CAN_user_circulate_manage_bookings: [% CAN_user_circulate_manage_bookings ? 1 : 0 | html %],
+            CAN_user_circulate_circulate_remaining_permissions: [% CAN_user_circulate_circulate_remaining_permissions ? 1 : 0 | html %],
+        });
         patron_borrowernumber = [% patron.borrowernumber | $raw %]
 
         var amountlimit = "[% Koha.Preference('FineNoRenewals') | html %]";
@@ -905,8 +909,16 @@
     [% Asset.js("js/holds.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% IF Koha.Preference('EnableBooking') %]
+        [% Asset.js("lib/dayjs/plugin/isSameOrAfter.js") | $raw %]
+        [% Asset.js("lib/dayjs/plugin/isSameOrBefore.js") | $raw %]
+        <script nonce="[% Koha.CSPNonce | $raw %]">
+            dayjs.extend(window.dayjs_plugin_isSameOrAfter);
+            dayjs.extend(window.dayjs_plugin_isSameOrBefore);
+        </script>
         [% Asset.js("js/additional-filters.js") | $raw %]
         [% Asset.js("js/cancel_booking_modal.js") | $raw %]
+        [% Asset.js("js/modals/place_booking.js") | $raw %]
+        [% Asset.js("js/bookings/common.js") | $raw %]
         [% Asset.js("js/tables/bookings.js") | $raw %]
     [% END %]
     [% Asset.js("js/combobox.js") | $raw %]

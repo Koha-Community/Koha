@@ -65,6 +65,7 @@
     [% Asset.js("js/cancel_booking_modal.js") | $raw %]
     [% Asset.js("js/combobox.js") | $raw %]
     [% Asset.js("js/additional-filters.js") | $raw %]
+    [% Asset.js("js/bookings/common.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var cancel_success = 0;
         var update_success = 0;
@@ -73,6 +74,7 @@
         let biblionumber = "[% biblionumber | uri %]";
         Koha.addPermissions({
             CAN_user_circulate_manage_bookings: [% CAN_user_circulate_manage_bookings ? 1 : 0 | html %],
+            CAN_user_circulate_circulate_remaining_permissions: [% CAN_user_circulate_circulate_remaining_permissions ? 1 : 0 | html %],
         });
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
@@ -248,7 +250,10 @@
                     ajax: {
                         url: bookings_table_url,
                     },
-                    embed: ["item", "patron", "pickup_library"],
+                    embed: ["item", "item.checkout", "patron", "pickup_library"],
+                    createdRow: function (row, data) {
+                        BookingsTable.highlightRow(data, row);
+                    },
                     columns: [
                         {
                             data: "booking_id",
@@ -263,25 +268,7 @@
                             orderable: false,
                             visible: true,
                             render: function (data, type, row, meta) {
-                                const statusMap = {
-                                    new: () => _("New"),
-                                    cancelled: () => [_("Cancelled"), row.cancellation_reason].filter(Boolean).join(": "),
-                                    issued: () => _("Issued"),
-                                    completed: () => _("Completed"),
-                                };
-
-                                const statusText = statusMap[row.status] ? statusMap[row.status]() : _("Unknown");
-
-                                const classMap = [
-                                    { status: _("Cancelled"), class: "bg-secondary" },
-                                    { status: _("Completed"), class: "bg-secondary" },
-                                    { status: _("Issued"), class: "bg-info" },
-                                    { status: _("New"), class: "bg-success" },
-                                ];
-
-                                const badgeClass = classMap.find(mapping => statusText.startsWith(mapping.status))?.class || "bg-secondary";
-
-                                return `<span class="badge rounded-pill ${badgeClass}">${statusText}</span>`;
+                                return BookingsTable.statusBadge(row);
                             },
                         },
                         {
@@ -291,11 +278,7 @@
                             orderable: true,
                             defaultContent: _("Any item"),
                             render: function (data, type, row, meta) {
-                                if (row.item) {
-                                    return row.item.external_id + " (" + row.booking_id + ")";
-                                } else {
-                                    return null;
-                                }
+                                return BookingsTable.itemContent(row);
                             },
                         },
                         {
@@ -344,59 +327,7 @@
                             searchable: false,
                             orderable: false,
                             render: function (data, type, row, meta) {
-                                let result = "";
-                                const is_readonly = ["cancelled", "issued", "completed"].includes(row.status);
-                                if (Koha.permissions.CAN_user_circulate_manage_bookings && !is_readonly) {
-                                    result += `
-                                <button type="button" class="btn btn-default btn-xs edit-action"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#placeBookingModal"
-                                    data-booking="%s"
-                                    data-biblionumber="%s"
-                                    data-itemnumber="%s"
-                                    data-patron="%s"
-                                    data-pickup_library="%s"
-                                    data-start_date="%s"
-                                    data-end_date="%s"
-                                    data-item_type_id="%s"
-                                >
-                                    <i class="fa fa-pencil" aria-hidden="true"></i> %s
-                                </button>
-                            `.format(
-                                        escape_str(row.booking_id),
-                                        escape_str(biblionumber),
-                                        escape_str(row.item_id),
-                                        escape_str(row.patron_id),
-                                        escape_str(row.pickup_library_id),
-                                        escape_str(row.start_date),
-                                        escape_str(row.end_date),
-                                        escape_str(row.item.item_type_id),
-                                        _("Edit")
-                                    );
-                                    result += `
-                                <button type="button" class="btn btn-default btn-xs cancel-action"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#cancelBookingModal"
-                                    data-booking="%s"
-                                >
-                                    <i class="fa fa-trash" aria-hidden="true"></i> %s
-                                </button>
-                            `.format(escape_str(row.booking_id), _("Cancel"));
-                                    const csrf_token = $('meta[name="csrf-token"]').attr("content");
-                                    result += `
-                                <form name="checkout-transform" method="post" action="/cgi-bin/koha/circ/circulation.pl?borrowernumber=%s">
-                                    <input type="hidden" name="csrf_token" value="${csrf_token}" />
-                                    <input type="hidden" name="op" value="cud-checkout"/>
-                                    <input type="hidden" name="borrowernumber" value="%s"/>
-                                    <input type="hidden" name="barcode" value="%s"/>
-                                    <input type="hidden" name="duedatespec" value="%s"/>
-                                    <button id="checkout_action" class="btn btn-default btn-xs" type="submit">
-                                       <i class="fa fa-check-circle" aria-hidden="true"></i> %s
-                                    </button>
-                                </form>
-                            `.format(escape_str(row.patron_id), escape_str(row.patron_id), escape_str(row.item.external_id), escape_str(row.end_date), _("Transform to checkout"));
-                                }
-                                return result;
+                                return BookingsTable.actionsContent(row);
                             },
                         },
                     ],
