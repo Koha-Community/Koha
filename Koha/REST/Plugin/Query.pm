@@ -150,6 +150,13 @@ Generates the DBIC prefetch attribute based on embedded relations, and merges in
             my @prefetches;
             my $count_aliases = {};
 
+            # Extract the main DBIC result source for FK chain resolution in
+            # nested +count subqueries (Bug 42995)
+            my $main_source =
+                  $result_set->can('_resultset')
+                ? $result_set->_resultset->result_source
+                : $result_set->_result->result_source;
+
             foreach my $key ( sort keys( %{$embed} ) ) {
 
                 # Handle +count embeds with SQL-level subquery
@@ -166,7 +173,8 @@ Generates the DBIC prefetch attribute based on embedded relations, and merges in
                     $count_aliases->{$key} = 0;
                 }
 
-                my $parsed = _parse_prefetch( $key, $embed, $result_set, $attributes, undef, $count_aliases );
+                my $parsed =
+                    _parse_prefetch( $key, $embed, $result_set, $attributes, undef, $count_aliases, $main_source );
                 push @prefetches, $parsed if defined $parsed;
             }
 
@@ -538,18 +546,23 @@ sub _merge_count_select {
 
 =head3 _build_count_subquery
 
-    my $subquery = _build_count_subquery( $rel, $result_set, $parent_alias );
+    my $subquery = _build_count_subquery( $rel, $result_set, $parent_alias, $main_source );
 
 Builds a correlated COUNT subquery scalar ref for the given DBIC relationship.
 I<$parent_alias> is the SQL alias of the parent table (e.g. C<me> for top-level,
 or the relation name for nested embeds like C<biblio>).
+
+I<$main_source> is the DBIC ResultSource of the top-level result set (the one
+aliased as C<me>). It is used for nested embeds to resolve the FK chain back
+to C<me>, avoiding references to join aliases that may not be available inside
+DBIC's limiting subquery when pagination and has_many prefetches are combined.
 
 Returns the scalar ref, or undef if the relationship has no DBIC metadata.
 
 =cut
 
 sub _build_count_subquery {
-    my ( $rel, $result_set, $parent_alias ) = @_;
+    my ( $rel, $result_set, $parent_alias, $main_source ) = @_;
 
     my $source =
           $result_set->can('_resultset')
@@ -568,11 +581,43 @@ sub _build_count_subquery {
     $fk_foreign =~ s/^foreign\.//;
     $fk_self    =~ s/^self\.//;
 
-    return \"(SELECT COUNT(*) FROM $rel_table WHERE $rel_table.$fk_foreign = $parent_alias.$fk_self)";
+    # For nested embeds, resolve the correlation back to me.column to avoid
+    # referencing a join alias that DBIC may not include in the inner subquery
+    # when pagination + has_many prefetch triggers the limiting subquery
+    # optimization (Bug 42995).
+    my $correlation_expr = "$parent_alias.$fk_self";
+    if ( $parent_alias ne 'me' && $main_source ) {
+        my $parent_rel_info = $main_source->relationship_info($parent_alias);
+        if ($parent_rel_info) {
+            my $parent_cond = $parent_rel_info->{cond};
+
+            # Find which me.column maps to parent.fk_self
+            # parent_cond is like { 'foreign.biblionumber' => 'self.biblionumber' }
+            for my $fk_key ( keys %{$parent_cond} ) {
+                ( my $foreign_col = $fk_key ) =~ s/^foreign\.//;
+                if ( $foreign_col eq $fk_self ) {
+                    ( my $self_col = $parent_cond->{$fk_key} ) =~ s/^self\.//;
+                    $correlation_expr = "me.$self_col";
+                    last;
+                }
+            }
+        }
+    }
+
+    return \"(SELECT COUNT(*) FROM $rel_table WHERE $rel_table.$fk_foreign = $correlation_expr)";
 }
 
+=head3 _parse_prefetch
+
+    my $prefetch = _parse_prefetch( $key, $embed, $result_set, $attributes, $parent_alias, $count_aliases, $main_source );
+
+Recursively builds the DBIC prefetch structure for a given embed key. Handles nested
++count embeds by injecting correlated COUNT subqueries via C<_build_count_subquery>.
+
+=cut
+
 sub _parse_prefetch {
-    my ( $key, $embed, $result_set, $attributes, $parent_alias, $count_aliases ) = @_;
+    my ( $key, $embed, $result_set, $attributes, $parent_alias, $count_aliases, $main_source ) = @_;
 
     $parent_alias //= 'me';
 
@@ -592,7 +637,7 @@ sub _parse_prefetch {
 
     # Handle nested +count embeds with SQL-level subquery
     if ( $embed->{$key}->{is_count} && $attributes ) {
-        my $subquery = _build_count_subquery( $pref_key, $result_set, $parent_alias );
+        my $subquery = _build_count_subquery( $pref_key, $result_set, $parent_alias, $main_source );
         if ($subquery) {
 
             # Use the full dotted path as the alias key so order_by fixup
@@ -611,8 +656,8 @@ sub _parse_prefetch {
     my @prefetches;
     foreach my $child ( sort keys( %{ $embed->{$key}->{children} } ) ) {
         my $parsed = _parse_prefetch(
-            $child, $embed->{$key}->{children}, $ko_class->new, $attributes, $pref_key,
-            $count_aliases
+            $child,         $embed->{$key}->{children}, $ko_class->new, $attributes, $pref_key,
+            $count_aliases, $main_source
         );
         push @prefetches, $parsed if defined $parsed;
     }
@@ -623,6 +668,15 @@ sub _parse_prefetch {
 
     return { $pref_key => \@prefetches };
 }
+
+=head3 _from_api_param
+
+    my $dbic_param = _from_api_param( $key, $result_set );
+
+Translates a dot-separated API parameter name into its DBIC equivalent using
+the result set's C<from_api_mapping>.
+
+=cut
 
 sub _from_api_param {
     my ( $key, $result_set ) = @_;
@@ -655,6 +709,15 @@ sub _from_api_param {
         return defined $result_set->from_api_mapping->{$key} ? $result_set->from_api_mapping->{$key} : $key;
     }
 }
+
+=head3 _parse_dbic_query
+
+    my $query = _parse_dbic_query( $q_params, $result_set );
+
+Recursively translates API query parameters into DBIC-compatible query structures,
+resolving dot-separated paths into nested relationship queries.
+
+=cut
 
 sub _parse_dbic_query {
     my ( $q_params, $result_set ) = @_;

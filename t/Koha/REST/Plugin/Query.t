@@ -662,7 +662,7 @@ subtest '/dbic_merge_prefetch' => sub {
     $t->get_ok('/dbic_merge_prefetch_nested_count')
         ->status_is(200)
         ->json_like( '/order_by/0/-asc' => qr/SELECT COUNT\(\*\) FROM article_requests/ )
-        ->json_like( '/order_by/0/-asc' => qr/guarantee\.borrowernumber/ )
+        ->json_like( '/order_by/0/-asc' => qr/me\.guarantee_id/ )
         ->json_is( '/+as/0' => 'guarantee.article_requests_count' );
 
     # Nested unsortable +count with order_by: throws BadParameter (400)
