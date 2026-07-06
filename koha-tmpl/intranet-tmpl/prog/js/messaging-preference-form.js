@@ -8,98 +8,86 @@ $(document).ready(function () {
         message_prefs_dirty = true;
     }
 
-    if ($("#messaging_prefs_loading").length) {
-        $("#categorycode_entry").change(function () {
-            var categorycode = $(this).val();
-            // if we change category, consider the messaging prefs dirty
-            message_prefs_dirty = true;
-            // Show the combined modal and reset checkboxes to checked
-            $("#categoryChangeUpdateMessaging").prop("checked", true);
-            $("#categoryChangeUpdateExpiry").prop("checked", true);
-            $("#categoryChangeModal").modal("show");
+    $("#categorycode_entry").change(function () {
+        var categorycode = $(this).val();
+        // if we change category, consider the messaging prefs dirty
+        message_prefs_dirty = true;
+        // Show the combined modal and reset checkboxes to checked
+        $("#categoryChangeUpdateMessaging").prop("checked", true);
+        $("#categoryChangeUpdateExpiry").prop("checked", true);
+        $("#categoryChangeModal").modal("show");
 
-            // Remove any previously bound confirm handler to avoid stacking
-            $("#categoryChangeConfirmBtn")
-                .off("click")
-                .on("click", function () {
-                    $("#categoryChangeModal").modal("hide");
+        // Remove any previously bound confirm handler to avoid stacking
+        $("#categoryChangeConfirmBtn")
+            .off("click")
+            .on("click", function () {
+                $("#categoryChangeModal").modal("hide");
 
-                    // --- Update messaging preferences ---
-                    if (
-                        $("#categoryChangeUpdateMessaging").prop("checked") &&
-                        message_prefs_dirty
-                    ) {
-                        var messaging_prefs_loading = $(
-                            "#messaging_prefs_loading"
-                        );
-                        messaging_prefs_loading.show();
+                // --- Update messaging preferences ---
+                if (
+                    $("#categoryChangeUpdateMessaging").prop("checked") &&
+                    message_prefs_dirty
+                ) {
+                    var messaging_prefs_loading = $("#messaging_prefs_loading");
+                    messaging_prefs_loading.show();
 
-                        $.getJSON(
-                            "/cgi-bin/koha/members/default_messageprefs.pl?categorycode=" +
-                                categorycode,
-                            function (data) {
-                                $.each(
-                                    data.messaging_preferences,
-                                    function (i, item) {
-                                        var attrid = item.message_attribute_id;
-                                        var transports = [
-                                            "email",
-                                            "rss",
-                                            "sms",
-                                        ];
-                                        $.each(
-                                            transports,
-                                            function (j, transport) {
-                                                var checked =
-                                                    item[
-                                                        "transports_" +
-                                                            transport
-                                                    ] == 1;
-                                                $(
-                                                    "#" + transport + attrid
-                                                ).prop("checked", checked);
-                                                toggle_digest(attrid);
-                                            }
+                    $.getJSON(
+                        "/cgi-bin/koha/members/default_messageprefs.pl?categorycode=" +
+                            categorycode,
+                        function (data) {
+                            $.each(
+                                data.messaging_preferences,
+                                function (i, item) {
+                                    var attrid = item.message_attribute_id;
+                                    var transports = ["email", "rss", "sms"];
+                                    $.each(transports, function (j, transport) {
+                                        var checked =
+                                            item["transports_" + transport] ==
+                                            1;
+                                        $("#" + transport + attrid).prop(
+                                            "checked",
+                                            checked
                                         );
-                                        if (item.digest && item.digest != " ") {
-                                            $("#digest" + attrid).prop(
-                                                "checked",
-                                                true
-                                            );
-                                        } else {
-                                            $("#digest" + attrid).prop(
-                                                "checked",
-                                                false
-                                            );
-                                        }
-                                        if (item.takes_days == "1") {
-                                            $("[name=" + attrid + "-DAYS]").val(
-                                                "" + item.days_in_advance
-                                            );
-                                        }
+                                        toggle_digest(attrid);
+                                    });
+                                    if (item.digest && item.digest != " ") {
+                                        $("#digest" + attrid).prop(
+                                            "checked",
+                                            true
+                                        );
+                                    } else {
+                                        $("#digest" + attrid).prop(
+                                            "checked",
+                                            false
+                                        );
                                     }
-                                );
-                                message_prefs_dirty = false;
-                            }
-                        ).always(function () {
-                            messaging_prefs_loading.hide();
-                        });
-                    }
-
-                    // --- Update expiry date ---
-                    if ($("#categoryChangeUpdateExpiry").prop("checked")) {
-                        var fp = $("#to").flatpickr();
-                        var expiryDate = $(
-                            "select" + category_selector + " option:selected"
-                        ).data("expiryDate");
-                        if (expiryDate) {
-                            var formattedDate = expiryDate.split("T")[0];
-                            fp.setDate(formattedDate);
+                                    if (item.takes_days == "1") {
+                                        $("[name=" + attrid + "-DAYS]").val(
+                                            "" + item.days_in_advance
+                                        );
+                                    }
+                                }
+                            );
+                            message_prefs_dirty = false;
                         }
+                    ).always(function () {
+                        messaging_prefs_loading.hide();
+                    });
+                }
+
+                // --- Update expiry date ---
+                if ($("#categoryChangeUpdateExpiry").prop("checked")) {
+                    var fp = $("#to").flatpickr();
+                    var expiryDate = $(
+                        "select" + category_selector + " option:selected"
+                    ).data("expiryDate");
+                    if (expiryDate) {
+                        var formattedDate = expiryDate.split("T")[0];
+                        fp.setDate(formattedDate);
                     }
-                });
-        });
-    }
+                }
+            });
+    });
 
     function toggle_digest(id) {
         let phone_checked = TalkingTechItivaPhoneNotification
