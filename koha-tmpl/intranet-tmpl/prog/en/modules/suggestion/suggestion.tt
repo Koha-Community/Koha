@@ -1431,15 +1431,34 @@
                                         searchable: true,
                                         orderable: true,
                                         render: function (data, type, row, meta) {
-                                            let node = "";
-                                            if (row.status === "ASKED") node += '<span class="status asked">%s</span>'.format(escape_str(_("Pending")));
-                                            else if (row.status === "ACCEPTED") node += '<span class="status accepted">%s</span>'.format(escape_str(_("Accepted")));
-                                            else if (row.status === "ORDERED") node += '<span class="status ordered">%s</span>'.format(escape_str(_("Ordered")));
-                                            else if (row.status === "REJECTED") node += '<span class="status rejected">%s</span>'.format(escape_str(_("Rejected")));
-                                            else if (row.status === "CHECKED") node += '<span class="status checked">%s</span>'.format(escape_str(_("Checked")));
-                                            else if (row.status === "AVAILABLE") node += '<span class="status available">%s</span>'.format(escape_str(_("Available")));
-                                            else if (row._strings.status.str) node += '<span class="status ' + escape_str(row.status) + '">%s</span>'.format(escape_str(row._strings.status.str));
-                                            else node += '<span class="status unknown">%s</span>'.format(escape_str(_("Status unknown")));
+                                            const status_el = document.createElement("span");
+                                            status_el.classList.add("status");
+                                            if (row.status === "ASKED") {
+                                                status_el.classList.add("asked");
+                                                status_el.textContent = _("Pending");
+                                            } else if (row.status === "ACCEPTED") {
+                                                status_el.classList.add("accepted");
+                                                status_el.textContent = _("Accepted");
+                                            } else if (row.status === "ORDERED") {
+                                                status_el.classList.add("ordered");
+                                                status_el.textContent = _("Ordered");
+                                            } else if (row.status === "REJECTED") {
+                                                status_el.classList.add("rejected");
+                                                status_el.textContent = _("Rejected");
+                                            } else if (row.status === "CHECKED") {
+                                                status_el.classList.add("checked");
+                                                status_el.textContent = _("Checked");
+                                            } else if (row.status === "AVAILABLE") {
+                                                status_el.classList.add("available");
+                                                status_el.textContent = _("Available");
+                                            } else if (row._strings.status.str) {
+                                                status_el.dataset.status = row.status;
+                                                status_el.textContent = row._strings.status.str;
+                                            } else {
+                                                status_el.classList.add("unknown");
+                                                status_el.textContent = _("Status unknown");
+                                            }
+                                            let node = status_el.outerHTML;
                                             if (row.reason) {
                                                 const reason_el = document.createElement("div");
                                                 reason_el.classList.add("reason");
