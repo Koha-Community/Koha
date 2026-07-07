@@ -34,6 +34,7 @@ use C4::Creators qw(
     get_unit_values
 );
 use C4::Patroncards;
+use Koha::Logger;
 
 my $cgi = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -179,10 +180,8 @@ elsif  ($op eq 'cud-save') {
     my $image_select = 0;
     my $field_enabled = 0;
 
-    # Get valid image names for validation
-    my $valid_image_names = get_all_image_names();
-    my %valid_images      = map { $_->{'type'} => 1 } @$valid_image_names;
-    $valid_images{'none'} = 1;    # 'none' is also a valid value
+    # $image_names was already fetched above (and already includes 'none')
+    my %valid_images = map { $_->{'type'} => 1 } @$image_names;
 
     CGI_PARAMS:
     foreach my $parameter ($cgi->multi_param()) {     # parse the field values and build a hash of the layout for conversion to xml and storage in the db
@@ -217,13 +216,15 @@ elsif  ($op eq 'cud-save') {
             my $param_value = $cgi->param($parameter);
 
             # Sanitize image_name
-            my $field_name = $image_data =~ m/^image_(.*)$/ ? $1 : $image_data;
-            $param_value = undef
-                if $field_name eq 'name'
-                && $param_value
-                && !exists $valid_images{$param_value};
-            if ($image_data =~ m/^image_(.*)$/) {
-                $layout->{'images'}->{"image_$image_number"}->{'data_source'}->{"image_$1"} = $param_value;
+            my ($image_suffix) = $image_data =~ m/^image_(.*)$/;
+            my $field_name = $image_suffix // $image_data;
+            if ( $field_name eq 'name' && $param_value && !exists $valid_images{$param_value} ) {
+                Koha::Logger->get->warn(
+                    sprintf( "Rejecting unknown image_name '%s' submitted for patroncard layout", $param_value ) );
+                $param_value = undef;
+            }
+            if ( defined $image_suffix ) {
+                $layout->{'images'}->{"image_$image_number"}->{'data_source'}->{"image_$image_suffix"} = $param_value;
             } else {
                 $layout->{'images'}->{"image_$image_number"}->{$image_data} = $param_value;
             }

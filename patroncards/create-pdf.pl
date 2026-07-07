@@ -177,7 +177,10 @@ foreach my $item (@{$items}) {
                     ## FIXME: The DB stuff here needs to be religated to a Koha::Creator::Images object -chris_n
                     my $dbh = C4::Context->dbh();
                     $dbh->{LongReadLen} = 1000000;      # allows us to read approx 1MB
-                    $image_data = $dbh->selectrow_hashref("SELECT imagefile FROM creator_images WHERE image_name = \'$images->{$card_image}->{'data_source'}->[0]->{'image_name'}\'");
+                        $image_data = $dbh->selectrow_hashref(
+                            "SELECT imagefile FROM creator_images WHERE image_name = ?",
+                            undef, $images->{$card_image}->{'data_source'}->[0]->{'image_name'}
+                        );
                     warn sprintf('Database returned the following error: %s.', $error) if $error;
                     unless($image_data){
                         warn sprintf('Image does not exists in db table %s.', $images->{$card_image}->{'data_source'}->[0]->{'image_name'});
