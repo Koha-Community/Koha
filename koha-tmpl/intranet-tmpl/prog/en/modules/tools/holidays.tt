@@ -668,19 +668,32 @@
                 },
                 onChange: function (selectedDates, dateStr, instance) {
                     var fromdate = selectedDates[0];
-                    var enddate = dateofrange.selectedDates[0];
 
                     dateChanged(fromdate);
 
-                    dateofrange.set("defaultDate", fromdate);
-                    dateofrange.set("minDate", fromdate);
-
-                    if (enddate != undefined) {
-                        if (enddate < fromdate) {
-                            dateofrange.set("defaultDate", fromdate);
-                            dateofrange.setDate(fromdate);
+                    /* we need to wait animations to complete in order
+                      to determine if calendar opened is for adding a new
+                      holiday or for editing an existing one */
+                    setTimeout(function () {
+                        var calendar;
+                        if ($("#newHoliday").is(":visible")) {
+                            calendar = dateofrange;
+                        } else if ($("#showHoliday").is(":visible")) {
+                            calendar = datecancelrange;
                         }
-                    }
+
+                        var enddate = calendar.selectedDates[0];
+
+                        calendar.set("defaultDate", fromdate);
+                        calendar.set("minDate", fromdate);
+
+                        if (enddate != undefined) {
+                            if (enddate < fromdate) {
+                                calendar.set("defaultDate", fromdate);
+                                calendar.setDate(fromdate);
+                            }
+                        }
+                    }, 250);
                 },
                 defaultDate: new Date(keydate),
             });
