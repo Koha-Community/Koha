@@ -2,21 +2,19 @@
 [% USE raw %]
 <!-- js-patron-get-age.inc -->
 [% USE KohaDates %]
-<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
-    (function() {
-
-        const tz = '[% KohaDates.tz | html %]';
-        window.$get_age = function(dob, options) {
-            if(!dob) return '';
+<script nonce="[% Koha.CSPNonce | $raw %]">
+    (function () {
+        window.$get_age = function (dob, options) {
+            if (!dob) return "";
 
             let today = new Date();
             dob = new Date(dob);
-            if ( tz ) {
-                let today_tz = new Date(today.toLocaleString('en-US', {timeZone: tz}));
+            if (tz) {
+                let today_tz = new Date(today.toLocaleString("en-US", { timeZone: tz }));
                 let diff = today.getTime() - today_tz.getTime();
                 today = new Date(today.getTime() - diff);
 
-                let dob_tz = new Date(dob.toLocaleString('en-US', {timeZone: tz}));
+                let dob_tz = new Date(dob.toLocaleString("en-US", { timeZone: tz }));
                 diff = dob.getTime() - dob_tz.getTime();
                 dob = new Date(dob.getTime() - diff);
             }
@@ -26,8 +24,7 @@
                 age--;
             }
             return age;
-        }
-
+        };
     })();
 </script>
 <!-- / js-patron-get-age.inc -->
