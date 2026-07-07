@@ -44,9 +44,15 @@ my $layout_id   = $cgi->param('layout_id')   || undef;
 my $start_label = $cgi->param('start_label') || 1;
 @label_ids    = $cgi->multi_param('label_id')    if $cgi->param('label_id');
 @item_numbers = $cgi->multi_param('item_number') if $cgi->param('item_number');
-my $from           = $cgi->param('from') || undef;
-my $to             = $cgi->param('to')   || undef;
-my $barcode_length = $cgi->param('barcode_length');
+
+my $txt_from = $cgi->param('from')              || undef;
+my $from     = int($txt_from)                   || undef;
+my $count    = int( $cgi->param('count') || 0 ) || undef;
+
+# if count is greater than 1000, just set it to 1000. We don't want to generate more than 1000 barcodes at a time!
+$count = 1000 if $count && $count > 1000;
+my $to             = ( $from && $count ) ? $from + $count - 1 : undef;
+my $barcode_length = length($txt_from) || undef;
 
 my $items = undef;
 
@@ -121,7 +127,7 @@ if (@label_ids) {
         my $padding = '0' x ( $barcode_length - length($i) );
         push @$items, { item_number => $padding . $i };
     }
-} else {
+} elsif ($batch_id) {
     $items = $batch->get_attr('items');
 }
 

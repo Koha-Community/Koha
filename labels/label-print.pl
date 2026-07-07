@@ -54,11 +54,12 @@ my @item_numbers;
 my $output_format = $cgi->param('output_format') || 'pdf';
 my $referer       = $cgi->param('referer')       || undef;
 
-my $txt_from       = $cgi->param('from') || undef;
-my $txt_to         = $cgi->param('to')   || undef;
-my $from           = int($txt_from)      || undef;
-my $to             = int($txt_to)        || undef;
-my $barcode_length = length($txt_from)   || undef;
+my $txt_from = $cgi->param('from')              || undef;
+my $from     = int($txt_from)                   || undef;
+my $count    = int( $cgi->param('count') || 0 ) || undef;
+$count = 1000 if $count && $count > 1000;
+my $to             = ( $from && $count ) ? $from + $count - 1 : undef;
+my $barcode_length = length($txt_from) || undef;
 
 my $layouts           = undef;
 my $templates         = undef;
@@ -143,7 +144,7 @@ if ( $op eq 'cud-export' ) {
             {
                 create_script  => 'label-create-pdf.pl',
                 from           => $from,
-                to             => $to,
+                count          => $count,
                 barcode_length => $barcode_length,
                 template_id    => $template_id,
                 layout_id      => $layout_id,
@@ -181,10 +182,9 @@ if ( $op eq 'cud-export' ) {
         item_count        => $item_count,
         referer           => $referer,
         from              => $from,
-        to                => $to,
+        count             => $count,
         barcode_length    => $barcode_length,
         txt_from          => $txt_from,
-        txt_to            => $txt_to
     );
 }
 output_html_with_http_headers $cgi, $cookie, $template->output;
