@@ -202,7 +202,8 @@ CARD_ITEMS:
                         my $dbh = C4::Context->dbh();
                         $dbh->{LongReadLen} = 1000000;                   # allows us to read approx 1MB
                         $image_data = $dbh->selectrow_hashref(
-                            "SELECT imagefile FROM creator_images WHERE image_name = \'$images->{$card_image}->{'data_source'}->[0]->{'image_name'}\'"
+                            "SELECT imagefile FROM creator_images WHERE image_name = ?",
+                            undef, $images->{$card_image}->{'data_source'}->[0]->{'image_name'}
                         );
                         warn sprintf( 'Database returned the following error: %s.', $error ) if $error;
                         unless ($image_data) {
