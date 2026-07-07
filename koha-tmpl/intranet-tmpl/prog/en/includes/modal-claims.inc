@@ -53,27 +53,28 @@
         var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
         var interface = "[% interface | html %]";
         var theme = "[% theme | html %]";
-
+    </script>
+    <script nonce="[% Koha.CSPNonce | $raw %]">
         // Handle return claims
-        $(document).on("click", '.claim-returned-btn', function(e){
+        $(document).on("click", ".claim-returned-btn", function (e) {
             e.preventDefault();
-            itemnumber = $(this).data('itemnumber');
+            itemnumber = $(this).data("itemnumber");
 
-            $('#claims-returned-itemnumber').val(itemnumber);
-            $('#claims-returned-notes').val("");
-            $('#claims-returned-charge-lost-fee').attr('checked', false);
-            $('#claims-returned-modal').modal("show");
+            $("#claims-returned-itemnumber").val(itemnumber);
+            $("#claims-returned-notes").val("");
+            $("#claims-returned-charge-lost-fee").attr("checked", false);
+            $("#claims-returned-modal").modal("show");
         });
-        $(document).on("click", '#claims-returned-modal-btn-submit', function(e){
-            let itemnumber = $('#claims-returned-itemnumber').val();
-            let notes = $('#claims-returned-notes').val();
-            let charge_lost_fee = $('#claims-returned-charge-lost-fee').prop('checked') ? true : false;
-            let refund_lost_fee = $('#claims-returned-refund-lost-fee').prop('checked') ? true : false;
+        $(document).on("click", "#claims-returned-modal-btn-submit", function (e) {
+            let itemnumber = $("#claims-returned-itemnumber").val();
+            let notes = $("#claims-returned-notes").val();
+            let charge_lost_fee = $("#claims-returned-charge-lost-fee").prop("checked") ? true : false;
+            let refund_lost_fee = $("#claims-returned-refund-lost-fee").prop("checked") ? true : false;
 
-            $('#claims-returned-modal').modal('hide');
+            $("#claims-returned-modal").modal("hide");
 
             const button = $('.claim-returned-btn[data-itemnumber="' + itemnumber + '"]');
-            const img = '<img id="return_claim_spinner_' + itemnumber + '" src="' + interface + '/' + theme + '/img/spinner-small.gif" />';
+            const img = '<img id="return_claim_spinner_' + itemnumber + '" src="' + interface + "/" + theme + '/img/spinner-small.gif" />';
             button.replaceWith(img);
 
             params = {
@@ -85,24 +86,23 @@
             };
 
             const client = APIClient.claim;
-            client.return_claims.create(params).then(function( data ) {
-
+            client.return_claims.create(params).then(function (data) {
                 id = "#return_claim_spinner_" + data.item_id;
 
                 let formatted_date = $datetime(data.created_on);
 
                 let content = "";
-                if ( data.claim_id ) {
-                    content = '<span class="badge text-bg-info">' + formatted_date + '</span>';
-                    $(id).parent().parent().addClass('ok');
+                if (data.claim_id) {
+                    content = '<span class="badge text-bg-info">' + formatted_date + "</span>";
+                    $(id).parent().parent().addClass("ok");
                 } else {
                     content = _("Unable to claim as returned");
-                    $(id).parent().parent().addClass('warn');
+                    $(id).parent().parent().addClass("warn");
                 }
 
-                $(id).replaceWith( content );
+                $(id).replaceWith(content);
 
-                $('body').trigger('refreshClaimModal');
+                $("body").trigger("refreshClaimModal");
             });
         });
     </script>
