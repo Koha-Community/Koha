@@ -85,6 +85,8 @@ function apply_sticky(node) {
 
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
+
+    return () => window.removeEventListener("scroll", onScroll);
 }
 
 $(document).ready(function () {

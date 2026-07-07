@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { computed, useTemplateRef, watch } from "vue";
+import { computed, onUnmounted, useTemplateRef, watch } from "vue";
 import ToolbarButton from "./ToolbarButton.vue";
 import DropdownButtons from "./DropdownButtons.vue";
 export default {
@@ -45,11 +45,15 @@ export default {
         const toolbar = computed(() => {
             return useTemplateRef("toolbar");
         });
+        let disconnectSticky;
         watch(toolbar.value, newValue => {
+            disconnectSticky?.();
+            disconnectSticky = undefined;
             if (newValue && props.sticky) {
-                apply_sticky(newValue);
+                disconnectSticky = apply_sticky(newValue);
             }
         });
+        onUnmounted(() => disconnectSticky?.());
     },
 };
 </script>
