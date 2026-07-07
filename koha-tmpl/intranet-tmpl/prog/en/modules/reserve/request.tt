@@ -615,10 +615,13 @@
                     [% END %]
 
                     [% IF ( diffbranch ) %]
-                        <li
-                            ><strong>Pickup library is different. </strong>Patron: [% INCLUDE 'patron-title.inc' patron => patron no_title => 1 no_cardnumber => 1 hide_patron_infos_if_needed => 1 %] Patron's home library:
-                            ([% Branches.GetName(patron.branchcode) | html %] / [% patron.branchcode | html %] )</li
-                        >
+                        <li>
+                            <strong>Pickup library is different. </strong>
+                            [% UNLESS Koha.Preference('HidePatronName') %]
+                                Patron: [% INCLUDE 'patron-title.inc' patron => patron no_title => 1 no_cardnumber => 1 hide_patron_infos_if_needed => 1 %]
+                            [% END %]
+                            Patron's home library: [% Branches.GetName(patron.branchcode) | html %] / [% patron.branchcode | html %]
+                        </li>
                     [% END %]
                 </ul>
                 <!-- /.dialog.message -->
