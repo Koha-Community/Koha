@@ -83,7 +83,7 @@
                 <legend>Recall next available item</legend>
 
                 <ol>
-                    [% UNLESS ( single_branch_mode ) %]
+                    [% UNLESS ( singleBranchMode ) %]
                         <li>
                             <label for="pickup">Pick up at:</label>
                             <select name="pickup" id="pickup">
@@ -122,7 +122,7 @@
                             <th>&nbsp;</th>
                             <th>Item type</th>
                             <th>Barcode</th>
-                            [% UNLESS ( single_branch_mode ) %]
+                            [% UNLESS ( singleBranchMode ) %]
                                 <th>Home library</th>
                                 <th>Holding library</th>
                             [% END %]
@@ -134,7 +134,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        [% FOREACH item IN items %]
+                        [% FOREACH item IN biblio.items %]
                             <tr>
                                 <td>
                                     [% IF item.can_be_recalled( patron => patron ) %]
@@ -147,7 +147,7 @@
                                 </td>
                                 <td>[% ItemTypes.GetDescription( item.effective_itemtype ) | html %]</td>
                                 <td>[% item.barcode | html %]</td>
-                                [% UNLESS ( single_branch_mode ) %]
+                                [% UNLESS ( singleBranchMode ) %]
                                     <td>[% Branches.GetName( item.homebranch ) | html %]</td>
                                     <td>[% Branches.GetName( item.holdingbranch) | html %]</td>
                                 [% END %]
@@ -186,7 +186,7 @@
                                     [% END # / IF ( item.recall or hold ) %]
                                 </td>
                             </tr>
-                        [% END # FOREACH item IN items %]
+                        [% END # FOREACH item IN biblio.items %]
                     </tbody>
                 </table>
 

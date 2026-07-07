@@ -148,10 +148,8 @@ if ($borrowernumber) {
     }
 }
 
-my $recalls            = Koha::Recalls->search( { biblio_id => $biblionumber, completed => 0 } );
-my $branches           = Koha::Libraries->search;
-my $single_branch_mode = $branches->count == 1;
-my $items              = Koha::Items->search( { biblionumber => $biblionumber } );
+my $recalls  = Koha::Recalls->search( { biblio_id => $biblionumber, completed => 0 } );
+my $branches = Koha::Libraries->search;
 
 $template->param(
     recalls     => $recalls,
@@ -159,15 +157,8 @@ $template->param(
     biblio      => $biblio,
     checkboxes  => 1,
     C4::Search::enabled_staff_search_views,
-    branches             => $branches,
-    items                => $items,
-    error                => $error,
-    single_branch_mode   => $single_branch_mode,
-    attribute_type_codes => (
-        C4::Context->preference('ExtendedPatronAttributes')
-        ? [ Koha::Patron::Attribute::Types->search( { staff_searchable => 1 } )->get_column('code') ]
-        : []
-    ),
+    branches => $branches,
+    error    => $error,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

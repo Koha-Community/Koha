@@ -36,12 +36,6 @@ my $op           = $query->param('op') || '';
 my $biblionumber = $query->param('biblionumber');
 my $biblio       = Koha::Biblios->find($biblionumber);
 
-if ( $op eq 'cud-cancel' ) {
-    my $recall_id = $query->param('recall_id');
-    Koha::Recalls->find($recall_id)->set_cancelled;
-    print $query->redirect('/cgi-bin/koha/opac-user.pl');
-}
-
 if ( C4::Context->preference('UseRecalls') =~ m/opac/ ) {
 
     my $patron = Koha::Patrons->find($borrowernumber);
@@ -70,8 +64,14 @@ if ( C4::Context->preference('UseRecalls') =~ m/opac/ ) {
         }
     }
 
+    if ( $op eq 'cud-cancel' ) {
+        my $recall_id = $query->param('recall_id');
+        Koha::Recalls->find($recall_id)->set_cancelled;
+        print $query->redirect('/cgi-bin/koha/opac-user.pl');
+    }
+
     # submitting recall request
-    if ( $op eq 'cud-request' ) {
+    elsif ( $op eq 'cud-request' ) {
 
         if ( defined $error and $error eq 'unavailable' ) {
 
