@@ -43,8 +43,8 @@
                     <input type="text" inputmode="numeric" pattern="[0-9]*" name="from" id="from-input" value="0" style="text-align: right;" />
                 </li>
                 <li>
-                    <label for="to-input">To:</label>
-                    <input type="text" inputmode="numeric" pattern="[0-9]*" name="to" id="to-input" value="0" style="text-align: right;" />
+                    <label for="count-input">Number of labels:</label>
+                    <input type="text" inputmode="numeric" pattern="[0-9]*" name="count" id="count-input" value="0" style="text-align: right;" />
                 </li>
             </ol>
         </fieldset>
@@ -59,68 +59,30 @@
         function Xport() {
             var str = "";
             str += "from=" + document.getElementById("from-input").value + "&";
-            str += "to=" + document.getElementById("to-input").value;
+            str += "count=" + document.getElementById("count-input").value;
             location.href = "/cgi-bin/koha/labels/label-print.pl?" + str;
-        }
-
-        function checkTwoValue(_from, _to, _id) {
-            var result = _from.length == _to.length;
-            if (_from[0] == "0" || _to[0] == "0") {
-                switch (_id) {
-                    case "from-input":
-                        var to_inp = $("#to-input");
-                        if (to_inp.hasClass("error")) {
-                            to_inp.removeClass("error").addClass("valid");
-                            $("to-input-error").remove();
-                        }
-                        if ($("#to-input-error").length) {
-                            $("#to-input-error").remove();
-                        }
-                        return result;
-                    case "to-input":
-                        var from_inp = $("#from-input");
-                        if (from_inp.hasClass("error")) {
-                            from_inp.removeClass("error").addClass("valid");
-                        }
-                        if ($("#from-input-error").length) {
-                            $("#from-input-error").remove();
-                        }
-                        return result;
-                }
-            }
-            return true;
         }
 
         $(document).ready(function () {
             $('.sidebar_menu a[href$="/cgi-bin/koha/labels/label-home.pl"]').addClass("current");
-            $.validator.addMethod(
-                "gt",
-                function (value, element, params) {
-                    return parseInt(value) >= parseInt($(params).val());
-                },
-                _("Must be greater or equal to the from value.")
-            );
-
-            $.validator.addMethod(
-                "eq",
-                function (value, element, params) {
-                    return checkTwoValue($("#from-input").val(), $("#to-input").val(), $(element).attr("id"));
-                },
-                _("From and to values must have the same length.")
-            );
 
             $("form[name=add_by_number]").validate({
                 rules: {
                     from: {
                         required: true,
-                        eq: "#from-input",
-                        eq: "#to-input",
+                        digits: true,
                     },
-                    to: {
+                    count: {
                         required: true,
-                        gt: "#from-input",
-                        eq: "#from-input",
-                        eq: "#to-input",
+                        digits: true,
+                        min: 1,
+                        max: 1000,
+                    },
+                },
+                messages: {
+                    count: {
+                        max: _("Cannot print more than 1000 barcodes at a time."),
+                        min: _("Must print at least 1 barcode."),
                     },
                 },
             });
