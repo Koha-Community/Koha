@@ -39,6 +39,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Koha;
+use C4::Items qw( GetAutomaticItemModificationAgeFields );
 
 use Koha::Items;
 use Koha::Biblioitems;
@@ -62,10 +63,7 @@ my @biblioitem_fields  = map { "biblioitems.$_" } Koha::Biblioitems->columns;
 my @biblio_fields      = map { "biblio.$_" } Koha::Biblios->columns;
 my @allowed_condition_fields    = ( @item_fields, @biblioitem_fields, @biblio_fields );
 my @allowed_substitution_fields = @item_fields;
-my @allowed_age_fields = (
-    'items.dateaccessioned', 'items.replacementpricedate', 'items.datelastborrowed', 'items.datelastseen',
-    'items.damaged_on',      'items.itemlost_on',          'items.withdrawn_on'
-);
+my @allowed_age_fields          = GetAutomaticItemModificationAgeFields();
 
 my $syspref_name = q|automatic_item_modification_by_age_configuration|;
 if ( $op eq 'cud-update' ) {
