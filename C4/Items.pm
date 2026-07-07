@@ -38,6 +38,7 @@ BEGIN {
         SearchItems
         PrepareItemrecordDisplay
         ToggleNewStatus
+        GetAutomaticItemModificationAgeFields
     );
 }
 
@@ -58,6 +59,7 @@ use Try::Tiny qw( catch try );
 use Koha::AuthorisedValues;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Database;
+use Koha::Logger;
 
 use Koha::Biblios;
 use Koha::Biblioitems;
@@ -1655,6 +1657,25 @@ sub PrepareItemrecordDisplay {
     };
 }
 
+=head2 GetAutomaticItemModificationAgeFields
+
+    my @fields = GetAutomaticItemModificationAgeFields();
+
+Returns the fixed, C<items.>-prefixed list of date columns that are valid
+"age field" values for automatic item modification rules (see
+ToggleNewStatus below). This is the single source of truth for that
+allow-list; it is shared with F<tools/automatic_item_modification_by_age.pl>
+so the two cannot drift apart.
+
+=cut
+
+sub GetAutomaticItemModificationAgeFields {
+    return (
+        'items.dateaccessioned', 'items.replacementpricedate', 'items.datelastborrowed', 'items.datelastseen',
+        'items.damaged_on',      'items.itemlost_on',          'items.withdrawn_on'
+    );
+}
+
 =head2 ToggleNewStatus
 
 Missing POD for ToggleNewStatus.
@@ -1671,17 +1692,32 @@ sub ToggleNewStatus {
     my @item_columns       = map { "items.$_" } Koha::Items->columns;
     my @biblioitem_columns = map { "biblioitems.$_" } Koha::Biblioitems->columns;
     my @biblio_columns     = map { "biblio.$_" } Koha::Biblios->columns;
+    my @age_fields         = GetAutomaticItemModificationAgeFields();
     my $report;
     for my $rule (@rules) {
         my $age = $rule->{age};
 
         # Default to using items.dateaccessioned if there's an old item modification rule
-        # missing an agefield value
-        my $agefield      = $rule->{agefield} ? $rule->{agefield} : 'items.dateaccessioned';
+        # missing an agefield value, or if the stored value is not (or is no longer) a
+        # recognised age field - values are only trusted from a fixed allow-list since
+        # this is spliced directly into the SQL below and cannot be bound as a placeholder.
+        my $agefield = $rule->{agefield} // '';
+        unless ( grep { $_ eq $agefield } @age_fields ) {
+            Koha::Logger->get->warn(qq{Rejecting invalid agefield "$agefield" in automatic item modification rule})
+                if length $agefield;
+            $agefield = 'items.dateaccessioned';
+        }
         my $conditions    = $rule->{conditions};
         my $substitutions = $rule->{substitutions};
-        foreach (@$substitutions) {
-            ( $_->{item_field} ) = ( $_->{field} =~ /items\.(.*)/ );
+        foreach my $substitution (@$substitutions) {
+            my $field = $substitution->{field} // '';
+            if ( grep { $_ eq $field } @item_columns ) {
+                ( $substitution->{item_field} ) = ( $field =~ /^items\.(.*)/ );
+            } else {
+                Koha::Logger->get->warn(
+                    qq{Rejecting invalid substitution field "$field" in automatic item modification rule})
+                    if length $field;
+            }
         }
         my @params;
 
@@ -1706,6 +1742,9 @@ sub ToggleNewStatus {
                     $query .= qq| AND $condition->{field} = ?|;
                     push @params, $condition->{value};
                 }
+            } else {
+                Koha::Logger->get->warn(
+                    qq{Rejecting invalid condition field "$condition->{field}" in automatic item modification rule});
             }
         }
         if ( defined $age ) {
@@ -1722,6 +1761,7 @@ sub ToggleNewStatus {
                 my $field = $substitution->{item_field};
                 my $value = $substitution->{value};
                 next unless $substitution->{field};
+                next unless defined $field;
                 next
                     if ( defined $values->{ $substitution->{item_field} }
                     and $values->{ $substitution->{item_field} } eq $substitution->{value} );
