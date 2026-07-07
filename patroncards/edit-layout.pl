@@ -195,6 +195,12 @@ UNUSED_IMAGE_FIELDS:
     my $array_index   = 0;
     my $image_select  = 0;
     my $field_enabled = 0;
+
+    # Get valid image names for validation
+    my $valid_image_names = get_all_image_names();
+    my %valid_images      = map { $_->{'type'} => 1 } @$valid_image_names;
+    $valid_images{'none'} = 1;    # 'none' is also a valid value
+
 CGI_PARAMS:
 
     foreach my $parameter ( $cgi->multi_param() )
@@ -223,10 +229,18 @@ CGI_PARAMS:
             my $image_data   = $2;
             $field_enabled = $image_number if $cgi->param( "image_$image_number" . "_image_source" ) ne 'none';
             next CGI_PARAMS unless $image_number == $field_enabled;
+            my $param_value = $cgi->param($parameter);
+
+            # Sanitize image_name
+            my $field_name = $image_data =~ m/^image_(.*)$/ ? $1 : $image_data;
+            $param_value = undef
+                if $field_name eq 'name'
+                && $param_value
+                && !exists $valid_images{$param_value};
             if ( $image_data =~ m/^image_(.*)$/ ) {
-                $layout->{'images'}->{"image_$image_number"}->{'data_source'}->{"image_$1"} = $cgi->param($parameter);
+                $layout->{'images'}->{"image_$image_number"}->{'data_source'}->{"image_$1"} = $param_value;
             } else {
-                $layout->{'images'}->{"image_$image_number"}->{$image_data} = $cgi->param($parameter);
+                $layout->{'images'}->{"image_$image_number"}->{$image_data} = $param_value;
             }
         } else {
             $layout_name            = $cgi->param($parameter) if $parameter eq 'layout_name';
