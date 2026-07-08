@@ -15,6 +15,7 @@ import "datatables.net-buttons";
 import "datatables.net-buttons/js/buttons.html5";
 import "datatables.net-buttons/js/buttons.print";
 import "datatables.net-buttons/js/buttons.colVis";
+import "datatables.net-select";
 import {
     onBeforeMount,
     onBeforeUnmount,
@@ -65,9 +66,20 @@ export default {
 
         const table = useTemplateRef("table");
         const tableColumns = ref(props.columns);
+
+        if (props.select) {
+            tableColumns.value.unshift({
+                searchable: false,
+                orderable: false,
+                render: DataTablesLib.render.select(),
+                targets: 0,
+            });
+        }
+
         const allOptions = ref({
             paging: true,
             searching: true,
+            ...(props.select && { select: { style: "multi" } }),
             ...(props.url && {
                 ajax: {
                     url:
@@ -337,6 +349,11 @@ export default {
             type: Array,
             required: false,
             default: [],
+        },
+        select: {
+            type: Boolean,
+            required: false,
+            default: false,
         },
     },
 };
