@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 26;
+use Test::More tests => 27;
 use Test::NoWarnings;
 use Test::MockModule;
 use Test::Warn;
@@ -1228,6 +1228,40 @@ subtest 'ModBiblio on invalid record' => sub {
     like( $action_log->info, qr/^biblio /, "Biblio data logged in action log info" );
     ok( defined $action_log->diff, "Diff column is populated for MODIFY" );
     like( $action_log->diff, qr/_marc/, "MARC field changes are captured in the diff column" );
+};
+
+subtest 'ModBiblio on record with strippable non-XML characters' => sub {
+    plan tests => 4;
+
+    t::lib::Mocks::mock_preference( "CataloguingLog", 1 );
+
+    # We create a record with an invalid control character (chr(31)) in the MARC
+    my $record = MARC::Record->new();
+    my $field  = MARC::Field->new( '650', '', '', 'a' => '00' . chr(31) . 'aD000015937' );
+    $record->append_fields($field);
+
+    my ($biblionumber) = C4::Biblio::AddBiblio( $record, '' );
+
+    # New behaviour: strippable non-XML characters are silently fixed; the
+    # stripping event is reported via the warnings arrayref, not Perl warn()
+    my @warnings;
+    C4::Biblio::ModBiblio( $record, $biblionumber, '', { warnings => \@warnings } );
+    like(
+        $warnings[0]{message}, qr/650\$a: invalid char value 31 \(U\+001F\) at position \d+/,
+        'Non-XML character stripping reported via warnings arrayref with field and char context'
+    );
+
+    my $metadata      = Koha::Biblios->find($biblionumber)->metadata;
+    my @nonxml_errors = $metadata->metadata_errors->search( { error_type => 'nonxml_stripped' } )->as_list;
+    ok( scalar @nonxml_errors, 'nonxml_stripped errors persisted in biblio_metadata_errors after ModBiblio' );
+    like(
+        $nonxml_errors[0]->message, qr/650\$a: invalid char value 31 \(U\+001F\) at position \d+/,
+        'error message identifies field, char value, and position'
+    );
+
+    my $action_logs =
+        Koha::ActionLogs->search( { object => $biblionumber, module => 'Cataloguing', action => 'MODIFY' } );
+    is( $action_logs->count, 1, "Modification of biblio was successfully recorded in action logs" );
 };
 
 subtest 'UpdateTotalIssues on Invalid record' => sub {

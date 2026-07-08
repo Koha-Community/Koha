@@ -89,7 +89,6 @@ use C4::Charset     qw(
     nsb_clean
     SetMarcUnicodeFlag
     SetUTF8Flag
-    StripNonXmlChars
 );
 use C4::Languages;
 use C4::Linker;
@@ -301,6 +300,7 @@ sub AddBiblio {
                     {
                         skip_record_index => 1,
                         record_source_id  => $options->{record_source_id},
+                        ( ref $options->{warnings} eq 'ARRAY' ? ( warnings => $options->{warnings} ) : () ),
                     }
                 );
 
@@ -330,8 +330,14 @@ sub AddBiblio {
             $indexer->index_records( $biblionumber, "specialUpdate", "biblioserver" );
         }
     } catch {
-        warn $_;
-        ( $biblionumber, $biblioitemnumber ) = ( undef, undef );
+        my $error = $_;
+        if ( ref($error) eq 'Koha::Exceptions::Metadata::Invalid' ) {
+            ( $biblionumber, $biblioitemnumber ) = ( undef, undef );
+            $error->rethrow;
+        } else {
+            warn $error;
+            ( $biblionumber, $biblioitemnumber ) = ( undef, undef );
+        }
     };
     return ( $biblionumber, $biblioitemnumber );
 }
@@ -399,7 +405,12 @@ sub ModBiblio {
               ( exists $options->{record_source_id} )
             ? ( record_source_id => $options->{record_source_id} )
             : ()
-        )
+        ),
+        (
+              ( ref $options->{warnings} eq 'ARRAY' )
+            ? ( warnings => $options->{warnings} )
+            : ()
+        ),
     };
 
     if ( !$record ) {
@@ -2352,7 +2363,6 @@ sub TransformHtmlToMarc {
 
                     # between 001 and 009 (included)
                 } elsif ( $fval ne '' ) {
-                    $fval     = StripNonXmlChars($fval);    #Strip out any non-XML characters like control characters
                     $newfield = MARC::Field->new( $tag, $fval, );
                 }
 
@@ -2377,7 +2387,6 @@ sub TransformHtmlToMarc {
                     if ( $fval ne '' && $newfield ) {
                         $newfield->add_subfields( $fkey => $fval );
                     } elsif ( $fval ne '' ) {
-                        $fval     = StripNonXmlChars($fval);   #Strip out any non-XML characters like control characters
                         $newfield = MARC::Field->new( $tag, $ind1, $ind2, $fkey => $fval );
                     }
                     $j += 2;
@@ -3029,6 +3038,12 @@ sub ModBiblioMarc {
             )
         }
     )->store;
+
+    if ( ref $options->{warnings} eq 'ARRAY' ) {
+        for my $msg ( grep { $_->type eq 'warning' } @{ $m_rs->object_messages } ) {
+            push @{ $options->{warnings} }, { type => $msg->message, message => $msg->payload };
+        }
+    }
 
     unless ($skip_record_index) {
         my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
