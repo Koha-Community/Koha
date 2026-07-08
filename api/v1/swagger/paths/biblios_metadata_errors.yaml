@@ -1,0 +1,48 @@
+---
+"/biblios/{biblio_id}/metadata/errors/{error_id}":
+  delete:
+    x-mojo-to: Biblios::MetadataErrors#delete
+    operationId: deleteBiblioMetadataError
+    tags:
+    - biblios
+    summary: Delete a biblio metadata error
+    description: Deletes a specific metadata error record, marking it as resolved.
+    parameters:
+    - name: biblio_id
+      in: path
+      description: Internal identifier for the bibliographic record
+      required: true
+      type: integer
+    - name: error_id
+      in: path
+      description: Internal identifier for the metadata error
+      required: true
+      type: integer
+    produces:
+    - application/json
+    responses:
+      '204':
+        description: Metadata error deleted
+      '401':
+        description: Authentication required
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '403':
+        description: Access forbidden
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '404':
+        description: Metadata error not found
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '500':
+        description: Internal error
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '503':
+        description: Under maintenance
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        editcatalogue: edit_catalogue
