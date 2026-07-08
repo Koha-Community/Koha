@@ -2537,7 +2537,7 @@ sub libraries_where_can_see_things {
     my ( $self, $params ) = @_;
     my $permission    = $params->{permission};
     my $subpermission = $params->{subpermission};
-    my $group_feature = $params->{group_feature};
+    my $group_feature = $params->{group_feature} // '';
 
     return @{ $self->{"_restricted_branchcodes:$permission:$subpermission:$group_feature"} }
         if exists( $self->{"_restricted_branchcodes:$permission:$subpermission:$group_feature"} );
@@ -2555,7 +2555,7 @@ sub libraries_where_can_see_things {
             if ( $library_groups->count ) {
                 while ( my $library_group = $library_groups->next ) {
                     my $root = Koha::Library::Groups->get_root_ancestor( { id => $library_group->id } );
-                    next unless $root->$group_feature;
+                    next unless ( !$group_feature || $root->$group_feature );
                     my $parent   = $library_group->parent;
                     my @children = $parent->all_libraries;
                     foreach my $child (@children) {
