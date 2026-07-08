@@ -97,7 +97,7 @@ subtest 'bundled_items()' => sub {
 };
 
 subtest 'add_to_bundle' => sub {
-    plan tests => 14;
+    plan tests => 21;
 
     $schema->storage->txn_begin;
 
@@ -160,10 +160,40 @@ subtest 'add_to_bundle' => sub {
 
     $item_to_bundle->discard_changes;
     $bundled_marc = $item_to_bundle->biblio->metadata->record;
+    my $bundled_773 = $bundled_marc->field('773');
+    is( ref($bundled_773), 'MARC::Field', '773 field is set after bundling with "marc_link = 1"' );
     is(
-        ref( $bundled_marc->field('773') ), 'MARC::Field',
-        '773 field is set after bundling with "marc_link = 1"'
+        $bundled_773->subfield('0'), undef,
+        'Subfield 0 is not populated when EasyAnalyticalRecords is disabled'
     );
+
+    # marc_link with EasyAnalyticalRecords enabled - item-specific subfields should be added
+    t::lib::Mocks::mock_preference( 'EasyAnalyticalRecords', 1 );
+
+    $item_to_bundle = $builder->build_sample_item;
+    $link->{external_id} = $item_to_bundle->barcode;
+
+    $t->post_ok( "//$userid:$password@/api/v1/items/$itemnumber/bundled_items" => json => $link )
+        ->status_is( 201, 'Link created successfully' )
+        ->json_is( '/item_id' => $item_to_bundle->itemnumber, 'Bundled item returned' );
+
+    $item_to_bundle->discard_changes;
+    $bundled_marc = $item_to_bundle->biblio->metadata->record;
+    $bundled_773  = $bundled_marc->field('773');
+    is(
+        $bundled_773->subfield('0'), $item->biblio->biblionumber,
+        'Subfield 0 contains host biblionumber when EasyAnalyticalRecords is enabled'
+    );
+    is(
+        $bundled_773->subfield('9'), $item->itemnumber,
+        'Subfield 9 contains host itemnumber when EasyAnalyticalRecords is enabled'
+    );
+    is(
+        $bundled_773->subfield('o'), $item->barcode,
+        'Subfield o contains host item barcode when EasyAnalyticalRecords is enabled'
+    );
+
+    t::lib::Mocks::mock_preference( 'EasyAnalyticalRecords', 0 );
 
     $schema->storage->txn_rollback;
 };

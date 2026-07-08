@@ -1833,7 +1833,9 @@ sub to_api_mapping {
     Called in list context, it also returns 773$g (related parts).
 
     If there is no $w, we use $0 (host biblionumber) or $9 (host itemnumber)
-    to search for the host record. If there is also no $0 and no $9, we search
+    to search for the host record. We also fall back to $0/$9 if a $w is
+    present but fails to resolve to a single host record (e.g. the host
+    hasn't been indexed yet). If there is also no $0 and no $9, we search
     using author and title. Failing all of that, we return an undef host and
     form a concatenation of strings with 773$agt for host information,
     returned when called in list context.
@@ -1868,19 +1870,7 @@ sub get_marc_host {
 
         # not linked using $w
         my $unlinkedf = $record->field('773');
-        my $host;
-        if ( C4::Context->preference("EasyAnalyticalRecords") ) {
-            if ( $unlinkedf->subfield('0') ) {
-
-                # use 773$0 host biblionumber
-                $bibno = $unlinkedf->subfield('0');
-            } elsif ( $unlinkedf->subfield('9') ) {
-
-                # use 773$9 host itemnumber
-                my $linkeditemnumber = $unlinkedf->subfield('9');
-                $bibno = Koha::Items->find($linkeditemnumber)->biblionumber;
-            }
-        }
+        $bibno = $self->_get_marc_host_bibnumber_from_easy_analytics($unlinkedf);
         if ($bibno) {
             my $host = Koha::Biblios->find($bibno) or return;
             return wantarray ? ( $host, $unlinkedf->subfield('g') ) : $host;
@@ -1910,10 +1900,44 @@ sub get_marc_host {
             last;
         }
     }
+
+    # The $w-based control number search didn't resolve to a single host
+    # record (e.g. the host hasn't been indexed yet) - fall back to the
+    # Koha-internal $0/$9 linking present on the same field, if any.
+    $bibno //= $self->_get_marc_host_bibnumber_from_easy_analytics($hostfld);
+
     if ($bibno) {
         my $host = Koha::Biblios->find($bibno) or return;
         return wantarray ? ( $host, $hostfld->subfield('g') ) : $host;
     }
+}
+
+=head3 _get_marc_host_bibnumber_from_easy_analytics
+
+Private method returning the host biblionumber encoded in a 773 field's $0
+(host biblionumber) or $9 (host itemnumber) subfields, as populated by
+L</generate_marc_host_field> when EasyAnalyticalRecords is enabled. Returns
+undef if EasyAnalyticalRecords is disabled, or neither subfield is present.
+
+=cut
+
+sub _get_marc_host_bibnumber_from_easy_analytics {
+    my ( $self, $field ) = @_;
+
+    return unless $field && C4::Context->preference('EasyAnalyticalRecords');
+
+    if ( $field->subfield('0') ) {
+
+        # use 773$0 host biblionumber
+        return $field->subfield('0');
+    } elsif ( $field->subfield('9') ) {
+
+        # use 773$9 host itemnumber
+        my $item = Koha::Items->find( $field->subfield('9') );
+        return $item ? $item->biblionumber : undef;
+    }
+
+    return;
 }
 
 =head3 get_marc_host_only

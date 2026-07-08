@@ -36,7 +36,7 @@ $schema->storage->txn_begin;
 our $builder = t::lib::TestBuilder->new;
 
 subtest 'get_marc_host' => sub {
-    plan tests => 18;
+    plan tests => 20;
 
     t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
     t::lib::Mocks::mock_preference( 'MARCOrgCode', 'xyz' );
@@ -82,6 +82,26 @@ subtest 'get_marc_host' => sub {
     $marc->field('773')->update( '0' => $bib2->biblionumber );
     $host = $bib1->get_marc_host;
     is( $host->biblionumber, $bib2->biblionumber, 'Found host biblio using 773$0 biblionumber' );
+
+    # $w present but the search engine finds no results - falls back to 773$0
+    $marc->field('773')->update( w => '(xyz)999' );
+    $results = [];
+    $host    = $bib1->get_marc_host;
+    is(
+        $host->biblionumber, $bib2->biblionumber,
+        'Falls back to 773$0 biblionumber when $w search finds no results'
+    );
+
+    # $w present but the search engine finds more than one result - falls back to 773$0
+    $results = [ 1, 2 ];
+    $host    = $bib1->get_marc_host;
+    is(
+        $host->biblionumber, $bib2->biblionumber,
+        'Falls back to 773$0 biblionumber when $w search is ambiguous'
+    );
+
+    $marc->field('773')->delete_subfield( code => 'w' );
+    $results = [ $bib1->biblionumber ];    # restore for later tests relying on a single search hit
 
     $marc->field('773')->delete_subfield( code => '0' );
     $marc->field('773')->update( '9' => $item1->itemnumber );
