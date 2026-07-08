@@ -68,6 +68,11 @@
             </select>
         </strong></p
     >
+    [% IF metadata_errors %]
+        [% WRAPPER 'metadata_repairs.inc' errors=metadata_errors %]
+            <p>Please <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber | uri %]">edit the record</a> to review the affected fields and confirm the data is correct.</p>
+        [% END %]
+    [% END %]
     [% IF ( ocoins ) %]
         <!-- COinS / OpenURL -->
         <span class="Z3988" title="[% ocoins | html %]"></span>

@@ -102,6 +102,11 @@
     <!-- /.row -->
     <div class="row">
         <div id="catalogue_detail_biblio" class="col">
+            [% IF metadata_errors %]
+                [% WRAPPER 'metadata_repairs.inc' errors=metadata_errors %]
+                    <p>Please <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblio.biblionumber | uri %]">edit the record</a> to review the affected fields and confirm the data is correct.</p>
+                [% END %]
+            [% END %]
             [% IF decoding_error || analytics_error %]
                 <div class="alert alert-warning">
                     <h1>Errors found</h1>

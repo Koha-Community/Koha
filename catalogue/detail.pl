@@ -164,6 +164,8 @@ my $showallitems = $query->param('showallitems');
 my $marcflavour  = C4::Context->preference("marcflavour");
 
 $template->param( ocoins => !$invalid_marc_record ? $biblio->get_coins : undef );
+my @metadata_errors = $biblio->metadata->metadata_errors->as_list;
+$template->param( metadata_errors => \@metadata_errors ) if @metadata_errors;
 
 # some useful variables for enhanced content;
 # in each case, we're grabbing the first value we find in
