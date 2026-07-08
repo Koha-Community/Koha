@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Exception;
 use Test::MockModule;
 use Test::Warn;
@@ -28,6 +28,8 @@ use t::lib::Mocks;
 
 use C4::Biblio qw( AddBiblio );
 use Koha::Database;
+use MARC::Record;
+use MARC::Field;
 
 BEGIN {
     use_ok('Koha::Biblio::Metadatas');
@@ -35,6 +37,269 @@ BEGIN {
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
+
+subtest 'Testing store() method' => sub {
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    # Create a test bibliographic record
+    my $biblio = $builder->build(
+        {
+            source => 'Biblio',
+        }
+    );
+
+    subtest 'Valid MARCXML storage' => sub {
+        plan tests => 2;
+        $schema->storage->txn_begin;
+
+        my $marc_rec = MARC::Record->new;
+        $marc_rec->append_fields( MARC::Field->new( '245', '', '', 'a' => 'Test Title' ) );
+        my $valid_marcxml = $marc_rec->as_xml_record('MARC21');
+
+        my $record = Koha::Biblio::Metadata->new(
+            {
+                format       => 'marcxml',
+                metadata     => $valid_marcxml,
+                biblionumber => $biblio->{biblionumber},
+                schema       => 'MARC21',
+            }
+        );
+
+        lives_ok { $record->store }
+        'Valid MARCXML record stores successfully';
+        is(
+            $record->metadata_errors->search( { error_type => 'nonxml_stripped' } )->count,
+            0, 'No nonxml_stripped error for clean record'
+        );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'MARCXML with strippable non-XML characters' => sub {
+        plan tests => 4;
+        $schema->storage->txn_begin;
+
+        # Build MARCXML containing a non-XML control character (chr(31) = Unit Separator)
+        my $bad_title   = 'Title with' . chr(31) . ' bad character';
+        my $clean_title = 'Title with bad character';
+
+        # Generate the MARCXML string with the embedded bad character
+        my $marc_record = MARC::Record->new;
+        $marc_record->append_fields( MARC::Field->new( '245', '', '', 'a' => $bad_title ) );
+        my $marcxml_with_bad_char = $marc_record->as_xml_record('MARC21');
+
+        my $record = Koha::Biblio::Metadata->new(
+            {
+                format       => 'marcxml',
+                metadata     => $marcxml_with_bad_char,
+                biblionumber => $biblio->{biblionumber},
+                schema       => 'MARC21',
+            }
+        );
+
+        lives_ok { $record->store } 'MARCXML with strippable characters stores successfully';
+
+        my @errors = $record->metadata_errors->search( { error_type => 'nonxml_stripped' } )->as_list;
+        ok( scalar @errors, 'nonxml_stripped error(s) recorded after stripping' );
+        like(
+            $errors[0]->message,
+            qr/245\$a: invalid char value 31 \(U\+001F\) at position \d+/,
+            'error message identifies field, char value, and position'
+        );
+
+        my $stored = Koha::Biblio::Metadatas->find( { biblionumber => $biblio->{biblionumber}, format => 'marcxml' } );
+        is(
+            $stored->record->field('245')->subfield('a'),
+            $clean_title,
+            'Stored record has control character removed'
+        );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'MARCXML with an empty datafield' => sub {
+        plan tests => 4;
+        $schema->storage->txn_begin;
+
+        # A datafield with no subfields at all cannot be produced via the public MARC::Field
+        # API (it refuses to construct one), but legacy data saved before this validation
+        # existed can contain exactly that. Simulate it by poking the internal structure.
+        my $marc_record = MARC::Record->new;
+        $marc_record->append_fields( MARC::Field->new( '245', '', '', 'a' => 'Test Title' ) );
+        my $empty_field = MARC::Field->new( '500', ' ', ' ', 'a' => 'placeholder' );
+        $empty_field->{_subfields} = [];
+        $marc_record->append_fields($empty_field);
+        my $marcxml_with_empty_field = $marc_record->as_xml_record('MARC21');
+
+        my $record = Koha::Biblio::Metadata->new(
+            {
+                format       => 'marcxml',
+                metadata     => $marcxml_with_empty_field,
+                biblionumber => $biblio->{biblionumber},
+                schema       => 'MARC21',
+            }
+        );
+
+        lives_ok { $record->store } 'MARCXML with an empty datafield stores successfully';
+
+        my @errors = $record->metadata_errors->search( { error_type => 'empty_datafield_stripped' } )->as_list;
+        ok( scalar @errors, 'empty_datafield_stripped error(s) recorded after stripping' );
+        like(
+            $errors[0]->message,
+            qr/^500: field removed, it had no subfields/,
+            'error message identifies the removed field'
+        );
+
+        my $stored = Koha::Biblio::Metadatas->find( { biblionumber => $biblio->{biblionumber}, format => 'marcxml' } );
+        ok( !$stored->record->field('500'), 'Stored record no longer has the empty field' );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'MARCXML with both strippable characters and an empty datafield' => sub {
+        plan tests => 3;
+        $schema->storage->txn_begin;
+
+        my $marc_record = MARC::Record->new;
+        $marc_record->append_fields( MARC::Field->new( '245', '', '', 'a' => 'Bad' . chr(31) . ' Title' ) );
+        my $empty_field = MARC::Field->new( '500', ' ', ' ', 'a' => 'placeholder' );
+        $empty_field->{_subfields} = [];
+        $marc_record->append_fields($empty_field);
+        my $marcxml = $marc_record->as_xml_record('MARC21');
+
+        my $record = Koha::Biblio::Metadata->new(
+            {
+                format       => 'marcxml',
+                metadata     => $marcxml,
+                biblionumber => $biblio->{biblionumber},
+                schema       => 'MARC21',
+            }
+        );
+
+        lives_ok { $record->store } 'MARCXML with both faults stores successfully';
+        ok(
+            $record->metadata_errors->search( { error_type => 'nonxml_stripped' } )->count,
+            'nonxml_stripped error recorded'
+        );
+        ok(
+            $record->metadata_errors->search( { error_type => 'empty_datafield_stripped' } )->count,
+            'empty_datafield_stripped error recorded'
+        );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'Non-MARCXML format' => sub {
+        plan tests => 1;
+        $schema->storage->txn_begin;
+        my $other_metadata = '{"title": "Test Title"}';
+
+        my $record = Koha::Biblio::Metadata->new(
+            {
+                format       => 'json',
+                metadata     => $other_metadata,
+                biblionumber => $biblio->{biblionumber},
+                schema       => 'LOCAL',
+            }
+        );
+
+        lives_ok { $record->store }
+        'Non-MARCXML record stores without validation';
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'Empty MARCXML handling' => sub {
+        plan tests => 1;
+        $schema->storage->txn_begin;
+        my $empty_record = Koha::Biblio::Metadata->new(
+            {
+                format       => 'marcxml',
+                metadata     => '',
+                biblionumber => $biblio->{biblionumber},
+                schema       => 'MARC21',
+            }
+        );
+
+        throws_ok { $empty_record->store }
+        'Koha::Exceptions::Metadata::Invalid',
+            'Empty MARCXML throws expected exception';
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'Re-saving a record with the same recoverable fault does not duplicate the error row' => sub {
+        plan tests => 2;
+        $schema->storage->txn_begin;
+
+        my $bad_title   = 'Title with' . chr(31) . ' bad character';
+        my $marc_record = MARC::Record->new;
+        $marc_record->append_fields( MARC::Field->new( '245', '', '', 'a' => $bad_title ) );
+        my $marcxml_with_bad_char = $marc_record->as_xml_record('MARC21');
+
+        my $record = Koha::Biblio::Metadata->new(
+            {
+                format       => 'marcxml',
+                metadata     => $marcxml_with_bad_char,
+                biblionumber => $biblio->{biblionumber},
+                schema       => 'MARC21',
+            }
+        );
+        $record->store;
+
+        # Simulate the same dirty source record being re-harvested/re-imported again
+        # before anyone fixes the underlying data.
+        $record->metadata($marcxml_with_bad_char);
+        $record->store;
+
+        is(
+            $record->metadata_errors->search( { error_type => 'nonxml_stripped' } )->count,
+            1, 'Re-triggering the exact same fault does not create a duplicate error row'
+        );
+        is(
+            Koha::Biblio::Metadatas->find( { biblionumber => $biblio->{biblionumber}, format => 'marcxml' } )
+                ->record->subfield( '245', 'a' ),
+            'Title with bad character',
+            'The record is still stored with the control character removed'
+        );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'Pre-existing error rows survive a clean re-save' => sub {
+        plan tests => 1;
+        $schema->storage->txn_begin;
+
+        my $bad_title   = 'Title with' . chr(31) . ' bad character';
+        my $marc_record = MARC::Record->new;
+        $marc_record->append_fields( MARC::Field->new( '245', '', '', 'a' => $bad_title ) );
+
+        my $record = Koha::Biblio::Metadata->new(
+            {
+                format       => 'marcxml',
+                metadata     => $marc_record->as_xml_record('MARC21'),
+                biblionumber => $biblio->{biblionumber},
+                schema       => 'MARC21',
+            }
+        );
+        $record->store;    # records the nonxml_stripped error row
+
+        # Re-save with already-clean MARCXML, as if the cataloguer just edited an unrelated
+        # field - the earlier fault has not been explicitly resolved.
+        my $clean_record = MARC::Record->new;
+        $clean_record->append_fields( MARC::Field->new( '245', '', '', 'a' => 'Title with bad character' ) );
+        $record->metadata( $clean_record->as_xml_record('MARC21') );
+        $record->store;
+
+        is(
+            $record->metadata_errors->search( { error_type => 'nonxml_stripped' } )->count,
+            1,
+            'The pre-existing error row is left in place after a subsequent clean save, since resolution is explicit'
+        );
+
+        $schema->storage->txn_rollback;
+    };
+};
 
 subtest 'record() tests' => sub {
 
@@ -124,7 +389,7 @@ subtest 'record_strip_nonxml() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $title = 'Oranges and' . chr(31) . ' Peaches';
+    my $title = 'Oranges and Peaches';
 
     # Create a valid record
     my $record = MARC::Record->new();
@@ -133,7 +398,16 @@ subtest 'record_strip_nonxml() tests' => sub {
     my ($biblio_id) = C4::Biblio::AddBiblio( $record, '' );
 
     my $metadata = Koha::Biblios->find($biblio_id)->metadata;
-    my $record2  = $metadata->record_strip_nonxml;
+
+    # Update the record in the database directly to include our error character
+    my $bad_title = 'Oranges and' . chr(31) . ' Peaches';
+    $record = $metadata->record;
+    $record->delete_fields( $record->field('245') );
+    $record->insert_fields_ordered( MARC::Field->new( '245', '', '', 'a' => $bad_title ) );
+    $metadata->_result->update( { metadata => $record->as_xml_record } );
+    $metadata->discard_changes;
+
+    my $record2 = $metadata->record_strip_nonxml;
 
     is( ref $record2, 'MARC::Record', 'Method record() returned a MARC::Record object' );
     is(
@@ -157,8 +431,7 @@ subtest 'record_strip_nonxml() tests' => sub {
         "record_strip_nonxml returns undef when the record cannot be parsed after removing nonxml characters"
     );
 
-    my $builder = t::lib::TestBuilder->new;
-    my $item    = $builder->build_sample_item( { biblionumber => $metadata->biblionumber } );
+    my $item = $builder->build_sample_item( { biblionumber => $metadata->biblionumber } );
 
     # Emptied the OpacHiddenItems pref
     t::lib::Mocks::mock_preference( 'OpacHiddenItems', '' );
