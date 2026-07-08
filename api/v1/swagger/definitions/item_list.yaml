@@ -1,0 +1,61 @@
+---
+type: object
+properties:
+  id:
+    type: integer
+    description: unique id for the item list
+    readOnly: true
+  name:
+    description: name of the item list
+    type: string
+  owner:
+    description: borrowernumber of the item list owner
+    type:
+      - integer
+      - "null"
+  visibility:
+    description: visibility determining ability to read the item list
+    type: string
+    enum:
+      - private
+      - group
+      - public
+  created_date:
+    description: when the item list was created
+    type: string
+    format: date-time
+    readOnly: true
+  updated_date:
+    description: when the item list was last updated
+    type: string
+    format: date-time
+    readOnly: true
+  item_list_contents_count:
+    description: Item list contents count (x-koha-embed)
+    type: integer
+    readOnly: true
+  item_list_shares_count:
+    description: Item list shares count (x-koha-embed)
+    type: integer
+    readOnly: true
+  can_read:
+    description: Whether the requesting user may read this list
+    type: boolean
+    readOnly: true
+  can_update:
+    description: Whether the requesting user may update this list
+    type: boolean
+    readOnly: true
+  can_delete:
+    description: Whether the requesting user may delete this list
+    type: boolean
+    readOnly: true
+  can_manage:
+    description: Whether the requesting user may manage this list
+    type: boolean
+    readOnly: true
+additionalProperties: false
+required:
+  - id
+  - name
+  - owner

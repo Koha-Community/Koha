@@ -1,0 +1,32 @@
+---
+type: object
+properties:
+  item_list_id:
+    type: integer
+    description: unique id for the shared item list
+    readOnly: true
+  borrowernumber:
+    description: borrowernumber of the user the list is shared with
+    type:
+      - integer
+      - object
+  permission:
+    description: the type of permission shared with the user
+    type: string
+    enum:
+      - view
+      - edit
+  created_date:
+    description: when the item list was created
+    type: string
+    format: date-time
+    readOnly: true
+  patron:
+    description: embedded patron object
+    type: object
+    readOnly: true
+additionalProperties: false
+required:
+  - item_list_id
+  - borrowernumber
+  - permission

@@ -158,6 +158,12 @@ definitions:
     $ref: ./definitions/item.yaml
   item_group:
     $ref: ./definitions/item_group.yaml
+  item_list:
+    $ref: ./definitions/item_list.yaml
+  item_list_share:
+    $ref: ./definitions/item_list_share.yaml
+  item_lists_config:
+    $ref: ./definitions/item_lists_config.yaml
   item_type:
     $ref: ./definitions/item_type.yaml
   job:
@@ -535,6 +541,18 @@ paths:
     $ref: ./paths/items.yaml#/~1items~1{item_id}~1bundled_items~1{bundled_item_id}
   "/items/{item_id}/pickup_locations":
     $ref: "./paths/items.yaml#/~1items~1{item_id}~1pickup_locations"
+  /item-lists:
+    $ref: ./paths/item_lists.yaml#/~1item-lists
+  /item-lists/config:
+    $ref: ./paths/item_lists.yaml#/~1item-lists~1config
+  "/item-lists/{item_list_id}":
+    $ref: "./paths/item_lists.yaml#/~1item-lists~1{item_list_id}"
+  "/item-lists/{item_list_id}/items":
+    $ref: "./paths/item_lists.yaml#/~1item-lists~1{item_list_id}~1items"
+  "/item-lists/{item_list_id}/shares":
+    $ref: "./paths/item_lists.yaml#/~1item-lists~1{item_list_id}~1shares"
+  "/item-lists/{item_list_id}/shares/{patron_id}":
+    $ref: "./paths/item_lists.yaml#/~1item-lists~1{item_list_id}~1shares~1{patron_id}"
   /jobs:
     $ref: ./paths/jobs.yaml#/~1jobs
   "/jobs/{job_id}":
@@ -969,6 +987,12 @@ parameters:
     description: Internal item identifier
     in: query
     name: item_id
+    type: integer
+  item_list_id_pp:
+    description: Internal item list identifier
+    in: path
+    name: item_list_id
+    required: true
     type: integer
   job_id_pp:
     description: Job internal identifier
@@ -1481,6 +1505,9 @@ tags:
   - description: "Manage record sources\n"
     name: record_sources
     x-displayName: Record source
+  - description: "Manage item lists\n"
+    x-displayName: Item Lists
+    name: item_lists
   - description: "Manage items\n"
     name: items
     x-displayName: Items

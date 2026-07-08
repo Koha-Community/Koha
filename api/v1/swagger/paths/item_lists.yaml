@@ -1,0 +1,730 @@
+---
+/item-lists/config:
+  get:
+    x-mojo-to: Item::Lists#config
+    operationId: getItemListsconfig
+    description: This resource returns a list of options needed for the item lists Vue app. EXPERIMENTAL - DO NOT RELY on this, it is subject to change!
+    summary: Get the config for the item lists module
+    tags:
+      - item_lists
+    produces:
+      - application/json
+    responses:
+      200:
+        description: The item lists module config
+        schema:
+          $ref: "../swagger.yaml#/definitions/item_lists_config"
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
+/item-lists:
+  get:
+    x-mojo-to: Item::Lists#list
+    operationId: listItemLists
+    tags:
+      - item_lists
+    summary: List item lists
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - item_list_contents+count
+            - item_list_shares+count
+        collectionFormat: csv
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A list of item lists
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/item_list"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
+  post:
+    x-mojo-to: Item::Lists#create
+    operationId: createItemList
+    tags:
+      - item_lists
+    summary: Create new item list
+    parameters:
+      - name: body
+        in: body
+        description: A JSON object describing the new item list
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/item_list"
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: The created item list
+        schema:
+          $ref: "../swagger.yaml#/definitions/item_list"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: |
+          Conflict creating the resource. Possible `error_code` attribute values:
+
+          * `duplicate_name`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
+        item_lists: create_item_lists
+/item-lists/{item_list_id}:
+  get:
+    x-mojo-to: Item::Lists#get
+    operationId: getItemList
+    tags:
+      - item_lists
+    summary: Get item list
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/item_list_id_pp"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - item_list_contents+count
+            - item_list_shares+count
+        collectionFormat: csv
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: An item list
+        schema:
+          $ref: "../swagger.yaml#/definitions/item_list"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Item not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
+  put:
+    x-mojo-to: Item::Lists#update
+    operationId: updateItemList
+    tags:
+      - item_lists
+    summary: Update item list
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/item_list_id_pp"
+      - name: body
+        in: body
+        description: A JSON object describing the updated item list
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/item_list"
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: An item list
+        schema:
+          $ref: "../swagger.yaml#/definitions/item_list"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Item not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: |
+          Conflict creating the resource. Possible `error_code` attribute values:
+
+          * `duplicate_name`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
+  delete:
+    x-mojo-to: Item::Lists#delete
+    operationId: deleteItemList
+    tags:
+      - item_lists
+    summary: Deletes an item list
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/item_list_id_pp"
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "204":
+        description: Item list deleted
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Item not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
+/item-lists/{item_list_id}/items:
+  get:
+    x-mojo-to: Item::Lists#list_items
+    operationId: listItemListItems
+    tags:
+      - item_lists
+    summary: List item list items
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/item_list_id_pp"
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - biblio
+            - holding_library
+            - home_library
+            - item_type
+            - "+strings"
+        collectionFormat: csv
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A list of items
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/item"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Item not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
+  post:
+    x-mojo-to: Item::Lists#add_items
+    operationId: addItemListItems
+    tags:
+      - item_lists
+    summary: Add new items to an item list
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/item_list_id_pp"
+      - name: body
+        in: body
+        description: A JSON object describing the new items
+        required: true
+        schema:
+          type: object
+          additionalProperties: false
+          properties:
+            item_ids:
+              description: Unique item identifiers
+              type: array
+              items:
+                type: integer
+            external_ids:
+              description: External item identifiers
+              type: array
+              items:
+                type: string
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: The added items
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/item"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Item not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
+  delete:
+    x-mojo-to: Item::Lists#remove_items
+    operationId: removeItemListItems
+    tags:
+      - item_lists
+    summary: Remove items from an item list
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/item_list_id_pp"
+      - name: body
+        in: body
+        description: A JSON object describing the items to remove
+        required: true
+        schema:
+          type: object
+          additionalProperties: false
+          properties:
+            item_ids:
+              description: Unique item identifiers
+              type: array
+              items:
+                type: integer
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "204":
+        description: Items removed from item list
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Item not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
+/item-lists/{item_list_id}/shares:
+  get:
+    x-mojo-to: Item::Lists#list_shares
+    operationId: listItemListShares
+    tags:
+      - item_lists
+    summary: List item list shares
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/item_list_id_pp"
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - patron
+        collectionFormat: csv
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A list of shares
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/item_list_share"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Item not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
+  put:
+    x-mojo-to: Item::Lists#add_share
+    operationId: addItemListShare
+    tags:
+      - item_lists
+    summary: Share an item list
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/item_list_id_pp"
+      - name: body
+        in: body
+        description: A JSON object describing the new share
+        required: true
+        schema:
+          type: object
+          additionalProperties: false
+          properties:
+            patron_id:
+              description: The patron to share with
+              type: integer
+            permission:
+              description: The permission to share with
+              type: string
+              enum:
+                - view
+                - edit
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: The share was successful
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Item not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: |
+          Conflict creating the resource. Possible `error_code` attribute values:
+
+          * `sharee_owner`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
+/item-lists/{item_list_id}/shares/{patron_id}:
+  delete:
+    x-mojo-to: Item::Lists#remove_share
+    operationId: removeItemListShare
+    tags:
+      - item_lists
+    summary: Unshares an item list with a patron
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/item_list_id_pp"
+      - $ref: "../swagger.yaml#/parameters/patron_id_pp"
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "204":
+        description: Share removed from item list
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Item not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
