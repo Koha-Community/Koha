@@ -53,6 +53,10 @@ subtest 'process_quote' => sub {
     );
     t::lib::Mocks::mock_preference( 'CataloguingLog', 0 );
 
+    # The log-line count below includes the Zebra 'specialUpdate biblioserver' traces, which
+    # Bug 21820 made conditional on ElasticsearchEnableZebraQueue when using Elasticsearch
+    t::lib::Mocks::mock_preference( 'ElasticsearchEnableZebraQueue', 1 );
+
     # Test 1: Basic Quote Processing
     subtest 'basic_quote_processing' => sub {
         plan tests => 27;
