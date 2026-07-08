@@ -112,9 +112,13 @@ for my $biblionumber (@biblionumbers) {
         say " skipping. ERROR: biblionumber not found." if $verbose;
         next;
     }
-    my $record = $biblio->metadata->record;
-    unless ($record) {
-        say " skipping. ERROR: Invalid record." if $verbose;
+    my $record = eval { $biblio->metadata->record };
+    if ($@) {
+        if ($verbose) {
+            say " skipping. ERROR: Invalid record: $@";
+        } else {
+            say "ERROR: record $biblionumber could not be decoded: $@";
+        }
         next;
     }
 
@@ -122,8 +126,17 @@ for my $biblionumber (@biblionumbers) {
     if ($has_been_modified) {
         my $frameworkcode = C4::Biblio::GetFrameworkCode($record);
 
-        C4::Biblio::ModBiblio( $cleaned_record, $biblionumber, $frameworkcode )
-            if $confirm;
+        if ($confirm) {
+            eval { C4::Biblio::ModBiblio( $cleaned_record, $biblionumber, $frameworkcode ) };
+            if ($@) {
+                if ($verbose) {
+                    say " skipping. ERROR: could not be saved: $@";
+                } else {
+                    say "ERROR: record $biblionumber could not be saved: $@";
+                }
+                next;
+            }
+        }
         push @changes, $biblionumber;
         say " Done!" if $verbose;
     } else {

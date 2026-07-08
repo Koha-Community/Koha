@@ -76,9 +76,21 @@ $sth1->execute();
 # fetch info from the search
 while ( my ( $biblionumber, $frameworkcode ) = $sth1->fetchrow_array ) {
     my $biblio = Koha::Biblios->find($biblionumber);
-    my $record = $biblio->metadata->record;
+    my $record = eval { $biblio->metadata->record };
+    if ($@) {
+        $badcount++;
+        $totalcount++;
+        print $fh "ERROR WITH BIBLIO $biblionumber: metadata could not be decoded: $@\n";
+        next;
+    }
 
-    my $modok = ModBiblio( $record, $biblionumber, $frameworkcode, { skip_holds_queue => 1 } );
+    my $modok = eval { ModBiblio( $record, $biblionumber, $frameworkcode, { skip_holds_queue => 1 } ) };
+    if ($@) {
+        $badcount++;
+        $totalcount++;
+        print $fh "ERROR WITH BIBLIO $biblionumber: could not be saved: $@\n";
+        next;
+    }
 
     if ($modok) {
         $goodcount++;
