@@ -31,6 +31,7 @@ use Koha::AuthorisedValues;
 use Koha::Biblios;
 use Koha::Item::Search::Field qw(GetItemSearchFields);
 use Koha::ItemTypes;
+use Koha::Item::Lists;
 use Koha::Libraries;
 
 my $cgi = CGI->new;
@@ -384,6 +385,7 @@ $template->param(
     items_search_fields    => \@items_search_fields,
     authorised_values_json => to_json($authorised_values),
     query                  => $cgi,
+    item_lists             => Koha::Item::Lists->get_manageable_lists( Koha::Patrons->find($borrowernumber) )
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

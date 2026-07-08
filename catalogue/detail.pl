@@ -51,6 +51,7 @@ use Koha::Database::DataInconsistency;
 use Koha::ILL::Requests;
 use Koha::Items;
 use Koha::ItemTypes;
+use Koha::Item::Lists;
 use Koha::Patrons;
 use Koha::Virtualshelves;
 use Koha::Plugins;
@@ -110,6 +111,7 @@ $template->param(
     biblio      => $biblio,
     activetab   => $activetab,
     is_fast_add => $is_fast_add,
+    item_lists  => Koha::Item::Lists->get_manageable_lists( Koha::Patrons->find($borrowernumber) )
 );
 
 my $marc_record         = eval { $biblio->metadata->record };

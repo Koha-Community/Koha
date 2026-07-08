@@ -80,6 +80,9 @@
                     <button type="submit" class="itemselection_action_modify btn btn-link"><i class="fa-solid fa-pencil"></i> Modify selected items</button>
                 </form>
             [% END %]
+            [% IF item_lists.count || CAN_user_item_lists_create_item_lists %]
+                <a class="itemselection_action_item_list_add" href="#"><i class="fa fa-list"></i> Add selected items to list </a>
+            [% END %]
             [% IF CAN_user_editcatalogue_manage_item_groups && biblio.item_groups.count %]
                 <a class="itemselection_action_item_group_set" href="#"><i class="fa fa-book"></i> Add/move to item group</a>
                 <a class="itemselection_action_item_group_unset" href="#"><i class="fa fa-unlink"></i> Remove from item group</a>

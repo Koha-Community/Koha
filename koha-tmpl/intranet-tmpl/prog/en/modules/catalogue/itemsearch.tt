@@ -393,6 +393,8 @@
     </form>
 [% END %]
 
+[% INCLUDE 'modals/item_list_add.inc' %]
+
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
@@ -458,11 +460,13 @@
                     .find("span")
                     .html(_("Items selected: ") + number);
                 $("#batch_mod_menu").removeClass("disabled").prop("disabled", false);
+                $(".send_to_item_list").removeClass("disabled").prop("disabled", false);
                 $("#export-button").html(_("Export selected results (%s) to").format(number) + caret);
             } else {
                 $("#table_search_selections").hide();
                 $("#batch_mod_menu").prop("disabled", true).addClass("disabled");
                 $("#batch_item_operations").empty();
+                $(".send_to_item_list").prop("disabled", true).addClass("disabled");
                 $("#export-button").html(_("Export all results to") + caret);
             }
         }
@@ -652,6 +656,7 @@
                 "</a></li>" +
                 "            </ul>" +
                 "        </div>";
+
             if (Koha.permissions.CAN_user_tools_items_batchmod || Koha.permissions.CAN_user_tools_items_batchdel) {
                 table +=
                     "" +
@@ -679,6 +684,11 @@
                 }
                 table += "" + "            </ul>" + "        </div>";
             }
+
+            if ($("#item-list-add-form-select > option").length > 0) {
+                table += "" + '        <button class="btn btn-default btn-sm disabled send_to_item_list" disabled="disabled">' + _("Add to item list") + "</button>";
+            }
+
             table +=
                 "" +
                 '        <div id="table_search_selections" class="btn-group" style="display:none;">' +
@@ -952,6 +962,10 @@
                 batch_mod_form.submit();
             });
 
+            $("body").on("click", ".send_to_item_list", function (e) {
+                showItemListAddModal();
+            });
+
             $("body").on("click", "#item_search tbody td", function (e) {
                 var checkbox = $(this).find("input[type=checkbox]");
                 if (e.target.type != "checkbox") {
@@ -974,6 +988,7 @@
             }
         });
     </script>
+    [% Asset.js("js/modals/item_list_add.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

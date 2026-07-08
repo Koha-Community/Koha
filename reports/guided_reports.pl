@@ -34,6 +34,7 @@ use C4::Log qw( logaction );
 use Koha::AuthorisedValue;
 use Koha::AuthorisedValues;
 use Koha::BiblioFrameworks;
+use Koha::Item::Lists;
 use Koha::Libraries;
 use Koha::Patron::Categories;
 use Koha::Patrons;
@@ -1185,6 +1186,7 @@ if ( $op eq 'run' ) {
                 'errors'         => defined($errors) ? [$errors] : undef,
                 'sql_params'     => \@sql_params,
                 'param_names'    => \@param_names,
+                item_lists       => Koha::Item::Lists->get_manageable_lists( Koha::Patrons->find($borrowernumber) )
             );
         }
     }

@@ -1261,6 +1261,8 @@
     <!-- /#removeFromBundleModal.modal -->
 [% END %]
 
+[% INCLUDE 'modals/item_list_add.inc' %]
+
 [% IF ( Koha.Preference('CatalogConcerns') ) %]
     [% INCLUDE 'modals/add_catalog_concern.inc' %]
 [% END %]
@@ -2487,6 +2489,13 @@
             });
         </script>
     [% END # /IF EnableItemGroups %]
+    <script nonce="[% Koha.CSPNonce | $raw %]">
+        // Add item(s) to an item list
+        $(".itemselection_action_item_list_add").on("click", function () {
+            showItemListAddModal();
+        });
+    </script>
+    [% Asset.js("js/modals/item_list_add.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(".delete-comment").on("click", function () {
             return confirm(_("Are you sure you want to delete this comment?"));

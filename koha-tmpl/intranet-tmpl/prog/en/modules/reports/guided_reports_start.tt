@@ -222,6 +222,8 @@
 </div>
 <!-- #update_sql -->
 
+[% INCLUDE 'modals/item_list_add.inc' %]
+
 [% aside = BLOCK %]
     [% IF ( saved1 ) %]
         <div id="saved-reports-filter">
@@ -1327,6 +1329,11 @@
                                                         >Batch item deletion</a
                                                     >
                                                 </li>
+                                                [% IF item_lists.count || CAN_user_item_lists_create_item_lists %]
+                                                    <li>
+                                                        <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Add visible items to an item list" class="dropdown-item send_to_item_list">Add items to item list</a>
+                                                    </li>
+                                                [% END %]
                                             [% END %]
                                             [% IF header_ro.cell == 'reserve_id' || header_types.item( header_ro.cell ) == 'reserve_id' %]
                                                 <li class="dropdown-header">Hold records</li>
@@ -1843,6 +1850,7 @@
     [% Asset.css("lib/codemirror/highlight.css") | $raw %]
     [% Asset.js( "js/mana.js" ) | $raw %]
     [% Asset.js( "js/throttledButton.js" ) | $raw %]
+    [% Asset.js("js/modals/item_list_add.js") | $raw %]
     [% INCLUDE 'select2.inc' %]
     <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         let op = "";
@@ -2688,6 +2696,10 @@
             $("#batch_add_to_list").on("submit", function (e) {
                 e.preventDefault();
                 addToList();
+            });
+
+            $(".send_to_item_list").on("click", function (e) {
+                showItemListAddModal();
             });
 
             $("body").on("click", ".preview_sql", function (e) {
