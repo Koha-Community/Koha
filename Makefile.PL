@@ -334,6 +334,7 @@ my $target_map = {
     './kohaversion.pl'                                 => 'INTRANET_CGI_DIR',
     './labels'                                         => 'INTRANET_CGI_DIR',
     './lib'                                            => { target => 'PERL_MODULE_LIB_DIR', trimdir => -1 },
+    './lists'                                          => 'INTRANET_CGI_DIR',
     './mainpage.pl'                                    => 'INTRANET_CGI_DIR',
     './Makefile.PL'                                    => 'NONE',
     './MANIFEST.SKIP'                                  => 'NONE',

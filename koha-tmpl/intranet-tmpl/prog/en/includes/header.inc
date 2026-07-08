@@ -49,6 +49,7 @@
                     >
                     <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
                         <li><a class="dropdown-item" href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a></li>
+                        <li><a class="dropdown-item" href="/cgi-bin/koha/lists/items">Item lists</a></li>
                         [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items || can_see_cataloguing_module  ) %]
                             <li><a class="dropdown-item" href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cataloging</a></li>
                         [% END %]

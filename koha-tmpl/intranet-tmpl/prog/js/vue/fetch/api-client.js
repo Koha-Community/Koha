@@ -18,6 +18,7 @@ import SysprefAPIClient from "@fetch/system-preferences-api-client";
 import SIP2APIClient from "@fetch/sip2-api-client";
 import PreservationAPIClient from "@fetch/preservation-api-client";
 import CircRuleAPIClient from "@fetch/circulation-rules-api-client";
+import ItemListsAPIClient from "@fetch/item-lists-api-client";
 
 export const APIClient = {
     booking: new BookingAPIClient(HttpClient),
@@ -38,6 +39,7 @@ export const APIClient = {
     preservation: new PreservationAPIClient(HttpClient),
     record_sources: new RecordSourcesAPIClient(HttpClient),
     circRule: new CircRuleAPIClient(HttpClient),
+    item_lists: new ItemListsAPIClient(HttpClient),
 };
 
 export default APIClient;

@@ -1,0 +1,39 @@
+[% USE raw %]
+[% USE To %]
+[% USE Asset %]
+[% USE KohaDates %]
+[% USE TablesSettings %]
+[% PROCESS 'i18n.inc' %]
+[% SET footerjs = 1 %]
+[% PROCESS 'patron-search.inc' %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title
+    >[% FILTER collapse %]
+        [% t("Item Lists") | html %]
+        &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="item_lists-home" class="item_lists">
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'cat-search.inc' %]
+[% END %]
+
+[% WRAPPER 'sub-header.inc' %]
+    <div id="vue-breadcrumbs-container"></div>
+[% END #/ WRAPPER sub-header.inc %]
+
+[% WRAPPER 'main-container.inc' wide_centered=1 %]
+    <div id="item-lists"></div>
+[% END %]
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'js-date-format.inc' %]
+    [% Asset.js("js/vue/dist/item_lists.js") | $raw %]
+    [% INCLUDE 'select2.inc' %]
+[% END %]
+[% INCLUDE 'intranet-bottom.inc' %]
