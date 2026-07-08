@@ -343,10 +343,7 @@ export function useBaseResource(resourceConfig) {
      */
 
     const doResourceSelect = (resource, dt, event) => {
-        resourceConfig.$emit(
-            "select-resource",
-            resource[resourceConfig.idAttr]
-        );
+        resourceConfig.emit("select-resource", resource[resourceConfig.idAttr]);
     };
 
     /*
