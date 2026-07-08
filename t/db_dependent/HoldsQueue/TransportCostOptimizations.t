@@ -9,7 +9,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 123;
+use Test::More tests => 128;
 use Test::NoWarnings;
 use Test::Warn;
 use Data::Dumper;
@@ -365,6 +365,19 @@ test_allocation(
     [ 0, 0, 0, 1, 1 ],
     [ [ 0, 4 ] ],
     1
+);
+
+test_allocation(
+    "many holds, three items at Library A, none at B, three a C - only library C holds should fill with C items",
+    [
+        [  0, -1, -1 ],
+        [ -1,  0, -1 ],
+        [ -1, -1,  0 ],
+    ],
+    [ 3,        0,        3 ],
+    [ 0,        5,        22 ],
+    [ [ 2, 2 ], [ 2, 2 ], [ 2, 2 ] ],
+    0
 );
 
 test_allocation(
