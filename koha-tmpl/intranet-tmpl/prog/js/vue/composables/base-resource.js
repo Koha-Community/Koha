@@ -284,6 +284,55 @@ export function useBaseResource(resourceConfig) {
     };
 
     /**
+     * Resource removal handler.
+     * Accepts an optional callback function to run after removal.
+     * If no callback is provided, does the following:
+     * - If removing from show component, navigates to resource list component.
+     * - If removing from resource list component, redraws the table.
+     *
+     * @param {Object} resource - The resource to remove (optional)
+     * @param {Object} callback - Callback to call after deletion (optional)
+     * @return {void}
+     */
+    const doResourceRemove = (resource, callback) => {
+        let resourceId = resource
+            ? resource[resourceConfig.idAttr]
+            : resourceConfig.newResource[resourceConfig.idAttr];
+        let resourceName = resource
+            ? resource[resourceConfig.nameAttr]
+            : resourceConfig.newResource[resourceConfig.nameAttr];
+
+        setConfirmationDialog(
+            {
+                title: i18n.removeConfirmationMessage,
+                message: resourceName,
+                accept_label: $__("Yes, remove"),
+                cancel_label: $__("No, do not remove"),
+            },
+            () => {
+                resourceConfig.apiClient.remove(resourceId).then(
+                    success => {
+                        setMessage(
+                            i18n.removeSuccessMessage.format(resourceName),
+                            true
+                        );
+                        if (typeof callback === "function") {
+                            callback();
+                        } else {
+                            if (resourceConfig.props.routeAction === "list") {
+                                callback.ajax.reload();
+                            } else {
+                                goToResourceList();
+                            }
+                        }
+                    },
+                    error => {}
+                );
+            }
+        );
+    };
+
+    /**
      * Emits the 'select-resource' event with the id of the provided resource.
      *
      * @param {Object} resource - The resource object containing the id attribute.
@@ -737,6 +786,7 @@ export function useBaseResource(resourceConfig) {
         appendToShow,
         doResourceSelect,
         doResourceDelete,
+        doResourceRemove,
         additionalFieldsChanged,
         getTableFilterFormElementsLabel,
         getTableFilterFormElements,

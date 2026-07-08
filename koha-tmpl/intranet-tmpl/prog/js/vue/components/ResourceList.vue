@@ -40,6 +40,7 @@ export default {
             show: props.instancedResource.goToResourceShow,
             edit: props.instancedResource.goToResourceEdit,
             delete: props.instancedResource.doResourceDelete,
+            remove: props.instancedResource.doResourceRemove,
             select: props.instancedResource.doResourceSelect,
         });
 
