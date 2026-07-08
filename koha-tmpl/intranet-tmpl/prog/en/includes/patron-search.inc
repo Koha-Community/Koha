@@ -292,7 +292,6 @@
         [% END %]
 
         Koha.addPrefs({
-            singleBranchMode: [% Koha.Preference('singleBranchMode') ? 1 : 0 | html %],
             PatronsPerPage: "[% Koha.Preference('PatronsPerPage') | html %]",
             ShowPatronFirstnameIfDifferentThanPreferredname: [% Koha.Preference('ShowPatronFirstnameIfDifferentThanPreferredname') ? 1 : 0 | html %],
         });
@@ -421,7 +420,7 @@
             }
             let first_draw = 0;
             let patrons_table;
-            let singleBranchMode = Koha.prefs.singleBranchMode;
+
             if (adjust_history) {
                 /* popstate event triggered by forward and back button. Need to refresh search */
                 window.addEventListener("popstate", event => {

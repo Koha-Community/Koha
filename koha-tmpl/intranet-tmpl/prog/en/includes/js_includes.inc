@@ -52,7 +52,7 @@
         CAN_user_circulate_circulate_remaining_permissions: [% CAN_user_circulate_circulate_remaining_permissions ? 1 : 0 | html %],
     });
     var loggedInLibrary = '[% Branches.GetLoggedInBranchcode | html %]';
-    var singleBranchMode = '[% singleBranchMode | html %]';
+    var singleBranchMode = [% singleBranchMode ? 1 : 0 | html %];
 
     [% IF Koha.Preference('AudioAlerts') || AudioAlertsPage %]
         var AUDIO_ALERT_PATH = '[% interface | html %]/[% theme | html %]/sound/';
