@@ -126,6 +126,21 @@ __PACKAGE__->add_unique_constraint(
 
 =head1 RELATIONS
 
+=head2 biblio_metadata_errors
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::BiblioMetadataError>
+
+=cut
+
+__PACKAGE__->has_many(
+  "biblio_metadata_errors",
+  "Koha::Schema::Result::BiblioMetadataError",
+  { "foreign.metadata_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 biblionumber
 
 Type: belongs_to
@@ -162,8 +177,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-08-01 15:57:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ar73Sy86oYHspxu0udvnoA
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-02-27 12:56:18
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NChAW/EUnwVNQoNOa1eNVw
 
 =head2 koha_object_class
 
