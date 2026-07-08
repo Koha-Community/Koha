@@ -4300,6 +4300,64 @@ CREATE TABLE `item_groups` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `item_list_contents`
+--
+
+DROP TABLE IF EXISTS `item_list_contents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `item_list_contents` (
+  `item_list_id` int(11) NOT NULL COMMENT 'the item list this item belongs to',
+  `itemnumber` int(11) NOT NULL COMMENT 'the item contained in the item list',
+  `created_on` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'when this item was added to the list',
+  PRIMARY KEY (`item_list_id`,`itemnumber`),
+  KEY `ilc_item` (`itemnumber`),
+  CONSTRAINT `ilc_item` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE,
+  CONSTRAINT `ilc_list` FOREIGN KEY (`item_list_id`) REFERENCES `item_lists` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `item_list_shares`
+--
+
+DROP TABLE IF EXISTS `item_list_shares`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `item_list_shares` (
+  `item_list_id` int(11) NOT NULL COMMENT 'the item list being shared',
+  `borrowernumber` int(11) NOT NULL COMMENT 'the patron that the item list is being shared with',
+  `permission` enum('view','edit') NOT NULL DEFAULT 'view' COMMENT 'what level of permission is being granted',
+  `created_on` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'when the share was created',
+  PRIMARY KEY (`item_list_id`,`borrowernumber`),
+  KEY `ils_patron` (`borrowernumber`),
+  CONSTRAINT `ils_list` FOREIGN KEY (`item_list_id`) REFERENCES `item_lists` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `ils_patron` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `item_lists`
+--
+
+DROP TABLE IF EXISTS `item_lists`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `item_lists` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique id for the item list',
+  `name` varchar(255) NOT NULL COMMENT 'name of the item list',
+  `owner` int(11) DEFAULT NULL COMMENT 'borrowernumber of the item list owner',
+  `visibility` enum('private','group','public') NOT NULL DEFAULT 'private' COMMENT 'visibility determining ability to read the item list',
+  `created_on` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'when the item list was created',
+  `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'when the item list was last updated',
+  PRIMARY KEY (`id`),
+  UNIQUE (`name`),
+  KEY `il_owner` (`owner`),
+  CONSTRAINT `il_owner` FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `items`
 --
 
