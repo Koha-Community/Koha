@@ -266,6 +266,23 @@ export default {
                     });
                     return acc;
                 }
+                if (attr.type === "select") {
+                    acc.push({
+                        title: attr.label,
+                        data: attr.name,
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
+                            let value = row[`${attr.name}`];
+                            const entry = attr.options.find(
+                                x => x.value === value
+                            );
+                            if (entry) value = entry.description;
+                            return escape_str(value);
+                        },
+                    });
+                    return acc;
+                }
                 if (attr.type === "date") {
                     acc.push({
                         title: attr.label,
