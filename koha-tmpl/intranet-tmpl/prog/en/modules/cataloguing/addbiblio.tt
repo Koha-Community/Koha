@@ -253,6 +253,46 @@
         $("body").on("click", ".show-errors", function (e) {
             document.getElementById("form-errors").scrollIntoView();
         });
+
+        $("body").on("click", ".nonxml-linkfield", function (e) {
+            e.preventDefault();
+            var tag = $(this).data("tag");
+            var sub = $(this).data("subfield") || "@";
+            // Find the first subfield_line for this tag+subfield (random suffix unknown)
+            var $li = $('li[id^="subfield' + tag + sub + '"]').first();
+            if (!$li.length) return;
+            // Determine which tab contains the field
+            var $tabpane = $li.closest(".tab-pane");
+            if ($tabpane.length) {
+                selectTab("#" + $tabpane.attr("id"));
+            }
+            window.scrollTo(0, getScrollto($li.attr("id"), "toolbar"));
+        });
+
+        $("body").on("click", ".nonxml-resolve", function (e) {
+            e.preventDefault();
+            var errorId = $(this).data("error-id");
+            var biblioId = $(this).data("biblio-id");
+            var $item = $("#nonxml-error-" + errorId);
+            $.ajax({
+                url: "/api/v1/biblios/" + biblioId + "/metadata/errors/" + errorId,
+                method: "DELETE",
+                success: function () {
+                    $item.remove();
+                    if ($("#nonxml-error-list li").length === 0) {
+                        $("#nonxml-errors-notice").remove();
+                    }
+                },
+                error: function (xhr) {
+                    if (xhr.status === 404) {
+                        alert(_("This error was already resolved. Refreshing the page."));
+                        location.reload();
+                    } else {
+                        alert(_("Failed to mark error as resolved. Please try again."));
+                    }
+                },
+            });
+        });
     });
 
     function selectTab(tablink) {
@@ -867,11 +907,43 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' wide_centered => 1 %]
+    [% IF existing_metadata_errors %]
+        <div class="alert alert-warning" id="nonxml-errors-notice">
+            <h2>Data quality warnings</h2>
+            <p><strong>This record could not be saved as-is and was automatically modified when it was last saved. Please review the affected fields and correct or confirm the data.</strong></p>
+            <ul id="nonxml-error-list">
+                [% FOREACH err IN existing_metadata_errors %]
+                    <li id="nonxml-error-[% err.id | html %]">
+                        [% IF err.tag %]
+                            <a class="nonxml-linkfield btn btn-link" href="#" data-tag="[% err.tag | html %]" [% IF err.subfield %]data-subfield="[% err.subfield | html %]"[% END %]>
+                                <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                Go to [% err.field_ref | html %]
+                            </a>
+                        [% END %]
+                        <code>[% err.message | html %]</code>
+                        <button class="nonxml-resolve btn btn-default btn-xs" data-error-id="[% err.id | html %]" data-biblio-id="[% biblionumber | html %]"> Mark resolved </button>
+                    </li>
+                [% END %]
+            </ul>
+        </div>
+    [% END %]
     [% IF ( INVALID_METADATA ) %]
         <div class="alert alert-warning">
             <h1>Errors found</h1>
             <p><strong>This record had encoding issues, non-xml characters have been stripped in order to allow editing. Please be cautious when saving that some data may have been removed from the record.</strong></p>
             <pre class="problem">[% INVALID_METADATA | html %]</pre>
+        </div>
+    [% END %]
+    [% IF ( METADATA_WARNING ) %]
+        <div class="alert alert-warning">
+            <h1>Record saved with modifications</h1>
+            <p
+                ><strong
+                    >This record could not be saved as-is and was automatically modified before saving. The record has been saved successfully, but please review it to ensure the data is correct. If data appears to be missing or incorrect,
+                    edit and re-save the record.</strong
+                ></p
+            >
+            <pre class="problem">[% METADATA_WARNING | html %]</pre>
         </div>
     [% END %]
 

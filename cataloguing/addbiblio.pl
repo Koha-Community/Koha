@@ -20,7 +20,7 @@
 
 use Modern::Perl;
 use CGI;
-use POSIX     qw( strftime );
+use POSIX     qw(strftime);
 use Try::Tiny qw(catch try);
 
 use C4::Output qw( output_html_with_http_headers );
@@ -699,6 +699,29 @@ if ($biblionumber) {
     }
 }
 
+# Load any existing metadata errors so they can be shown in the edit form, with
+# quick-links to the affected fields where the field still exists in the record.
+if ( $biblio && $is_a_modif ) {
+    my @existing_errors = eval { $biblio->metadata->metadata_errors->as_list };
+    if (@existing_errors) {
+        $template->param(
+            existing_metadata_errors => [
+                map {
+                    my $tag      = $_->tag;
+                    my $subfield = $_->subfield;
+                    {
+                        id        => $_->id,
+                        message   => $_->message,
+                        field_ref => $tag ? ( $subfield ? "$tag\$$subfield" : $tag ) : '',
+                        tag       => $tag      // '',
+                        subfield  => $subfield // '',
+                    }
+                } @existing_errors
+            ]
+        );
+    }
+}
+
 #-------------------------------------------------------------------------------------
 if ( $op eq "cud-addbiblio" ) {
 
@@ -726,22 +749,67 @@ if ( $op eq "cud-addbiblio" ) {
     # it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)
     if ( !$duplicate or ( !$duplicate->{forbid_duplicate_creation} and $confirm_not_duplicate ) ) {
         my $oldbibitemnum;
-        if ($is_a_modif) {
-            ModBiblio(
-                $record,
-                $biblionumber,
-                $frameworkcode,
-                {
-                    overlay_context => {
-                        source       => $z3950 ? 'z3950' : 'intranet',
-                        categorycode => $logged_in_patron->categorycode,
-                        userid       => $logged_in_patron->userid,
+        my @save_warnings;
+        my $encode_error = try {
+            if ($is_a_modif) {
+                ModBiblio(
+                    $record,
+                    $biblionumber,
+                    $frameworkcode,
+                    {
+                        overlay_context => {
+                            source       => $z3950 ? 'z3950' : 'intranet',
+                            categorycode => $logged_in_patron->categorycode,
+                            userid       => $logged_in_patron->userid,
+                        },
+                        warnings => \@save_warnings,
                     }
-                }
+                );
+            } else {
+                ( $biblionumber, $oldbibitemnum ) =
+                    AddBiblio( $record, $frameworkcode, { warnings => \@save_warnings } );
+            }
+            return 0;
+        } catch {
+            my $exception = $_;
+            if ( ref($exception) && $exception->isa('Koha::Exceptions::Metadata::Invalid') ) {
+                $template->param( INVALID_METADATA => $exception );
+            } else {
+                die $exception;
+            }
+            return 1;
+        };
+
+        if ($encode_error) {
+            build_tabs( $template, $record, $dbh, $encoding, $input );
+            $template->param(
+                biblionumber   => $biblionumber,
+                popup          => $mode,
+                frameworkcode  => $frameworkcode,
+                itemtype       => $frameworkcode,
+                borrowernumber => $loggedinuser,
+                tab            => scalar $input->param('tab')
             );
-        } else {
-            ( $biblionumber, $oldbibitemnum ) = AddBiblio( $record, $frameworkcode );
+            output_html_with_http_headers $input, $cookie, $template->output;
+            exit;
         }
+
+        if (@save_warnings) {
+            $record = Koha::Biblios->find($biblionumber)->metadata->record;
+            build_tabs( $template, $record, $dbh, $encoding, $input );
+            $template->param(
+                biblionumber     => $biblionumber,
+                popup            => $mode,
+                frameworkcode    => $frameworkcode,
+                itemtype         => $frameworkcode,
+                borrowernumber   => $loggedinuser,
+                tab              => scalar $input->param('tab'),
+                METADATA_WARNING => join( "\n\n", map { $_->{message} } @save_warnings ),
+            );
+            output_html_with_http_headers $input, $cookie, $template->output;
+            exit;
+        }
+
         if ( $redirect eq "items"
             || ( $mode ne "popup" && !$is_a_modif && $redirect ne "view" && $redirect ne "just_save" ) )
         {
@@ -786,7 +854,6 @@ if ( $op eq "cud-addbiblio" ) {
                     "/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber&searchid=$searchid");
             }
             exit;
-
         } elsif ( $redirect eq "just_save" ) {
             my $tab = $input->param('current_tab');
             print $input->redirect(
