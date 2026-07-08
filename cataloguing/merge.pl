@@ -19,7 +19,8 @@
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
+use CGI       qw ( -utf8 );
+use Try::Tiny qw( catch try );
 
 use C4::Output qw( output_html_with_http_headers );
 use C4::Auth   qw( get_template_and_user );
@@ -91,51 +92,68 @@ if ( $op eq 'cud-merge' ) {
     my $frameworkcode = $input->param('frameworkcode');
 
     # Modifying the reference record
-    ModBiblio( $record, $ref_biblionumber, $frameworkcode );
+    my $invalid_metadata;
+    my @merge_warnings;
+    my $modded = try {
+        ModBiblio( $record, $ref_biblionumber, $frameworkcode, { warnings => \@merge_warnings } );
+        return 1;
+    } catch {
+        my $exception = $_;
+        if ( ref($exception) && $exception->isa('Koha::Exceptions::Metadata::Invalid') ) {
+            $invalid_metadata = $exception;
+        } else {
+            die $exception;
+        }
+        return 0;
+    };
 
     my $report_header = {};
-    foreach my $biblionumber ( $ref_biblionumber, @biblionumbers ) {
+    if ($modded) {
+        foreach my $biblionumber ( $ref_biblionumber, @biblionumbers ) {
 
-        # build report
-        my $biblio        = Koha::Biblios->find($biblionumber);
-        my $marcrecord    = $biblio->metadata->record;
-        my %report_record = (
-            biblionumber => $biblionumber,
-            fields       => {},
-        );
-        foreach my $field (@report_fields) {
-            my @marcfields = $marcrecord->field( $field->{tag} );
-            foreach my $marcfield (@marcfields) {
-                my $tag = $marcfield->tag();
-                if ( scalar @{ $field->{subfields} } ) {
-                    foreach my $subfield ( @{ $field->{subfields} } ) {
-                        my @values = $marcfield->subfield($subfield);
-                        $report_header->{ $tag . $subfield } = 1;
-                        push @{ $report_record{fields}->{ $tag . $subfield } }, @values;
+            # build report
+            my $biblio        = Koha::Biblios->find($biblionumber);
+            my $marcrecord    = $biblio->metadata->record;
+            my %report_record = (
+                biblionumber => $biblionumber,
+                fields       => {},
+            );
+            foreach my $field (@report_fields) {
+                my @marcfields = $marcrecord->field( $field->{tag} );
+                foreach my $marcfield (@marcfields) {
+                    my $tag = $marcfield->tag();
+                    if ( scalar @{ $field->{subfields} } ) {
+                        foreach my $subfield ( @{ $field->{subfields} } ) {
+                            my @values = $marcfield->subfield($subfield);
+                            $report_header->{ $tag . $subfield } = 1;
+                            push @{ $report_record{fields}->{ $tag . $subfield } }, @values;
+                        }
+                    } elsif ( $field->{tag} gt '009' ) {
+                        my @marcsubfields = $marcfield->subfields();
+                        foreach my $marcsubfield (@marcsubfields) {
+                            my ( $code, $value ) = @$marcsubfield;
+                            $report_header->{ $tag . $code } = 1;
+                            push @{ $report_record{fields}->{ $tag . $code } }, $value;
+                        }
+                    } else {
+                        $report_header->{ $tag . '@' } = 1;
+                        push @{ $report_record{fields}->{ $tag . '@' } }, $marcfield->data();
                     }
-                } elsif ( $field->{tag} gt '009' ) {
-                    my @marcsubfields = $marcfield->subfields();
-                    foreach my $marcsubfield (@marcsubfields) {
-                        my ( $code, $value ) = @$marcsubfield;
-                        $report_header->{ $tag . $code } = 1;
-                        push @{ $report_record{fields}->{ $tag . $code } }, $value;
-                    }
-                } else {
-                    $report_header->{ $tag . '@' } = 1;
-                    push @{ $report_record{fields}->{ $tag . '@' } }, $marcfield->data();
                 }
             }
+            push @report_records, \%report_record;
         }
-        push @report_records, \%report_record;
-    }
 
-    my $rmerge;
-    eval {
-        my $newbiblio = Koha::Biblios->find($ref_biblionumber);
-        $rmerge = $newbiblio->merge_with( \@biblionumbers );
-    };
-    if ($@) {
-        push @errors, $@;
+        my $rmerge;
+        eval {
+            my $newbiblio = Koha::Biblios->find($ref_biblionumber);
+            $rmerge = $newbiblio->merge_with( \@biblionumbers );
+        };
+        if ($@) {
+            push @errors, $@;
+        }
+    } else {
+        push @errors, { code => "INVALID_METADATA", value => $invalid_metadata };
     }
 
     # Parameters
@@ -143,7 +161,12 @@ if ( $op eq 'cud-merge' ) {
         result           => 1,
         report_records   => \@report_records,
         report_header    => $report_header,
-        ref_biblionumber => scalar $input->param('ref_biblionumber')
+        ref_biblionumber => scalar $input->param('ref_biblionumber'),
+        (
+            @merge_warnings
+            ? ( METADATA_WARNING => join( "\n\n", map { $_->{message} } @merge_warnings ) )
+            : ()
+        ),
     );
 
     #-------------------------

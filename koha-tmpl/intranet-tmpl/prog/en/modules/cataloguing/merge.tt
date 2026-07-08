@@ -61,6 +61,9 @@
                 <div class="alert alert-warning">
                     [% IF error.code == 'CANNOT_MOVE' %]
                         The following items could not be moved from the old record to the new one: [% error.value | html %]
+                    [% ELSIF error.code == 'INVALID_METADATA' %]
+                        <p>The merged record could not be saved because it contains characters that are not valid XML. The merge has been aborted.</p>
+                        <pre class="problem">[% error.value | html %]</pre>
                     [% ELSE %]
                         [% error | html %]
                     [% END %]
@@ -70,6 +73,15 @@
             [% END %]
         [% ELSE %]
             <div class="alert alert-info">The merge was successful. <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% ref_biblionumber | uri %]">View the merged record.</a></div>
+            [% IF METADATA_WARNING %]
+                <div class="alert alert-warning">
+                    <strong
+                        >The merged record could not be saved as-is and was automatically modified before saving. Please <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% ref_biblionumber | uri %]">review the record</a> to
+                        ensure the data is correct.</strong
+                    >
+                    <pre class="problem">[% METADATA_WARNING | html %]</pre>
+                </div>
+            [% END %]
             <div class="page-section">
                 <h3>Report</h3>
                 <table>
