@@ -496,6 +496,10 @@ function _dt_buttons(params) {
         },
     ];
 
+    if (settings.additionalButtons) {
+        buttons.push(...settings.additionalButtons);
+    }
+
     // Retrieving bKohaColumnsUseNames from the options passed to the constructor, not DT's settings
     // But ideally should be retrieved using table.data()
     let use_names = settings.bKohaColumnsUseNames;
