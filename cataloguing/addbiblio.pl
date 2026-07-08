@@ -492,8 +492,9 @@ sub build_tabs {
 #=========================
 my $input            = CGI->new;
 my $error            = $input->param('error');
-my $biblionumber     = $input->param('biblionumber');         # if biblionumber exists, it's a modif, not a new biblio.
-my $parentbiblio     = $input->param('parentbiblionumber');
+my $biblionumber     = $input->param('biblionumber');       # if biblionumber exists, it's a modif, not a new biblio.
+my $hostbiblionumber = $input->param('hostbiblionumber');
+my $parentbiblio     = $input->param('parentbiblionumber') || $hostbiblionumber;
 my $breedingid       = $input->param('breedingid');
 my $z3950            = $input->param('z3950');
 my $mode             = $input->param('mode') // q{};
@@ -501,7 +502,6 @@ my $frameworkcode    = $input->param('frameworkcode');
 my $redirect         = $input->param('redirect');
 my $searchid         = $input->param('searchid') // "";
 my $dbh              = C4::Context->dbh;
-my $hostbiblionumber = $input->param('hostbiblionumber');
 my $hostitemnumber   = $input->param('hostitemnumber');
 
 # fast cataloguing datas in transit
@@ -647,28 +647,19 @@ if ( $record && $op eq 'duplicate' ) {
     }
 }
 
-#populate hostfield if hostbiblionumber is available
-if ($hostbiblionumber) {
-    $record = MARC::Record->new();
-    $record->leader('');
-    my $host_biblio = Koha::Biblios->find($hostbiblionumber);
-    if ($host_biblio) {
-        my $item  = $hostitemnumber ? Koha::Items->find($hostitemnumber) : undef;
-        my $field = $host_biblio->generate_marc_host_field( { item => $item } );
-        $record->append_fields($field) if $field;
-    }
-}
-
-# This is  a child record
+# This is a child record - covers both "New child record" (parentbiblionumber, shown when
+# EasyAnalyticalRecords is disabled) and "Create analytics" (hostbiblionumber, an alias for
+# parentbiblionumber, plus hostitemnumber for the linked item, shown when it's enabled)
 if ($parentbiblio) {
     my $marcflavour = C4::Context->preference('marcflavour');
     $record = MARC::Record->new();
     $record->leader('     naa a22      i 4500');
     SetMarcUnicodeFlag( $record, $marcflavour );
-    my $parent    = Koha::Biblios->find($parentbiblio);
-    my $hostfield = $parent->generate_marc_host_field;
-    if ($hostfield) {
-        $record->append_fields($hostfield);
+    my $parent = Koha::Biblios->find($parentbiblio);
+    if ($parent) {
+        my $item      = $hostitemnumber ? Koha::Items->find($hostitemnumber) : undef;
+        my $hostfield = $parent->generate_marc_host_field( { item => $item } );
+        $record->append_fields($hostfield) if $hostfield;
     }
 }
 
