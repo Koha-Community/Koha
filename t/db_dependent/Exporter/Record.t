@@ -77,10 +77,8 @@ if ( $marcflavour eq 'UNIMARC' ) {
     $homebranch_subfield_code = 'a';
 }
 
-my $bad_biblio = Koha::Biblio->new()->store();
-Koha::Biblio::Metadata->new(
-    { biblionumber => $bad_biblio->id, format => 'marcxml', metadata => 'something wrong', schema => $marcflavour } )
-    ->store();
+my $bad_biblio = $builder->build_sample_biblio;
+$bad_biblio->metadata->_result->update( { metadata => 'something wrong' } );
 my $bad_biblionumber = $bad_biblio->id;
 
 my $item_1_1 = $builder->build_sample_item(
