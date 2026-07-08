@@ -133,4 +133,20 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QpQBMYpjcA78mS/8zfGOcg
 
 
+=head2 koha_object_class
+
+=cut
+
+sub koha_object_class {
+    'Koha::Biblio::Metadata::Error';
+}
+
+=head2 koha_objects_class
+
+=cut
+
+sub koha_objects_class {
+    'Koha::Biblio::Metadata::Errors';
+}
+
 1;
