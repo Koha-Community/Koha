@@ -27,6 +27,8 @@ import {
  * @param {String} resourceConfig.components - An object containing the names of the components ("show", "add", "list", "edit")
  * @param {Object} resourceConfig.i18n - The i18n object.
  * @param {Object} resourceConfig.apiClient - The API client for the resource.
+ * @param {Object} resourceConfig.parentResource.apiClient - The API client for the parent resource, used for fetching metadata for lists.
+ * @param {Object} resourceConfig.parentResource.idAttr - The name of the id attribute of the parent resource.
  * @param {Object} resourceConfig.table - Contains the table configuration.
  * @param {String} resourceConfig.table.resourceTableUrl - The URL to the resource table.
  * @param {Array} resourceConfig.resourceAttrs - An array of attributes that relate to the resource's properties and how they should appear in the form/show/list components.

@@ -1,7 +1,11 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else :id="`${instancedResource.resourceNamePlural}_list`">
-        <slot name="toolbar" :componentPropData="{ ...$props, ...$data }" />
+        <slot
+            name="toolbar"
+            :resource="parentResource"
+            :componentPropData="{ ...$props, ...$data }"
+        />
         <template v-if="resourceCount > 0">
             <slot name="filters" :table="table" />
         </template>
@@ -22,17 +26,22 @@
 
 <script>
 import Toolbar from "./Toolbar.vue";
-import { ref, onBeforeMount, computed } from "vue";
+import { ref, onBeforeMount, computed, inject } from "vue";
 import { APIClient } from "../fetch/api-client.js";
 import KohaTable from "./KohaTable.vue";
 import { $__ } from "@koha-vue/i18n";
 import { useBaseElement } from "../composables/base-element.js";
+import { storeToRefs } from "pinia";
 
 export default {
     inheritAttrs: false,
     setup(props) {
+        const navigationStore = inject("navigationStore");
+        const { breadcrumbMetadata } = storeToRefs(navigationStore);
+
         const table = ref();
         const resourceCount = ref(0);
+        const parentResource = ref(null);
         const initialized = ref(false);
         const searchable_additional_fields = ref([]);
         const searchable_av_options = ref([]);
@@ -333,25 +342,47 @@ export default {
             return { ...tableEvents.value, ...actionButtons };
         });
         onBeforeMount(() => {
-            if (props.instancedResource.embedded) {
-                getResourceCount().then(() => (initialized.value = true));
-            } else {
-                getResourceCount().then(() => {
-                    if (props.instancedResource.hasAdditionalFields) {
-                        getSearchableAdditionalFields().then(() =>
-                            getSearchableAVOptions().then(
-                                () => (initialized.value = true)
-                            )
-                        );
-                    } else {
-                        initialized.value = true;
-                    }
-                });
+            let loading_promises = [];
+            if (props.instancedResource.parentResource) {
+                loading_promises.push(
+                    props.instancedResource.parentResource.apiClient
+                        .get(
+                            props.instancedResource.route.params[
+                                props.instancedResource.parentResource.idAttr
+                            ]
+                        )
+                        .then(
+                            resource => {
+                                breadcrumbMetadata.value = resource;
+                                parentResource.value = resource;
+                            },
+                            error => {}
+                        )
+                );
             }
+
+            if (props.instancedResource.embedded) {
+                loading_promises.push(getResourceCount());
+            } else {
+                loading_promises.push(
+                    getResourceCount().then(() => {
+                        if (props.instancedResource.hasAdditionalFields) {
+                            return getSearchableAdditionalFields().then(() =>
+                                getSearchableAVOptions()
+                            );
+                        }
+                    })
+                );
+            }
+
+            Promise.all(loading_promises).then(() => {
+                initialized.value = true;
+            });
         });
         return {
             table,
             resourceCount,
+            parentResource,
             initialized,
             searchable_additional_fields,
             searchable_av_options,
