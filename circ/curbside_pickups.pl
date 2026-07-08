@@ -45,7 +45,19 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $branchcode = C4::Context->userenv()->{'branch'};
-my $libraries  = Koha::Libraries->search( {}, { order_by => ['branchname'] } );
+
+my $policy;
+if ( C4::Context->preference('CurbsidePickup') ) {
+    $policy = Koha::CurbsidePickupPolicies->find( { branchcode => $branchcode } );
+}
+
+unless ( $policy && $policy->enabled ) {
+    $template->param( disabled_for_branch => 1 );
+    output_html_with_http_headers $input, $cookie, $template->output;
+    exit;
+}
+
+my $libraries = Koha::Libraries->search( {}, { order_by => ['branchname'] } );
 if ( $op eq 'find-patron' ) {
     my $borrowernumber = $input->param('borrowernumber');
 
@@ -150,7 +162,7 @@ $template->param(
     tab              => $tab,
     auto_refresh     => $auto_refresh,
     refresh_delay    => $refresh_delay,
-    policy           => Koha::CurbsidePickupPolicies->find( { branchcode => $branchcode } ),
+    policy           => $policy,
     curbside_pickups => Koha::CurbsidePickups->search(
         {
             branchcode => $branchcode,

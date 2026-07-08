@@ -84,15 +84,8 @@
     [% END %]
 [% END %]
 
-[% SET aside = Koha.Preference('CircSidebar') ? 'circ-nav' : '' %]
-[% WRAPPER 'main-container.inc' aside=aside %]
+[% BLOCK curbside_pickups_enabled %]
     <h1>Curbside pickups</h1>
-
-    [% UNLESS policy.enabled %]
-        <div class="alert alert-warning"> Curbside pickups are not enabled for your library. </div>
-        [% INCLUDE 'intranet-bottom.inc' %]
-        [% STOP %]
-    [% END %]
 
     [% FOR m IN messages %]
         <div class="alert alert-[% m.type | html %]">
@@ -457,7 +450,7 @@
             [% END # /tab_panel %]
         [% END # /WRAPPER tab_panels %]
     [% END # /WRAPPER tabs %]
-[% END %]
+[% END # /BLOCK enabled %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("lib/dayjs/plugin/isSameOrAfter.js") | $raw %]
@@ -694,5 +687,19 @@
         }
     </script>
 [% END %]
+
+[% BLOCK curbside_pickups_disabled %]
+    <h1>Curbside pickups</h1>
+    <div class="alert alert-info">Curbside pickups are not enabled. Enable the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=CurbsidePickup">CurbsidePickup</a> system preference to use this feature.</div>
+[% END # /BLOCK disabled %]
+
+[% SET aside = Koha.Preference('CircSidebar') ? 'circ-nav' : '' %]
+[% WRAPPER 'main-container.inc' aside=aside %]
+    [% IF !disabled_for_branch %]
+        [% PROCESS curbside_pickups_enabled %]
+    [% ELSE %]
+        [% PROCESS curbside_pickups_disabled %]
+    [% END %]
+[% END # /WRAPPER %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
