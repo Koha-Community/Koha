@@ -93,6 +93,9 @@
     [%- CASE 'debug' -%]
         <span class="main_permission debug_permission">Display the debug interface</span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'item_lists' -%]
+        <span class="main_permission item_lists_permission">Manage item lists</span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- END -%]
 [%- END -%]
 
@@ -648,6 +651,18 @@
         [%# record_sources %]
     [%- CASE 'manage_record_sources' -%]
         <span class="sub_permission manage_record_sources_subpermission"> Manage record sources </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'create_item_lists' -%]
+        <span class="sub_permission create_item_lists_subpermission"> Create item lists </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'edit_item_lists' -%]
+        <span class="sub_permission edit_item_lists_subpermission"> Edit item lists owned by others / public </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'delete_item_lists' -%]
+        <span class="sub_permission delete_item_lists_subpermission"> Delete item lists owned by others / public </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_item_list_contents' -%]
+        <span class="sub_permission manage_item_list_contents_subpermission"> Add/remove items in public or group lists </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- END -%]
 [%- END -%]
