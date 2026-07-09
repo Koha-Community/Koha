@@ -62,10 +62,21 @@ my $registers = Koha::Cash::Registers->search(
 if ( !$registers->count ) {
     $template->param( error_registers => 1 );
 } else {
+
+    # CashupPaymentTypes is a global preference, so any register's breakdown
+    # gives us the same configured list - used only for the "bankable" tooltip.
+    my $cashup_payment_type_labels;
+    my $any_register = Koha::Cash::Registers->search( { branch => $library->id, archived => 0 } )->next;
+    if ($any_register) {
+        my $breakdown = $any_register->cashup_payment_types_breakdown;
+        $cashup_payment_type_labels = join( ', ', map { $_->{label} } @$breakdown );
+    }
+
     $template->param(
         registers                    => $registers,
         reconciliation_note_avs      => $reconciliation_note_avs,
         reconciliation_note_required => C4::Context->preference('CashupReconciliationNoteRequired'),
+        cashup_payment_type_labels   => $cashup_payment_type_labels,
     );
 }
 

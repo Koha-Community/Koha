@@ -152,8 +152,8 @@
 
         <h2>Summary</h2>
         <ul>
-            <li>Total income (cash): <span id="income"></span></li>
-            <li>Total outgoing (cash): <span id="outgoing"></span></li>
+            <li>Total income: <span id="income" data-bankable-types="[% cashup_payment_type_labels | html %]"></span></li>
+            <li>Total outgoing: <span id="outgoing" data-bankable-types="[% cashup_payment_type_labels | html %]"></span></li>
             <li>Total bankable: <span id="bankable"></span></li>
         </ul>
 
@@ -169,8 +169,8 @@
                         <th>Last cashup</th>
                         <th>Float</th>
                         <th>Bankable</th>
-                        <th>Income (cash)</th>
-                        <th>Outgoing (cash)</th>
+                        <th title="Total across all payment types; bankable subset ([% cashup_payment_type_labels | html %]) shown in parentheses">Income</th>
+                        <th title="Total across all payment types; bankable subset ([% cashup_payment_type_labels | html %]) shown in parentheses">Outgoing</th>
                         [% IF CAN_user_cash_management_cashup %]
                             <th class="no-export">Actions</th>
                         [% END %]
@@ -374,8 +374,8 @@
                 <div class="modal-body">
                     <p>Please confirm that you have received [% bankable | $Price %] to cashup.</p>
                     <ul>
-                        <li>Total income (cash): [% ctotal | $Price %] ([% cctotal | $Price %])</li>
-                        <li>Total outgoing (cash): [% dtotal | $Price %] ([% cdtotal | $Price %])</li>
+                        <li>Total income: [% ctotal | $Price %] (<span title="Bankable payment types: [% cashup_payment_type_labels | html %]">bankable</span>: [% cctotal | $Price %])</li>
+                        <li>Total outgoing: [% dtotal | $Price %] (<span title="Bankable payment types: [% cashup_payment_type_labels | html %]">bankable</span>: [% cdtotal | $Price %])</li>
                     </ul>
                 </div>
                 <!-- /.modal-body -->
@@ -408,8 +408,10 @@
         $(document).ready(function () {
             [%# js used here as we don't have access to these template variables where we need them #%]
             $("#bankable").text('[% bankable | $Price %]');
-            $("#income").text('[% ctotal | $Price %] ([% cctotal | $Price %])');
-            $("#outgoing").text('[% dtotal | $Price %] ([% cdtotal | $Price %])');
+            $("#income").text('[% ctotal | $Price %] (bankable: [% cctotal | $Price %])')
+                .attr('title', _("Bankable payment types: ") + $("#income").data('bankable-types'));
+            $("#outgoing").text('[% dtotal | $Price %] (bankable: [% cdtotal | $Price %])')
+                .attr('title', _("Bankable payment types: ") + $("#outgoing").data('bankable-types'));
         });
         const cashupModalData = {
             hasAuthorisedValues: [% reconciliation_note_avs ? 'true' : 'false' | html %],

@@ -115,6 +115,11 @@
 
         [% SET total_bankable = accountlines.total( payment_type => cashup_payment_type_codes ) * -1 %]
         [% SET total_transactions = accountlines.total() * -1 %]
+        [% SET cashup_type_labels = [] %]
+        [% FOREACH pt IN cashup_payment_types_breakdown %]
+            [% cashup_type_labels.push(pt.label) %]
+        [% END %]
+        [% SET cashup_type_labels_str = cashup_type_labels.join(', ') %]
         [% IF ( CAN_user_cash_management_cashup ) %]
             <div id="toolbar" class="btn-toolbar">
                 [% IF cashup_in_progress %]
@@ -146,8 +151,14 @@
                 >
             [% END %]
             <li>Float: [% register.starting_float | $Price %]</li>
-            <li>Total income (cash): [% accountlines.credits_total * -1 | $Price %] ([% accountlines.credits_total(payment_type => cashup_payment_type_codes) * -1 | $Price %])</li>
-            <li>Total outgoing (cash): [% accountlines.debits_total * -1 | $Price %] ([% accountlines.debits_total( payment_type => cashup_payment_type_codes) * -1 | $Price %])</li>
+            <li
+                >Total income: [% accountlines.credits_total * -1 | $Price %] (<span title="Bankable payment types: [% cashup_type_labels_str | html %]">bankable</span>:
+                [% accountlines.credits_total(payment_type => cashup_payment_type_codes) * -1 | $Price %])</li
+            >
+            <li
+                >Total outgoing: [% accountlines.debits_total * -1 | $Price %] (<span title="Bankable payment types: [% cashup_type_labels_str | html %]">bankable</span>:
+                [% accountlines.debits_total( payment_type => cashup_payment_type_codes) * -1 | $Price %])</li
+            >
             <li>Total bankable: [% total_bankable | $Price %]</li>
         </ul>
 
