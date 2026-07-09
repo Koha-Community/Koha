@@ -282,6 +282,36 @@ get '/dbic_merge_prefetch_nested_count' => sub {
     $c->render( json => $attributes, status => 200 );
 };
 
+get '/dbic_merge_prefetch_deeply_nested_count' => sub {
+    my $c          = shift;
+    my $attributes = {};
+    my $result_set = Koha::Patron::Relationship->new;
+
+    # Two levels of nesting below the top-level result set: the FK-chain
+    # resolution in _build_count_subquery only walks ONE level back to "me",
+    # so this must decline to build a COUNT subquery (Bug 42995 QA follow-up)
+    # and fall back to a plain prefetch instead of emitting SQL that
+    # references a potentially-unavailable "housebound_profile" alias.
+    $c->stash(
+        'koha.embed',
+        {
+            "guarantee" => {
+                "children" =>
+                    { "housebound_profile" => { "children" => { "housebound_visits_count" => { "is_count" => 1 } } } }
+            }
+        }
+    );
+
+    $c->dbic_merge_prefetch(
+        {
+            attributes => $attributes,
+            result_set => $result_set
+        }
+    );
+
+    $c->render( json => $attributes, status => 200 );
+};
+
 get '/dbic_merge_prefetch_nested_count_unsortable' => sub {
     my $c          = shift;
     my $attributes = { order_by => [ { '-desc' => 'guarantee.no_dbic_rel_count' } ] };
@@ -615,7 +645,7 @@ subtest 'dbic_merge_sorting() tests' => sub {
 };
 
 subtest '/dbic_merge_prefetch' => sub {
-    plan tests => 32;
+    plan tests => 36;
 
     my $t = Test::Mojo->new;
 
@@ -664,6 +694,15 @@ subtest '/dbic_merge_prefetch' => sub {
         ->json_like( '/order_by/0/-asc' => qr/SELECT COUNT\(\*\) FROM article_requests/ )
         ->json_like( '/order_by/0/-asc' => qr/me\.guarantee_id/ )
         ->json_is( '/+as/0' => 'guarantee.article_requests_count' );
+
+    # Two levels of nesting: FK-chain resolution only walks one level back
+    # to "me", so this must decline the COUNT subquery and fall back to a
+    # plain prefetch instead of emitting SQL referencing an unavailable
+    # alias (Bug 42995 QA follow-up)
+    $t->get_ok('/dbic_merge_prefetch_deeply_nested_count')
+        ->status_is(200)
+        ->json_hasnt('/+select')
+        ->json_is( '/prefetch/0' => { guarantee => { housebound_profile => 'housebound_visits' } } );
 
     # Nested unsortable +count with order_by: throws BadParameter (400)
     $t->get_ok('/dbic_merge_prefetch_nested_count_unsortable')

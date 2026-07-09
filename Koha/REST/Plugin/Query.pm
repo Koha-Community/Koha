@@ -152,10 +152,7 @@ Generates the DBIC prefetch attribute based on embedded relations, and merges in
 
             # Extract the main DBIC result source for FK chain resolution in
             # nested +count subqueries (Bug 42995)
-            my $main_source =
-                  $result_set->can('_resultset')
-                ? $result_set->_resultset->result_source
-                : $result_set->_result->result_source;
+            my $main_source = _result_source($result_set);
 
             foreach my $key ( sort keys( %{$embed} ) ) {
 
@@ -507,6 +504,23 @@ sub _merge_embed {
     }
 }
 
+=head3 _result_source
+
+    my $source = _result_source( $result_set );
+
+Returns the DBIC result source for I<$result_set>. Handles both C<Koha::Objects>
+(plural, via C<_resultset>) and C<Koha::Object> (singular, via C<_result>).
+
+=cut
+
+sub _result_source {
+    my ($result_set) = @_;
+
+    return $result_set->can('_resultset')
+        ? $result_set->_resultset->result_source
+        : $result_set->_result->result_source;
+}
+
 =head3 _merge_count_select
 
     my $added = _merge_count_select( $key, $attributes, $result_set );
@@ -557,17 +571,27 @@ aliased as C<me>). It is used for nested embeds to resolve the FK chain back
 to C<me>, avoiding references to join aliases that may not be available inside
 DBIC's limiting subquery when pagination and has_many prefetches are combined.
 
-Returns the scalar ref, or undef if the relationship has no DBIC metadata.
+This FK-chain resolution only covers ONE level of nesting: I<$parent_alias>
+must be a direct relationship of I<$main_source> (true for every C<+count>
+embed currently declared in F<api/v1/swagger/>, e.g. C<biblio.items+count>).
+If that assumption doesn't hold - I<$parent_alias> is itself a nested alias,
+its relationship condition isn't a plain hashref (e.g. a coderef custom join),
+or no matching column is found - we decline to build the subquery and return
+undef, rather than emit SQL that may reference an unavailable alias. The
+caller then falls back to its normal "no DBIC relationship" degradation path
+(prefetching the association directly, so C<to_api> uses the Perl-level
+C<< $object->$relation->count >> call, and the sort fixup rejects a sort
+attempt with a clean 400 instead of a 500).
+
+Returns the scalar ref, or undef if the relationship has no DBIC metadata or
+the correlation cannot be safely resolved.
 
 =cut
 
 sub _build_count_subquery {
     my ( $rel, $result_set, $parent_alias, $main_source ) = @_;
 
-    my $source =
-          $result_set->can('_resultset')
-        ? $result_set->_resultset->result_source
-        : $result_set->_result->result_source;
+    my $source   = _result_source($result_set);
     my $rel_info = $source->relationship_info($rel);
     return unless $rel_info;
 
@@ -581,27 +605,43 @@ sub _build_count_subquery {
     $fk_foreign =~ s/^foreign\.//;
     $fk_self    =~ s/^self\.//;
 
-    # For nested embeds, resolve the correlation back to me.column to avoid
-    # referencing a join alias that DBIC may not include in the inner subquery
-    # when pagination + has_many prefetch triggers the limiting subquery
-    # optimization (Bug 42995).
-    my $correlation_expr = "$parent_alias.$fk_self";
-    if ( $parent_alias ne 'me' && $main_source ) {
-        my $parent_rel_info = $main_source->relationship_info($parent_alias);
-        if ($parent_rel_info) {
-            my $parent_cond = $parent_rel_info->{cond};
+    my $correlation_expr;
 
-            # Find which me.column maps to parent.fk_self
-            # parent_cond is like { 'foreign.biblionumber' => 'self.biblionumber' }
-            for my $fk_key ( keys %{$parent_cond} ) {
-                ( my $foreign_col = $fk_key ) =~ s/^foreign\.//;
-                if ( $foreign_col eq $fk_self ) {
-                    ( my $self_col = $parent_cond->{$fk_key} ) =~ s/^self\.//;
-                    $correlation_expr = "me.$self_col";
-                    last;
-                }
+    if ( $parent_alias eq 'me' ) {
+        $correlation_expr = "me.$fk_self";
+    } else {
+
+        # Nested embed: resolve the correlation back to me.column to avoid
+        # referencing a join alias that DBIC may not include in the inner
+        # subquery when pagination + has_many prefetch triggers the limiting
+        # subquery optimization (Bug 42995). See the caveats in the POD above.
+        return unless $main_source;
+
+        my $parent_rel_info = $main_source->relationship_info($parent_alias);
+        return unless $parent_rel_info;
+
+        my $parent_cond = $parent_rel_info->{cond};
+
+        # Only plain hashref conditions are supported; a coderef (custom
+        # join) can't be walked the same way.
+        return unless ref($parent_cond) eq 'HASH';
+
+        # Find which me.column maps to parent.fk_self by matching column
+        # NAMES (parent_cond is like
+        # { 'foreign.biblionumber' => 'self.biblionumber' }). This relies on
+        # Koha's convention of reusing the same column name across the FK
+        # chain (e.g. biblionumber, guarantee_id/borrowernumber) - it is not
+        # a general-purpose column mapper.
+        for my $fk_key ( keys %{$parent_cond} ) {
+            ( my $foreign_col = $fk_key ) =~ s/^foreign\.//;
+            if ( $foreign_col eq $fk_self ) {
+                ( my $self_col = $parent_cond->{$fk_key} ) =~ s/^self\.//;
+                $correlation_expr = "me.$self_col";
+                last;
             }
         }
+
+        return unless $correlation_expr;
     }
 
     return \"(SELECT COUNT(*) FROM $rel_table WHERE $rel_table.$fk_foreign = $correlation_expr)";
