@@ -13,7 +13,7 @@
 [% PROCESS 'html_helpers.inc' %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
-[% SET OpacMySummaryNote = AdditionalContents.get( location => "OpacMySummaryNote", lang => lang, library => branchcode ) %]
+[% SET OpacMySummaryNote = AdditionalContents.get( location => "OpacMySummaryNote", lang => lang, library => logged_in_user.branchcode ) %]
 [% SET borrower_club_enrollments = logged_in_user.get_club_enrollments %]
 [% SET borrower_enrollable_clubs = logged_in_user.get_enrollable_clubs(1) %]
 <!-- 1 => OPAC -->
