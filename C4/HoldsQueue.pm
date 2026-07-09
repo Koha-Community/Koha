@@ -476,7 +476,6 @@ sub _allocateWithTransportCostMatrix {
 
     my @m = map { [ (undef) x $num_tasks ] } ( 1 .. $num_agents );
 
-    my $inf = -1;    # Initially represent infinity with a negative value.
     my $max = 0;
 
     # If some candidate holds requests cannot be filled and there are
@@ -493,6 +492,7 @@ sub _allocateWithTransportCostMatrix {
 
 RETRY:
     while (1) {
+        my $inf = -1;    # Initially represent infinity with a negative value.
         return [] if $num_agents == 0 || $num_tasks + scalar(@remaining) == 0;
 
         if ( $num_tasks < $num_agents && @remaining ) {
@@ -680,8 +680,10 @@ RETRY:
                     }
                 }
             }
-            for ( my $u = 0 ; $u < scalar(@unallocated) ; $u++ ) {
-                splice @requests, $unallocated[$u], 1;
+
+            # Indices must be spliced out reverse order.
+            for my $u ( sort { $b <=> $a } @unallocated ) {
+                splice @requests, $u, 1;
             }
             $num_tasks = scalar(@requests);
 
