@@ -668,12 +668,20 @@ RETRY:
 
         if ( $retries-- > 0 && @unallocated && @remaining ) {
 
+            # @unallocated is built by iterating agents (rows), so its
+            # entries are not necessarily in column order: Munkres'
+            # row-to-column assignment is a permutation, not a monotonic
+            # mapping. The matrix compaction below scans columns in
+            # ascending order and expects to consume @unallocated in that
+            # same order, so it must be sorted first.
+            my @unallocated_sorted = sort { $a <=> $b } @unallocated;
+
             # Remove the transport cost of unfilled holds and compact the matrix.
             # Also remove the hold request from the array.
             for ( my $i = 0 ; $i < $num_agents ; $i++ ) {
                 my $u = 0;
                 for ( my $j = 0 ; $j < $num_tasks ; $j++ ) {
-                    if ( $u < scalar(@unallocated) && $unallocated[$u] == $j ) {
+                    if ( $u < scalar(@unallocated_sorted) && $unallocated_sorted[$u] == $j ) {
                         $u++;
                     } elsif ( $u > 0 ) {
                         $m[$i][ $j - $u ] = $m[$i][$j];
@@ -681,8 +689,10 @@ RETRY:
                 }
             }
 
-            # Indices must be spliced out reverse order.
-            for my $u ( sort { $b <=> $a } @unallocated ) {
+            # Indices must be spliced out in reverse order, otherwise removing
+            # a lower index shifts the position of any higher index still to
+            # be removed.
+            for my $u ( reverse @unallocated_sorted ) {
                 splice @requests, $u, 1;
             }
             $num_tasks = scalar(@requests);
