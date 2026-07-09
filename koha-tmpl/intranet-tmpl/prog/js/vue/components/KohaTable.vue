@@ -32,11 +32,6 @@ export default {
     name: "KohaTable",
     setup(props, { emit }) {
         const route = useRoute();
-        let buttons = _dt_buttons({
-            settings: props.options,
-            table_settings: props.table_settings,
-        });
-
         if (props.add_filters) {
             props.options.orderCellsTop = true;
         }
@@ -73,8 +68,17 @@ export default {
                 orderable: false,
                 render: DataTablesLib.render.select(),
                 targets: 0,
+                cannot_be_toggled: true,
             });
         }
+
+        let buttons = _dt_buttons({
+            settings: { ...props.options, disable_share: true },
+            table_settings: {
+                ...props.table_settings,
+                columns: tableColumns.value,
+            },
+        });
 
         const allOptions = ref({
             paging: true,
