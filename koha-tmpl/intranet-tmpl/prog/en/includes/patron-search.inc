@@ -553,7 +553,7 @@
                 var order_column_index = 0;
                 columns.forEach((column, i) => {
                     if (default_sort_column == column) {
-                        order_column_index = i - 1;
+                        order_column_index = i;
                     }
                     switch (column) {
                         case "checkbox":
