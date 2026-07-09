@@ -368,6 +368,7 @@
             sticky_header,
             default_sort_column,
             embed,
+            patron_search_url,
         };
     </script>
     [% INCLUDE 'datatables.inc' %]
@@ -410,6 +411,7 @@
                 sticky_header,
                 default_sort_column,
                 embed,
+                patron_search_url,
             } = Koha.patron_searches[current_table_id];
 
             function get_patron_search_form() {
