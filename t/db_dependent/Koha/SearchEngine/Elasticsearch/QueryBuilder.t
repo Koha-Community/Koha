@@ -85,7 +85,7 @@ $se->mock(
 
 subtest 'build_authorities_query_compat() tests' => sub {
 
-    plan tests => 81;
+    plan tests => 83;
 
     my $qb;
 
@@ -247,6 +247,24 @@ subtest 'build_authorities_query_compat() tests' => sub {
         $query->{query}->{bool}->{must}[1]->{query_string}{default_field},
         'heading',
         "If mapping found for marclist the index is passed through converted"
+    );
+
+    # Thesaurus value mapping delegates to Koha::Authority (bug 31925)
+    $query = $qb->build_authorities_query_compat(
+        ['thesaurus'], undef, undef, ['contains'], ['lcsh'], 'AUTH_TYPE',
+        'asc'
+    );
+    is(
+        $query->{query}->{bool}->{must}[0]->{query_string}->{query}, 'a*',
+        "thesaurus value 'lcsh' is still translated to 008/11 code 'a'"
+    );
+    $query = $qb->build_authorities_query_compat(
+        ['thesaurus'], undef, undef, ['contains'], ['mesh'], 'AUTH_TYPE',
+        'asc'
+    );
+    is(
+        $query->{query}->{bool}->{must}[0]->{query_string}->{query}, 'c*',
+        "thesaurus value 'mesh' is still translated to 008/11 code 'c'"
     );
 
 };

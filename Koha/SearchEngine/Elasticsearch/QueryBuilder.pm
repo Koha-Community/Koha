@@ -47,6 +47,7 @@ use URI::Escape qw( uri_escape_utf8 );
 
 use C4::Context;
 use Koha::Exceptions;
+use Koha::Authority;
 use Koha::Caches;
 use Koha::AuthorisedValueCategories;
 
@@ -608,23 +609,9 @@ our $koha_to_index_name = {
     all                     => ''
 };
 
-# Note that sears and aat map to 008/11 values here
-# but don't appear in C4/Heading/MARC21 thesaurus
-# because they don't have values in controlled field indicators
-# https://www.loc.gov/marc/authority/ad008.html
-our $thesaurus_to_value = {
-    lcsh          => 'a',
-    lcac          => 'b',
-    mesh          => 'c',
-    nal           => 'd',
-    notapplicable => 'n',
-    cash          => 'k',
-    rvm           => 'v',
-    aat           => 'r',
-    sears         => 's',
-    notdefined    => 'z',
-    notspecified  => '|'
-};
+# Delegates to Koha::Authority's table so there is a single source of
+# truth for thesaurus-name -> 008/11-code (bug 31925).
+our $thesaurus_to_value = $Koha::Authority::MARC21_THESAURUS_TO_CONTROL_FIELD_008_11;
 
 sub build_authorities_query_compat {
     my (
