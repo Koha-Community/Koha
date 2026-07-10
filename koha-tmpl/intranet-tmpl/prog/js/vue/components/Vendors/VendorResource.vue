@@ -795,9 +795,25 @@ export default {
                     componentData.resource.value.discount =
                         componentData.resource.value.discount.toFixed(1);
                 }
-                componentData.resource.payment_method = resource.payment_method
-                    ? resource.payment_method.split("|")
-                    : [];
+                if (resource.payment_method) {
+                    const avs =
+                        componentData.instancedResource.authorisedValues
+                            .av_vendor_payment_methods;
+                    const paymentMethods = resource.payment_method.split("|");
+
+                    resource.payment_method = paymentMethods.reduce(
+                        (acc, pm) => {
+                            const avMatch = avs.find(av => av.value === pm);
+                            if (!avMatch) return acc;
+                            acc.push({
+                                description: avMatch.description,
+                                value: avMatch.value,
+                            });
+                            return acc;
+                        },
+                        []
+                    );
+                }
             }
             if (caller === "show") {
                 let physicalAddress = "";
