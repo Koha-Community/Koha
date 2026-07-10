@@ -253,7 +253,7 @@ sub commit {
                 $auth_indexer->update_index( \@auth_chunk );
             } catch {
                 $logger->warn( sprintf "Update of elastic index failed with: %s", $_ );
-                if ( "$_" =~ /NoNodes/ ) {
+                if ( ref($_) eq 'Search::Elasticsearch::Error::NoNodes' ) {
                     $no_nodes = 1;
                     $auth_indexer =
                         Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
@@ -270,7 +270,7 @@ sub commit {
                 $biblio_indexer->update_index( \@bib_chunk );
             } catch {
                 $logger->warn( sprintf "Update of elastic index failed with: %s", $_ );
-                if ( "$_" =~ /NoNodes/ ) {
+                if ( ref($_) eq 'Search::Elasticsearch::Error::NoNodes' ) {
                     $no_nodes = 1;
                     $biblio_indexer =
                         Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
@@ -281,9 +281,11 @@ sub commit {
         }
     }
 
-    if ($no_nodes) {
+    if ( $no_nodes && $index_ok ) {
 
-        # ES is unreachable — reset jobs to 'new' so they are retried after reconnection
+        # ES is unreachable, and no other error occurred — reset jobs to 'new' so they are retried
+        # after reconnection. If a genuine indexing error also occurred, fall through to record
+        # the batch as 'failed' instead, so that error isn't masked by the retry.
         $logger->warn("Elasticsearch unavailable (NoNodes), resetting jobs for retry");
         $jobs->update(
             {
