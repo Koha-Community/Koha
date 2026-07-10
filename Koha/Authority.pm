@@ -21,6 +21,8 @@ use Modern::Perl;
 
 use Scalar::Util qw( blessed );
 
+use C4::Context;
+
 use base qw(Koha::Object);
 
 use Koha::Authority::ControlledIndicators;
@@ -290,6 +292,77 @@ sub record_schema {
     return C4::Context->preference('marcflavour') eq 'UNIMARC'
         ? 'UNIMARCAUTH'
         : 'MARC21';
+}
+
+=head3 $MARC21_THESAURUS_TO_CONTROL_FIELD_008_11
+
+    my $code = $Koha::Authority::MARC21_THESAURUS_TO_CONTROL_FIELD_008_11->{$thesaurus};
+
+The mapping of a subject heading's thesaurus name (as derived by
+C4::Heading from MARC indicator 2 / subfield $2, e.g. 'lcsh', 'mesh', or a
+raw $2 code such as 'fast') to its MARC21 authority 008/11 code ("Subject
+heading system/thesaurus"), per
+L<https://www.loc.gov/marc/authority/ad008.html>.
+
+Note that C<sears> and C<aat> map to 008/11 values here but never appear
+as a thesaurus name derived by C4::Heading, because they don't have their
+own MARC21 indicator 2 value (see the LOC list linked above).
+
+=cut
+
+our $MARC21_THESAURUS_TO_CONTROL_FIELD_008_11 = {
+    lcsh          => 'a',
+    lcac          => 'b',
+    mesh          => 'c',
+    nal           => 'd',
+    notapplicable => 'n',
+    cash          => 'k',
+    rvm           => 'v',
+    aat           => 'r',
+    sears         => 's',
+    notdefined    => 'z',
+    notspecified  => '|',
+};
+
+=head3 default_marc21_008
+
+    my $default_008 = Koha::Authority->default_marc21_008;
+    my $default_008 = Koha::Authority->default_marc21_008($thesaurus);
+
+Returns the default 34-character body (i.e. everything after the
+6-character date) to use for a new MARC21 authority record's 008 field,
+honouring the I<MARCAuthorityControlField008> system preference and
+falling back to Koha's hardcoded default when it isn't set to a valid (at
+least 34 character) value.
+
+If C<$thesaurus> is passed, position 11 ("Subject heading
+system/thesaurus") is set from
+L<$MARC21_THESAURUS_TO_CONTROL_FIELD_008_11> instead of whatever the
+default/syspref value carries, falling back to 'z' (Other) for a
+thesaurus with no dedicated code -- consistent with how Elasticsearch
+indexing already reconciles 008/11 vs 040$f (see
+Koha::SearchEngine::Elasticsearch::_process_mappings, where a 'z' is
+dropped in favour of a genuine 040$f value).
+
+=cut
+
+sub default_marc21_008 {
+    my ( $class, $thesaurus ) = @_;
+
+    my $default_008 = C4::Context->preference('MARCAuthorityControlField008');
+    if ( !$default_008 or length($default_008) < 34 ) {
+        $default_008 = '|| aca||aabn           | a|a     d';
+    } else {
+        $default_008 = substr( $default_008, 0, 34 );
+    }
+
+    if ( defined $thesaurus ) {
+
+        # Position 11 is absolute (over date + body); within the 34-char body alone that's index 11 - 6 = 5.
+        substr( $default_008, 5, 1, $MARC21_THESAURUS_TO_CONTROL_FIELD_008_11->{$thesaurus} // 'z' );
+    }
+
+    return $default_008;
 }
 
 =head3 to_api_mapping
