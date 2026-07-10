@@ -1114,6 +1114,65 @@ subtest "LinkBibHeadingsToAuthorities record generation tests" => sub {
     );
 };
 
+subtest "LinkBibHeadingsToAuthorities codes new authorities with the source thesaurus (bug 31925)" => sub {
+    plan tests => 7;
+
+    my $biblio_mod = Test::MockModule->new('C4::Linker::Default');
+    $biblio_mod->mock(
+        'get_link',
+        sub {
+            return ( undef, undef, 0 );
+        }
+    );
+
+    t::lib::Mocks::mock_preference( 'marcflavour',           'MARC21' );
+    t::lib::Mocks::mock_preference( 'AutoCreateAuthorities', '1' );
+
+    my $linker = C4::Linker::Default->new();
+
+    # Case 1: plain LCSH (ind2=0, no $2) - regression guard, must stay coded 'a'
+    my $biblio = $builder->build_sample_biblio();
+    my $record = $biblio->metadata->record;
+    my $field  = MARC::Field->new( '650', '', '0', 'a' => 'Feminism' );
+    $record->append_fields($field);
+    LinkBibHeadingsToAuthorities( $linker, $record, "", undef, 650 );
+    my $authority = GetAuthority( $record->subfield( '650', '9' ) );
+    is( substr( $authority->field('008')->data(), 11, 1 ), 'a',   'Plain LCSH heading (ind2=0) is coded 008/11=a' );
+    is( $authority->subfield( '040', 'f' ),                undef, 'Plain LCSH heading (ind2=0) gets no 040$f' );
+
+    # Case 2: FAST heading (ind2=7, $2=fast) - the actual bug: must NOT be coded as LCSH
+    $biblio = $builder->build_sample_biblio();
+    $record = $biblio->metadata->record;
+    $field  = MARC::Field->new( '650', '', '7', 'a' => 'Miracles', '2' => 'fast' );
+    $record->append_fields($field);
+    LinkBibHeadingsToAuthorities( $linker, $record, "", undef, 650 );
+    $authority = GetAuthority( $record->subfield( '650', '9' ) );
+    is( substr( $authority->field('008')->data(), 11, 1 ), 'z',    'FAST heading (ind2=7, $2=fast) is coded 008/11=z' );
+    is( $authority->subfield( '040', 'f' ),                'fast', 'FAST heading (ind2=7, $2=fast) gets 040$f=fast' );
+
+    # Case 3: MeSH heading (ind2=2, no $2)
+    $biblio = $builder->build_sample_biblio();
+    $record = $biblio->metadata->record;
+    $field  = MARC::Field->new( '650', '', '2', 'a' => 'Something' );
+    $record->append_fields($field);
+    LinkBibHeadingsToAuthorities( $linker, $record, "", undef, 650 );
+    $authority = GetAuthority( $record->subfield( '650', '9' ) );
+    is( substr( $authority->field('008')->data(), 11, 1 ), 'c',   'MeSH heading (ind2=2) is coded 008/11=c' );
+    is( $authority->subfield( '040', 'f' ),                undef, 'MeSH heading (ind2=2) gets no 040$f' );
+
+    # Case 4: non-subject heading (personal name added entry) is unaffected - no thesaurus semantics
+    $biblio = $builder->build_sample_biblio();
+    $record = $biblio->metadata->record;
+    $field  = MARC::Field->new( '700', '', '', 'a' => 'Doe, Jane' );
+    $record->append_fields($field);
+    LinkBibHeadingsToAuthorities( $linker, $record, "", undef, 700 );
+    $authority = GetAuthority( $record->subfield( '700', '9' ) );
+    is(
+        substr( $authority->field('008')->data(), 11, 1 ), 'a',
+        'Non-subject heading (700) keeps the default LCSH 008/11=a coding, unaffected by this fix'
+    );
+};
+
 subtest 'autoControlNumber tests' => sub {
 
     plan tests => 3;
