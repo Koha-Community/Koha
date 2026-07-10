@@ -68,7 +68,7 @@ SELECT
     invoiceid,
     invoicenumber,
     quantityreceived,
-    unitprice_tax_included,
+    $unitprice_field,
     datereceived,
     aqbooksellers.name as vendorname
 FROM
