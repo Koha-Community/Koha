@@ -330,9 +330,9 @@
         var redirect_if_attribute_equal = [% redirect_if_attribute_equal ? 1 : 0 | html %];
         var open_on_row_click = [% open_on_row_click ? 1 : 0 | html %];
         var on_click_url = "[% on_click_url | url %]";
-        var columns = [% To.json(columns) || [] | $raw %];
+        var columns = [% To.json(columns) || '[]' | $raw %];
         var preview_on_name_click = [% preview_on_name_click ? 1 : 0 | html %];
-        var actions = [% To.json(actions) || [] | $raw %];
+        var actions = [% To.json(actions) || '[]' | $raw %];
         var callback = "[% callback | html %]";
         var display_search_description = [% display_search_description ? 1 : 0 | html %];
         var adjust_history = [% adjust_history ? 1 : 0 | html %];
