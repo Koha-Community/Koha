@@ -626,6 +626,10 @@ export function useBaseResource(resourceConfig) {
                     return acc;
                 }
                 if (["text", "textarea", "select"].includes(attr.type)) {
+                    if (attr.allowMultipleChoices) {
+                        acc[attr.name] = [];
+                        return acc;
+                    }
                     acc[attr.name] = "";
                     return acc;
                 }
