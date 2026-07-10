@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::MockModule;
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::NoWarnings;
 
 use C4::AuthoritiesMarc;
@@ -115,4 +115,42 @@ subtest 'move_to_deleted' => sub {
     );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'default_marc21_008 tests (bug 31925)' => sub {
+    plan tests => 7;
+
+    is(
+        substr( Koha::Authority->default_marc21_008('lcsh'), 5, 1 ), 'a',
+        'lcsh maps to 008/11 code a'
+    );
+    is(
+        substr( Koha::Authority->default_marc21_008('mesh'), 5, 1 ), 'c',
+        'mesh maps to 008/11 code c'
+    );
+    is(
+        substr( Koha::Authority->default_marc21_008('rvm'), 5, 1 ), 'v',
+        'rvm maps to 008/11 code v'
+    );
+    is(
+        substr( Koha::Authority->default_marc21_008('fast'), 5, 1 ), 'z',
+        'Unrecognized raw $2 code (e.g. fast, from an ind2=7 heading) maps to 008/11 code z (Other)'
+    );
+
+    t::lib::Mocks::mock_preference( 'MARCAuthorityControlField008', '' );
+    is(
+        Koha::Authority->default_marc21_008, '|| aca||aabn           | a|a     d',
+        'Falls back to the hardcoded default when the syspref is unset, and thesaurus is not passed'
+    );
+    is(
+        substr( Koha::Authority->default_marc21_008('fast'), 5, 1 ), 'z',
+        'Thesaurus code is still applied on top of the hardcoded default'
+    );
+
+    my $custom = '||caaa||aabn           | a|a     d##padding';
+    t::lib::Mocks::mock_preference( 'MARCAuthorityControlField008', $custom );
+    is(
+        Koha::Authority->default_marc21_008, substr( $custom, 0, 34 ),
+        'Uses the syspref value, truncated to 34 characters, when valid'
+    );
 };
