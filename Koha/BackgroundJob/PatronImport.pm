@@ -20,6 +20,7 @@ use Try::Tiny qw( catch try );
 
 use Koha::List::Patron qw( AddPatronList AddPatronsToList );
 use Koha::Patrons::Import;
+use Koha::UploadedFiles;
 
 use base 'Koha::BackgroundJob';
 
@@ -54,8 +55,12 @@ sub process {
 
     $self->start;
 
-    my $file_content = $args->{file_content};
-    open my $fh, '<', \$file_content or die "Cannot create in-memory file handle: $!";
+    my $upload = Koha::UploadedFiles->find( $args->{uploaded_file_id} );
+    unless ($upload) {
+        $self->status('failed')->store;
+        return;
+    }
+    my $fh = $upload->file_handle;
 
     my $result = try {
         Koha::Patrons::Import->new->import_patrons(
@@ -80,7 +85,6 @@ sub process {
     };
 
     my $data = $self->decoded_data;
-    delete $data->{file_content};    # No longer needed; free DB space
 
     if ($result) {
         if ( $args->{createpatronlist} && @{ $result->{imported_borrowers} // [] } ) {
@@ -110,9 +114,17 @@ Enqueue the new job.
 sub enqueue {
     my ( $self, $args ) = @_;
 
-    return unless $args->{file_content};
+    return unless $args->{uploaded_file_id};
 
-    my $line_count = scalar grep { /\S/ } split /\n/, $args->{file_content};
+    my $upload = Koha::UploadedFiles->find( $args->{uploaded_file_id} );
+    return unless $upload;
+
+    my $fh         = $upload->file_handle;
+    my $line_count = 0;
+    while ( my $line = <$fh> ) {
+        $line_count++ if $line =~ /\S/;
+    }
+    close $fh;
 
     $self->SUPER::enqueue(
         {

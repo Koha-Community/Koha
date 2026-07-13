@@ -26,6 +26,11 @@
     code {
         background-color: yellow;
     }
+    #fileuploadstatus,
+    #fileuploadfailed,
+    #fileuploadcancel {
+        display: none;
+    }
 </style>
 </head>
 
@@ -61,6 +66,11 @@
             <div class="col-sm-6">
                 [% IF error == 'cannot_enqueue_job' %]
                     <div class="alert alert-danger">The import job could not be enqueued. Please try again.</div>
+                [% ELSIF error == 'job_failed_to_queue' %]
+                    <div class="alert alert-danger">
+                        The import job was created but could not be queued for processing.
+                        <a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&amp;id=[% job_id | uri %]">View the job</a> for more details, or try again.
+                    </div>
                 [% ELSE %]
                     <div class="alert alert-info">
                         <h1>The patron import job has been enqueued!</h1>
@@ -81,18 +91,41 @@
                     <li>If a card number exists in the table, you can choose whether to ignore the new one or overwrite the old one.</li>
                 </ul>
 
-                <form method="post" action="/cgi-bin/koha/tools/import_borrowers.pl" enctype="multipart/form-data">
+                <form method="get" id="uploadfile" enctype="multipart/form-data">
+                    <fieldset class="rows" id="uploadform">
+                        <legend>Upload a file to import</legend>
+                        <ol>
+                            <li>
+                                <div id="fileuploadform">
+                                    <label for="fileToUpload">Select the file to import: </label>
+                                    <input type="file" id="fileToUpload" name="fileToUpload" />
+                                </div>
+                            </li>
+                        </ol>
+                    </fieldset>
+                    <fieldset class="action">
+                        <button id="fileuploadbutton" class="btn btn-primary">Upload file</button>
+                        <button id="fileuploadcancel">Cancel</button>
+                    </fieldset>
+
+                    <div id="fileuploadpanel">
+                        <div id="fileuploadstatus" class="progress_panel"
+                            >Upload progress:
+                            <progress id="fileuploadprogress" max="100" value="0"></progress>
+                            <span class="fileuploadpercent">0</span>%
+                        </div>
+                        <div id="fileuploadfailed"></div>
+                    </div>
+                </form>
+
+                <form method="post" id="processfile" action="/cgi-bin/koha/tools/import_borrowers.pl" enctype="multipart/form-data">
                     [% INCLUDE 'csrf-token.inc' %]
                     <input type="hidden" name="op" value="cud-import" />
+                    <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
                     <fieldset class="rows">
                         <legend>Import into the borrowers table</legend>
 
                         <ol>
-                            <li>
-                                <label for="uploadborrowers">Select the file to import: </label>
-                                <input type="file" id="uploadborrowers" name="uploadborrowers" />
-                            </li>
-
                             <li>
                                 <label for="createpatronlist">Create patron list: </label>
                                 <input name="createpatronlist" id="createpatronlist" value="1" type="checkbox" />
@@ -237,7 +270,7 @@
                     </fieldset>
 
                     <fieldset class="action">
-                        <input type="submit" class="btn btn-primary" value="Import" />
+                        <input type="submit" id="mainformsubmit" class="btn btn-primary" value="Import" />
                     </fieldset>
                 </form>
             </div>
@@ -295,7 +328,9 @@
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
+    [% Asset.js("js/file-upload.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
+        var xhr;
         $(document).ready(function () {
             // Make date fields have the datepicker
             $("#dateenrolled, #dateexpiry, #dateofbirth").flatpickr({
@@ -316,6 +351,27 @@
                 $(".preserve_values").toggle();
                 $(".expand_preserves").toggle();
             });
+
+            $("#processfile").hide();
+
+            $("#fileuploadbutton").on("click", function (e) {
+                e.preventDefault();
+                StartUpload();
+            });
+            $("#fileuploadcancel").on("click", function (e) {
+                e.preventDefault();
+                CancelUpload();
+            });
+            $("#mainformsubmit").on("click", function (e) {
+                e.preventDefault();
+                if ($("#uploadedfileid").val() == "") {
+                    alert(_("Please upload a file first."));
+                    return false;
+                } else {
+                    $("#processfile").submit();
+                    return true;
+                }
+            });
         });
 
         $("#overwrite_cardnumberno").click(function () {
@@ -326,6 +382,43 @@
             $("#overwrite_passwords").prop("disabled", false);
             $("#update_dateexpiry").prop("disabled", false);
         });
+
+        function StartUpload() {
+            if ($("#fileToUpload").prop("files").length == 0) return;
+            $("#fileuploadbutton").hide();
+            $("#fileuploadfailed").hide();
+            $("#processfile").hide();
+            $("#fileuploadstatus").show();
+            $("#uploadedfileid").val("");
+            xhr = AjaxUpload($("#fileToUpload"), $("#fileuploadprogress"), "temp=1", cbUpload);
+            $("#fileuploadcancel").show();
+        }
+        function CancelUpload() {
+            if (xhr) xhr.abort();
+            $("#fileuploadstatus").hide();
+            $("#fileuploadbutton").show();
+            $("#fileuploadcancel").hide();
+            $("#fileuploadfailed").show();
+            $("#fileuploadfailed").text(_("Upload status: Cancelled "));
+        }
+        function cbUpload(status, fileid, errors) {
+            if (status == "done") {
+                $("#uploadedfileid").val(fileid);
+                $("#fileToUpload").prop("disabled", true);
+                $("#fileuploadbutton").prop("disabled", true);
+                $("#fileuploadbutton").show();
+                $("#fileuploadcancel").hide();
+                $("#processfile").show();
+            } else {
+                var errMsgs = [_("Error code 0 not used"), _("File already exists"), _("Directory is not writeable"), _("Root directory for uploads not defined"), _("Temporary directory for uploads not defined")];
+                var errCode = errors[$("#fileToUpload").prop("files")[0].name].code;
+                $("#fileuploadbutton").show();
+                $("#fileuploadcancel").hide();
+                $("#fileuploadstatus").hide();
+                $("#fileuploadfailed").show();
+                $("#fileuploadfailed").text(_("Upload status: ") + (status == "failed" ? _("Failed") + " - (" + errCode + ") " + errMsgs[errCode] : status == "denied" ? _("Denied") : status));
+            }
+        }
     </script>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

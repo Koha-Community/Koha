@@ -176,6 +176,7 @@ sub allows_add_by {
         { circulate => 'circulate_remaining_permissions' },
         { tools     => 'stage_marc_import' },
         { tools     => 'upload_local_cover_images' },
+        { tools     => 'import_patrons' },
     ];
     require C4::Auth;
     foreach (@$flags) {

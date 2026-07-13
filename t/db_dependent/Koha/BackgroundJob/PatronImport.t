@@ -17,6 +17,8 @@
 
 use Modern::Perl;
 
+use File::Temp qw( tempdir );
+use Test::MockModule;
 use Test::NoWarnings;
 use Test::More tests => 7;
 
@@ -24,12 +26,41 @@ use Koha::BackgroundJob::PatronImport;
 use Koha::BackgroundJobs;
 use Koha::Database;
 use Koha::Patrons;
+use Koha::UploadedFiles;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
+
+my $tempdir  = tempdir( CLEANUP => 1 );
+my $ctx_mock = Test::MockModule->new('C4::Context');
+$ctx_mock->mock( 'temporary_directory' => sub { return $tempdir; } );
+
+my $upload_counter = 0;
+
+sub build_uploaded_file {
+    my ($csv) = @_;
+
+    $upload_counter++;
+    my $upload = Koha::UploadedFile->new(
+        {
+            hashvalue          => sprintf( 'testhash%03d', $upload_counter ),
+            filename           => "patrons_$upload_counter.csv",
+            dir                => '',
+            uploadcategorycode => 'temp',
+            filesize           => length($csv),
+            permanent          => 0,
+        }
+    )->store;
+
+    open my $fh, '>', $upload->full_path or die "Cannot write test upload file: $!";
+    print $fh $csv;
+    close $fh;
+
+    return $upload;
+}
 
 subtest 'enqueue() tests' => sub {
 
@@ -39,10 +70,11 @@ subtest 'enqueue() tests' => sub {
 
     my $csv = "surname,branchcode,categorycode\nSmith,CPL,PT\nJones,CPL,PT\n";
 
+    my $upload = build_uploaded_file($csv);
     my $job_id = Koha::BackgroundJob::PatronImport->new->enqueue(
         {
-            file_content => $csv,
-            matchpoint   => 'cardnumber',
+            uploaded_file_id => $upload->id,
+            matchpoint       => 'cardnumber',
         }
     );
     my $job = Koha::BackgroundJobs->find($job_id)->_derived_class;
@@ -53,10 +85,11 @@ subtest 'enqueue() tests' => sub {
     is( $job->type,   'patron_import', 'job_type is patron_import' );
 
     my $csv_no_newline = "surname,branchcode,categorycode\nSmith,CPL,PT\nJones,CPL,PT";
+    my $upload2        = build_uploaded_file($csv_no_newline);
     my $job_id2        = Koha::BackgroundJob::PatronImport->new->enqueue(
         {
-            file_content => $csv_no_newline,
-            matchpoint   => 'cardnumber',
+            uploaded_file_id => $upload2->id,
+            matchpoint       => 'cardnumber',
         }
     );
     my $job2 = Koha::BackgroundJobs->find($job_id2)->_derived_class;
@@ -67,7 +100,7 @@ subtest 'enqueue() tests' => sub {
 
 subtest 'process() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -85,9 +118,10 @@ subtest 'process() tests' => sub {
         ""
     );
 
+    my $upload = build_uploaded_file($csv);
     my $job_id = Koha::BackgroundJob::PatronImport->new->enqueue(
         {
-            file_content         => $csv,
+            uploaded_file_id     => $upload->id,
             matchpoint           => 'cardnumber',
             overwrite_cardnumber => 0,
             defaults             => {},
@@ -107,7 +141,6 @@ subtest 'process() tests' => sub {
     is( $data->{already_in_db}, 0, 'No patrons already in db' );
     is( $data->{invalid},       0, 'No invalid rows' );
     is( $data->{total},         2, 'Total count is correct' );
-    ok( !exists $data->{file_content}, 'file_content cleared from stored data' );
     is(
         Koha::Patrons->search( { cardnumber => { '-in' => [ 'TEST001', 'TEST002' ] } } )->count,
         2, 'Patrons exist in the database'
@@ -136,9 +169,10 @@ subtest 'process() with errors' => sub {
         ""
     );
 
+    my $upload = build_uploaded_file($csv);
     my $job_id = Koha::BackgroundJob::PatronImport->new->enqueue(
         {
-            file_content         => $csv,
+            uploaded_file_id     => $upload->id,
             matchpoint           => 'cardnumber',
             overwrite_cardnumber => 0,
             defaults             => {},
@@ -180,11 +214,12 @@ subtest 'process() already_in_db and overwritten' => sub {
         ""
     );
 
+    my $upload    = build_uploaded_file($csv);
     my %base_args = (
-        file_content    => $csv,
-        matchpoint      => 'cardnumber',
-        defaults        => {},
-        preserve_fields => [],
+        uploaded_file_id => $upload->id,
+        matchpoint       => 'cardnumber',
+        defaults         => {},
+        preserve_fields  => [],
     );
 
     # First import creates the patrons
@@ -238,9 +273,10 @@ subtest 'process() with patron list creation' => sub {
         ""
     );
 
+    my $upload = build_uploaded_file($csv);
     my $job_id = Koha::BackgroundJob::PatronImport->new->enqueue(
         {
-            file_content         => $csv,
+            uploaded_file_id     => $upload->id,
             matchpoint           => 'cardnumber',
             overwrite_cardnumber => 0,
             defaults             => {},
@@ -284,9 +320,10 @@ subtest 'process() with cancelled job' => sub {
         ""
     );
 
+    my $upload = build_uploaded_file($csv);
     my $job_id = Koha::BackgroundJob::PatronImport->new->enqueue(
         {
-            file_content         => $csv,
+            uploaded_file_id     => $upload->id,
             matchpoint           => 'cardnumber',
             overwrite_cardnumber => 0,
             defaults             => {},

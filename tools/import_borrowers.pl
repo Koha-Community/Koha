@@ -46,6 +46,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::Patron::Attribute::Types;
 use Koha::Patron::Categories;
 use Koha::Patrons;
+use Koha::UploadedFiles;
 
 use Text::CSV;
 
@@ -88,9 +89,9 @@ if ( $input->param('sample') ) {
 
 my @preserve_fields = $input->multi_param('preserve_existing');
 
-my $uploadborrowers = $input->param('uploadborrowers');
-my $matchpoint      = $input->param('matchpoint');
-my $welcome_new     = $input->param('welcome_new');
+my $uploadedfileid = $input->param('uploadedfileid');
+my $matchpoint     = $input->param('matchpoint');
+my $welcome_new    = $input->param('welcome_new');
 if ($matchpoint) {
     $matchpoint =~ s/^patron_attribute_//;
 }
@@ -100,11 +101,10 @@ my $createpatronlist = $input->param('createpatronlist') || 0;
 my $dt               = dt_from_string();
 my $timestamp        = $dt->ymd('-') . ' ' . $dt->hms(':');
 
-if ( $op eq 'cud-import' && $uploadborrowers && length($uploadborrowers) > 0 ) {
+if ( $op eq 'cud-import' && $uploadedfileid ) {
 
-    my $handle         = $input->upload('uploadborrowers');
-    my $file_content   = do { local $/; <$handle> };
-    my $patronlistname = $uploadborrowers . ' (' . $timestamp . ')';
+    my $upload         = Koha::UploadedFiles->find($uploadedfileid);
+    my $patronlistname = ( $upload ? $upload->filename : $uploadedfileid ) . ' (' . $timestamp . ')';
 
     my %defaults;
     for my $k (@columnkeys) {
@@ -115,10 +115,11 @@ if ( $op eq 'cud-import' && $uploadborrowers && length($uploadborrowers) > 0 ) {
     my $overwrite_passwords = defined $input->param('overwrite_passwords') ? 1 : 0;
     my $update_dateexpiry   = $input->param('update_dateexpiry') // "";
 
+    my $job = Koha::BackgroundJob::PatronImport->new;
     try {
-        my $job_id = Koha::BackgroundJob::PatronImport->new->enqueue(
+        my $job_id = $job->enqueue(
             {
-                file_content                    => $file_content,
+                uploaded_file_id                => $uploadedfileid,
                 defaults                        => \%defaults,
                 matchpoint                      => $matchpoint,
                 overwrite_cardnumber            => scalar $input->param('overwrite_cardnumber'),
@@ -134,15 +135,30 @@ if ( $op eq 'cud-import' && $uploadborrowers && length($uploadborrowers) > 0 ) {
             }
         );
 
-        $template->param(
-            op     => 'enqueued',
-            job_id => $job_id,
-        );
+        if ($job_id) {
+            $template->param(
+                op     => 'enqueued',
+                job_id => $job_id,
+            );
+        } else {
+            $template->param(
+                op    => 'enqueued',
+                error => 'cannot_enqueue_job',
+            );
+        }
     } catch {
-        $template->param(
-            op    => 'enqueued',
-            error => 'cannot_enqueue_job',
-        );
+        if ( $job->id ) {
+            $template->param(
+                op     => 'enqueued',
+                job_id => $job->id,
+                error  => 'job_failed_to_queue',
+            );
+        } else {
+            $template->param(
+                op    => 'enqueued',
+                error => 'cannot_enqueue_job',
+            );
+        }
     };
 
 } else {
