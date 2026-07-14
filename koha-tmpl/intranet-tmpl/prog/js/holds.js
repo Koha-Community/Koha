@@ -152,10 +152,6 @@ $(document).ready(function () {
         if (!holdsTable) {
             var title;
 
-            let filters_options = {
-                libraries: all_libraries,
-            };
-
             holdsTable = $("#holds-table").kohaTable(
                 {
                     autoWidth: false,
