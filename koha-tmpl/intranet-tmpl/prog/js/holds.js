@@ -1543,6 +1543,14 @@ async function load_patron_holds_table(biblio_id, split_data) {
                     orderable: true,
                     searchable: true,
                     render: function (data, type, row, meta) {
+                        if (row.patron == null) {
+                            let library = all_libraries.find(
+                                library => library._id == row.pickup_library_id
+                            );
+                            return __("A patron from library %s").format(
+                                library ? library._str : row.pickup_library_id
+                            );
+                        }
                         return $patron_to_html(row.patron, {
                             url: true,
                             display_cardnumber: true,
