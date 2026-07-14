@@ -226,6 +226,42 @@ sub decode_jwt {
     return _decode_jwt($params);
 }
 
+=head2 encode_claims
+
+    my $jwt = $tokenizer->encode_claims($hashref);
+
+Encodes an arbitrary hashref as a signed JWT. Uses the default Koha secret
+(database password). Unlike C<generate_jwt>, this method supports any claims
+structure, not just a single C<id> value.
+
+=cut
+
+sub encode_claims {
+    my ( $self, $claims ) = @_;
+    my $params = _add_default_jwt_params( {} );
+
+    return Mojo::JWT->new(
+        claims => $claims,
+        secret => $params->{secret},
+    )->encode;
+}
+
+=head2 decode_claims
+
+    my $hashref = $tokenizer->decode_claims($token);
+
+Decodes a JWT and returns the full claims hashref. Uses the default Koha
+secret (database password).
+
+=cut
+
+sub decode_claims {
+    my ( $self, $token ) = @_;
+    my $params = _add_default_jwt_params( {} );
+
+    return Mojo::JWT->new( secret => $params->{secret} )->decode($token);
+}
+
 # --- Internal routines ---
 
 =head3 _add_default_csrf_params
