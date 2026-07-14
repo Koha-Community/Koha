@@ -267,7 +267,7 @@
 [% END # /WRAPPER tabs %]
 <!-- /patron-detail-tabs.inc -->
 <script nonce="[% Koha.CSPNonce | $raw %]">
-    let all_libraries  = [% To.json(Branches.all) | $raw %].map(e => {
+    var all_libraries = [% To.json(Branches.all) | $raw %].map(e => {
         e['_id'] = e.branchcode;
         e['_str'] = e.branchname;
         return e;
