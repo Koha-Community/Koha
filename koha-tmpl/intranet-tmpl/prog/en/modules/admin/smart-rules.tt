@@ -1414,10 +1414,10 @@
                                 [% END %]
                             </td>
                             <td>
-                                [% IF fill_other_biblio_holds_policy %]
-                                    <span> Yes </span>
-                                [% ELSE %]
+                                [% IF fill_other_biblio_holds_policy == 0 %]
                                     <span> No </span>
+                                [% ELSE %]
+                                    <span> Yes </span>
                                 [% END %]
                             </td>
                             <td>
