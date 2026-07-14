@@ -3888,7 +3888,7 @@ subtest 'find_by_identifier() tests' => sub {
 };
 
 subtest 'check_for_existing_matches' => sub {
-    plan tests => 5;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -3896,9 +3896,22 @@ subtest 'check_for_existing_matches' => sub {
         { class => 'Koha::Patrons', value => { firstname => 'John', surname => 'Smith', dateofbirth => '1980-01-01' } }
     );
 
+    t::lib::Mocks::mock_preference( 'PatronDuplicateMatchingAddFields', '' );
+    my $match_result = Koha::Patrons->check_for_existing_matches(
+        { firstname => 'Someone', surname => 'Else', dateofbirth => '1999-09-09' } );
+    is( $match_result->{duplicate_found}, 0, 'No duplicate found when PatronDuplicateMatchingAddFields is empty' );
+
+    t::lib::Mocks::mock_preference( 'PatronDuplicateMatchingAddFields', 'city' );
+    $match_result = Koha::Patrons->check_for_existing_matches(
+        { firstname => 'Someone', surname => 'Else', dateofbirth => '1999-09-09' } );
+    is(
+        $match_result->{duplicate_found}, 0,
+        'No duplicate found when none of the configured match fields are populated'
+    );
+
     t::lib::Mocks::mock_preference( 'PatronDuplicateMatchingAddFields', 'dateofbirth|firstname|surname' );
 
-    my $match_result = Koha::Patrons->check_for_existing_matches(
+    $match_result = Koha::Patrons->check_for_existing_matches(
         { firstname => 'John', surname => 'Smith', dateofbirth => '1980-01-01' } );
     is( $match_result->{duplicate_found},                        1,                       'Duplicate found' );
     is( $match_result->{matching_patrons}->next->borrowernumber, $patron->borrowernumber, 'Matching patron' );
