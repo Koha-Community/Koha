@@ -749,6 +749,10 @@ sub check_for_existing_matches {
         $match_conditions->{$field} = $new_patron_data->{$field} if $new_patron_data->{$field};
     }
 
+    # Without any usable conditions, Koha::Patrons->search would run
+    # unfiltered and match every patron in the system.
+    return { 'duplicate_found' => 0 } unless $match_conditions && %$match_conditions;
+
     my $patrons = Koha::Patrons->search($match_conditions);
     if ( $patrons->count > 0 ) {
         return {
