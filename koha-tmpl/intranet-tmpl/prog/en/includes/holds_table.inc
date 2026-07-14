@@ -1,7 +1,6 @@
 [% USE Koha %]
 [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
 [% USE AuthorisedValues %]
-[% USE raw %]
 
 <table id="patron_holds_table_[% biblio_id | html %]_[% split_data | html %]" class="holds_table" data-total-holds="[% total_holds | html %]">
     <thead>
@@ -22,10 +21,3 @@
         </tr>
     </thead>
 </table>
-<script nonce="[% Koha.CSPNonce | $raw %]">
-    let all_libraries  = [% To.json(Branches.all) | $raw %].map(e => {
-        e['_id'] = e.branchcode;
-        e['_str'] = e.branchname;
-        return e;
-    });
-</script>

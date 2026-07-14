@@ -1572,6 +1572,11 @@
         var AutoResumeSuspendedHolds = [% ( Koha.Preference('AutoResumeSuspendedHolds') ) ? 1 : 0 | html %];
         var AllowHoldDateInFuture = [% ( Koha.Preference('AllowHoldDateInFuture') ) ? 1 : 0 | html %];
         var HidePatronName = [% ( Koha.Preference('HidePatronName') ) ? 1 : 0 | html %];
+        var all_libraries = [% To.json(Branches.all) | $raw %].map(e => {
+            e['_id'] = e.branchcode;
+            e['_str'] = e.branchname;
+            return e;
+        });
         var CAN_user_reserveforothers_modify_holds_priority = [%CAN_user_reserveforothers_modify_holds_priority ? 1 : 0 | html %];
         var borrowernumber = "[% patron.borrowernumber | $raw %]";
         var patron_homebranch = "[% To.json( Branches.GetName( patron.branchcode ) ) | $raw %]";
