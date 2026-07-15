@@ -17,6 +17,7 @@ package Koha::File::Transport::FTP;
 
 use Modern::Perl;
 use Net::FTP;
+use Time::Local qw( timegm );
 use Try::Tiny;
 
 use base qw(Koha::File::Transport);
@@ -156,7 +157,7 @@ sub _change_directory {
 
 Internal method that performs the FTP-specific file listing operation.
 Returns an array reference of hashrefs with file information.
-Each hashref contains: filename, longname, size, perms.
+Each hashref contains: filename, longname, size, perms, mtime, type.
 
 The listing is obtained with MLSD (RFC 3659), whose machine-readable output
 is locale- and platform-independent and gives us the filename unambiguously
@@ -171,9 +172,7 @@ rmdir() uses for MLSD. That interface has been stable for many releases.
 
 The hashref shape is kept consistent with the SFTP and Local transports so
 that consumers of list_files() (including out-of-tree ones) can rely on the
-same structure regardless of transport type. Note that over MLSD the perms
-value is the RFC 3659 "perm" fact (e.g. "adfr"), not a Unix mode string, and
-size is only present when the server reports it.
+same structure regardless of transport type.
 
 =cut
 
@@ -200,21 +199,44 @@ sub _list_files {
                 map { my ( $k, $v ) = split /=/, $_, 2; ( lc($k) => $v ) }
                 grep { length } split /;/, $facts_str;
 
-            # Skip the directory itself, its parent and any subdirectories
-            next if ( $fact{type} // q{} ) =~ /^(?:dir|cdir|pdir)$/i;
+            # Skip only the current/parent directory pseudo-entries; real
+            # subdirectories (type=dir) are now included like Local and SFTP.
+            next if ( $fact{type} // q{} ) =~ /^(?:cdir|pdir)$/i;
 
+            my $type =
+                  ( $fact{type} // q{} ) eq 'file' ? 'file'
+                : ( $fact{type} // q{} ) eq 'dir'  ? 'directory'
+                :                                    'other';
+
+            my $perms = $self->_perms_from_mlsd_facts( \%fact, $type );
             push @file_list, {
                 filename => $filename,
                 longname => $line,
                 size     => $fact{size},
-                perms    => $fact{perm}
+                perms    => $perms,
+                mtime    => $self->_mtime_from_mlsd_fact( $fact{modify} ),
+                type     => $type,
             };
         }
     } else {
 
-        # Fallback for servers without MLSD: NLST returns bare filenames only.
+        # Fallback for servers without MLSD: NLST returns bare filenames
+        # only, so probe each entry with SIZE/MDTM (both plain Net::FTP
+        # methods) to recover size, mtime and a best-effort type. A
+        # permission-denied file would be misclassified as a directory here
+        # (SIZE failing is the only signal available) - a rare, accepted
+        # limitation of this legacy fallback path. perms stays undef: there
+        # is no way to get Unix permission bits without MLSD/UNIX.mode.
         my $names = $self->{connection}->ls or return $self->_abort_operation($operation);
-        @file_list = map { { filename => $_ } } grep { !/^[.]{1,2}$/ } @{$names};
+        foreach my $name ( grep { !/^[.]{1,2}$/ } @{$names} ) {
+            my $size = $self->{connection}->size($name);
+            push @file_list, {
+                filename => $name,
+                size     => $size,
+                mtime    => $self->{connection}->mdtm($name),
+                type     => defined $size ? 'file' : 'directory',
+            };
+        }
     }
 
     $self->add_message(
@@ -229,6 +251,60 @@ sub _list_files {
     );
 
     return \@file_list;
+}
+
+=head3 _perms_from_mlsd_facts
+
+    my $perms = $self->_perms_from_mlsd_facts( \%fact, $type );
+
+Converts MLSD facts into the same C<"%04o"> Unix permission-bits string used
+by the Local and SFTP transports.
+
+Prefers the C<UNIX.mode> vendor-extension fact (exact Unix octal
+permissions) when the server provides it. Otherwise approximates from the
+RFC 3659 C<perm> fact, which describes only what the connected user is
+allowed to do (append/create/delete/rename/list/mkdir/read/write/etc.), not
+a real owner/group/other split - the resulting triad is mirrored across
+owner/group/other since that distinction isn't available. Returns undef if
+neither fact is present.
+
+=cut
+
+sub _perms_from_mlsd_facts {
+    my ( $self, $fact, $type ) = @_;
+
+    if ( defined $fact->{'unix.mode'} ) {
+        return sprintf( "%04o", oct( $fact->{'unix.mode'} ) & oct('07777') );
+    }
+
+    my $perm = $fact->{perm};
+    return unless defined $perm;
+
+    my $bits = 0;
+    $bits |= 4 if $perm                         =~ /r/;
+    $bits |= 2 if $perm                         =~ /[wa]/;
+    $bits |= 1 if $type eq 'directory' && $perm =~ /e/;
+
+    return sprintf( "%04o", ( $bits << 6 ) | ( $bits << 3 ) | $bits );
+}
+
+=head3 _mtime_from_mlsd_fact
+
+    my $mtime = $self->_mtime_from_mlsd_fact( $fact->{modify} );
+
+Converts an MLSD C<modify> fact (RFC 3659 C<YYYYMMDDHHMMSS[.sss]> format,
+always UTC) into a Unix epoch timestamp. Returns undef if the fact is
+missing or doesn't match the expected format.
+
+=cut
+
+sub _mtime_from_mlsd_fact {
+    my ( $self, $modify ) = @_;
+
+    return unless defined $modify;
+    return unless $modify =~ /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/;
+
+    return eval { timegm( $6, $5, $4, $3, $2 - 1, $1 ) };
 }
 
 =head3 _rename_file

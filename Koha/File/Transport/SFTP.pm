@@ -23,7 +23,8 @@ use File::Spec;
 use IO::File;
 use Net::SFTP::Foreign;
 use Try::Tiny;
-use JSON qw( decode_json encode_json );
+use JSON  qw( decode_json encode_json );
+use Fcntl qw( S_ISDIR S_ISREG );
 
 use base qw(Koha::File::Transport);
 
@@ -172,7 +173,11 @@ sub _change_directory {
 
 Internal method that performs the SFTP-specific file listing operation.
 Returns an array reference of hashrefs with file information.
-Each hashref contains: filename, longname, a (attributes).
+Each hashref contains: filename, longname, size, perms, mtime, type.
+
+Net::SFTP::Foreign's ls() natively returns the size/perms/mtime nested inside
+a Net::SFTP::Foreign::Attributes object (the 'a' key). Those fields are
+flattened out here so the returned shape matches the FTP and Local transports.
 
 =cut
 
@@ -181,6 +186,22 @@ sub _list_files {
     my $operation = "list";
 
     my $file_list = $self->{connection}->ls or return $self->_abort_operation($operation);
+
+    my @files = map {
+        my $attrs = $_->{a};
+        my $mode  = $attrs ? $attrs->perm : undef;
+        {
+            filename => $_->{filename},
+            longname => $_->{longname},
+            size     => $attrs                  ? $attrs->size                            : undef,
+            perms    => $attrs && defined $mode ? sprintf( "%04o", $mode & oct('07777') ) : undef,
+            mtime    => $attrs                  ? $attrs->mtime                           : undef,
+            type     => !defined $mode          ? 'other'
+            : S_ISDIR($mode) ? 'directory'
+            : S_ISREG($mode) ? 'file'
+            : 'other',
+        }
+    } @{$file_list};
 
     $self->add_message(
         {
@@ -194,7 +215,7 @@ sub _list_files {
         }
     );
 
-    return $file_list;
+    return \@files;
 }
 
 =head3 _rename_file

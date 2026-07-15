@@ -136,7 +136,7 @@ subtest 'change_directory() tests' => sub {
 };
 
 subtest 'list_files() MLSD tests' => sub {
-    plan tests => 6;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -151,11 +151,12 @@ subtest 'list_files() MLSD tests' => sub {
 
     # MLSD output: "facts filename" per RFC 3659. Facts are locale-independent,
     # the filename is everything after the facts and a single space (so spaces
-    # in filenames are handled), and cdir/pdir/dir entries must be skipped.
+    # in filenames are handled), and cdir/pdir entries must be skipped while
+    # real subdirectories (type=dir) are now included.
     my @mlsd_output = (
         'type=file;size=1234;modify=20250101120000;perm=adfr; QUOTES_413514.CEQ',
-        'type=file;size=4096;modify=20250214093000; INVOICE_99.CEI',
-        'type=dir;modify=20250303080000; subdir',
+        'type=file;size=4096;modify=20250214093000;UNIX.mode=0644; INVOICE_99.CEI',
+        'type=dir;modify=20250303080000;perm=cpmel; subdir',
         'type=cdir;modify=20250303080000; .',
         'type=pdir;modify=20250303080000; ..',
         'type=file;size=55;modify=20250405091000; name with spaces.CEA',
@@ -175,17 +176,34 @@ subtest 'list_files() MLSD tests' => sub {
     is( ref($files), 'ARRAY', 'list_files() returns an arrayref' );
 
     my @names = sort map { $_->{filename} } @{$files};
-    is( scalar @names, 3, 'directory, cdir and pdir entries are skipped' );
+    is( scalar @names, 4, 'cdir and pdir entries are skipped, dir entries are now included' );
 
     is_deeply(
         \@names,
-        [ 'INVOICE_99.CEI', 'QUOTES_413514.CEQ', 'name with spaces.CEA' ],
+        [ 'INVOICE_99.CEI', 'QUOTES_413514.CEQ', 'name with spaces.CEA', 'subdir' ],
         'filenames parsed from MLSD, spaces preserved'
     );
 
-    my ($quote) = grep { $_->{filename} eq 'QUOTES_413514.CEQ' } @{$files};
-    is( $quote->{size},  1234,   'size fact parsed correctly' );
-    is( $quote->{perms}, 'adfr', 'perm fact captured' );
+    my ($quote)   = grep { $_->{filename} eq 'QUOTES_413514.CEQ' } @{$files};
+    my ($invoice) = grep { $_->{filename} eq 'INVOICE_99.CEI' } @{$files};
+    my ($subdir)  = grep { $_->{filename} eq 'subdir' } @{$files};
+    my ($spaced)  = grep { $_->{filename} eq 'name with spaces.CEA' } @{$files};
+
+    is( $quote->{size},  1234,       'size fact parsed correctly' );
+    is( $quote->{type},  'file',     'type=file fact maps to "file"' );
+    is( $quote->{perms}, '0666',     'perm-only fact (adfr: read+write) approximated to octal' );
+    is( $quote->{mtime}, 1735732800, 'modify fact (2025-01-01 12:00:00 UTC) parsed into mtime' );
+
+    is( $invoice->{perms}, '0644',     'UNIX.mode fact used verbatim when present' );
+    is( $invoice->{type},  'file',     'type=file fact maps to "file"' );
+    is( $invoice->{mtime}, 1739525400, 'modify fact (2025-02-14 09:30:00 UTC) parsed into mtime' );
+
+    is( $subdir->{type},  'directory', 'type=dir fact maps to "directory"' );
+    is( $subdir->{perms}, '0111',      'perm-only fact (cpmel: execute via e) approximated to octal' );
+    is( $subdir->{mtime}, 1740988800,  'modify fact is parsed into mtime for directories too' );
+
+    is( $spaced->{perms}, undef,      'entries with neither perm nor UNIX.mode fact get undef perms' );
+    is( $spaced->{mtime}, 1743844200, 'modify fact still parsed into mtime when perms is undef' );
 
     $transport->{connection} = undef;
 
@@ -193,7 +211,7 @@ subtest 'list_files() MLSD tests' => sub {
 };
 
 subtest 'list_files() NLST fallback tests' => sub {
-    plan tests => 4;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
@@ -205,12 +223,30 @@ subtest 'list_files() NLST fallback tests' => sub {
     );
 
     # Server without MLSD support: _list_cmd('MLSD') returns nothing, so
-    # list_files() must fall back to NLST (ls) and return bare filenames.
+    # list_files() must fall back to NLST (ls) and probe each entry with
+    # SIZE/MDTM (plain Net::FTP methods) for size/mtime/type.
     my $ls_called = 0;
     my $mock_ftp  = Test::MockModule->new('Net::FTP');
     $mock_ftp->mock( '_list_cmd', sub { return; } );
-    $mock_ftp->mock( 'ls',        sub { $ls_called = 1; return [ 'QUOTES_1.CEQ', '.', '..', 'INVOICE_2.CEI' ]; } );
-    $mock_ftp->mock( 'pwd',       sub { return '/incoming/'; } );
+    $mock_ftp->mock(
+        'ls',
+        sub { $ls_called = 1; return [ 'QUOTES_1.CEQ', '.', '..', 'INVOICE_2.CEI', 'subdir' ]; }
+    );
+    $mock_ftp->mock( 'pwd', sub { return '/incoming/'; } );
+    $mock_ftp->mock(
+        'size',
+        sub {
+            my ( $s, $name ) = @_;
+            return { 'QUOTES_1.CEQ' => 100, 'INVOICE_2.CEI' => 200 }->{$name};
+        }
+    );
+    $mock_ftp->mock(
+        'mdtm',
+        sub {
+            my ( $s, $name ) = @_;
+            return { 'QUOTES_1.CEQ' => 1700000000, 'INVOICE_2.CEI' => 1700000100 }->{$name};
+        }
+    );
 
     $transport->{connection}          = bless {}, 'Net::FTP';
     $transport->{_user_set_directory} = 1;
@@ -220,13 +256,26 @@ subtest 'list_files() NLST fallback tests' => sub {
     is( $ls_called, 1, 'falls back to ls() when MLSD is unsupported' );
 
     my @names = sort map { $_->{filename} } @{$files};
-    is( scalar @names, 2, 'current/parent dir entries filtered from NLST output' );
+    is( scalar @names, 3, 'current/parent dir entries filtered from NLST output' );
     is_deeply(
         \@names,
-        [ 'INVOICE_2.CEI', 'QUOTES_1.CEQ' ],
-        'bare filenames returned from NLST fallback'
+        [ 'INVOICE_2.CEI', 'QUOTES_1.CEQ', 'subdir' ],
+        'bare filenames returned from NLST fallback, including the directory'
     );
-    ok( ( exists $files->[0]{filename} ), 'fallback entries expose a filename key' );
+
+    my ($quote)   = grep { $_->{filename} eq 'QUOTES_1.CEQ' } @{$files};
+    my ($invoice) = grep { $_->{filename} eq 'INVOICE_2.CEI' } @{$files};
+    my ($subdir)  = grep { $_->{filename} eq 'subdir' } @{$files};
+
+    is( $quote->{type},  'file',     'SIZE succeeding means type "file"' );
+    is( $quote->{size},  100,        'size populated via SIZE probe' );
+    is( $quote->{mtime}, 1700000000, 'mtime populated via MDTM probe' );
+
+    is( $invoice->{type}, 'file', 'SIZE succeeding means type "file"' );
+    is( $invoice->{size}, 200,    'size populated via SIZE probe' );
+
+    is( $subdir->{type},  'directory', 'SIZE failing is treated as a directory' );
+    is( $subdir->{perms}, undef,       'perms stay undef on the NLST fallback path' );
 
     $transport->{connection} = undef;
 
