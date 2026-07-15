@@ -21,6 +21,7 @@ use Modern::Perl;
 use Test::NoWarnings;
 use Test::More tests => 6;
 
+use Koha::AuthorisedValues;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 
@@ -516,7 +517,7 @@ subtest 'accountlines' => sub {
 };
 
 subtest 'summary_session_boundaries' => sub {
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -672,6 +673,63 @@ subtest 'summary_session_boundaries' => sub {
 
         ok( defined $summary,          'Empty cashup has summary' );
         ok( defined $summary->{total}, 'Empty cashup summary has total' );
+    };
+
+    # Test 5: Payments recorded in the same second as a cashup boundary must
+    # still be included. accountlines.date only has second resolution, so a
+    # payment taken immediately before a "quick cashup" (e.g. a self-service
+    # kiosk paying by card and cashing up straight away) can easily land on
+    # the exact same second as the cashup action itself.
+    subtest 'same_second_boundary_collision' => sub {
+        plan tests => 3;
+
+        my $register5 = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+        my $account   = $patron->account;
+
+        unless ( Koha::AuthorisedValues->find( { category => 'PAYMENT_TYPE', authorised_value => 'CARD' } ) ) {
+            Koha::AuthorisedValue->new( { category => 'PAYMENT_TYPE', authorised_value => 'CARD', lib => 'Card' } )
+                ->store;
+        }
+
+        # Establish a prior session boundary safely in the past, so this test
+        # exercises the start/end-both-defined branch rather than the
+        # no-previous-cashup fallback.
+        my $cashup1 = $register5->add_cashup( { manager_id => $manager->id, amount => '0.00' } );
+        $cashup1->_result->update( { timestamp => dt_from_string('2026-01-01 09:00:00') } );
+
+        my $cash_fine = $account->add_debit( { amount => '5.00', type => 'OVERDUE', interface => 'cron' } );
+        $account->pay(
+            {
+                cash_register => $register5->id,
+                amount        => '5.00',
+                credit_type   => 'PAYMENT',
+                payment_type  => 'CASH',
+                lines         => [$cash_fine]
+            }
+        );
+
+        my $card_fine = $account->add_debit( { amount => '0.90', type => 'OVERDUE', interface => 'cron' } );
+        $account->pay(
+            {
+                cash_register => $register5->id,
+                amount        => '0.90',
+                credit_type   => 'PAYMENT',
+                payment_type  => 'CARD',
+                lines         => [$card_fine]
+            }
+        );
+
+        # No delay: the cashup lands in the same second as the payments above.
+        my $cashup2 = $register5->add_cashup( { manager_id => $manager->id, amount => '5.00' } );
+        my $summary = $cashup2->summary;
+
+        is( $summary->{total} + 0, 5.9, 'Total includes payments made in the same second as the cashup' );
+
+        my ($cash_grouped) = grep { $_->{payment_type} eq 'Cash' } @{ $summary->{total_grouped} };
+        my ($card_grouped) = grep { $_->{payment_type} eq 'Card' } @{ $summary->{total_grouped} };
+
+        is( $cash_grouped->{total} + 0, 5,   'Cash total_grouped includes the same-second cash payment' );
+        is( $card_grouped->{total} + 0, 0.9, 'Card total_grouped includes the same-second card payment' );
     };
 
     $schema->storage->txn_rollback;

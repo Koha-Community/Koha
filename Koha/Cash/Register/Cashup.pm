@@ -68,13 +68,11 @@ sub summary {
     my $conditions;
     if ( $session_start && $session_end ) {
 
-        # Complete session: between start and end (exclusive)
-        $conditions = {
-            'date' => {
-                '>' => $session_start,
-                '<' => $session_end
-            }
-        };
+        # Complete session: between start and end (inclusive). accountlines.date
+        # only has second resolution, so a strict > / < comparison here would
+        # silently drop transactions recorded in the same second as a cashup
+        # boundary.
+        $conditions = { 'date' => { '-between' => [ $session_start, $session_end ] } };
     } elsif ($session_end) {
 
         # Session from beginning to end
@@ -242,13 +240,11 @@ sub accountlines {
     my $conditions;
     if ( $session_start && $session_end ) {
 
-        # Complete session: between start and end (exclusive)
-        $conditions = {
-            'date' => {
-                '>' => $session_start,
-                '<' => $session_end
-            }
-        };
+        # Complete session: between start and end (inclusive). accountlines.date
+        # only has second resolution, so a strict > / < comparison here would
+        # silently drop transactions recorded in the same second as a cashup
+        # boundary.
+        $conditions = { 'date' => { '-between' => [ $session_start, $session_end ] } };
     } elsif ($session_end) {
 
         # Session from beginning to end
