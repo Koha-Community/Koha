@@ -136,7 +136,10 @@ subtest 'q DSL: multi-value, like, range' => sub {
     is( scalar @{ $t->tx->res->json }, 2, 'like operator on info matches both biblio rows' );
 
     # Object filter via typed param
-    $t->get_ok("//$userid:$password@/api/v1/action_logs?object=42")->status_is(200);
+    # _match=exact is required: the default 'contains' matching does a LIKE
+    # match even on integer columns, so plain ?object=42 would also match
+    # object values like 420 or 142.
+    $t->get_ok("//$userid:$password@/api/v1/action_logs?object=42&_match=exact")->status_is(200);
     is( scalar @{ $t->tx->res->json }, 2, 'object filter returns rows for object 42' );
 
     # Combined filter
