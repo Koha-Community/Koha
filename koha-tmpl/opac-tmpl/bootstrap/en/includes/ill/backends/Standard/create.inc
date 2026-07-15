@@ -37,7 +37,13 @@
                 [% WRAPPER ill_select_field required = 1 id = 'branchcode' label = t('Destination library') %]
                     <option value=""></option>
                     [% FOREACH branch IN branches %]
-                        [% IF whole.value.other.branchcode && branch.branchcode == whole.value.other.branchcode %]
+                        [% IF whole.value.other.branchcode %]
+                            [% IF branch.branchcode == whole.value.other.branchcode %]
+                                <option value="[% branch.branchcode | html %]" selected="selected"> [% branch.branchname | html %] </option>
+                            [% ELSE %]
+                                <option value="[% branch.branchcode | html %]"> [% branch.branchname | html %] </option>
+                            [% END %]
+                        [% ELSIF logged_in_user && branch.branchcode == logged_in_user.branchcode %]
                             <option value="[% branch.branchcode | html %]" selected="selected"> [% branch.branchname | html %] </option>
                         [% ELSE %]
                             <option value="[% branch.branchcode | html %]"> [% branch.branchname | html %] </option>
