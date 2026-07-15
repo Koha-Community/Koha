@@ -150,5 +150,33 @@
         // <![CDATA[]
         [% INCLUDE "ill/backends/Standard/shared/shared.js" %]
         // ]]>
+
+        const prefix = "ill_request_";
+        const prefill_form_values = [
+            "unauthenticated_first_name",
+            "unauthenticated_last_name",
+            "unauthenticated_email",
+            "branchcode"
+        ];
+
+        $(document).ready(function() {
+            for(const key of prefill_form_values) {
+                const val = sessionStorage.getItem(prefix + key);
+                if(!val) continue;
+                if($("#" + key).val()) continue;
+                $("#" + key).val(val);
+            }
+        });
+
+        $("#create_form").on("submit", function() {
+            for(const key of prefill_form_values) {
+                const val = $("#" + key).val();
+                if(val) {
+                    sessionStorage.setItem(prefix + key, val);
+                } else {
+                    sessionStorage.removeItem(prefix + key);
+                }
+            }
+        });
     </script>
 [% END %]
