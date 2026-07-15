@@ -22,6 +22,7 @@ use Test::Exception;
 use Test::NoWarnings;
 use Test::Warn;
 
+use Net::SFTP::Foreign::Attributes;
 use Koha::File::Transports;
 
 use t::lib::TestBuilder;
@@ -141,7 +142,10 @@ subtest 'change_directory() tests' => sub {
 };
 
 subtest 'list_files() tests' => sub {
-    plan tests => 1;
+    plan tests => 11;
+
+    $schema->storage->txn_begin;
+
     my $transport = $builder->build_object(
         {
             class => 'Koha::File::Transports',
@@ -150,6 +154,64 @@ subtest 'list_files() tests' => sub {
     );
 
     can_ok( $transport, 'list_files' );
+
+    # Net::SFTP::Foreign::ls() returns an arrayref of hashes, each with
+    # filename, longname and an 'a' key holding a
+    # Net::SFTP::Foreign::Attributes object - the fields we need to flatten
+    # out into the same flat hash shape used by the FTP and Local transports.
+    my $file_attrs = Net::SFTP::Foreign::Attributes->new;
+    $file_attrs->set_size(1234);
+    $file_attrs->set_perm( oct('100644') );
+    $file_attrs->set_amtime( 1700000000, 1700000100 );
+
+    my $dir_attrs = Net::SFTP::Foreign::Attributes->new;
+    $dir_attrs->set_perm( oct('040755') );
+
+    my @sftp_ls_output = (
+        {
+            filename => 'QUOTES_413514.CEQ',
+            longname => '-rw-r--r-- 1 kohauser kohauser 1234 Nov 14 22:15 QUOTES_413514.CEQ',
+            a        => $file_attrs,
+        },
+        {
+            filename => 'incoming',
+            longname => 'drwxr-xr-x 2 kohauser kohauser 4096 Nov 14 22:15 incoming',
+            a        => $dir_attrs,
+        },
+    );
+
+    my $undef;
+    my $mock_sftp = Test::MockModule->new('Net::SFTP::Foreign');
+    $mock_sftp->mock( 'ls',     sub { return [@sftp_ls_output]; } );
+    $mock_sftp->mock( 'error',  sub { return $undef; } );
+    $mock_sftp->mock( 'status', sub { return 0; } );
+    $mock_sftp->mock( 'cwd',    sub { return '/incoming/'; } );
+
+    # Pretend we are already connected so list_files() skips (re)connection
+    $transport->{connection}          = bless {}, 'Net::SFTP::Foreign';
+    $transport->{_user_set_directory} = 1;
+
+    my $files = $transport->list_files();
+
+    is( ref($files),      'ARRAY', 'list_files() returns an arrayref' );
+    is( scalar @{$files}, 2,       'both the file and the directory are returned' );
+
+    my ($file) = grep { $_->{filename} eq 'QUOTES_413514.CEQ' } @{$files};
+    my ($dir)  = grep { $_->{filename} eq 'incoming' } @{$files};
+
+    is( ref( $file->{a} ), '',         'nested Attributes object is not present in the returned hashref' );
+    is( $file->{size},     1234,       'size is flattened out of the Attributes object' );
+    is( $file->{mtime},    1700000100, 'mtime is flattened out of the Attributes object' );
+    is( $file->{perms},    '0644',     'perms is flattened out of the Attributes object' );
+    is( $file->{type},     'file',     'regular file gets type "file"' );
+
+    ok( $dir, 'directory entry is present in the listing' );
+    is( $dir->{type},  'directory', 'directory gets type "directory"' );
+    is( $dir->{perms}, '0755',      'directory perms are flattened too' );
+
+    $transport->{connection} = undef;
+
+    $schema->storage->txn_rollback;
 };
 
 1;

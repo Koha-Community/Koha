@@ -19,6 +19,7 @@ use Modern::Perl;
 use File::Copy qw( copy move );
 use File::Spec;
 use IO::Dir;
+use Fcntl qw( S_ISDIR S_ISREG );
 
 use base qw(Koha::File::Transport);
 
@@ -263,6 +264,7 @@ sub change_directory {
 
 Returns an array reference of hashrefs with file information found in the current directory.
 Each hashref contains: filename, longname, size, perms, mtime.
+Each hashref contains: filename, longname, size, perms, mtime, type.
 
 =cut
 
@@ -305,13 +307,19 @@ sub list_files {
     while ( defined( my $file = $dir_handle->read ) ) {
         next if $file =~ /^\.\.?$/;    # Skip . and ..
         my $full_path = File::Spec->catfile( $directory, $file );
-        next unless -f $full_path;     # Only files
 
-        # Get file stats for consistency with SFTP format
-        my @stat  = stat($full_path);
+        # Get file stats for consistency with the SFTP/FTP format
+        my @stat = stat($full_path);
+        next unless @stat;             # Skip entries we can't stat (e.g. broken symlinks)
+
         my $size  = $stat[7] || 0;
         my $mtime = $stat[9] || 0;
         my $mode  = $stat[2] || 0;
+
+        my $type =
+              S_ISDIR($mode) ? 'directory'
+            : S_ISREG($mode) ? 'file'
+            :                  'other';
 
         # Create permissions string (simplified)
         my $perms = sprintf( "%04o", $mode & oct('07777') );
@@ -321,7 +329,8 @@ sub list_files {
             longname => sprintf( "%s %8d %s %s", $perms, $size, scalar( localtime($mtime) ), $file ),
             size     => $size,
             perms    => $perms,
-            mtime    => $mtime
+            mtime    => $mtime,
+            type     => $type,
         };
     }
     $dir_handle->close;
