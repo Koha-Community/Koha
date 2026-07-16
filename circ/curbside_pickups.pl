@@ -47,12 +47,16 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $branchcode = C4::Context->userenv()->{'branch'};
 
 my $policy;
-if ( C4::Context->preference('CurbsidePickup') ) {
+my $curbside_pickup_syspref_disabled = !C4::Context->preference('CurbsidePickup');
+unless ($curbside_pickup_syspref_disabled) {
     $policy = Koha::CurbsidePickupPolicies->find( { branchcode => $branchcode } );
 }
 
 unless ( $policy && $policy->enabled ) {
-    $template->param( disabled_for_branch => 1 );
+    $template->param(
+        disabled_for_branch              => 1,
+        curbside_pickup_syspref_disabled => $curbside_pickup_syspref_disabled,
+    );
     output_html_with_http_headers $input, $cookie, $template->output;
     exit;
 }

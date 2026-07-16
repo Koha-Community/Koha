@@ -453,244 +453,250 @@
 [% END # /BLOCK enabled %]
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("lib/dayjs/plugin/isSameOrAfter.js") | $raw %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
-        dayjs.extend(window.dayjs_plugin_isSameOrAfter);
-    </script>
-    <script nonce="[% Koha.CSPNonce | $raw %]">
-        dayjs.extend(window.dayjs_plugin_customParseFormat);
-    </script>
-    [% INCLUDE 'calendar.inc' %]
-    [% INCLUDE 'datatables.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
-        let pickups = [% To.json(curbside_pickups.unblessed) | $raw %];
-        let policy = [% To.json(policy.unblessed) | $raw %];
-        let opening_slots = [% To.json(policy.opening_slots.unblessed) | $raw %];
+    [% UNLESS disabled_for_branch %]
+        [% Asset.js("lib/dayjs/plugin/isSameOrAfter.js") | $raw %]
+        <script nonce="[% Koha.CSPNonce | $raw %]">
+            dayjs.extend(window.dayjs_plugin_isSameOrAfter);
+        </script>
+        <script nonce="[% Koha.CSPNonce | $raw %]">
+            dayjs.extend(window.dayjs_plugin_customParseFormat);
+        </script>
+        [% INCLUDE 'calendar.inc' %]
+        [% INCLUDE 'datatables.inc' %]
+        <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+            let pickups = [% To.json(curbside_pickups.unblessed) | $raw %];
+            let policy = [% To.json(policy.unblessed) | $raw %];
+            let opening_slots = [% To.json(policy.opening_slots.unblessed) | $raw %];
 
-        let dt_settings = [];
-        dt_settings.push( [% TablesSettings.GetTableSettings('circ', 'curbside_pickups', 'to_be_stagedt', 'json') | $raw %] );
-        dt_settings.push( [% TablesSettings.GetTableSettings('circ', 'curbside_pickups', 'staged_and_readyt', 'json') | $raw %] );
-        dt_settings.push( [% TablesSettings.GetTableSettings('circ', 'curbside_pickups', 'patron_is_outsidet', 'json') | $raw %] );
-        dt_settings.push( [% TablesSettings.GetTableSettings('circ', 'curbside_pickups', 'delivered_todayt', 'json') | $raw %] );
+            let dt_settings = [];
+            dt_settings.push( [% TablesSettings.GetTableSettings('circ', 'curbside_pickups', 'to_be_stagedt', 'json') | $raw %] );
+            dt_settings.push( [% TablesSettings.GetTableSettings('circ', 'curbside_pickups', 'staged_and_readyt', 'json') | $raw %] );
+            dt_settings.push( [% TablesSettings.GetTableSettings('circ', 'curbside_pickups', 'patron_is_outsidet', 'json') | $raw %] );
+            dt_settings.push( [% TablesSettings.GetTableSettings('circ', 'curbside_pickups', 'delivered_todayt', 'json') | $raw %] );
 
-        const tab = "[% tab | html %]";
-    </script>
-    <script nonce="[% Koha.CSPNonce | $raw %]">
-        let existingPickupMoments = [];
-        pickups.forEach(function (pickup) {
-            let scheduled_pickup_datetime = pickup.scheduled_pickup_datetime;
-            let pickupMoment = dayjs(scheduled_pickup_datetime);
+            const tab = "[% tab | html %]";
+        </script>
+        <script nonce="[% Koha.CSPNonce | $raw %]">
+            let existingPickupMoments = [];
+            pickups.forEach(function (pickup) {
+                let scheduled_pickup_datetime = pickup.scheduled_pickup_datetime;
+                let pickupMoment = dayjs(scheduled_pickup_datetime);
 
-            existingPickupMoments.push(pickupMoment);
-        });
-
-        let slots_per_day = {};
-        opening_slots.forEach(function (slot) {
-            let day = slot.day;
-            if (!slots_per_day[day]) slots_per_day[day] = [];
-            slots_per_day[day].push(slot);
-        });
-
-        $(document).ready(function () {
-            $("#schedule-pickup-tab").on("click", function () {
-                $("#find-patron").focus();
+                existingPickupMoments.push(pickupMoment);
             });
 
-            if (tab == "schedule-pickup_panel") {
-                $("#find-patron").focus();
-            }
-
-            const pickup_date = document.querySelector("#pickup_date");
-            if (pickup_date) {
-                const fp = pickup_date._flatpickr;
-                fp.set("disable", [
-                    function (date) {
-                        return !slots_per_day.hasOwnProperty(date.getDay());
-                    },
-                ]);
-            }
-
-            $("#pickup_date").on("change", function () {
-                $("#pickup-times").empty();
-                $("#schedule-pickup-button").prop("disabled", 1);
-
-                var currentDate = $(this).val();
-
-                let selectedDate = dayjs(currentDate);
-
-                let pickupSlots = [];
-                let available_count = 0;
-                let dow = selectedDate.day(); // Sunday is 0 (at least for now)
-                if (!slots_per_day[dow]) {
-                    $("#pickup-times").html("<div>" + _("No pickup time defined for this day.") + "</div>");
-                    return;
-                }
-
-                slots_per_day[dow]
-                    .sort((a, b) => a.start_hour - b.start_hour)
-                    .forEach(function (slot) {
-                        let pickup_interval = policy.pickup_interval;
-                        if (!pickup_interval) {
-                            $("#pickup-times").html("<div>" + _("No pickup time defined for this day.") + "</div>");
-                            return;
-                        }
-
-                        let listStartMoment = selectedDate.hour(slot.start_hour).minute(slot.start_minute);
-                        let listEndMoment = selectedDate.hour(slot.end_hour).minute(slot.end_minute);
-
-                        let keep_going = true;
-                        let now = dayjs();
-
-                        // Initialize pickup slots starting at opening time
-                        let pickupIntervalStartMoment = listStartMoment;
-                        let pickupIntervalEndMoment = listStartMoment.add(pickup_interval, "minutes");
-                        while (keep_going) {
-                            let available = true;
-                            let display_slot = true;
-
-                            if (pickupIntervalStartMoment.isBefore(now)) {
-                                // Slots in the past are unavailable
-                                available = false;
-                                display_slot = false;
-                            }
-
-                            if (pickupIntervalEndMoment.isAfter(listEndMoment)) {
-                                // Slots after the end of pickup times for the day are unavailable
-                                available = false;
-                            }
-
-                            let pickups_scheduled = 0;
-                            existingPickupMoments.forEach(function (pickupMoment) {
-                                // An existing pickup time
-                                if (pickupMoment.isSameOrAfter(pickupIntervalStartMoment) && pickupMoment.isBefore(pickupIntervalEndMoment)) {
-                                    // This calculated pickup is in use by another scheduled pickup
-                                    pickups_scheduled++;
-                                }
-                            });
-
-                            if (pickups_scheduled >= policy.patrons_per_interval) {
-                                available = false;
-                            }
-
-                            if (display_slot) {
-                                pickupSlots.push({
-                                    available: available,
-                                    moment: pickupIntervalStartMoment,
-                                    pickups_scheduled: pickups_scheduled,
-                                });
-                            }
-
-                            if (available) {
-                                available_count++;
-                            }
-
-                            pickupIntervalStartMoment = pickupIntervalEndMoment;
-                            pickupIntervalEndMoment = pickupIntervalStartMoment.add(pickup_interval, "minutes");
-                            if (pickupIntervalEndMoment.isAfter(listEndMoment)) {
-                                // This latest slot is after the end of pickup times for the day, so we can stop
-                                keep_going = false;
-                            }
-                        }
-                    });
-
-                for (let i = 0; i < pickupSlots.length; i++) {
-                    let pickupSlot = pickupSlots[i];
-                    let optText = pickupSlot.moment.format("HH:mm");
-                    let optValue = pickupSlot.moment.format("YYYY-MM-DD HH:mm:ss");
-                    let pickups_scheduled = pickupSlot.pickups_scheduled;
-                    let disabled = pickupSlot.available ? "" : "disabled";
-                    $("#pickup-times").append(`<span class="pickup_time"><input type="radio" id="slot_${i}" name="pickup_time" value="${optValue}" ${disabled} /> <label for="slot_${i}">${optText} (${pickups_scheduled})</label></span>`);
-                }
-
-                $("#pickup-times").show();
-                $("#schedule-pickup-button").prop("disabled", available_count <= 0);
+            let slots_per_day = {};
+            opening_slots.forEach(function (slot) {
+                let day = slot.day;
+                if (!slots_per_day[day]) slots_per_day[day] = [];
+                slots_per_day[day].push(slot);
             });
 
-            $("#create-pickup").on("submit", function () {
-                if (!$("input[type='radio']:checked").length) {
-                    alert(_("Please select a date and a pickup time"));
-                    return false;
-                }
-                return true;
-            });
-
-            if ($("#find-patron").length) {
-                patron_autocomplete($("#find-patron"), {
-                    "on-select-callback": function (event, ui) {
-                        window.location.href = "/cgi-bin/koha/circ/curbside_pickups.pl?op=find-patron&borrowernumber=" + ui.item.patron_id;
-                        return false;
-                    },
+            $(document).ready(function () {
+                $("#schedule-pickup-tab").on("click", function () {
+                    $("#find-patron").focus();
                 });
-            }
 
-            $("#pickup-tabs a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
-                $("#current-tab").val($(this).attr("href").substring(1)); // Remove #
-            });
-            $("#auto_refresh,#refresh_delay").on("change", function () {
-                set_interval_if_needed();
-            });
-
-            set_interval_if_needed();
-
-            let dt_tables = new Array("to_be_stagedt", "staged_and_readyt", "patron_is_outsidet", "delivered_todayt");
-            dt_tables.forEach(function (id, index) {
-                $("#" + id).kohaTable(
-                    {
-                        autoWidth: false,
-                    },
-                    dt_settings[index]
-                );
-            });
-        });
-
-        let refresh_interval_id = 0;
-        let countdown_interval_id = 0;
-        function set_interval(refresh_delay_ms) {
-            clear_intervals();
-            let next_refresh = new Date();
-            next_refresh.setSeconds(next_refresh.getSeconds() + refresh_delay_ms / 1000);
-
-            countdown_interval_id = setInterval(function () {
-                const now = new Date().getTime();
-                const seconds = Math.floor((next_refresh - now + 1) / 1000);
-                if (seconds > 0) {
-                    $("#refresh_info").text(_("Refresh in %s seconds").format(seconds));
-                } else {
-                    $("#refresh_info").text(""); // In case something is going wrong
+                if (tab == "schedule-pickup_panel") {
+                    $("#find-patron").focus();
                 }
-            }, 1000);
 
-            setInterval(function () {
-                $(".refresh-form:visible").submit();
-            }, refresh_delay_ms);
-        }
-        function clear_intervals() {
-            if (refresh_interval_id) {
-                clearInterval(refresh_interval_id);
-                refresh_interval_id = 0;
-            }
-            if (countdown_interval_id) {
-                clearInterval(countdown_interval_id);
-                countdown_interval_id = 0;
-            }
-        }
+                const pickup_date = document.querySelector("#pickup_date");
+                if (pickup_date) {
+                    const fp = pickup_date._flatpickr;
+                    fp.set("disable", [
+                        function (date) {
+                            return !slots_per_day.hasOwnProperty(date.getDay());
+                        },
+                    ]);
+                }
 
-        function set_interval_if_needed() {
-            const refresh_delay = $("#refresh_delay").val();
-            const auto_refresh = $("#auto_refresh").is(":checked");
+                $("#pickup_date").on("change", function () {
+                    $("#pickup-times").empty();
+                    $("#schedule-pickup-button").prop("disabled", 1);
 
-            if (auto_refresh && refresh_delay) {
-                set_interval(refresh_delay * 1000);
-            } else {
+                    var currentDate = $(this).val();
+
+                    let selectedDate = dayjs(currentDate);
+
+                    let pickupSlots = [];
+                    let available_count = 0;
+                    let dow = selectedDate.day(); // Sunday is 0 (at least for now)
+                    if (!slots_per_day[dow]) {
+                        $("#pickup-times").html("<div>" + _("No pickup time defined for this day.") + "</div>");
+                        return;
+                    }
+
+                    slots_per_day[dow]
+                        .sort((a, b) => a.start_hour - b.start_hour)
+                        .forEach(function (slot) {
+                            let pickup_interval = policy.pickup_interval;
+                            if (!pickup_interval) {
+                                $("#pickup-times").html("<div>" + _("No pickup time defined for this day.") + "</div>");
+                                return;
+                            }
+
+                            let listStartMoment = selectedDate.hour(slot.start_hour).minute(slot.start_minute);
+                            let listEndMoment = selectedDate.hour(slot.end_hour).minute(slot.end_minute);
+
+                            let keep_going = true;
+                            let now = dayjs();
+
+                            // Initialize pickup slots starting at opening time
+                            let pickupIntervalStartMoment = listStartMoment;
+                            let pickupIntervalEndMoment = listStartMoment.add(pickup_interval, "minutes");
+                            while (keep_going) {
+                                let available = true;
+                                let display_slot = true;
+
+                                if (pickupIntervalStartMoment.isBefore(now)) {
+                                    // Slots in the past are unavailable
+                                    available = false;
+                                    display_slot = false;
+                                }
+
+                                if (pickupIntervalEndMoment.isAfter(listEndMoment)) {
+                                    // Slots after the end of pickup times for the day are unavailable
+                                    available = false;
+                                }
+
+                                let pickups_scheduled = 0;
+                                existingPickupMoments.forEach(function (pickupMoment) {
+                                    // An existing pickup time
+                                    if (pickupMoment.isSameOrAfter(pickupIntervalStartMoment) && pickupMoment.isBefore(pickupIntervalEndMoment)) {
+                                        // This calculated pickup is in use by another scheduled pickup
+                                        pickups_scheduled++;
+                                    }
+                                });
+
+                                if (pickups_scheduled >= policy.patrons_per_interval) {
+                                    available = false;
+                                }
+
+                                if (display_slot) {
+                                    pickupSlots.push({
+                                        available: available,
+                                        moment: pickupIntervalStartMoment,
+                                        pickups_scheduled: pickups_scheduled,
+                                    });
+                                }
+
+                                if (available) {
+                                    available_count++;
+                                }
+
+                                pickupIntervalStartMoment = pickupIntervalEndMoment;
+                                pickupIntervalEndMoment = pickupIntervalStartMoment.add(pickup_interval, "minutes");
+                                if (pickupIntervalEndMoment.isAfter(listEndMoment)) {
+                                    // This latest slot is after the end of pickup times for the day, so we can stop
+                                    keep_going = false;
+                                }
+                            }
+                        });
+
+                    for (let i = 0; i < pickupSlots.length; i++) {
+                        let pickupSlot = pickupSlots[i];
+                        let optText = pickupSlot.moment.format("HH:mm");
+                        let optValue = pickupSlot.moment.format("YYYY-MM-DD HH:mm:ss");
+                        let pickups_scheduled = pickupSlot.pickups_scheduled;
+                        let disabled = pickupSlot.available ? "" : "disabled";
+                        $("#pickup-times").append(`<span class="pickup_time"><input type="radio" id="slot_${i}" name="pickup_time" value="${optValue}" ${disabled} /> <label for="slot_${i}">${optText} (${pickups_scheduled})</label></span>`);
+                    }
+
+                    $("#pickup-times").show();
+                    $("#schedule-pickup-button").prop("disabled", available_count <= 0);
+                });
+
+                $("#create-pickup").on("submit", function () {
+                    if (!$("input[type='radio']:checked").length) {
+                        alert(_("Please select a date and a pickup time"));
+                        return false;
+                    }
+                    return true;
+                });
+
+                if ($("#find-patron").length) {
+                    patron_autocomplete($("#find-patron"), {
+                        "on-select-callback": function (event, ui) {
+                            window.location.href = "/cgi-bin/koha/circ/curbside_pickups.pl?op=find-patron&borrowernumber=" + ui.item.patron_id;
+                            return false;
+                        },
+                    });
+                }
+
+                $("#pickup-tabs a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
+                    $("#current-tab").val($(this).attr("href").substring(1)); // Remove #
+                });
+                $("#auto_refresh,#refresh_delay").on("change", function () {
+                    set_interval_if_needed();
+                });
+
+                set_interval_if_needed();
+
+                let dt_tables = new Array("to_be_stagedt", "staged_and_readyt", "patron_is_outsidet", "delivered_todayt");
+                dt_tables.forEach(function (id, index) {
+                    $("#" + id).kohaTable(
+                        {
+                            autoWidth: false,
+                        },
+                        dt_settings[index]
+                    );
+                });
+            });
+
+            let refresh_interval_id = 0;
+            let countdown_interval_id = 0;
+            function set_interval(refresh_delay_ms) {
                 clear_intervals();
+                let next_refresh = new Date();
+                next_refresh.setSeconds(next_refresh.getSeconds() + refresh_delay_ms / 1000);
+
+                countdown_interval_id = setInterval(function () {
+                    const now = new Date().getTime();
+                    const seconds = Math.floor((next_refresh - now + 1) / 1000);
+                    if (seconds > 0) {
+                        $("#refresh_info").text(_("Refresh in %s seconds").format(seconds));
+                    } else {
+                        $("#refresh_info").text(""); // In case something is going wrong
+                    }
+                }, 1000);
+
+                setInterval(function () {
+                    $(".refresh-form:visible").submit();
+                }, refresh_delay_ms);
             }
-        }
-    </script>
+            function clear_intervals() {
+                if (refresh_interval_id) {
+                    clearInterval(refresh_interval_id);
+                    refresh_interval_id = 0;
+                }
+                if (countdown_interval_id) {
+                    clearInterval(countdown_interval_id);
+                    countdown_interval_id = 0;
+                }
+            }
+
+            function set_interval_if_needed() {
+                const refresh_delay = $("#refresh_delay").val();
+                const auto_refresh = $("#auto_refresh").is(":checked");
+
+                if (auto_refresh && refresh_delay) {
+                    set_interval(refresh_delay * 1000);
+                } else {
+                    clear_intervals();
+                }
+            }
+        </script>
+    [% END # /UNLESS disabled_for_branch %]
 [% END %]
 
 [% BLOCK curbside_pickups_disabled %]
     <h1>Curbside pickups</h1>
-    <div class="alert alert-info">Curbside pickups are not enabled. Enable the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=CurbsidePickup">CurbsidePickup</a> system preference to use this feature.</div>
+    [% IF curbside_pickup_syspref_disabled %]
+        <div class="alert alert-info">Curbside pickups are not enabled. Enable the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=CurbsidePickup">CurbsidePickup</a> system preference to use this feature.</div>
+    [% ELSE %]
+        <div class="alert alert-info">Curbside pickups are not enabled for your library. Configure a <a href="/cgi-bin/koha/admin/curbside_pickup.pl">curbside pickup policy</a> for this library to use this feature.</div>
+    [% END %]
 [% END # /BLOCK disabled %]
 
 [% SET aside = Koha.Preference('CircSidebar') ? 'circ-nav' : '' %]
