@@ -165,7 +165,7 @@ sub _change_directory {
             type    => 'success',
             payload => {
                 directory => $remote_directory,
-                pwd       => $self->{connection}->pwd
+                pwd       => $self->_current_directory
             }
         }
     );
@@ -267,7 +267,7 @@ sub _list_files {
             type    => 'success',
             payload => {
                 count => scalar @file_list,
-                pwd   => $self->{connection}->pwd
+                pwd   => $self->_current_directory
             }
         }
     );
@@ -382,7 +382,7 @@ Internal method to check if transport is currently connected.
 sub _is_connected {
     my ($self) = @_;
 
-    return $self->{connection} && $self->{connection}->pwd();
+    return $self->{connection} && $self->_current_directory();
 }
 
 =head3 _abort_operation
