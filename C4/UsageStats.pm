@@ -241,6 +241,7 @@ sub _shared_preferences {
         AmazonCoverImages
         OPACAmazonCoverImages
         Babeltheque
+        EnableZotero
         GoogleJackets
         HTML5MediaEnabled
         LibraryThingForLibrariesEnabled
