@@ -104,7 +104,7 @@ sub process {
     };
 
     try {
-        my ($results) = Koha::Items->search( { itemnumber => \@record_ids } )->batch_update(
+        my ($results) = Koha::Items->search( { itemnumber => { -in => \@record_ids } } )->batch_update(
             {
                 regex_mod                         => $regex_mod,
                 new_values                        => $new_values,

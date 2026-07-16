@@ -716,7 +716,7 @@ sub filter_by_safe_to_delete {
         push @ids, $patron->borrowernumber
             if $patron->safe_to_delete;
     }
-    return Koha::Patrons->search( { borrowernumber => \@ids } );
+    return Koha::Patrons->search( { borrowernumber => { -in => \@ids } } );
 }
 
 =head3 extended_attributes_config
