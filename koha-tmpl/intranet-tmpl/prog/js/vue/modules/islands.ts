@@ -2,9 +2,6 @@ import { Component, defineCustomElement } from "vue";
 export * from "vue";
 import { createPinia } from "pinia";
 import { $__ } from "../i18n";
-import { useMainStore } from "../stores/main";
-import { useNavigationStore } from "../stores/navigation";
-import { useVendorStore } from "../stores/vendors";
 
 /**
  * Represents a web component with an import function and optional configuration.
@@ -19,7 +16,20 @@ export type WebComponentDynamicImport = {
 };
 
 /**
+ * Pinia store definitions available to islands, keyed by the name components
+ * reference in their config.stores list.
+ * @typedef {Object.<string, function(Pinia): Object>} IslandStoreDefinitions
+ */
+export type IslandStoreDefinitions = Record<
+    string,
+    (pinia: ReturnType<typeof createPinia>) => unknown
+>;
+
+/**
  * A registry for Vue components.
+ *
+ * Starts empty; the per-application entry points (islands-intranet.ts,
+ * islands-opac.ts) and Koha plugins populate it via registerIsland().
  * @type {Map<string, WebComponentDynamicImport>}
  * @property {string} key - The name of the component.
  * @property {WebComponentDynamicImport} value - The configuration for the component. Includes the import function and optional configuration.
@@ -42,66 +52,7 @@ export type WebComponentDynamicImport = {
  * ],
  */
 export const componentRegistry: Map<string, WebComponentDynamicImport> =
-    new Map([
-        [
-            "acquisitions-menu",
-            {
-                importFn: async () => {
-                    const module = await import(
-                        /* webpackChunkName: "acquisitions-menu" */
-                        "../components/Islands/AcquisitionsMenu.vue"
-                    );
-                    return module.default;
-                },
-                config: {
-                    stores: ["vendorStore", "navigationStore"],
-                },
-            },
-        ],
-        [
-            "vendor-menu",
-            {
-                importFn: async () => {
-                    const module = await import(
-                        /* webpackChunkName: "vendor-menu" */
-                        "../components/Islands/VendorMenu.vue"
-                    );
-                    return module.default;
-                },
-                config: {
-                    stores: ["vendorStore", "navigationStore"],
-                },
-            },
-        ],
-        [
-            "admin-menu",
-            {
-                importFn: async () => {
-                    const module = await import(
-                        /* webpackChunkName: "admin-menu" */
-                        "../components/Islands/AdminMenu.vue"
-                    );
-                    return module.default;
-                },
-                config: {
-                    stores: [],
-                },
-            },
-        ],
-        [
-            "patron-self-renewal",
-            {
-                importFn: async () => {
-                    const module = await import(
-                        /* webpackChunkName: "patron-self-renewal" */
-                        "../components/Islands/PatronSelfRenewal/PatronSelfRenewal.vue"
-                    );
-                    return module.default;
-                },
-                config: {},
-            },
-        ],
-    ]);
+    new Map();
 
 /**
  * Registers an island component for hydration.
@@ -143,16 +94,22 @@ export function registerIsland(
 
 /**
  * Hydrates custom elements by scanning the document and loading only necessary components.
+ * @param {IslandStoreDefinitions} [storeDefinitions] - The stores islands on this page may request via config.stores.
  * @returns {void}
  */
-export function hydrate(): void {
+export function hydrate(storeDefinitions: IslandStoreDefinitions = {}): void {
     window.requestIdleCallback(async () => {
+        if (componentRegistry.size === 0) {
+            return;
+        }
+
         const pinia = createPinia();
-        const storesMatrix = {
-            mainStore: useMainStore(pinia),
-            navigationStore: useNavigationStore(pinia),
-            vendorStore: useVendorStore(pinia),
-        };
+        const storesMatrix = Object.fromEntries(
+            Object.entries(storeDefinitions).map(([name, useStore]) => [
+                name,
+                useStore(pinia),
+            ])
+        );
 
         const islandTagNames = Array.from(componentRegistry.keys()).join(", ");
         const requestedIslands = new Set(
@@ -202,8 +159,4 @@ export function hydrate(): void {
             );
         });
     });
-}
-
-if (parseInt(document?.currentScript?.getAttribute("init") ?? "0", 10)) {
-    hydrate();
 }
