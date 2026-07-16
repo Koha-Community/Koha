@@ -118,6 +118,28 @@ sub _connect {
     return 1;
 }
 
+=head3 _working_directory
+
+    my $directory = $self->_working_directory('download_directory');
+
+Returns the directory a Local operation should act in: the directory most
+recently set via change_directory(), falling back to the given configured
+directory field (C<download_directory> or C<upload_directory>).
+
+Returns undef if neither is set. Callers must not fall back to '.' -
+that's the Koha process's own working directory, which has no relation to
+any configured transport location and would silently list/act on whatever
+directory the process happens to be running in (e.g. the Koha install
+root) instead of failing cleanly.
+
+=cut
+
+sub _working_directory {
+    my ( $self, $configured_field ) = @_;
+
+    return $self->{current_directory} || $self->$configured_field;
+}
+
 =head3 _upload_file
 
 Internal method that performs the local file system upload operation.
@@ -130,7 +152,18 @@ sub _upload_file {
     my ( $self, $local_file, $remote_file ) = @_;
     my $operation = "upload";
 
-    my $upload_dir  = $self->{current_directory} || $self->upload_directory || '.';
+    my $upload_dir = $self->_working_directory('upload_directory');
+    unless ( defined $upload_dir ) {
+        $self->add_message(
+            {
+                message => $operation,
+                type    => 'error',
+                payload => { error => 'No upload directory configured or set via change_directory()' }
+            }
+        );
+        return;
+    }
+
     my $destination = File::Spec->catfile( $upload_dir, $remote_file );
 
     unless ( copy( $local_file, $destination ) ) {
@@ -170,8 +203,19 @@ sub _download_file {
     my ( $self, $remote_file, $local_file ) = @_;
     my $operation = 'download';
 
-    my $download_dir = $self->{current_directory} || $self->download_directory || '.';
-    my $source       = File::Spec->catfile( $download_dir, $remote_file );
+    my $download_dir = $self->_working_directory('download_directory');
+    unless ( defined $download_dir ) {
+        $self->add_message(
+            {
+                message => $operation,
+                type    => 'error',
+                payload => { error => 'No download directory configured or set via change_directory()' }
+            }
+        );
+        return;
+    }
+
+    my $source = File::Spec->catfile( $download_dir, $remote_file );
 
     unless ( -f $source ) {
         $self->add_message(
@@ -282,7 +326,17 @@ sub _list_files {
     my ($self) = @_;
     my $operation = "list";
 
-    my $directory = $self->{current_directory} || $self->download_directory || '.';
+    my $directory = $self->_working_directory('download_directory');
+    unless ( defined $directory ) {
+        $self->add_message(
+            {
+                message => $operation,
+                type    => 'error',
+                payload => { error => 'No download directory configured or set via change_directory()' }
+            }
+        );
+        return;
+    }
 
     unless ( -d $directory ) {
         $self->add_message(
@@ -371,9 +425,20 @@ sub _rename_file {
     my ( $self, $old_name, $new_name ) = @_;
     my $operation = "rename";
 
-    my $directory = $self->{current_directory} || $self->download_directory || '.';
-    my $old_path  = File::Spec->catfile( $directory, $old_name );
-    my $new_path  = File::Spec->catfile( $directory, $new_name );
+    my $directory = $self->_working_directory('download_directory');
+    unless ( defined $directory ) {
+        $self->add_message(
+            {
+                message => $operation,
+                type    => 'error',
+                payload => { error => 'No download directory configured or set via change_directory()' }
+            }
+        );
+        return;
+    }
+
+    my $old_path = File::Spec->catfile( $directory, $old_name );
+    my $new_path = File::Spec->catfile( $directory, $new_name );
 
     unless ( -f $old_path ) {
         $self->add_message(
