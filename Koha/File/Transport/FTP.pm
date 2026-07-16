@@ -232,7 +232,9 @@ sub _list_files {
             my $size = $self->{connection}->size($name);
             push @file_list, {
                 filename => $name,
+                longname => undef,
                 size     => $size,
+                perms    => undef,
                 mtime    => $self->{connection}->mdtm($name),
                 type     => defined $size ? 'file' : 'directory',
             };

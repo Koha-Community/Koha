@@ -211,7 +211,7 @@ subtest 'list_files() MLSD tests' => sub {
 };
 
 subtest 'list_files() NLST fallback tests' => sub {
-    plan tests => 10;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
@@ -276,6 +276,11 @@ subtest 'list_files() NLST fallback tests' => sub {
 
     is( $subdir->{type},  'directory', 'SIZE failing is treated as a directory' );
     is( $subdir->{perms}, undef,       'perms stay undef on the NLST fallback path' );
+
+    ok(
+        exists( $quote->{longname} ) && exists( $quote->{perms} ),
+        'longname and perms keys are present (as undef) on the NLST fallback path, matching the MLSD/SFTP/Local shape'
+    );
 
     $transport->{connection} = undef;
 
