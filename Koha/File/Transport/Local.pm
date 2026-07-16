@@ -254,6 +254,22 @@ sub _change_directory {
     return 1;
 }
 
+=head3 _current_directory
+
+    my $path = $self->_current_directory;
+
+Internal method that returns the local transport's current working
+directory: the directory most recently set via change_directory(), falling
+back to the configured download_directory, then to '.'.
+
+=cut
+
+sub _current_directory {
+    my ($self) = @_;
+
+    return $self->{current_directory} || $self->download_directory || '.';
+}
+
 =head3 _list_files
 
 Internal method that performs the local file system file listing operation.

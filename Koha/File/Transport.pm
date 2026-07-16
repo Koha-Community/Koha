@@ -244,6 +244,45 @@ sub _is_connected {
     die "Subclass must implement _is_connected";
 }
 
+=head3 current_directory
+
+    my $path = $transport->current_directory();
+
+Returns the transport's current remote working directory as a plain string,
+without side effects. Automatically establishes a connection if needed.
+
+B<Note:> This is a read-only query. It must never navigate the connection -
+unlike some underlying libraries' own C<cwd()>/C<pwd()> methods, which differ
+in meaning between backends (see subclass implementations).
+
+B<Returns:> The current directory path on success, undef on failure. Check
+object_messages() for details.
+
+=cut
+
+sub current_directory {
+    my ($self) = @_;
+
+    return unless $self->_ensure_connected();
+
+    return $self->_current_directory();
+}
+
+=head3 _current_directory
+
+    my $path = $transport->_current_directory();
+
+Internal method that returns the protocol-specific current working
+directory. Must be implemented by subclasses. Called by current_directory()
+after connection verification.
+
+=cut
+
+sub _current_directory {
+    my ($self) = @_;
+    die "Subclass must implement _current_directory";
+}
+
 =head3 _auto_change_directory
 
     $transport->_auto_change_directory($dir_type, $custom_path);

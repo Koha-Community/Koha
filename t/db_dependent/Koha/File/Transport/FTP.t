@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::Exception;
 use Test::NoWarnings;
 use Test::Warn;
@@ -133,6 +133,37 @@ subtest 'change_directory() tests' => sub {
     );
 
     can_ok( $transport, 'change_directory' );
+};
+
+subtest 'current_directory() tests' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $transport = $builder->build_object(
+        {
+            class => 'Koha::File::Transports',
+            value => { transport => 'ftp', password => 'testpass' }
+        }
+    );
+
+    can_ok( $transport, 'current_directory' );
+
+    # Net::FTP's own cwd() is a mutator (no-arg means "change to /" and
+    # returns a boolean) - current_directory() must read pwd(), the real
+    # read-only accessor, never cwd().
+    my $mock_ftp = Test::MockModule->new('Net::FTP');
+    $mock_ftp->mock( 'pwd', sub { return '/incoming/'; } );
+    $mock_ftp->mock( 'cwd', sub { die 'cwd() must not be called by current_directory()'; } );
+
+    $transport->{connection}          = bless {}, 'Net::FTP';
+    $transport->{_user_set_directory} = 1;
+
+    is( $transport->current_directory, '/incoming/', 'current_directory() reads pwd(), not cwd()' );
+
+    $transport->{connection} = undef;
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'list_files() MLSD tests' => sub {
