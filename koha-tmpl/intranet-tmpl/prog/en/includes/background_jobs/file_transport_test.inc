@@ -14,7 +14,7 @@
     [%- CASE 'list' -%]
         <span>List files</span> [% status | html %]
     [%- CASE 'change_directory' -%]
-        <span>Change directory ([% operation.detail.directory | html %][% operation.detail.operation_params | html %])</span> [% status | html %]
+        <span>Change directory ([% operation.detail.path | html %])</span> [% status | html %]
     [%- CASE -%]
         <span>[% operation.code | html %]</span> [% status | html %]
     [%- END -%]

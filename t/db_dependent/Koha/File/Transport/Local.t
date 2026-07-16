@@ -17,10 +17,11 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::NoWarnings;
 use File::Temp qw( tempdir );
 use File::Spec;
+use JSON qw( decode_json );
 
 use Koha::File::Transports;
 
@@ -178,6 +179,44 @@ subtest 'an unconfigured directory fails cleanly instead of falling back to "." 
     like(
         $download_error->payload->{error}, qr/No (?:download|upload) directory configured/,
         'download_file() also records a clear "not configured" error rather than falling back to "."'
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest '_abort_operation persists status consistently (bug 42656 QA follow-up)' => sub {
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $transport = $builder->build_object(
+        {
+            class => 'Koha::File::Transports',
+            value => { transport => 'local' }
+        }
+    );
+
+    # Before this fix, Local never persisted a status snapshot on error at
+    # all (it had no _abort_operation), unlike SFTP.
+    my $result = $transport->change_directory('/this/does/not/exist');
+    is( $result, undef, 'change_directory() returns undef for a missing directory' );
+
+    my ($error) = grep { $_->type eq 'error' } @{ $transport->object_messages };
+    ok( $error, 'an error message was recorded' );
+    is(
+        $error->payload->{path}, '/this/does/not/exist',
+        'error payload uses the "path" key, matching FTP and SFTP'
+    );
+
+    my $reloaded         = Koha::File::Transports->find( $transport->id );
+    my $persisted_status = decode_json( $reloaded->status );
+    is(
+        $persisted_status->{status}, 'errors',
+        'status column now persists an "errors" status after a failed operation, matching FTP and SFTP'
+    );
+    is(
+        $persisted_status->{operations}[0]{code}, 'change_directory',
+        'persisted status records which operation failed'
     );
 
     $schema->storage->txn_rollback;

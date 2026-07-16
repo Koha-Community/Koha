@@ -17,11 +17,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::Exception;
 use Test::NoWarnings;
 use Test::Warn;
 use Test::MockModule;
+use JSON qw( decode_json );
 
 use Koha::File::Transports;
 
@@ -160,6 +161,56 @@ subtest 'current_directory() tests' => sub {
     $transport->{_user_set_directory} = 1;
 
     is( $transport->current_directory, '/incoming/', 'current_directory() reads pwd(), not cwd()' );
+
+    $transport->{connection} = undef;
+
+    $schema->storage->txn_rollback;
+};
+
+subtest '_abort_operation persists status consistently (bug 42656 QA follow-up)' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $transport = $builder->build_object(
+        {
+            class => 'Koha::File::Transports',
+            value => { transport => 'ftp', password => 'testpass' }
+        }
+    );
+
+    my $mock_ftp = Test::MockModule->new('Net::FTP');
+    $mock_ftp->mock( 'cwd',     sub { return 0; } );                     # simulate a failed CWD
+    $mock_ftp->mock( 'abort',   sub { return 1; } );
+    $mock_ftp->mock( 'status',  sub { return 0; } );
+    $mock_ftp->mock( 'message', sub { return 'No such directory'; } );
+
+    $transport->{connection}          = bless {}, 'Net::FTP';
+    $transport->{_user_set_directory} = 1;
+
+    my $result = $transport->change_directory('/missing');
+    is( $result, undef, 'change_directory() returns undef on failure' );
+
+    my ($error) = grep { $_->type eq 'error' } @{ $transport->object_messages };
+    ok( $error, 'an error message was recorded' );
+    is( $error->payload->{path}, '/missing', 'error payload uses the "path" key, matching SFTP and Local' );
+
+    # Before this fix, only SFTP persisted a status snapshot on a failed
+    # operation; FTP never touched the status column outside test_connection().
+    my $reloaded         = Koha::File::Transports->find( $transport->id );
+    my $persisted_status = decode_json( $reloaded->status );
+    is(
+        $persisted_status->{status}, 'errors',
+        'status column now persists an "errors" status after a failed operation, not only after test_connection()'
+    );
+    is(
+        $persisted_status->{operations}[0]{code}, 'change_directory',
+        'persisted status records which operation failed'
+    );
+    is(
+        $persisted_status->{operations}[0]{detail}{path}, '/missing',
+        'persisted status detail also uses the "path" key'
+    );
 
     $transport->{connection} = undef;
 
