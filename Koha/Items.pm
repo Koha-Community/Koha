@@ -353,26 +353,28 @@ Returns a new resultset, containing only those items that are currently availabl
 sub filter_by_available {
     my ($self) = @_;
 
-    my @all_itemnumbers = $self->get_column('itemnumber');
-    my @not_available_itemnumbers;
-    push @not_available_itemnumbers, $self->filter_by_checked_out->get_column('itemnumber');
-    push @not_available_itemnumbers, $self->filter_by_in_transit->get_column('itemnumber');
-
-    push @not_available_itemnumbers, $self->filter_by_has_holds->get_column('itemnumber');
-    push @not_available_itemnumbers, $self->filter_by_has_recalls->get_column('itemnumber');
-
     my @item_types_notforloan = Koha::ItemTypes->search( { notforloan => { '!=' => 0 } } )->get_column('itemtype');
-    return Koha::Items->search(
+    my $available             = $self->search(
         {
-            'me.itemnumber' => [ array_minus @all_itemnumbers, @not_available_itemnumbers ],
-            itemlost        => 0,
-            withdrawn       => 0,
-            damaged         => 0,
-            notforloan      => 0,
-            restricted      => [ { '!=' => 0 }, undef ],
-            'me.itype'      => { -not_in => \@item_types_notforloan },
+            itemlost   => 0,
+            withdrawn  => 0,
+            damaged    => 0,
+            notforloan => 0,
+            restricted => [ { '!=' => 0 }, undef ],
+            'me.itype' => { -not_in => \@item_types_notforloan },
         }
     );
+
+    for my $not_available (
+        $self->filter_by_checked_out, $self->filter_by_in_transit,
+        $self->filter_by_has_holds,   $self->filter_by_has_recalls
+        )
+    {
+        $available = $available->search(
+            { 'me.itemnumber' => { -not_in => $not_available->_resultset->get_column('itemnumber')->as_query } } );
+    }
+
+    return $available;
 }
 
 =head3 move_to_biblio
