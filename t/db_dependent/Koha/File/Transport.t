@@ -17,10 +17,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Exception;
 use Test::NoWarnings;
 use Test::Warn;
+use Test::MockModule;
+use JSON qw( decode_json );
 
 use Koha::File::Transports;
 
@@ -167,6 +169,55 @@ subtest 'plain_text_key() tests' => sub {
 
     isnt( $transport_plain_text_key, $transport->key_file, 'Key file and key file hash shouldn\'t match' );
     is( $transport_plain_text_key, "test321\n", 'Key file should be in plain text' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest '_record_error() tests' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my @warnings;
+    my $logger_module = Test::MockModule->new('Koha::Logger');
+    $logger_module->mock(
+        'warn',
+        sub {
+            shift;
+            push @warnings, "@_";
+        }
+    );
+
+    my $transport = $builder->build_object(
+        {
+            class => 'Koha::File::Transports',
+            value => { transport => 'local' }
+        }
+    );
+
+    # Simulate a prior successful step before the failure, as would happen
+    # during a real multi-step operation (e.g. an EDI download loop
+    # downloading several files before one fails).
+    $transport->add_message( { message => 'connection', type => 'success', payload => { status => 'connected' } } );
+
+    $transport->_record_error( 'download', { error => 'File not found', path => '/missing/file.txt' } );
+
+    my $reloaded         = Koha::File::Transports->find( $transport->id );
+    my $persisted_status = decode_json( $reloaded->status );
+
+    is( $persisted_status->{status}, 'errors', 'status is "errors"' );
+    is(
+        scalar @{ $persisted_status->{operations} }, 2,
+        'the full trace is persisted: the prior success plus the failure, not just the failure alone'
+    );
+    is( $persisted_status->{operations}[0]{status}, 'success',  'the prior successful operation is recorded first' );
+    is( $persisted_status->{operations}[1]{status}, 'error',    'the failing operation is recorded last' );
+    is( $persisted_status->{operations}[1]{code},   'download', 'the failing operation code is recorded correctly' );
+
+    ok(
+        ( grep { /download/ && /File not found/ } @warnings ),
+        '_record_error() logs the failure, including the operation and error, via Koha::Logger at warn level'
+    );
 
     $schema->storage->txn_rollback;
 };

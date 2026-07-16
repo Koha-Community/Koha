@@ -44,62 +44,46 @@ sub _connect {
     # Check download directory if configured
     if ( my $download_dir = $self->download_directory ) {
         unless ( -d $download_dir ) {
-            $self->add_message(
+            return $self->_abort_operation(
+                $operation,
                 {
-                    message => $operation,
-                    type    => 'error',
-                    payload => {
-                        error => "Download directory does not exist: $download_dir",
-                        path  => $download_dir
-                    }
+                    error => "Download directory does not exist: $download_dir",
+                    path  => $download_dir
                 }
             );
-            return;
         }
 
         unless ( -r $download_dir ) {
-            $self->add_message(
+            return $self->_abort_operation(
+                $operation,
                 {
-                    message => $operation,
-                    type    => 'error',
-                    payload => {
-                        error => "Download directory is not readable: $download_dir",
-                        path  => $download_dir
-                    }
+                    error => "Download directory is not readable: $download_dir",
+                    path  => $download_dir
                 }
             );
-            return;
         }
     }
 
     # Check upload directory if configured
     if ( my $upload_dir = $self->upload_directory ) {
         unless ( -d $upload_dir ) {
-            $self->add_message(
+            return $self->_abort_operation(
+                $operation,
                 {
-                    message => $operation,
-                    type    => 'error',
-                    payload => {
-                        error => "Upload directory does not exist: $upload_dir",
-                        path  => $upload_dir
-                    }
+                    error => "Upload directory does not exist: $upload_dir",
+                    path  => $upload_dir
                 }
             );
-            return;
         }
 
         unless ( -w $upload_dir ) {
-            $self->add_message(
+            return $self->_abort_operation(
+                $operation,
                 {
-                    message => $operation,
-                    type    => 'error',
-                    payload => {
-                        error => "Upload directory is not writable: $upload_dir",
-                        path  => $upload_dir
-                    }
+                    error => "Upload directory is not writable: $upload_dir",
+                    path  => $upload_dir
                 }
             );
-            return;
         }
     }
 
@@ -167,17 +151,13 @@ sub _upload_file {
     my $destination = File::Spec->catfile( $upload_dir, $remote_file );
 
     unless ( copy( $local_file, $destination ) ) {
-        $self->add_message(
+        return $self->_abort_operation(
+            $operation,
             {
-                message => $operation,
-                type    => 'error',
-                payload => {
-                    error => $!,
-                    path  => $destination
-                }
+                error => $!,
+                path  => $destination
             }
         );
-        return;
     }
 
     $self->add_message(
@@ -218,31 +198,23 @@ sub _download_file {
     my $source = File::Spec->catfile( $download_dir, $remote_file );
 
     unless ( -f $source ) {
-        $self->add_message(
+        return $self->_abort_operation(
+            $operation,
             {
-                message => $operation,
-                type    => 'error',
-                payload => {
-                    error => "File not found: $source",
-                    path  => $source
-                }
+                error => "File not found: $source",
+                path  => $source
             }
         );
-        return;
     }
 
     unless ( copy( $source, $local_file ) ) {
-        $self->add_message(
+        return $self->_abort_operation(
+            $operation,
             {
-                message => $operation,
-                type    => 'error',
-                payload => {
-                    error => $!,
-                    path  => $source
-                }
+                error => $!,
+                path  => $source
             }
         );
-        return;
     }
 
     $self->add_message(
@@ -272,17 +244,13 @@ sub _change_directory {
 
     # For local file transport, we just track the current directory
     if ( $remote_directory && !-d $remote_directory ) {
-        $self->add_message(
+        return $self->_abort_operation(
+            $operation,
             {
-                message => $operation,
-                type    => 'error',
-                payload => {
-                    error => "Directory not found: $remote_directory",
-                    path  => $remote_directory
-                }
+                error => "Directory not found: $remote_directory",
+                path  => $remote_directory
             }
         );
-        return;
     }
 
     $self->{current_directory} = $remote_directory;
@@ -339,32 +307,24 @@ sub _list_files {
     }
 
     unless ( -d $directory ) {
-        $self->add_message(
+        return $self->_abort_operation(
+            $operation,
             {
-                message => $operation,
-                type    => 'error',
-                payload => {
-                    error => "Directory not found: $directory",
-                    path  => $directory
-                }
+                error => "Directory not found: $directory",
+                path  => $directory
             }
         );
-        return;
     }
 
     my $dir_handle = IO::Dir->new($directory);
     unless ($dir_handle) {
-        $self->add_message(
+        return $self->_abort_operation(
+            $operation,
             {
-                message => $operation,
-                type    => 'error',
-                payload => {
-                    error => "Cannot open directory: $!",
-                    path  => $directory
-                }
+                error => "Cannot open directory: $!",
+                path  => $directory
             }
         );
-        return;
     }
 
     my @files;
@@ -441,31 +401,23 @@ sub _rename_file {
     my $new_path = File::Spec->catfile( $directory, $new_name );
 
     unless ( -f $old_path ) {
-        $self->add_message(
+        return $self->_abort_operation(
+            $operation,
             {
-                message => $operation,
-                type    => 'error',
-                payload => {
-                    error => "File not found: $old_path",
-                    path  => $old_path
-                }
+                error => "File not found: $old_path",
+                path  => $old_path
             }
         );
-        return;
     }
 
     unless ( move( $old_path, $new_path ) ) {
-        $self->add_message(
+        return $self->_abort_operation(
+            $operation,
             {
-                message => $operation,
-                type    => 'error',
-                payload => {
-                    error => $!,
-                    path  => "$old_path -> $new_path"
-                }
+                error => $!,
+                path  => "$old_path -> $new_path"
             }
         );
-        return;
     }
 
     $self->add_message(
@@ -477,6 +429,29 @@ sub _rename_file {
     );
 
     return 1;
+}
+
+=head3 _abort_operation
+
+    return $self->_abort_operation( $operation, \%payload );
+
+Records an error message for the named operation, persisting a status
+snapshot via the shared _record_error() (see Koha::File::Transport), and
+returns nothing, so callers can
+C<return $self-E<gt>_abort_operation($operation, \%payload)> on failure.
+
+Unlike FTP/SFTP there is no live connection to abort here - this purely
+records the failure, but does so the same way as the other two backends so
+a Local transport's displayed status reflects real usage too.
+
+=cut
+
+sub _abort_operation {
+    my ( $self, $operation, $payload ) = @_;
+
+    $self->_record_error( $operation, $payload );
+
+    return;
 }
 
 =head3 _is_connected

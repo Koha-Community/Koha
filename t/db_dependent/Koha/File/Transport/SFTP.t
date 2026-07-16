@@ -17,11 +17,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::Exception;
 use Test::NoWarnings;
 use Test::Warn;
 use Test::MockModule;
+use JSON qw( decode_json );
 
 use Net::SFTP::Foreign::Attributes;
 
@@ -274,6 +275,63 @@ subtest 'current_directory() tests' => sub {
     $transport->{_user_set_directory} = 1;
 
     is( $transport->current_directory, '/home/vendor', "current_directory() reads the SFTP connection's cwd()" );
+
+    $transport->{connection} = undef;
+
+    $schema->storage->txn_rollback;
+};
+
+subtest '_abort_operation persists status consistently (bug 42656 QA follow-up)' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $transport = $builder->build_object(
+        {
+            class => 'Koha::File::Transports',
+
+            # key_file must be explicitly undef - _abort_operation() now
+            # triggers store(), which (via _post_store_trigger) tries to
+            # decrypt key_file; TestBuilder would otherwise auto-fill it
+            # with a non-ciphertext value.
+            value => { transport => 'sftp', password => 'testpass', key_file => undef }
+        }
+    );
+
+    my $mock_sftp = Test::MockModule->new('Net::SFTP::Foreign');
+    $mock_sftp->mock( 'setcwd', sub { return 0; } );                     # simulate a failed setcwd
+    $mock_sftp->mock( 'abort',  sub { return 1; } );
+    $mock_sftp->mock( 'status', sub { return 0; } );
+    $mock_sftp->mock( 'error',  sub { return 'No such directory'; } );
+    $mock_sftp->mock( 'cwd',    sub { return '/incoming/'; } );
+
+    $transport->{connection}          = bless {}, 'Net::SFTP::Foreign';
+    $transport->{_user_set_directory} = 1;
+    $transport->{stderr_capture}      = '';
+
+    my $result = $transport->change_directory('/missing');
+    is( $result, undef, 'change_directory() returns undef on failure' );
+
+    my ($error) = grep { $_->type eq 'error' } @{ $transport->object_messages };
+    ok( $error, 'an error message was recorded' );
+    is( $error->payload->{path}, '/missing', 'error payload uses the "path" key, matching FTP and Local' );
+
+    # SFTP already persisted status on failure before this refactor; this
+    # confirms the shared _record_error() preserves that existing behaviour.
+    my $reloaded         = Koha::File::Transports->find( $transport->id );
+    my $persisted_status = decode_json( $reloaded->status );
+    is(
+        $persisted_status->{status}, 'errors',
+        'status column still persists an "errors" status after a failed operation'
+    );
+    is(
+        $persisted_status->{operations}[0]{code}, 'change_directory',
+        'persisted status records which operation failed'
+    );
+    is(
+        $persisted_status->{operations}[0]{detail}{path}, '/missing',
+        'persisted status detail uses the "path" key'
+    );
 
     $transport->{connection} = undef;
 

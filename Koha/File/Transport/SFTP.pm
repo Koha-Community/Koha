@@ -23,7 +23,6 @@ use File::Spec;
 use IO::File;
 use Net::SFTP::Foreign;
 use Try::Tiny;
-use JSON  qw( decode_json encode_json );
 use Fcntl qw( S_ISDIR S_ISREG );
 
 use base qw(Koha::File::Transport);
@@ -382,6 +381,10 @@ sub _locate_key_file {
 
 Helper method to abort the current operation and return.
 
+Records the failure via the shared _record_error() (see
+Koha::File::Transport), which persists a status snapshot the same way for
+every transport type.
+
 =cut
 
 sub _abort_operation {
@@ -397,23 +400,11 @@ sub _abort_operation {
         error_raw => $stderr
     };
 
-    $self->add_message(
-        {
-            message => $operation,
-            type    => 'error',
-            payload => $payload
-        }
-    );
+    $self->_record_error( $operation, $payload );
 
     if ( $self->{connection} ) {
         $self->{connection}->abort;
     }
-
-    my $status = {
-        status     => 'errors',
-        operations => [ { code => $operation, status => 'error', detail => $payload } ]
-    };
-    $self->set( { status => encode_json($status) } )->store();
 
     return;
 }

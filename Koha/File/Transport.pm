@@ -28,6 +28,7 @@ use List::MoreUtils qw( any );
 use Koha::Database;
 use Koha::Exceptions::Object;
 use Koha::Encryption;
+use Koha::Logger;
 
 use base qw(Koha::Object);
 
@@ -281,6 +282,64 @@ after connection verification.
 sub _current_directory {
     my ($self) = @_;
     die "Subclass must implement _current_directory";
+}
+
+=head3 _record_error
+
+    $transport->_record_error( $operation, \%payload );
+
+Records an operation failure consistently across all transport backends:
+adds an in-memory 'error' message (as add_message() already does), persists
+a snapshot of the failure to the C<status> column, and logs it, so that a
+transport's displayed status reflects real usage (not only explicit
+test_connection() runs).
+
+Before this existed, only Koha::File::Transport::SFTP persisted status on
+every failed operation; FTP and Local never did, so an SFTP transport's
+status could reflect a single transient failure from live usage (e.g. an
+EDI cron job) while the same failure on FTP/Local left the stored status
+untouched. Subclasses should call this from their C<_abort_operation>
+instead of writing to C<status> themselves, so all three stay in sync.
+
+The persisted C<operations> array carries every message recorded on this
+transport object so far this session (in order), not just the failing one -
+the same "full trace" shape TestTransport::process() builds for an explicit
+test_connection() run. A single long-lived transport object (e.g. across an
+EDI download loop) will therefore show every prior successful step leading
+up to the failure, not just the failure in isolation.
+
+=cut
+
+sub _record_error {
+    my ( $self, $operation, $payload ) = @_;
+
+    $self->add_message(
+        {
+            message => $operation || 'operation',
+            type    => 'error',
+            payload => $payload,
+        }
+    );
+
+    my $operations =
+        [ map { { code => $_->message, status => $_->type, detail => $_->payload } } @{ $self->object_messages } ];
+
+    my $status = {
+        status     => 'errors',
+        operations => $operations,
+    };
+    $self->set( { status => encode_json($status) } )->store();
+
+    Koha::Logger->get( { category => __PACKAGE__ } )->warn(
+        sprintf(
+            "File transport %s (%s) operation '%s' failed: %s. Trace: %s",
+            $self->id, $self->transport, $operation || 'operation',
+            $payload->{error} // 'unknown error',
+            encode_json($operations)
+        )
+    );
+
+    return;
 }
 
 =head3 _auto_change_directory

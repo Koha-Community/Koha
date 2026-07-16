@@ -164,8 +164,8 @@ sub _change_directory {
             message => $operation,
             type    => 'success',
             payload => {
-                directory => $remote_directory,
-                pwd       => $self->_current_directory
+                path => $remote_directory,
+                pwd  => $self->_current_directory
             }
         }
     );
@@ -387,26 +387,30 @@ sub _is_connected {
 
 =head3 _abort_operation
 
-    return $self->_abort_operation($operation);
+    return $self->_abort_operation($operation, $path);
 
-Records an error message for the named operation, aborts any in-progress
-transfer on the current connection and returns nothing, so callers can
-C<return $self-E<gt>_abort_operation($operation)> on failure.
+Records an error message for the named operation (persisting a status
+snapshot via the shared _record_error(), see Koha::File::Transport), aborts
+any in-progress transfer on the current connection and returns nothing, so
+callers can C<return $self-E<gt>_abort_operation($operation)> on failure.
+
+C<$path> is optional and carries the directory/file the operation was
+acting on, for display purposes (e.g. which directory a failed
+change_directory() was trying to reach). Uses the C<path> key, matching
+SFTP and Local, so templates can read C<operation.detail.path> the same way
+regardless of transport type.
 
 =cut
 
 sub _abort_operation {
-    my ( $self, $operation, $operation_params ) = @_;
+    my ( $self, $operation, $path ) = @_;
 
-    $self->add_message(
+    $self->_record_error(
+        $operation,
         {
-            message => $operation || 'operation',
-            type    => 'error',
-            payload => {
-                detail           => $self->{connection} ? $self->{connection}->status  : '',
-                error            => $self->{connection} ? $self->{connection}->message : $@,
-                operation_params => $operation_params
-            }
+            detail => $self->{connection} ? $self->{connection}->status  : '',
+            error  => $self->{connection} ? $self->{connection}->message : $@,
+            path   => $path,
         }
     );
 
