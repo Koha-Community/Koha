@@ -671,12 +671,24 @@ Filters items based on the specified status.
 
 =cut
 
+=head3 _extract_custom_attrs
+
+Split the custom underscore-prefixed attributes out of the search parameters.
+
+=cut
+
 sub _extract_custom_attrs {
     my ($params) = @_;
     my %custom_attrs;
     my $clean_params = _process_params( $params, \%custom_attrs );
     return ( \%custom_attrs, $clean_params );
 }
+
+=head3 _process_params
+
+Strip custom underscore-prefixed keys from a search condition, recursing into nested structures.
+
+=cut
 
 sub _process_params {
     my ( $params, $custom_attrs ) = @_;
