@@ -68,7 +68,8 @@ sub invalid_item_library {
 
 =head2 ids
 
-    Build a hashref of IDs from a Koha::Object Koha::Objects-based object.
+    Build a set of biblionumbers suitable for an IN search from a Koha::Object or Koha::Objects-based object.
+    Returns a subquery for a Koha::Objects set and an arrayref for a single Koha::Object.
 
 =cut
 
@@ -76,8 +77,8 @@ sub ids {
     my ( $self, $object ) = @_;
     if ( $object->can('_resultset') ) {
 
-        # It's a Koha::Objects
-        return [ $object->get_column('biblionumber') ];
+        # It's a Koha::Objects, don't materialize the ids, let the database resolve the set
+        return $object->_resultset->get_column('biblionumber')->as_query;
     } else {
 
         # It's a single Koha::Object
@@ -98,7 +99,7 @@ sub no_item_type {
     if ( C4::Context->preference('item-level_itypes') ) {
         my $items_without_itype = Koha::Items->search(
             {
-                biblionumber => $ids,
+                biblionumber => { -in => $ids },
                 -or          => [ itype => undef, itype => '' ]
             }
         );
@@ -122,7 +123,7 @@ sub no_item_type {
     } else {
         my $biblioitems_without_itemtype = Koha::Biblioitems->search(
             {
-                biblionumber => $ids,
+                biblionumber => { -in => $ids },
                 -or          => [ itemtype => undef, itemtype => '' ]
             }
         );
@@ -152,7 +153,7 @@ sub invalid_item_type {
     if ( C4::Context->preference('item-level_itypes') ) {
         my $items_with_invalid_itype = Koha::Items->search(
             {
-                biblionumber => $ids,
+                biblionumber => { -in => $ids },
                 -and         => [ itype => { not_in => \@itemtypes }, itype => { '!=' => '' } ]
             }
         );
@@ -169,7 +170,7 @@ sub invalid_item_type {
     } else {
         my $biblioitems_with_invalid_itemtype = Koha::Biblioitems->search(
             {
-                biblionumber => $ids,
+                biblionumber => { -in => $ids },
                 -and         => [ itemtype => { not_in => \@itemtypes }, itemtype => { '!=' => '' } ]
             }
         );
@@ -200,7 +201,7 @@ sub errors_in_marc {
     my ( $item_tag, $item_subfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber");
     my $search_string = q{ExtractValue(metadata,'count(//datafield[@tag="} . $item_tag . q{"])')>0};
     my $biblio_metadatas_with_item_fields =
-        Koha::Biblio::Metadatas->search( { biblionumber => $ids } )->search( \$search_string );
+        Koha::Biblio::Metadatas->search( { biblionumber => { -in => $ids } } )->search( \$search_string );
     if ( $biblio_metadatas_with_item_fields->count ) {
         while ( my $biblio_metadata_with_item_fields = $biblio_metadatas_with_item_fields->next ) {
             push @item_fields_in_marc,
@@ -212,7 +213,7 @@ sub errors_in_marc {
 
     my ( $biblio_tag,     $biblio_subfield )     = C4::Biblio::GetMarcFromKohaField("biblio.biblionumber");
     my ( $biblioitem_tag, $biblioitem_subfield ) = C4::Biblio::GetMarcFromKohaField("biblioitems.biblioitemnumber");
-    $biblios = Koha::Biblios->search( { biblionumber => $ids } );
+    $biblios = Koha::Biblios->search( { biblionumber => { -in => $ids } } );
     while ( my $biblio = $biblios->next ) {
         my $record = eval { $biblio->metadata->record; };
         if ($@) {
@@ -316,7 +317,7 @@ sub nonexistent_AV {
             # We are only checking biblios with items
             my $items = Koha::Items->search(
                 {
-                    'me.biblionumber' => $ids,
+                    'me.biblionumber' => { -in => $ids },
                     $tmp_kohafield    => {
                         -not_in => [ $avs->get_column('authorised_value'), '' ],
                         '!='    => undef,
@@ -371,7 +372,7 @@ sub empty_title {
     my @errors;
     $biblios = Koha::Biblios->search(
         {
-            biblionumber => $ids,
+            biblionumber => { -in => $ids },
             -or          => [
                 title => '',
                 title => undef,
