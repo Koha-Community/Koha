@@ -1,9 +1,10 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::Warn;
 
+use Koha::Biblios;
 use Koha::Items;
 use Koha::Database::DataInconsistency;
 
@@ -464,4 +465,40 @@ subtest 'for_biblio' => sub {
         );
     };
 
+};
+
+subtest 'ids() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin();
+
+    my $biblio_1 = $builder->build_sample_biblio;
+    my $biblio_2 = $builder->build_sample_biblio;
+    $builder->build_sample_item( { biblionumber => $biblio_1->biblionumber } );
+    $builder->build_sample_item( { biblionumber => $biblio_2->biblionumber } );
+
+    is_deeply(
+        Koha::Database::DataInconsistency->ids($biblio_1),
+        [ $biblio_1->biblionumber ],
+        'A single Koha::Object gives an arrayref containing its biblionumber'
+    );
+
+    my $biblios =
+        Koha::Biblios->search( { biblionumber => { -in => [ $biblio_1->biblionumber, $biblio_2->biblionumber ] } } );
+
+    my $ids = Koha::Database::DataInconsistency->ids($biblios);
+    is( ref($ids), 'REF', 'A Koha::Objects set gives a subquery instead of a materialized list of ids' );
+    like(
+        ${$ids}->[0], qr/SELECT\s+`?me`?\.`?biblionumber`?\s+FROM\s+`?biblio`?/,
+        'The subquery selects biblionumber from biblio'
+    );
+
+    my $items = Koha::Items->search(
+        { 'me.biblionumber' => { -in => $ids } },
+        { join              => [ 'biblioitem', 'biblio' ] }
+    );
+    is( $items->count, 2, 'The subquery is usable in an IN search' );
+
+    $schema->storage->txn_rollback();
 };
