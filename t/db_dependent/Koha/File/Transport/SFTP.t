@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::Exception;
 use Test::NoWarnings;
 use Test::Warn;
@@ -247,6 +247,37 @@ subtest 'change_directory() tests' => sub {
     );
 
     can_ok( $transport, 'change_directory' );
+};
+
+subtest 'current_directory() tests' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $transport = $builder->build_object(
+        {
+            class => 'Koha::File::Transports',
+            value => { transport => 'sftp', password => 'testpass' }
+        }
+    );
+
+    can_ok( $transport, 'current_directory' );
+
+    # Net::SFTP::Foreign's cwd() is a pure read-only accessor - unlike FTP's
+    # cwd(), it never navigates - so current_directory() can read it directly.
+    my $undef;
+    my $mock_sftp = Test::MockModule->new('Net::SFTP::Foreign');
+    $mock_sftp->mock( 'error', sub { return $undef; } );
+    $mock_sftp->mock( 'cwd',   sub { return '/home/vendor'; } );
+
+    $transport->{connection}          = bless {}, 'Net::SFTP::Foreign';
+    $transport->{_user_set_directory} = 1;
+
+    is( $transport->current_directory, '/home/vendor', "current_directory() reads the SFTP connection's cwd()" );
+
+    $transport->{connection} = undef;
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'list_files() tests' => sub {

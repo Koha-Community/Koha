@@ -123,6 +123,26 @@ sub _download_file {
     return 1;
 }
 
+=head3 _current_directory
+
+    my $path = $self->_current_directory;
+
+Internal method that returns the FTP connection's current working directory.
+
+Net::FTP's own C<cwd()> method is a mutator: called with no argument it
+defaults to "/" and issues a real C<CWD /> command, changing the connection's
+directory as a side effect and returning a boolean rather than a path. The
+read-only equivalent is C<pwd()>, which sends PWD and parses the path out of
+the response without navigating anywhere.
+
+=cut
+
+sub _current_directory {
+    my ($self) = @_;
+
+    return $self->{connection}->pwd;
+}
+
 =head3 _change_directory
 
     my $success = $server->_change_directory($directory);
