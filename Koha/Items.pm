@@ -239,7 +239,7 @@ sub filter_by_checked_out {
 
     $params //= {};
     my $checkouts = Koha::Checkouts->search(
-        { %$params, 'me.itemnumber' => [ $self->get_column('itemnumber') ], },
+        { %$params, 'me.itemnumber' => { -in => $self->_resultset->get_column('itemnumber')->as_query }, },
         {
             columns  => ['itemnumber'],
             distinct => 1
@@ -266,7 +266,7 @@ sub filter_by_in_transit {
     $params->{datecancelled} = undef;
 
     my $transfers = Koha::Item::Transfers->search(
-        { %$params, 'me.itemnumber' => [ $self->get_column('itemnumber') ], },
+        { %$params, 'me.itemnumber' => { -in => $self->_resultset->get_column('itemnumber')->as_query }, },
         {
             columns  => ['itemnumber'],
             distinct => 1
@@ -289,7 +289,7 @@ sub filter_by_has_holds {
 
     $params //= {};
     my $holds = Koha::Holds->search(
-        { %$params, 'me.itemnumber' => [ $self->get_column('itemnumber') ], },
+        { %$params, 'me.itemnumber' => { -in => $self->_resultset->get_column('itemnumber')->as_query }, },
         {
             columns  => ['itemnumber'],
             distinct => 1
@@ -312,7 +312,10 @@ sub filter_by_has_recalls {
 
     $params //= {};
     my $recalls = Koha::Recalls->search(
-        { %$params, 'me.item_id' => [ $self->get_column('itemnumber') ], 'me.item_level' => 1, },
+        {
+            %$params, 'me.item_id' => { -in => $self->_resultset->get_column('itemnumber')->as_query },
+            'me.item_level' => 1,
+        },
         {
             columns  => ['item_id'],
             distinct => 1
