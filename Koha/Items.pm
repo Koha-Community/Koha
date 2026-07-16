@@ -599,7 +599,8 @@ sub batch_update {
 
     if (@modified_itemnumbers) {
         my @biblionumbers =
-            uniq( Koha::Items->search( { itemnumber => \@modified_itemnumbers } )->get_column('biblionumber') );
+            uniq(
+            Koha::Items->search( { itemnumber => { -in => \@modified_itemnumbers } } )->get_column('biblionumber') );
 
         if (@biblionumbers) {
             my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
