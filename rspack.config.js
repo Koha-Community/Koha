@@ -16,6 +16,7 @@ const islandsExport = application => {
 
     return {
         resolve: {
+            extensions: [".ts", "..."],
             alias: {
                 "@fetch": path.resolve(
                     __dirname,
@@ -33,7 +34,7 @@ const islandsExport = application => {
         entry: {
             islands: [
                 "./koha-tmpl/intranet-tmpl/prog/js/vue/csp-nonce.js",
-                "./koha-tmpl/intranet-tmpl/prog/js/vue/modules/islands.ts",
+                `./koha-tmpl/intranet-tmpl/prog/js/vue/modules/islands-${application}.ts`,
             ],
         },
         output: {
@@ -101,6 +102,7 @@ const islandsExport = application => {
 module.exports = [
     {
         resolve: {
+            extensions: [".ts", "..."],
             alias: {
                 "@fetch": path.resolve(
                     __dirname,
@@ -132,7 +134,7 @@ module.exports = [
             ],
             islands: [
                 "./koha-tmpl/intranet-tmpl/prog/js/vue/csp-nonce.js",
-                "./koha-tmpl/intranet-tmpl/prog/js/vue/modules/islands.ts",
+                "./koha-tmpl/intranet-tmpl/prog/js/vue/modules/islands-intranet.ts",
             ],
             sip2: [
                 "./koha-tmpl/intranet-tmpl/prog/js/vue/csp-nonce.js",
