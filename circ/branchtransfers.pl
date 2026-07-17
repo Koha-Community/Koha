@@ -21,11 +21,11 @@
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
+use CGI             qw ( -utf8 );
 use C4::Circulation qw( transferbook barcodedecode );
-use C4::Output qw( output_html_with_http_headers );
-use C4::Reserves qw( ModReserve ModReserveAffect );
-use C4::Auth qw( get_session get_template_and_user );
+use C4::Output      qw( output_html_with_http_headers );
+use C4::Reserves    qw( ModReserve ModReserveAffect );
+use C4::Auth        qw( get_session get_template_and_user );
 use C4::Members;
 use Koha::BiblioFrameworks;
 use Koha::AuthorisedValues;
