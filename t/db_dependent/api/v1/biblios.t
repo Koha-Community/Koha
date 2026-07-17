@@ -848,6 +848,174 @@ subtest 'get_bookings() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'get_booking_availability() tests' => sub {
+
+    plan tests => 29;
+
+    $schema->storage->txn_begin;
+
+    # Rule context must be fully under our control
+    Koha::CirculationRules->search( { rule_name => { '-in' => [ 'bookings_lead_period', 'bookings_trail_period' ] } } )
+        ->delete;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }     # no additional permissions
+        }
+    );
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $librarian->borrowernumber,
+                module_bit     => 1,
+                code           => 'manage_bookings',
+            },
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $unauth_userid = $patron->userid;
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item   = $builder->build_sample_item( { bookable => 1, biblionumber => $biblio->biblionumber } );
+
+    my $today = dt_from_string->truncate( to => 'day' );
+    my $from  = $today->ymd;
+    my $to    = $today->clone->add( days => 30 )->ymd;
+    my $path  = "/api/v1/biblios/" . $biblio->biblionumber . "/booking_availability";
+
+    $t->get_ok("//$unauth_userid:$password\@$path?from_date=$from&to_date=$to")->status_is(403);
+
+    $t->get_ok(
+        "//$userid:$password@/api/v1/biblios/0/booking_availability?from_date=$from&to_date=$to",
+        "Non-existent biblio"
+    )->status_is(404)->json_is( '/error_code' => 'not_found' );
+
+    $t->get_ok( "//$userid:$password\@$path?from_date=$to&to_date=$from", "to before from" )
+        ->status_is(400)
+        ->json_is( '/error_code' => 'invalid_parameter_value' )
+        ->json_is( '/path'       => '/query/to_date' );
+
+    my $too_far = $today->clone->add( days => 400 )->ymd;
+    $t->get_ok( "//$userid:$password\@$path?from_date=$from&to_date=$too_far", "Range too long" )
+        ->status_is(400)
+        ->json_is( '/path' => '/query/to_date' );
+
+    $t->get_ok( "//$userid:$password\@$path?from_date=$from&to_date=$to&patron_id=0", "Non-existent patron" )
+        ->status_is(400)
+        ->json_is( '/path' => '/query/patron_id' );
+
+    $t->get_ok( "//$userid:$password\@$path?from_date=$from&to_date=$to&pickup_library_id=XXX", "Non-existent library" )
+        ->status_is(400)
+        ->json_is( '/path' => '/query/pickup_library_id' );
+
+    my $other_item = $builder->build_sample_item( { bookable => 1 } );
+    $t->get_ok(
+        "//$userid:$password\@$path?from_date=$from&to_date=$to&item_id=" . $other_item->itemnumber,
+        "Item of another biblio"
+    )->status_is(400)->json_is( '/path' => '/query/item_id' );
+
+    my $booking = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                biblio_id  => $biblio->biblionumber,
+                item_id    => $item->itemnumber,
+                start_date => $today->clone->add( days => 10, hours => 12 ),
+                end_date   => $today->clone->add( days => 12, hours => 12 ),
+                status     => 'new',
+            }
+        }
+    );
+
+    my $booked_day = $today->clone->add( days => 10 )->ymd;
+    $t->get_ok("//$userid:$password\@$path?from_date=$from&to_date=$to")
+        ->status_is(200)
+        ->json_is( '/item_ids' => [ 0 + $item->itemnumber ] )
+        ->json_is( "/availability/$booked_day/"
+            . $item->itemnumber => { blockers => { booking => 1 }, confirms => {}, warnings => {} } );
+
+    $t->get_ok( "//$userid:$password\@$path?from_date=$from&to_date=$to&excluded_booking_id=" . $booking->booking_id )
+        ->status_is(200)
+        ->json_is( '/availability' => {} );
+
+    subtest 'item_type_id validation and inference' => sub {
+        plan tests => 9;
+
+        $t->get_ok(
+            "//$userid:$password\@$path?from_date=$from&to_date=$to&item_type_id=nonexistent",
+            "Non-existent item type"
+        )->status_is(400)->json_is( '/path' => '/query/item_type_id' );
+
+        # Rules exist only for the item's own item type; selecting the item
+        # directly, with no item_type_id passed, must still resolve the
+        # lead/trail rules by inferring the item type from the item.
+        my $branch   = $builder->build_object( { class => 'Koha::Libraries' } );
+        my $itemtype = $builder->build_object( { class => 'Koha::ItemTypes' } );
+        Koha::CirculationRules->set_rules(
+            {
+                branchcode => $branch->branchcode,
+                itemtype   => $itemtype->itemtype,
+                rules      => {
+                    bookings_lead_period  => 2,
+                    bookings_trail_period => 1,
+                },
+            }
+        );
+        my $typed_item = $builder->build_sample_item(
+            { bookable => 1, biblionumber => $biblio->biblionumber, itype => $itemtype->itemtype } );
+        $builder->build_object(
+            {
+                class => 'Koha::Bookings',
+                value => {
+                    biblio_id  => $biblio->biblionumber,
+                    item_id    => $typed_item->itemnumber,
+                    start_date => $today->clone->add( days => 10, hours => 12 ),
+                    end_date   => $today->clone->add( days => 12, hours => 12 ),
+                    status     => 'new',
+                }
+            }
+        );
+
+        my $lead_day    = $today->clone->add( days => 9 )->ymd;
+        my $inferred_id = $typed_item->itemnumber;
+        $t->get_ok(
+                  "//$userid:$password\@$path?from_date=$from&to_date=$to"
+                . "&pickup_library_id="
+                . $branch->branchcode
+                . "&item_id=$inferred_id",
+            "Item type inferred from item_id"
+        )->status_is(200)->json_is( "/availability/$lead_day/$inferred_id/blockers/lead" => 1 );
+
+        # The item's own item type governs its lead/trail rules, overriding a
+        # differing item_type_id: passing an unrelated (ruleless) type must not
+        # suppress the lead window derived from the item's actual type.
+        my $other_itemtype = $builder->build_object( { class => 'Koha::ItemTypes' } );
+        $t->get_ok(
+                  "//$userid:$password\@$path?from_date=$from&to_date=$to"
+                . "&pickup_library_id="
+                . $branch->branchcode
+                . "&item_id=$inferred_id"
+                . "&item_type_id="
+                . $other_itemtype->itemtype,
+            "Item's own type overrides a passed item_type_id"
+        )->status_is(200)->json_is( "/availability/$lead_day/$inferred_id/blockers/lead" => 1 );
+    };
+
+    $schema->storage->txn_rollback;
+};
+
 subtest 'get_checkouts() tests' => sub {
 
     plan tests => 17;

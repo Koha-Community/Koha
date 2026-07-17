@@ -18,11 +18,12 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 44;
+use Test::More tests => 45;
 use Test::Exception;
 use Test::Warn;
 
-use C4::Biblio      qw( AddBiblio DelBiblio ModBiblio ModBiblioMarc );
+use C4::Biblio qw( AddBiblio DelBiblio ModBiblio ModBiblioMarc );
+use C4::Calendar;
 use C4::Circulation qw( AddIssue AddReturn );
 use C4::Reserves    qw( AddReserve );
 
@@ -30,6 +31,7 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Cache::Memory::Lite;
 use Koha::Caches;
+use Koha::CirculationRules;
 use Koha::Acquisition::Orders;
 use Koha::AuthorisedValueCategories;
 use Koha::AuthorisedValues;
@@ -2549,6 +2551,49 @@ subtest 'check_booking tests' => sub {
             "Checkout on bookable item correctly reduces availability"
         );
     };
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'booking_availability() tests' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    # Rule context must be fully under our control
+    Koha::CirculationRules->search( { rule_name => { '-in' => [ 'bookings_lead_period', 'bookings_trail_period' ] } } )
+        ->delete;
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item   = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, bookable => 1 } );
+
+    # Anchor booked days at local noon so their library-timezone date part
+    # matches the local calendar date in any sane server timezone
+    my $today   = dt_from_string->truncate( to => 'day' );
+    my $booking = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                biblio_id  => $biblio->biblionumber,
+                item_id    => $item->itemnumber,
+                start_date => $today->clone->add( days => 10, hours => 12 ),
+                end_date   => $today->clone->add( days => 12, hours => 12 ),
+                status     => 'new',
+            }
+        }
+    );
+
+    my $availability = $biblio->booking_availability( { from => $today, to => $today->clone->add( days => 30 ) } );
+
+    is_deeply(
+        $availability->{item_ids}, [ 0 + $item->itemnumber ],
+        "Delegates to Koha::Biblio::Availability::Booking"
+    );
+    is_deeply(
+        $availability->{availability}->{ $today->clone->add( days => 10 )->ymd }->{ $item->itemnumber },
+        { blockers => { booking => 1 }, confirms => {}, warnings => {} },
+        "... and returns its per-(date, item) availability map"
+    );
 
     $schema->storage->txn_rollback;
 };
