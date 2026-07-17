@@ -1,0 +1,40 @@
+---
+type: object
+properties:
+  item_ids:
+    type: array
+    description: Internal identifiers of the bookable items considered
+    items:
+      type: integer
+  availability:
+    type: object
+    description: |
+      Sparse map of calendar date (YYYY-MM-DD) to item id to a per-(date, item)
+      availability result. A cell is present only when it carries at least one
+      blocker or warning; an item absent from a date is bookable that day, so an
+      item's available dates are the complement of its blocked dates. Each cell
+      has three reason sets. Reason codes:
+      blockers = booking, checkout, lead, trail (prevent a new booking);
+      warnings = holiday, lead_floor, lead_theoretical (advisory context only);
+      confirms is always empty for bookings.
+      Booking and checkout dates are attributed to their library-local calendar
+      day.
+    additionalProperties:
+      type: object
+      additionalProperties:
+        type: object
+        properties:
+          blockers:
+            type: object
+            description: reasons that prevent a new booking on this date
+          confirms:
+            type: object
+            description: reasons requiring confirmation (unused for bookings)
+          warnings:
+            type: object
+            description: advisory context that does not block a booking
+        additionalProperties: false
+additionalProperties: false
+required:
+  - item_ids
+  - availability

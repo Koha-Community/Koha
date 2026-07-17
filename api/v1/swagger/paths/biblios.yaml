@@ -298,6 +298,91 @@
     x-koha-authorization:
       permissions:
         editcatalogue: edit_catalogue
+"/biblios/{biblio_id}/booking_availability":
+  get:
+    x-mojo-to: Biblios#get_booking_availability
+    operationId: getBiblioBookingAvailability
+    tags:
+      - bookings
+    summary: Get booking availability for a biblio
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/biblio_id_pp"
+      - name: from_date
+        in: query
+        description: First calendar date of the inclusive range (YYYY-MM-DD)
+        required: true
+        type: string
+        format: date
+      - name: to_date
+        in: query
+        description: Last calendar date of the inclusive range (YYYY-MM-DD), at most 366 days after `from_date`
+        required: true
+        type: string
+        format: date
+      - name: pickup_library_id
+        in: query
+        description: Pickup library context for the lead/trail circulation rules and closed days
+        required: false
+        type: string
+      - name: patron_id
+        in: query
+        description: Patron context for the circulation rules
+        required: false
+        type: integer
+      - name: item_type_id
+        in: query
+        description: Item type context for the circulation rules
+        required: false
+        type: string
+      - name: item_id
+        in: query
+        description: Restrict the calculation to this bookable item
+        required: false
+        type: integer
+      - name: excluded_booking_id
+        in: query
+        description: Booking to exclude from the calculation, e.g. the booking being edited
+        required: false
+        type: integer
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: Booking availability for the record's bookable items
+        schema:
+          $ref: ../swagger.yaml#/definitions/booking_availability
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_parameter_value`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "404":
+        description: Bibliographic record not found
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "500":
+        description: Internal server error
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+    x-koha-authorization:
+      permissions:
+        circulate: "manage_bookings"
 "/biblios/{biblio_id}/bookings":
   get:
     x-mojo-to: Biblios#get_bookings

@@ -31,6 +31,7 @@ use C4::Barcodes::ValueBuilder;
 use C4::Context;
 
 use Koha::Items;
+use Koha::ItemTypes;
 
 use List::MoreUtils qw( any );
 use MARC::Record::MiJ;
@@ -235,6 +236,106 @@ sub get_bookings {
         return $c->render(
             status  => 200,
             openapi => $bookings
+        );
+    } catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+=head3 get_booking_availability
+
+Controller function that handles retrieving booking availability for a biblio
+
+=cut
+
+sub get_booking_availability {
+    my $c = shift->openapi->valid_input or return;
+
+    return try {
+        my $biblio = Koha::Biblios->find( $c->param('biblio_id') );
+
+        return $c->render_resource_not_found("Bibliographic record")
+            unless $biblio;
+
+        my $from = Koha::DateUtils::dt_from_string( $c->param('from_date') );
+        my $to   = Koha::DateUtils::dt_from_string( $c->param('to_date') );
+        return $c->render_invalid_parameter_value( { path => '/query/to_date' } )
+            unless $to >= $from
+            and $to->delta_days($from)->in_units('days') <= 366;
+
+        my $patron;
+        if ( defined( my $patron_id = $c->param('patron_id') ) ) {
+            $patron = Koha::Patrons->find($patron_id);
+            return $c->render_invalid_parameter_value(
+                {
+                    path   => '/query/patron_id',
+                    values => {
+                        uri   => '/api/v1/patrons',
+                        field => 'patron_id'
+                    }
+                }
+            ) unless $patron;
+        }
+
+        if ( defined( my $pickup_library_id = $c->param('pickup_library_id') ) ) {
+            return $c->render_invalid_parameter_value(
+                {
+                    path   => '/query/pickup_library_id',
+                    values => {
+                        uri   => '/api/v1/libraries',
+                        field => 'library_id'
+                    }
+                }
+            ) unless Koha::Libraries->find($pickup_library_id);
+        }
+
+        my $item_type_id = $c->param('item_type_id');
+        if ( defined($item_type_id) ) {
+            return $c->render_invalid_parameter_value(
+                {
+                    path   => '/query/item_type_id',
+                    values => {
+                        uri   => '/api/v1/item_types',
+                        field => 'item_type_id'
+                    }
+                }
+            ) unless Koha::ItemTypes->find($item_type_id);
+        }
+
+        my $item;
+        if ( defined( my $item_id = $c->param('item_id') ) ) {
+            $item = $biblio->bookable_items->find($item_id);
+            return $c->render_invalid_parameter_value(
+                {
+                    path   => '/query/item_id',
+                    values => {
+                        uri   => '/api/v1/items',
+                        field => 'item_id'
+                    }
+                }
+            ) unless $item;
+
+            # A single item fixes the item type context: its own type
+            # governs the lead/trail rules, the same type enforcement will
+            # use, so it overrides any item_type_id the caller passed.
+            $item_type_id = $item->effective_itemtype;
+        }
+
+        my $availability = $biblio->booking_availability(
+            {
+                from              => $from,
+                to                => $to,
+                pickup_library_id => scalar $c->param('pickup_library_id'),
+                patron            => $patron,
+                item_type_id      => $item_type_id,
+                item_id           => scalar $c->param('item_id'),
+                booking_id        => scalar $c->param('excluded_booking_id'),
+            }
+        );
+
+        return $c->render(
+            status  => 200,
+            openapi => $availability
         );
     } catch {
         $c->unhandled_exception($_);

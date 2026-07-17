@@ -39,6 +39,7 @@ use base qw(Koha::Object);
 
 use Koha::Acquisition::Orders;
 use Koha::ArticleRequests;
+use Koha::Biblio::Availability::Booking;
 use Koha::Biblio::Metadatas;
 use Koha::Biblio::Metadata::Extractor;
 use Koha::Biblio::ItemGroups;
@@ -430,6 +431,33 @@ sub check_booking {
     $booked_count += $checkouts->count;
 
     return ( ( $total_bookable - $booked_count ) > 0 ) ? 1 : 0;
+}
+
+=head3 booking_availability
+
+    my $availability = $biblio->booking_availability(
+        {
+            from => $from,
+            to   => $to,
+            [ pickup_library_id   => $pickup_library_id, ]
+            [ patron              => $patron, ]
+            [ item_type_id        => $item_type_id, ]
+            [ item_id             => $item_id, ]
+            [ booking_id          => $booking_id, ]
+        }
+    );
+
+Returns a hashref describing, for each calendar date in the inclusive
+C<from>/C<to> range, which bookable items are unavailable for a new booking
+and why. Convenience wrapper; see L<Koha::Biblio::Availability::Booking>
+for the parameters and the shape of the returned structure.
+
+=cut
+
+sub booking_availability {
+    my ( $self, $params ) = @_;
+
+    return Koha::Biblio::Availability::Booking->check( { %$params, biblio => $self } );
 }
 
 =head3 can_be_transferred

@@ -28,6 +28,8 @@ definitions:
     $ref: ./definitions/basket.yaml
   booking:
     $ref: ./definitions/booking.yaml
+  booking_availability:
+    $ref: ./definitions/booking_availability.yaml
   booking_patch:
     $ref: ./definitions/booking_patch.yaml
   bundle_link:
@@ -331,6 +333,8 @@ paths:
     $ref: "./paths/biblios.yaml#/~1biblios"
   "/biblios/{biblio_id}":
     $ref: "./paths/biblios.yaml#/~1biblios~1{biblio_id}"
+  "/biblios/{biblio_id}/booking_availability":
+    $ref: "./paths/biblios.yaml#/~1biblios~1{biblio_id}~1booking_availability"
   "/biblios/{biblio_id}/bookings":
     $ref: "./paths/biblios.yaml#/~1biblios~1{biblio_id}~1bookings"
   "/biblios/{biblio_id}/checkouts":
