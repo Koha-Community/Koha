@@ -222,7 +222,10 @@ sub move_hold {
         $new_biblionumber = $args->{new_biblionumber};
 
         # for record level holds we must check to make sure there is at least 1 item on the record that can fulfill the new hold
-        my @items             = Koha::Items->search( { biblionumber => $new_biblionumber } )->as_list;
+        my @items = Koha::Items->search( { biblionumber => $new_biblionumber } )->as_list;
+
+        return { success => 0, error => 'noItemsOnBib' } unless @items;
+
         my $valid_pickup_item = 0;
         foreach my $candidate_item (@items) {
             if ( $self->_pickup_valid_for_item( $candidate_item, $patron ) ) {
