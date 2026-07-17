@@ -227,6 +227,8 @@
                             <span>Target item is damaged</span>
                         [% CASE 'invalidPickupBranch' %]
                             <span>Target item or record has an invalid pickup location. Either move the hold onto a valid item type or select a valid pickup location.</span>
+                        [% CASE 'noItemsOnBib' %]
+                            <span>Target record has no items. Move to a record that has items.</span>
                         [% CASE %]
                             <span>Error: [% fail.error | html %]</span>
                         [% END %]
