@@ -215,15 +215,7 @@ sub move_hold {
         $new_biblionumber = $item->biblionumber;
 
         # need to make sure the item is being moved to a valid pickup location
-        my $branchitemrule = C4::Circulation::GetBranchItemRule(
-            Koha::Policy::Holds->holds_control_library( $item, $patron ),
-            $item->effective_itemtype
-        );
-
-        my $policy = $branchitemrule->{hold_fulfillment_policy};
-        if ( ( $policy eq 'homebranch' || $policy eq 'holdingbranch' ) && $self->branchcode ne $item->$policy ) {
-            return { success => 0, error => 'invalidPickupBranch' };
-        }
+        return { success => 0, error => 'invalidPickupBranch' } unless $self->_pickup_valid_for_item( $item, $patron );
 
         $canReserve = C4::Reserves::CanItemBeReserved( $patron, $item, $self->branchcode, { ignore_hold_counts => 1 } );
     } elsif ( $args->{new_biblionumber} ) {
@@ -233,16 +225,10 @@ sub move_hold {
         my @items             = Koha::Items->search( { biblionumber => $new_biblionumber } )->as_list;
         my $valid_pickup_item = 0;
         foreach my $candidate_item (@items) {
-            my $branchitemrule = C4::Circulation::GetBranchItemRule(
-                Koha::Policy::Holds->holds_control_library( $candidate_item, $patron ),
-                $candidate_item->effective_itemtype
-            );
-            my $policy = $branchitemrule->{hold_fulfillment_policy};
-            next
-                if ( $policy eq 'homebranch' || $policy eq 'holdingbranch' )
-                && $self->branchcode ne $candidate_item->$policy;
-            $valid_pickup_item = 1;
-            last;
+            if ( $self->_pickup_valid_for_item( $candidate_item, $patron ) ) {
+                $valid_pickup_item = 1;
+                last;
+            }
         }
         return { success => 0, error => 'invalidPickupBranch' } unless $valid_pickup_item;
 
@@ -1724,6 +1710,23 @@ sub strings_map {
     }
 
     return $strings;
+}
+
+sub _pickup_valid_for_item {
+    my ( $self, $item, $patron ) = @_;
+
+    my $branchitemrule = C4::Circulation::GetBranchItemRule(
+        Koha::Policy::Holds->holds_control_library( $item, $patron ),
+        $item->effective_itemtype
+    );
+
+    my $policy = $branchitemrule->{hold_fulfillment_policy};
+
+    return 0
+        if ( $policy eq 'homebranch' || $policy eq 'holdingbranch' )
+        && $self->branchcode ne $item->$policy;
+
+    return 1;
 }
 
 =head2 Internal methods
