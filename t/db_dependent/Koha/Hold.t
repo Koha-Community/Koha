@@ -1750,7 +1750,7 @@ subtest 'revert_found() tests' => sub {
     };
 };
 subtest 'move_hold() tests' => sub {
-    plan tests => 24;
+    plan tests => 26;
     $schema->storage->txn_begin;
 
     my $patron = Koha::Patron->new(
@@ -2015,6 +2015,11 @@ subtest 'move_hold() tests' => sub {
 
     my $result_8 = $hold_9->move_hold( { new_itemnumber => $item_2->itemnumber } );
     ok( $result_8->{success}, 'Item level move succeeds when pickup branch matches fulfillment policy' );
+
+    my $empty_biblio = $builder->build_sample_biblio;
+    $result = $hold->move_hold( { new_biblionumber => $empty_biblio->biblionumber } );
+    is( $result->{success}, 0,              'Move to biblio without items fails' );
+    is( $result->{error},   'noItemsOnBib', 'noItemsOnBib error returned' );
 
     $schema->storage->txn_rollback;
 };
