@@ -925,7 +925,7 @@
                             [% END %]
                         </div>
                         <fieldset class="action">
-                            <a href="/cgi-bin/koha/reports/guided_reports.pl?op=edit_formid=[% id | uri %]" class="btn btn-primary">Edit SQL</a>
+                            <a href="/cgi-bin/koha/reports/guided_reports.pl?op=edit_form&id=[% id | uri %]" class="btn btn-primary">Edit SQL</a>
                         </fieldset>
                     [% ELSE #  IF ( auth_val_error ) %]
                         <form method="get" action="/cgi-bin/koha/reports/guided_reports.pl" id="report_param_form">
