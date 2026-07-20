@@ -933,36 +933,28 @@
         $(document).ready(function () {
             function getTextareaFromParent(el) {
                 return $(el).children("textarea").eq(0);
-            };
-            $("#category_form").on(
-                "click",
-                ".clone_message",
-                function (e) {
-                    e.preventDefault();
+            }
+            $("#category_form").on("click", ".clone_message", function (e) {
+                e.preventDefault();
+                const original = $(this).parent();
+                const indexToIncrement = parseInt(getTextareaFromParent(original).prop("id").match(/\d+/g));
+                const clone = $(this).parent().clone();
+                $(clone).children("div.hint").remove();
+                getTextareaFromParent(clone).prop("id", "self_renewal_information_message_" + (indexToIncrement + 1));
+                $(original).after(clone);
+                return false;
+            });
+            $("#category_form").on("click", ".clear_message", function (e) {
+                e.preventDefault();
+                const messageCount = $("textarea[name=self_renewal_information_message]").length;
+                if (messageCount === 1) {
                     const original = $(this).parent();
-                    const indexToIncrement = parseInt(getTextareaFromParent(original).prop("id").match(/\d+/g));
-                    const clone = $(this).parent().clone();
-                    $(clone).children("div.hint").remove();
-                    getTextareaFromParent(clone).prop("id", "self_renewal_information_message_" + (indexToIncrement + 1));
-                    $(original).after(clone);
-                    return false;
+                    $("textarea", original).val("");
+                } else {
+                    const original = $(this).parent();
+                    $(original).remove();
                 }
-            );
-            $("#category_form").on(
-                "click",
-                ".clear_message",
-                function (e) {
-                    e.preventDefault();
-                    const messageCount = $("textarea[name=self_renewal_information_message]").length
-                    if(messageCount === 1) {
-                        const original = $(this).parent();
-                        $("textarea", original).val("");
-                    } else {
-                        const original = $(this).parent();
-                        $(original).remove();
-                    }
-                }
-            );
+            });
         });
     </script>
     [% Asset.js("js/categories.js") | $raw %]
