@@ -283,6 +283,7 @@ subtest 'Search patrons' => sub {
     # NOTE: We should probably ensure the bad field is removed from 'standard' search here, else searches are broken
     C4::Context->set_preference( 'DefaultPatronSearchFields', "" );
     $driver->get( $base_url . "/members/members-home.pl" );
+    sleep $DT_delay && $s->wait_for_ajax;
     $s->fill_form( { 'search_patron_filter' => 'test_patron' } );
     $s->submit_form;
     my $first_patron = Koha::Patrons->search( { surname => { like => 'test_patron_%' } } )->next;
@@ -325,6 +326,7 @@ subtest 'Search patrons' => sub {
     );
 
     $driver->get( $base_url . "/members/members-home.pl" );
+    sleep $DT_delay && $s->wait_for_ajax;
     $s->fill_form( { 'search_patron_filter' => 'test_patron' } );
     $s->submit_form;
     sleep $DT_delay && $s->wait_for_ajax;
@@ -465,6 +467,7 @@ subtest 'Search patrons' => sub {
         $patron_category->replace_library_limits( [ $library->id ] );
         C4::Context->set_preference( 'PatronsPerPage', 5 );
         $driver->get( $base_url . "/members/members-home.pl" );
+        sleep $DT_delay && $s->wait_for_ajax;
         clear_filters();
         $s->fill_form( { 'search_patron_filter' => 'test_patron' } );
         $s->submit_form;
@@ -486,6 +489,7 @@ subtest 'Search patrons' => sub {
 
         C4::Context->set_preference( 'PatronsPerPage', 5 );
         $driver->get( $base_url . "/members/members-home.pl" );
+        sleep $DT_delay && $s->wait_for_ajax;
         clear_filters();
         $s->fill_form( { 'search_patron_filter' => 'test_patron' } );
         $s->submit_form;
@@ -511,6 +515,7 @@ subtest 'Search patrons' => sub {
 
         # Perform another search
         $driver->get( $base_url . "/members/members-home.pl" );
+        sleep $DT_delay && $s->wait_for_ajax;
         clear_filters();
         $s->fill_form( { 'search_patron_filter' => 'test_patron' } );
         $s->submit_form;
@@ -547,6 +552,7 @@ subtest 'Search patrons' => sub {
         # We have a patron with date of birth=1980-06-17 => formatted as 17/06/1980
 
         $driver->get( $base_url . "/members/members-home.pl" );
+        sleep $DT_delay && $s->wait_for_ajax;
         clear_filters();
         $s->fill_form( { 'search_patron_filter' => 'test_patron' } );
         $s->submit_form;
