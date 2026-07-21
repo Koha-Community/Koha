@@ -19,12 +19,14 @@ package Koha::ActionLog;
 
 use Modern::Perl;
 
+use JSON qw( decode_json );
+
 use C4::Context;
 
 # Avoid `use Koha::Patrons` here: Koha::ActionLog is loaded transitively by
 # C4::Log very early in the dependency chain, before Koha::Patron has been
-# fully defined. The accessors below reach for Koha::Patron at call time,
-# by which point it is reliably available.
+# fully defined. The accessors below reach for Koha::Patron (and Koha::Items)
+# at call time, by which point they are reliably available.
 
 use base qw(Koha::Object);
 
@@ -68,6 +70,42 @@ sub patron {
     my $rs = $self->_result->patron;
     return unless $rs;
     return Koha::Patron->_new_from_dbic($rs);
+}
+
+=head3 item
+
+    my $item = $log->item;
+
+Returns the related I<Koha::Item> for a CIRCULATION log entry, or I<undef>.
+
+The itemnumber is not stored in a dedicated column; it lives inside the
+C<info> field, which for circulation is either a JSON payload carrying an
+C<itemnumber> key (ISSUE, RENEWAL) or a bare itemnumber string (RETURN).
+Returns I<undef> for non-circulation rows, when no itemnumber can be
+derived, or when the item has since been deleted.
+
+=cut
+
+sub item {
+    my ($self) = @_;
+
+    return unless ( $self->module // q{} ) eq 'CIRCULATION';
+
+    my $info = $self->info;
+    return unless defined $info;
+
+    my $itemnumber;
+    my $decoded = eval { decode_json($info) };
+    if ( ref($decoded) eq 'HASH' && $decoded->{itemnumber} ) {
+        $itemnumber = $decoded->{itemnumber};
+    } elsif ( $info =~ /^\s*(\d+)\s*$/ ) {
+        $itemnumber = $1;
+    }
+
+    return unless $itemnumber;
+
+    require Koha::Items;
+    return Koha::Items->find($itemnumber);
 }
 
 =head2 Internal methods
