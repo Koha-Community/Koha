@@ -67,4 +67,12 @@ properties:
       Patron object joined on `object` (only meaningful for MEMBERS,
       CIRCULATION, FINES and APIKEYS rows; only present if requested
       via x-koha-embed)
+  item:
+    type:
+      - object
+      - "null"
+    description: |
+      Item object derived from the itemnumber carried in `info` (only
+      meaningful for CIRCULATION rows; only present if requested via
+      x-koha-embed)
 additionalProperties: false
