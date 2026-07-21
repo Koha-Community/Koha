@@ -4,10 +4,10 @@ use Modern::Perl;
 use CGI;
 use Template;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::MockModule;
 
-#use Test::NoWarnings;
+use Test::NoWarnings;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
