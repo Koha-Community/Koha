@@ -21,7 +21,7 @@ use Test::NoWarnings;
 
 use Array::Utils qw( array_minus );
 
-my @t_files = qx{git grep --files-without-match "Test::NoWarnings" 't/*.t' 'xt/*.t'};
+my @t_files = qx{git grep --files-without-match "^use Test::NoWarnings" 't/*.t' 'xt/*.t'};
 chomp for @t_files;
 
 my @exceptions = (
