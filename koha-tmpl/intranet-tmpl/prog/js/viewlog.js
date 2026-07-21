@@ -125,6 +125,109 @@ function renderCircInfo(raw) {
 }
 
 /**
+ * Parse a log `info` payload as a JSON object, returning the parsed object
+ * or null when it isn't a JSON object.
+ */
+function parseInfoObject(raw) {
+    if (!raw) return null;
+    const trimmed = raw.replace(/^\s+|\s+$/g, "");
+    if (trimmed.charAt(0) !== "{") return null;
+    try {
+        const parsed = JSON.parse(trimmed);
+        return parsed && typeof parsed === "object" ? parsed : null;
+    } catch (e) {
+        return null;
+    }
+}
+
+/**
+ * Build the "Item <barcode>" link for a CIRCULATION log entry. The item is
+ * embedded on the row based on the itemnumber carried in `info`. For JSON
+ * payloads (ISSUE/RENEWAL) the item's branchcode is appended after the barcode,
+ * Returns the anchor markup wrapped in a <div>, or null when no item is
+ * embedded (e.g. the item has since been deleted).
+ */
+function renderCircItemLink(row) {
+    const item = row.item;
+    if (!item) return null;
+
+    const itemnumber = item.item_id;
+    const barcode = item.external_id != null ? item.external_id : itemnumber;
+    const biblionumber = item.biblio_id;
+
+    const parsed = parseInfoObject(row.info);
+    const branchcode = parsed && parsed.branchcode ? parsed.branchcode : null;
+
+    const encodedItem = encodeURIComponent(itemnumber);
+    const encodedBiblio = encodeURIComponent(biblionumber);
+    const label = branchcode
+        ? __("Item %s %s").format(escapeHtml(barcode), escapeHtml(branchcode))
+        : __("Item %s").format(escapeHtml(barcode));
+
+    return (
+        "<div>" +
+        '<a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=' +
+        encodedItem +
+        "&biblionumber=" +
+        encodedBiblio +
+        "&bi=" +
+        encodedBiblio +
+        "#item" +
+        encodedItem +
+        '" title="' +
+        __("Display detail for this item") +
+        '">' +
+        label +
+        "</a>" +
+        "</div>"
+    );
+}
+
+/**
+ * Build the hold link (and optional item link) for a HOLDS log entry whose
+ * `info` payload is a JSON object carrying `hold` and `biblionumber`.
+ * Returns the markup wrapped in a <div>, or null.
+ */
+function renderHoldsInfoLink(row) {
+    const parsed = parseInfoObject(row.info);
+    if (!parsed || parsed.hold == null || parsed.biblionumber == null) {
+        return null;
+    }
+
+    const encodedBiblio = encodeURIComponent(parsed.biblionumber);
+    let html =
+        '<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=' +
+        encodedBiblio +
+        '" title="' +
+        __("Display holds for this record") +
+        '">' +
+        __("Hold %s on biblio %s").format(
+            escapeHtml(parsed.hold),
+            escapeHtml(parsed.biblionumber)
+        ) +
+        "</a>";
+
+    if (parsed.itemnumber != null) {
+        const encodedItem = encodeURIComponent(parsed.itemnumber);
+        html +=
+            " - " +
+            '<a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=' +
+            encodedItem +
+            "&biblionumber=" +
+            encodedBiblio +
+            "#item" +
+            encodedItem +
+            '" title="' +
+            __("Display detail for this item") +
+            '">' +
+            __("Item %s").format(escapeHtml(parsed.itemnumber)) +
+            "</a>";
+    }
+
+    return "<div>" + html + "</div>";
+}
+
+/**
  * Render Struct::Diff JSON as a human-readable before/after table.
  * Falls back to a <pre> block for non-Struct::Diff JSON or plain text.
  */
@@ -393,21 +496,30 @@ function renderInfo(data, type, row) {
         );
     }
 
-    var body = null;
-    if (mod == "CIRCULATION" || mod == "HOLDS") {
+    let prefix = "";
+    let body = null;
+    if (mod == "CIRCULATION") {
+        prefix = renderCircItemLink(row) || "";
+        body = renderCircInfo(info);
+    } else if (mod == "HOLDS") {
+        prefix = renderHoldsInfoLink(row) || "";
         body = renderCircInfo(info);
     }
-    if (body === null) {
+    // Only fall back to the record/plain-text renderers when we produced
+    // neither a link nor any override text, so we never dump the raw JSON
+    // payload alongside a rendered item/hold link.
+    if (body === null && prefix === "") {
         body = renderRecordInfo(info);
     }
-    if (body === null) {
+    if (body === null && prefix === "") {
         body = escapeHtml(info);
     }
     return (
         '<div class="loginfo" id="loginfo' +
         escapeHtml(action_id) +
         '">' +
-        body +
+        prefix +
+        (body || "") +
         "</div>"
     );
 }
@@ -567,7 +679,7 @@ $(document).ready(function () {
                 ajax: {
                     url: "/api/v1/action_logs",
                 },
-                embed: ["librarian", "patron"],
+                embed: ["librarian", "patron", "item"],
                 order: [[0, "desc"]],
                 pagingType: "full",
                 autoWidth: false,
