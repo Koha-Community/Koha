@@ -250,7 +250,7 @@ subtest 'change_directory() tests' => sub {
 };
 
 subtest 'list_files() tests' => sub {
-    plan tests => 11;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
@@ -275,7 +275,21 @@ subtest 'list_files() tests' => sub {
     my $dir_attrs = Net::SFTP::Foreign::Attributes->new;
     $dir_attrs->set_perm( oct('040755') );
 
+    # Some SFTP servers include '.' and '..' pseudo-entries in their
+    # SSH_FXP_READDIR response - Net::SFTP::Foreign::ls() does not filter
+    # them out by default, so Koha must do it itself, matching the FTP and
+    # Local transports.
     my @sftp_ls_output = (
+        {
+            filename => '.',
+            longname => 'drwxr-xr-x 2 kohauser kohauser 4096 Nov 14 22:15 .',
+            a        => $dir_attrs,
+        },
+        {
+            filename => '..',
+            longname => 'drwxr-xr-x 2 kohauser kohauser 4096 Nov 14 22:15 ..',
+            a        => $dir_attrs,
+        },
         {
             filename => 'QUOTES_413514.CEQ',
             longname => '-rw-r--r-- 1 kohauser kohauser 1234 Nov 14 22:15 QUOTES_413514.CEQ',
@@ -316,6 +330,11 @@ subtest 'list_files() tests' => sub {
     ok( $dir, 'directory entry is present in the listing' );
     is( $dir->{type},  'directory', 'directory gets type "directory"' );
     is( $dir->{perms}, '0755',      'directory perms are flattened too' );
+
+    ok(
+        !( grep { $_->{filename} =~ /^\.\.?$/ } @{$files} ),
+        "'.' and '..' entries are excluded from the listing"
+    );
 
     $transport->{connection} = undef;
 
