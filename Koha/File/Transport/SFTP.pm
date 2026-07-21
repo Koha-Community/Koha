@@ -179,6 +179,11 @@ Net::SFTP::Foreign's ls() natively returns the size/perms/mtime nested inside
 a Net::SFTP::Foreign::Attributes object (the 'a' key). Those fields are
 flattened out here so the returned shape matches the FTP and Local transports.
 
+Net::SFTP::Foreign::ls() does not filter '.' and '..' out of its
+SSH_FXP_READDIR response itself - whether those pseudo-entries appear is
+purely down to the remote server implementation. They are skipped here so
+behaviour is consistent with the FTP and Local transports.
+
 =cut
 
 sub _list_files {
@@ -201,7 +206,7 @@ sub _list_files {
             : S_ISREG($mode) ? 'file'
             : 'other',
         }
-    } @{$file_list};
+    } grep { $_->{filename} !~ /^\.\.?$/ } @{$file_list};
 
     $self->add_message(
         {
