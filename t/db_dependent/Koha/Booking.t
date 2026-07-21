@@ -457,7 +457,7 @@ subtest 'store() tests' => sub {
     };
 
     subtest 'confirmation notice trigger' => sub {
-        plan tests => 3;
+        plan tests => 4;
 
         # FIXME: This is a bandaid solution to prevent test failures when running
         # the Koha_Main_My8 job because notices are not added at upgrade time.
@@ -500,11 +500,14 @@ subtest 'store() tests' => sub {
         )->count;
 
         # Reuse previous booking to produce a clash
-        throws_ok {
-            Koha::Booking->new( $booking->unblessed )->store
+        warning_like {
+            throws_ok {
+                Koha::Booking->new( $booking->unblessed )->store
+            }
+            'Koha::Exceptions::Object::DuplicateID',
+                'Exception is thrown correctly';
         }
-        'Koha::Exceptions::Object::DuplicateID',
-            'Exception is thrown correctly';
+        qr/Duplicate ID/, 'Warning from store on DuplicateID exception';
 
         my $post_notices_count = Koha::Notice::Messages->search(
             {
@@ -704,12 +707,15 @@ subtest 'store() tests' => sub {
     };
 
     subtest 'status change exception' => sub {
-        plan tests => 2;
+        plan tests => 3;
 
         $booking->discard_changes;
         my $status = $booking->status;
-        throws_ok { $booking->update( { status => 'blah' } ) } 'Koha::Exceptions::Object::BadValue',
-            'Throws exception when passed booking status would fail enum constraint';
+        warning_like {
+            throws_ok { $booking->update( { status => 'blah' } ) } 'Koha::Exceptions::Object::BadValue',
+                'Throws exception when passed booking status would fail enum constraint';
+        }
+        qr/Invalid value/, 'Warning from store on BadValue exception';
 
         # Status unchanged
         $booking->discard_changes;

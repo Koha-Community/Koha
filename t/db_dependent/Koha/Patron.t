@@ -377,7 +377,7 @@ subtest 'is_active' => sub {
 
 subtest 'add_guarantor() tests' => sub {
 
-    plan tests => 6;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -404,11 +404,14 @@ subtest 'add_guarantor() tests' => sub {
 
     is( $guarantors->count, 1, 'No guarantors added' );
 
-    throws_ok {
-        $patron_1->add_guarantor( { guarantor_id => $patron_2->borrowernumber, relationship => 'father2' } );
+    warning_like {
+        throws_ok {
+            $patron_1->add_guarantor( { guarantor_id => $patron_2->borrowernumber, relationship => 'father2' } );
+        }
+        'Koha::Exceptions::Patron::Relationship::DuplicateRelationship',
+            'Exception is thrown for duplicated relationship';
     }
-    'Koha::Exceptions::Patron::Relationship::DuplicateRelationship',
-        'Exception is thrown for duplicated relationship';
+    qr/Duplicate ID/, 'Warning from store on DuplicateID exception';
 
     $schema->storage->txn_rollback;
 };

@@ -42,7 +42,7 @@ $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'DB constraints' => sub {
-    plan tests => 1;
+    plan tests => 2;
 
     my $patron    = $builder->build_object( { class => 'Koha::Patrons' } );
     my $item      = $builder->build_sample_item;
@@ -58,9 +58,12 @@ subtest 'DB constraints' => sub {
     my $reserve_id = C4::Reserves::AddReserve($hold_info);
     my $hold       = Koha::Holds->find($reserve_id);
 
-    throws_ok { $hold->priority(undef)->store }
-    'Koha::Exceptions::Object::NotNull',
-        'Storing a hold with NULL priority should throw a NotNull exception';
+    warning_like {
+        throws_ok { $hold->priority(undef)->store }
+        'Koha::Exceptions::Object::NotNull',
+            'Storing a hold with NULL priority should throw a NotNull exception';
+    }
+    qr/required column value/, 'Warning from store on NotNull exception';
 };
 
 subtest 'cancel' => sub {
@@ -481,7 +484,7 @@ subtest 'cancel' => sub {
     };
 
     subtest 'rollback' => sub {
-        plan tests => 3;
+        plan tests => 4;
         my $patron_category = $builder->build_object(
             {
                 class => 'Koha::Patron::Categories',
@@ -509,9 +512,12 @@ subtest 'cancel' => sub {
         # Add a row with the same id to make the cancel fails
         Koha::Old::Hold->new( $hold->unblessed )->store;
 
-        throws_ok { $hold->cancel( { charge_cancel_fee => 1 } ) }
-        'Koha::Exceptions::Object::DuplicateID',
-            'Cancelling a hold whose id already exists in old_reserves should throw a DuplicateID exception';
+        warning_like {
+            throws_ok { $hold->cancel( { charge_cancel_fee => 1 } ) }
+            'Koha::Exceptions::Object::DuplicateID',
+                'Cancelling a hold whose id already exists in old_reserves should throw a DuplicateID exception';
+        }
+        qr/Duplicate ID/, 'Warning from store on DuplicateID exception';
 
         $hold = Koha::Holds->find($reserve_id);
         is( ref($hold), 'Koha::Hold', 'The hold should not have been deleted' );

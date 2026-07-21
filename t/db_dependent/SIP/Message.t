@@ -1577,8 +1577,8 @@ sub test_checkin_v2 {
     Koha::Old::Checkout->new( { issue_id => $issue->issue_id } )->store;
     undef $response;
     $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
-    warning_like { $msg->handle_checkin($server); }
-    qr/data issues/,
+    warnings_like { $msg->handle_checkin($server); }
+    [ qr/Duplicate ID/, qr/data issues/ ],
         'data issues warning is emitted on duplicate issue_id in old_issues';
     is( substr( $response, 2, 1 ), '0', 'OK flag is false when we encounter data corruption in old_issues' );
     is( substr( $response, 5, 1 ), 'Y', 'Alert flag is set' );

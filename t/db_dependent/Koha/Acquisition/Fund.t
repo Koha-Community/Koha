@@ -61,7 +61,7 @@ subtest 'budget ()' => sub {
 };
 
 subtest 'budget' => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
     my $f = $builder->build_object(
@@ -78,9 +78,12 @@ subtest 'budget' => sub {
     );
 
     # Cannot set aqbudgets.budget_period_id as NULL
-    throws_ok { $fund->budget_period_id(undef)->store }
-    'Koha::Exceptions::Object::NotNull',
-        'Storing a fund with NULL budget_period_id should throw a NotNull exception';
+    warning_like {
+        throws_ok { $fund->budget_period_id(undef)->store }
+        'Koha::Exceptions::Object::NotNull',
+            'Storing a fund with NULL budget_period_id should throw a NotNull exception';
+    }
+    qr/required column value/, 'Warning from store on NotNull exception';
 
     $schema->storage->txn_rollback;
 };

@@ -24,6 +24,7 @@ use Test::More tests => 24;
 
 use Test::Exception;
 use Test::MockModule;
+use Test::Warn;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -76,7 +77,7 @@ subtest 'store() tests' => sub {
 
 subtest 'biblio() tests' => sub {
 
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
@@ -86,9 +87,12 @@ subtest 'biblio() tests' => sub {
         }
     );
 
-    throws_ok { $hold->biblionumber(undef)->store; }
-    'Koha::Exceptions::Object::NotNull',
-        'reserves.biblionumber cannot be null, exception thrown';
+    warning_like {
+        throws_ok { $hold->biblionumber(undef)->store; }
+        'Koha::Exceptions::Object::NotNull',
+            'reserves.biblionumber cannot be null, exception thrown';
+    }
+    qr/required column value/, 'Warning from store on NotNull exception';
 
     $schema->storage->txn_rollback;
 };

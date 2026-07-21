@@ -305,11 +305,11 @@ subtest 'Handle ids duplication' => sub {
     my $old_checkout = Koha::Old::Checkouts->find($issue_id);
 
     my ( $doreturn, $messages, $new_checkout, $borrower );
-    warning_like {
+    warnings_like {
         ( $doreturn, $messages, $new_checkout, $borrower ) =
             AddReturn( $item->barcode, undef, undef, undef, dt_from_string );
     }
-    { carped => qr{The checkin for the following issue failed.*Duplicate ID.*} },
+    [ qr/Duplicate ID/, { carped => qr{The checkin for the following issue failed.*Duplicate ID.*} } ],
         'AddReturn should have carped about the duplicate id';
 
     is( $doreturn,                  0,              'Return should not have been done' );

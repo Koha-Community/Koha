@@ -37,7 +37,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'store() tests' => sub {
 
-    plan tests => 13;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -111,9 +111,12 @@ subtest 'store() tests' => sub {
         }
     );
 
-    throws_ok { $relationship_2->store; }
-    'Koha::Exceptions::Patron::Relationship::DuplicateRelationship',
-        'Exception is thrown for duplicated relationship';
+    warning_like {
+        throws_ok { $relationship_2->store; }
+        'Koha::Exceptions::Patron::Relationship::DuplicateRelationship',
+            'Exception is thrown for duplicated relationship';
+    }
+    qr/Duplicate ID/, 'Warning from store on DuplicateID exception';
 
     is(
         "$@",

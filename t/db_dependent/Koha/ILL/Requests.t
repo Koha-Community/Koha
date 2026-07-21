@@ -1596,7 +1596,7 @@ subtest 'Censorship' => sub {
 
 subtest 'Checking out' => sub {
 
-    plan tests => 16;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
 
@@ -1667,13 +1667,17 @@ subtest 'Checking out' => sub {
 
     # First we pass bad parameters to the item creation to test we're
     # catching the failure of item creation
-    my $form_stage_bad_branchcode = $request->check_out(
-        {
-            stage      => 'form',
-            item_type  => $itemtype->itemtype,
-            branchcode => '---'
-        }
-    );
+    my $form_stage_bad_branchcode;
+    warning_like {
+        $form_stage_bad_branchcode = $request->check_out(
+            {
+                stage      => 'form',
+                item_type  => $itemtype->itemtype,
+                branchcode => '---'
+            }
+        );
+    }
+    qr/Broken FK constraint/, 'Warning from store on FKConstraint exception';
 
     is_deeply(
         $form_stage_bad_branchcode->{value}->{errors}, {

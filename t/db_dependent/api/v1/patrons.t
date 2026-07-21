@@ -451,7 +451,7 @@ subtest 'add() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 40;
+        plan tests => 41;
 
         $schema->storage->txn_begin;
 
@@ -511,10 +511,14 @@ subtest 'add() tests' => sub {
 
         # Test duplicate cardnumber constraint
         $newpatron->{userid} = undef;    # force regeneration
-        $t->post_ok( "//$userid:$password@/api/v1/patrons" => { 'x-confirm-not-duplicate' => 1 } => json => $newpatron )
-            ->status_is(409)
-            ->json_has( '/error', 'Fails when trying to POST duplicate cardnumber' )
-            ->json_like( '/conflict' => qr/(borrowers\.)?cardnumber/ );
+        warning_like {
+            $t->post_ok(
+                "//$userid:$password@/api/v1/patrons" => { 'x-confirm-not-duplicate' => 1 } => json => $newpatron )
+                ->status_is(409)
+                ->json_has( '/error', 'Fails when trying to POST duplicate cardnumber' )
+                ->json_like( '/conflict' => qr/(borrowers\.)?cardnumber/ );
+        }
+        qr/Duplicate ID/;
 
         # Create a library just to make sure its ID doesn't exist on the DB
         my $category_to_delete  = $builder->build_object( { class => 'Koha::Patron::Categories' } );
@@ -1004,7 +1008,7 @@ subtest 'update() tests' => sub {
 
     subtest 'librarian access tests' => sub {
 
-        plan tests => 43;
+        plan tests => 44;
 
         $schema->storage->txn_begin;
 
@@ -1092,9 +1096,12 @@ subtest 'update() tests' => sub {
         # Use an invalid library_id
         $newpatron->{library_id} = $deleted_library_id;
 
-        $t->put_ok( "//$userid:$password@/api/v1/patrons/" . $patron_2->borrowernumber => json => $newpatron )
-            ->status_is(400)
-            ->json_is( '/error' => "Given library_id does not exist" );
+        warning_like {
+            $t->put_ok( "//$userid:$password@/api/v1/patrons/" . $patron_2->borrowernumber => json => $newpatron )
+                ->status_is(400)
+                ->json_is( '/error' => "Given library_id does not exist" );
+        }
+        qr/Broken FK constraint/, 'DB exception logged for invalid library_id';
 
         # Restore the valid library_id
         $newpatron->{library_id} = $patron_2->branchcode;

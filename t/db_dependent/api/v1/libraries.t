@@ -160,7 +160,7 @@ subtest 'get() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 16;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
 
@@ -224,10 +224,13 @@ subtest 'add() tests' => sub {
     # Authorized attempt to create with existing id
     $library->{library_id} = $library_id;
 
-    $t->post_ok( "//$auth_userid:$password@/api/v1/libraries" => json => $library )
-        ->status_is(409)
-        ->json_has( '/error' => "Fails when trying to add an existing library_id" )
-        ->json_like( '/conflict' => qr/(branches\.)?PRIMARY/ );
+    warning_like {
+        $t->post_ok( "//$auth_userid:$password@/api/v1/libraries" => json => $library )
+            ->status_is(409)
+            ->json_has( '/error' => "Fails when trying to add an existing library_id" )
+            ->json_like( '/conflict' => qr/(branches\.)?PRIMARY/ );
+    }
+    qr/Duplicate ID/;
 
     $schema->storage->txn_rollback;
 };
