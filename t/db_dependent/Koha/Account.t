@@ -383,7 +383,7 @@ subtest 'add_debit() tests' => sub {
             'Koha::Exceptions::Account::UnrecognisedType',
                 'Expected validation exception thrown (type)';
         },
-        qr{a foreign key constraint fails}
+        qr/Broken FK constraint/
     );
 
     throws_ok {

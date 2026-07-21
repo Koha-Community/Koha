@@ -946,7 +946,7 @@ subtest "Test update method" => sub {
 
 subtest 'store() tests' => sub {
 
-    plan tests => 16;
+    plan tests => 18;
 
     # Using Koha::Library::Groups to test Koha::Object>-store
     # Simple object with foreign keys and unique key
@@ -966,9 +966,12 @@ subtest 'store() tests' => sub {
     );
 
     my $dbh = $schema->storage->dbh;
-    throws_ok { $library_group->store }
-    'Koha::Exceptions::Object::FKConstraint',
-        'Exception is thrown correctly';
+    warning_like {
+        throws_ok { $library_group->store }
+        'Koha::Exceptions::Object::FKConstraint',
+            'Exception is thrown correctly';
+    }
+    qr/Broken FK constraint/, 'DB exception logged for FK constraint';
     is(
         $@->message,
         "Broken FK constraint",
@@ -989,9 +992,12 @@ subtest 'store() tests' => sub {
         }
     );
 
-    throws_ok { $new_library_group->store }
-    'Koha::Exceptions::Object::DuplicateID',
-        'Exception is thrown correctly';
+    warning_like {
+        throws_ok { $new_library_group->store }
+        'Koha::Exceptions::Object::DuplicateID',
+            'Exception is thrown correctly';
+    }
+    qr/Duplicate ID/, 'DB exception logged for duplicate ID';
 
     is(
         $@->message,
@@ -1059,14 +1065,17 @@ subtest 'store() tests' => sub {
 
     subtest 'Bad value tests' => sub {
 
-        plan tests => 3;
+        plan tests => 4;
 
         my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
-        throws_ok {
-            $patron->lastseen('wrong_value')->store;
+        warning_like {
+            throws_ok {
+                $patron->lastseen('wrong_value')->store;
+            }
+            'Koha::Exceptions::Object::BadValue', 'Exception thrown correctly';
         }
-        'Koha::Exceptions::Object::BadValue', 'Exception thrown correctly';
+        qr/Invalid value/, 'DB exception logged for bad value';
 
         like( $@->property, qr/(borrowers\.)?lastseen/, 'Column should be the expected one' )
             ;    # The table name is not always displayed, it depends on the DBMS version

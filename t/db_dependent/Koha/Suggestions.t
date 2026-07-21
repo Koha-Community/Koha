@@ -202,7 +202,7 @@ subtest 'constraints' => sub {
             'Koha::Exceptions::Object::FKConstraint',
                 'store raises an exception on invalid managerid';
         },
-        qr{a foreign key constraint fails}
+        qr/Broken FK constraint/
     );
     my $manager = $builder->build_object( { class => "Koha::Patrons" } );
     $suggestion->managedby( $manager->borrowernumber )->store;
@@ -222,7 +222,7 @@ subtest 'constraints' => sub {
             'Koha::Exceptions::Object::FKConstraint',
                 'store raises an exception on invalid acceptedby id';
         },
-        qr{a foreign key constraint fails}
+        qr/Broken FK constraint/
     );
     my $acceptor = $builder->build_object( { class => "Koha::Patrons" } );
     $suggestion->acceptedby( $acceptor->borrowernumber )->store;
@@ -242,7 +242,7 @@ subtest 'constraints' => sub {
             'Koha::Exceptions::Object::FKConstraint',
                 'store raises an exception on invalid rejectedby id';
         },
-        qr{a foreign key constraint fails}
+        qr/Broken FK constraint/
     );
     my $rejecter = $builder->build_object( { class => "Koha::Patrons" } );
     $suggestion->rejectedby( $rejecter->borrowernumber )->store;
@@ -260,7 +260,7 @@ subtest 'constraints' => sub {
             'Koha::Exceptions::Object::FKConstraint',
                 'store raises an exception on invalid budgetid';
         },
-        qr{a foreign key constraint fails}
+        qr/Broken FK constraint/
     );
     my $fund = $builder->build_object( { class => "Koha::Acquisition::Funds" } );
     $suggestion->budgetid( $fund->id )->store;

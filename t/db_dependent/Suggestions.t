@@ -346,7 +346,7 @@ warning_like(
     sub {
         ModSuggestion($mod_suggestion4);
     },
-    qr{Incorrect date value: 'invalid date!' for column .*manageddate}
+    qr/Invalid value/
 );
 $messages = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber2 } );
 

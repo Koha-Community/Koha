@@ -21,6 +21,7 @@ use Modern::Perl;
 use Test::NoWarnings;
 use Test::More tests => 11;
 use Test::Exception;
+use Test::Warn;
 
 use Koha::Database;
 use Koha::Schema::ExceptionMapper;
@@ -185,7 +186,7 @@ subtest 'exception_action integration' => sub {
 };
 
 subtest 'Object::store integration' => sub {
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
@@ -195,10 +196,13 @@ subtest 'Object::store integration' => sub {
     # Force a duplicate cardnumber
     $patron2->cardnumber( $patron->cardnumber );
 
-    throws_ok {
-        $patron2->store();
+    warning_like {
+        throws_ok {
+            $patron2->store();
+        }
+        'Koha::Exceptions::Object::DuplicateID', 'Object::store gets automatic exception translation';
     }
-    'Koha::Exceptions::Object::DuplicateID', 'Object::store gets automatic exception translation';
+    qr/Duplicate ID/, 'DB exception logged on store failure';
 
     $schema->storage->txn_rollback;
 };

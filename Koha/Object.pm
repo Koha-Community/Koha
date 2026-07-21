@@ -170,7 +170,13 @@ sub store {
         }
     }
 
-    return $self->_result()->update_or_insert() ? $self : undef;
+    try {
+        return $self->_result()->update_or_insert() ? $self : undef;
+    } catch {
+        warn "$_";
+        $_->rethrow if ref($_) && $_->can('rethrow');
+        die $_;
+    }
 }
 
 =head3 discard_changes

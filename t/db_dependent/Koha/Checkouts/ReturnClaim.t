@@ -165,7 +165,7 @@ subtest "resolve() tests" => sub {
             'Koha::Exceptions::Object::FKConstraint',
                 "Exception thrown on invalid resolver";
         },
-        qr{a foreign key constraint fails}
+        qr/Broken FK constraint/
     );
 
     my $today    = dt_from_string;

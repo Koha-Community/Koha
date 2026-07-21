@@ -175,7 +175,7 @@ subtest 'Manually pass a return date' => sub {
             'Koha::Exceptions::Object::BadValue',
                 'An exception is thrown on bad date';
         },
-        qr{Incorrect datetime value: 'bad_date' for column .*returndate}
+        qr/Invalid value/
     );
 
     $schema->storage->txn_rollback;

@@ -112,7 +112,7 @@ subtest 'store() tests' => sub {
             'Koha::Exceptions::Object::FKConstraint',
                 'Invalid patron ID raises exception';
         },
-        qr{a foreign key constraint fails}
+        qr/Broken FK constraint/
     );
     is( $@->message,   'Broken FK constraint', 'Exception message is correct' );
     is( $@->broken_fk, 'patron_id',            'Exception field is correct' );
