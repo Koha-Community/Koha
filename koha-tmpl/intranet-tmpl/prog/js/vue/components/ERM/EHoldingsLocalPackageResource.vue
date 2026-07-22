@@ -53,6 +53,9 @@ export default {
             vendors,
             props,
             moduleStore: "ERMStore",
+            groupLabels: {
+                agreements: $__("Agreements"),
+            },
             resourceAttrs: [
                 {
                     name: "name",
@@ -120,7 +123,7 @@ export default {
                 {
                     name: "package_agreements",
                     type: "relationshipWidget",
-                    group: $__("Agreements"),
+                    group: "agreements",
                     showElement: {
                         type: "table",
                         columnData: "package_agreements",

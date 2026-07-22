@@ -161,18 +161,25 @@ export default {
             formGroupsDisplayMode: "accordion",
             showGroupsDisplayMode: "splitScreen",
             splitScreenGroupings: [
-                { name: "Details", pane: 1 },
-                { name: "Aliases", pane: 1 },
-                { name: "Ordering information", pane: 2 },
-                { name: "Interfaces", pane: 2 },
+                { name: "details", pane: 1 },
+                { name: "aliases", pane: 1 },
+                { name: "ordering_information", pane: 2 },
+                { name: "interfaces", pane: 2 },
             ],
+            groupLabels: {
+                details: $__("Details"),
+                aliases: $__("Aliases"),
+                contacts: $__("Contacts"),
+                ordering_information: $__("Ordering information"),
+                interfaces: $__("Interfaces"),
+            },
             additionalToolbarButtons,
             defaultToolbarButtons,
             stickyToolbar: ["Form"],
             resourceAttrs: [
                 {
                     name: "id",
-                    group: $__("Details"),
+                    group: "details",
                     label: $__("ID"),
                     type: "text",
                     hideIn: ["Form", "Show"],
@@ -180,14 +187,14 @@ export default {
                 {
                     name: "name",
                     tableDataSearchFields: "me.name:aliases.alias:me.id",
-                    group: $__("Details"),
+                    group: "details",
                     required: true,
                     type: "text",
                     label: $__("Vendor name"),
                 },
                 {
                     name: "postal",
-                    group: $__("Details"),
+                    group: "details",
                     type: "textarea",
                     label: $__("Postal address"),
                     textAreaRows: 3,
@@ -195,7 +202,7 @@ export default {
                 },
                 {
                     name: "physical",
-                    group: $__("Details"),
+                    group: "details",
                     type: "textarea",
                     label: $__("Physical address"),
                     textAreaRows: 3,
@@ -203,35 +210,35 @@ export default {
                 },
                 {
                     name: "phone",
-                    group: $__("Details"),
+                    group: "details",
                     type: "text",
                     label: $__("Phone"),
                     hideIn: ["List"],
                 },
                 {
                     name: "fax",
-                    group: $__("Details"),
+                    group: "details",
                     type: "text",
                     label: $__("Fax"),
                     hideIn: ["List"],
                 },
                 {
                     name: "url",
-                    group: $__("Details"),
+                    group: "details",
                     type: "text",
                     label: $__("Website"),
                     hideIn: ["List"],
                 },
                 {
                     name: "accountnumber",
-                    group: $__("Details"),
+                    group: "details",
                     type: "text",
                     label: $__("Account number"),
                     hideIn: ["List"],
                 },
                 {
                     name: "type",
-                    group: $__("Details"),
+                    group: "details",
                     type: "select",
                     label: $__("Vendor type"),
                     avCat: "av_vendor_types",
@@ -240,7 +247,7 @@ export default {
                 {
                     name: "aliases",
                     type: "relationshipWidget",
-                    group: $__("Aliases"),
+                    group: "aliases",
                     showElement: {
                         type: "table",
                         columnData: "aliases",
@@ -284,7 +291,7 @@ export default {
                 {
                     name: "contacts",
                     type: "relationshipWidget",
-                    group: $__("Contacts"),
+                    group: "contacts",
                     componentProps: {
                         resourceRelationships: {
                             resourceProperty: "contacts",
@@ -377,7 +384,7 @@ export default {
                 {
                     name: "interfaces",
                     type: "relationshipWidget",
-                    group: $__("Interfaces"),
+                    group: "interfaces",
                     showElement: {
                         type: "component",
                         hidden: vendor => !!vendor.interfaces?.length,
@@ -464,7 +471,7 @@ export default {
                 },
                 {
                     name: "active",
-                    group: $__("Ordering information"),
+                    group: "ordering_information",
                     label: $__("Vendor is"),
                     type: "radio",
                     options: [
@@ -475,7 +482,7 @@ export default {
                 },
                 {
                     name: "list_currency",
-                    group: $__("Ordering information"),
+                    group: "ordering_information",
                     type: "select",
                     label: $__("List prices are"),
                     selectLabel: "currency",
@@ -486,7 +493,7 @@ export default {
                 },
                 {
                     name: "invoice_currency",
-                    group: $__("Ordering information"),
+                    group: "ordering_information",
                     type: "select",
                     selectLabel: "currency",
                     requiredKey: "currency",
@@ -496,7 +503,7 @@ export default {
                 },
                 {
                     name: "gst",
-                    group: $__("Ordering information"),
+                    group: "ordering_information",
                     label: $__("Tax number registered"),
                     type: "radio",
                     options: [
@@ -508,7 +515,7 @@ export default {
                 },
                 {
                     name: "invoice_includes_gst",
-                    group: $__("Ordering information"),
+                    group: "ordering_information",
                     label: $__("Invoice prices"),
                     type: "radio",
                     options: [
@@ -520,7 +527,7 @@ export default {
                 },
                 {
                     name: "list_includes_gst",
-                    group: $__("Ordering information"),
+                    group: "ordering_information",
                     label: $__("List prices"),
                     type: "radio",
                     options: [
@@ -532,7 +539,7 @@ export default {
                 },
                 {
                     name: "tax_rate",
-                    group: $__("Ordering information"),
+                    group: "ordering_information",
                     type: "select",
                     label: $__("Tax rate"),
                     options: gstValues.value,
@@ -543,7 +550,7 @@ export default {
                 },
                 {
                     name: "discount",
-                    group: $__("Ordering information"),
+                    group: "ordering_information",
                     type: "number",
                     label: $__("Discount (%)"),
                     defaultValue: null,
@@ -556,14 +563,14 @@ export default {
                 },
                 {
                     name: "deliverytime",
-                    group: $__("Ordering information"),
+                    group: "ordering_information",
                     type: "number",
                     label: $__("Delivery time (days)"),
                     hideIn: ["List"],
                 },
                 {
                     name: "notes",
-                    group: $__("Ordering information"),
+                    group: "ordering_information",
                     type: "textarea",
                     label: $__("Notes"),
                     hideIn: ["List"],
