@@ -14,7 +14,7 @@
                 :aria-controls="`collapse-${counter}`"
             >
                 <i class="fa fa-caret-down" title="Collapse this section"></i>
-                {{ group.name }}
+                {{ group.label }}
             </legend>
             <div
                 :id="`collapse-${counter}`"
