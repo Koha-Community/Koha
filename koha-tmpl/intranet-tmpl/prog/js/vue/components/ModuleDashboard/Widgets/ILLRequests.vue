@@ -139,6 +139,7 @@ export default {
                 embed: "patron,library,extended_attributes,+strings",
                 pageLength: settings.value.per_page || 5,
                 processing: false,
+                order: [[0, "desc"]],
             },
             url: "/api/v1/ill/requests",
             default_filters: settingsToQueryParams(settings.value),
