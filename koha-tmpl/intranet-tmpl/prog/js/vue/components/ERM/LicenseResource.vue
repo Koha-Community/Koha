@@ -54,6 +54,10 @@ export default {
             vendors,
             props,
             moduleStore: "ERMStore",
+            groupLabels: {
+                documents: $__("Documents"),
+                users: $__("Users"),
+            },
             resourceAttrs: [
                 {
                     name: "license_id",
@@ -129,7 +133,7 @@ export default {
                 {
                     name: "user_roles",
                     type: "relationshipWidget",
-                    group: $__("Users"),
+                    group: "users",
                     showElement: {
                         type: "table",
                         columnData: "user_roles",
@@ -211,7 +215,7 @@ export default {
                 {
                     name: "documents",
                     type: "relationshipWidget",
-                    group: $__("Documents"),
+                    group: "documents",
                     showElement: {
                         type: "component",
                         hidden: license => !!license.documents?.length,

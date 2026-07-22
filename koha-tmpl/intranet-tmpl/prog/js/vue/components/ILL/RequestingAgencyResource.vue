@@ -49,13 +49,17 @@ export default {
                     APIClient.ill.httpClient._baseURL +
                     "iso18626_requesting_agencies",
             },
+            groupLabels: {
+                details: $__("Details"),
+                iso18626_authentication: $__("ISO18626 authentication"),
+            },
             resourceAttrs: [
                 {
                     name: "iso18626_requesting_agency_id",
                     label: $__("ID"),
                     type: "text",
                     hideIn: ["Form"],
-                    group: $__("Details"),
+                    group: "details",
                 },
                 {
                     name: "patron_id",
@@ -69,14 +73,14 @@ export default {
                     },
                     patronEmbedName: "ill_partner",
                     required: true,
-                    group: $__("Details"),
+                    group: "details",
                 },
                 {
                     name: "name",
                     label: $__("Name"),
                     required: true,
                     type: "text",
-                    group: $__("Details"),
+                    group: "details",
                 },
                 {
                     name: "type",
@@ -99,14 +103,14 @@ export default {
                     ],
                     requiredKey: "value",
                     selectLabel: "description",
-                    group: $__("Details"),
+                    group: "details",
                 },
                 {
                     name: "account_id",
                     label: $__("Account ID"),
                     required: true,
                     type: "text",
-                    group: $__("ISO18626 authentication"),
+                    group: "iso18626_authentication",
                 },
                 {
                     name: "securityCode",
@@ -114,7 +118,7 @@ export default {
                     required: true,
                     type: "text",
                     hideIn: ["List"],
-                    group: $__("ISO18626 authentication"),
+                    group: "iso18626_authentication",
                 },
                 {
                     name: "callback_endpoint",
@@ -124,7 +128,7 @@ export default {
                     ),
                     type: "text",
                     hideIn: ["List"],
-                    group: $__("Details"),
+                    group: "details",
                 },
             ],
             moduleStore: "ILLStore",

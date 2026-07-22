@@ -119,7 +119,7 @@ export default {
                 required: true,
                 type: "text",
                 label: __("Staff userid for SIP2 authentication"),
-                group: "Details",
+                group: "details",
                 toolTip: __(
                     "Must match the userid of an existing Koha user with appropriate circulation permissions"
                 ),
@@ -140,13 +140,13 @@ export default {
                 relationshipAPIClient: APIClient.sip2.institutions,
                 relationshipOptionLabelAttr: "name",
                 relationshipRequiredKey: "sip_institution_id",
-                group: "Details",
+                group: "details",
             },
             {
                 name: "allow_additional_materials_checkout",
                 type: "boolean",
                 label: __("Allow additional materials checkout"),
-                group: "Details",
+                group: "details",
                 hideIn: ["List"],
                 toolTip: __(
                     "If enabled, allows patrons to check out items via SIP even if the item has additional materials"
@@ -156,7 +156,7 @@ export default {
                 name: "allow_empty_passwords",
                 type: "boolean",
                 label: __("Allow empty passwords"),
-                group: "Details",
+                group: "details",
                 hideIn: ["List"],
             },
             {
@@ -168,7 +168,7 @@ export default {
                 requiredKey: "value",
                 selectLabel: "description",
                 label: __("Allow fields"),
-                group: "Details",
+                group: "details",
                 hideIn: ["List"],
                 toolTip: __(
                     "Hides all fields not in the list, it is the inverse of hide_fields ( hide_fields takes precedence )"
@@ -184,7 +184,7 @@ export default {
                 relationshipRequiredKey: "item_type_id",
                 label: __("Blocked item types"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
                 toolTip: __(
                     "List of item types that are blocked from being issued at this SIP account"
                 ),
@@ -194,14 +194,14 @@ export default {
                 type: "boolean",
                 label: __("Checked in OK"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
             },
             {
                 name: "convert_nonprinting_characters",
                 type: "text",
                 label: __("Convert nonprinting characters"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
                 toolTip: __(
                     "Convert control and non-space separator characters into the given string"
                 ),
@@ -223,7 +223,7 @@ export default {
                 requiredKey: "value",
                 selectLabel: "description",
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
                 defaultValue: "collection_code",
                 toolTip: __(
                     "CR (Collection Code) is a 3M extension field that communicates an item's shelving category to SIP2 clients. Selects which Koha item field to use as the CR value. Defaults to 'collection_code'."
@@ -234,7 +234,7 @@ export default {
                 type: "boolean",
                 label: __("CT always send"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
                 toolTip: __(
                     "CT (Destination Location) tells the SIP2 client where to route an item, for example to a holds shelf or to another branch for transfer. When enabled, this field is always sent in checkin responses even when the item has no routing destination."
                 ),
@@ -244,7 +244,7 @@ export default {
                 type: "boolean",
                 label: __("CV always send 00 on success"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
                 toolTip: __(
                     'CV (Alert Type) classifies the reason for a checkin alert, for example: 01 = hold at same branch, 02 = hold for another branch, 04 = item needs transfer. Some SIP2 clients require CV to be present in every checkin response; when enabled, sends CV with value "00" (no alert) on successful checkins instead of omitting the field entirely.'
                 ),
@@ -254,7 +254,7 @@ export default {
                 type: "boolean",
                 label: __("CV triggers alert"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
                 toolTip: __(
                     "When enabled, the SIP2 alert flag is only raised if a CV (Alert Type) value is present. When disabled (the default), the alert flag is raised if the checkin failed or if any CV value is sent."
                 ),
@@ -264,14 +264,14 @@ export default {
                 type: "text",
                 label: __("Delimiter"),
                 placeholder: "|",
-                group: "Details",
+                group: "details",
             },
             {
                 name: "disallow_overpayment",
                 type: "boolean",
                 label: __("Disallow overpayment"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
                 toolTip: __(
                     "Set if over-paying a patron's account via SIP2 should fail, rather than create a credit on the account"
                 ),
@@ -287,20 +287,20 @@ export default {
                 defaultValue: null,
                 requiredKey: "value",
                 selectLabel: "description",
-                group: "Details",
+                group: "details",
             },
             {
                 name: "error_detect",
                 type: "boolean",
                 label: __("Error detect"),
-                group: "Details",
+                group: "details",
             },
             {
                 name: "format_due_date",
                 type: "boolean",
                 label: __("Format due date"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
                 toolTip: __(
                     "Set to format the due date in the current DateFormat syspref"
                 ),
@@ -315,7 +315,7 @@ export default {
                 selectLabel: "description",
                 label: __("Hide fields"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
                 toolTip: __(
                     "Hides all fields in the list, it is the inverse of allow_fields ( hide_fields takes precedence )"
                 ),
@@ -325,14 +325,14 @@ export default {
                 type: "boolean",
                 label: __("Holds block checkin"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
             },
             {
                 name: "holds_get_captured",
                 type: "boolean",
                 label: __("Holds get captured"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
                 toolTip: __(
                     "If enabled, items are automatically assigned to holds at SIP check-in; The alerts messages will continue to show, however, to allow items to be put to one side and then captured by a subsequent staff check-in."
                 ),
@@ -348,7 +348,7 @@ export default {
                 relationshipRequiredKey: "item_type_id",
                 label: __("Inhouse item types"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
                 toolTip: __(
                     "Item types that can only do in house checkouts via SIP self check machines"
                 ),
@@ -363,7 +363,7 @@ export default {
                 relationshipRequiredKey: "patron_category_id",
                 label: __("Inhouse patron categories"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
                 toolTip: __(
                     "Patron categories that can only do in house checkouts via SIP self check machines"
                 ),
@@ -373,7 +373,7 @@ export default {
                 type: "number",
                 label: __("Lost block checkout"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
                 toolTip: __(
                     "If a patron has more than a certain number of lost items (default is 1), a flag is set"
                 ),
@@ -384,7 +384,7 @@ export default {
                 type: "number",
                 label: __("Lost block checkout value"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
                 toolTip: __(
                     "Specifies the minimum value of a lost item to be counted towards the lost_block_checkout threshold."
                 ),
@@ -397,21 +397,21 @@ export default {
                 avCat: "av_lost",
                 defaultValue: null,
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
             },
             {
                 name: "overdues_block_checkout",
                 type: "boolean",
                 label: __("Overdues block checkout"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
             },
             {
                 name: "payment_type_writeoff",
                 type: "text",
                 label: __("Payment type writeoff"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
                 placeholder: "06",
             },
             {
@@ -419,7 +419,7 @@ export default {
                 type: "boolean",
                 label: __("Block previous checkouts"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
                 toolTip: __(
                     "Block checkout of items previously or currently checked out by a patron"
                 ),
@@ -435,7 +435,7 @@ export default {
                     sysprefs.value.UseCashRegisters !== "0"
                         ? ["List"]
                         : ["Form", "Show", "List"],
-                group: "Details",
+                group: "details",
                 toolTip: __(
                     "Only required if system preference UseCashRegisters is enabled"
                 ),
@@ -452,7 +452,7 @@ export default {
                 requiredKey: "value",
                 selectLabel: "description",
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
                 toolTip: __(
                     "If set, the item information SIP message will update the datelastseen field for items. For lost items, will either keep them as'lost' or mark them as 'found' depending on the setting"
                 ),
@@ -462,14 +462,14 @@ export default {
                 type: "boolean",
                 label: __("Send patron home library in AF"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
             },
             {
                 name: "patron_branchcode_in_ao",
                 type: "boolean",
                 label: __("Send patron home library in AO"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
                 toolTip: __(
                     "Send patron branchcode in AO field for patron status and patron information responses"
                 ),
@@ -479,7 +479,7 @@ export default {
                 type: "boolean",
                 label: __("Show checkin message"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
                 toolTip: __(
                     "If enabled, successful checking responses will contain an AF screen message"
                 ),
@@ -489,7 +489,7 @@ export default {
                 type: "boolean",
                 label: __("Show outstanding amount"),
                 hideIn: ["List"],
-                group: "Details",
+                group: "details",
                 toolTip: __(
                     "If enabled, if the patron has outstanding charges, the total outstanding amount is displayed on SIP checkout"
                 ),
@@ -506,7 +506,7 @@ export default {
                 selectLabel: "description",
                 label: __("Terminator"),
                 placeholder: "CRLF",
-                group: "Details",
+                group: "details",
             },
             {
                 name: "custom_patron_fields",
@@ -527,7 +527,7 @@ export default {
                     ],
                 },
                 hideIn: ["List"],
-                group: __("SIP response mappings"),
+                group: "sip_response_mappings",
                 componentProps: {
                     resourceRelationships: {
                         resourceProperty: "custom_patron_fields",
@@ -588,7 +588,7 @@ export default {
                     ],
                 },
                 hideIn: ["List"],
-                group: __("SIP response mappings"),
+                group: "sip_response_mappings",
                 componentProps: {
                     resourceRelationships: {
                         resourceProperty: "patron_attributes",
@@ -650,7 +650,7 @@ export default {
                     ],
                 },
                 hideIn: ["List"],
-                group: __("SIP response mappings"),
+                group: "sip_response_mappings",
                 componentProps: {
                     resourceRelationships: {
                         resourceProperty: "custom_item_fields",
@@ -709,7 +709,7 @@ export default {
                     ],
                 },
                 hideIn: ["List"],
-                group: __("SIP response mappings"),
+                group: "sip_response_mappings",
                 componentProps: {
                     resourceRelationships: {
                         resourceProperty: "item_fields",
@@ -764,7 +764,7 @@ export default {
                     ],
                 },
                 hideIn: ["List"],
-                group: __("SIP response mappings"),
+                group: "sip_response_mappings",
                 componentProps: {
                     resourceRelationships: {
                         resourceProperty: "sort_bin_mappings",
@@ -814,7 +814,7 @@ export default {
                     ],
                 },
                 hideIn: ["List"],
-                group: __("SIP response mappings"),
+                group: "sip_response_mappings",
                 componentProps: {
                     resourceRelationships: {
                         resourceProperty: "screen_msg_regexs",
@@ -873,7 +873,7 @@ export default {
                     ],
                 },
                 hideIn: ["List"],
-                group: __("System preference overrides"),
+                group: "system_preference_overrides",
                 componentProps: {
                     resourceRelationships: {
                         resourceProperty: "system_preference_overrides",
@@ -922,7 +922,7 @@ export default {
                 placeholder:
                     "[% patron.surname %][% IF patron.firstname %], [% patron.firstname %][% END %]",
                 hideIn: ["List"],
-                group: "Templates",
+                group: "templates",
                 toolTip:
                     "AE " +
                     __(
@@ -936,7 +936,7 @@ export default {
                 placeholder:
                     "[% accountline.description %] [% accountline.amountoutstanding | format('%.2f') %]",
                 hideIn: ["List"],
-                group: "Templates",
+                group: "templates",
                 toolTip:
                     "AV " +
                     __(
@@ -950,7 +950,7 @@ export default {
                 placeholder:
                     "[% patron.surname %][% IF patron.firstname %], [% patron.firstname %][% END %]",
                 hideIn: ["List"],
-                group: "Templates",
+                group: "templates",
                 toolTip:
                     "DA " +
                     __(
@@ -988,6 +988,12 @@ export default {
             stickyToolbar: ["Form"],
             embedded: props.embedded,
             formGroupsDisplayMode: "accordion",
+            groupLabels: {
+                details: $__("Details"),
+                templates: $__("Templates"),
+                sip_response_mappings: $__("SIP response mappings"),
+                system_preference_overrides: $__("System preference overrides"),
+            },
             resourceAttrs,
             props,
             moduleStore: "SIP2Store",
