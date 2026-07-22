@@ -39,7 +39,7 @@
             <a id="resolved_filter"><i class="fa fa-bars"></i> Include resolved</a>
             <input type="checkbox" id="hide_resolved_concerns" style="display:none;" />
             [% FOR st IN status %]
-                <a id="[% st.authorised_value | html %]_filter"><i class="fa fa-filter"></i> Filter [% st.lib | html %]</a>
+                <a id="[% st.authorised_value | html %]_filter"><i class="fa fa-filter"></i> Hide [% st.lib | html %]</a>
                 <input type="checkbox" id="hide_[% st.authorised_value | html %]" style="display:none;" class="status-filter-checkbox" />
             [% END %]
         </fieldset>
@@ -260,7 +260,7 @@
             );
 
             var txtActivefilter = _("Include resolved");
-            var txtInactivefilter = _("Filter resolved");
+            var txtInactivefilter = _("Hide resolved");
             function adjust_filter_label() {
                 if ($("#hide_resolved_concerns").is(":checked")) {
                     $("#resolved_filter").html('<i class="fa fa-bars"></i> ' + txtActivefilter);
@@ -282,7 +282,7 @@
 
                 $(`#${av}_filter`).on("click", function () {
                     if ($(`#hide_${av}`).is(":checked")) {
-                        $(this).html('<i class="fa fa-filter"></i> ' + _("Filter ") + st.lib);
+                        $(this).html('<i class="fa fa-filter"></i> ' + _("Hide ") + st.lib);
                     } else {
                         $(this).html('<i class="fa fa-bars"></i> ' + _("Include ") + st.lib);
                     }
