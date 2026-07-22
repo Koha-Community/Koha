@@ -251,7 +251,7 @@
                     >
                         [% INCLUDE 'csrf-token.inc' %]
 
-                        [% FOREACH field = ['streetnumber' 'streettype'  'cardnumber' 'branchcode' 'categorycode' 'title' 'surname' 'firstname' 'preferred_name' 'middle_name' 'dateofbirth' 'initials' 'pronouns' 'othernames' 'address' 'address2' 'city' 'state' 'zipcode' 'country' 'phone' 'phonepro' 'mobile' 'email' 'emailpro' 'fax' 'B_streettype' 'B_streetnumber' 'B_address' 'B_address2' 'B_city' 'B_state' 'B_zipcode' 'B_country' 'B_phone' 'B_email' 'contactnote' 'altcontactsurname' 'altcontactfirstname' 'altcontactaddress1' 'altcontactaddress2' 'altcontactaddress3' 'altcontactstate' 'altcontactzipcode' 'altcontactcountry' 'altcontactphone' 'password' 'lang' ] %]
+                        [% FOREACH field = ['streetnumber' 'streettype'  'cardnumber' 'branchcode' 'categorycode' 'title' 'surname' 'firstname' 'preferred_name' 'middle_name' 'sex' 'dateofbirth' 'initials' 'pronouns' 'othernames' 'address' 'address2' 'city' 'state' 'zipcode' 'country' 'phone' 'phonepro' 'mobile' 'email' 'emailpro' 'fax' 'B_streettype' 'B_streetnumber' 'B_address' 'B_address2' 'B_city' 'B_state' 'B_zipcode' 'B_country' 'B_phone' 'B_email' 'contactnote' 'altcontactsurname' 'altcontactfirstname' 'altcontactaddress1' 'altcontactaddress2' 'altcontactaddress3' 'altcontactstate' 'altcontactzipcode' 'altcontactcountry' 'altcontactphone' 'password' 'lang' ] %]
                             [% IF mandatory.defined( field ) %]
                                 [% SET required.$field = 'required' %]
                             [% END %]
@@ -557,17 +557,14 @@
                                                 <li>
                                                     <label for="sex" class="[% required.sex | html %]">Gender:</label>
 
-                                                    <select id="sex" name="borrower_sex" class="[% required.sex | html %] [% IF mandatory.sex && !borrower.sex %]missing_required[% END %]" [% IF mandatory.sex %]required[% END %]>
+                                                    <select id="sex" name="borrower_sex" class="[% required.sex | html %]" [% IF required.sex %]required[% END %]>
                                                         <option value="">None specified</option>
 
                                                         <option value="F" [% IF borrower.sex == 'F' %]selected="selected"[% END %]>Female</option>
                                                         <option value="M" [% IF borrower.sex == 'M' %]selected="selected"[% END %]>Male</option>
                                                         <option value="O" [% IF borrower.sex == 'O' %]selected="selected"[% END %]>Other</option>
                                                     </select>
-
-                                                    [% IF mandatory.sex %]
-                                                        <div class="required_label required" style="margin-top: 0.4em;">Required</div>
-                                                    [% END %]
+                                                    <div class="required_label [% required.sex | html %]">Required</div>
                                                 </li>
                                             [% END %]
                                         </ol>
