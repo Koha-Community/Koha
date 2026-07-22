@@ -28,7 +28,7 @@ my $dev_files = Koha::Devel::Files->new( { context => 'core' } );
 my @tt_files  = $dev_files->ls_tt_files;
 
 # Only for staff
-@tt_files = grep {m{/intranet-tmpl/}} @tt_files;
+@tt_files = grep { m{/intranet-tmpl/} } @tt_files;
 
 my @exceptions = qw(
     koha-tmpl/intranet-tmpl/prog/en/includes/main-container.inc
@@ -42,12 +42,14 @@ plan tests => scalar(@tt_files) + 1;
 for my $file (@tt_files) {
 
     my @lines = read_file($file);
-    my ( $has_main, $has_main_container_fluid );
+    my $has_main;
     for my $line (@lines) {
+
         #$has_main_container_fluid = 1 if $line =~ m{<div class="main container-fluid">};
         $has_main = 1 if $line =~ m{<main>};
     }
 
     ok( !$has_main, qq{$file has '<main>', it must use main-container.inc instead.} );
+
     #is( $has_main_container_fluid, 0, qq{$file has '<div class="main container-fluid">', it must use main-container.inc instead.} );
 }
