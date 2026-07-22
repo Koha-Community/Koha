@@ -45,6 +45,10 @@ export default {
                     APIClient.sip2.httpClient._baseURL + "institutions",
             },
             navigationOnFormSave: "SIP2InstitutionsList",
+            groupLabels: {
+                details: $__("Details"),
+                policy: $__("Policy"),
+            },
             resourceAttrs: [
                 {
                     name: "name",
@@ -52,7 +56,7 @@ export default {
                     type: "text",
                     label: __("Name"),
                     showInTable: true,
-                    group: "Details",
+                    group: "details",
                     toolTip: __(
                         "Name of institution, often chosen to match an existing library branch code or library group title. Unexpected behavior may occur if it is not a valid branch code."
                     ),
@@ -63,7 +67,7 @@ export default {
                     type: "text",
                     label: __("Implementation"),
                     showInTable: true,
-                    group: "Details",
+                    group: "details",
                     placeholder: "ILS",
                     defaultValue: "ILS",
                     toolTip: __(
@@ -75,7 +79,7 @@ export default {
                     type: "boolean",
                     label: __("Checkin"),
                     showInTable: true,
-                    group: "Policy",
+                    group: "policy",
                     toolTip: __(
                         "Are the self service terminals permitted to check items in?"
                     ),
@@ -86,7 +90,7 @@ export default {
                     type: "boolean",
                     label: __("Checkout"),
                     showInTable: true,
-                    group: "Policy",
+                    group: "policy",
                     toolTip: __(
                         "Are the self service terminals permitted to check items out to patrons?"
                     ),
@@ -97,7 +101,7 @@ export default {
                     type: "boolean",
                     label: __("Offline"),
                     showInTable: true,
-                    group: "Policy",
+                    group: "policy",
                     toolTip: __(
                         "Does the ILS allow self-check units to operate when unconnected to the ILS?  That is, can a self-check unit check out items to patrons without checking the status of the items and patrons in real time?"
                     ),
@@ -108,7 +112,7 @@ export default {
                     type: "boolean",
                     label: __("Renewal"),
                     showInTable: true,
-                    group: "Policy",
+                    group: "policy",
                     toolTip: __(
                         "Are the self service terminals permitted to renew items?"
                     ),
@@ -120,7 +124,7 @@ export default {
                     type: "number",
                     label: __("Retries"),
                     show_in_table: true,
-                    group: "Policy",
+                    group: "policy",
                     showInTable: true,
                     defaultValue: 5,
                     toolTip: __(
@@ -134,7 +138,7 @@ export default {
                     type: "boolean",
                     label: __("Status update"),
                     showInTable: true,
-                    group: "Policy",
+                    group: "policy",
                     toolTip: __(
                         "Are the self service terminals permitted to update patron status information. For example, can terminals block patrons?"
                     ),
@@ -145,7 +149,7 @@ export default {
                     type: "number",
                     label: __("Timeout"),
                     showInTable: true,
-                    group: "Policy",
+                    group: "policy",
                     defaultValue: 100,
                     toolTip: __(
                         "Time, in seconds, that the system will wait for a response from the ILS before timing out the request."
