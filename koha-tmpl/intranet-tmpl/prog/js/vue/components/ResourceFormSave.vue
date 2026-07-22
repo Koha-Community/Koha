@@ -75,7 +75,7 @@
                     v-bind:key="counter"
                     class="rows"
                 >
-                    <legend v-if="group.name">{{ group.name }}</legend>
+                    <legend v-if="group.name">{{ group.label }}</legend>
                     <ol>
                         <li
                             v-for="(attr, index) in group.fields"

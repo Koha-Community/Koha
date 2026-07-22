@@ -12,8 +12,8 @@
                 :data-bs-target="'#' + tab.name?.replace(/\s/g, '_')"
                 role="tab"
                 :aria-controls="tab.name?.replace(/\s/g, '_')"
-                :data-content="tab.name"
-                >{{ tab.name }}</a
+                :data-content="tab.label"
+                >{{ tab.label }}</a
             >
         </li>
     </ul>

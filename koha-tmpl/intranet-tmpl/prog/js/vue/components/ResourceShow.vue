@@ -62,7 +62,7 @@
                     v-for="(group, counter) in paneFieldList"
                     v-bind:key="counter"
                 >
-                    <legend v-if="group.name">{{ group.name }}</legend>
+                    <legend v-if="group.name">{{ group.label }}</legend>
                     <ol>
                         <li
                             v-for="(attr, index) in group.fields"
@@ -84,7 +84,7 @@
                 v-for="(group, counter) in fieldList"
                 v-bind:key="counter"
             >
-                <legend v-if="group.name">{{ group.name }}</legend>
+                <legend v-if="group.name">{{ group.label }}</legend>
                 <ol>
                     <li
                         v-for="(attr, index) in group.fields"
@@ -159,6 +159,7 @@ export default {
                 .map(field => {
                     return {
                         name: field.name,
+                        label: field.name,
                         fields: [field],
                         ...(props.instancedResource.showGroupsDisplayMode ===
                         "splitScreen"

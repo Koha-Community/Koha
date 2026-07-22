@@ -42,6 +42,7 @@ import {
  * @param {Function} resourceConfig.defaultToolbarButtons - A function to amend default buttons in the toolbar.
  * @param {Function} resourceConfig.additionalToolbarButtons - A function to add additional buttons to the toolbar.
  * @param {String} resourceConfig.formGroupsDisplayMode - The display mode for the form groups if not the default. Can be one of the following: "accordion", "tabs".
+ * @param {Object} resourceConfig.groupLabels - Maps each group key to its translated, user-facing label, e.g. { ordering_information: $__("Ordering information") }.
  * @param {Array} resourceConfig.stickyToolbar - The names of the components with a toolbar that should be sticky.
  * @param {Array} resourceConfig.navigationOnFormSave - The name of the component that should be navigated to when saving the resource creation/edit form. Defaults to the show component
  *
@@ -486,6 +487,10 @@ export function useBaseResource(resourceConfig) {
             );
             const groupInfo = {
                 name: group === "noGroupFound" ? null : group,
+                label:
+                    group === "noGroupFound"
+                        ? null
+                        : (resourceConfig.groupLabels?.[group] ?? group),
                 fields: groupFields,
                 hasDataToDisplay: false,
             };
