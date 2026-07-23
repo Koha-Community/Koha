@@ -26,6 +26,7 @@ use Koha::CirculationRules;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
+use Koha::Result::Availability;
 
 # The reason vocabulary and the category each reason belongs to.
 # blockers prevent a new booking; warnings are advisory context that does not.
@@ -37,6 +38,12 @@ use constant REASON_CATEGORY => {
     holiday          => 'warnings',
     lead_floor       => 'warnings',
     lead_theoretical => 'warnings',
+};
+
+# The Koha::Result::Availability method that files a reason under its category.
+use constant ADD_METHOD_FOR_CATEGORY => {
+    blockers => 'add_blocker',
+    warnings => 'add_warning',
 };
 
 =head1 NAME
@@ -170,12 +177,16 @@ sub check {
     $self->_mark_holidays;
     $self->_mark_lead_windows;
 
-    # Cells are already built in their final per-(date, item) shape by
-    # _mark, keyed by category (blockers/warnings), so no post-hoc
-    # classification is needed here.
+    # Cells are built as Koha::Result::Availability objects (see _mark), so
+    # they need flattening to plain hashrefs for the wire format.
+    my %availability;
+    while ( my ( $date, $by_item ) = each %{ $self->{availability} } ) {
+        $availability{$date} = { map { $_ => $by_item->{$_}->to_hashref } keys %$by_item };
+    }
+
     return {
         item_ids     => [ sort { $a <=> $b } map { 0 + $_ } @{ $self->{bookable_item_ids} } ],
-        availability => $self->{availability},
+        availability => \%availability,
     };
 }
 
@@ -353,8 +364,8 @@ sub _mark_lead_windows {
 
 Records a reason for an item on every day of the passed span, clamped to
 the requested range. The reason is filed under its category (C<blockers>
-or C<warnings>, per C<REASON_CATEGORY>), building each per-(date, item)
-cell directly in its final shape.
+or C<warnings>, per C<REASON_CATEGORY>) on that day's L<Koha::Result::Availability>
+cell, creating it on first use.
 
 =cut
 
@@ -365,16 +376,13 @@ sub _mark {
 
     my $category = REASON_CATEGORY->{$reason}
         or Koha::Exceptions::WrongParameter->throw("Unknown booking availability reason: $reason");
+    my $add_method = ADD_METHOD_FOR_CATEGORY->{$category};
 
     my $day  = ( DateTime->compare( $start, $self->{from} ) >= 0 ? $start : $self->{from} )->clone;
     my $last = ( DateTime->compare( $end,   $self->{to} ) <= 0   ? $end   : $self->{to} );
     while ( DateTime->compare( $day, $last ) <= 0 ) {
-
-        # Each cell carries all three reason sets (blockers / confirms /
-        # warnings), even when empty.
-        my $cell = $self->{availability}->{ $day->ymd }->{$item_id} //=
-            { blockers => {}, confirms => {}, warnings => {} };
-        $cell->{$category}->{$reason} = 1;
+        my $cell = $self->{availability}->{ $day->ymd }->{$item_id} //= Koha::Result::Availability->new;
+        $cell->$add_method( $reason => 1 );
         $day->add( days => 1 );
     }
 
@@ -401,7 +409,7 @@ sub _soft_mark {
         # Read without autovivifying: touching a not-yet-marked cell must
         # not spawn an empty availability entry in the output.
         my $cell = ( $self->{availability}->{ $day->ymd } // {} )->{$item_id};
-        next if $cell and ( $cell->{blockers}{booking} or $cell->{blockers}{checkout} );
+        next if $cell and ( $cell->blockers->{booking} or $cell->blockers->{checkout} );
         $self->_mark( { item_id => $item_id, reason => $reason, start => $day, end => $day } );
     }
 
