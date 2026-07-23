@@ -844,6 +844,9 @@ subtest 'add() + can_place_holds() tests' => sub {
 
     $schema->storage->txn_begin;
 
+    # Remove any ambient holds_per_day rule so this test is isolated from site configuration
+    Koha::CirculationRules->search( { rule_name => 'holds_per_day' } )->delete;
+
     my $password = 'AbcdEFG123';
 
     my $library = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
