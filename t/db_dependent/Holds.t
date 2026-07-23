@@ -983,6 +983,9 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
 
     $schema->storage->txn_begin;
 
+    # Remove any ambient holds_per_day rule so this test is isolated from site configuration
+    Koha::CirculationRules->search( { rule_name => 'holds_per_day' } )->delete;
+
     my $itemtype = $builder->build_object( { class => 'Koha::ItemTypes' } );
     my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -1744,6 +1747,10 @@ subtest 'CanItemBeReserved rule precedence tests' => sub {
 
     t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'ItemHomeLibrary' );
     $schema->storage->txn_begin;
+
+    # Remove any ambient holds_per_day rule so this test is isolated from site configuration
+    Koha::CirculationRules->search( { rule_name => 'holds_per_day' } )->delete;
+
     my $library = $builder->build_object(
         {
             class => 'Koha::Libraries',

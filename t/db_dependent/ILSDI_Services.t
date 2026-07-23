@@ -467,6 +467,9 @@ subtest 'Holds test' => sub {
 
     $schema->storage->txn_begin;
 
+    # Remove any ambient holds_per_day rule so this test is isolated from site configuration
+    Koha::CirculationRules->search( { rule_name => 'holds_per_day' } )->delete;
+
     t::lib::Mocks::mock_preference( 'AllowHoldsOnDamagedItems', 0 );
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
