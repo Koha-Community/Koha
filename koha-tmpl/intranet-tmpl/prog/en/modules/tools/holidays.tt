@@ -564,7 +564,8 @@
          * Triggers an action based on a click on a calendar day: If a holiday exists on
          * that day it loads an edit form. If there is no existing holiday one can be created
          * @param  {object} calendar - a Date object corresponding to the clicked day
-         * @return {void}
+         * @return {"showHoliday"|"newHoliday"} "showHoliday" when an existing
+         *                   holiday is edited, "newHoliday" when a new one is added
          */
         function dateChanged(calendar) {
             var day = calendar.getDate();
@@ -576,14 +577,19 @@
             var dateString = year + "/" + month + "/" + day;
             if (holidays[dateString] != null) {
                 showHoliday(0, dayName, day, month, year, weekDay, holidays[dateString].title, holidays[dateString].description, "ymd");
+                return "showHoliday";
             } else if (exception_holidays[dateString] != null) {
                 showHoliday(0, dayName, day, month, year, weekDay, exception_holidays[dateString].title, exception_holidays[dateString].description, "exception");
+                return "showHoliday";
             } else if (week_days[weekDay] != null) {
                 showHoliday(1, dayName, day, month, year, weekDay, week_days[weekDay].title, week_days[weekDay].description, "weekday");
+                return "showHoliday";
             } else if (day_month_holidays[dayMonth] != null) {
                 showHoliday(1, dayName, day, month, year, weekDay, day_month_holidays[dayMonth].title, day_month_holidays[dayMonth].description, "daymonth");
+                return "showHoliday";
             } else {
                 newHoliday(dayName, day, month, year, weekDay);
+                return "newHoliday";
             }
         }
 
@@ -669,31 +675,22 @@
                 onChange: function (selectedDates, dateStr, instance) {
                     var fromdate = selectedDates[0];
 
-                    dateChanged(fromdate);
+                    /* dateChanged opens the relevant panel and tells us which
+                      one, so we can adjust its "To date" picker without probing
+                      panel visibility mid-animation */
+                    var calendar = dateChanged(fromdate) === "showHoliday" ? datecancelrange : dateofrange;
 
-                    /* we need to wait animations to complete in order
-                      to determine if calendar opened is for adding a new
-                      holiday or for editing an existing one */
-                    setTimeout(function () {
-                        var calendar;
-                        if ($("#newHoliday").is(":visible")) {
-                            calendar = dateofrange;
-                        } else if ($("#showHoliday").is(":visible")) {
-                            calendar = datecancelrange;
+                    var enddate = calendar.selectedDates[0];
+
+                    calendar.set("defaultDate", fromdate);
+                    calendar.set("minDate", fromdate);
+
+                    if (enddate != undefined) {
+                        if (enddate < fromdate) {
+                            calendar.set("defaultDate", fromdate);
+                            calendar.setDate(fromdate);
                         }
-
-                        var enddate = calendar.selectedDates[0];
-
-                        calendar.set("defaultDate", fromdate);
-                        calendar.set("minDate", fromdate);
-
-                        if (enddate != undefined) {
-                            if (enddate < fromdate) {
-                                calendar.set("defaultDate", fromdate);
-                                calendar.setDate(fromdate);
-                            }
-                        }
-                    }, 250);
+                    }
                 },
                 defaultDate: new Date(keydate),
             });
