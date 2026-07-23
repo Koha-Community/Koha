@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 3;
+use Test::More tests => 6;
 use Test::Exception;
 
 use C4::Calendar;
@@ -262,6 +262,242 @@ subtest 'check() availability tests' => sub {
     is(
         $without_context->{availability}->{ $holiday->ymd }->{ $item1->itemnumber }, undef,
         "No holiday markers without a pickup library context"
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'check() overlapping bookings on the same item' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    Koha::CirculationRules->search( { rule_name => { '-in' => [ 'bookings_lead_period', 'bookings_trail_period' ] } } )
+        ->delete;
+
+    my $branch   = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $itemtype = $builder->build_object( { class => 'Koha::ItemTypes' } );
+    my $biblio   = $builder->build_sample_biblio();
+    my $item     = $builder->build_sample_item(
+        { biblionumber => $biblio->biblionumber, bookable => 1, itype => $itemtype->itemtype } );
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => $branch->branchcode,
+            itemtype   => $itemtype->itemtype,
+            rules      => {
+                bookings_lead_period  => 2,
+                bookings_trail_period => 1,
+            },
+        }
+    );
+
+    my $today = dt_from_string->truncate( to => 'day' );
+    my $day   = sub { $today->clone->add( days => $_[0] ) };
+
+    # First booking: days 10-12 (trail window: day 13)
+    $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                biblio_id  => $biblio->biblionumber,
+                item_id    => $item->itemnumber,
+                start_date => $day->(10)->add( hours => 12 ),
+                end_date   => $day->(12)->add( hours => 12 ),
+                status     => 'new',
+            }
+        }
+    );
+
+    # Second booking on the SAME item, close enough that its lead window
+    # (days 13-14) collides with the first booking's trail window (day 13).
+    $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                biblio_id  => $biblio->biblionumber,
+                item_id    => $item->itemnumber,
+                start_date => $day->(15)->add( hours => 12 ),
+                end_date   => $day->(17)->add( hours => 12 ),
+                status     => 'new',
+            }
+        }
+    );
+
+    my $availability = Koha::Biblio::Availability::Booking->check(
+        {
+            biblio            => $biblio,
+            from              => $today,
+            to                => $day->(30),
+            pickup_library_id => $branch->branchcode,
+            item_type_id      => $itemtype->itemtype,
+        }
+    );
+    my $map = $availability->{availability};
+
+    is_deeply(
+        [ sort keys %{ $map->{ $day->(13)->ymd }->{ $item->itemnumber }->{blockers} } ],
+        [qw(lead trail)],
+        "The first booking's trail and the second booking's lead both land on the boundary day"
+    );
+    is_deeply(
+        $map->{ $day->(14)->ymd }->{ $item->itemnumber }->{blockers},
+        { lead => 1 },
+        "The second booking's lead window continues to close in on its start day"
+    );
+    is_deeply(
+        $map->{ $day->(14)->ymd }->{ $item->itemnumber }->{warnings},
+        { lead_theoretical => 1 },
+        "... while the first booking's theoretical follow-up window still shows as a warning on the same day"
+    );
+    is_deeply(
+        [ sort keys %{ $map->{ $day->(18)->ymd }->{ $item->itemnumber }->{blockers} } ],
+        [qw(trail)],
+        "The second booking's own trail window is unaffected by the first booking"
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'check() booking fully engulfing the requested range' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    Koha::CirculationRules->search( { rule_name => { '-in' => [ 'bookings_lead_period', 'bookings_trail_period' ] } } )
+        ->delete;
+
+    my $branch   = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $itemtype = $builder->build_object( { class => 'Koha::ItemTypes' } );
+    my $biblio   = $builder->build_sample_biblio();
+    my $item     = $builder->build_sample_item(
+        { biblionumber => $biblio->biblionumber, bookable => 1, itype => $itemtype->itemtype } );
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => $branch->branchcode,
+            itemtype   => $itemtype->itemtype,
+            rules      => {
+                bookings_lead_period  => 2,
+                bookings_trail_period => 1,
+            },
+        }
+    );
+
+    my $today = dt_from_string->truncate( to => 'day' );
+    my $day   = sub { $today->clone->add( days => $_[0] ) };
+
+    # Booking starts long before and ends long after the requested range.
+    $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                biblio_id  => $biblio->biblionumber,
+                item_id    => $item->itemnumber,
+                start_date => $day->(-20)->add( hours => 12 ),
+                end_date   => $day->(40)->add( hours => 12 ),
+                status     => 'new',
+            }
+        }
+    );
+
+    my $from         = $today;
+    my $to           = $day->(10);
+    my $availability = Koha::Biblio::Availability::Booking->check(
+        {
+            biblio            => $biblio,
+            from              => $from,
+            to                => $to,
+            pickup_library_id => $branch->branchcode,
+            item_type_id      => $itemtype->itemtype,
+        }
+    );
+    my $map = $availability->{availability};
+
+    is_deeply(
+        $map->{ $from->ymd }->{ $item->itemnumber }->{blockers}, { booking => 1 },
+        "The first day of the range is marked, clamped from the booking's true start"
+    );
+    is_deeply(
+        $map->{ $to->ymd }->{ $item->itemnumber }->{blockers}, { booking => 1 },
+        "The last day of the range is marked, clamped from the booking's true end"
+    );
+
+    my %reasons_seen = map { $_ => 1 } map { keys %{ $_->{ $item->itemnumber }->{blockers} } } values %$map;
+    is_deeply(
+        [ sort keys %reasons_seen ], ['booking'],
+        "Every marked day in the range is a plain 'booking' blocker; the lead/trail windows around"
+            . " the booking's true start/end fall entirely outside the requested range"
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'check() with circulation rules explicitly set to 0' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    Koha::CirculationRules->search( { rule_name => { '-in' => [ 'bookings_lead_period', 'bookings_trail_period' ] } } )
+        ->delete;
+
+    my $branch   = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $itemtype = $builder->build_object( { class => 'Koha::ItemTypes' } );
+    my $biblio   = $builder->build_sample_biblio();
+    my $item     = $builder->build_sample_item(
+        { biblionumber => $biblio->biblionumber, bookable => 1, itype => $itemtype->itemtype } );
+
+    # Explicit 0, as opposed to no rule at all (which also resolves to 0 via
+    # the `|| 0` fallback in check()) — must behave identically.
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => $branch->branchcode,
+            itemtype   => $itemtype->itemtype,
+            rules      => {
+                bookings_lead_period  => 0,
+                bookings_trail_period => 0,
+            },
+        }
+    );
+
+    my $today = dt_from_string->truncate( to => 'day' );
+    my $day   = sub { $today->clone->add( days => $_[0] ) };
+
+    $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                biblio_id  => $biblio->biblionumber,
+                item_id    => $item->itemnumber,
+                start_date => $day->(10)->add( hours => 12 ),
+                end_date   => $day->(12)->add( hours => 12 ),
+                status     => 'new',
+            }
+        }
+    );
+
+    my $availability = Koha::Biblio::Availability::Booking->check(
+        {
+            biblio            => $biblio,
+            from              => $today,
+            to                => $day->(30),
+            pickup_library_id => $branch->branchcode,
+            item_type_id      => $itemtype->itemtype,
+        }
+    );
+    my $map = $availability->{availability};
+
+    is_deeply(
+        $map->{ $day->(10)->ymd }->{ $item->itemnumber }->{blockers}, { booking => 1 },
+        "The booking itself is still marked"
+    );
+    is(
+        $map->{ $day->(9)->ymd }->{ $item->itemnumber }, undef,
+        "No lead window when bookings_lead_period is explicitly 0"
+    );
+    is(
+        $map->{ $day->(13)->ymd }->{ $item->itemnumber }, undef,
+        "No trail window when bookings_trail_period is explicitly 0"
     );
 
     $schema->storage->txn_rollback;
