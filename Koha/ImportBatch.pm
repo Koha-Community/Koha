@@ -102,7 +102,7 @@ sub new_from_file {
             );
         }
 
-        if ($errors) {
+        if ( scalar @$errors ) {
             Koha::Logger->get->warn( 'The following error(s) occurred during '
                     . ( defined $format ? ( $format . " " ) : "" )
                     . "record import:\nERROR: "
