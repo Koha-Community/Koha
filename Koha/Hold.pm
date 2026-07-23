@@ -1715,6 +1715,13 @@ sub strings_map {
     return $strings;
 }
 
+=head3 _pickup_valid_for_item
+
+Helper method to determine if the pickup location for an item is valid when a hold is moved.
+Returns true if the pickup location is valid.
+
+=cut
+
 sub _pickup_valid_for_item {
     my ( $self, $item, $patron ) = @_;
 
