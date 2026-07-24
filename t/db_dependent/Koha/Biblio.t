@@ -2271,7 +2271,7 @@ sub host_record {
 }
 
 subtest 'check_booking tests' => sub {
-    plan tests => 7;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -2384,6 +2384,60 @@ subtest 'check_booking tests' => sub {
         $can_book,
         1,
         "Koha::Item->check_booking takes account of cancelled status in bookings check"
+    );
+
+    # Checkouts on bookable items count against the bookable pool
+    my $checkout_patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $checkout        = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                borrowernumber => $checkout_patron->borrowernumber,
+                itemnumber     => $items[0]->itemnumber,
+                booking_id     => undef,
+                date_due       => dt_from_string()->add( days => 5 ),
+            }
+        }
+    );
+
+    $can_book = $biblio->check_booking(
+        {
+            start_date => dt_from_string(),
+            end_date   => dt_from_string()->add( days => 7 ),
+        }
+    );
+    is(
+        $can_book,
+        0,
+        "Koha::Biblio->check_booking returns false when a checkout occupies the last free bookable item"
+    );
+
+    # ... but the booking's own linked checkout must not block it
+    my $issued_booking = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                biblio_id  => $biblio->biblionumber,
+                item_id    => $items[0]->itemnumber,
+                start_date => dt_from_string()->add( days => 10 ),
+                end_date   => dt_from_string()->add( days => 14 ),
+                status     => 'issued',
+            }
+        }
+    );
+    $checkout->booking_id( $issued_booking->booking_id )->store();
+
+    $can_book = $biblio->check_booking(
+        {
+            start_date => dt_from_string(),
+            end_date   => dt_from_string()->add( days => 7 ),
+            booking_id => $issued_booking->booking_id,
+        }
+    );
+    is(
+        $can_book,
+        1,
+        "Koha::Biblio->check_booking returns true when the only blocking checkout is linked to the booking being updated"
     );
 
     my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );

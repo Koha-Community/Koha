@@ -412,6 +412,14 @@ sub check_booking {
                 '-not_in' => $existing_bookings->_resultset->get_column('item_id')->as_query,
                 '-in'     => $bookable_item_ids,
             },
+
+            # A checkout linked to the booking under consideration must not
+            # block that booking's own updates (see Koha::Item->check_booking)
+            (
+                defined($booking_id)
+                ? ( "me.booking_id" => [ undef, { '!=' => $booking_id } ] )
+                : ()
+            ),
         }
     );
     $booked_count += $checkouts->count;
