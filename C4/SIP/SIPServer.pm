@@ -491,8 +491,12 @@ sub telnet_transport {
         }
     };    # End of eval
 
-    if ($@) {
-        siplog( "LOG_ERR", "telnet_transport: Login timed out" );
+    if ( my $error = $@ ) {
+        if ( $error =~ m/timed out/i ) {
+            siplog( "LOG_ERR", "telnet_transport: Login timed out" );
+        } else {
+            siplog( "LOG_ERR", "telnet_transport: %s", $error );
+        }
         die "Telnet Login Timed out";
     } elsif ( !defined($account) ) {
         siplog( "LOG_ERR", "telnet_transport: Login Failed" );
