@@ -1177,8 +1177,8 @@ subtest 'Integration test: Full optimal selection workflow' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'store() skips clash detection on terminal status transition' => sub {
-    plan tests => 4;
+subtest 'store() skips clash detection on lifecycle status transitions' => sub {
+    plan tests => 6;
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object( { class => "Koha::Patrons" } );
@@ -1205,17 +1205,51 @@ subtest 'store() skips clash detection on terminal status transition' => sub {
     )->store();
     ok( $booking->in_storage, 'Booking on bookable item stored OK' );
 
-    # Now check out the non-bookable sibling item. This
-    # checkout inflates the unavailable count in
-    # Biblio::check_booking (see Bug 41886) and causes a
-    # false clash when there is only one bookable item.
+    # A checkout on the non-bookable sibling inflates the unavailable count
+    # in Biblio::check_booking (see Bug 41886), and a checkout on the booked
+    # item itself registers as a clash in Item::check_booking; neither may
+    # block a lifecycle status transition.
     C4::Circulation::AddIssue( $patron, $non_bookable_item->barcode );
+    $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                itemnumber      => $bookable_item->itemnumber,
+                borrowernumber  => $patron->borrowernumber,
+                date_due        => $end,
+                returndate      => undef,
+                onsite_checkout => 0,
+            }
+        }
+    );
 
-    # Without the fix, transitioning to 'issued' runs clash
-    # detection which sees the non-bookable checkout and throws
-    # Koha::Exceptions::Booking::Clash → 500 error.
     lives_ok { $booking->status('issued')->store() }
-    'Transition to issued skips clash detection';
+    'Transition to issued skips clash detection despite a live checkout on the booked item';
+
+    lives_ok { $booking->status('issued')->store() }
+    'Redundant issued store is a no-op and skips clash detection';
+
+    # A change to the booked period must still be validated, whatever the status
+    my $booking2 = Koha::Booking->new(
+        {
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            item_id           => $bookable_item->itemnumber,
+            pickup_library_id => $bookable_item->homebranch,
+            start_date        => $end->clone->add( days => 1 ),
+            end_date          => $end->clone->add( days => 3 ),
+        }
+    )->store();
+    throws_ok {
+        $booking->set(
+            {
+                start_date => $booking2->start_date,
+                end_date   => $booking2->end_date,
+            }
+        )->store()
+    }
+    'Koha::Exceptions::Booking::Clash', 'Changing the booked period still runs clash detection';
+    $booking->discard_changes;
 
     # Transition to completed (item returned) also skips clash detection
     lives_ok { $booking->status('completed')->store() }

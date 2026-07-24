@@ -150,6 +150,13 @@ sub store {
 
     $self->_result->result_source->schema->txn_do(
         sub {
+            # Nothing changed, nothing to validate; circulation may issue
+            # redundant status writes (e.g. when switching an on-site
+            # checkout) that must not re-trigger clash detection
+            if ( $self->in_storage && !( () = $self->_result->get_dirty_columns ) ) {
+                return $self->SUPER::store;
+            }
+
             if ( $self->item_id ) {
                 Koha::Exceptions::Object::FKConstraint->throw(
                     broken_fk => 'item_id',
@@ -173,10 +180,12 @@ sub store {
                 value     => $self->biblio_id,
             ) unless ( $self->biblio );
 
-            # Skip clash detection when transitioning to a final/terminal
-            # status (cancelled or completed); the checks are irrelevant
-            # at those points and can produce false positives.
-            unless ( $self->_is_final_status_transition ) {
+            # Skip clash detection when the status transition cannot
+            # introduce a new clash: terminal statuses (cancelled,
+            # completed) and collection (issued) leave the booked
+            # period untouched, and the checks can produce false
+            # positives (e.g. against the booking's own checkout).
+            unless ( $self->_skip_clash_detection ) {
 
                 # Throw exception for item level booking clash
                 Koha::Exceptions::Booking::Clash->throw()
@@ -212,7 +221,6 @@ sub store {
                 $self->_send_notice( { notice => 'BOOKING_CONFIRMATION' } );
             } else {
                 my %updated_columns = $self->_result->get_dirty_columns;
-                return $self->SUPER::store unless %updated_columns;
 
                 my $old_booking = $self->get_from_storage;
                 $self->SUPER::store;
@@ -342,16 +350,22 @@ sub to_api_mapping {
 
 =head2 Internal methods
 
-=head3 _is_final_status_transition
+=head3 _skip_clash_detection
 
-    my $bool = $self->_is_final_status_transition;
+    my $bool = $self->_skip_clash_detection;
 
-Returns true when the booking is being transitioned to a terminal status where
-clash detection is no longer meaningful: C<cancelled> or C<completed>.
+Returns true when the booking is being transitioned to a status for which
+clash detection is not meaningful: the terminal statuses C<cancelled> and
+C<completed>, or C<issued> (collection). A booking being collected already
+occupies the period being validated, and the item's own checkout would
+register as a false clash. The transition to C<issued> only skips the
+checks while the booked period and item remain unchanged, and only from an
+active (C<new> or C<issued>) stored status; reactivating a terminal booking
+is still validated.
 
 =cut
 
-sub _is_final_status_transition {
+sub _skip_clash_detection {
     my ($self) = @_;
 
     return 0 unless $self->in_storage;
@@ -361,6 +375,14 @@ sub _is_final_status_transition {
 
     return 0 unless $new_status;
     return 1 if any { $_ eq $new_status } qw( cancelled completed );
+
+    if ( $new_status eq 'issued' ) {
+        return 0 if any { exists $updated_columns->{$_} } qw( start_date end_date item_id biblio_id );
+
+        my $stored_status = $self->get_from_storage->status;
+        return 1 if any { $_ eq $stored_status } qw( new issued );
+    }
+
     return 0;
 }
 

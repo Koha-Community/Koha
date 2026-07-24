@@ -7260,7 +7260,7 @@ subtest 'AddIssue records staff who checked out item if appropriate' => sub {
 };
 
 subtest 'AddIssue/AddReturn | booking status handling' => sub {
-    plan tests => 6;
+    plan tests => 9;
 
     my $schema = Koha::Database->schema;
     $schema->storage->txn_begin;
@@ -7293,6 +7293,41 @@ subtest 'AddIssue/AddReturn | booking status handling' => sub {
     is( $booking1->status, 'completed', "Booking marked as completed when item returned" );
 
     $booking1->delete();
+
+    # Test 1b: Onsite checkout of a booked item, then switched to a regular checkout - booking stays issued
+    t::lib::Mocks::mock_preference( 'OnSiteCheckouts',       1 );
+    t::lib::Mocks::mock_preference( 'SwitchOnSiteCheckouts', 1 );
+
+    my $booking1b = Koha::Booking->new(
+        {
+            patron_id         => $patron1->borrowernumber,
+            pickup_library_id => $pickup_library->branchcode,
+            item_id           => $item->itemnumber,
+            biblio_id         => $item->biblio->biblionumber,
+            start_date        => dt_from_string(),
+            end_date          => dt_from_string()->add( days => 7 ),
+        }
+    )->store();
+
+    AddIssue(
+        $patron1, $item->barcode, dt_from_string()->add( days => 7 ), undef, undef, undef,
+        { onsite_checkout => 1 }
+    );
+    $booking1b->discard_changes();
+    is( $booking1b->status, 'issued', "Booking marked as issued on onsite checkout" );
+
+    lives_ok {
+        AddIssue(
+            $patron1, $item->barcode, dt_from_string()->add( days => 7 ), undef, undef, undef,
+            { switch_onsite_checkout => 1 }
+        )
+    }
+    'Switching an onsite checkout to a regular checkout does not trigger clash detection';
+    $booking1b->discard_changes();
+    is( $booking1b->status, 'issued', "Booking still issued after switching to a regular checkout" );
+
+    AddReturn( $item->barcode, $pickup_library->branchcode );
+    $booking1b->delete();
 
     # Test 2: Another patron checks out item with different patron's booking overlapping actual booking period - should cancel booking
     my $booking2 = Koha::Booking->new(
