@@ -584,9 +584,12 @@ if ( @$barcodes && $op eq 'cud-checkout' ) {
 
                 # If booked (alerts or confirmation) update datedue to end of booking,
                 # unless staff explicitly specified a due date - AddIssue will sync
-                # the booking end_date with the override where possible
+                # the booking end_date with the override where possible. On-site
+                # checkouts are due back the same day and must never stretch to the
+                # booking end date; AddIssue shrinks the booking to match instead
                 if ( my $booked = $needsconfirmation->{BOOKED_EARLY} // $alerts->{BOOKED} ) {
-                    $datedue = $booked->end_date unless ( $duedatespec_allow && $duedatespec );
+                    $datedue = $booked->end_date
+                        unless ( ( $duedatespec_allow && $duedatespec ) || $onsite_checkout );
                 }
 
                 # If renewing an item on hold, use renewonholdduedate (similar to renew.pl)
