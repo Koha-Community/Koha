@@ -21,7 +21,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Warn;
 
 my ( $mockConfig, $mockPrefork );
@@ -118,4 +118,34 @@ subtest '_config_up_to_date() tests' => sub {
         C4::SIP::SIPServer::_config_up_to_date(), 1,
         'Up to date when this process loaded its config after the last modification'
     );
+};
+
+subtest 'sip_protocol_loop() tests' => sub {
+    plan tests => 4;
+
+    my @siplog_calls;
+    my $sipserver_mock = Test::MockModule->new('C4::SIP::SIPServer');
+    $sipserver_mock->mock( 'siplog',       sub { push @siplog_calls, [@_]; } );
+    $sipserver_mock->mock( 'read_request', sub { return '9900302.00'; } );
+
+    my $msgtype_mock = Test::MockModule->new('C4::SIP::Sip::MsgType');
+    $msgtype_mock->mock( 'handle', sub { die "Internal Server Error\n"; } );
+
+    my $server = bless { service => { client_timeout => 5 } }, 'C4::SIP::SIPServer';
+
+    $server->sip_protocol_loop();
+    alarm 0;    # sip_protocol_loop does not clear the pending alarm on the error path
+
+    my @errors = grep { $_->[0] eq 'LOG_ERR' } @siplog_calls;
+    is( scalar @errors, 1, 'A fatal error from the message handler is logged once' );
+    like( $errors[0]->[1], qr/sip_protocol_loop/,     'Error is logged by sip_protocol_loop' );
+    like( $errors[0]->[2], qr/Internal Server Error/, 'The actual error text is logged' );
+
+    @siplog_calls = ();
+    $msgtype_mock->mock( 'handle', sub { die "Timed Out!\n"; } );
+    $server->sip_protocol_loop();
+    alarm 0;
+
+    @errors = grep { $_->[0] eq 'LOG_ERR' } @siplog_calls;
+    is( scalar @errors, 0, 'An inactivity timeout is not logged as an error' );
 };
