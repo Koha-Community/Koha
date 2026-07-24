@@ -1168,23 +1168,9 @@ function syspref_autocomplete(node) {
     node
         .autocomplete({
             source: function (request, response) {
-                let patterns = request.term
-                    .split(/[\s,]+/)
-                    .filter(function (s) {
-                        return s.length;
-                    });
-
-                var table_prefix = "me";
-                let search_fields = ["variable"];
-                let term_subquery_or = [];
-                search_fields.forEach(function (field, i) {
-                    term_subquery_or.push({
-                        [table_prefix + "." + field]: {
-                            like: "%" + request.term + "%",
-                        },
-                    });
-                });
-                let query = [{ "-or": term_subquery_or }];
+                let query = {
+                    "me.variable": { like: "%" + request.term + "%" },
+                };
 
                 let params = {
                     _page: 1,
