@@ -310,7 +310,11 @@ sub process_request {
         siplog( "LOG_WARNING", "Unknown transport '%s', dropping", $service->{transport} );
         return;
     } else {
-        &$transport($self);
+        eval { &$transport($self) };
+        if ( my $error = $@ ) {
+            siplog( "LOG_ERR", "process_request: %s", $error );
+            die $error;
+        }
     }
     return;
 }
@@ -564,8 +568,9 @@ sub sip_protocol_loop {
         alarm($previous_alarm);
         return;
     };
-    if ( $@ =~ m/timed out/i ) {
-        return;
+    if ( my $error = $@ ) {
+        return if $error =~ m/timed out/i;
+        siplog( "LOG_ERR", "sip_protocol_loop: %s", $error );
     }
     return;
 }

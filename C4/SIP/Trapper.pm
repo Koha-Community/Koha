@@ -56,37 +56,4 @@ sub BINMODE {
     binmode( STDOUT, $mode );
 }
 
-=head2 DIE signal handler
-
-    A global die handler to capture fatal errors and ensures they are logged.
-    When DIE is emitted, the message will be logged using Koha::Logger if available,
-    and also printed to stderr
-
-=cut
-
-$SIG{__DIE__} = sub {
-    my $msg = shift;
-
-    # Check if we are inside an eval
-    my $logger_method = 'error';
-    $logger_method = 'warn' if defined $^S && $^S != 0;
-
-    # Check if error originated from SIP code
-    my $is_sip_error = 0;
-    my $i            = 0;    # Start from 0 to check the current caller
-    while ( my @caller = caller( $i++ ) ) {
-        if ( $caller[0] =~ /^C4::SIP::/ || $caller[1] =~ /\/C4\/SIP\// ) {
-            $is_sip_error = 1;
-            last;
-        }
-        last if $i > 10;     # Don't check too deep
-    }
-
-    # Only log if it's from SIP code
-    return unless $is_sip_error;
-    my $logger = Koha::Logger->get( { interface => 'sip', category => 'STDERR' } );
-    $logger->$logger_method($msg) if $logger;
-    die $msg;
-};
-
 1;
