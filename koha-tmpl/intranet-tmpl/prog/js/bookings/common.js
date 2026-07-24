@@ -43,6 +43,21 @@ window.BookingsTable = (function () {
     }
 
     /**
+     * The checkout that collected this booking, or null; the item's current
+     * checkout may belong to somebody else when a stale issued booking
+     * lingers, and must not be displayed or extended as if it were linked
+     *
+     * @param {Object} row - The booking row as returned by the bookings API
+     * @returns {Object|null} - The linked checkout, null when there is none
+     */
+    function linkedCheckout(row) {
+        const checkout = row.item?.checkout;
+        return checkout && checkout.booking_id === row.booking_id
+            ? checkout
+            : null;
+    }
+
+    /**
      * Render the Item column; for issued bookings additionally show the
      * checkout due date and a link to the checkout record
      *
@@ -61,12 +76,13 @@ window.BookingsTable = (function () {
             escape_str(row.booking_id)
         );
 
-        if (row.status === "issued" && row.item.checkout) {
+        const checkout = linkedCheckout(row);
+        if (row.status === "issued" && checkout) {
             content +=
                 '<br/><span class="booking_due_date">%s <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=%s">%s</a></span>'.format(
                     __("Due:"),
                     encodeURIComponent(row.patron_id),
-                    escape_str($date(row.item.checkout.due_date))
+                    escape_str($date(checkout.due_date))
                 );
         }
 
@@ -152,11 +168,13 @@ window.BookingsTable = (function () {
         }
 
         if (row.status === "issued") {
+            const checkout = linkedCheckout(row);
+
             // Extending is a staff authorised renewal of the linked checkout,
             // so it requires both the circulate permission and a checkout
             if (
                 permissions.CAN_user_circulate_circulate_remaining_permissions &&
-                row.item?.checkout
+                checkout
             ) {
                 actions += `
                     <button type="button" class="btn btn-default btn-xs extend-action"
@@ -172,10 +190,10 @@ window.BookingsTable = (function () {
                     </button>
                 `.format(
                     escape_str(row.booking_id),
-                    escape_str(row.item.checkout.checkout_id),
+                    escape_str(checkout.checkout_id),
                     escape_str(row.item_id),
                     escape_str(row.end_date),
-                    escape_str(row.item.checkout.due_date),
+                    escape_str(checkout.due_date),
                     __("Extend")
                 );
             }
