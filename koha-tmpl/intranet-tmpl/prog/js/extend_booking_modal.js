@@ -1,4 +1,4 @@
-/* global __ $date $datetime dayjs flatpickr bookings_table timeline */
+/* global __ $date $datetime $timezone $toDisplayDate dayjs flatpickr bookings_table timeline */
 
 (() => {
     let extendPicker;
@@ -33,6 +33,17 @@
             ? $datetime(dueDate)
             : __("Not found");
 
+        // Work in the library's configured timezone throughout so the day
+        // boundaries match the dates staff see (see Bug 42868); an extension
+        // must end after the current due date, and an overdue checkout can
+        // still be extended from today onwards
+        const libraryTz = $timezone();
+        const today = dayjs().tz(libraryTz).startOf("day");
+        const dueFloor = dueDate
+            ? dayjs(dueDate).tz(libraryTz).add(1, "day").startOf("day")
+            : today;
+        const minDate = dueFloor.isAfter(today) ? dueFloor : today;
+
         // Block dates where another new or issued booking exists for this
         // item, and cap the selectable range at the earliest subsequent
         // booking start date
@@ -48,15 +59,21 @@
             .then(response => (response.ok ? response.json() : []))
             .then(bookings => {
                 const disable = bookings.map(booking => ({
-                    from: dayjs(booking.start_date).startOf("day").toDate(),
-                    to: dayjs(booking.end_date).endOf("day").toDate(),
+                    from: $toDisplayDate(
+                        dayjs(booking.start_date).tz(libraryTz).startOf("day")
+                    ),
+                    to: $toDisplayDate(
+                        dayjs(booking.end_date).tz(libraryTz).endOf("day")
+                    ),
                 }));
 
                 let maxDate;
                 bookings.forEach(booking => {
-                    const bookingStart = dayjs(booking.start_date);
+                    const bookingStart = dayjs(booking.start_date).tz(
+                        libraryTz
+                    );
                     if (
-                        bookingStart.isAfter(dayjs(endDate)) &&
+                        bookingStart.isAfter(dayjs(endDate).tz(libraryTz)) &&
                         (!maxDate || bookingStart.isBefore(maxDate))
                     ) {
                         maxDate = bookingStart;
@@ -64,13 +81,12 @@
                 });
 
                 extendPicker = flatpickr("#extend_new_end_date", {
-                    minDate: dayjs().startOf("day").toDate(),
+                    minDate: $toDisplayDate(minDate),
                     ...(maxDate
                         ? {
-                              maxDate: maxDate
-                                  .subtract(1, "day")
-                                  .endOf("day")
-                                  .toDate(),
+                              maxDate: $toDisplayDate(
+                                  maxDate.subtract(1, "day").endOf("day")
+                              ),
                           }
                         : {}),
                     disable,
@@ -101,7 +117,11 @@
             return;
         }
 
-        const dueDate = dayjs(newEndDate).endOf("day");
+        // Anchor the selected day in the library's timezone so the booking
+        // ends at the end of that day as the library sees it (see Bug 42868)
+        const dueDate = dayjs
+            .tz(dayjs(newEndDate).format("YYYY-MM-DD"), $timezone())
+            .endOf("day");
 
         // The extension is a staff authorised renewal of the linked
         // checkout; the booking end_date is kept in sync server-side

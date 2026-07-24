@@ -1,6 +1,6 @@
 <!-- Extend booking modal -->
 <div class="modal" id="extendBookingModal" tabindex="-1" role="dialog" aria-labelledby="extendBookingLabel">
-    <form method="get" id="extendBookingForm">
+    <form method="get" id="extendBookingForm" novalidate>
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
