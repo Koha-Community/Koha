@@ -22,6 +22,9 @@ Commands:
   restart <instance> <svc>   Restart specific service for instance
   status <instance> <svc>    Show status of specific service for instance
 
+  sync-es-indexers           Enable and start the ES indexer for every
+                             instance configured to use Elasticsearch
+
 Services: plack, zebra, sip, z3950, worker, worker-long_tasks, indexer, es-indexer
 
 Examples:
@@ -32,6 +35,17 @@ Examples:
 EOF
     exit 1
 }
+
+if [ "${1:-}" = "sync-es-indexers" ]; then
+    # Which search engine an instance uses is plain koha-conf.xml state, so
+    # switching an instance to Elasticsearch never runs 'systemctl enable'.
+    # Re-discover ES instances here, like the SysV init script did on every
+    # start.
+    for instance in $(koha-list --enabled --elasticsearch 2>/dev/null); do
+        systemctl enable --now "koha-es-indexer@${instance}.service" || true
+    done
+    exit 0
+fi
 
 [ $# -lt 2 ] && usage
 

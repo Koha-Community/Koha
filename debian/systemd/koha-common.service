@@ -7,7 +7,9 @@ After=koha.target
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStartPre=+/bin/sh -c 'for i in $(koha-list --enabled --elasticsearch 2>/dev/null); do systemctl enable --now "koha-es-indexer@$i.service" 2>/dev/null || true; done'
+# Instances can switch to Elasticsearch after their units were enabled, so
+# re-discover ES indexers on every start, like the SysV init script did.
+ExecStartPre=-/usr/sbin/koha-systemd-ctl sync-es-indexers
 ExecStart=/bin/true
 ExecStop=/bin/systemctl stop koha.target
 
