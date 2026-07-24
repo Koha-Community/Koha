@@ -367,6 +367,12 @@ set_action()
 
 _do_instance() {
     local name=$1
+    #NOTE: It's very important that PERL5LIB and KOHA_HOME are local
+    #      By being local, we keep the PERL5LIB and KOHA_HOME specific
+    #      to the instance that we're working on right now.
+    #      If you disagree, please look at BZ 25778 and BZ 43159.
+    local PERL5LIB=$PERL5LIB
+    local KOHA_HOME=$KOHA_HOME
 
     adjust_paths_git_install $name
     PERL5LIB=$PERL5LIB:$KOHA_HOME/installer:$KOHA_HOME/lib/installer
