@@ -511,7 +511,7 @@
                         }).appendTo('#payForm');
                     });
 
-                    if (Koha.prefs.FinePaymentAutoPopup) {
+                    [% IF Koha.Preference('FinePaymentAutoPopup') %]
                     // Form submits to new tab; reset this page for the next transaction
                     setTimeout(function() {
                         sale_kohaTable.api().clear().draw();
@@ -521,7 +521,8 @@
                         $(':input[name="change"]').val(zero_formatted);
                         checked = false;
                     }, 0);
-                    }
+
+                    [% END %]
 
                     return true;
                 }
