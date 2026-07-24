@@ -81,7 +81,7 @@ sub store {
     $self->SUPER::store();
 
     if ( $log && $is_new ) {
-        logaction( 'APIKEYS', 'CREATE', $self->patron_id, $self, undef );
+        logaction( 'APIKEYS', 'CREATE', $self->patron_id, 'apikey', undef, $self );
     } elsif ($log) {
         logaction( 'APIKEYS', 'MODIFY', $self->patron_id, $self, undef, $original );
     }
@@ -139,7 +139,7 @@ sub delete {
     my $patron_id = $self->patron_id;
     my $result    = $self->SUPER::delete();
 
-    logaction( 'APIKEYS', 'DELETE', $patron_id )
+    logaction( 'APIKEYS', 'DELETE', $patron_id, 'apikey', undef, $self )
         if C4::Context->preference('ApiKeyLog');
 
     return $result;

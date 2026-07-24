@@ -122,7 +122,7 @@ subtest 'store() tests' => sub {
 
 subtest 'validate_secret() tests' => sub {
 
-    plan tests => 12;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -154,7 +154,8 @@ subtest 'validate_secret() tests' => sub {
     )->first;
     ok( $log_entry, 'CREATE log entry found' );
     is( $log_entry->object, $test_patron->id, 'Log object is patron_id' );
-    like( $log_entry->info, qr/logged/, 'Log info contains description' );
+    is( $log_entry->info,   'apikey',         'CREATE log info contains object name' );
+    ok( $log_entry->diff, 'CREATE log info contains diff' );
 
     # Test no CREATE logging when ApiKeyLog is disabled
     t::lib::Mocks::mock_preference( 'ApiKeyLog', 0 );
@@ -178,9 +179,8 @@ subtest 'validate_secret() tests' => sub {
     )->first;
     ok( $delete_log, 'DELETE log entry found' );
     is( $delete_log->object, $test_patron->id, 'DELETE log object is patron_id' );
-
-    # DELETE logs pass undef for info field, object is in diff field
-    is( $delete_log->info, undef, 'DELETE log info is undef as expected' );
+    is( $delete_log->info,   'apikey',         'DELETE log info contains object name' );
+    ok( $delete_log->diff, 'DELETE log info contains diff' );
 
     # Test no DELETE logging when ApiKeyLog is disabled
     t::lib::Mocks::mock_preference( 'ApiKeyLog', 0 );
