@@ -24,20 +24,18 @@ window.BookingsTable = (function () {
             completed: () => __("Completed"),
         };
 
+        const classMap = {
+            new: "bg-success",
+            cancelled: "bg-secondary",
+            issued: "bg-info",
+            completed: "bg-secondary",
+        };
+
         const statusText = statusMap[row.status]
             ? statusMap[row.status]()
             : __("Unknown");
 
-        const classMap = [
-            { status: __("Cancelled"), class: "bg-secondary" },
-            { status: __("Completed"), class: "bg-secondary" },
-            { status: __("Issued"), class: "bg-info" },
-            { status: __("New"), class: "bg-success" },
-        ];
-
-        const badgeClass =
-            classMap.find(mapping => statusText.startsWith(mapping.status))
-                ?.class || "bg-secondary";
+        const badgeClass = classMap[row.status] || "bg-secondary";
 
         return `<span class="badge rounded-pill ${badgeClass}">${statusText}</span>`;
     }
