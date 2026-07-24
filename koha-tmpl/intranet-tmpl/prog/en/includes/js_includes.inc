@@ -99,7 +99,7 @@
 [% END %]
 
 [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-    <script>
+    <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
             if ($("#syspref_searchfield").length) {
                 syspref_autocomplete($("#syspref_searchfield"));
