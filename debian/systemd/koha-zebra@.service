@@ -13,17 +13,17 @@ Group=%i-koha
 WorkingDirectory=/var/lib/koha/%i
 Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
 Environment=KOHA_HOME=/usr/share/koha
-PIDFile=/var/run/koha/%i/zebra.pid
+PIDFile=/run/koha/%i/zebra.pid
 ExecStartPre=+/usr/sbin/koha-generate-env zebra %i
 # Clean up leftover Zebra socket files so Zebra can rebind on startup.
-ExecStartPre=+/bin/rm -f /var/run/koha/%i/bibliosocket /var/run/koha/%i/authoritysocket
+ExecStartPre=+/bin/rm -f /run/koha/%i/bibliosocket /run/koha/%i/authoritysocket
 EnvironmentFile=-/run/koha/%i/zebra.env
 ExecStart=/usr/bin/zebrasrv \
     -v ${ZEBRA_LOGLEVELS} \
     -k ${ZEBRA_MAX_RECORD_SIZE} \
     -f /etc/koha/sites/%i/koha-conf.xml \
     -m '%%FT%%T' \
-    -p /var/run/koha/%i/zebra.pid \
+    -p /run/koha/%i/zebra.pid \
     -D
 ProtectSystem=full
 ProtectHome=yes
