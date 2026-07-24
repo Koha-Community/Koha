@@ -7539,7 +7539,7 @@ subtest 'AddIssue/AddReturn | booking status handling' => sub {
 };
 
 subtest 'AddIssue | booking end_date sync with due date override' => sub {
-    plan tests => 5;
+    plan tests => 8;
 
     my $schema = Koha::Database->schema;
     $schema->storage->txn_begin;
@@ -7625,6 +7625,45 @@ subtest 'AddIssue | booking end_date sync with due date override' => sub {
     is(
         dt_from_string( $booking->end_date )->compare($end_date), 0,
         "Booking end_date kept when override would clash with a subsequent booking"
+    );
+
+    AddReturn( $item->barcode, $pickup_library->branchcode );
+    $booking->delete();
+    $subsequent_booking->delete();
+
+    # Case 4: Early collection due back before the booking starts - the
+    # start_date follows the checkout so the period is not inverted
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode => '*',
+            itemtype   => $item->effective_itemtype,
+            rule_name  => 'bookings_lead_period',
+            rule_value => 5,
+        }
+    );
+
+    $booking = Koha::Booking->new(
+        {
+            patron_id         => $patron->borrowernumber,
+            pickup_library_id => $pickup_library->branchcode,
+            item_id           => $item->itemnumber,
+            biblio_id         => $item->biblio->biblionumber,
+            start_date        => dt_from_string()->add( days => 3 ),
+            end_date          => dt_from_string()->add( days => 10 ),
+        }
+    )->store();
+
+    my $early_due   = dt_from_string()->add( days => 1 )->truncate( to => 'minute' );
+    my $early_issue = AddIssue( $patron, $item->barcode, $early_due->clone );
+    $booking->discard_changes();
+    is( $booking->status, 'issued', "Booking marked issued when collected early" );
+    is(
+        dt_from_string( $booking->end_date )->compare($early_due), 0,
+        "Booking end_date synced to an override before the booking start"
+    );
+    is(
+        $booking->start_date, $early_issue->issuedate,
+        "Booking start_date pulled back to the checkout date instead of storing an inverted period"
     );
 
     $schema->storage->txn_rollback;
@@ -7841,7 +7880,7 @@ subtest 'AddRenewal | booking_id preservation' => sub {
 };
 
 subtest 'AddRenewal | booking end_date sync' => sub {
-    plan tests => 4;
+    plan tests => 6;
 
     my $schema = Koha::Database->schema;
     $schema->storage->txn_begin;
@@ -7936,6 +7975,33 @@ subtest 'AddRenewal | booking end_date sync' => sub {
     is(
         dt_from_string( $booking->end_date )->compare($new_due_date), 0,
         "Booking end_date kept when the renewal clashes with the next booking"
+    );
+
+    # A renewal due before the booking start pulls the start_date back too
+    $booking->set(
+        {
+            start_date => dt_from_string()->add( days => 5 ),
+            end_date   => dt_from_string()->add( days => 8 ),
+        }
+    )->store;
+
+    my $short_due_date = dt_from_string()->add( days => 2 )->truncate( to => 'minute' );
+    AddRenewal(
+        {
+            borrowernumber => $patron->borrowernumber,
+            itemnumber     => $item->itemnumber,
+            branch         => $library->branchcode,
+            datedue        => $short_due_date->clone,
+        }
+    );
+    $booking->discard_changes;
+    is(
+        dt_from_string( $booking->end_date )->compare($short_due_date), 0,
+        "Booking end_date synced to a renewal due date before the booking start"
+    );
+    is(
+        $booking->start_date, $issue->get_from_storage->issuedate,
+        "Booking start_date pulled back to the checkout date instead of storing an inverted period"
     );
 
     $schema->storage->txn_rollback;

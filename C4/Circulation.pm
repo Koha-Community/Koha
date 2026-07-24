@@ -1877,7 +1877,15 @@ sub AddIssue {
                             # Sync any due date override back to the booking end_date so the
                             # booking and checkout agree from the moment of issue
                             my $booking_end = dt_from_string( $booking->end_date );
-                            $booking->end_date($datedue) if $datedue->compare($booking_end) != 0;
+                            if ( $datedue->compare($booking_end) != 0 ) {
+                                $booking->end_date($datedue);
+
+                                # An early collection can be due back before the booked period
+                                # even starts; pull the start_date back to the checkout date
+                                # rather than storing an inverted booking period
+                                my $booking_start = dt_from_string( $booking->start_date );
+                                $booking->start_date($issuedate) if $datedue->compare($booking_start) < 0;
+                            }
 
                             try {
                                 $booking->store;
@@ -3750,7 +3758,14 @@ sub AddRenewal {
                     my $booking_end = dt_from_string( $booking->end_date );
                     if ( $datedue->compare($booking_end) != 0 ) {
                         try {
-                            $booking->end_date($datedue)->store;
+                            $booking->end_date($datedue);
+
+                            # As at issue time, guard against inverting the booking period
+                            # when the new due date precedes the booking start
+                            my $booking_start = dt_from_string( $booking->start_date );
+                            $booking->start_date( dt_from_string( $issue->issuedate ) )
+                                if $datedue->compare($booking_start) < 0;
+                            $booking->store;
                         } catch {
                             my $error = $_;
                             if ( blessed $error && $error->isa('Koha::Exceptions::Booking::Clash') ) {
