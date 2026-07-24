@@ -20,10 +20,6 @@ export class SysprefAPIClient {
                     params: { _order_by: "name", ...params },
                     headers: {},
                 }),
-            getAll: variables =>
-                this.httpClient.get({
-                    endpoint: "/?" + variables.map(p => `pref=${p}`).join("&"),
-                }),
             update: (variable, value) =>
                 this.httpClient.post({
                     endpoint: "/cgi-bin/koha/svc/config/systempreferences",
