@@ -160,7 +160,7 @@
     [% CASE 'EXPIRE' %]
         <span>Expire</span>
     [% CASE 'MODIFY_CARDNUMBER' %]
-        <span>Modify cardnumber</span>
+        <span>Modify card number</span>
     [% CASE 'RESET 2FA' %]
         <span>Reset 2FA</span>
     [% CASE %]
