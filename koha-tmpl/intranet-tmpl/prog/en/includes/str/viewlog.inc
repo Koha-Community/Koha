@@ -81,7 +81,7 @@
         "ACQUISITION ORDER": _("Acquisition order"),
         OVERDUE: _("Overdue"),
         EXPIRE: _("Expire"),
-        MODIFY_CARDNUMBER: _("Modify cardnumber"),
+        MODIFY_CARDNUMBER: _("Modify card number"),
         "RESET 2FA": _("Reset 2FA"),
     };
 
