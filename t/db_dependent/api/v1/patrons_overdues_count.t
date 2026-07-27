@@ -36,7 +36,7 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'overdues_count unauthorized' => sub {
-    plan tests => 2;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -44,11 +44,24 @@ subtest 'overdues_count unauthorized' => sub {
 
     $t->get_ok( "/api/v1/patrons/" . $patron->borrowernumber . "/overdues_count" )->status_is(401);
 
+    # Patron without the borrowers flag
+    my $unprivileged = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+    my $password = 'thePassword123';
+    $unprivileged->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $unprivileged->userid;
+
+    $t->get_ok( "//$userid:$password\@/api/v1/patrons/" . $patron->borrowernumber . "/overdues_count" )->status_is(403);
+
     $schema->storage->txn_rollback;
 };
 
 subtest 'overdues_count' => sub {
-    plan tests => 8;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
@@ -78,6 +91,24 @@ subtest 'overdues_count' => sub {
                 borrowernumber => $patron->borrowernumber,
                 itemnumber     => $item->itemnumber,
                 date_due       => '2020-01-01 00:00:00',
+                branchcode     => $patron->branchcode,
+            }
+        }
+    );
+
+    $t->get_ok( "//$userid:$password\@/api/v1/patrons/" . $patron->borrowernumber . "/overdues_count" )
+        ->status_is(200)
+        ->json_is(1);
+
+    # Add a checkout due in the future, only overdues are counted
+    my $item_2 = $builder->build_sample_item();
+    $builder->build(
+        {
+            source => 'Issue',
+            value  => {
+                borrowernumber => $patron->borrowernumber,
+                itemnumber     => $item_2->itemnumber,
+                date_due       => dt_from_string->add( days => 7 ),
                 branchcode     => $patron->branchcode,
             }
         }
