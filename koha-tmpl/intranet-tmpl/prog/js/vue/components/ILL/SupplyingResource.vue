@@ -936,7 +936,7 @@ export default {
             ],
             groupLabels: {
                 request_details: $__("Request details"),
-                iso18626_messages: $__("ISO18626 Messages"),
+                iso18626_messages: $__("ISO18626 messages"),
                 circulation_information: $__("Circulation information"),
                 specified_by_the_requesting_agency: $__(
                     "Specified by the requesting agency"

@@ -70,7 +70,7 @@ export const routes = [
                     },
                     {
                         path: "/cgi-bin/koha/ill/iso18626_requesting_agencies",
-                        title: $__("Requesting Agencies"),
+                        title: $__("Requesting agencies"),
                         icon: "fa fa-building-columns",
                         is_end_node: true,
                         resource: "ILL/RequestingAgencyResource.vue",
