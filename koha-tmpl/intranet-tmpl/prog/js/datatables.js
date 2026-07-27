@@ -1293,11 +1293,9 @@ function _dt_save_restore_state(table_settings, external_filter_nodes = {}) {
 
         state = JSON.parse(state);
 
-        if (default_save_state || default_save_state_search) {
+        if (default_save_state_search) {
             $("#" + settings.nTable.id).data("loaded_from_state", true);
-        }
-
-        if (!default_save_state_search) {
+        } else {
             delete state.search;
             state.columns.forEach(c => delete c.search);
         }
