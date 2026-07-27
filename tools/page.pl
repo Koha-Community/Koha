@@ -40,7 +40,7 @@ my $page = Koha::AdditionalContents->find($page_id);
 
 if (  !$page
     || $page->category ne 'pages'
-    || $page->branchcode && $page->branchcode != $branch
+    || $page->branchcode && $page->branchcode ne $branch
     || $page->location ne 'staff_only' && $page->location ne 'staff_and_opac' )
 {
     print $query->redirect('/cgi-bin/koha/errors/404.pl');
