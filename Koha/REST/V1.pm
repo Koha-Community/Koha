@@ -219,7 +219,6 @@ sub startup {
     };
 
     $self->plugin('Koha::App::Plugin::Language');
-    $self->plugin('Koha::REST::Plugin::CSRF');
     $self->plugin('Koha::REST::Plugin::Pagination');
     $self->plugin('Koha::REST::Plugin::Query');
     $self->plugin('Koha::REST::Plugin::Objects');
