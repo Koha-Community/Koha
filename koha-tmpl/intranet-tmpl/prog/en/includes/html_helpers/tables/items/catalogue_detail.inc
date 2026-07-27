@@ -962,21 +962,18 @@
                     },
                     drawCallback: function (settings) {
                         let api = this.api();
-                        $.each($(this).find("tbody tr td:first-child"), function (index, e) {
-                            let tr = $(this).parent();
-                            let row = api.row(tr).data();
+                        $.each($(this).find("tbody tr"), function (index, e) {
+                            let row = api.row(this).data();
                             if (!row) return; // Happen if the table is empty
-                            $(this)
-                                .find("input[name='itemnumber'][type='checkbox']")
-                                .on("change", function () {
-                                    let itemnumber = parseInt($(this).val());
-                                    if ($(this).prop("checked")) {
-                                        items_selection[tab_id].push(itemnumber);
-                                    } else {
-                                        items_selection[tab_id] = items_selection[tab_id].filter(id => id != itemnumber);
-                                    }
-                                    itemSelectionBuildActionLinks(tab_id);
-                                });
+                            $(this).on("change", "input[name='itemnumber'][type='checkbox']", function () {
+                                let itemnumber = parseInt($(this).val());
+                                if ($(this).prop("checked")) {
+                                    items_selection[tab_id].push(itemnumber);
+                                } else {
+                                    items_selection[tab_id] = items_selection[tab_id].filter(id => id != itemnumber);
+                                }
+                                itemSelectionBuildActionLinks(tab_id);
+                            });
                         });
 
                         if (!add_filters && settings._iRecordsDisplay == settings._iRecordsTotal && settings._iDisplayLength >= settings._iRecordsDisplay) {
