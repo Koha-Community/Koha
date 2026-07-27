@@ -351,3 +351,63 @@ describe("On single result", () => {
         });
     });
 });
+
+describe("Defer loading", () => {
+    const table_id = "memberresultst";
+
+    beforeEach(() => {
+        cleanup();
+        cy.login();
+        cy.title().should("eq", "Koha staff interface");
+        cy.window().then(win => {
+            win.localStorage.clear();
+        });
+    });
+
+    it("should be deferred if not default_save_state_search", () => {
+        cy.task("buildSampleObjects", {
+            object: "patron",
+            count: RESTdefaultPageSize,
+            values: {},
+        }).then(patrons => {
+            // Needs more properties to not explode
+            // account_balace: balance_str.escapeHtml(...).format_price is not a function
+            patrons = patrons.map(p => ({ ...p, account_balance: 0 }));
+
+            cy.intercept("GET", "/api/v1/patrons*", {
+                statusCode: 200,
+                body: patrons,
+                headers: {
+                    "X-Base-Total-Count": baseTotalCount,
+                    "X-Total-Count": baseTotalCount,
+                },
+            }).as("searchPatrons");
+
+            cy.visit("/cgi-bin/koha/members/members-home.pl");
+            cy.window().then(win => {
+                win.categories_map = patrons.reduce((map, p) => {
+                    map[p.category_id.toLowerCase()] = p.category_id;
+                    return map;
+                }, {});
+            });
+
+            cy.mock_table_settings({
+                default_save_state: 1,
+                default_save_state_search: 0,
+            });
+
+            cy.get(`#${table_id}_wrapper .dt-info`).should("not.be.visible");
+            cy.get("form.patron_search_form input[type='submit']").click();
+            cy.wait("@searchPatrons");
+            cy.get(`#${table_id}_wrapper .dt-info`).should("be.visible");
+            cy.get("@searchPatrons.all").should("have.length", 1);
+
+            cy.visit("/cgi-bin/koha/members/members-home.pl");
+            cy.get(`#${table_id}_wrapper .dt-info`).should("not.be.visible");
+            cy.get("form.patron_search_form input[type='submit']").click();
+            cy.wait("@searchPatrons");
+            cy.get(`#${table_id}_wrapper .dt-info`).should("be.visible");
+            cy.get("@searchPatrons.all").should("have.length", 2); // Previous 1, +1
+        });
+    });
+});
