@@ -28,6 +28,7 @@ use base qw{Module::Bundled::Files};
 use C4::Context;
 use C4::Output qw( output_with_http_headers );
 
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions::Plugin;
 use Koha::Cache::Memory::Lite;
 
@@ -209,6 +210,20 @@ sub get_metadata {
     #FIXME: Why another encoding issue? For metadata containing non latin characters.
     my $metadata = $self->{metadata};
     defined( $metadata->{$_} ) && utf8::decode( $metadata->{$_} ) for keys %$metadata;
+
+    # Validate date fields
+    foreach my $field (qw{date_authored date_updated}) {
+        my $value = $metadata->{$field};
+        next unless $value;
+
+        try { dt_from_string( $value, 'iso' ) }
+        catch {
+            my $name = $metadata->{name} // 'Unknown';
+            warn "Plugin $name has invalid $field metadata";
+            delete $metadata->{$field};
+        }
+    }
+
     return $metadata;
 }
 
