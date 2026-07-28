@@ -920,6 +920,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 reports_branches
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ReportsBranch>
+
+=cut
+
+__PACKAGE__->has_many(
+  "reports_branches",
+  "Koha::Schema::Result::ReportsBranch",
+  { "foreign.branchcode" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 reserves
 
 Type: has_many
@@ -1036,8 +1051,8 @@ Composing rels: L</z3950servers_branches> -> server
 __PACKAGE__->many_to_many("servers", "z3950servers_branches", "server");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-02-25 12:31:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/S4XS+A55sZ8v/fC8k785g
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-07-28 12:08:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zldxQFMCaqzHTVla/0ZdWQ
 
 __PACKAGE__->has_many(
     "additional_field_values",
