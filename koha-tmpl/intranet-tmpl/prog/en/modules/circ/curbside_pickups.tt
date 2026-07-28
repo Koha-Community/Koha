@@ -54,7 +54,7 @@
             background: #e6e6e6 linear-gradient(180deg, #f7f7f7, #f0f0f0);
         }
         fieldset.fg .pickup_time label::before {
-            font-family: "Font Awesome 6 Free";
+            font-family: "Font Awesome 7 Free";
             color: #aaa;
             content: "\f111";
             display: inline-block;
@@ -66,7 +66,7 @@
             color: #fff;
         }
         fieldset.fg .pickup_time input:checked + label::before {
-            font-family: "Font Awesome 6 Free";
+            font-family: "Font Awesome 7 Free";
             color: #fff;
             content: "\f05d";
             display: inline-block;
@@ -473,27 +473,25 @@
                                         <span class="label">Items ready for pickup: </span>
                                     </div>
                                     <div class="fg-text">
-                                        <fieldset>
+                                        [% IF waiting_holds.count %]
                                             <ul>
-                                                [% IF waiting_holds.count %]
-                                                    [% FOREACH h IN waiting_holds %]
-                                                        <li>
-                                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% h.biblionumber | uri %]"> [% h.biblio.title | html %] </a>
-                                                            [% IF ( h.biblio.author ) %]
-                                                                [% h.biblio.author | html %]
-                                                            [% END %]
-                                                            [% IF h.item.barcode %]
-                                                                (<a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% h.itemnumber | uri %]&biblionumber=[% h.biblionumber | uri %]#item[% h.itemnumber | uri %]"
-                                                                    >[% h.item.barcode | html %]</a
-                                                                >)
-                                                            [% END %]
-                                                        </li>
-                                                    [% END %]
-                                                [% ELSE %]
-                                                    <li>There are no waiting holds for this patron at this library.</li>
+                                                [% FOREACH h IN waiting_holds %]
+                                                    <li>
+                                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% h.biblionumber | uri %]"> [% h.biblio.title | html %] </a>
+                                                        [% IF ( h.biblio.author ) %]
+                                                            [% h.biblio.author | html %]
+                                                        [% END %]
+                                                        [% IF h.item.barcode %]
+                                                            (<a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% h.itemnumber | uri %]&biblionumber=[% h.biblionumber | uri %]#item[% h.itemnumber | uri %]"
+                                                                >[% h.item.barcode | html %]</a
+                                                            >)
+                                                        [% END %]
+                                                    </li>
                                                 [% END %]
                                             </ul>
-                                        </fieldset>
+                                        [% ELSE %]
+                                            There are no waiting holds for this patron at this library.
+                                        [% END %]
                                     </div>
                                 </div>
 
@@ -688,8 +686,8 @@
                         let disabled = pickupSlot.available ? "" : "disabled";
                         $("#pickup-time-slots").append(
                             `<div class="pickup_time"><input type="radio" id="slot_${i}" name="pickup_time" value="${optValue}" ${disabled} /> <label class="pickup_select" for="slot_${i}" data-bs-toggle="tooltip" title="` +
-                            _("Pickups scheduled: ") +
-                            `${pickups_scheduled}">${optText} <span class="pickups_scheduled">${pickups_scheduled}</span></label></div>`
+                                _("Pickups scheduled: ") +
+                                `${pickups_scheduled}">${optText} <span class="pickups_scheduled">${pickups_scheduled}</span></label></div>`
                         );
                     }
 
