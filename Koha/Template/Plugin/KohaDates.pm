@@ -31,7 +31,9 @@ sub filter {
     return "" unless $text;
     $config->{with_hours} //= 0;
 
-    my $dt = dt_from_string( $text, 'iso' );
+    my $dt = eval { dt_from_string( $text, 'iso' ) };
+    return "" if $@;
+
     $dt->add(%$_) for _parse_config_for_durations($config);   # Allow date add/subtract; see _parse_config_for_durations
 
     return $config->{as_due_date}

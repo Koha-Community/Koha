@@ -7,7 +7,7 @@ use Koha::DateUtils qw( dt_from_string output_pref );
 
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 10;
+use Test::More tests => 11;
 use t::lib::Mocks;
 
 BEGIN {
@@ -22,10 +22,13 @@ my $context = C4::Context->new();
 my $filter = Koha::Template::Plugin::KohaDates->new();
 ok( $filter, "new()" );
 
+my $filtered_date = $filter->filter('01-01-01');
+is( $filtered_date, '', 'invalid date returns empty string' ) or diag('invalid date fails');
+
 t::lib::Mocks::mock_preference( "dateformat", 'iso' );
 $context->clear_syspref_cache();
 
-my $filtered_date = $filter->filter($date);
+$filtered_date = $filter->filter($date);
 is( $filtered_date, $date, "iso conversion" ) or diag("iso conversion fails");
 
 #$filter = Koha::Template::Plugin::KohaDates->new();
