@@ -50,7 +50,7 @@ String.prototype.escapeHtml = function () {
     });
 };
 function escape_str(s) {
-    return s != null ? s.escapeHtml() : "";
+    return s != null ? s.toString().escapeHtml() : "";
 }
 
 function confirmDelete(message) {
