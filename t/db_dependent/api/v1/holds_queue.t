@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -207,6 +207,88 @@ subtest 'sorting on embedded fields' => sub {
     $t->get_ok(
         "//$userid:$password\@/api/v1/holds/queue?_order_by=+biblio.publisher" => { 'x-koha-embed' => 'biblio' } )
         ->status_is(200);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'HidePatronName tests' => sub {
+
+    plan tests => 13;
+
+    $schema->storage->txn_begin;
+
+    Koha::Hold::HoldsQueueItems->delete;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**1 }    # circulate flag
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $biblio      = $builder->build_sample_biblio;
+    my $item        = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $hold_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { surname => 'Smith', firstname => 'John' },
+        }
+    );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    $builder->build_object(
+        {
+            class => 'Koha::Hold::HoldsQueueItems',
+            value => {
+                biblionumber   => $biblio->biblionumber,
+                itemnumber     => $item->itemnumber,
+                barcode        => $item->barcode,
+                surname        => $hold_patron->surname,
+                firstname      => $hold_patron->firstname,
+                borrowernumber => $hold_patron->borrowernumber,
+                cardnumber     => $hold_patron->cardnumber,
+                pickbranch     => $library->branchcode,
+                holdingbranch  => $item->holdingbranch,
+                title          => $biblio->title,
+            },
+        }
+    );
+
+    # HidePatronName OFF - full patron embed returned (not redacted)
+    t::lib::Mocks::mock_preference( 'HidePatronName', 0 );
+
+    $t->get_ok( "//$userid:$password\@/api/v1/holds/queue" => { 'x-koha-embed' => 'patron' } )
+        ->status_is(200)
+        ->json_has('/0/patron/library_id')
+        ->json_has('/0/patron/surname')
+        ->json_has('/0/patron/firstname');
+
+    # HidePatronName ON - patron redacted to only allowed keys
+    t::lib::Mocks::mock_preference( 'HidePatronName', 1 );
+
+    my $tx =
+        $t->get_ok( "//$userid:$password\@/api/v1/holds/queue" => { 'x-koha-embed' => 'patron' } )
+        ->status_is(200)
+        ->json_hasnt('/0/patron/surname')
+        ->json_hasnt('/0/patron/firstname')
+        ->json_hasnt('/0/patron/library_id');
+
+    # HidePatronName ON applies even to superlibrarians
+    my $superlibrarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 }     # superlibrarian
+        }
+    );
+    $superlibrarian->set_password( { password => $password, skip_validation => 1 } );
+    my $super_userid = $superlibrarian->userid;
+
+    $t->get_ok( "//$super_userid:$password\@/api/v1/holds/queue" => { 'x-koha-embed' => 'patron' } )
+        ->status_is(200)
+        ->json_hasnt('/0/patron/library_id');
 
     $schema->storage->txn_rollback;
 };

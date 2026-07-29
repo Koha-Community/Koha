@@ -54,7 +54,7 @@ sub list {
 
         # TODO: HidePatronName should be handled generically in Koha::Patron->to_api
         # so all endpoints respect it without per-controller redaction logic.
-        if ( C4::Context->preference('HidePatronName') && !$c->stash('koha.user')->is_superlibrarian ) {
+        if ( C4::Context->preference('HidePatronName') ) {
             for my $item (@$items) {
                 next unless $item->{patron};
                 my $patron = $item->{patron};
