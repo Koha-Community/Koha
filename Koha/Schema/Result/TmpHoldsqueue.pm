@@ -122,6 +122,30 @@ __PACKAGE__->table("tmp_holdsqueue");
 
 set when the queue targeted this item as a local hold group match for the reserve
 
+=head2 itype_description
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+materialized description of the item type at queue build time
+
+=head2 ccode_description
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+materialized description of the collection code at queue build time
+
+=head2 location_description
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+materialized description of the shelving location at queue build time
+
 =head2 timestamp
 
   data_type: 'timestamp'
@@ -168,6 +192,12 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "local_holdgroup_match",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "itype_description",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
+  "ccode_description",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
+  "location_description",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "timestamp",
   {
     data_type => "timestamp",
@@ -242,8 +272,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-07-29 15:48:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wvYdiCgLY1Ssu8dCA8yc7Q
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-07-31 18:54:02
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZoQ0yT6ujIc5s8pMIMrgcA
 
 __PACKAGE__->add_columns(
     '+item_level_request'    => { is_boolean => 1 },
