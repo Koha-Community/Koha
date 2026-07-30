@@ -406,6 +406,8 @@ subtest 'return_claim accessor' => sub {
 subtest 'tracked_links relationship' => sub {
     plan tests => 3;
 
+    $schema->storage->txn_begin;
+
     my $biblio = $builder->build_sample_biblio();
     my $item   = $builder->build_sample_item(
         {
@@ -419,6 +421,8 @@ subtest 'tracked_links relationship' => sub {
     my $link2 = $builder->build( { source => 'Linktracker', value => { itemnumber => $item->itemnumber } } );
 
     is( $item->tracked_links()->count, 2, "Two tracked links found" );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'is_bundle tests' => sub {
@@ -1273,6 +1277,8 @@ subtest 'store check barcodes' => sub {
     $item->barcode(undef)->store();
     $item->discard_changes;
     is( $item->barcode, undef, 'undef barcodes remain undef' );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'deletion' => sub {
@@ -2196,6 +2202,8 @@ subtest 'Tests for relationship between item and item_orders via aqorders_item' 
     $orders = $item->orders;
     is( $orders->count,                    1,           'One order found by item with the relationship' );
     is( $orders->next->order_internalnote, $order_note, 'Correct order found by item with the relationship' );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'move_to_biblio() tests' => sub {
