@@ -206,6 +206,52 @@ describe("kohaTable (using REST API)", () => {
             });
         });
 
+        it("User choices are kept in the state - Save state is ON, search state is OFF", () => {
+            const state_key = "DataTables_admin_libraries_libraries";
+
+            build_libraries().then(() => {
+                cy.visit("/cgi-bin/koha/admin/branches.pl");
+
+                cy.mock_table_settings({
+                    default_save_state: 1,
+                    default_save_state_search: 0,
+                });
+
+                // Hide "Code"
+                cy.get(`#${table_id}_wrapper .buttons-colvis`).click();
+                cy.get(`#${table_id}_wrapper .dt-button-collection`)
+                    .contains("Code")
+                    .click();
+
+                cy.window().then(win => {
+                    const state = JSON.parse(
+                        win.localStorage.getItem(state_key)
+                    );
+                    expect(state.user_choices).to.deep.equal({ 1: false });
+                });
+
+                // The state is saved on every draw, the user choices must not
+                // be dropped by the draws of the next page load
+                cy.visit("/cgi-bin/koha/admin/branches.pl");
+
+                cy.mock_table_settings({
+                    default_save_state: 1,
+                    default_save_state_search: 0,
+                });
+
+                cy.get(`#${table_id}_wrapper .dt-info`).contains(
+                    `Showing 1 to ${RESTdefaultPageSize} of ${baseTotalCount} entries`
+                );
+
+                cy.window().then(win => {
+                    const state = JSON.parse(
+                        win.localStorage.getItem(state_key)
+                    );
+                    expect(state.user_choices).to.deep.equal({ 1: false });
+                });
+            });
+        });
+
         it("One column hidden, feature is off {visibility_condition: false} - Save state is ON", () => {
             build_libraries().then(() => {
                 cy.visit("/cgi-bin/koha/admin/branches.pl");
