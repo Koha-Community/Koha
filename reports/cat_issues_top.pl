@@ -37,9 +37,32 @@ plugin that shows a stats on borrowers
 my $input          = CGI->new;
 my $do_it          = $input->param('do_it');
 my $fullreportname = "reports/cat_issues_top.tt";
-my $limit          = $input->param("Limit");
-my $column         = $input->param("Criteria");
+my $limit;
+my $limit_input = $input->param("Limit");
+my $column;
+my $column_input = $input->param("Criteria");
 my @filters        = $input->multi_param("Filter");
+
+# Allowed values for the Criteria parameter, matching the report's own
+# select options in reports/cat_issues_top.tt. Criteria is used unquoted
+# as a SQL identifier, so it must be validated against a fixed set.
+my %allowed_fields = (
+    "branch"       => 1,
+    "categorycode" => 1,
+    "itemtype"     => 1,
+    "Day"          => 1,
+    "Week"         => 1,
+    "Month"        => 1,
+    "Year"         => 1,
+);
+if ( $column_input && $allowed_fields{$column_input} ) {
+    $column = $column_input;
+}
+
+# Limit is a numeric row count only
+if ( $limit_input && $limit_input =~ /^\d+$/ ) {
+    $limit = $limit_input;
+}
 
 my $output   = $input->param("output");
 my $basename = $input->param("basename");
@@ -248,6 +271,7 @@ sub calculate {
             $colorder .= $column;
         }
 
+        my @bind2 = ();
         my $strsth2;
         $strsth2 .= "SELECT distinctrow $colfield 
                      FROM `old_issues` 
@@ -258,26 +282,24 @@ sub calculate {
         if ( ( $column =~ /issuedate/ ) or ( $column =~ /returndate/ ) ) {
             if ( $colfilter[1] and ( $colfilter[0] ) ) {
                 $strsth2 .= " and $column between ? and ? ";
+                push( @bind2, $colfilter[0], $colfilter[1] );
             } elsif ( $colfilter[1] ) {
                 $strsth2 .= " and $column < ? ";
+                push( @bind2, $colfilter[1] );
             } elsif ( $colfilter[0] ) {
                 $strsth2 .= " and $column > ? ";
+                push( @bind2, $colfilter[0] );
             }
         } elsif ( $colfilter[0] ) {
             $colfilter[0] =~ s/\*/%/g;
             $strsth2 .= " and $column LIKE ? ";
+            push( @bind2, $colfilter[0] );
         }
         $strsth2 .= " group by $colfield";
         $strsth2 .= " order by $colorder";
 
         my $sth2 = $dbh->prepare($strsth2);
-        if ( (@colfilter) and ( $colfilter[1] ) ) {
-            $sth2->execute( "'" . $colfilter[0] . "'", "'" . $colfilter[1] . "'" );
-        } elsif ( $colfilter[0] ) {
-            $sth2->execute( $colfilter[0] );
-        } else {
-            $sth2->execute;
-        }
+        $sth2->execute(@bind2);
 
         while ( my ($celvalue) = $sth2->fetchrow ) {
             my %cell;
@@ -314,40 +336,76 @@ sub calculate {
                   LEFT JOIN borrowers USING(borrowernumber)
                   WHERE 1";
 
+    my @bind3 = ();
     @$filters[0] =~ s/\*/%/g                                             if ( @$filters[0] );
-    $strcalc .= " AND old_issues.issuedate > '" . @$filters[0] . "'"     if ( @$filters[0] );
+    if ( @$filters[0] ) {
+        $strcalc .= " AND old_issues.issuedate > ?";
+        push( @bind3, @$filters[0] );
+    }
     @$filters[1] =~ s/\*/%/g                                             if ( @$filters[1] );
-    $strcalc .= " AND old_issues.issuedate < '" . @$filters[1] . "'"     if ( @$filters[1] );
+    if ( @$filters[1] ) {
+        $strcalc .= " AND old_issues.issuedate < ?";
+        push( @bind3, @$filters[1] );
+    }
     @$filters[2] =~ s/\*/%/g                                             if ( @$filters[2] );
-    $strcalc .= " AND old_issues.returndate > '" . @$filters[2] . "'"    if ( @$filters[2] );
+    if ( @$filters[2] ) {
+        $strcalc .= " AND old_issues.returndate > ?";
+        push( @bind3, @$filters[2] );
+    }
     @$filters[3] =~ s/\*/%/g                                             if ( @$filters[3] );
-    $strcalc .= " AND old_issues.returndate < '" . @$filters[3] . "'"    if ( @$filters[3] );
+    if ( @$filters[3] ) {
+        $strcalc .= " AND old_issues.returndate < ?";
+        push( @bind3, @$filters[3] );
+    }
     @$filters[4] =~ s/\*/%/g                                             if ( @$filters[4] );
-    $strcalc .= " AND old_issues.branchcode like '" . @$filters[4] . "'" if ( @$filters[4] );
+    if ( @$filters[4] ) {
+        $strcalc .= " AND old_issues.branchcode like ?";
+        push( @bind3, @$filters[4] );
+    }
     @$filters[5] =~ s/\*/%/g                                             if ( @$filters[5] );
-
     if ( @$filters[5] ) {
         if ( C4::Context->preference('item-level_itypes') ) {
-            $strcalc .= " AND items.itype like ";
+            $strcalc .= " AND items.itype like ?";
         } else {
-            $strcalc .= " AND biblioitems.itemtype like ";
+            $strcalc .= " AND biblioitems.itemtype like ?";
         }
-        $strcalc .= "'" . @$filters[5] . "'";
+        push( @bind3, @$filters[5] );
     }
     @$filters[6] =~ s/\*/%/g                                                        if ( @$filters[6] );
-    $strcalc .= " AND itemcallnumber like '" . @$filters[6] . "'"                   if ( @$filters[6] );
+    if ( @$filters[6] ) {
+        $strcalc .= " AND itemcallnumber like ?";
+        push( @bind3, @$filters[6] );
+    }
     @$filters[7] =~ s/\*/%/g                                                        if ( @$filters[7] );
-    $strcalc .= " AND ccode like '" . @$filters[7] . "'"                            if ( @$filters[7] );
+    if ( @$filters[7] ) {
+        $strcalc .= " AND ccode like ?";
+        push( @bind3, @$filters[7] );
+    }
     @$filters[8] =~ s/\*/%/g                                                        if ( @$filters[8] );
-    $strcalc .= " AND location like '" . @$filters[8] . "'"                         if ( @$filters[8] );
+    if ( @$filters[8] ) {
+        $strcalc .= " AND location like ?";
+        push( @bind3, @$filters[8] );
+    }
     @$filters[9] =~ s/\*/%/g                                                        if ( @$filters[9] );
-    $strcalc .= " AND borrowers.categorycode like '" . @$filters[9] . "'"           if ( @$filters[9] );
+    if ( @$filters[9] ) {
+        $strcalc .= " AND borrowers.categorycode like ?";
+        push( @bind3, @$filters[9] );
+    }
     @$filters[10] =~ s/\*/%/g                                                       if ( @$filters[10] );
-    $strcalc .= " AND dayname(old_issues.issuedate) like '" . @$filters[10] . "'"   if ( @$filters[10] );
+    if ( @$filters[10] ) {
+        $strcalc .= " AND dayname(old_issues.issuedate) like ?";
+        push( @bind3, @$filters[10] );
+    }
     @$filters[11] =~ s/\*/%/g                                                       if ( @$filters[11] );
-    $strcalc .= " AND monthname(old_issues.issuedate) like '" . @$filters[11] . "'" if ( @$filters[11] );
+    if ( @$filters[11] ) {
+        $strcalc .= " AND monthname(old_issues.issuedate) like ?";
+        push( @bind3, @$filters[11] );
+    }
     @$filters[12] =~ s/\*/%/g                                                       if ( @$filters[12] );
-    $strcalc .= " AND year(old_issues.issuedate) like '" . @$filters[12] . "'"      if ( @$filters[12] );
+    if ( @$filters[12] ) {
+        $strcalc .= " AND year(old_issues.issuedate) like ?";
+        push( @bind3, @$filters[12] );
+    }
 
     $strcalc .= " group by biblio.biblionumber, biblio.title";
     $strcalc .= ", $colfield" if ($column);
@@ -355,7 +413,7 @@ sub calculate {
     $strcalc .= ", $colfield " if ($colfield);
 
     my $dbcalc = $dbh->prepare($strcalc);
-    $dbcalc->execute;
+    $dbcalc->execute(@bind3);
     my %indice;
     while ( my @data = $dbcalc->fetchrow ) {
         my ( $row, $rank, $id, $col ) = @data;
