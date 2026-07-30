@@ -13,6 +13,16 @@
     [% END %]</title
 >
 [% INCLUDE 'doc-head-close.inc' %]
+[% FILTER collapse %]
+    <style nonce="[% Koha.CSPNonce | $raw %]">
+        #cn_browser_table tr.match td {
+            background-color: #ffc;
+        }
+        #cn_browser_table tr.position td {
+            background-color: #6faf44;
+        }
+    </style>
+[% END %]
 </head>
 
 <body id="cat_cn_browser" class="cat value_builder">
@@ -29,14 +39,14 @@
         <fieldset class="brief">
             <ol>
                 <li>
-                    <label for="searchcn">Search call number:</label>
+                    <label for="cn_browser_input">Search call number:</label>
                     <input type="text" id="cn_browser_input" name="q" value="[% q | html %]" />
                     <input name="plugin_name" type="hidden" value="cn_browser.pl" />
                     <input name="popup" type="hidden" value="[% popup | html %]" />
                 </li>
                 <li>
                     <label for="cn_source">Call number classification scheme:</label>
-                    <select name="cn_source" form="cn_browser">
+                    <select name="cn_source" id="cn_source">
                         [% FOREACH class_source IN class_sources %]
                             [% IF class_source.cn_source == cn_source %]
                                 <option value="[% class_source.cn_source | html %]" selected="selected">[% class_source.description | html %]</option>
@@ -55,8 +65,8 @@
 
     <div class="page-section">
         <table id="cn_browser_table">
-            <thead
-                ><tr>
+            <thead>
+                <tr>
                     <th>Call number</th>
                     <th>Title</th>
                     <th>Library</th>
@@ -65,13 +75,19 @@
                     [% IF Koha.Preference('item-level_itypes') %]
                         <th>Item type</th>
                     [% END %]
-                </tr></thead
-            >
+                </tr>
+            </thead>
             <tbody>
                 [% FOREACH cn_loo IN cn_loop %]
-                    <tr>
-                        <td style="background:[% cn_loo.background | html %];">[% cn_loo.itemcallnumber | html %]</td>
-                        <td style="background:[% cn_loo.background | html %];">
+                    [% SWITCH ( cn_loo.background ) %]
+                    [% CASE "red" %]
+                        [% SET row_class="match" %]
+                    [% CASE "green" %]
+                        [% SET row_class="position" %]
+                    [% END %]
+                    <tr class="[% row_class | html %]">
+                        <td>[% cn_loo.itemcallnumber | html %]</td>
+                        <td>
                             <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cn_loo.biblionumber | uri %]">
                                 [% cn_loo.title | html %] [% cn_loo.subtitle | html %] [% cn_loo.subtitle2 | html %]
                                 [% IF ( cn_loo.author ) %]
@@ -80,13 +96,14 @@
                                 [% IF ( cn_loo.barcode ) %]([% cn_loo.barcode | html %])[% END %]
                             </a>
                         </td>
-                        <td style="background:[% cn_loo.background | html %];">[% cn_loo.branchname | html %]</td>
-                        <td style="background:[% cn_loo.background | html %];">[% AuthorisedValues.GetByCode( 'CCODE', cn_loo.ccode ) | html %]</td>
-                        <td style="background:[% cn_loo.background | html %];">[% AuthorisedValues.GetByCode( 'LOC', cn_loo.location ) | html %]</td>
+                        <td>[% cn_loo.branchname | html %]</td>
+                        <td>[% AuthorisedValues.GetByCode( 'CCODE', cn_loo.ccode ) | html %]</td>
+                        <td>[% AuthorisedValues.GetByCode( 'LOC', cn_loo.location ) | html %]</td>
                         [% IF Koha.Preference('item-level_itypes') %]
-                            <td style="background:[% cn_loo.background | html %];">[% ItemTypes.GetDescription( cn_loo.itype ) | html %]</td>
+                            <td>[% ItemTypes.GetDescription( cn_loo.itype ) | html %]</td>
                         [% END %]
                     </tr>
+                    [% row_class = "" %]
                 [% END %]
             </tbody>
         </table>
