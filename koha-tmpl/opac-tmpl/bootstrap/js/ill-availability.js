@@ -81,9 +81,10 @@ $(document).ready(function () {
                 }
             },
             source: function (data, type, row) {
-                return row.opac_url
+                var link = row.url || row.opac_url;
+                return link
                     ? '<a href="' +
-                          row.opac_url +
+                          link +
                           '" target="_blank">' +
                           row.source +
                           "</a>"
