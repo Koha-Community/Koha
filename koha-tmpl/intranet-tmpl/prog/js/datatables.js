@@ -1332,6 +1332,13 @@ function _dt_save_restore_state(table_settings, external_filter_nodes = {}) {
         data.user_choices = kohaTableUserChoices[tableId] || {};
     };
     let stateLoadParams = function (settings, data) {
+        // The user choices are part of the column state, which is saved on
+        // every draw. They must be restored even when the search state is not.
+        if (data.user_choices) {
+            const tableId = settings.nTable.id;
+            kohaTableUserChoices[tableId] = data.user_choices;
+        }
+
         if (!$("#" + settings.nTable.id).data("loaded_from_state")) return;
 
         if (data.external_filters) {
@@ -1364,11 +1371,6 @@ function _dt_save_restore_state(table_settings, external_filter_nodes = {}) {
                     }
                 }
             });
-        }
-
-        if (data.user_choices) {
-            const tableId = settings.nTable.id;
-            kohaTableUserChoices[tableId] = data.user_choices;
         }
     };
 
