@@ -109,7 +109,7 @@
                                             <td>[% cr.item.copynumber | html %]</td>
                                             <td>
                                                 [% IF cr.item %]
-                                                    [% INCLUDE 'item-status.inc' item=cr.item issue=cr.issue show_recall_link=Koha.Preference('UseRecalls') %]
+                                                    [% INCLUDE 'item-status.inc' item=cr.item issue=cr.issue %]
                                                 [% END %]
                                             </td>
                                             <td data-order="[% cr.issue.date_due | html %]">[% cr.issue.date_due | $KohaDates  as_due_date => 1 %]</td>
