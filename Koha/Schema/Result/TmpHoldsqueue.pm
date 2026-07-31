@@ -293,6 +293,18 @@ __PACKAGE__->belongs_to(
 );
 
 __PACKAGE__->belongs_to(
+  "patron",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "borrowernumber" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+__PACKAGE__->belongs_to(
   "item",
   "Koha::Schema::Result::Item",
   { itemnumber => "itemnumber" },
@@ -320,6 +332,18 @@ __PACKAGE__->belongs_to(
   "biblioitem",
   "Koha::Schema::Result::Biblioitem",
   { biblionumber => "biblionumber" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+__PACKAGE__->belongs_to(
+  "pickup_library",
+  "Koha::Schema::Result::Branch",
+  { "foreign.branchcode" => "self.pickbranch" },
   {
     is_deferrable => 1,
     join_type     => "LEFT",
