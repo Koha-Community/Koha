@@ -35,7 +35,7 @@ use_ok('Koha::ImportBatch');
 
 subtest 'Koha::ImportBatch->new_from_file tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -64,6 +64,19 @@ subtest 'Koha::ImportBatch->new_from_file tests' => sub {
     $logger->warn_is(
         "The following error(s) occurred during ISO2709 record import:\nERROR: iso2709 error 1\nERROR: error 2",
         "Errors are being logged"
+    );
+
+    $mocked_c4_importbatch->mock(
+        'RecordsFromISO2709File',
+        sub {
+            return ( [], [] );
+        }
+    );
+
+    Koha::ImportBatch->new_from_file( { record_type => 'biblio', format => 'ISO2709', filepath => 'none' } );
+    $logger->warn_is(
+        "",
+        "No Errors are being logged"
     );
 
     $schema->storage->txn_rollback;
