@@ -83,9 +83,7 @@
                     <thead>
                         <tr>
                             <th data-colname="title" class="anti-the">Title</th>
-                            [% IF Koha.Preference('DisplayAddHoldGroups') %]
-                                <th data-colname="hold_group_id">Hold group ID</th>
-                            [% END %]
+                            <th data-colname="hold_group_id">Hold group ID</th>
                             <th data-colname="author">Author</th>
                             <th data-colname="barcode">Barcode</th>
                             <th data-colname="itemcallnumber">Call number</th>
@@ -129,9 +127,7 @@
                     <thead>
                         <tr>
                             <th data-colname="title" class="anti-the">Title</th>
-                            [% IF Koha.Preference('DisplayAddHoldGroups') %]
-                                <th data-colname="hold_group_id">Hold group ID</th>
-                            [% END %]
+                            <th data-colname="hold_group_id">Hold group ID</th>
                             <th data-colname="author">Author</th>
                             <th data-colname="barcode">Barcode</th>
                             <th data-colname="itemcallnumber">Call number</th>
@@ -192,6 +188,8 @@
         $(document).ready(function () {
             let item_type_column = table_settings.columns.find(c => c.columnname == "itemtype");
             item_type_column.visibility_condition = !!show_itemtype_column;
+            let hold_group_id_column = table_settings.columns.find(c => c.columnname == "hold_group_id");
+            hold_group_id_column.visibility_condition = !!display_hold_group_id;
 
             let current_holds_table = build_holds_table("#table_holdshistory");
             let old_holds_table = build_holds_table("#table_oldholdshistory", 1);
