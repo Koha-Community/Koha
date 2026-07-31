@@ -621,27 +621,17 @@ export function useBaseResource(resourceConfig) {
     const newResource = computed(() => {
         resourceConfig.resourceToBeGenerated =
             resourceConfig.resourceAttrs.reduce((acc, attr) => {
-                if (attr.hasOwnProperty("defaultValue")) {
-                    acc[attr.name] = attr.defaultValue;
-                    return acc;
-                }
-                if (["text", "textarea", "select"].includes(attr.type)) {
-                    if (attr.allowMultipleChoices) {
-                        acc[attr.name] = [];
-                        return acc;
-                    }
-                    acc[attr.name] = "";
-                    return acc;
-                }
-                if (["boolean", "checkbox"].includes(attr.type)) {
-                    acc[attr.name] = false;
-                    return acc;
-                }
-                if (attr.type === "relationshipWidget") {
-                    acc[attr.name] = [];
-                    return acc;
-                }
-                acc[attr.name] = null;
+                acc[attr.name] = attr.hasOwnProperty("defaultValue")
+                    ? attr.defaultValue
+                    : ["text", "textarea", "select"].includes(attr.type)
+                      ? attr.allowMultipleChoices
+                          ? []
+                          : ""
+                      : ["boolean", "checkbox"].includes(attr.type)
+                        ? false
+                        : attr.type === "relationshipWidget"
+                          ? []
+                          : null;
                 return acc;
             }, {});
         if (resourceConfig.extendedAttributesResourceType) {
