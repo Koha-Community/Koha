@@ -360,7 +360,7 @@ subtest 'login_core() authentication tests' => sub {
     my $build_server = sub {
         return {
             config => {
-                accounts     => { $uid => { id => $uid,  institution    => 'CPL' } },
+                accounts     => { $uid => { id => $uid,  institution    => 'CPL', password => 'goodpw' } },
                 institutions => { CPL  => { id => 'CPL', implementation => 'ILS', policy => {} } },
             },
         };
