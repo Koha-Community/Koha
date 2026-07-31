@@ -268,6 +268,86 @@ describe("Vendor CRUD operations", () => {
             .contains("Vendor")
             .contains("deleted");
     });
+
+    it("should display multiple payment methods correctly", () => {
+        const vendor = cy.getVendor();
+        vendor.payment_method = "CASH|CREDIT_CARD|BANK_TRANSFER";
+
+        cy.intercept("GET", "/api/v1/acquisitions/vendors\?*", {
+            statusCode: 200,
+            body: [vendor],
+            headers: {
+                "X-Base-Total-Count": "1",
+                "X-Total-Count": "1",
+            },
+        });
+        cy.intercept(
+            "GET",
+            new RegExp("/api/v1/acquisitions/vendors/(?!config$).+"),
+            vendor
+        ).as("get-vendor");
+        cy.intercept(
+            "GET",
+            "/api/v1/acquisitions/vendors/extended_attribute_types*",
+            {
+                body: [],
+                statusCode: 200,
+            }
+        ).as("get-attr-types");
+        cy.intercept("GET", "/api/v1/authorised_value_categories?q=*", [
+            {
+                category_name: "VENDOR_PAYMENT_METHOD",
+                authorised_values: [
+                    {
+                        category_name: "VENDOR_PAYMENT_METHOD",
+                        description: "Cash",
+                        value: "CASH",
+                    },
+                    {
+                        category_name: "VENDOR_PAYMENT_METHOD",
+                        description: "Bank transfer",
+                        value: "BANK_TRANSFER",
+                    },
+                    {
+                        category_name: "VENDOR_PAYMENT_METHOD",
+                        description: "Credit card",
+                        value: "CREDIT_CARD",
+                    },
+                ],
+            },
+            {
+                category_name: "VENDOR_INTERFACE_TYPE",
+                authorised_values: [],
+            },
+            {
+                category_name: "VENDOR_TYPE",
+                authorised_values: [],
+            },
+        ]);
+
+        cy.visit("/cgi-bin/koha/acquisition/vendors");
+        const name_link = cy.get(
+            "#vendors_list table tbody tr:first td:first a"
+        );
+        name_link.click();
+        cy.wait("@get-vendor");
+
+        cy.get("#vendors_show h2").contains("Vendor #" + vendor.id);
+
+        cy.contains("Edit").click();
+        cy.wait("@get-vendor");
+
+        // The payment_method field should contain all three options
+        cy.get("#payment_method").should("exist");
+        cy.get("#payment_method .vs__selected").should("have.length", 3);
+        cy.get("#payment_method .vs__selected").eq(0).should("contain", "Cash");
+        cy.get("#payment_method .vs__selected")
+            .eq(1)
+            .should("contain", "Credit card");
+        cy.get("#payment_method .vs__selected")
+            .eq(2)
+            .should("contain", "Bank transfer");
+    });
 });
 
 describe("Vendor module", () => {
