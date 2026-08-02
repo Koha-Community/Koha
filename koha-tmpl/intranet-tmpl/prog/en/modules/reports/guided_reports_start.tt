@@ -326,34 +326,32 @@
                                         <table id="table_reports">
                                             <thead>
                                                 <tr>
-                                                    <th class="no-sort">&nbsp;</th>
-                                                    <th>ID</th>
-                                                    <th>Report name</th>
-                                                    <th>Type</th>
-                                                    <th>Group</th>
-                                                    <th>Subgroup</th>
-                                                    <th>Notes</th>
-                                                    <th>Author</th>
-                                                    <th>Creation date</th>
-                                                    <th>Last edit</th>
-                                                    <th>Last run</th>
-                                                    <th class="report_public">Public</th>
-                                                    <th class="report_json_url">JSON URL</th>
+                                                    <th data-colname="selection" class="report_checkbox no-sort">&nbsp;</th>
+                                                    <th data-colname="report_id" class="report_id">ID</th>
+                                                    <th data-colname="report_name" class="report_name">Report name</th>
+                                                    <th data-colname="type" class="report_type">Type</th>
+                                                    <th data-colname="group" class="report_group">Group</th>
+                                                    <th data-colname="subgroup" class="report_subgroup">Subgroup</th>
+                                                    <th data-colname="notes" class="report_notes">Notes</th>
+                                                    <th data-colname="author" class="report_author">Author</th>
+                                                    <th data-colname="creation_date" class="report_creation_date">Creation date</th>
+                                                    <th data-colname="last_edit" class="report_last_edit">Last edit</th>
+                                                    <th data-colname="last_run" class="report_last_run">Last run</th>
+                                                    <th data-colname="public" class="report_public">Public</th>
+                                                    <th data-colname="json_url" class="report_json_url">JSON URL</th>
                                                     [% IF (usecache) %]
-                                                        <th>Cache expiry (seconds)</th>
+                                                        <th data-colname="cache_expiry" class="report_cache_expiry">Cache expiry (seconds)</th>
                                                     [% ELSE %]
-                                                        <th class="NoVisible">Cache expiry (seconds)</th>
+                                                        <th data-colname="cache_expiry" class="report_cache_expiry NoVisible">Cache expiry (seconds)</th>
                                                     [% END %]
-                                                    <th>Saved results</th>
+                                                    <th data-colname="saved_results" class="report_saved_results">Saved results</th>
                                                     [% IF has_obsolete_reports %]
-                                                        <th>Update</th>
+                                                        <th data-colname="update" class="report_update">Update</th>
                                                     [% ELSE %]
-                                                        <th class="NoVisible">Update</th>
+                                                        <th data-colname="update" class="report_update NoVisible">Update</th>
                                                     [% END %]
-                                                    [% IF ( Koha.Preference('LimitReportsByLibrary') && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
-                                                        <th>Library limits</th>
-                                                    [% END %]
-                                                    <th class="no-sort no-export">Actions</th>
+                                                    <th data-colname="library_limits" class="report_library_limits">Library limits</th>
+                                                    <th data-colname="actions" class="no-sort no-export">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -420,8 +418,8 @@
                                                                 >
                                                             [% END %]
                                                         </td>
-                                                        [% IF ( Koha.Preference('LimitReportsByLibrary') && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
-                                                            <td>
+                                                        <td>
+                                                            [% IF ( Koha.Preference('LimitReportsByLibrary') && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
                                                                 [% IF savedreport.library_limits && savedreport.library_limits.size > 0 %]
                                                                     [% library_str = "" %]
                                                                     [% FOREACH library IN savedreport.library_limits %]
@@ -441,8 +439,8 @@
                                                                 [% ELSE %]
                                                                     <span>No limitation</span>
                                                                 [% END %]
-                                                            </td>
-                                                        [% END %]
+                                                            [% END %]
+                                                        </td>
                                                         <td>
                                                             <div class="btn-group dropup">
                                                                 [%# There should be no space between these two buttons, it would render badly %]
@@ -1918,7 +1916,19 @@
             [% END %]
         [% END %]
 
+        const can_limit_reports_by_library = [% (Koha.Preference('LimitReportsByLibrary') && (CAN_user_superlibrarian || CAN_user_reports_manage_report_limits)) ? 1 : 0 | html %];
+
         var table_settings = [% TablesSettings.GetTableSettings( 'reports', 'saved-sql', 'table_reports', 'json' ) | $raw %];
+        if (table_settings && table_settings.columns) {
+            let library_limits_column = table_settings.columns.find(function (c) {
+                return c.columnname === "library_limits";
+            });
+            if (library_limits_column) {
+                library_limits_column.is_hidden = !can_limit_reports_by_library;
+                library_limits_column.cannot_be_toggled = !can_limit_reports_by_library;
+                library_limits_column.visibility_condition = !!can_limit_reports_by_library;
+            }
+        }
 
         const tables = [% To.json(tables || []) | $raw %];
 
@@ -2365,22 +2375,7 @@
                 let report_table_settings = { columns };
                 $("#report_results").kohaTable({}, report_table_settings);
             }
-            [% IF (saved1) %]
-                var table_settings = [% TablesSettings.GetTableSettings( 'reports', 'saved-sql', 'table_reports', 'json' ) | $raw %];
-                [% UNLESS ( Koha.Preference('LimitReportsByLibrary') && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
-                  table_settings.columns = table_settings.columns.filter(function(col) {
-                      return col.columnname !== 'library_limits';
-                  });
-                [% END %]
-
-                [% IF ( Koha.Preference('LimitReportsByLibrary') && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
-                  let library_limits_col_index = -1;
-                  table_settings.columns.forEach(function(col, index) {
-                      if (col.columnname === 'library_limits') {
-                          library_limits_col_index = index;
-                      }
-                  });
-                [% END %]
+            if (saved1) {
                 var rtable = $("#table_reports").kohaTable(
                     {
                         autoWidth: false,
@@ -2388,9 +2383,8 @@
                         order: [[1, "asc"]],
                         language: {
                             zeroRecords: _("No matching reports found"),
-                        }[% IF ( Koha.Preference('LimitReportsByLibrary') && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %],
-                        columnDefs: library_limits_col_index !== -1 ? [{ visible: false, targets: [library_limits_col_index] }] : []
-                        [% END %]
+                        },
+                        bKohaColumnsUseNames: true,
                     },
                     table_settings
                 );
@@ -2449,7 +2443,7 @@
                     $("#update_sql_label").html("");
                     $("#update_sql .modal-body").html('<div id="loading"><img src="' + interface + "/" + theme + '/img/spinner-small.gif" alt="" /> ' + _("Loading") + "</div>");
                 });
-            [% END %]
+            }
 
             if (op == "showsql") {
                 $("#sql").focus(function () {
@@ -2682,9 +2676,9 @@
                 $(selectField).select2();
             });
 
-            const libraryLimitSelectFields = document.querySelectorAll('#library_limitation');
-            libraryLimitSelectFields.forEach((selectField) => {
-                selectField.style.minWidth = '450px';
+            const libraryLimitSelectFields = document.querySelectorAll("#library_limitation");
+            libraryLimitSelectFields.forEach(selectField => {
+                selectField.style.minWidth = "450px";
                 $(selectField).select2();
             });
         });
