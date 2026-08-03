@@ -195,7 +195,7 @@
                                 <div id="floating" class="sticky">
                                     <div id="toolbar" class="toolbar row align-items-center">
                                         <div id="top-pages" class="col"> [% INCLUDE 'page-numbers.inc' %] </div>
-                                        [% UNLESS no_result %]
+                                        [% UNLESS no_page_results %]
                                             [% UNLESS tag %]
                                                 <div class="sort_by col-sm-auto">
                                                     <label for="sort_by">Sort results by:</label>
@@ -233,13 +233,13 @@
                                     <!-- / #toolbar -->
 
                                     [% INCLUDE 'result-batch-controls.inc' results=1 %]
-                                    [% IF no_result %]
+                                    [% IF no_page_results %]
                                         <p>Search results on this page are not available.</p>
                                     [% END %]
                                 </div>
                                 <!-- /#floating -->
 
-                                [% UNLESS no_result %]
+                                [% UNLESS no_page_results %]
                                     <!-- TABLE RESULTS START -->
                                     <table class="table table-striped" role="presentation">
                                         <span class="visually-hidden">Results</span>
@@ -420,9 +420,8 @@
                                                             [% ELSE %]
                                                                 <br />
                                                             [% END %]
-                                                        </div>
-                                                        <!-- / .results_summary -->
-                                                    [% END # / IF OpacStarRatings %]
+                                                            <!-- / .results_summary -->
+                                                        [% END # / IF OpacStarRatings %]
 
                                                         [% INCLUDE 'title-actions-menu.inc' items=SEARCH_RESULT %]
                                                     </div>

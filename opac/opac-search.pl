@@ -664,7 +664,8 @@ for ( my $i = 0 ; $i < @servers ; $i++ ) {
             $results_hashref->{$server}->{"RECORDS"}, $variables
         );
         unless (@newresults) {
-            $template->param( no_result => 1 );
+            $hits = 0;
+            $template->param( no_page_results => 1 );
         }
 
         my $art_req_itypes;
