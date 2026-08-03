@@ -407,32 +407,36 @@
             $("#income").text('[% ctotal | $Price %] ([% cctotal | $Price %])');
             $("#outgoing").text('[% dtotal | $Price %] ([% cdtotal | $Price %])');
         });
+        const cashupModalData = {
+            hasAuthorisedValues: [% reconciliation_note_avs ? 'true' : 'false' | html %],
+            noteRequired: [% reconciliation_note_required ? 'true' : 'false' | html %],
+        };
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
             var registers_table = $("#registers").kohaTable({
-                columnDefs: [{ targets: [ -1, 0 ], orderable: false }],
+                columnDefs: [{ targets: [-1, 0], orderable: false }],
                 searching: false,
                 paginationType: "full",
             });
 
             // Initialize cashup modals
-            initTriggerCashupModal('#triggerCashupModalRegister');
+            initTriggerCashupModal("#triggerCashupModalRegister");
 
-            initConfirmCashupModal('#confirmCashupModal', {
-                hasAuthorisedValues: [% reconciliation_note_avs ? 'true' : 'false' | html %],
-                noteRequired: [% reconciliation_note_required ? 'true' : 'false' | html %]
+            initConfirmCashupModal("#confirmCashupModal", {
+                hasAuthorisedValues: cashupModalData.hasAuthorisedValues,
+                noteRequired: cashupModalData.noteRequired,
             });
 
             // Select all registers functionality
-            $("#select_all_registers").on("change", function() {
+            $("#select_all_registers").on("change", function () {
                 var isChecked = $(this).is(":checked");
                 $(".register_checkbox:not(:disabled)").prop("checked", isChecked);
                 updateCashupSelectedButton();
             });
 
             // Individual checkbox change handler
-            $(".register_checkbox").on("change", function() {
+            $(".register_checkbox").on("change", function () {
                 updateCashupSelectedButton();
 
                 // Update select all checkbox state
@@ -461,13 +465,13 @@
             }
 
             // Handle cashup selected modal
-            $("#confirmCashupSelectedModal").on("shown.bs.modal", function(e) {
+            $("#confirmCashupSelectedModal").on("shown.bs.modal", function (e) {
                 var selectedCheckboxes = $(".register_checkbox:checked");
                 var selectedCount = selectedCheckboxes.length;
                 var selectedIds = [];
                 var selectedNames = [];
 
-                selectedCheckboxes.each(function() {
+                selectedCheckboxes.each(function () {
                     var registerRow = $(this).closest("tr");
                     var registerId = $(this).val();
                     var registerName = registerRow.find("td:nth-child(2) a").text(); // Second column (after checkbox)
@@ -481,13 +485,13 @@
 
                 // Populate register list
                 var list = $("#selected_registers_list").empty();
-                selectedNames.forEach(function(name) {
+                selectedNames.forEach(function (name) {
                     $("<li>").text(name).appendTo(list);
                 });
             });
 
             // Handle start cashup for selected
-            $("#start_selected_btn").on("click", function(e) {
+            $("#start_selected_btn").on("click", function (e) {
                 e.preventDefault();
                 var form = $(this).closest("form");
                 form.find("#selected_operation").val("cud-cashup_start");
@@ -495,7 +499,7 @@
             });
 
             // Handle quick cashup for selected
-            $("#quick_selected_btn").on("click", function(e) {
+            $("#quick_selected_btn").on("click", function (e) {
                 e.preventDefault();
                 var form = $(this).closest("form");
                 form.find("#selected_operation").val("cud-cashup");

@@ -494,6 +494,13 @@
             id: "[% register.id | html %]",
             description: "[% register.description | html %]",
         };
+        const cashupModalData = {
+            bankableAmount: [% accountlines.total( payment_type => [ 'CASH', 'SIP00' ]) * -1 | html %],
+            registerFloat: [% register.starting_float | html %],
+            hasAuthorisedValues: [% reconciliation_note_avs ? 'true' : 'false' | html %],
+            noteRequired: [% reconciliation_note_required ? 'true' : 'false' | html %],
+            isInProgress: [% cashup_in_progress ? 'true' : 'false' | html %],
+        };
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         var sales_table = $("#sales").kohaTable({
@@ -652,15 +659,15 @@
         });
 
         // Initialize cashup modals
-        initTriggerCashupModal('#triggerCashupModal', {
-            bankableAmount: [% accountlines.total( payment_type => [ 'CASH', 'SIP00' ]) * -1 | html %],
-            registerFloat: [% register.starting_float | html %]
+        initTriggerCashupModal("#triggerCashupModal", {
+            bankableAmount: cashupModalData.bankableAmount,
+            registerFloat: cashupModalData.registerFloat,
         });
 
-        initConfirmCashupModal('#confirmCashupModal', {
-            hasAuthorisedValues: [% reconciliation_note_avs ? 'true' : 'false' | html %],
-            noteRequired: [% reconciliation_note_required ? 'true' : 'false' | html %],
-            isInProgress: [% cashup_in_progress ? 'true' : 'false' | html %]
+        initConfirmCashupModal("#confirmCashupModal", {
+            hasAuthorisedValues: cashupModalData.hasAuthorisedValues,
+            noteRequired: cashupModalData.noteRequired,
+            isInProgress: cashupModalData.isInProgress,
         });
     </script>
 [% END %]
