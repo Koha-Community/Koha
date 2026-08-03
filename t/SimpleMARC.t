@@ -1846,8 +1846,10 @@ subtest 'delete_field' => sub {
 };
 
 subtest 'field_equals' => sub {
-    plan tests => 2;
+    plan tests => 3;
+
     my $record = new_record;
+
     subtest 'standard MARC fields' => sub {
         plan tests => 2;
         my $match = Koha::SimpleMARC::field_equals(
@@ -1894,6 +1896,93 @@ subtest 'field_equals' => sub {
             }
         );
         is_deeply( $match, [1], 'first 008 control field matches "eng"' );
+    };
+
+    subtest 'indicator matching' => sub {
+        plan tests => 5;
+
+        my $record = MARC::Record->new;
+
+        $record->append_fields(
+            MARC::Field->new(
+                650, ' ', '0',
+                a => 'Cats',
+            ),
+            MARC::Field->new(
+                650, ' ', '7',
+                a => 'Dogs',
+            ),
+            MARC::Field->new(
+                650, '1', '7',
+                a => 'Dogs',
+            ),
+        );
+
+        is_deeply(
+            field_equals(
+                {
+                    record => $record,
+                    value  => 'Dogs',
+                    field  => '650',
+                    ind2   => '7',
+                }
+            ),
+            [ 2, 3 ],
+            'Matches value and indicator 2'
+        );
+
+        is_deeply(
+            field_equals(
+                {
+                    record => $record,
+                    value  => 'Dogs',
+                    field  => '650',
+                    ind1   => ' ',
+                    ind2   => '7',
+                }
+            ),
+            [2],
+            'Matches value and both indicators'
+        );
+
+        is_deeply(
+            field_equals(
+                {
+                    record => $record,
+                    value  => 'Dogs',
+                    field  => '650',
+                    ind1   => '1',
+                }
+            ),
+            [3],
+            'Matches value and indicator 1'
+        );
+
+        is_deeply(
+            field_equals(
+                {
+                    record => $record,
+                    value  => 'Cats',
+                    field  => '650',
+                    ind2   => '7',
+                }
+            ),
+            [],
+            'Value match is rejected when indicators do not match'
+        );
+
+        is_deeply(
+            field_equals(
+                {
+                    record => $record,
+                    value  => 'eng',
+                    field  => '008',
+                    ind1   => ' ',
+                }
+            ),
+            [],
+            'Control fields do not match indicator criteria'
+        );
     };
 };
 

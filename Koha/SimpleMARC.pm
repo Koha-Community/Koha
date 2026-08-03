@@ -548,12 +548,22 @@ sub field_equals {
     my $fieldName    = $params->{field};
     my $subfieldName = $params->{subfield};
     my $is_regex     = $params->{is_regex};
+    my $ind1         = $params->{ind1};
+    my $ind2         = $params->{ind2};
 
     if ( !$record ) { return; }
 
     my @field_numbers        = ();
     my $current_field_number = 1;
+
 FIELDS: for my $field ( $record->field($fieldName) ) {
+        if ( defined $ind1 || defined $ind2 ) {
+            unless ( _field_matches_indicators( $field, $ind1, $ind2 ) ) {
+                $current_field_number++;
+                next FIELDS;
+            }
+        }
+
         my @subfield_values;
         if ( $field->is_control_field ) {
             push @subfield_values, $field->data;
@@ -570,6 +580,7 @@ FIELDS: for my $field ( $record->field($fieldName) ) {
                 last SUBFIELDS;
             }
         }
+
         $current_field_number++;
     }
 
