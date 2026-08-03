@@ -2185,7 +2185,7 @@ subtest 'ModReserve to convert a hold to a recall' => sub {
         }
     )->store;
 
-    t::lib::Mocks::mock_preference( "UseRecalls", 1 );
+    t::lib::Mocks::mock_preference( "UseRecalls", 'opac_and_staff' );
     t::lib::Mocks::mock_userenv( { branchcode => $branch } );
 
     C4::Circulation::AddIssue( $patron2, $item->barcode );
