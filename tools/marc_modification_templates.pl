@@ -64,17 +64,24 @@ if ( $op eq "cud-create_template" ) {
     my $mmta_id                = $cgi->param('mmta_id');
     my $action                 = $cgi->param('action');
     my $field_number           = $cgi->param('field_number');
+    my $use_indicators         = $cgi->param('use_indicators') ? 1 : 0;
     my $from_field             = $cgi->param('from_field');
     my $from_subfield          = $cgi->param('from_subfield');
+    my $from_ind1              = $cgi->param('from_ind1');
+    my $from_ind2              = $cgi->param('from_ind2');
     my $field_value            = $cgi->param('field_value');
     my $to_field               = $cgi->param('to_field');
     my $to_subfield            = $cgi->param('to_subfield');
+    my $to_ind1                = $cgi->param('to_ind1');
+    my $to_ind2                = $cgi->param('to_ind2');
     my $to_regex_search        = $cgi->param('to_regex_search');
     my $to_regex_replace       = $cgi->param('to_regex_replace');
     my $to_regex_modifiers     = $cgi->param('to_regex_modifiers');
     my $conditional            = $cgi->param('conditional');
     my $conditional_field      = $cgi->param('conditional_field');
     my $conditional_subfield   = $cgi->param('conditional_subfield');
+    my $conditional_ind1       = $cgi->param('conditional_ind1');
+    my $conditional_ind2       = $cgi->param('conditional_ind2');
     my $conditional_comparison = $cgi->param('conditional_comparison');
     my $conditional_value      = $cgi->param('conditional_value');
     my $conditional_regex      = ( $cgi->param('conditional_regex') eq 'on' ) ? 1 : 0;
@@ -83,27 +90,59 @@ if ( $op eq "cud-create_template" ) {
     if ($from_field) {
         unless ($mmta_id) {
             AddModificationTemplateAction(
-                $template_id,            $action,
-                $field_number,           $from_field,
-                $from_subfield,          $field_value,
-                $to_field,               $to_subfield,
-                $to_regex_search,        $to_regex_replace,
-                $to_regex_modifiers,     $conditional,
-                $conditional_field,      $conditional_subfield,
-                $conditional_comparison, $conditional_value,
-                $conditional_regex,      $description
+                $template_id,
+                $action,
+                $field_number,
+                $use_indicators,
+                $from_field,
+                $from_subfield,
+                $from_ind1,
+                $from_ind2,
+                $field_value,
+                $to_field,
+                $to_subfield,
+                $to_ind1,
+                $to_ind2,
+                $to_regex_search,
+                $to_regex_replace,
+                $to_regex_modifiers,
+                $conditional,
+                $conditional_field,
+                $conditional_subfield,
+                $conditional_ind1,
+                $conditional_ind2,
+                $conditional_comparison,
+                $conditional_value,
+                $conditional_regex,
+                $description
             );
         } else {
             ModModificationTemplateAction(
-                $mmta_id,                $action,
-                $field_number,           $from_field,
-                $from_subfield,          $field_value,
-                $to_field,               $to_subfield,
-                $to_regex_search,        $to_regex_replace,
-                $to_regex_modifiers,     $conditional,
-                $conditional_field,      $conditional_subfield,
-                $conditional_comparison, $conditional_value,
-                $conditional_regex,      $description
+                $mmta_id,
+                $action,
+                $field_number,
+                $use_indicators,
+                $from_field,
+                $from_subfield,
+                $from_ind1,
+                $from_ind2,
+                $field_value,
+                $to_field,
+                $to_subfield,
+                $to_ind1,
+                $to_ind2,
+                $to_regex_search,
+                $to_regex_replace,
+                $to_regex_modifiers,
+                $conditional,
+                $conditional_field,
+                $conditional_subfield,
+                $conditional_ind1,
+                $conditional_ind2,
+                $conditional_comparison,
+                $conditional_value,
+                $conditional_regex,
+                $description
             );
         }
     } else {

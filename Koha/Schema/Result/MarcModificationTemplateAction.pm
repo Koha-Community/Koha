@@ -52,6 +52,12 @@ __PACKAGE__->table("marc_modification_template_actions");
   default_value: 0
   is_nullable: 0
 
+=head2 use_indicators
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =head2 from_field
 
   data_type: 'varchar'
@@ -63,6 +69,18 @@ __PACKAGE__->table("marc_modification_template_actions");
   data_type: 'varchar'
   is_nullable: 1
   size: 2
+
+=head2 from_ind1
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 1
+
+=head2 from_ind2
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 1
 
 =head2 field_value
 
@@ -76,6 +94,18 @@ __PACKAGE__->table("marc_modification_template_actions");
   size: 3
 
 =head2 to_subfield
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 1
+
+=head2 to_ind1
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 1
+
+=head2 to_ind2
 
   data_type: 'varchar'
   is_nullable: 1
@@ -111,6 +141,18 @@ __PACKAGE__->table("marc_modification_template_actions");
   size: 3
 
 =head2 conditional_subfield
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 1
+
+=head2 conditional_ind1
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 1
+
+=head2 conditional_ind2
 
   data_type: 'varchar'
   is_nullable: 1
@@ -164,15 +206,25 @@ __PACKAGE__->add_columns(
   },
   "field_number",
   { data_type => "smallint", default_value => 0, is_nullable => 0 },
+  "use_indicators",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "from_field",
   { data_type => "varchar", is_nullable => 0, size => 3 },
   "from_subfield",
   { data_type => "varchar", is_nullable => 1, size => 2 },
+  "from_ind1",
+  { data_type => "varchar", is_nullable => 1, size => 1 },
+  "from_ind2",
+  { data_type => "varchar", is_nullable => 1, size => 1 },
   "field_value",
   { data_type => "text", is_nullable => 1 },
   "to_field",
   { data_type => "varchar", is_nullable => 1, size => 3 },
   "to_subfield",
+  { data_type => "varchar", is_nullable => 1, size => 1 },
+  "to_ind1",
+  { data_type => "varchar", is_nullable => 1, size => 1 },
+  "to_ind2",
   { data_type => "varchar", is_nullable => 1, size => 1 },
   "to_regex_search",
   { data_type => "mediumtext", is_nullable => 1 },
@@ -189,6 +241,10 @@ __PACKAGE__->add_columns(
   "conditional_field",
   { data_type => "varchar", is_nullable => 1, size => 3 },
   "conditional_subfield",
+  { data_type => "varchar", is_nullable => 1, size => 1 },
+  "conditional_ind1",
+  { data_type => "varchar", is_nullable => 1, size => 1 },
+  "conditional_ind2",
   { data_type => "varchar", is_nullable => 1, size => 1 },
   "conditional_comparison",
   {
@@ -234,11 +290,12 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-06-15 15:20:10
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4595k+0FjvRzTEO2/QIbCg
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-08-12 21:11:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oyPMnRS23StR2g1WUkgOqg
 
 __PACKAGE__->add_columns(
     '+conditional_regex' => { is_boolean => 1 },
+    '+use_indicators'    => { is_boolean => 1 },
 );
 
 1;

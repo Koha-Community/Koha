@@ -4729,17 +4729,24 @@ CREATE TABLE `marc_modification_template_actions` (
   `ordering` int(3) NOT NULL,
   `action` enum('delete_field','add_field','update_field','move_field','copy_field','copy_and_replace_field') NOT NULL,
   `field_number` smallint(6) NOT NULL DEFAULT 0,
+  `use_indicators` tinyint(1) NOT NULL DEFAULT 0,
   `from_field` varchar(3) NOT NULL,
   `from_subfield` varchar(2) DEFAULT NULL,
+  `from_ind1` varchar(1) DEFAULT NULL,
+  `from_ind2` varchar(1) DEFAULT NULL,
   `field_value` text DEFAULT NULL,
   `to_field` varchar(3) DEFAULT NULL,
   `to_subfield` varchar(1) DEFAULT NULL,
+  `to_ind1` varchar(1) DEFAULT NULL,
+  `to_ind2` varchar(1) DEFAULT NULL,
   `to_regex_search` mediumtext DEFAULT NULL,
   `to_regex_replace` mediumtext DEFAULT NULL,
   `to_regex_modifiers` varchar(8) DEFAULT '',
   `conditional` enum('if','unless') DEFAULT NULL,
   `conditional_field` varchar(3) DEFAULT NULL,
   `conditional_subfield` varchar(1) DEFAULT NULL,
+  `conditional_ind1` varchar(1) DEFAULT NULL,
+  `conditional_ind2` varchar(1) DEFAULT NULL,
   `conditional_comparison` enum('exists','not_exists','equals','not_equals') DEFAULT NULL,
   `conditional_value` mediumtext DEFAULT NULL,
   `conditional_regex` tinyint(1) NOT NULL DEFAULT 0,
@@ -4747,6 +4754,7 @@ CREATE TABLE `marc_modification_template_actions` (
   PRIMARY KEY (`mmta_id`),
   KEY `mmta_ibfk_1` (`template_id`),
   CONSTRAINT `mmta_ibfk_1` FOREIGN KEY (`template_id`) REFERENCES `marc_modification_templates` (`template_id`) ON DELETE CASCADE ON UPDATE CASCADE
+);
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
