@@ -49,7 +49,7 @@ sub new_record {
 
 # field_exists
 subtest 'field_exists' => sub {
-    plan tests => 3;
+    plan tests => 9;
     my $record = new_record;
     is_deeply(
         field_exists( { record => $record, field => '650', subfield => 'a' } ),
@@ -70,10 +70,95 @@ subtest 'field_exists' => sub {
         )
     );
 
+    $record->append_fields(
+        MARC::Field->new(
+            650, ' ', '7',
+            a => 'Dogs.',
+        ),
+        MARC::Field->new(
+            650, '1', '7',
+            a => 'Birds.',
+        ),
+    );
+
     is_deeply(
         field_exists( { record => $record, field => '650', subfield => 'a' } ),
-        [ 1, 2 ],
-        '650$a exists, field_exists returns the 2 field numbers'
+        [ 1, 2, 3, 4 ],
+        '650$a exists, field_exists returns all field numbers'
+    );
+
+    is_deeply(
+        field_exists(
+            {
+                record => $record,
+                field  => '650',
+                ind2   => '7',
+            }
+        ),
+        [ 3, 4 ],
+        'Finds fields matching indicator 2'
+    );
+
+    is_deeply(
+        field_exists(
+            {
+                record => $record,
+                field  => '650',
+                ind1   => ' ',
+                ind2   => '7',
+            }
+        ),
+        [3],
+        'Finds fields matching both indicators'
+    );
+
+    is_deeply(
+        field_exists(
+            {
+                record => $record,
+                field  => '650',
+                ind1   => '1',
+            }
+        ),
+        [4],
+        'Finds fields matching indicator 1'
+    );
+
+    is_deeply(
+        field_exists(
+            {
+                record   => $record,
+                field    => '650',
+                subfield => 'a',
+                ind2     => '7',
+            }
+        ),
+        [ 3, 4 ],
+        'Indicator and subfield criteria are both applied'
+    );
+
+    is_deeply(
+        field_exists(
+            {
+                record => $record,
+                field  => '650',
+                ind2   => '4',
+            }
+        ),
+        [],
+        'Returns no fields when indicators do not match'
+    );
+
+    is_deeply(
+        field_exists(
+            {
+                record => $record,
+                field  => '008',
+                ind1   => ' ',
+            }
+        ),
+        [],
+        'Control fields do not match indicator criteria'
     );
 };
 
@@ -1638,9 +1723,11 @@ subtest 'move_field' => sub {
 
 # delete_field
 subtest 'delete_field' => sub {
-    plan tests => 2;
+    plan tests => 3;
+
     subtest 'delete subfield' => sub {
         plan tests => 3;
+
         my $record = new_record;
         $record->append_fields(
             MARC::Field->new(
@@ -1681,6 +1768,7 @@ subtest 'delete_field' => sub {
                 0 => 'https://id.loc.gov/authorities/names/n81152393.html',
             ),
         );
+
         delete_field( { record => $record, field => '600', subfield => '0' } );
         my @fields_600 = read_field( { record => $record, field => '600' } );
         is_deeply( \@fields_600, ['Murakami, Haruki'], 'Delete all 600$0, only subfield 0 deleted' );
@@ -1688,6 +1776,7 @@ subtest 'delete_field' => sub {
 
     subtest 'delete field' => sub {
         plan tests => 2;
+
         my $record = new_record;
         delete_field( { record => $record, field => '952' } );
         my @fields_952 = read_field( { record => $record, field => '952' } );
@@ -1701,9 +1790,58 @@ subtest 'delete_field' => sub {
                 y => 'BK',
             ),
         );
+
         delete_field( { record => $record, field => '952' } );
         @fields_952 = read_field( { record => $record, field => '952' } );
         is_deeply( \@fields_952, [], 'Delete all 952, 2 deleted' );
+    };
+
+    subtest 'delete fields selected by indicators' => sub {
+        plan tests => 3;
+
+        my $record = MARC::Record->new;
+
+        $record->append_fields(
+            MARC::Field->new(
+                650, ' ', '0',
+                a => 'Cats.',
+            ),
+            MARC::Field->new(
+                650, ' ', '7',
+                a => 'Dogs.',
+            ),
+            MARC::Field->new(
+                650, '1', '7',
+                a => 'Birds.',
+            ),
+        );
+
+        my $field_numbers = field_exists(
+            {
+                record => $record,
+                field  => '650',
+                ind2   => '7',
+            }
+        );
+
+        is_deeply(
+            $field_numbers,
+            [ 2, 3 ],
+            'Indicator matching returns original field occurrence numbers'
+        );
+
+        delete_field(
+            {
+                record        => $record,
+                field         => '650',
+                field_numbers => $field_numbers,
+            }
+        );
+
+        my @fields = $record->field('650');
+
+        is( scalar @fields,            1,       'Deleted fields matching indicator 2' );
+        is( $fields[0]->subfield('a'), 'Cats.', 'Retained field with nonmatching indicator' );
     };
 };
 

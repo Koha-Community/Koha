@@ -474,17 +474,50 @@ sub _read_subfield {
 
 =cut
 
+=head3 _field_matches_indicators
+
+Checks whether a MARC field matches the supplied indicator values.
+
+Undefined indicator values are ignored. Control fields do not match
+indicator criteria.
+
+=cut
+
+sub _field_matches_indicators {
+    my ( $field, $ind1, $ind2 ) = @_;
+
+    return 0 if $field->is_control_field;
+
+    return 0
+        if defined $ind1
+        && $field->indicator(1) ne $ind1;
+
+    return 0
+        if defined $ind2
+        && $field->indicator(2) ne $ind2;
+    return 1;
+}
+
 sub field_exists {
     my ($params)     = @_;
     my $record       = $params->{record};
     my $fieldName    = $params->{field};
     my $subfieldName = $params->{subfield};
+    my $ind1         = $params->{ind1};
+    my $ind2         = $params->{ind2};
 
     if ( !$record ) { return; }
 
     my @field_numbers        = ();
     my $current_field_number = 1;
     for my $field ( $record->field($fieldName) ) {
+        if ( defined $ind1 || defined $ind2 ) {
+            unless ( _field_matches_indicators( $field, $ind1, $ind2 ) ) {
+                $current_field_number++;
+                next;
+            }
+        }
+
         if ($subfieldName) {
             push @field_numbers, $current_field_number
                 if $field->subfield($subfieldName);
