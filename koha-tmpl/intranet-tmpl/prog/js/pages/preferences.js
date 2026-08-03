@@ -65,6 +65,7 @@ KOHA.Preferences = {
     },
     Success: function (form) {
         var msg = "";
+        var saved_prefs = new Set();
         $(form)
             .find(".modified")
             .each(function () {
@@ -72,8 +73,14 @@ KOHA.Preferences = {
                 if (this.defaultValue != undefined) {
                     this.defaultValue = this.value;
                 }
-                var modified_pref = $(this).attr("id");
-                modified_pref = modified_pref.replace("pref_", "");
+                // Checkbox-group preferences (multiple_sortable, ill_backends,
+                // languages) share one "name" per preference but a distinct
+                // "id" per option - group on "name" so we report one saved
+                // message per preference, not one per option.
+                var modified_pref = $(this).attr("name");
+                modified_pref = modified_pref.replace(/^pref_/, "");
+                if (saved_prefs.has(modified_pref)) return;
+                saved_prefs.add(modified_pref);
                 msg +=
                     "<strong>" +
                     __("Saved preference %s").format(modified_pref) +
@@ -228,7 +235,14 @@ $(".prefs-tab")
     .find("select.preference")
     .change(mark_modified);
 $(".preference-checkbox").change(function () {
-    $(".preference-checkbox").addClass("modified");
+    // Only mark the checkboxes belonging to this preference (same "name")
+    // as modified, not every checkbox-group preference on the page.
+    var name = this.name;
+    $(".preference-checkbox")
+        .filter(function () {
+            return this.name === name;
+        })
+        .addClass("modified");
     mark_modified.call(this);
 });
 
