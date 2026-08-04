@@ -126,6 +126,15 @@ the notes or description given to this report
   data_type: 'integer'
   is_nullable: 1
 
+=head2 run_type
+
+  data_type: 'enum'
+  default_value: 'any'
+  extra: {list => ["any","foreground","background"]}
+  is_nullable: 0
+
+optional constraint forcing this report to always run in the foreground or always as a background job
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -171,6 +180,13 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "mana_id",
   { data_type => "integer", is_nullable => 1 },
+  "run_type",
+  {
+    data_type => "enum",
+    default_value => "any",
+    extra => { list => ["any", "foreground", "background"] },
+    is_nullable => 0,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -218,8 +234,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-08-04 19:49:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:djTICmIK20cxvbN7mOX3ng
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-08-04 20:17:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TZndqst8ObtPjLuhPjsLoA
 
 __PACKAGE__->add_columns(
     '+public' => { is_boolean => 1 }
