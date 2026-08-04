@@ -664,7 +664,6 @@ for ( my $i = 0 ; $i < @servers ; $i++ ) {
             $results_hashref->{$server}->{"RECORDS"}, $variables
         );
         unless (@newresults) {
-            $hits = 0;
             $template->param( no_page_results => 1 );
         }
 
