@@ -204,10 +204,8 @@ sub _get_chunk {
     } elsif ( $options{'multiple_sortable'} ) {
         if ( ref( $options{'multiple_sortable'} ) eq '' ) {
             if ( $options{'multiple_sortable'} eq 'authval' && $options{'source'} ) {
-                $options{'multiple_sortable'} = {
-                    map { $_->authorised_value => $_->lib }
-                        Koha::AuthorisedValues->search( { category => $options{'source'} } )->as_list
-                };
+                $options{'multiple_sortable'} = { map { $_->authorised_value => $_->lib }
+                        Koha::AuthorisedValues->search( { category => $options{'source'} } )->as_list };
             } else {
                 die 'Unrecognized source for multiple_sortable: ' . $options{'multiple_sortable'};
             }
