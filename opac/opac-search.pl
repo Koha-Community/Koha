@@ -664,7 +664,59 @@ for ( my $i = 0 ; $i < @servers ; $i++ ) {
             $results_hashref->{$server}->{"RECORDS"}, $variables
         );
         unless (@newresults) {
-            $template->param( no_page_results => 1 );
+
+            # This page has hits, but every one of them is hidden from the OPAC
+            # (OpacHiddenItemsHidesRecord). Rather than showing a dead end, look
+            # a few pages ahead for one with something to show and jump straight
+            # there. The lookahead is capped so a library with many consecutive
+            # hidden pages doesn't turn this search into a long chain of extra
+            # search-engine queries.
+            my $found_offset;
+            my $skipped_hidden_page = 0;
+            my $lookahead_offset    = $offset;
+            for ( 1 .. 3 ) {
+                $lookahead_offset += $results_per_page;
+                last if $lookahead_offset >= $hits;
+
+                my $lookahead_results_hashref;
+                my $itemtypes_nocategory =
+                    { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
+                eval {
+                    ( $error, $lookahead_results_hashref, undef ) = $searcher->search_compat(
+                        $query, $simple_query,         \@sort_by,   \@servers, $results_per_page, $lookahead_offset,
+                        undef,  $itemtypes_nocategory, $query_type, $scan,     1
+                    );
+                };
+                my @lookahead_results = searchResults(
+                    $search_context, $query_desc, $hits, $results_per_page, $lookahead_offset, $scan,
+                    $lookahead_results_hashref->{$server}->{"RECORDS"}, $variables
+                );
+                if (@lookahead_results) {
+                    $found_offset = $lookahead_offset;
+                    last;
+                }
+                $skipped_hidden_page = 1;
+            }
+
+            if (   defined $found_offset
+                && $format ne 'rss'
+                && $format ne 'opensearchdescription'
+                && $format ne 'atom' )
+            {
+                $cgi->param( offset        => $found_offset );
+                $cgi->param( hidden_notice => 1 );
+                print $cgi->redirect( '/cgi-bin/koha/opac-search.pl?' . $cgi->query_string() );
+                exit;
+            }
+
+            $template->param(
+                no_page_results     => 1,
+                some_results_hidden => $skipped_hidden_page,
+            );
+        }
+
+        if ( $cgi->param('hidden_notice') ) {
+            $template->param( some_results_hidden => 1 );
         }
 
         my $art_req_itypes;

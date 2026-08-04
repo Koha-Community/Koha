@@ -159,6 +159,10 @@
                     [% END # / IF total %]
                 [% END # / IF searchdesc %]
 
+                [% IF ( total && some_results_hidden ) %]
+                    <p class="alert alert-info">Some results are hidden due to library policy.</p>
+                [% END %]
+
                 <div id="userresults">
                     [% IF ( DidYouMean ) %]
                         <div id="didyoumean">Not what you expected? Check for <a href="/cgi-bin/koha/svc/suggestion?render=standalone&amp;q=[% querystring | uri %]">suggestions</a></div>
