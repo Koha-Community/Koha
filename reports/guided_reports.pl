@@ -227,7 +227,7 @@ if ( !$op ) {
             'id'                    => $report_id,
             'cache_expiry'          => $report->cache_expiry,
             'public'                => $report->public,
-        'run_type'              => $report->run_type,
+            'run_type'              => $report->run_type,
             'usecache'              => $usecache,
             'editsql'               => 1,
             'mana_id'               => $report->{mana_id},
@@ -248,7 +248,7 @@ if ( !$op ) {
         my $cache_expiry       = $input->param('cache_expiry');
         my $cache_expiry_units = $input->param('cache_expiry_units');
         my $public             = $input->param('public');
-    my $run_type           = $input->param('run_type');
+        my $run_type           = $input->param('run_type');
         my $save_anyway        = $input->param('save_anyway');
         my @errors;
         my $tables   = get_tables();
@@ -322,7 +322,7 @@ if ( !$op ) {
                         notes        => $notes,
                         public       => $public,
                         cache_expiry => $cache_expiry,
-                    run_type     => $run_type,
+                        run_type     => $run_type,
                     }
                 );
 
