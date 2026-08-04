@@ -2,8 +2,8 @@ use Modern::Perl;
 use Koha::Installer::Output qw(say_warning say_success say_info);
 
 return {
-    bug_number  => "BUG_NUMBER",
-    description => "A single line description",
+    bug_number  => "43072",
+    description => "Create fill_other_biblios_hold_policy value where holdallowed value exists",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
