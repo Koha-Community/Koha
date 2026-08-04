@@ -912,7 +912,7 @@
     [% Asset.js("js/throttledButton.js") | $raw %]
     [% Asset.js("js/hold-group.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
-        var MSG_CONFIRM_RENEW = _("The patron has a debt of %s").format(fines);
+        var MSG_CONFIRM_RENEW = _("The patron has a debt of %s.").format(fines) + " ";
         MSG_CONFIRM_RENEW += _("Are you sure you want to renew checkout(s)?");
 
         function uncheck_sibling(me) {
