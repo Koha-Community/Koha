@@ -187,6 +187,21 @@ __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
+=head2 background_jobs
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::BackgroundJob>
+
+=cut
+
+__PACKAGE__->has_many(
+  "background_jobs",
+  "Koha::Schema::Result::BackgroundJob",
+  { "foreign.report_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 reports_branches
 
 Type: has_many
@@ -203,8 +218,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-07-28 12:08:20
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Q3SgcT4kICZ11VDDPhm8EQ
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-08-04 19:49:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:djTICmIK20cxvbN7mOX3ng
 
 __PACKAGE__->add_columns(
     '+public' => { is_boolean => 1 }

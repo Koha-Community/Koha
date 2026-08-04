@@ -50,6 +50,14 @@ __PACKAGE__->table("background_jobs");
   data_type: 'integer'
   is_nullable: 1
 
+=head2 report_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+foreign key to saved_sql.id for run_report jobs
+
 =head2 type
 
   data_type: 'varchar'
@@ -108,6 +116,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "borrowernumber",
   { data_type => "integer", is_nullable => 1 },
+  "report_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "type",
   { data_type => "varchar", is_nullable => 1, size => 64 },
   "queue",
@@ -153,9 +163,31 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("id");
 
+=head1 RELATIONS
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-06-30 14:53:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:t95CnrIOd1CBL5qaEez7dQ
+=head2 report
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::SavedSql>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "report",
+  "Koha::Schema::Result::SavedSql",
+  { id => "report_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "RESTRICT",
+  },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-08-04 19:49:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BlZ8b9WvE+aqoFRAuDdQlw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
