@@ -786,7 +786,8 @@ if ( !$op ) {
                 -status => '429 Too Many Requests',
                 -type   => 'text/plain; charset=UTF-8',
             );
-            print "Too many reports are currently running. Please wait for some to finish before running this report.\n";
+            print
+                "Too many reports are currently running. Please wait for some to finish before running this report.\n";
             exit;
         }
 
