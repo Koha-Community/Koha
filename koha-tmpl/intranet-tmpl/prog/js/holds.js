@@ -105,12 +105,12 @@ function display_pickup_location(state) {
     };
 })(jQuery);
 
-var coded_values = {
-    library: new Map(all_libraries.map(l => [l.branchname, l.branchcode])),
-};
-
 /* global __ borrowernumber SuspendHoldsIntranet */
 $(document).ready(function () {
+    window.coded_values = {
+        library: new Map(all_libraries.map(l => [l.branchname, l.branchcode])),
+    };
+
     let patron_page = holds_table_patron_page();
     function suspend_hold(hold_ids, end_date) {
         var params = { hold_ids: hold_ids };
