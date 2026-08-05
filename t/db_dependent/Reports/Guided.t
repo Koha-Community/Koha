@@ -253,7 +253,15 @@ subtest 'get_saved_reports' => sub {
     my $r1 = Koha::Reports->find( $report_ids[0] );
     $r1 = update_sql(
         $r1->id,
-        { %{ $r1->unblessed }, borrowernumber => $r1->borrowernumber, name => 'Just another report' }
+        {
+            sql          => $r1->savedsql,
+            name         => 'Just another report',
+            notes        => $r1->notes,
+            group        => $r1->report_group,
+            subgroup     => $r1->report_subgroup,
+            cache_expiry => $r1->cache_expiry,
+            public       => $r1->public,
+        }
     );
     is( $r1->cache_expiry, 300, 'cache_expiry has the correct default value, from DBMS' );
 

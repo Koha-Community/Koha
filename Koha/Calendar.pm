@@ -342,9 +342,10 @@ sub days_between {
     my $end_dt   = shift;
 
     # Change time zone for date math and swap if needed
-    $start_dt = $start_dt->clone->set_time_zone('floating');
-    $end_dt   = $end_dt->clone->set_time_zone('floating');
+    $start_dt = $start_dt->clone->set_time_zone('floating')->truncate( to => 'day' );
+    $end_dt   = $end_dt->clone->set_time_zone('floating')->truncate( to => 'day' );
     if ( $start_dt->compare($end_dt) > 0 ) {
+
         ( $start_dt, $end_dt ) = ( $end_dt, $start_dt );
     }
 
@@ -447,6 +448,20 @@ Koha::Calendar - Object containing a branches calendar
   Implements those features of C4::Calendar needed for Staffs Rolling Loans
 
 =head1 METHODS
+
+=head2 _init
+
+    $calendar->_init();
+
+Populates the object with repeatable closed days (weekly and day/month) for the
+branch. Called automatically by C<new>.
+
+=head2 _holidays
+
+    my $holidays = $calendar->_holidays();
+
+Returns a hashref of special (one-off) holidays for the branch, keyed by
+C<YYYYMMDD> date strings. Results are cached.
 
 =head2 new : Create a calendar object
 

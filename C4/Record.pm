@@ -931,6 +931,7 @@ sub marc2cites {
     if ( $marcflavour eq "UNIMARC" ) {
         %publication = (
             title     => $record->subfield( "200", "a" ) || "",
+            subtitle  => $record->subfield( "200", "e" ) || "",
             place     => $record->subfield( "210", "a" ) || "",
             publisher => $record->subfield( "210", "c" ) || "",
             date      => $record->subfield( "210", "d" ) || $record->subfield( "210", "h" ) || ""
@@ -938,6 +939,7 @@ sub marc2cites {
     } else {
         %publication = (
             title     => $record->subfield( "245", "a" ) || "",
+            subtitle  => $record->subfield( "245", "b" ) || "",
             place     => $record->subfield( "264", "a" ) || $record->subfield( "260", "a" ) || "",
             publisher => $record->subfield( "264", "b" ) || $record->subfield( "260", "b" ) || "",
             date      => $record->subfield( "264", "c" )
@@ -978,13 +980,16 @@ sub marc2cites {
     if ( $publication{date} ) {
         $cites{'Harvard'} .= ' (' . $publication{'date'} . '). ';
         $cites{'Chicago'} .= ' ' . $publication{'date'} . '. ';
-        $cites{'MLA'}     .= ' ' . $publication{'title'} . '. ';
-        $cites{'APA'}     .= ' (' . $publication{'date'} . '). ';
+        $cites{'MLA'} .=
+            ' ' . $publication{'title'} . ( $publication{'subtitle'} ? ': ' . $publication{'subtitle'} : '' ) . '. ';
+        $cites{'APA'} .= ' (' . $publication{'date'} . '). ';
     }
-    $cites{'Harvard'} .= $publication{'title'} . '. ';
-    $cites{'Chicago'} .= $publication{'title'} . '. ';
-    $cites{'MLA'}     .= $publication{'place'} . ': ';
-    $cites{'APA'}     .= $publication{'title'} . '. ';
+    $cites{'Harvard'} .=
+        $publication{'title'} . ( $publication{'subtitle'} ? ': ' . $publication{'subtitle'} : '' ) . '. ';
+    $cites{'Chicago'} .=
+        $publication{'title'} . ( $publication{'subtitle'} ? ': ' . $publication{'subtitle'} : '' ) . '. ';
+    $cites{'MLA'} .= $publication{'place'} . ': ';
+    $cites{'APA'} .= $publication{'title'} . ( $publication{'subtitle'} ? ': ' . $publication{'subtitle'} : '' ) . '. ';
     $cites{'Harvard'} .= $publication{'place'} . ': ';
     $cites{'Chicago'} .= $publication{'place'} . ': ';
     $cites{'MLA'}     .= $publication{'publisher'} . '. ';

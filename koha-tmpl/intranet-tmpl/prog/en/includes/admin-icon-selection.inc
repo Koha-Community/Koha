@@ -78,7 +78,7 @@
                 <img src="[% image_location | html %]" alt="" />
             [% ELSE %]
                 <input type="radio" id="remote_image_check" name="image" value="remoteImage" />
-                <input type="text" name="remoteImage" size="48" maxlength="200" value="" onmousedown="document.getElementById('remote_image_check').checked = true;" />
+                <input type="text" id="remoteImage" name="remoteImage" size="48" maxlength="200" value="" />
             [% END %]
         [% END %]
     [% END # /tab_panels %]

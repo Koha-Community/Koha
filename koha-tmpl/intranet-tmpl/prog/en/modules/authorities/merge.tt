@@ -72,7 +72,7 @@
                 <legend>Merge reference</legend>
                 <ol>
                     <li class="radio"
-                        ><input type="radio" value="[% recordid1 | uri %]" checked="checked" id="mergereference1" name="mergereference" onclick="changeFramework('[% frameworkcode1 | html %]')" /><label for="mergereference1"
+                        ><input type="radio" value="[% recordid1 | uri %]" checked="checked" id="mergereference1" name="mergereference" class="change_framework" data-framework="[% frameworkcode1 | html %]" /><label for="mergereference1"
                             >[% title1 | html %] [% FOREACH subtitl1 IN subtitle1 %][% subtitl1 | html %][% END %] (<a
                                 href="/cgi-bin/koha/authorities/detail.pl?authid=[% recordid1 | uri %]"
                                 title="MARC"
@@ -83,7 +83,7 @@
                         ></li
                     >
                     <li class="radio"
-                        ><input type="radio" value="[% recordid2 | uri %]" id="mergereference2" name="mergereference" onclick="changeFramework('[% frameworkcode2 | html %]')" /><label for="mergereference2"
+                        ><input type="radio" value="[% recordid2 | uri %]" id="mergereference2" name="mergereference" class="change_framework" data-framework="[% frameworkcode2 | html %]" /><label for="mergereference2"
                             >[% title2 | html %] [% FOREACH subtitl2 IN subtitle2 %][% subtitl2 | html %][% END %] (<a
                                 href="/cgi-bin/koha/authorities/detail.pl?authid=[% recordid2 | uri %]"
                                 title="MARC"
@@ -166,11 +166,15 @@
             if( $("#tabs .tab-pane.active").length < 1 ){
                 $("#tabs a:first").tab("show");
             }
+            $(".change_framework").on("click", function () {
+                let framework = $(this).data("framework");
+                changeFramework(framework);
+            });
         });
 
 
         function changeFramework(fw) {
-            $("#Frameworks").val(fw);
+            $("#frameworkcode").val(fw);
         }
     </script>
 [% END %]

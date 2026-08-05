@@ -221,8 +221,8 @@ GetOptions(
     'pseudo-transactions:i'      => \$pPseudoTransactions,
     'pseudo-transactions-from:s' => \$pPseudoTransactionsFrom,
     'pseudo-transactions-to:s'   => \$pPseudoTransactionsTo,
-    'labels'                     => \$labels,
-    'cards'                      => \$cards,
+    'labels:i'                   => \$labels,
+    'cards:i'                    => \$cards,
     'return-claims'              => \$return_claims,
     'jobs-type:s'                => \@jobs_types,
     'jobs-days:i'                => \$jobs_days,
@@ -524,7 +524,7 @@ if ($verbose) {
     say $confirm ? sprintf( "Deleted %d patrons", $count ) : sprintf( "%d patrons would have been deleted", $count );
 }
 
-if ($pExpSelfReg) {
+if ( $pExpSelfReg && C4::Context->preference('PatronSelfRegistration') ) {
     try {
         my $opac_registrations = Koha::Patrons->search->filter_by_expired_opac_registrations->filter_by_safe_to_delete;
         my $count              = $opac_registrations->count;
@@ -771,11 +771,11 @@ if ($labels) {
 
 if ($cards) {
     print "Purging card creator batches last added to more than $cards days ago.\n" if $verbose;
-    my $count = PurgeCreatorBatches( $labels, 'patroncards', $confirm );
+    my $count = PurgeCreatorBatches( $cards, 'patroncards', $confirm );
     if ($verbose) {
         say $confirm
             ? sprintf "Done with purging %d card creator batches last added to more than %d days ago.\n", $count,
-            $labels
+            $cards
             : sprintf "%d card creator batches would have been purged.", $count;
     }
 }
