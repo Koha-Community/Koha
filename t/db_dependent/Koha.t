@@ -173,7 +173,7 @@ subtest 'Authorized Values Tests' => sub {
 };
 
 subtest 'isbn tests' => sub {
-    plan tests => 29;
+    plan tests => 33;
 
     my $isbn13  = "9780330356473";
     my $isbn13D = "978-0-330-35647-3";
@@ -273,7 +273,11 @@ subtest 'isbn tests' => sub {
         'Test GetNormalizedISBN'
     );
     is( C4::Koha::GetNormalizedISBN('9781250067128 | 125006712X'), '125006712X', 'Test GetNormalizedISBN' );
-    is( C4::Koha::GetNormalizedISBN('9780373211463 | 0373211465'), '0373211465', 'Test GetNormalizedISBN' );
+
+    my $test_normalized_isbn10 = C4::Koha::GetNormalizedISBN('9780373211463 | 0373211465');
+    is( $test_normalized_isbn10, '0373211465', 'Test GetNormalizedISBN' );
+    my $test_isbn10 = Business::ISBN->new($test_normalized_isbn10);
+    is( $test_isbn10->type, 'ISBN10', 'ISBN not starting with 979 is normalized to valid ISBN-10 format' );
 
     is( C4::Koha::GetNormalizedUPC(), undef, 'GetNormalizedUPC should return undef if no record is passed' );
     is(
@@ -288,6 +292,13 @@ subtest 'isbn tests' => sub {
         C4::Koha::GetNormalizedOCLCNumber(), undef,
         'GetNormalizedOCLCNumber should return undef if no record and no isbn are passed'
     );
+
+    is( C4::Koha::GetNormalizedISBN('979-8-88650-962-5'), '9798886509625', 'Test GetNormalizedISBN' );
+
+    my $test_normalized_isbn13 = C4::Koha::GetNormalizedISBN('9798886509625');
+    is( $test_normalized_isbn13, '9798886509625', 'Test GetNormalizedISBN' );
+    my $test_isbn13 = Business::ISBN->new($test_normalized_isbn13);
+    is( $test_isbn13->type, 'ISBN13', 'ISBN starting with 979 is normalized to valid ISBN-13 format' );
 };
 
 subtest 'issn stuff' => sub {
