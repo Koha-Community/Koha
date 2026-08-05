@@ -20,6 +20,7 @@ package Koha::Library::Calendar::WeeklyClosure;
 use Modern::Perl;
 
 use Koha::Database;
+use Koha::Exceptions;
 
 use base qw(Koha::Object);
 
@@ -28,6 +29,27 @@ use base qw(Koha::Object);
 Koha::Library::Calendar::WeeklyClosure - Koha weekly closure Object class
 
 =head1 API
+
+=head2 Class methods
+
+=head3 store
+
+Overloaded store method that validates weekday is in the range 0-6
+(Sunday-Saturday) before storing.
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    my $weekday = $self->weekday;
+    Koha::Exceptions::BadParameter->throw(
+        error     => "Invalid weekday: " . ( $weekday // 'undef' ) . " (must be 0-6)",
+        parameter => 'weekday'
+    ) unless defined($weekday) && $weekday =~ m/^[0-6]$/;
+
+    return $self->SUPER::store;
+}
 
 =head2 Internal methods
 

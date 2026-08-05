@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Exception;
 use Test::NoWarnings;
 
@@ -160,11 +160,14 @@ subtest 'CRUD methods' => sub {
     # add_exception
     my $exception = $calendar->add_exception( { date => '2026-12-25', title => 'Special opening', description => '' } );
     isa_ok( $exception, 'Koha::Library::Calendar::Exception', 'add_exception returns object' );
-    is( Koha::Library::Calendar::Exceptions->search( { library_id => $library->branchcode } )->count, 1, 'Exception created' );
+    is(
+        Koha::Library::Calendar::Exceptions->search( { library_id => $library->branchcode } )->count, 1,
+        'Exception created'
+    );
 
     # Verify is_holiday uses the new data
     my $cal    = Koha::Library::Calendar->new( branchcode => $library->branchcode );
-    my $sunday = dt_from_string('2026-06-14');                                # a Sunday
+    my $sunday = dt_from_string('2026-06-14');                                         # a Sunday
     is( $cal->is_holiday($sunday), 1, 'Sunday is closed after add_weekly_closure' );
 
     my $june15 = dt_from_string('2026-06-15');
@@ -193,7 +196,10 @@ subtest 'CRUD methods' => sub {
     );
 
     $calendar->delete_exception( { date => '2026-12-25' } );
-    is( Koha::Library::Calendar::Exceptions->search( { library_id => $library->branchcode } )->count, 0, 'Exception deleted' );
+    is(
+        Koha::Library::Calendar::Exceptions->search( { library_id => $library->branchcode } )->count, 0,
+        'Exception deleted'
+    );
 
     # copy_to
     $calendar->add_weekly_closure( { weekday => 6,            title => 'Saturdays', description => '' } );
@@ -249,9 +255,16 @@ subtest 'closed_dates_in_range' => sub {
         }
     );
     $builder->build_object(
-        { class => 'Koha::Library::Calendar::SingleClosures', value => { library_id => $branchcode, date => '2026-06-15' } } );
+        {
+            class => 'Koha::Library::Calendar::SingleClosures',
+            value => { library_id => $branchcode, date => '2026-06-15' }
+        }
+    );
     $builder->build_object(
-        { class => 'Koha::Library::Calendar::Exceptions', value => { library_id => $branchcode, date => '2026-12-25' } } );
+        {
+            class => 'Koha::Library::Calendar::Exceptions', value => { library_id => $branchcode, date => '2026-12-25' }
+        }
+    );
 
     my $calendar = Koha::Library::Calendar->new( branchcode => $branchcode );
 
@@ -296,6 +309,33 @@ subtest 'delete_*_closure clears _holidays cache' => sub {
     ok( defined $cache->get_from_cache($cache_key), 'Cache warm after is_holiday (exception)' );
     $calendar->delete_exception( { date => '2027-07-05' } );
     is( $cache->get_from_cache($cache_key), undef, 'Cache cleared after delete_exception' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'add_weekly_closure validates weekday' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $calendar = Koha::Library::Calendar->new( branchcode => $library->branchcode );
+
+    throws_ok {
+        $calendar->add_weekly_closure( { weekday => 7, title => '', description => '' } );
+    }
+    'Koha::Exceptions::BadParameter', 'add_weekly_closure dies on out-of-range weekday';
+
+    throws_ok {
+        $calendar->add_weekly_closure( { weekday => undef, title => '', description => '' } );
+    }
+    'Koha::Exceptions::BadParameter', 'add_weekly_closure dies on undef weekday';
+
+    is(
+        Koha::Library::Calendar::WeeklyClosures->search( { library_id => $library->branchcode } )->count, 0,
+        'No weekly closure row was created for the invalid weekday values'
+    );
 
     $schema->storage->txn_rollback;
 };
