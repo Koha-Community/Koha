@@ -292,7 +292,7 @@
 
         // Validate: max 2 instructions per group
         if (group.length >= 2) {
-            alert("Each service group can contain at most 2 instructions (one LVC and/or one LVT).");
+            alert(_("Each service group can contain at most 2 instructions (one LVC and/or one LVT)."));
             return;
         }
 
@@ -308,11 +308,11 @@
         });
 
         if (type === "LVC" && hasLVC) {
-            alert("This group already has an LVC instruction. Each group can have only one LVC.");
+            alert(_("This group already has an LVC instruction. Each group can have only one LVC."));
             return;
         }
         if (type === "LVT" && hasLVT) {
-            alert("This group already has an LVT instruction. Each group can have only one LVT.");
+            alert(_("This group already has an LVT instruction. Each group can have only one LVT."));
             return;
         }
 
@@ -333,7 +333,7 @@
         // Check if changing type would create a duplicate
         for (var i = 0; i < group.length; i++) {
             if (i !== instructionIndex && group[i].type === type) {
-                alert("This group already has a " + type + " instruction. Each group can have only one of each type.");
+                alert(_("This group already has a %s instruction. Each group can have only one of each type.").format(type));
                 renderServicingInstructions(); // Re-render to reset the select
                 return;
             }
@@ -348,7 +348,7 @@
         container.empty();
 
         if (servicingInstructionGroups.length === 0) {
-            container.append('<div class="hint">No servicing instructions added. Click "Add servicing group" to add one.</div>');
+            container.append('<div class="hint">' + _("No servicing instructions added yet. Use the Add servicing group button to add one.") + "</div>");
             return;
         }
 
@@ -363,24 +363,24 @@
             });
 
             var groupHeader = $('<div style="margin-bottom: 10px;"></div>');
-            groupHeader.append("<strong>Service Group " + (groupIndex + 1) + "</strong> ");
+            groupHeader.append("<strong>" + _("Service Group %s").format(groupIndex + 1) + "</strong> ");
             groupHeader.append(
-                $('<button type="button" class="btn btn-default btn-xs" style="margin-left: 10px;">' + '<i class="fa fa-trash"></i> Remove group</button>').on("click", function () {
+                $('<button type="button" class="btn btn-default btn-xs" style="margin-left: 10px;">' + '<i class="fa fa-trash"></i> ' + _("Remove group") + "</button>").on("click", function () {
                     removeServicingGroup(groupIndex);
                 })
             );
             groupDiv.append(groupHeader);
 
             if (group.length === 0) {
-                groupDiv.append('<div class="hint" style="margin-left: 20px;">Empty group</div>');
+                groupDiv.append('<div class="hint" style="margin-left: 20px;">' + _("Empty group") + "</div>");
             }
 
             group.forEach(function (instruction, instructionIndex) {
                 var instructionDiv = $('<div class="servicing_instruction" style="margin-left: 20px; margin-bottom: 5px;"></div>');
 
                 var typeSelect = $('<select style="width: 100px; margin-right: 5px;"></select>')
-                    .append('<option value="LVC"' + (instruction.type === "LVC" ? " selected" : "") + ">LVC (Coded)</option>")
-                    .append('<option value="LVT"' + (instruction.type === "LVT" ? " selected" : "") + ">LVT (Text)</option>")
+                    .append('<option value="LVC"' + (instruction.type === "LVC" ? " selected" : "") + ">" + _("LVC (Coded)") + "</option>")
+                    .append('<option value="LVT"' + (instruction.type === "LVT" ? " selected" : "") + ">" + _("LVT (Text)") + "</option>")
                     .on("change", function () {
                         var newType = $(this).val();
                         var valueInput = $(this).next();
@@ -391,7 +391,7 @@
                 var valueInput;
                 if (instruction.type === "LVC" && servicingInstructionAVs.length > 0) {
                     valueInput = $('<select style="width: 300px; margin-right: 5px;"></select>');
-                    valueInput.append('<option value="">Select...</option>');
+                    valueInput.append('<option value="">' + _("Select...") + "</option>");
                     servicingInstructionAVs.forEach(function (av) {
                         valueInput.append(
                             $("<option></option>")
@@ -408,7 +408,7 @@
                     updateInstruction(groupIndex, instructionIndex, typeSelect.val(), $(this).val());
                 });
 
-                var removeBtn = $('<button type="button" class="btn btn-default btn-xs">' + '<i class="fa fa-trash"></i> Remove</button>').on("click", function () {
+                var removeBtn = $('<button type="button" class="btn btn-default btn-xs">' + '<i class="fa fa-trash"></i> ' + _("Remove") + "</button>").on("click", function () {
                     removeInstructionFromGroup(groupIndex, instructionIndex);
                 });
 
@@ -428,14 +428,15 @@
             var canAddMore = group.length < 2;
 
             if (canAddMore) {
-                var btnText = '<i class="fa fa-plus"></i> Add instruction';
+                var btnLabel = _("Add instruction");
                 if (hasLVC && !hasLVT) {
-                    btnText += " (LVT only)";
+                    btnLabel += " " + _("(LVT only)");
                 } else if (hasLVT && !hasLVC) {
-                    btnText += " (LVC only)";
+                    btnLabel += " " + _("(LVC only)");
                 } else if (group.length === 0) {
-                    btnText += " to this group";
+                    btnLabel += " " + _("to this group");
                 }
+                var btnText = '<i class="fa fa-plus"></i> ' + btnLabel;
 
                 var addInstructionBtn = $('<button type="button" class="btn btn-default btn-xs" style="margin-left: 20px; margin-top: 5px;">' + btnText + "</button>").on("click", function () {
                     // Determine default type based on what's already in the group
@@ -446,7 +447,7 @@
                 });
                 groupDiv.append(addInstructionBtn);
             } else {
-                var maxMsg = $('<div class="hint" style="margin-left: 20px; margin-top: 5px; color: #666;">' + "Maximum 2 instructions per group (one LVC + one LVT)</div>");
+                var maxMsg = $('<div class="hint" style="margin-left: 20px; margin-top: 5px; color: #666;">' + _("Maximum 2 instructions per group (one LVC + one LVT)") + "</div>");
                 groupDiv.append(maxMsg);
             }
 
