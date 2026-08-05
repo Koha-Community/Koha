@@ -74,7 +74,14 @@
                             [% IF ( opacsuggestion ) %]
                                 [% PROCESS koha_news_block news => opacsuggestion %]
                             [% ELSE %]
-                                <p>Please fill out this form to make a purchase suggestion. You will receive an email when the library processes your suggestion.</p>
+                                <p
+                                    >Please fill out this form to make a purchase suggestion.
+                                    [% IF ( loggedinusername ) %]
+                                        You will receive an email when the library processes your suggestion.
+                                    [% ELSE %]
+                                        If you wish to receive an email when the library processes your suggestion, please log in before making a purchase suggestion.
+                                    [% END %]</p
+                                >
                                 <p
                                     >Only certain fields (marked in red) are required, but the more information you enter the easier it will be for the librarians to find the title you're requesting. The "Notes" field can be used to provide
                                     any additional information.</p
