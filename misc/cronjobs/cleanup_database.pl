@@ -41,6 +41,7 @@ use Koha::Script -cron;
 
 use C4::Accounts qw( purge_zero_balance_fees );
 use C4::Context;
+use C4::Log qw( cronlogaction );
 use C4::Search::History;
 use C4::Search;
 use Koha::BackgroundJobs;
