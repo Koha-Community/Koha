@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Koha::Caches;
 use Koha::Database;
+use Koha::Exceptions;
 
 use base qw(Koha::Object);
 
@@ -38,11 +39,19 @@ Overloaded store method that clears the holidays cache on insert.
 
 Only flushes on insert (new exception), not on title/description updates,
 because the holidays cache only stores dates and their open/closed status.
+An update that changes C<date> in place would desync the cache with no
+warning, so that is rejected outright - callers must delete and re-add
+instead.
 
 =cut
 
 sub store {
     my ($self) = @_;
+
+    Koha::Exceptions::BadParameter->throw(
+        error     => 'Cannot change date on an existing closure exception; delete and re-add instead',
+        parameter => 'date'
+    ) if $self->in_storage && $self->_result->is_column_changed('date');
 
     my $flush = !$self->in_storage;
 

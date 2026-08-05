@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Exception;
 use Test::NoWarnings;
 
@@ -336,6 +336,38 @@ subtest 'add_weekly_closure validates weekday' => sub {
         Koha::Library::Calendar::WeeklyClosures->search( { library_id => $library->branchcode } )->count, 0,
         'No weekly closure row was created for the invalid weekday values'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'SingleClosure/Exception store() rejects an in-place date change' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $calendar = Koha::Library::Calendar->new( branchcode => $library->branchcode );
+
+    my $single = $calendar->add_single_closure( { date => '2027-08-01', title => 'Staff day', description => '' } );
+    throws_ok {
+        $single->date('2027-08-02')->store;
+    }
+    'Koha::Exceptions::BadParameter', 'SingleClosure->store dies when date is changed in place';
+
+    $single->discard_changes;
+    $single->title('Staff day (renamed)')->store;
+    is( $single->title, 'Staff day (renamed)', 'SingleClosure->store still allows a title-only update' );
+
+    my $exception = $calendar->add_exception( { date => '2027-08-03', title => 'Special open', description => '' } );
+    throws_ok {
+        $exception->date('2027-08-04')->store;
+    }
+    'Koha::Exceptions::BadParameter', 'Exception->store dies when date is changed in place';
+
+    $exception->discard_changes;
+    $exception->title('Special open (renamed)')->store;
+    is( $exception->title, 'Special open (renamed)', 'Exception->store still allows a title-only update' );
 
     $schema->storage->txn_rollback;
 };
