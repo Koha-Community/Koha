@@ -426,12 +426,18 @@ sub clear_weekly_closed_days {
 
 sub add_weekly_closure {
     my ( $self, $params ) = @_;
-    return Koha::Library::Calendar::WeeklyClosure->new( { library_id => $self->{branchcode}, %$params } )->store;
+    my $closure =
+        Koha::Library::Calendar::WeeklyClosure->new( { library_id => $self->{branchcode}, %$params } )->store;
+    $self->_init;
+    return $closure;
 }
 
 sub add_repeating_closure {
     my ( $self, $params ) = @_;
-    return Koha::Library::Calendar::RepeatingClosure->new( { library_id => $self->{branchcode}, %$params } )->store;
+    my $closure =
+        Koha::Library::Calendar::RepeatingClosure->new( { library_id => $self->{branchcode}, %$params } )->store;
+    $self->_init;
+    return $closure;
 }
 
 sub add_single_closure {
@@ -450,7 +456,10 @@ sub delete_weekly_closure {
         { library_id => $self->{branchcode}, weekday => $params->{weekday} },
         { rows       => 1 }
     )->single;
-    $row->delete if $row;
+    if ($row) {
+        $row->delete;
+        $self->_init;
+    }
     return $self;
 }
 
@@ -460,7 +469,10 @@ sub delete_repeating_closure {
         { library_id => $self->{branchcode}, day => $params->{day}, month => $params->{month} },
         { rows       => 1 }
     )->single;
-    $row->delete if $row;
+    if ($row) {
+        $row->delete;
+        $self->_init;
+    }
     return $self;
 }
 
@@ -566,11 +578,12 @@ sub copy_to {
             }
 
             my $exceptions =
-                Koha::Library::Calendar::Exceptions->search( { library_id => $self->{branchcode}, date => { '>=' => $today } } );
+                Koha::Library::Calendar::Exceptions->search(
+                { library_id => $self->{branchcode}, date => { '>=' => $today } } );
             while ( my $row = $exceptions->next ) {
                 next
-                    if Koha::Library::Calendar::Exceptions->search( { library_id => $target_branchcode, date => $row->date } )
-                    ->count;
+                    if Koha::Library::Calendar::Exceptions->search(
+                    { library_id => $target_branchcode, date => $row->date } )->count;
                 Koha::Library::Calendar::Exception->new(
                     {
                         library_id => $target_branchcode, date        => $row->date,

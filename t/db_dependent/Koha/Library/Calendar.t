@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::Exception;
 use Test::NoWarnings;
 
@@ -368,6 +368,38 @@ subtest 'SingleClosure/Exception store() rejects an in-place date change' => sub
     $exception->discard_changes;
     $exception->title('Special open (renamed)')->store;
     is( $exception->title, 'Special open (renamed)', 'Exception->store still allows a title-only update' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'delete_weekly_closure/delete_repeating_closure refresh in-process state' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $calendar = Koha::Library::Calendar->new( branchcode => $library->branchcode );
+
+    my $sunday = dt_from_string('2027-08-08');    # a Sunday
+    $calendar->add_weekly_closure( { weekday => 0, title => '', description => '' } );
+    is( $calendar->is_holiday($sunday), 1, 'Sunday is closed after add_weekly_closure' );
+
+    $calendar->delete_weekly_closure( { weekday => 0 } );
+    is(
+        $calendar->is_holiday($sunday), 0,
+        'Sunday is open on the SAME object immediately after delete_weekly_closure, without re-instantiating'
+    );
+
+    my $christmas = dt_from_string('2027-12-25');
+    $calendar->add_repeating_closure( { day => 25, month => 12, title => '', description => '' } );
+    is( $calendar->is_holiday($christmas), 1, 'Christmas is closed after add_repeating_closure' );
+
+    $calendar->delete_repeating_closure( { day => 25, month => 12 } );
+    is(
+        $calendar->is_holiday($christmas), 0,
+        'Christmas is open on the SAME object immediately after delete_repeating_closure, without re-instantiating'
+    );
 
     $schema->storage->txn_rollback;
 };
