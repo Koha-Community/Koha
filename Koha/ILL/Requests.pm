@@ -20,6 +20,7 @@ package Koha::ILL::Requests;
 use Modern::Perl;
 
 use Koha::Database;
+use Koha::Exceptions;
 use Koha::ILL::Request;
 use Koha::ILL::Request::Config;
 
@@ -100,6 +101,39 @@ not considered completed.
 sub search_incomplete {
     my ($self) = @_;
     $self->search( { status => [ -and => { '!=', 'COMP' }, { '!=', 'GENCOMP' } ] } );
+}
+
+=head3 filter_by_purgeable
+
+    my $purgeable = Koha::ILL::Requests->filter_by_purgeable(
+        {
+            days     => 30,
+            statuses => ['COMP', 'KILL'],
+        }
+    );
+
+Returns a I<Koha::ILL::Requests> resultset filtered to requests that:
+- Have a status matching one of the provided statuses
+- Were last updated more than the specified number of days ago
+
+The caller can then use C<< ->count >> for reporting or C<< ->delete >> to purge.
+
+=cut
+
+sub filter_by_purgeable {
+    my ( $self, $params ) = @_;
+
+    Koha::Exceptions::MissingParameter->throw( parameter => 'days' )
+        unless defined $params->{days};
+    Koha::Exceptions::MissingParameter->throw( parameter => 'statuses' )
+        unless $params->{statuses} && @{ $params->{statuses} };
+
+    return $self->search(
+        {
+            status  => { '-in' => $params->{statuses} },
+            updated => { '<'   => \[ 'DATE_SUB(NOW(), INTERVAL ? DAY)', $params->{days} ] },
+        }
+    );
 }
 
 =head3 extended_attributes_config

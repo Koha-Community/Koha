@@ -43,7 +43,7 @@ use Test::Deep qw/ cmp_deeply ignore /;
 use Test::Warn;
 
 use Test::NoWarnings;
-use Test::More tests => 17;
+use Test::More tests => 18;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -2294,6 +2294,102 @@ subtest 'filter_by_visible() tests' => sub {
 
     is( $filtered_reqs->count, 1, 'Count is correct' );
     is( $filtered_reqs->next->status, 'REQ' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_by_purgeable() tests' => sub {
+
+    plan tests => 7;
+
+    $schema->storage->txn_begin;
+
+    # Clean slate
+    Koha::ILL::Requests->search->delete;
+
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    # Create requests with various statuses and ages
+    my $old_comp = $builder->build_object(
+        {
+            class => 'Koha::ILL::Requests',
+            value => {
+                borrowernumber => $patron->borrowernumber,
+                branchcode     => $library->branchcode,
+                status         => 'COMP',
+                backend        => 'Standard',
+                updated        => dt_from_string->subtract( days => 60 )->ymd . ' 00:00:00',
+            }
+        }
+    );
+
+    my $old_kill = $builder->build_object(
+        {
+            class => 'Koha::ILL::Requests',
+            value => {
+                borrowernumber => $patron->borrowernumber,
+                branchcode     => $library->branchcode,
+                status         => 'KILL',
+                backend        => 'Standard',
+                updated        => dt_from_string->subtract( days => 45 )->ymd . ' 00:00:00',
+            }
+        }
+    );
+
+    my $recent_comp = $builder->build_object(
+        {
+            class => 'Koha::ILL::Requests',
+            value => {
+                borrowernumber => $patron->borrowernumber,
+                branchcode     => $library->branchcode,
+                status         => 'COMP',
+                backend        => 'Standard',
+                updated        => dt_from_string->subtract( days => 10 )->ymd . ' 00:00:00',
+            }
+        }
+    );
+
+    my $old_req = $builder->build_object(
+        {
+            class => 'Koha::ILL::Requests',
+            value => {
+                borrowernumber => $patron->borrowernumber,
+                branchcode     => $library->branchcode,
+                status         => 'REQ',
+                backend        => 'Standard',
+                updated        => dt_from_string->subtract( days => 60 )->ymd . ' 00:00:00',
+            }
+        }
+    );
+
+    # Filter COMP older than 30 days
+    my $purgeable = Koha::ILL::Requests->filter_by_purgeable( { days => 30, statuses => ['COMP'] } );
+    is( $purgeable->count,               1,                        'Only 1 old COMP request found' );
+    is( $purgeable->next->illrequest_id, $old_comp->illrequest_id, 'Correct request identified' );
+
+    # Filter multiple statuses
+    $purgeable = Koha::ILL::Requests->filter_by_purgeable( { days => 30, statuses => [ 'COMP', 'KILL' ] } );
+    is( $purgeable->count, 2, '2 requests found with COMP+KILL statuses older than 30 days' );
+
+    # Recent requests excluded
+    $purgeable = Koha::ILL::Requests->filter_by_purgeable( { days => 30, statuses => [ 'COMP', 'KILL', 'REQ' ] } );
+    is( $purgeable->count, 3, '3 old requests found (recent COMP excluded)' );
+
+    # Throws without days
+    throws_ok { Koha::ILL::Requests->filter_by_purgeable( { statuses => ['COMP'] } ) }
+    'Koha::Exceptions::MissingParameter',
+        'Throws without days parameter';
+
+    # Throws without statuses
+    throws_ok { Koha::ILL::Requests->filter_by_purgeable( { days => 30 } ) }
+    'Koha::Exceptions::MissingParameter',
+        'Throws without statuses parameter';
+
+    # Throws with empty statuses
+    throws_ok { Koha::ILL::Requests->filter_by_purgeable( { days => 30, statuses => [] } ) }
+    'Koha::Exceptions::MissingParameter',
+        'Throws with empty statuses array';
 
     $schema->storage->txn_rollback;
 };
