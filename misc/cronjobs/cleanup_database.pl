@@ -48,6 +48,7 @@ use Koha::BackgroundJobs;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Item::Transfers;
+use Koha::ILL::Requests;
 use Koha::Library::Calendar::Exceptions;
 use Koha::Library::Calendar::SingleClosures;
 use Koha::Old::Biblioitems;
@@ -890,7 +891,10 @@ if ($illrequests_days) {
         . join( ', ', @illrequests_statuses )
         . " older than $illrequests_days days.\n"
         if $verbose;
-    my $count = PurgeIllRequests( $illrequests_days, \@illrequests_statuses, $confirm );
+    my $purgeable =
+        Koha::ILL::Requests->filter_by_purgeable( { days => $illrequests_days, statuses => \@illrequests_statuses } );
+    my $count = $purgeable->count;
+    $purgeable->delete if $confirm;
     if ($verbose) {
         say $confirm
             ? sprintf( "Done with purging %d ILL requests.",      $count )
@@ -1057,33 +1061,3 @@ sub PurgeEdifactMessages {
     return $count;
 }
 
-sub PurgeIllRequests {
-    my ( $days, $statuses, $doit ) = @_;
-
-    my $count = 0;
-    $sth = $dbh->prepare(
-        q{
-            DELETE FROM illrequests
-            WHERE updated < date_sub(curdate(), INTERVAL ? DAY)
-            AND status IN (}
-            . join( ',', ('?') x @$statuses ) . q{)
-        }
-    );
-    if ($doit) {
-        $sth->execute( $days, @$statuses ) or die $dbh->errstr;
-        $count = $sth->rows;
-    } else {
-        my $count_sth = $dbh->prepare(
-            q{
-                SELECT COUNT(*) FROM illrequests
-                WHERE updated < date_sub(curdate(), INTERVAL ? DAY)
-                AND status IN (}
-                . join( ',', ('?') x @$statuses ) . q{)
-            }
-        );
-        $count_sth->execute( $days, @$statuses ) or die $dbh->errstr;
-        ($count) = $count_sth->fetchrow_array;
-    }
-
-    return $count;
-}
