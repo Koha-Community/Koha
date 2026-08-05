@@ -1,12 +1,12 @@
 use utf8;
-package Koha::Schema::Result::SpecialHoliday;
+package Koha::Schema::Result::LibraryRepeatingClosure;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-Koha::Schema::Result::SpecialHoliday
+Koha::Schema::Result::LibraryRepeatingClosure
 
 =cut
 
@@ -15,35 +15,34 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
-=head1 TABLE: C<special_holidays>
+=head1 TABLE: C<library_repeating_closures>
 
 =cut
 
-__PACKAGE__->table("special_holidays");
+__PACKAGE__->table("library_repeating_closures");
 
 =head1 ACCESSORS
 
-=head2 id
+=head2 library_repeating_closure_id
 
   data_type: 'integer'
   is_auto_increment: 1
   is_nullable: 0
 
-unique identifier assigned by Koha
+unique identifier
 
-=head2 branchcode
+=head2 library_id
 
   data_type: 'varchar'
   is_foreign_key: 1
   is_nullable: 0
   size: 10
 
-foreign key from the branches table, defines which branch this closing is for
+foreign key from the branches table
 
 =head2 day
 
   data_type: 'smallint'
-  default_value: 0
   is_nullable: 0
 
 day of the month this closing is on
@@ -51,26 +50,9 @@ day of the month this closing is on
 =head2 month
 
   data_type: 'smallint'
-  default_value: 0
   is_nullable: 0
 
 month this closing is in
-
-=head2 year
-
-  data_type: 'smallint'
-  default_value: 0
-  is_nullable: 0
-
-year this closing is in
-
-=head2 isexception
-
-  data_type: 'smallint'
-  default_value: 1
-  is_nullable: 0
-
-is this a holiday exception to a repeatable holiday (1 for yes, 0 for no)
 
 =head2 title
 
@@ -79,30 +61,26 @@ is this a holiday exception to a repeatable holiday (1 for yes, 0 for no)
   is_nullable: 0
   size: 50
 
-title for this closing
+title of this closing
 
 =head2 description
 
   data_type: 'mediumtext'
   is_nullable: 0
 
-description of this closing
+description for this closing
 
 =cut
 
 __PACKAGE__->add_columns(
-  "id",
+  "library_repeating_closure_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "branchcode",
+  "library_id",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 10 },
   "day",
-  { data_type => "smallint", default_value => 0, is_nullable => 0 },
+  { data_type => "smallint", is_nullable => 0 },
   "month",
-  { data_type => "smallint", default_value => 0, is_nullable => 0 },
-  "year",
-  { data_type => "smallint", default_value => 0, is_nullable => 0 },
-  "isexception",
-  { data_type => "smallint", default_value => 1, is_nullable => 0 },
+  { data_type => "smallint", is_nullable => 0 },
   "title",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 50 },
   "description",
@@ -113,17 +91,35 @@ __PACKAGE__->add_columns(
 
 =over 4
 
-=item * L</id>
+=item * L</library_repeating_closure_id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("id");
+__PACKAGE__->set_primary_key("library_repeating_closure_id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<library_id_day_month>
+
+=over 4
+
+=item * L</library_id>
+
+=item * L</day>
+
+=item * L</month>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("library_id_day_month", ["library_id", "day", "month"]);
 
 =head1 RELATIONS
 
-=head2 branchcode
+=head2 library
 
 Type: belongs_to
 
@@ -132,16 +128,14 @@ Related object: L<Koha::Schema::Result::Branch>
 =cut
 
 __PACKAGE__->belongs_to(
-  "branchcode",
+  "library",
   "Koha::Schema::Result::Branch",
-  { branchcode => "branchcode" },
+  { branchcode => "library_id" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:H3PUa5HiJKKfdndKXbmJ6A
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-04-08 18:44:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NC9XLjyjtiR2CsDPP41S3g
 
-
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

@@ -1,12 +1,12 @@
 use utf8;
-package Koha::Schema::Result::RepeatableHoliday;
+package Koha::Schema::Result::LibraryWeeklyClosure;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-Koha::Schema::Result::RepeatableHoliday
+Koha::Schema::Result::LibraryWeeklyClosure
 
 =cut
 
@@ -15,51 +15,37 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
-=head1 TABLE: C<repeatable_holidays>
+=head1 TABLE: C<library_weekly_closures>
 
 =cut
 
-__PACKAGE__->table("repeatable_holidays");
+__PACKAGE__->table("library_weekly_closures");
 
 =head1 ACCESSORS
 
-=head2 id
+=head2 library_weekly_closure_id
 
   data_type: 'integer'
   is_auto_increment: 1
   is_nullable: 0
 
-unique identifier assigned by Koha
+unique identifier
 
-=head2 branchcode
+=head2 library_id
 
   data_type: 'varchar'
   is_foreign_key: 1
   is_nullable: 0
   size: 10
 
-foreign key from the branches table, defines which branch this closing is for
+foreign key from the branches table
 
 =head2 weekday
 
   data_type: 'smallint'
-  is_nullable: 1
+  is_nullable: 0
 
-day of the week (0=Sunday, 1=Monday, etc) this closing is repeated on
-
-=head2 day
-
-  data_type: 'smallint'
-  is_nullable: 1
-
-day of the month this closing is on
-
-=head2 month
-
-  data_type: 'smallint'
-  is_nullable: 1
-
-month this closing is in
+day of the week (0=Sunday, 1=Monday, etc)
 
 =head2 title
 
@@ -80,16 +66,12 @@ description for this closing
 =cut
 
 __PACKAGE__->add_columns(
-  "id",
+  "library_weekly_closure_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "branchcode",
+  "library_id",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 10 },
   "weekday",
-  { data_type => "smallint", is_nullable => 1 },
-  "day",
-  { data_type => "smallint", is_nullable => 1 },
-  "month",
-  { data_type => "smallint", is_nullable => 1 },
+  { data_type => "smallint", is_nullable => 0 },
   "title",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 50 },
   "description",
@@ -100,17 +82,33 @@ __PACKAGE__->add_columns(
 
 =over 4
 
-=item * L</id>
+=item * L</library_weekly_closure_id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("id");
+__PACKAGE__->set_primary_key("library_weekly_closure_id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<library_id_weekday>
+
+=over 4
+
+=item * L</library_id>
+
+=item * L</weekday>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("library_id_weekday", ["library_id", "weekday"]);
 
 =head1 RELATIONS
 
-=head2 branchcode
+=head2 library
 
 Type: belongs_to
 
@@ -119,16 +117,14 @@ Related object: L<Koha::Schema::Result::Branch>
 =cut
 
 __PACKAGE__->belongs_to(
-  "branchcode",
+  "library",
   "Koha::Schema::Result::Branch",
-  { branchcode => "branchcode" },
+  { branchcode => "library_id" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OZykv+F1kgqeLvezCyhvZA
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-04-08 18:44:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2DqS0FAKqaZrpqCNlJNYaw
 
-
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

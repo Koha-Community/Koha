@@ -800,6 +800,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 library_closure_exceptions
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::LibraryClosureException>
+
+=cut
+
+__PACKAGE__->has_many(
+  "library_closure_exceptions",
+  "Koha::Schema::Result::LibraryClosureException",
+  { "foreign.library_id" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 library_float_limits
 
 Type: has_many
@@ -845,6 +860,36 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 library_repeating_closures
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::LibraryRepeatingClosure>
+
+=cut
+
+__PACKAGE__->has_many(
+  "library_repeating_closures",
+  "Koha::Schema::Result::LibraryRepeatingClosure",
+  { "foreign.library_id" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 library_single_closures
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::LibrarySingleClosure>
+
+=cut
+
+__PACKAGE__->has_many(
+  "library_single_closures",
+  "Koha::Schema::Result::LibrarySingleClosure",
+  { "foreign.library_id" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 library_smtp_server
 
 Type: might_have
@@ -856,6 +901,21 @@ Related object: L<Koha::Schema::Result::LibrarySmtpServer>
 __PACKAGE__->might_have(
   "library_smtp_server",
   "Koha::Schema::Result::LibrarySmtpServer",
+  { "foreign.library_id" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 library_weekly_closures
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::LibraryWeeklyClosure>
+
+=cut
+
+__PACKAGE__->has_many(
+  "library_weekly_closures",
+  "Koha::Schema::Result::LibraryWeeklyClosure",
   { "foreign.library_id" => "self.branchcode" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -905,21 +965,6 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 repeatable_holidays
-
-Type: has_many
-
-Related object: L<Koha::Schema::Result::RepeatableHoliday>
-
-=cut
-
-__PACKAGE__->has_many(
-  "repeatable_holidays",
-  "Koha::Schema::Result::RepeatableHoliday",
-  { "foreign.branchcode" => "self.branchcode" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
 =head2 reports_branches
 
 Type: has_many
@@ -946,21 +991,6 @@ Related object: L<Koha::Schema::Result::Reserve>
 __PACKAGE__->has_many(
   "reserves",
   "Koha::Schema::Result::Reserve",
-  { "foreign.branchcode" => "self.branchcode" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-=head2 special_holidays
-
-Type: has_many
-
-Related object: L<Koha::Schema::Result::SpecialHoliday>
-
-=cut
-
-__PACKAGE__->has_many(
-  "special_holidays",
-  "Koha::Schema::Result::SpecialHoliday",
   { "foreign.branchcode" => "self.branchcode" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
