@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 12;
 use Test::Exception;
 use Test::NoWarnings;
 
@@ -309,6 +309,76 @@ subtest 'delete_*_closure clears _holidays cache' => sub {
     ok( defined $cache->get_from_cache($cache_key), 'Cache warm after is_holiday (exception)' );
     $calendar->delete_exception( { date => '2027-07-05' } );
     is( $cache->get_from_cache($cache_key), undef, 'Cache cleared after delete_exception' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'add_*_closure clears a cache warmed BEFORE the add' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $library    = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $branchcode = $library->branchcode;
+    my $calendar   = Koha::Library::Calendar->new( branchcode => $branchcode );
+
+    # Warm the cache with the "not a holiday" answer for a date that is not
+    # yet closed, THEN add a single closure for that exact date - the stale
+    # cache must not mask the new closure.
+    my $independence_day = dt_from_string('2027-07-04');
+    is( $calendar->is_holiday($independence_day), 0, 'Not yet a holiday (warms the cache)' );
+    $calendar->add_single_closure( { date => '2027-07-04', title => 'Independence', description => '' } );
+    is( $calendar->is_holiday($independence_day), 1, 'add_single_closure invalidates a pre-warmed cache' );
+
+    my $special_open_day = dt_from_string('2027-07-05');
+    $calendar->add_weekly_closure( { weekday => $special_open_day->day_of_week % 7, title => '', description => '' } );
+    is( $calendar->is_holiday($special_open_day), 1, 'Closed by weekly closure (warms the cache)' );
+    $calendar->add_exception( { date => '2027-07-05', title => 'Special open', description => '' } );
+    is( $calendar->is_holiday($special_open_day), 0, 'add_exception invalidates a pre-warmed cache' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'a library with no closures at all' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $calendar = Koha::Library::Calendar->new( branchcode => $library->branchcode );
+
+    is( $calendar->is_holiday( dt_from_string('2027-01-01') ), 0, 'No holidays: New Year is open' );
+    is( $calendar->is_holiday( dt_from_string('2027-01-03') ), 0, 'No holidays: an arbitrary Sunday is open' );
+    is(
+        $calendar->has_business_days_between( dt_from_string('2027-01-01'), dt_from_string('2027-01-08') ), 1,
+        'No holidays: has business days between two dates a week apart'
+    );
+    is_deeply(
+        $calendar->closed_dates_in_range( dt_from_string('2027-01-01'), dt_from_string('2027-01-31') ), [],
+        'No holidays: closed_dates_in_range returns an empty list'
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'repeating closure on 29 February' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $calendar = Koha::Library::Calendar->new( branchcode => $library->branchcode );
+
+    $calendar->add_repeating_closure( { day => 29, month => 2, title => 'Leap day', description => '' } );
+
+    is( $calendar->is_holiday( dt_from_string('2028-02-29') ), 1, '29 February is closed in a leap year (2028)' );
+
+    # 2027 is not a leap year and has no 29 February; the day after is an
+    # ordinary open day and must not be affected by the repeating rule.
+    is( $calendar->is_holiday( dt_from_string('2027-03-01') ), 0, '1 March is open in a non-leap year (2027)' );
 
     $schema->storage->txn_rollback;
 };
