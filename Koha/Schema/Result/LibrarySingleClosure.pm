@@ -128,4 +128,20 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-04-08 18:44:00
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:98ikVfQC+ja7Yr4Oby85pA
 
+=head2 koha_objects_class
+
+=cut
+
+sub koha_objects_class {
+    'Koha::Calendar::SingleClosures';
+}
+
+=head2 koha_object_class
+
+=cut
+
+sub koha_object_class {
+    'Koha::Calendar::SingleClosure';
+}
+
 1;
