@@ -742,13 +742,28 @@ sub _normalize_match_point {
 
 sub _isbn_cleanup {
     my ($isbn) = @_;
-    return NormalizeISBN(
-        {
-            isbn          => $isbn,
-            format        => 'ISBN-10',
-            strip_hyphens => 1,
-        }
-    ) if $isbn;
+
+    return unless $isbn;
+
+    if ( $isbn =~ /^979/ ) {
+
+        # ISBNs starting with 979 cannot be converted to ISBN-10 format, but all other valid ISBNs can
+        return NormalizeISBN(
+            {
+                isbn          => $isbn,
+                format        => 'ISBN-13',
+                strip_hyphens => 1,
+            }
+        );
+    } else {
+        return NormalizeISBN(
+            {
+                isbn          => $isbn,
+                format        => 'ISBN-10',
+                strip_hyphens => 1,
+            }
+        );
+    }
 }
 
 =head2 NormalizeISBN
