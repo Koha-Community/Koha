@@ -104,7 +104,7 @@ sub _init {
     $exceptions_sth->execute($branch);
     my %exception_holidays;
     while ( my $row = $exceptions_sth->fetchrow_hashref ) {
-        my ( $year, $month, $day ) = split( /-/, $row->{date} );
+        my ( $year, $month, $day ) = map { $_ + 0 } split( /-/, $row->{date} );
         $exception_holidays{"$year/$month/$day"}{title}       = $row->{title};
         $exception_holidays{"$year/$month/$day"}{description} = $row->{description};
         $exception_holidays{"$year/$month/$day"}{date}        = $row->{date};
@@ -115,7 +115,7 @@ sub _init {
     $single_sth->execute($branch);
     my %single_holidays;
     while ( my $row = $single_sth->fetchrow_hashref ) {
-        my ( $year, $month, $day ) = split( /-/, $row->{date} );
+        my ( $year, $month, $day ) = map { $_ + 0 } split( /-/, $row->{date} );
         $single_holidays{"$year/$month/$day"}{title}       = $row->{title};
         $single_holidays{"$year/$month/$day"}{description} = $row->{description};
         $single_holidays{"$year/$month/$day"}{date}        = $row->{date};
@@ -274,11 +274,18 @@ sub insert_single_holiday {
     unless ($date) {
         $date = sprintf( ISO_DATE_FORMAT, $options{year}, $options{month}, $options{day} );
     }
+    @options{qw(year month day)} = map { $_ + 0 } ( $date =~ m/(\d+)-(\d+)-(\d+)/ )
+        unless $options{day};
+
     Koha::Library::Calendar->new( branchcode => $self->{branchcode} )->add_single_closure(
         {
             date => $date, title => $options{title}, description => $options{description},
         }
     );
+
+    $self->{'single_holidays'}->{"$options{year}/$options{month}/$options{day}"}{title}       = $options{title};
+    $self->{'single_holidays'}->{"$options{year}/$options{month}/$options{day}"}{description} = $options{description};
+
     return $self;
 }
 
@@ -311,11 +318,19 @@ sub insert_exception_holiday {
     unless ($date) {
         $date = sprintf( ISO_DATE_FORMAT, $options{year}, $options{month}, $options{day} );
     }
+    @options{qw(year month day)} = map { $_ + 0 } ( $date =~ m/(\d+)-(\d+)-(\d+)/ )
+        unless $options{day};
+
     Koha::Library::Calendar->new( branchcode => $self->{branchcode} )->add_exception(
         {
             date => $date, title => $options{title}, description => $options{description},
         }
     );
+
+    $self->{'exception_holidays'}->{"$options{year}/$options{month}/$options{day}"}{title} = $options{title};
+    $self->{'exception_holidays'}->{"$options{year}/$options{month}/$options{day}"}{description} =
+        $options{description};
+
     return $self;
 }
 
