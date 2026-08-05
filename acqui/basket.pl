@@ -688,8 +688,9 @@ sub get_order_infos {
     }
 
     # Format servicing instruction for display
+    # Parts are passed to the template as plain text and HTML-escaped there ([% part | html %]),
+    # rather than being joined into a raw HTML string here (see bug 30144 security follow-up).
     if ( $line{servicing_instruction} && $edifact_si_map ) {
-        my $si_display = '';
         eval {
             my $groups = decode_json( $line{servicing_instruction} );
             if ( ref $groups eq 'ARRAY' && @$groups ) {
@@ -730,13 +731,12 @@ sub get_order_infos {
                         }
                     }
                 }
-                $si_display = join( '<br>', @display_parts ) if @display_parts;
+                $line{servicing_instruction_display_parts} = \@display_parts if @display_parts;
             }
         };
         if ($@) {
             Koha::Logger->get->warn("Failed to parse servicing_instruction JSON: $@");
         }
-        $line{servicing_instruction_display} = $si_display;
     }
 
     return \%line;

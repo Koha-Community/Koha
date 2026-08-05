@@ -452,6 +452,10 @@ my @servicing_instruction_authorised_values = Koha::AuthorisedValues->search(
     { order_by => 'lib' }
 )->as_list;
 
+# Encode as JSON for safe embedding in a hidden form field (avoids raw interpolation into inline JS)
+my $servicing_instruction_avs_json = encode_json(
+    [ map { { value => $_->authorised_value, label => $_->lib } } @servicing_instruction_authorised_values ] );
+
 # Parse servicing instruction JSON into array of groups
 my $servicing_instruction_groups      = [];
 my $servicing_instruction_groups_json = '[]';
@@ -483,28 +487,28 @@ $template->param(
     closedate            => $basket->{'closedate'},
 
     # order details
-    suggestion                              => $suggestion,
-    biblionumber                            => $biblionumber,
-    uncertainprice                          => $data->{'uncertainprice'},
-    discount_2dp                            => sprintf( "%.2f", $bookseller->discount ),      # for display
-    discount                                => $bookseller->discount,
-    orderdiscount_2dp                       => sprintf( "%.2f", $data->{'discount'} || 0 ),
-    orderdiscount                           => $data->{'discount'},
-    order_internalnote                      => $data->{'order_internalnote'},
-    order_vendornote                        => $data->{'order_vendornote'},
-    servicing_instruction_groups            => $servicing_instruction_groups,
-    servicing_instruction_groups_json       => $servicing_instruction_groups_json,
-    servicing_instruction_authorised_values => \@servicing_instruction_authorised_values,
-    listincgst                              => $bookseller->listincgst,
-    invoiceincgst                           => $bookseller->invoiceincgst,
-    cur_active_sym                          => $active_currency->symbol,
-    cur_active                              => $active_currency->currency,
-    currencies                              => Koha::Acquisition::Currencies->search,
-    currency                                => $data->{currency},
-    vendor_currency                         => $bookseller->listprice,
-    orderexists                             => ( $new eq 'yes' ) ? 0 : 1,
-    title                                   => $data->{'title'},
-    author                                  => $data->{'author'},
+    suggestion                        => $suggestion,
+    biblionumber                      => $biblionumber,
+    uncertainprice                    => $data->{'uncertainprice'},
+    discount_2dp                      => sprintf( "%.2f", $bookseller->discount ),      # for display
+    discount                          => $bookseller->discount,
+    orderdiscount_2dp                 => sprintf( "%.2f", $data->{'discount'} || 0 ),
+    orderdiscount                     => $data->{'discount'},
+    order_internalnote                => $data->{'order_internalnote'},
+    order_vendornote                  => $data->{'order_vendornote'},
+    servicing_instruction_groups      => $servicing_instruction_groups,
+    servicing_instruction_groups_json => $servicing_instruction_groups_json,
+    servicing_instruction_avs_json    => $servicing_instruction_avs_json,
+    listincgst                        => $bookseller->listincgst,
+    invoiceincgst                     => $bookseller->invoiceincgst,
+    cur_active_sym                    => $active_currency->symbol,
+    cur_active                        => $active_currency->currency,
+    currencies                        => Koha::Acquisition::Currencies->search,
+    currency                          => $data->{currency},
+    vendor_currency                   => $bookseller->listprice,
+    orderexists                       => ( $new eq 'yes' ) ? 0 : 1,
+    title                             => $data->{'title'},
+    author                            => $data->{'author'},
     publicationyear  => $data->{'publicationyear'} ? $data->{'publicationyear'} : $data->{'copyrightdate'},
     editionstatement => $data->{'editionstatement'},
     budget_loop      => $budget_loop,

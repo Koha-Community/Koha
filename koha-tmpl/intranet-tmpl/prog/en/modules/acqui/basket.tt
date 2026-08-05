@@ -932,7 +932,11 @@
                                                     [% books_loo.invoice_object.invoicenumber | html %]
                                                 [% END %]
                                             </td>
-                                            <td> [% books_loo.servicing_instruction_display | $raw %] </td>
+                                            <td>
+                                                [% FOREACH part IN books_loo.servicing_instruction_display_parts %]
+                                                    [% part | html %][% UNLESS loop.last %]<br />[% END %]
+                                                [% END %]
+                                            </td>
                                             [% IF Koha.Preference('EDIFACT') && ediaccount %]
                                                 <td>[% books_loo.suppliers_report | html %]</td>
                                             [% ELSE %]
