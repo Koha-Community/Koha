@@ -748,6 +748,7 @@ INSERT INTO systempreferences ( `variable`, `value` ) VALUES
 ('SCOLoadCheckoutsByDefault','1'),
 ('SCOUserCSS',''),
 ('SCOUserJS',''),
+('ScriptLog','0'),
 ('SearchCancelledAndInvalidISBNandISSN','0'),
 ('SearchEngine','Zebra'),
 ('SearchLimitLibrary', 'homebranch'),
