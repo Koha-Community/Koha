@@ -18,6 +18,7 @@
 use Modern::Perl;
 
 use Koha::Acquisition::Orders;
+use Koha::ActionLogs;
 use Koha::AuthorisedValueCategories;
 use Koha::AuthorisedValues;
 use Koha::Cities;
@@ -145,7 +146,7 @@ get '/cities/:city_id/rs' => sub {
 
 # The tests
 use Test::NoWarnings;
-use Test::More tests => 20;
+use Test::More tests => 21;
 use Test::Mojo;
 
 use t::lib::Mocks;
@@ -1084,6 +1085,149 @@ subtest 'date handling' => sub {
         ->json_is( '/1/job_id' => $job_3->id );
     $response_count = scalar @{ $t->tx->res->json };
     is( $response_count, 2 );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'date handling inside DBIC operators' => sub {
+    plan tests => 28;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+
+    my $patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1 } } );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+    t::lib::Mocks::mock_userenv( { patron => $patron } );
+
+    # Clear action_logs to avoid interference
+    Koha::ActionLogs->delete;
+
+    my $now           = dt_from_string();
+    my $one_hour_ago  = $now->clone->subtract( hours => 1 );
+    my $two_hours_ago = $now->clone->subtract( hours => 2 );
+    my $one_day_ago   = $now->clone->subtract( days  => 1 );
+
+    my $log_recent = $builder->build_object(
+        {
+            class => 'Koha::ActionLogs',
+            value => {
+                user      => $patron->borrowernumber,
+                module    => 'MEMBERS',
+                action    => 'MODIFY',
+                object    => $patron->borrowernumber,
+                timestamp => $one_hour_ago,
+            }
+        }
+    );
+
+    my $log_older = $builder->build_object(
+        {
+            class => 'Koha::ActionLogs',
+            value => {
+                user      => $patron->borrowernumber,
+                module    => 'MEMBERS',
+                action    => 'ADD',
+                object    => $patron->borrowernumber,
+                timestamp => $one_day_ago,
+            }
+        }
+    );
+
+    my $t = Test::Mojo->new('Koha::REST::V1');
+
+    # Test 1: datetime with >= inside -and
+    my $q = encode_json( { '-and' => [ { timestamp => { '>=' => $two_hours_ago->rfc3339 }, module => 'MEMBERS' } ] } );
+    $t->get_ok( "//$userid:$password@/api/v1/action_logs?q=" . $q )
+        ->status_is(200)
+        ->json_is( '/0/action_id' => $log_recent->action_id );
+    is( scalar @{ $t->tx->res->json }, 1, '-and with >= filters correctly' );
+
+    # Test 2: datetime with <= inside -and
+    $q = encode_json( { '-and' => [ { timestamp => { '<=' => $two_hours_ago->rfc3339 }, module => 'MEMBERS' } ] } );
+    $t->get_ok( "//$userid:$password@/api/v1/action_logs?q=" . $q )
+        ->status_is(200)
+        ->json_is( '/0/action_id' => $log_older->action_id );
+    is( scalar @{ $t->tx->res->json }, 1, '-and with <= filters correctly' );
+
+    # Test 3: datetime range (>= and <=) inside -and
+    $q = encode_json(
+        {
+            '-and' => [
+                {
+                    timestamp => { '>=' => $two_hours_ago->rfc3339, '<=' => $now->rfc3339 },
+                    module    => 'MEMBERS'
+                }
+            ]
+        }
+    );
+    $t->get_ok( "//$userid:$password@/api/v1/action_logs?q=" . $q )
+        ->status_is(200)
+        ->json_is( '/0/action_id' => $log_recent->action_id );
+    is( scalar @{ $t->tx->res->json }, 1, '-and with >= and <= range filters correctly' );
+
+    # Test 4: datetime inside -or
+    $q = encode_json(
+        {
+            '-or' => [
+                { timestamp => { '>=' => $two_hours_ago->rfc3339 } },
+                { timestamp => { '<=' => $one_day_ago->clone->subtract( hours => 1 )->rfc3339 } },
+            ],
+            module => 'MEMBERS'
+        }
+    );
+    $t->get_ok( "//$userid:$password@/api/v1/action_logs?q=" . $q )
+        ->status_is(200)
+        ->json_is( '/0/action_id' => $log_recent->action_id );
+    is( scalar @{ $t->tx->res->json }, 1, '-or with datetime filters correctly' );
+
+    # Test 5: datetime with -between inside -and
+    $q = encode_json(
+        {
+            '-and' => [
+                {
+                    timestamp => { '-between' => [ $two_hours_ago->rfc3339, $now->rfc3339 ] },
+                    module    => 'MEMBERS'
+                }
+            ]
+        }
+    );
+    $t->get_ok( "//$userid:$password@/api/v1/action_logs?q=" . $q )
+        ->status_is(200)
+        ->json_is( '/0/action_id' => $log_recent->action_id );
+    is( scalar @{ $t->tx->res->json }, 1, '-and with -between filters correctly' );
+
+    # Test 6: nested -and inside -or with datetime
+    $q = encode_json(
+        {
+            '-or' => [
+                { '-and' => [ { timestamp => { '>=' => $two_hours_ago->rfc3339 }, module => 'MEMBERS' } ] },
+                {
+                    '-and' => [
+                        {
+                            timestamp => { '<=' => $one_day_ago->clone->subtract( hours => 1 )->rfc3339 },
+                            module    => 'MEMBERS'
+                        }
+                    ]
+                },
+            ]
+        }
+    );
+    $t->get_ok( "//$userid:$password@/api/v1/action_logs?q=" . $q )
+        ->status_is(200)
+        ->json_is( '/0/action_id' => $log_recent->action_id );
+    is( scalar @{ $t->tx->res->json }, 1, 'nested -and inside -or with datetime filters correctly' );
+
+    # Test 7: datetime with me. prefix inside -and
+    $q =
+        encode_json( { '-and' => [ { 'me.timestamp' => { '>=' => $two_hours_ago->rfc3339 }, module => 'MEMBERS' } ] } );
+    $t->get_ok( "//$userid:$password@/api/v1/action_logs?q=" . $q )
+        ->status_is(200)
+        ->json_is( '/0/action_id' => $log_recent->action_id );
+    is( scalar @{ $t->tx->res->json }, 1, '-and with me. prefixed datetime filters correctly' );
 
     $schema->storage->txn_rollback;
 };

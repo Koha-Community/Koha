@@ -21,6 +21,7 @@ use Modern::Perl;
 use Mojolicious::Lite;
 use Try::Tiny;
 
+use Koha::ActionLogs;
 use Koha::Cities;
 use Koha::Holds;
 use Koha::Biblios;
@@ -349,6 +350,24 @@ get '/merge_q_params' => sub {
     $c->render( json => $filtered_params, status => 200 );
 };
 
+get '/merge_q_params_datetime' => sub {
+    my $c               = shift;
+    my $filtered_params = {};
+    my $result_set      = Koha::ActionLogs->new;
+    $filtered_params = $c->merge_q_params( $filtered_params, $c->req->json->{q}, $result_set );
+
+    $c->render( json => $filtered_params, status => 200 );
+};
+
+get '/merge_q_params_patrons' => sub {
+    my $c               = shift;
+    my $filtered_params = {};
+    my $result_set      = Koha::Patrons->new;
+    $filtered_params = $c->merge_q_params( $filtered_params, $c->req->json->{q}, $result_set );
+
+    $c->render( json => $filtered_params, status => 200 );
+};
+
 get '/build_query' => sub {
     my $c = shift;
     my ( $filtered_params, $reserved_params ) = $c->extract_reserved_params( $c->req->params->to_hash );
@@ -561,7 +580,7 @@ get '/ill_requests_count_sort_correctness' => sub {
 # The tests
 
 use Test::NoWarnings;
-use Test::More tests => 13;
+use Test::More tests => 15;
 use Test::Mojo;
 
 subtest 'extract_reserved_params() tests' => sub {
@@ -720,7 +739,7 @@ subtest '/merge_q_params' => sub {
             q => {
                 "-not_bool" => "suggestions.suggester.patron_card_lost",
                 "-or"       => [
-                    { "creation_date"                                      => { "!=" => [ "fff", "zzz", "xxx" ] } },
+                    { "creation_date" => { "!=" => [ "2024-01-01", "2024-06-15", "2025-01-01" ] } },
                     { "suggestions.suggester.housebound_profile.frequency" => "123" },
                     { "suggestions.suggester.library_id"                   => { "like" => "%CPL%" } }
                 ]
@@ -734,9 +753,9 @@ subtest '/merge_q_params' => sub {
                     {
                         "datecreated" => {
                             "!=" => [
-                                "fff",
-                                "zzz",
-                                "xxx"
+                                "2024-01-01",
+                                "2024-06-15",
+                                "2025-01-01"
                             ]
                         }
                     },
@@ -746,6 +765,143 @@ subtest '/merge_q_params' => sub {
             },
             { "biblio_id" => 1 }
         ]
+    );
+};
+
+subtest '_parse_dbic_query datetime fixup' => sub {
+    plan tests => 21;
+
+    my $t = Test::Mojo->new;
+
+    # Test 1: datetime with >= inside -and
+    $t->get_ok( '/merge_q_params_datetime' => json =>
+            { q => { '-and' => [ { timestamp => { '>=' => '2026-08-01T00:00:00Z' }, module => 'MEMBERS' } ] } } )
+        ->status_is(200)
+        ->json_is( '' => { '-and' => [ { timestamp => { '>=' => '2026-08-01 00:00:00' }, module => 'MEMBERS' } ] } );
+
+    # Test 2: datetime range (>= and <=) inside -and
+    $t->get_ok(
+        '/merge_q_params_datetime' => json => {
+            q => { '-and' => [ { timestamp => { '>=' => '2026-08-01T00:00:00Z', '<=' => '2026-08-05T23:59:59Z' } } ] }
+        }
+        )
+        ->status_is(200)
+        ->json_is(
+        '' => { '-and' => [ { timestamp => { '>=' => '2026-08-01 00:00:00', '<=' => '2026-08-05 23:59:59' } } ] } );
+
+    # Test 3: datetime inside -or
+    $t->get_ok(
+        '/merge_q_params_datetime' => json => {
+            q => {
+                '-or' => [
+                    { timestamp => { '>=' => '2026-08-01T00:00:00Z' } },
+                    { timestamp => { '<=' => '2026-07-01T00:00:00Z' } },
+                ]
+            }
+        }
+    )->status_is(200)->json_is(
+        '' => {
+            '-or' => [
+                { timestamp => { '>=' => '2026-08-01 00:00:00' } },
+                { timestamp => { '<=' => '2026-07-01 00:00:00' } },
+            ]
+        }
+    );
+
+    # Test 4: datetime with -between inside -and
+    $t->get_ok(
+        '/merge_q_params_datetime' => json => {
+            q => { '-and' => [ { timestamp => { '-between' => [ '2026-08-01T00:00:00Z', '2026-08-05T23:59:59Z' ] } } ] }
+        }
+        )
+        ->status_is(200)
+        ->json_is(
+        '' => { '-and' => [ { timestamp => { '-between' => [ '2026-08-01 00:00:00', '2026-08-05 23:59:59' ] } } ] } );
+
+    # Test 5: nested -and inside -or
+    $t->get_ok(
+        '/merge_q_params_datetime' => json => {
+            q => {
+                '-or' => [
+                    { '-and' => [ { timestamp => { '>=' => '2026-08-01T00:00:00Z' } } ] },
+                    { '-and' => [ { timestamp => { '<=' => '2026-07-01T00:00:00Z' } } ] },
+                ]
+            }
+        }
+    )->status_is(200)->json_is(
+        '' => {
+            '-or' => [
+                { '-and' => [ { timestamp => { '>=' => '2026-08-01 00:00:00' } } ] },
+                { '-and' => [ { timestamp => { '<=' => '2026-07-01 00:00:00' } } ] },
+            ]
+        }
+    );
+
+    # Test 6: me. prefix
+    $t->get_ok( '/merge_q_params_datetime' => json =>
+            { q => { '-and' => [ { 'me.timestamp' => { '>=' => '2026-08-01T00:00:00Z' } } ] } } )
+        ->status_is(200)
+        ->json_is( '' => { '-and' => [ { 'me.timestamp' => { '>=' => '2026-08-01 00:00:00' } } ] } );
+
+    # Test 7: non-datetime values pass through unchanged
+    $t->get_ok( '/merge_q_params_datetime' => json =>
+            { q => { '-and' => [ { module => 'CRONJOBS', action => { '-in' => [ 'ADD', 'MODIFY' ] } } ] } } )
+        ->status_is(200)
+        ->json_is( '' => { '-and' => [ { module => 'CRONJOBS', action => { '-in' => [ 'ADD', 'MODIFY' ] } } ] } );
+};
+
+subtest '_parse_dbic_query boolean fixup' => sub {
+    plan tests => 12;
+
+    my $t = Test::Mojo->new;
+
+    # Test 1: boolean true inside -and
+    $t->get_ok(
+        '/merge_q_params_patrons' => json => { q => { '-and' => [ { patron_card_lost => 1, library_id => 'MPL' } ] } } )
+        ->status_is(200)
+        ->json_is( '' => { '-and' => [ { lost => 1, branchcode => 'MPL' } ] } );
+
+    # Test 2: boolean false inside -and
+    $t->get_ok( '/merge_q_params_patrons' => json => { q => { '-and' => [ { patron_card_lost => 0 } ] } } )
+        ->status_is(200)
+        ->json_is( '' => { '-and' => [ { lost => 0 } ] } );
+
+    # Test 3: boolean inside -or
+    $t->get_ok(
+        '/merge_q_params_patrons' => json => {
+            q => {
+                '-or' => [
+                    { patron_card_lost  => 1 },
+                    { incorrect_address => 1 },
+                ]
+            }
+        }
+    )->status_is(200)->json_is(
+        '' => {
+            '-or' => [
+                { lost          => 1 },
+                { gonenoaddress => 1 },
+            ]
+        }
+    );
+
+    # Test 4: boolean inside nested -and within -or
+    $t->get_ok(
+        '/merge_q_params_patrons' => json => {
+            q => {
+                '-or' => [
+                    { '-and' => [ { patron_card_lost  => 1, library_id => 'MPL' } ] },
+                    { '-and' => [ { incorrect_address => 1, library_id => 'CPL' } ] },
+                ]
+            }
+        }
+    )->status_is(200)->json_is(
+        '' => {
+            '-or' => [
+                { '-and' => [ { lost          => 1, branchcode => 'MPL' } ] },
+                { '-and' => [ { gonenoaddress => 1, branchcode => 'CPL' } ] },
+            ]
+        }
     );
 };
 
