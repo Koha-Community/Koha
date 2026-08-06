@@ -260,10 +260,14 @@ if ( $op and $op eq 'cud-serialchangestatus' ) {
 
                     # Changing the status to "available" and the itemtype according to the previousitemtype db field
                     my $item = Koha::Items->find($itemnumber);
+                    my $itype =
+                          $subscriptioninfos->{'previousitemtype'}
+                        ? $subscriptioninfos->{'previousitemtype'}
+                        : $item->itype;
                     $item->set(
                         {
                             notforloan => 0,
-                            itype      => $subscriptioninfos->{'previousitemtype'}
+                            itype      => $itype
                         }
                     )->store;
                 }

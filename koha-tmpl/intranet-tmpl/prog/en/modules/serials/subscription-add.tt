@@ -245,7 +245,7 @@
                         </li>
                         [% IF makePreviousSerialAvailable %]
                             <li>
-                                <label for="previousitemtype">item type for older issues:</label>
+                                <label for="previousitemtype">Item type for older issues:</label>
                                 <select name="previousitemtype" id="previousitemtype">
                                     <option value=""></option>
                                     [% FOREACH previous IN previoustypeloop %]
@@ -256,6 +256,7 @@
                                         [% END %]
                                     [% END %]
                                 </select>
+                                <div class="hint">If older issues itemtype is not selected old item type is preserved.</div>
                             </li>
                         [% END %]
                         <li>
