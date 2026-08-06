@@ -256,7 +256,8 @@ subtest 'list() tests' => sub {
         }
     );
 
-    $t->get_ok( "//$userid:$password@/api/v1/deleted/biblios?q=$query" => { Accept => 'application/json' } )
+    $t->get_ok(
+        "//$userid:$password@/api/v1/deleted/biblios" => { Accept => 'application/json' } => form => { q => $query } )
         ->status_is(200)
         ->json_is( '/0/biblio_id' => $old_biblio_1->id )
         ->json_is( '/1/biblio_id' => undef );

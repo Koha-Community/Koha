@@ -126,7 +126,7 @@ subtest 'list() tests' => sub {
     # Filtering works, two bookings after today
     my $api_filter = encode_json(
         { 'me.start_date' => { '>=' => output_pref( { dateformat => "rfc3339", dt => dt_from_string } ) } } );
-    $t->get_ok("//$userid:$password@/api/v1/bookings?q=$api_filter")->status_is(200)->json_is(
+    $t->get_ok( "//$userid:$password@/api/v1/bookings" => form => { q => $api_filter } )->status_is(200)->json_is(
         '' => [
             $booking_1->to_api,
             $booking_2->to_api
@@ -136,7 +136,7 @@ subtest 'list() tests' => sub {
 
     $api_filter = encode_json(
         { 'me.start_date' => { '<=' => output_pref( { dateformat => "rfc3339", dt => dt_from_string } ) } } );
-    $t->get_ok("//$userid:$password@/api/v1/bookings?q=$api_filter")
+    $t->get_ok( "//$userid:$password@/api/v1/bookings" => form => { q => $api_filter } )
         ->status_is(200)
         ->json_is( '' => [ $booking_0->to_api ], 'filtering to before today also works' );
 
