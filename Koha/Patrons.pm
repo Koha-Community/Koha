@@ -695,22 +695,40 @@ sub extended_attributes_config {
 
     Uses the fields from the PatronDuplicateMatchingAddFields preference to check for existing matches
 
+    A field that has no value is treated as unknown rather than as a mismatch, whichever
+    side of the comparison it is missing from. A blank value in the data being checked
+    means the field is not compared at all, and a blank value in an existing patron record
+    does not stop that record being reported as a possible duplicate.
+
 =cut
 
 sub check_for_existing_matches {
     my ( $self, $new_patron_data ) = @_;
 
-    my @duplicate_match_fields = split '\|', C4::Context->preference('PatronDuplicateMatchingAddFields');
-    my $match_conditions;
+    my @duplicate_match_fields = split '\|', C4::Context->preference('PatronDuplicateMatchingAddFields') // q{};
+
+    my $result_source = $self->_resultset->result_source;
+
+    my @match_conditions;
     for my $field (@duplicate_match_fields) {
-        $match_conditions->{$field} = $new_patron_data->{$field} if $new_patron_data->{$field};
+
+        my $value = $new_patron_data->{$field};
+        next unless defined $value && $value ne q{};
+
+        # An empty value in the existing record is unknown, not a mismatch. Only text
+        # columns are compared against the empty string, it is not a valid value for
+        # date or numeric columns.
+        my @blank_values = (undef);
+        push @blank_values, q{} if $result_source->column_info($field)->{data_type} =~ /char|text/;
+
+        push @match_conditions, { -or => [ { $field => $value }, { $field => \@blank_values } ] };
     }
 
     # Without any usable conditions, Koha::Patrons->search would run
     # unfiltered and match every patron in the system.
-    return { 'duplicate_found' => 0 } unless $match_conditions && %$match_conditions;
+    return { 'duplicate_found' => 0 } unless @match_conditions;
 
-    my $patrons = Koha::Patrons->search($match_conditions);
+    my $patrons = Koha::Patrons->search( { -and => \@match_conditions } );
     if ( $patrons->count > 0 ) {
         return {
             'duplicate_found'  => 1,
