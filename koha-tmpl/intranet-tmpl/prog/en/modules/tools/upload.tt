@@ -9,6 +9,7 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
+[% USE JSON.Escape %]
 <title
     >[% FILTER collapse %]
         [% IF op == 'new' %]
@@ -375,9 +376,9 @@
             OPACBaseURL: "[% Koha.Preference('OPACBaseURL') | html %]",
         });
     </script>
-    <script>
+    <script nonce="[% Koha.CSPNonce | $raw %]">
         [% IF msg %]
-            const msg_alert = [% To.json(msg) | $raw %];
+            const msg_alert = [% msg.json | json #Using JSON.Escape %];
         [% ELSE %]
             const msg_alert = null;
         [% END %]
@@ -432,13 +433,18 @@
             }
         }
         function ShowAlerts(err) {
-            var str = "";
+            let alerts = document.createElement("span");
             for (var file in err) {
-                str = str + "<p>" + file + ": " + errMESSAGES(err[file].code) + "</p>";
+                let alert_el = document.createElement("p");
+                alert_el.textContent = file + ": " + errMESSAGES(err[file].code);
+                alerts.appendChild(alert_el);
             }
-            if (str) {
-                $("#myalerts").html(str);
-                $("#myalerts").show();
+            if (alerts.childNodes) {
+                let myalerts = document.querySelector("#myalerts");
+                if (myalerts) {
+                    myalerts.replaceChildren(...alerts.childNodes);
+                    myalerts.style.display = "block";
+                }
             }
         }
         function errMESSAGES(code) {
