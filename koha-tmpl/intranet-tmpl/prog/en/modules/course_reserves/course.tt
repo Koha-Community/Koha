@@ -7,7 +7,7 @@
 <title
     >[% FILTER collapse %]
         [% IF ( course_name ) %]
-            [% tx("Edit course {course_name}", { course_name = course_name }) | html %][% IF section %] - [% section | html %][% END %]
+            [% tx("Edit course {course_name}", { course_name = course_name }) | html %][% IF section %][% " - "_ section | html %][% END %]
         [% ELSE %]
             [% t("New course") | html %]
         [% END %]
@@ -39,7 +39,8 @@
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             [% IF course_name %]
-                [% tx("Edit course {course_name}", { course_name = course_name }) | $raw %]
+                [% tx("Edit course {course_name}", { course_name = course_name }) | html %]
+                [% IF section %][% " - "_ section | html %][% END %]
             [% ELSE %]
                 <span>New course</span>
             [% END %]
