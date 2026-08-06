@@ -262,6 +262,7 @@ controller, and thus shouldn't be called twice in it.
             # Apply the mapping function to the passed params
             if ( defined $filtered_params ) {
                 $filtered_params = $c->build_query_params( $filtered_params, $reserved_params );
+                $filtered_params = $result_set->attributes_from_api($filtered_params);
             }
 
             if ($query_params) {
@@ -269,10 +270,6 @@ controller, and thus shouldn't be called twice in it.
                     $filtered_params, $query_params,
                     $result_set
                 );
-            }
-
-            if ( defined $filtered_params ) {
-                $filtered_params = $result_set->attributes_from_api($filtered_params);
             }
 
             $c->dbic_validate_operators( { filtered_params => $filtered_params } );

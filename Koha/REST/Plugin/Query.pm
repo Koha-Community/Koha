@@ -769,8 +769,25 @@ sub _parse_dbic_query {
                 $parsed_hash->{$key} = _from_api_param( $q_params->{$key}, $result_set );
                 next;
             }
-            my $k = _from_api_param( $key, $result_set );
-            $parsed_hash->{$k} = _parse_dbic_query( $q_params->{$key}, $result_set );
+            my $k     = _from_api_param( $key, $result_set );
+            my $value = $q_params->{$key};
+
+            # Apply datetime/boolean fixup when the key maps to a known column.
+            # This is needed because values inside q= queries bypass attributes_from_api
+            # (which normally calls _recursive_fixup) when nested within DBIC operators
+            # like -and or -or. We resolve the column info here - handling both the
+            # primary table (me.col or bare col) and related objects (relation.col).
+            if ( $k !~ /^-/ ) {
+                my ( $ko, $col ) = _resolve_column_info( $key, $result_set );
+                if ( $ko && $col ) {
+                    my $columns_info = $ko->_result->result_source->columns_info;
+                    if ( exists $columns_info->{$col} ) {
+                        $value = $ko->_recursive_fixup( $col, $value, $columns_info->{$col} );
+                    }
+                }
+            }
+
+            $parsed_hash->{$k} = ref($value) ? _parse_dbic_query( $value, $result_set ) : $value;
         }
         return $parsed_hash;
     } elsif ( reftype($q_params) && reftype($q_params) eq 'ARRAY' ) {
@@ -779,6 +796,56 @@ sub _parse_dbic_query {
     } else {
         return $q_params;
     }
+}
+
+=head3 _resolve_column_info
+
+    my ( $ko, $col ) = _resolve_column_info( $api_key, $result_set );
+
+Given an API field key (e.g. "timestamp", "me.timestamp",
+"librarian.expiry_date", or "patron.holds.item.creation_date") and a
+result_set, walks the relation chain to resolve the Koha::Object that
+owns the leaf column. Returns ($ko, $col) where $ko is the resolved
+Koha::Object instance and $col is the DBIC column name, or () if
+resolution fails.
+
+Related object instances are cached on $result_set->{_related_objects}
+to avoid repeated prefetch_whitelist lookups.
+
+=cut
+
+sub _resolve_column_info {
+    my ( $key, $result_set ) = @_;
+
+    my @parts = split /\./, $key;
+
+    # Strip "me" prefix - it refers to the primary table
+    shift @parts if @parts > 1 && $parts[0] eq 'me';
+
+    # The last part is the column (in API naming)
+    my $api_col = pop @parts;
+
+    # Walk the relation chain. prefetch_whitelist returns singular
+    # Koha::Object class names (e.g. "Koha::Patron"), which we
+    # instantiate to access their prefetch_whitelist and from_api_mapping.
+    my $ko = $result_set->{_singular_object} ||= $result_set->object_class->new();
+    my @path;
+    for my $rel (@parts) {
+        push @path, $rel;
+        my $cache_key = join( '.', @path );
+        unless ( exists $result_set->{_related_objects}{$cache_key} ) {
+            my $class = $ko->prefetch_whitelist->{$rel};
+            $result_set->{_related_objects}{$cache_key} = $class ? $class->new() : undef;
+        }
+        $ko = $result_set->{_related_objects}{$cache_key};
+        return () unless $ko;
+    }
+
+    # Resolve the column name through from_api_mapping
+    my $mapping = $ko->from_api_mapping;
+    my $col     = ( $mapping && defined $mapping->{$api_col} ) ? $mapping->{$api_col} : $api_col;
+
+    return ( $ko, $col );
 }
 
 =head3 _validate_operator
