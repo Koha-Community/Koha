@@ -119,7 +119,7 @@ subtest 'current_directory() tests' => sub {
 };
 
 subtest 'an unconfigured directory fails cleanly instead of falling back to "." (the Koha process cwd)' => sub {
-    plan tests => 8;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
@@ -150,6 +150,11 @@ subtest 'an unconfigured directory fails cleanly instead of falling back to "." 
         $list_error->payload->{error}, qr/No download directory configured/,
         'error explains the directory is unconfigured, rather than silently listing an unrelated directory'
     );
+
+    my $reloaded         = Koha::File::Transports->find( $transport->id );
+    my $persisted_status = decode_json( $reloaded->status );
+    is( $persisted_status->{status}, 'errors', 'a "not configured" error also persists an "errors" status' );
+    is( $persisted_status->{operations}[-1]{code}, 'list', 'persisted status records the failing operation' );
 
     my $renamed = $transport->rename_file( 'a.txt', 'b.txt' );
     is( $renamed, undef, 'rename_file() fails the same way when no download_directory is configured' );
