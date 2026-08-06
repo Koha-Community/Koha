@@ -3888,7 +3888,7 @@ subtest 'find_by_identifier() tests' => sub {
 };
 
 subtest 'check_for_existing_matches' => sub {
-    plan tests => 7;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -3928,6 +3928,61 @@ subtest 'check_for_existing_matches' => sub {
     $match_result = Koha::Patrons->check_for_existing_matches(
         { firstname => 'John', surname => 'Smith', dateofbirth => '1980-01-01', city => 'Sandwich, Kent' } );
     is( $match_result->{duplicate_found}, 0, 'No duplicate found' );
+
+    # An empty value is ignored on both sides of the comparison
+    t::lib::Mocks::mock_preference( 'PatronDuplicateMatchingAddFields', 'firstname|surname|email' );
+
+    $patron->email(undef)->store;
+    $match_result = Koha::Patrons->check_for_existing_matches(
+        { firstname => 'John', surname => 'Smith', email => 'john.smith@example.com' } );
+    is(
+        $match_result->{duplicate_found}, 1,
+        'Duplicate found when the email is only populated in the patron being added'
+    );
+    is(
+        $match_result->{matching_patrons}->next->borrowernumber, $patron->borrowernumber,
+        'The existing patron with no email is returned as the match'
+    );
+
+    $patron->email(q{})->store;
+    $match_result = Koha::Patrons->check_for_existing_matches(
+        { firstname => 'John', surname => 'Smith', email => 'john.smith@example.com' } );
+    is(
+        $match_result->{duplicate_found}, 1,
+        'Duplicate found when the email of the existing patron is an empty string'
+    );
+
+    $patron->email('john.smith@example.com')->store;
+    $match_result = Koha::Patrons->check_for_existing_matches(
+        { firstname => 'John', surname => 'Smith', email => 'someone.else@example.com' } );
+    is(
+        $match_result->{duplicate_found}, 0,
+        'No duplicate found when both emails are populated but do not match'
+    );
+
+    # Date columns are not compared against the empty string
+    t::lib::Mocks::mock_preference( 'PatronDuplicateMatchingAddFields', 'firstname|surname|dateofbirth' );
+
+    $patron->dateofbirth(undef)->store;
+    $match_result = Koha::Patrons->check_for_existing_matches(
+        { firstname => 'John', surname => 'Smith', dateofbirth => '1980-01-01' } );
+    is(
+        $match_result->{duplicate_found}, 1,
+        'Duplicate found when a date column is only populated in the patron being added'
+    );
+
+    # A value of '0' is a value, not an empty field
+    t::lib::Mocks::mock_preference( 'PatronDuplicateMatchingAddFields', 'firstname|surname|sort1' );
+
+    $patron->sort1('A')->store;
+    $match_result =
+        Koha::Patrons->check_for_existing_matches( { firstname => 'John', surname => 'Smith', sort1 => '0' } );
+    is( $match_result->{duplicate_found}, 0, "A value of '0' is compared rather than ignored" );
+
+    $patron->sort1('0')->store;
+    $match_result =
+        Koha::Patrons->check_for_existing_matches( { firstname => 'John', surname => 'Smith', sort1 => '0' } );
+    is( $match_result->{duplicate_found}, 1, "Duplicate found when both records have a sort1 of '0'" );
 
     $schema->storage->txn_rollback;
 };
