@@ -130,7 +130,7 @@ foreach my $attr (@$attributes) {
 
 if ( $op eq 'cud-create' ) {
 
-    my %borrower = ParseCgiForBorrower($cgi);
+    my %borrower = ParseCgiForBorrower( { cgi => $cgi, op => $op } );
 
     %borrower = DelEmptyFields(%borrower);
     $borrower{categorycode} ||= $PatronSelfRegistrationDefaultCategory;
@@ -312,7 +312,7 @@ if ( $op eq 'cud-create' ) {
 
     my $borrower = Koha::Patrons->find($borrowernumber)->unblessed;
 
-    my %borrower = ParseCgiForBorrower($cgi);
+    my %borrower = ParseCgiForBorrower( { cgi => $cgi, op => $op } );
     $borrower{borrowernumber} = $borrowernumber;
     $borrower{categorycode}   = $borrower->{categorycode};
 
@@ -565,7 +565,9 @@ sub CheckForInvalidFields {
 }
 
 sub ParseCgiForBorrower {
-    my ($cgi) = @_;
+    my ($params) = @_;
+    my $cgi      = $params->{cgi};
+    my $op       = $params->{op};
 
     my $scrubber = C4::Scrubber->new();
     my %borrower;
@@ -595,8 +597,11 @@ sub ParseCgiForBorrower {
         for
         qw/dateenrolled dateexpiry borrowernotes opacnote sort1 sort2 sms_provider_id autorenew_checkouts gonenoaddress lost relationship/
         ;    # On OPAC only
-    delete $borrower{$_}
-        for split( /\s*\|\s*/, C4::Context->preference('PatronSelfRegistrationBorrowerUnwantedField') || q{} );
+
+    # Delete fields hidden from this operation
+    my $mandatory = GetMandatoryFields($op);
+    my $hidden    = GetHiddenFields( $mandatory, $op );
+    delete $borrower{$_} for keys %$hidden;
 
     return %borrower;
 }
