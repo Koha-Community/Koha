@@ -222,6 +222,9 @@
                                 <th data-colname="batch_patron_edit_surname">Surname</th>
                                 <th data-colname="batch_patron_edit_firstname">First name</th>
                                 <th data-colname="batch_patron_edit_sex">Gender</th>
+                                <th data-colname="batch_patron_edit_preferred_name">Preferred name</th>
+                                <th data-colname="batch_patron_edit_middle_name">Middle name</th>
+                                <th data-colname="batch_patron_edit_othernames">Other name</th>
                                 <th data-colname="batch_patron_edit_branchcode">Library</th>
                                 <th data-colname="batch_patron_edit_categorycode">Patron category</th>
                                 <th data-colname="batch_patron_edit_streetnumber">Street number</th>
@@ -259,6 +262,9 @@
                                     <td>[% borrower.surname | html %]</td>
                                     <td>[% borrower.firstname | html %]</td>
                                     <td> [% INCLUDE 'patron-sex-label.inc' sex = borrower.sex %] </td>
+                                    <td>[% borrower.preferred_name | html %]</td>
+                                    <td>[% borrower.middle_name | html %]</td>
+                                    <td>[% borrower.othernames | html %]</td>
                                     <td>[% Branches.GetName( borrower.branchcode ) | html %]</td>
                                     <td>[% Categories.GetName(borrower.categorycode) | html %]</td>
                                     <td>[% borrower.streetnumber | html %]</td>
@@ -349,6 +355,12 @@
                                                 <span>First name:</span>
                                             [% CASE 'sex' %]
                                                 <span>Gender:</span>
+                                            [% CASE 'preferred_name' %]
+                                                <span>Preferred name:</span>
+                                            [% CASE 'middle_name' %]
+                                                <span>Middle name:</span>
+                                            [% CASE 'othernames' %]
+                                                <span>Other name:</span>
                                             [% CASE 'branchcode' %]
                                                 <span>Library:</span>
                                             [% CASE 'categorycode' %]

@@ -234,6 +234,21 @@ if ( $op eq 'cud-show' || $op eq 'show' ) {
             mandatory => ( grep /sex/, @mandatoryFields ) ? 1 : 0,
         },
         {
+            name      => "preferred_name",
+            type      => "text",
+            mandatory => ( grep /preferred_name/, @mandatoryFields ) ? 1 : 0,
+        },
+        {
+            name      => "middle_name",
+            type      => "text",
+            mandatory => ( grep /middle_name/, @mandatoryFields ) ? 1 : 0,
+        },
+        {
+            name      => "othernames",
+            type      => "text",
+            mandatory => ( grep /othernames/, @mandatoryFields ) ? 1 : 0,
+        },
+        {
             name      => "branchcode",
             type      => "select",
             option    => \@branches_option,
@@ -367,7 +382,7 @@ if ( $op eq 'cud-do' ) {
     my @disabled = $input->multi_param('disable_input');
     my $infos;
     for my $field (
-        qw/surname firstname sex branchcode categorycode streetnumber address address2 city state zipcode country email phone mobile fax sort1 sort2 dateenrolled dateexpiry password_expiration_date borrowernotes opacnote debarred debarredcomment protected/
+        qw/surname firstname sex preferred_name middle_name othernames branchcode categorycode streetnumber address address2 city state zipcode country email phone mobile fax sort1 sort2 dateenrolled dateexpiry password_expiration_date borrowernotes opacnote debarred debarredcomment protected/
         )
     {
         my $value = $input->param($field);
