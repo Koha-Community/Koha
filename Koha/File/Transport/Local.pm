@@ -138,14 +138,10 @@ sub _upload_file {
 
     my $upload_dir = $self->_working_directory('upload_directory');
     unless ( defined $upload_dir ) {
-        $self->add_message(
-            {
-                message => $operation,
-                type    => 'error',
-                payload => { error => 'No upload directory configured or set via change_directory()' }
-            }
+        return $self->_abort_operation(
+            $operation,
+            { error => 'No upload directory configured or set via change_directory()' }
         );
-        return;
     }
 
     my $destination = File::Spec->catfile( $upload_dir, $remote_file );
@@ -185,14 +181,10 @@ sub _download_file {
 
     my $download_dir = $self->_working_directory('download_directory');
     unless ( defined $download_dir ) {
-        $self->add_message(
-            {
-                message => $operation,
-                type    => 'error',
-                payload => { error => 'No download directory configured or set via change_directory()' }
-            }
+        return $self->_abort_operation(
+            $operation,
+            { error => 'No download directory configured or set via change_directory()' }
         );
-        return;
     }
 
     my $source = File::Spec->catfile( $download_dir, $remote_file );
@@ -296,14 +288,10 @@ sub _list_files {
 
     my $directory = $self->_working_directory('download_directory');
     unless ( defined $directory ) {
-        $self->add_message(
-            {
-                message => $operation,
-                type    => 'error',
-                payload => { error => 'No download directory configured or set via change_directory()' }
-            }
+        return $self->_abort_operation(
+            $operation,
+            { error => 'No download directory configured or set via change_directory()' }
         );
-        return;
     }
 
     unless ( -d $directory ) {
@@ -387,14 +375,10 @@ sub _rename_file {
 
     my $directory = $self->_working_directory('download_directory');
     unless ( defined $directory ) {
-        $self->add_message(
-            {
-                message => $operation,
-                type    => 'error',
-                payload => { error => 'No download directory configured or set via change_directory()' }
-            }
+        return $self->_abort_operation(
+            $operation,
+            { error => 'No download directory configured or set via change_directory()' }
         );
-        return;
     }
 
     my $old_path = File::Spec->catfile( $directory, $old_name );
