@@ -743,11 +743,11 @@ sub update {
         my $record;
 
         if ( $content_type =~ m/application\/marcxml\+xml/ ) {
-            $record = MARC::Record->new_from_xml( $c->req->body, 'UTF-8', $flavour );
+            $record = try { MARC::Record->new_from_xml( $c->req->body, 'UTF-8', $flavour ) } catch { undef };
         } elsif ( $content_type =~ m/application\/marc-in-json/ ) {
-            $record = MARC::Record->new_from_mij_structure( $c->req->json );
+            $record = try { MARC::Record->new_from_mij_structure( $c->req->json ) } catch { undef };
         } elsif ( $content_type =~ m/application\/marc/ ) {
-            $record = MARC::Record->new_from_usmarc( $c->req->body );
+            $record = try { MARC::Record->new_from_usmarc( $c->req->body ) } catch { undef };
         } else {
             return $c->render(
                 status  => 406,
@@ -757,6 +757,18 @@ sub update {
                     "application/marc-in-json",
                     "application/marc"
                 ]
+            );
+        }
+
+        # MARC::Record parsers return a record with zero fields (rather than
+        # dying) when given invalid or empty input. Reject such records to
+        # prevent overwriting existing biblios with blank metadata.
+        if ( !$record || !$record->fields() ) {
+            my $error = 'Unable to parse record from request body';
+            $error .= ': ' . join( '; ', $record->warnings() ) if $record && $record->warnings();
+            return $c->render(
+                status  => 400,
+                openapi => { error => $error, error_code => 'bad_record' }
             );
         }
 

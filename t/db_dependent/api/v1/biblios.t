@@ -2151,10 +2151,11 @@ subtest 'put() malformed body tests' => sub {
         is( scalar $biblio->metadata_record->fields(), $fields_before, 'Biblio unchanged after truncated MARCXML' );
 
         # Valid XML but empty record (no datafields)
+        my $empty_marcxml =
+            '<?xml version="1.0" encoding="UTF-8"?>' . '<record><leader>00000nam a2200000 a 4500</leader></record>';
         $t->put_ok(
             "//$userid:$password@/api/v1/biblios/$biblionumber" => { 'Content-Type' => 'application/marcxml+xml' } =>
-                '<?xml version="1.0" encoding="UTF-8"?><record xmlns="http://www.loc.gov/MARC21/slim"><leader>00000nam a2200000 a 4500</leader></record>'
-        )->status_is(400);
+                $empty_marcxml )->status_is(400);
         $biblio->discard_changes;
         is( scalar $biblio->metadata_record->fields(), $fields_before, 'Biblio unchanged after empty MARCXML record' );
     };
