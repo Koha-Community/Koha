@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 use Test::NoWarnings;
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::Exception;
 
 use DateTime::Duration;
@@ -1655,6 +1655,44 @@ subtest 'filter_by_readable() tests' => sub {
     while ( my $list = $lists->next ) {
         ok( $list->owner == $patron_1->id || $list->public, 'Only public or self lists in the resultset' );
     }
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_by_not_suppressed() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my $biblio_visible    = $builder->build_sample_biblio;
+    my $biblio_suppressed = $builder->build_sample_biblio;
+    $biblio_suppressed->opac_suppressed(1)->store;
+
+    my $shelf = Koha::Virtualshelf->new(
+        {
+            shelfname => 'test_suppression_shelf',
+            owner     => $patron->borrowernumber,
+            public    => 1,
+        }
+    )->store;
+
+    $shelf->add_biblio( $biblio_visible->biblionumber,    $patron->borrowernumber );
+    $shelf->add_biblio( $biblio_suppressed->biblionumber, $patron->borrowernumber );
+
+    my $contents = $shelf->get_contents;
+    is( $contents->count, 2, 'Shelf has 2 entries' );
+
+    my $filtered = $shelf->get_contents->filter_by_not_suppressed;
+    is( $filtered->count, 1, 'filter_by_not_suppressed returns only non-suppressed records' );
+
+    is(
+        $filtered->next->biblionumber,
+        $biblio_visible->biblionumber,
+        'The returned content is the visible biblio'
+    );
 
     $schema->storage->txn_rollback;
 };

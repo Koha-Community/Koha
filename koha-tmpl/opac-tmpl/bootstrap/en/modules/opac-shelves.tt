@@ -46,7 +46,7 @@
             data-shelfnumber="[% shelf.shelfnumber | html %]"
             data-shelfname="[% shelf.shelfname | html %]"
             data-shared="[% shelf.is_shared | html %]"
-            data-count="[% contents.count | html %]"
+            data-count="[% contents_count | html %]"
         >
             <i class="fa fa-times" aria-hidden="true"></i>
             [% IF ( context == "list" ) %]
@@ -258,8 +258,7 @@
                         </h1>
 
                         [% IF ( itemsloop ) %]
-                            [% SET contents = shelf.get_contents %]
-                            [% IF ( contents.count ) %]<p>This list contains [% contents.count | html %] titles</p>[% END %]
+                            [% IF ( contents_count ) %]<p>This list contains [% contents_count | html %] titles</p>[% END %]
                             <div id="floating" class="sticky">
                                 <div id="toolbar" class="toolbar clearfix">
                                     <div class="list-actions">
@@ -738,11 +737,18 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            [% FOREACH s IN shelves %]
-                                                [% SET contents = s.get_contents %]
+                                            [% FOREACH entry IN shelves_list %]
+                                                [% SET s = entry.shelf %]
                                                 <tr>
                                                     <td><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber | uri %]">[% s.shelfname | html %]</a></td>
-                                                    <td>[% IF contents.count %][% contents.count | html %] [% IF contents.count == 1 %]<span>item</span>[% ELSE %]<span>items</span>[% END %][% ELSE %]<span>Empty</span>[% END %]</td>
+                                                    <td
+                                                        >[% IF entry.contents_count %]
+                                                            [% entry.contents_count | html %]
+                                                            [% IF entry.contents_count == 1 %]<span>item</span>[% ELSE %]<span>items</span>[% END %]
+                                                        [% ELSE %]
+                                                            <span>Empty</span>
+                                                        [% END %]</td
+                                                    >
                                                     <td>
                                                         [% IF s.is_private %]
                                                             [% IF s.is_shared %]<span>Shared</span>[% ELSE %]<span>Private</span>[% END %]
@@ -762,7 +768,7 @@
                                                             </form>
                                                         [% END %]
                                                         [% IF s.can_be_deleted( loggedinusernumber ) %]
-                                                            [% PROCESS delete_shelf shelf = s context = "list" %]
+                                                            [% PROCESS delete_shelf shelf = s context = "list" contents_count = entry.contents_count %]
                                                         [% END %]
                                                         [% IF s.is_private AND s.can_be_managed( loggedinusernumber ) AND Koha.Preference('OpacAllowSharingPrivateLists') %]
                                                             <a href="/cgi-bin/koha/opac-shareshelf.pl?op=show&shelfnumber=[% s.shelfnumber | uri %]" class="sharelist btn btn-link"><i class="fa fa-share" aria-hidden="true"></i> Share</a>

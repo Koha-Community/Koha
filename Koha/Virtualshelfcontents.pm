@@ -31,9 +31,23 @@ Koha::Virtualshelfcontents - Koha Virtualshelfcontents Object class
 
 =head2 Class Methods
 
+=head3 filter_by_not_suppressed
+
+    my $contents = $shelf->get_contents->filter_by_not_suppressed;
+
+Filters out shelf contents whose linked biblio has opac_suppressed set to true.
+
 =cut
 
-=head3 type
+sub filter_by_not_suppressed {
+    my ($self) = @_;
+
+    return $self->search( { 'biblionumber.opac_suppressed' => 0 }, { join => 'biblionumber' } );
+}
+
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 
