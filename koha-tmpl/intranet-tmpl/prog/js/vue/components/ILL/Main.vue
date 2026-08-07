@@ -13,9 +13,7 @@
                     </main>
                 </div>
 
-                <div class="col-md-2 order-sm-2 order-md-1">
-                    <LeftMenu :title="$__('Interlibrary loans')"></LeftMenu>
-                </div>
+                <LeftMenu :title="$__('Interlibrary loans')"></LeftMenu>
             </div>
         </div>
     </div>
