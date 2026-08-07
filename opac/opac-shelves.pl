@@ -331,8 +331,20 @@ if ( $op eq 'view' ) {
             } else {
                 $rows = C4::Context->preference('OPACnumSearchResults') || 20;
             }
-            my $order_by = $sortfield eq 'itemcallnumber' ? 'items.cn_sort' : $sortfield;
-            my $contents = $shelf->get_contents->search(
+            my $order_by       = $sortfield eq 'itemcallnumber' ? 'items.cn_sort' : $sortfield;
+            my $shelf_contents = $shelf->get_contents;
+
+            if ( C4::Context->preference('OpacSuppression') ) {
+                my $ip_in_range = 0;
+                if ( my $ip_range = C4::Context->preference('OpacSuppressionByIPRange') ) {
+                    my $ip_address = $ENV{'REMOTE_ADDR'};
+                    $ip_in_range = ( $ip_address =~ /^$ip_range/ );
+                }
+                $shelf_contents = $shelf_contents->filter_by_not_suppressed
+                    unless $ip_in_range;
+            }
+
+            my $contents = $shelf_contents->search(
                 {},
                 {
                     distinct => 'biblionumber',
@@ -463,6 +475,7 @@ if ( $op eq 'view' ) {
                 can_delete_shelf   => $shelf->can_be_deleted($loggedinuser),
                 can_remove_biblios => $shelf->can_biblios_be_removed($loggedinuser),
                 can_add_biblios    => $shelf->can_biblios_be_added($loggedinuser),
+                contents_count     => $shelf_contents->count,
                 itemsloop          => \@items_info,
                 sortfield          => $sortfield,
                 direction          => $direction,
@@ -528,8 +541,27 @@ if ( $op eq 'view' ) {
     }
 
     my $pager = $shelves->pager;
+
+    # Pre-compute contents count per shelf, respecting suppression
+    my $apply_suppression = C4::Context->preference('OpacSuppression');
+    my $ip_in_range       = 0;
+    if ( $apply_suppression && ( my $ip_range = C4::Context->preference('OpacSuppressionByIPRange') ) ) {
+        my $ip_address = $ENV{'REMOTE_ADDR'};
+        $ip_in_range = ( $ip_address =~ /^$ip_range/ );
+    }
+
+    my @shelves_list;
+    while ( my $s = $shelves->next ) {
+        my $shelf_contents = $s->get_contents;
+        $shelf_contents = $shelf_contents->filter_by_not_suppressed
+            if $apply_suppression && !$ip_in_range;
+        push @shelves_list, { shelf => $s, contents_count => $shelf_contents->count };
+    }
+    $shelves->reset;
+
     $template->param(
         shelves        => $shelves,
+        shelves_list   => \@shelves_list,
         pagination_bar => pagination_bar(
             q||,   $pager->last_page - $pager->first_page + 1,
             $page, "page",
