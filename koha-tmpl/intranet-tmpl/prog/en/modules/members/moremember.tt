@@ -83,6 +83,10 @@
                 <h3>Unable to renew patron</h3>
                 <p>They must have a guarantor</p>
             [% END %]
+            [% IF ( error == 'NO_EMAIL_FOR_RECOVERY' ) %]
+                <h3>Unable to send recovery email</h3>
+                <p>No email address provided</p>
+            [% END %]
         </div>
     [% END %]
 

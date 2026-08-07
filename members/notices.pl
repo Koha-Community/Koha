@@ -131,6 +131,9 @@ if ( $op eq 'send_password_reset' ) {
 
         # send staff initiated password recovery
         SendPasswordRecoveryEmail( $patron, $emailaddr, 1 );
+    } else {
+        print $input->redirect(
+            "/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber&error=NO_EMAIL_FOR_RECOVERY");
     }
 
     # redirect to self to avoid form submission on refresh
