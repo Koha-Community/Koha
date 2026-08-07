@@ -20,7 +20,7 @@ use Modern::Perl;
 use utf8;
 use Encode;
 
-use Test::More tests => 16;
+use Test::More tests => 17;
 use Test::NoWarnings;
 use Test::MockModule;
 use Test::Mojo;
@@ -2076,6 +2076,98 @@ subtest 'put() tests' => sub {
             'new title',
             'Title has been changed'
         );
+    };
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'put() malformed body tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->borrowernumber,
+                module_bit     => 9,
+                code           => 'edit_catalogue'
+            }
+        }
+    );
+
+    my $biblio        = $builder->build_sample_biblio;
+    my $biblionumber  = $biblio->biblionumber;
+    my $fields_before = scalar $biblio->metadata_record->fields();
+
+    subtest 'application/marc-in-json' => sub {
+
+        plan tests => 9;
+
+        # Truncated JSON (Mojo cannot parse)
+        $t->put_ok(
+            "//$userid:$password@/api/v1/biblios/$biblionumber" => { 'Content-Type' => 'application/marc-in-json' } =>
+                '{"leader":"00000nam a2200000 a 4500","fields":[{"245":{"ind1":"1","ind2":"0","subfields":[{"a":"STOP HERE ON PURPOSE!!!'
+        )->status_is(400);
+        $biblio->discard_changes;
+        is( scalar $biblio->metadata_record->fields(), $fields_before, 'Biblio unchanged after truncated JSON' );
+
+        # Valid JSON but not a valid MARC-in-JSON structure
+        $t->put_ok(
+            "//$userid:$password@/api/v1/biblios/$biblionumber" => { 'Content-Type' => 'application/marc-in-json' } =>
+                '{"foo":"bar"}' )->status_is(400);
+        $biblio->discard_changes;
+        is( scalar $biblio->metadata_record->fields(), $fields_before, 'Biblio unchanged after invalid MiJ structure' );
+
+        # Valid MiJ structure with empty fields array
+        $t->put_ok(
+            "//$userid:$password@/api/v1/biblios/$biblionumber" => { 'Content-Type' => 'application/marc-in-json' } =>
+                '{"leader":"00000nam a2200000 a 4500","fields":[]}' )->status_is(400);
+        $biblio->discard_changes;
+        is( scalar $biblio->metadata_record->fields(), $fields_before, 'Biblio unchanged after empty fields MiJ' );
+    };
+
+    subtest 'application/marcxml+xml' => sub {
+
+        plan tests => 6;
+
+        # Truncated MARCXML
+        $t->put_ok(
+            "//$userid:$password@/api/v1/biblios/$biblionumber" => { 'Content-Type' => 'application/marcxml+xml' } =>
+                '<?xml version="1.0" encoding="UTF-8"?><record><leader>00000nam a2200000 a 4500</leader><datafield tag="245" ind1="1" ind2="0"><subfield code="a">TRUNCATED'
+        )->status_is(400);
+        $biblio->discard_changes;
+        is( scalar $biblio->metadata_record->fields(), $fields_before, 'Biblio unchanged after truncated MARCXML' );
+
+        # Valid XML but empty record (no datafields)
+        $t->put_ok(
+            "//$userid:$password@/api/v1/biblios/$biblionumber" => { 'Content-Type' => 'application/marcxml+xml' } =>
+                '<?xml version="1.0" encoding="UTF-8"?><record xmlns="http://www.loc.gov/MARC21/slim"><leader>00000nam a2200000 a 4500</leader></record>'
+        )->status_is(400);
+        $biblio->discard_changes;
+        is( scalar $biblio->metadata_record->fields(), $fields_before, 'Biblio unchanged after empty MARCXML record' );
+    };
+
+    subtest 'application/marc' => sub {
+
+        plan tests => 3;
+
+        # Empty/garbage USMARC
+        $t->put_ok( "//$userid:$password@/api/v1/biblios/$biblionumber" => { 'Content-Type' => 'application/marc' } =>
+                'this is not a valid usmarc record' )->status_is(400);
+        $biblio->discard_changes;
+        is( scalar $biblio->metadata_record->fields(), $fields_before, 'Biblio unchanged after garbage USMARC' );
     };
 
     $schema->storage->txn_rollback;
