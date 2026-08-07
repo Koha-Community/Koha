@@ -100,6 +100,7 @@ sub running {
 
     my %report_ids;
     for my $row (@$rows) {
+        next if $row->{info} =~ /^SELECT info FROM information_schema.processlist/;
         $report_ids{$1} = 1 if $row->{info} =~ /saved_sql\.id:\s*(\d+)/;
     }
 
