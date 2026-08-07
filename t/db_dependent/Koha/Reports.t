@@ -107,7 +107,7 @@ subtest 'prep_report' => sub {
 };
 
 subtest 'prep_report throws when duplicate-running limit is exceeded' => sub {
-    plan tests => 4;
+    plan tests => 5;
 
     my $report = Koha::Report->new( { report_name => 'duplicate_running_test', savedsql => 'SELECT 1' } )->store;
 
@@ -122,6 +122,19 @@ subtest 'prep_report throws when duplicate-running limit is exceeded' => sub {
     lives_ok { $report->prep_report( [], [] ) } 'limit not yet reached, prep_report returns normally';
 
     t::lib::Mocks::mock_config( 'duplicate_running_reports_per_user_limit', 1 );
+    lives_ok { $report->prep_report( [], [] ) } 'limit not yet reached, prep_report returns normally';
+
+    # Pretend a copy of this report is already in flight.
+    my $reports_mock = Test::MockModule->new('Koha::Reports');
+    $reports_mock->mock(
+        'running',
+        sub {
+            my ( $class, $params ) = @_;
+            return $class->search( { id => $report->id } ) if $params->{report_id};
+            return $class->search( { id => undef } );
+        }
+    );
+
     my $exception;
     eval { $report->prep_report( [], [] ); };
     $exception = $@;
@@ -130,6 +143,7 @@ subtest 'prep_report throws when duplicate-running limit is exceeded' => sub {
         'limit reached -> DuplicateRunning exception'
     );
     is( $exception->limit, 1, 'exception carries the configured limit' );
+
 };
 
 subtest 'prep_report throws when total-running limit is exceeded' => sub {
