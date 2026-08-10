@@ -794,6 +794,14 @@ if (AlwaysLoadCheckoutsTable) {
     });
 }
 
+function Dopop(link) {
+    var newin = window.open(
+        link,
+        "popup",
+        "width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top"
+    );
+}
+
 $(document).ready(function () {
     var onHoldDueDateSet = false;
 
@@ -1827,6 +1835,27 @@ $(document).ready(function () {
             });
             return true;
         }
+        return true;
+    });
+    $("#stickyduedate").on("click", function () {
+        barcodefield.focus();
+    });
+
+    $("#hold-confirm-print-slip").on("submit", function () {
+        Dopop(
+            "hold-transfer-slip.pl?reserve_id=" +
+                this.hold_reserveid.value +
+                "&itemnumber=" +
+                this.hold_itemnumber.value
+        );
+        return true;
+    });
+
+    $("#recall-print-slip").on("submit", function () {
+        Dopop(
+            "/cgi-bin/koha/recalls/recall_pickup_slip.pl?recall_id=" +
+                this.recall_id.value
+        );
         return true;
     });
 });

@@ -489,7 +489,7 @@
             [% END # /IF ADDITIONAL_MATERIALS %]
 
             [% IF ( RESERVED or RESERVE_WAITING or TRANSFERRED or PROCESSING ) %]
-                <form method="post" action="/cgi-bin/koha/circ/circulation.pl">
+                <form method="post" id="hold-confirm-print-slip" action="/cgi-bin/koha/circ/circulation.pl">
                     [% INCLUDE 'csrf-token.inc' %]
                     <input type="hidden" name="op" value="cud-confirm_hold" />
                     <input type="hidden" name="restoreduedatespec" />
@@ -499,18 +499,20 @@
                     <input type="hidden" name="hold_branch" value="[% resbranchcode | html %]" />
                     <input type="hidden" name="hold_borrower" value="[% resborrowernumber | html %]" />
                     <input type="hidden" name="hold_itemnumber" value="[% item.itemnumber | html %]" />
+                    <input type="hidden" name="hold_reserveid" value="[% reserve_id | html %]" />
                     <input type="hidden" name="stickyduedate" value="[% stickyduedate | html %]" />
-                    <button class="btn btn-default print" type="submit" accesskey="p" onclick="Dopop('hold-transfer-slip.pl?reserve_id=[% reserve_id | uri %]&itemnumber=[% item.id | html %]');this.form.submit();"
-                        ><i class="fa fa-print"></i> Don't check out, confirm hold, and print slip (P)</button
-                    >
+                    <button class="btn btn-default print" type="submit" accesskey="p"><i class="fa fa-print"></i> Don't check out, confirm hold, and print slip (P)</button>
                 </form>
             [% END %]
 
             [% IF ( RECALLED ) %]
-                <form method="get" action="/cgi-bin/koha/circ/circulation.pl">
-                    <button class="btn btn-default print" type="submit" accesskey="p" onclick="Dopop('/cgi-bin/koha/recalls/recall_pickup_slip.pl?recall_id=[% RECALLED.id | html %]');this.form.submit();"
-                        ><i class="fa fa-print"></i> Don't check out and print slip (P)</button
-                    >
+                <form method="get" id="recall-print-slip" action="/cgi-bin/koha/circ/circulation.pl">
+                    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
+                    <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
+                    <input type="hidden" name="restoreduedatespec" />
+                    <input type="hidden" name="stickyduedate" value="[% stickyduedate | html %]" />
+                    <input type="hidden" name="recall_id" value="[% RECALLED.id | html %]" />
+                    <button class="btn btn-default print" type="submit" accesskey="p"><i class="fa fa-print"></i> Don't check out and print slip (P)</button>
                 </form>
             [% END %]
 
@@ -533,9 +535,11 @@
 
             [% IF ( RESERVED || ISSUED_TO_ANOTHER || RECALLED ) && (CAN_user_reserveforothers_place_holds ) %]
                 [% UNLESS noissues %]
-                    <button class="btn btn-default" type="submit" onclick="window.location.href='/cgi-bin/koha/reserve/request.pl?biblionumber=[% itembiblionumber | html %]&borrowernumber=[% patron.borrowernumber | html %]'"
-                        ><i class="fa-solid fa-note-sticky"></i> Cancel checkout and place a hold for [% INCLUDE 'patron-title.inc' %]</button
-                    >
+                    <form method="get" action="/cgi-bin/koha/reserve/request.pl">
+                        <input type="hidden" name="biblionumber" value="[% itembiblionumber | html %]" />
+                        <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
+                        <button class="btn btn-default" type="submit"><i class="fa-solid fa-note-sticky"></i> Cancel checkout and place a hold for [% INCLUDE 'patron-title.inc' no_html=1 %]</button>
+                    </form>
                 [% END %]
             [% END %]
         </div>
@@ -899,9 +903,9 @@
                                             [% END %]
                                             <label for="stickyduedate"> Remember for session:</label>
                                             [% IF ( stickyduedate ) %]
-                                                <input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" checked="checked" />
+                                                <input type="checkbox" id="stickyduedate" name="stickyduedate" checked="checked" />
                                             [% ELSE %]
-                                                <input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" />
+                                                <input type="checkbox" id="stickyduedate" name="stickyduedate" />
                                             [% END %]
                                         </div>
                                     [% END %]
@@ -1211,9 +1215,6 @@
             }
         }
 
-        function Dopop(link) {
-            var newin = window.open(link, "popup", "width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top");
-        }
         $(document).ready(function () {
             let barcodeSubmitInFlight = false;
             $("#barcode")
