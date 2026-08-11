@@ -220,7 +220,7 @@
                 const cssToggle = document.getElementById("toggleUserCSS");
                 if (cssToggle) {
                     const cssText = cssToggle.querySelector(".toggle-text");
-                    if (cssText) cssText.textContent = cssDisabled ? "Enable User CSS" : "Disable User CSS";
+                    if (cssText) cssText.textContent = cssDisabled ? _("Enable custom CSS") : _("Disable custom CSS");
                 }
 
                 // User JS button
@@ -228,7 +228,7 @@
                 const jsToggle = document.getElementById("toggleUserJS");
                 if (jsToggle) {
                     const jsText = jsToggle.querySelector(".toggle-text");
-                    if (jsText) jsText.textContent = jsDisabled ? "Enable User JS" : "Disable User JS";
+                    if (jsText) jsText.textContent = jsDisabled ? _("Enable custom JS") : _("Disable custom JS");
                 }
 
                 // Stylesheets button
@@ -240,7 +240,7 @@
                 const stylesheetsToggle = document.getElementById("toggleStylesheets");
                 if (stylesheetsToggle) {
                     const stylesheetsText = stylesheetsToggle.querySelector(".toggle-text");
-                    if (stylesheetsText) stylesheetsText.textContent = stylesheetsDisabled ? "Enable Custom Stylesheets" : "Disable Custom Stylesheets";
+                    if (stylesheetsText) stylesheetsText.textContent = stylesheetsDisabled ? _("Enable custom stylesheets") : _("Disable custom stylesheets");
                 }
 
                 // Update icon color based on whether any toggles are active
