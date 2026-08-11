@@ -109,6 +109,10 @@ $(document).ready(function () {
         toggleCharacterPositionField();
     });
 
+    $("#to_field").change(function () {
+        toggleIndicatorFields();
+    });
+
     $("#cancel_edit").on("click", function (e) {
         e.preventDefault();
         cancelEditAction();
@@ -179,6 +183,10 @@ $(document).ready(function () {
     $("#conditional_comparison").on("change", function () {
         onConditionalComparisonChange(this);
     });
+
+    $("#use_indicators").on("change", function () {
+        toggleIndicatorFields();
+    });
 });
 
 function toggleCharacterPositionField() {
@@ -199,16 +207,31 @@ function toggleCharacterPositionField() {
         $("#from_subfield").show();
         $("#character_position").hide();
     }
+
+    if ($("#from_field").val().length > 0 && $("#from_field").val() < 10) {
+        hide("from_indicators_block");
+    } else if ($("#use_indicators").is(":checked")) {
+        show("from_indicators_block");
+    }
+
     if (
         $("#conditional_field").val().length > 0 &&
         $("#conditional_field").val() < 10
     ) {
         $("#conditional_subfield").val("");
         $("#conditional_subfield").hide();
+        hide("conditional_indicators_block");
     } else {
         $("#conditional_subfield").show();
+        if (
+            $("#use_indicators").is(":checked") &&
+            $("#conditional_block").is(":visible")
+        ) {
+            show("conditional_indicators_block");
+        }
     }
 }
+
 function updateAllEvery() {
     if ($("#conditional_field").is(":visible")) {
         if (
@@ -273,6 +296,7 @@ function onActionChange(selectObj) {
     }
 
     toggleCharacterPositionField();
+    toggleIndicatorFields();
 }
 
 function onConditionalChange(selectObj) {
@@ -292,6 +316,7 @@ function onConditionalChange(selectObj) {
             show("conditional_block");
             break;
     }
+    toggleIndicatorFields();
 }
 
 function onConditionalComparisonChange(selectObj) {
@@ -328,6 +353,41 @@ function onConditionalRegexChange(checkboxObj) {
     } else {
         $("span.match_regex_prefix").hide();
         $("span.match_regex_suffix").hide();
+    }
+}
+
+function toggleIndicatorFields() {
+    if (!$("#use_indicators").is(":checked")) {
+        hide("from_indicators_block");
+        hide("to_indicators_block");
+        hide("conditional_indicators_block");
+        return;
+    }
+
+    if ($("#from_field").val().length > 0 && $("#from_field").val() >= 10) {
+        show("from_indicators_block");
+    } else {
+        hide("from_indicators_block");
+    }
+
+    if (
+        $("#to_field_block").is(":visible") &&
+        $("#to_field").val().length > 0 &&
+        $("#to_field").val() >= 10
+    ) {
+        show("to_indicators_block");
+    } else {
+        hide("to_indicators_block");
+    }
+
+    if (
+        $("#conditional_block").is(":visible") &&
+        $("#conditional_field").val().length > 0 &&
+        $("#conditional_field").val() >= 10
+    ) {
+        show("conditional_indicators_block");
+    } else {
+        hide("conditional_indicators_block");
     }
 }
 
@@ -377,6 +437,21 @@ function editAction(mmta) {
     document.getElementById("field_value").value = mmta["field_value"];
     document.getElementById("to_field").value = mmta["to_field"];
     document.getElementById("to_subfield").value = mmta["to_subfield"];
+    document.getElementById("use_indicators").checked = parseInt(
+        mmta["use_indicators"]
+    );
+
+    document.getElementById("from_ind1").value = mmta["from_ind1"] ?? "";
+    document.getElementById("from_ind2").value = mmta["from_ind2"] ?? "";
+    document.getElementById("to_ind1").value = mmta["to_ind1"] ?? "";
+    document.getElementById("to_ind2").value = mmta["to_ind2"] ?? "";
+    document.getElementById("conditional_ind1").value =
+        mmta["conditional_ind1"] ?? "";
+    document.getElementById("conditional_ind2").value =
+        mmta["conditional_ind2"] ?? "";
+
+    toggleIndicatorFields();
+
     if (
         mmta["regex_search"] == "" &&
         mmta["to_regex_replace"] == "" &&
@@ -434,6 +509,16 @@ function cancelEditAction() {
     document.getElementById("field_value").value = "";
     document.getElementById("to_field").value = "";
     document.getElementById("to_subfield").value = "";
+    document.getElementById("use_indicators").checked = false;
+    document.getElementById("from_ind1").value = "";
+    document.getElementById("from_ind2").value = "";
+    document.getElementById("to_ind1").value = "";
+    document.getElementById("to_ind2").value = "";
+    document.getElementById("conditional_ind1").value = "";
+    document.getElementById("conditional_ind2").value = "";
+
+    toggleIndicatorFields();
+
     $("#to_regex_search").val("");
     $("#to_regex_replace").val("");
     $("#to_regex_modifiers").val("");

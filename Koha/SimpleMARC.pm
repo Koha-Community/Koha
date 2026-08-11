@@ -90,6 +90,8 @@ sub copy_field {
     my $toSubfieldName   = $params->{to_subfield};
     my $regex            = $params->{regex};
     my $field_numbers    = $params->{field_numbers} // [];
+    my $to_ind1          = $params->{to_ind1};
+    my $to_ind2          = $params->{to_ind2};
 
     if ( !( $record && $fromFieldName && $toFieldName ) ) { return; }
 
@@ -106,6 +108,8 @@ sub copy_field {
                 regex         => $regex,
                 field_numbers => $field_numbers,
                 action        => 'copy',
+                to_ind1       => $to_ind1,
+                to_ind2       => $to_ind2,
             }
         );
     } else {
@@ -119,6 +123,8 @@ sub copy_field {
                 regex         => $regex,
                 field_numbers => $field_numbers,
                 action        => 'copy',
+                to_ind1       => $to_ind1,
+                to_ind2       => $to_ind2,
             }
         );
     }
@@ -139,6 +145,8 @@ sub copy_and_replace_field {
     my $toSubfieldName   = $params->{to_subfield};
     my $regex            = $params->{regex};
     my $field_numbers    = $params->{field_numbers} // [];
+    my $to_ind1          = $params->{to_ind1};
+    my $to_ind2          = $params->{to_ind2};
 
     if ( !( $record && $fromFieldName && $toFieldName ) ) { return; }
 
@@ -153,6 +161,8 @@ sub copy_and_replace_field {
                 regex         => $regex,
                 field_numbers => $field_numbers,
                 action        => 'replace',
+                to_ind1       => $to_ind1,
+                to_ind2       => $to_ind2,
             }
         );
     } else {
@@ -166,6 +176,8 @@ sub copy_and_replace_field {
                 regex         => $regex,
                 field_numbers => $field_numbers,
                 action        => 'replace',
+                to_ind1       => $to_ind1,
+                to_ind2       => $to_ind2,
             }
         );
     }
@@ -238,11 +250,19 @@ sub add_field {
     my $subfieldName  = $params->{subfield};
     my @values        = @{ $params->{values} };
     my $field_numbers = $params->{field_numbers} // [];
+    my $ind1          = $params->{ind1};
+    my $ind2          = $params->{ind2};
 
     if ( !( $record && $fieldName ) ) { return; }
+
     if ( $fieldName > 10 ) {
         foreach my $value (@values) {
-            my $field = MARC::Field->new( $fieldName, '', '', "$subfieldName" => $value );
+            my $field = MARC::Field->new(
+                $fieldName,
+                defined $ind1 ? $ind1 : ' ',
+                defined $ind2 ? $ind2 : ' ',
+                "$subfieldName" => $value
+            );
             $record->insert_fields_ordered($field);
         }
     } else {
@@ -299,6 +319,8 @@ sub _update_subfield {
     my @values        = @{ $params->{values} };
     my $dont_erase    = $params->{dont_erase};
     my $field_numbers = $params->{field_numbers} // [];
+    my $ind1          = $params->{ind1};
+    my $ind2          = $params->{ind2};
     my $i             = 0;
 
     my @fields = $record->field($fieldName);
@@ -308,6 +330,11 @@ sub _update_subfield {
     }
 
     if (@fields) {
+        foreach my $field (@fields) {
+            $field->set_indicator( 1, $ind1 ) if defined $ind1;
+            $field->set_indicator( 2, $ind2 ) if defined $ind2;
+        }
+
         unless ($dont_erase) {
             @values = ( $values[0] ) x scalar(@fields)
                 if @values == 1;
@@ -325,7 +352,12 @@ sub _update_subfield {
     } else {
         ## Field does not exist, create it.
         foreach my $value (@values) {
-            my $field = MARC::Field->new( $fieldName, '', '', "$subfieldName" => $values[ $i++ ] );
+            my $field = MARC::Field->new(
+                $fieldName,
+                defined $ind1 ? $ind1 : ' ',
+                defined $ind2 ? $ind2 : ' ',
+                "$subfieldName" => $values[ $i++ ]
+            );
             $record->insert_fields_ordered($field);
         }
     }
@@ -609,6 +641,8 @@ sub move_field {
     my $toSubfieldName   = $params->{to_subfield};
     my $regex            = $params->{regex};
     my $field_numbers    = $params->{field_numbers} // [];
+    my $to_ind1          = $params->{to_ind1};
+    my $to_ind2          = $params->{to_ind2};
 
     if (   !defined $fromSubfieldName
         or $fromSubfieldName eq ''
@@ -623,6 +657,8 @@ sub move_field {
                 regex         => $regex,
                 field_numbers => $field_numbers,
                 action        => 'move',
+                to_ind1       => $to_ind1,
+                to_ind2       => $to_ind2,
             }
         );
     } else {
@@ -636,6 +672,8 @@ sub move_field {
                 regex         => $regex,
                 field_numbers => $field_numbers,
                 action        => 'move',
+                to_ind1       => $to_ind1,
+                to_ind2       => $to_ind2,
             }
         );
     }
@@ -755,6 +793,8 @@ sub _copy_move_field {
     my $regex         = $params->{regex};
     my $field_numbers = $params->{field_numbers} // [];
     my $action        = $params->{action} || 'copy';
+    my $to_ind1       = $params->{to_ind1};
+    my $to_ind2       = $params->{to_ind2};
 
     my @from_fields = $record->field($fromFieldName);
     if (@$field_numbers) {
@@ -764,6 +804,8 @@ sub _copy_move_field {
     my @new_fields;
     for my $from_field (@from_fields) {
         my $new_field = $from_field->clone;
+        $new_field->set_indicator( 1, $to_ind1 ) if defined $to_ind1;
+        $new_field->set_indicator( 2, $to_ind2 ) if defined $to_ind2;
         $new_field->{_tag} = $toFieldName;    # Should be replaced by set_tag, introduced by MARC::Field 2.0.4
         if ( $regex and $regex->{search} ) {
             for my $subfield ( $new_field->subfields ) {
@@ -801,6 +843,8 @@ sub _copy_move_subfield {
     my $regex            = $params->{regex};
     my $field_numbers    = $params->{field_numbers} // [];
     my $action           = $params->{action} || 'copy';
+    my $to_ind1          = $params->{to_ind1};
+    my $to_ind2          = $params->{to_ind2};
 
     my @values = read_field( { record => $record, field => $fromFieldName, subfield => $fromSubfieldName } );
     if (@$field_numbers) {
@@ -834,7 +878,9 @@ sub _copy_move_subfield {
             dont_erase    => $dont_erase,
             field_numbers => @target_field_numbers
             ? \@target_field_numbers
-            : ( $fromFieldName eq $toFieldName ? $field_numbers : [] )
+            : ( $fromFieldName eq $toFieldName ? $field_numbers : [] ),
+            ind1 => $to_ind1,
+            ind2 => $to_ind2,
         }
     );
 

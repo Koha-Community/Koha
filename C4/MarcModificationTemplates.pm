@@ -592,6 +592,16 @@ sub ModifyRecordWithTemplate {
         my $conditional_regex      = $a->{'conditional_regex'};
         my $use_indicators         = $a->{'use_indicators'};
 
+        my $to_ind1 =
+              $use_indicators
+            ? $a->{'to_ind1'}
+            : undef;
+
+        my $to_ind2 =
+              $use_indicators
+            ? $a->{'to_ind2'}
+            : undef;
+
         my $from_ind1 =
               $use_indicators
             ? $a->{'from_ind1'}
@@ -616,6 +626,13 @@ sub ModifyRecordWithTemplate {
             $field_value =~ s/__CURRENTDATE__/$current_date/g;
             $field_value =~ s/__BRANCHCODE__/$branchcode/g;
         }
+
+        $to_ind1          = undef if defined $to_ind1          && $to_ind1 eq '';
+        $to_ind2          = undef if defined $to_ind2          && $to_ind2 eq '';
+        $from_ind1        = undef if defined $from_ind1        && $from_ind1 eq '';
+        $from_ind2        = undef if defined $from_ind2        && $from_ind2 eq '';
+        $conditional_ind1 = undef if defined $conditional_ind1 && $conditional_ind1 eq '';
+        $conditional_ind2 = undef if defined $conditional_ind2 && $conditional_ind2 eq '';
 
         my $do            = 1;
         my $field_numbers = [];
@@ -778,6 +795,8 @@ sub ModifyRecordWithTemplate {
                             modifiers => $to_regex_modifiers
                         },
                         field_numbers => $field_numbers,
+                        to_ind1       => $to_ind1,
+                        to_ind2       => $to_ind2,
                     }
                 );
             } elsif ( $action eq 'copy_and_replace_field' ) {
@@ -794,6 +813,8 @@ sub ModifyRecordWithTemplate {
                             modifiers => $to_regex_modifiers
                         },
                         field_numbers => $field_numbers,
+                        to_ind1       => $to_ind1,
+                        to_ind2       => $to_ind2,
                     }
                 );
             } elsif ( $action eq 'add_field' ) {
@@ -804,6 +825,8 @@ sub ModifyRecordWithTemplate {
                         subfield      => $from_subfield,
                         values        => [$field_value],
                         field_numbers => $field_numbers,
+                        ind1          => $to_ind1,
+                        ind2          => $to_ind2,
                     }
                 );
             } elsif ( $action eq 'update_field' ) {
@@ -830,6 +853,8 @@ sub ModifyRecordWithTemplate {
                             modifiers => $to_regex_modifiers
                         },
                         field_numbers => $field_numbers,
+                        to_ind1       => $to_ind1,
+                        to_ind2       => $to_ind2,
                     }
                 );
             } elsif ( $action eq 'delete_field' ) {

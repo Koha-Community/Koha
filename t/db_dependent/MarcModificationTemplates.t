@@ -3,7 +3,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 149;
+use Test::More tests => 151;
 
 use Koha::Database;
 use Koha::SimpleMARC;
@@ -788,6 +788,112 @@ subtest 'Conditional indicator matching' => sub {
         'Action does not run when conditional indicator does not match'
     );
 
+};
+
+subtest 'Add field with destination indicators' => sub {
+    plan tests => 4;
+
+    $dbh->do(q|DELETE FROM marc_modification_templates|);
+
+    my $template_id = AddModificationTemplate("destination indicator add");
+
+    AddModificationTemplateAction(
+        $template_id,
+        'add_field',
+        0,
+        1,
+        '650',
+        'a',
+        undef,
+        undef,
+        'Dogs',
+        '',
+        '',
+        '1',
+        '7',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        undef,
+        undef,
+        '',
+        '',
+        '',
+        'Add 650 field with indicators 1 and 7'
+    );
+
+    my $record = MARC::Record->new;
+
+    is(
+        ModifyRecordWithTemplate( $template_id, $record ),
+        undef,
+        'Template modification completed'
+    );
+
+    my @fields = $record->field('650');
+
+    is( scalar @fields,           1,   'Added one 650 field' );
+    is( $fields[0]->indicator(1), '1', 'Added first destination indicator' );
+    is( $fields[0]->indicator(2), '7', 'Added second destination indicator' );
+};
+
+subtest 'Whole field destination indicators through template' => sub {
+    plan tests => 4;
+
+    $dbh->do(q|DELETE FROM marc_modification_templates|);
+
+    my $template_id = AddModificationTemplate("whole field destination indicators");
+
+    AddModificationTemplateAction(
+        $template_id,
+        'copy_field',
+        0,
+        1,
+        '650',
+        '',
+        undef,
+        undef,
+        '',
+        '651',
+        '',
+        ' ',
+        '0',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        undef,
+        undef,
+        '',
+        '',
+        '',
+        'Copy 650 to 651 with destination indicators'
+    );
+
+    my $record = MARC::Record->new;
+    $record->append_fields(
+        MARC::Field->new(
+            650, '1', '7',
+            a => 'Dogs',
+        ),
+    );
+
+    is(
+        ModifyRecordWithTemplate( $template_id, $record ),
+        undef,
+        'Template modification completed'
+    );
+
+    my @fields = $record->field('651');
+
+    is( scalar @fields,           1,   'Created one 651 field' );
+    is( $fields[0]->indicator(1), ' ', 'Template applied destination indicator 1' );
+    is( $fields[0]->indicator(2), '0', 'Template applied destination indicator 2' );
 };
 
 subtest "when conditional field doesn't match the from field" => sub {

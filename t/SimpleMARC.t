@@ -4,13 +4,13 @@ use Modern::Perl;
 
 use Test::Exception;
 use Test::NoWarnings;
-use Test::More tests => 13;
+use Test::More tests => 14;
 
 use_ok("MARC::Field");
 use_ok("MARC::Record");
 use_ok(
     "Koha::SimpleMARC",
-    qw( field_exists read_field update_field copy_field copy_and_replace_field move_field delete_field field_equals update_last_transaction_time )
+    qw( field_exists read_field add_field update_field copy_field copy_and_replace_field move_field delete_field field_equals update_last_transaction_time )
 );
 
 sub new_record {
@@ -514,7 +514,7 @@ subtest 'update_field' => sub {
 
 # copy_field - subfield
 subtest 'copy_field' => sub {
-    plan tests => 2;
+    plan tests => 4;
     subtest 'copy subfield' => sub {
         plan tests => 21;
         my $record = new_record;
@@ -880,6 +880,70 @@ subtest 'copy_field' => sub {
         );
     };
 
+    subtest 'copy subfield destination indicators' => sub {
+        plan tests => 6;
+
+        my $record = MARC::Record->new;
+        $record->append_fields(
+            MARC::Field->new(
+                245, '1', '4',
+                a => 'Dogs',
+            ),
+        );
+
+        copy_field(
+            {
+                record        => $record,
+                from_field    => '245',
+                from_subfield => 'a',
+                to_field      => '650',
+                to_subfield   => 'a',
+                to_ind1       => ' ',
+                to_ind2       => '7',
+            }
+        );
+
+        my ($new_field) = $record->field('650');
+
+        is( $new_field->indicator(1),  ' ',    'New destination field gets indicator 1' );
+        is( $new_field->indicator(2),  '7',    'New destination field gets indicator 2' );
+        is( $new_field->subfield('a'), 'Dogs', 'Subfield copied to new destination field' );
+
+        $record = MARC::Record->new;
+        $record->append_fields(
+            MARC::Field->new(
+                245, '1', '4',
+                a => 'Dogs',
+            ),
+            MARC::Field->new(
+                650, '1', '0',
+                a => 'Cats',
+            ),
+        );
+
+        copy_field(
+            {
+                record        => $record,
+                from_field    => '245',
+                from_subfield => 'a',
+                to_field      => '650',
+                to_subfield   => 'a',
+                to_ind1       => ' ',
+                to_ind2       => '7',
+            }
+        );
+
+        my ($existing_field) = $record->field('650');
+
+        is( $existing_field->indicator(1), ' ', 'Existing destination field gets indicator 1' );
+        is( $existing_field->indicator(2), '7', 'Existing destination field gets indicator 2' );
+        is_deeply(
+            [ $existing_field->subfield('a') ],
+            [ 'Cats', 'Dogs' ],
+            'Existing destination subfield remains present'
+        );
+    };
+
     subtest 'copy field' => sub {
         plan tests => 14;
         my $record = new_record;
@@ -1011,11 +1075,52 @@ subtest 'copy_field' => sub {
             'Copy a field to existent fields should create a new field, the original one should not have been updated'
         );
     };
+    subtest 'copy field destination indicators' => sub {
+        plan tests => 4;
+
+        my $record = MARC::Record->new;
+        $record->append_fields(
+            MARC::Field->new(
+                650, '1', '7',
+                a => 'Dogs',
+            ),
+        );
+
+        copy_field(
+            {
+                record     => $record,
+                from_field => '650',
+                to_field   => '651',
+            }
+        );
+
+        my ($preserved) = $record->field('651');
+
+        is( $preserved->indicator(1), '1', 'copy_field preserves indicator 1' );
+        is( $preserved->indicator(2), '7', 'copy_field preserves indicator 2' );
+
+        delete_field( { record => $record, field => '651' } );
+
+        copy_field(
+            {
+                record     => $record,
+                from_field => '650',
+                to_field   => '651',
+                to_ind1    => ' ',
+                to_ind2    => '0',
+            }
+        );
+
+        my ($overridden) = $record->field('651');
+
+        is( $overridden->indicator(1), ' ', 'copy_field overrides indicator 1' );
+        is( $overridden->indicator(2), '0', 'copy_field overrides indicator 2' );
+    };
 };
 
 # copy_and_replace_field - subfield
 subtest 'copy_and_replace_field' => sub {
-    plan tests => 3;
+    plan tests => 5;
     subtest 'copy and replace subfield' => sub {
         plan tests => 20;
         my $record = new_record;
@@ -1386,6 +1491,70 @@ subtest 'copy_and_replace_field' => sub {
         );
     };
 
+    subtest 'copy and replace subfield destination indicators' => sub {
+        plan tests => 6;
+
+        my $record = MARC::Record->new;
+        $record->append_fields(
+            MARC::Field->new(
+                245, '1', '4',
+                a => 'Dogs',
+            ),
+        );
+
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => '245',
+                from_subfield => 'a',
+                to_field      => '650',
+                to_subfield   => 'a',
+                to_ind1       => ' ',
+                to_ind2       => '7',
+            }
+        );
+
+        my ($new_field) = $record->field('650');
+
+        is( $new_field->indicator(1),  ' ',    'New destination field gets indicator 1' );
+        is( $new_field->indicator(2),  '7',    'New destination field gets indicator 2' );
+        is( $new_field->subfield('a'), 'Dogs', 'Subfield copied to new destination field' );
+
+        $record = MARC::Record->new;
+        $record->append_fields(
+            MARC::Field->new(
+                245, '1', '4',
+                a => 'Dogs',
+            ),
+            MARC::Field->new(
+                650, '1', '0',
+                a => 'Cats',
+            ),
+        );
+
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => '245',
+                from_subfield => 'a',
+                to_field      => '650',
+                to_subfield   => 'a',
+                to_ind1       => ' ',
+                to_ind2       => '7',
+            }
+        );
+
+        my ($existing_field) = $record->field('650');
+
+        is( $existing_field->indicator(1), ' ', 'Existing destination field gets indicator 1' );
+        is( $existing_field->indicator(2), '7', 'Existing destination field gets indicator 2' );
+        is_deeply(
+            [ $existing_field->subfield('a') ],
+            ['Dogs'],
+            'Existing destination subfield is replaced'
+        );
+    };
+
     subtest 'copy and replace field' => sub {
         plan tests => 14;
         my $record = new_record;
@@ -1534,11 +1703,53 @@ subtest 'copy_and_replace_field' => sub {
             'Copy and replace - Update a subfield with content of control field'
         );
     };
+
+    subtest 'copy and replace field destination indicators' => sub {
+        plan tests => 4;
+
+        my $record = MARC::Record->new;
+        $record->append_fields(
+            MARC::Field->new(
+                650, '1', '7',
+                a => 'Dogs',
+            ),
+        );
+
+        copy_and_replace_field(
+            {
+                record     => $record,
+                from_field => '650',
+                to_field   => '651',
+            }
+        );
+
+        my ($preserved) = $record->field('651');
+
+        is( $preserved->indicator(1), '1', 'copy_and_replace_field preserves indicator 1' );
+        is( $preserved->indicator(2), '7', 'copy_and_replace_field preserves indicator 2' );
+
+        delete_field( { record => $record, field => '651' } );
+
+        copy_and_replace_field(
+            {
+                record     => $record,
+                from_field => '650',
+                to_field   => '651',
+                to_ind1    => ' ',
+                to_ind2    => '0',
+            }
+        );
+
+        my ($overridden) = $record->field('651');
+
+        is( $overridden->indicator(1), ' ', 'copy_and_replace_field overrides indicator 1' );
+        is( $overridden->indicator(2), '0', 'copy_and_replace_field overrides indicator 2' );
+    };
 };
 
 # move_field - subfields
 subtest 'move_field' => sub {
-    plan tests => 2;
+    plan tests => 4;
     subtest 'move subfield' => sub {
         plan tests => 7;
         my $record = new_record;
@@ -1619,6 +1830,71 @@ subtest 'move_field' => sub {
         is_deeply(
             \@fields_9999, [],
             'move a nonexistent subfield does not create a new one'
+        );
+    };
+
+    subtest 'move subfield destination indicators' => sub {
+        plan tests => 7;
+
+        my $record = MARC::Record->new;
+        $record->append_fields(
+            MARC::Field->new(
+                245, '1', '4',
+                a => 'Dogs',
+            ),
+        );
+
+        move_field(
+            {
+                record        => $record,
+                from_field    => '245',
+                from_subfield => 'a',
+                to_field      => '650',
+                to_subfield   => 'a',
+                to_ind1       => ' ',
+                to_ind2       => '7',
+            }
+        );
+
+        my ($new_field) = $record->field('650');
+
+        is( $new_field->indicator(1),  ' ',    'New destination field gets indicator 1' );
+        is( $new_field->indicator(2),  '7',    'New destination field gets indicator 2' );
+        is( $new_field->subfield('a'), 'Dogs', 'Subfield moved to new destination field' );
+        ok( !$record->field('245'), 'Source field removed after move' );
+
+        $record = MARC::Record->new;
+        $record->append_fields(
+            MARC::Field->new(
+                245, '1', '4',
+                a => 'Dogs',
+            ),
+            MARC::Field->new(
+                650, '1', '0',
+                a => 'Cats',
+            ),
+        );
+
+        move_field(
+            {
+                record        => $record,
+                from_field    => '245',
+                from_subfield => 'a',
+                to_field      => '650',
+                to_subfield   => 'a',
+                to_ind1       => ' ',
+                to_ind2       => '7',
+            }
+        );
+
+        my ($existing_field) = $record->field('650');
+
+        is( $existing_field->indicator(1), ' ', 'Existing destination field gets indicator 1' );
+        is( $existing_field->indicator(2), '7', 'Existing destination field gets indicator 2' );
+        is_deeply(
+            [ $existing_field->subfield('a') ],
+            ['Dogs'],
+            'Existing destination subfield is replaced by moved value'
         );
     };
 
@@ -1718,6 +1994,53 @@ subtest 'move_field' => sub {
             'move a nonexistent field does not create a new one'
         );
 
+    };
+    subtest 'move field destination indicators' => sub {
+        plan tests => 4;
+
+        my $record = MARC::Record->new;
+        $record->append_fields(
+            MARC::Field->new(
+                650, '1', '7',
+                a => 'Dogs',
+            ),
+        );
+
+        move_field(
+            {
+                record     => $record,
+                from_field => '650',
+                to_field   => '651',
+            }
+        );
+
+        my ($preserved) = $record->field('651');
+
+        is( $preserved->indicator(1), '1', 'move_field preserves indicator 1' );
+        is( $preserved->indicator(2), '7', 'move_field preserves indicator 2' );
+
+        $record = MARC::Record->new;
+        $record->append_fields(
+            MARC::Field->new(
+                650, '1', '7',
+                a => 'Dogs',
+            ),
+        );
+
+        move_field(
+            {
+                record     => $record,
+                from_field => '650',
+                to_field   => '651',
+                to_ind1    => ' ',
+                to_ind2    => '0',
+            }
+        );
+
+        my ($overridden) = $record->field('651');
+
+        is( $overridden->indicator(1), ' ', 'move_field overrides indicator 1' );
+        is( $overridden->indicator(2), '0', 'move_field overrides indicator 2' );
     };
 };
 
@@ -1984,6 +2307,46 @@ subtest 'field_equals' => sub {
             'Control fields do not match indicator criteria'
         );
     };
+};
+
+subtest 'add_field with indicators' => sub {
+    plan tests => 6;
+
+    my $record = MARC::Record->new;
+
+    add_field(
+        {
+            record   => $record,
+            field    => '650',
+            subfield => 'a',
+            values   => ['Dogs'],
+            ind1     => '1',
+            ind2     => '7',
+        }
+    );
+
+    my @fields = $record->field('650');
+
+    is( scalar @fields,            1,      'Added one 650 field' );
+    is( $fields[0]->indicator(1),  '1',    'Set first indicator' );
+    is( $fields[0]->indicator(2),  '7',    'Set second indicator' );
+    is( $fields[0]->subfield('a'), 'Dogs', 'Set subfield value' );
+
+    $record = MARC::Record->new;
+
+    add_field(
+        {
+            record   => $record,
+            field    => '650',
+            subfield => 'a',
+            values   => ['Cats'],
+        }
+    );
+
+    my ($field) = $record->field('650');
+
+    is( $field->indicator(1), ' ', 'Defaults first indicator to blank' );
+    is( $field->indicator(2), ' ', 'Defaults second indicator to blank' );
 };
 
 subtest 'update_last_transaction_time' => sub {

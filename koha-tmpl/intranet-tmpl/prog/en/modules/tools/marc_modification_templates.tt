@@ -193,6 +193,9 @@
                                         <span>field</span>
 
                                         [% ActionsLoo.from_field | html %][% IF ( ActionsLoo.from_subfield.length ) %]$[% ActionsLoo.from_subfield | html %][% END %]
+                                        [% IF ActionsLoo.use_indicators %]
+                                            <span> (ind1: [% ActionsLoo.from_ind1 | html %], ind2: [% ActionsLoo.from_ind2 | html %]) </span>
+                                        [% END %]
 
                                         [% IF ( ActionsLoo.field_value ) %]
                                             <span>with value</span> <em>[% ActionsLoo.field_value | html %]</em>
@@ -200,6 +203,9 @@
 
                                         [% IF ( ActionsLoo.to_field ) %]
                                             <span>to</span> [% ActionsLoo.to_field | html %][% IF ( ActionsLoo.to_subfield.length ) %]$[% ActionsLoo.to_subfield | html %][% END %]
+                                            [% IF ActionsLoo.use_indicators %]
+                                                <span> (ind1: [% ActionsLoo.to_ind1 | html %], ind2: [% ActionsLoo.to_ind2 | html %]) </span>
+                                            [% END %]
 
                                             [% IF ( ActionsLoo.to_regex_search ) %]
                                                 <span>using RegEx</span> s<strong>/[% ActionsLoo.to_regex_search | html %]/[% ActionsLoo.to_regex_replace | html %]/[% ActionsLoo.to_regex_modifiers | html %]</strong>
@@ -211,6 +217,9 @@
                                             [% IF ( ActionsLoo.conditional_unless ) %]<span>unless</span>[% END %]
 
                                             [% ActionsLoo.conditional_field | html %][% IF ( ActionsLoo.conditional_subfield.length ) %]$[% ActionsLoo.conditional_subfield | html %][% END %]
+                                            [% IF ActionsLoo.use_indicators %]
+                                                <span> (ind1: [% ActionsLoo.conditional_ind1 | html %], ind2: [% ActionsLoo.conditional_ind2 | html %]) </span>
+                                            [% END %]
 
                                             [% IF ( ActionsLoo.conditional_comparison_exists ) %]<span>exists</span>[% END %]
                                             [% IF ( ActionsLoo.conditional_comparison_not_exists ) %]<span>does not exist</span>[% END %]
@@ -276,10 +285,29 @@
                         field(s) <input type="text" name="from_field" id="from_field" size="3" maxlength="3" /> <span id="character_position">starting from character position </span
                         ><input type="text" name="from_subfield" id="from_subfield" size="2" maxlength="2" title="let blank for the entire field" />
 
+                        <label for="use_indicators">
+                            <input type="checkbox" name="use_indicators" id="use_indicators" />
+                            Use indicators
+                        </label>
+
+                        <span id="from_indicators_block" style="display:none;">
+                            indicator 1
+                            <input type="text" name="from_ind1" id="from_ind1" size="1" maxlength="1" />
+                            indicator 2
+                            <input type="text" name="from_ind2" id="from_ind2" size="1" maxlength="1" />
+                        </span>
+
                         <span name="with_value_block" id="with_value_block" style="display:none;"> with value <input type="text" name="field_value" id="field_value" /> </span>
 
                         <span name="to_field_block" id="to_field_block" style="display:none;">
                             to field <input type="text" name="to_field" id="to_field" size="3" maxlength="3" /> <input type="text" name="to_subfield" id="to_subfield" size="1" maxlength="1" title="let blank for the entire field" />
+
+                            <span id="to_indicators_block" style="display:none;">
+                                indicator 1
+                                <input type="text" name="to_ind1" id="to_ind1" size="1" maxlength="1" />
+                                indicator 2
+                                <input type="text" name="to_ind2" id="to_ind2" size="1" maxlength="1" />
+                            </span>
 
                             <span name="to_field_regex_block" id="to_field_regex_block">
                                 <sup>
@@ -308,6 +336,13 @@
 
                         <span name="conditional_block" id="conditional_block" style="display:none;">
                             field <input type="text" name="conditional_field" id="conditional_field" size="3" maxlength="3" /> <input type="text" name="conditional_subfield" id="conditional_subfield" size="1" maxlength="1" />
+
+                            <span id="conditional_indicators_block" style="display:none;">
+                                indicator 1
+                                <input type="text" name="conditional_ind1" id="conditional_ind1" size="1" maxlength="1" />
+                                indicator 2
+                                <input type="text" name="conditional_ind2" id="conditional_ind2" size="1" maxlength="1" />
+                            </span>
 
                             <select name="conditional_comparison" id="conditional_comparison">
                                 <option value="" />
