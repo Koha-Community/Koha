@@ -508,10 +508,11 @@ sub GetAuthorisedValues {
     my $options  = shift // '';
     my $no_limit;
     if ($options) { $no_limit = $options->{'no_limit'}; }    #optional parameter to ignore library limitation
+    $no_limit = $no_limit ? 1 : 0;
 
     # Is this cached already?
     my $branch_limit = C4::Context::mybranch();
-    my $cache_key    = "AuthorisedValues-$category-$opac-$branch_limit";
+    my $cache_key    = "AuthorisedValues-$category-$opac-$branch_limit-$no_limit";
     my $cache        = Koha::Caches->get_instance();
     my $result       = $cache->get_from_cache($cache_key);
     return $result if $result;
@@ -539,7 +540,7 @@ sub GetAuthorisedValues {
         push @where_args,    $category;
     }
 
-    if ( $branch_limit && !defined $no_limit ) {
+    if ( $branch_limit && !$no_limit ) {
         push @where_strings, "( branchcode = ? OR branchcode IS NULL )";
         push @where_args,    $branch_limit;
     }

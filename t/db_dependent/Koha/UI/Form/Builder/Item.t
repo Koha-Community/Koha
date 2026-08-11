@@ -17,13 +17,14 @@
 
 use Modern::Perl;
 use Test::NoWarnings;
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::MockModule;
 use Data::Dumper qw( Dumper );
 use utf8;
 
 use List::MoreUtils qw( uniq );
 
+use Koha::AuthorisedValue;
 use Koha::ClassSources;
 use Koha::Libraries;
 use Koha::MarcSubfieldStructures;
@@ -147,6 +148,55 @@ subtest 'authorised values' => sub {
             'Labels should be correctly displayed'
         );
     };
+};
+
+subtest 'authorised values restricted to another library (bug 32748)' => sub {
+    plan tests => 3;
+
+    my $branch1 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $branch2 = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $restricted_av = Koha::AuthorisedValue->new(
+        {
+            category         => 'NOT_LOAN',
+            authorised_value => 'RESTRICTED32748',
+            lib              => 'Restricted for bug 32748 test',
+        }
+    )->store;
+    Koha::AuthorisedValue->new(
+        {
+            category         => 'NOT_LOAN',
+            authorised_value => 'UNRESTRICTED32748',
+            lib              => 'Unrestricted for bug 32748 test',
+        }
+    )->store;
+    $schema->resultset('AuthorisedValuesBranch')->create(
+        {
+            av_id      => $restricted_av->id,
+            branchcode => $branch2->branchcode,
+        }
+    );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $branch1->branchcode } );
+
+    my $biblio    = $builder->build_sample_biblio( { value => { frameworkcode => '' } } );
+    my $subfields = Koha::UI::Form::Builder::Item->new( { biblionumber => $biblio->biblionumber } )->edit_form;
+    my ($subfield) = grep { $_->{kohafield} eq 'items.notforloan' } @$subfields;
+
+    ok(
+        ( grep { $_ eq 'RESTRICTED32748' } @{ $subfield->{marc_value}->{values} } ),
+        'AV restricted to another library is still offered as a selectable option'
+    );
+    is(
+        $subfield->{marc_value}->{restricted}->{RESTRICTED32748}, 1,
+        'AV restricted to another library is flagged as restricted'
+    );
+    is(
+        $subfield->{marc_value}->{restricted}->{UNRESTRICTED32748}, 0,
+        'AV visible to the current library is not flagged as restricted'
+    );
+
+    C4::Context->set_userenv();
 };
 
 subtest 'prefill_with_default_values' => sub {

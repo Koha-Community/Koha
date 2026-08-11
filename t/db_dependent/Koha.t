@@ -5,7 +5,7 @@
 
 use Modern::Perl;
 use Test::NoWarnings;
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::MockModule;
 use Test::Warn;
 use Test::Deep;
@@ -17,6 +17,7 @@ use C4::Context;
 use Koha::Database;
 use Koha::AuthorisedValue;
 use Koha::AuthorisedValueCategories;
+use Koha::Caches;
 use Koha::Libraries;
 
 BEGIN {
@@ -170,6 +171,65 @@ subtest 'Authorized Values Tests' => sub {
     C4::Context->set_userenv();
     warning_is { GetAuthorisedValues("BUG10656") } [], 'No warning when userenv is anonymous';
 
+};
+
+subtest 'GetAuthorisedValues no_limit and cache key tests (bug 32748)' => sub {
+    plan tests => 6;
+
+    Koha::AuthorisedValueCategory->new( { category_name => 'BUG32748' } )->store;
+
+    my $branch1 = $builder->build( { source => 'Branch' } );
+    my $branch2 = $builder->build( { source => 'Branch' } );
+
+    my $av_unrestricted = Koha::AuthorisedValue->new(
+        {
+            category         => 'BUG32748',
+            authorised_value => 'UNRESTRICTED',
+            lib              => 'Unrestricted',
+        }
+    )->store;
+    my $av_restricted = Koha::AuthorisedValue->new(
+        {
+            category         => 'BUG32748',
+            authorised_value => 'RESTRICTED',
+            lib              => 'Restricted',
+        }
+    )->store;
+    $schema->resultset('AuthorisedValuesBranch')->create(
+        {
+            av_id      => $av_restricted->id,
+            branchcode => $branch2->{branchcode},
+        }
+    );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $branch1->{branchcode} } );
+
+    my $cache = Koha::Caches->get_instance;
+    $cache->clear_from_cache("AuthorisedValues-BUG32748-0-$branch1->{branchcode}-0");
+    $cache->clear_from_cache("AuthorisedValues-BUG32748-0-$branch1->{branchcode}-1");
+
+    my $limited = GetAuthorisedValues('BUG32748');
+    is( scalar @$limited, 1, 'Branch-limited call returns only the unrestricted value' );
+    is(
+        $limited->[0]{authorised_value}, 'UNRESTRICTED',
+        'Branch-limited call excludes the value restricted to another library'
+    );
+
+    my $unlimited = GetAuthorisedValues( 'BUG32748', undef, { no_limit => 1 } );
+    is( scalar @$unlimited, 2, 'no_limit call returns both values' );
+    my %restricted_by_av = map { $_->{authorised_value} => $_->{restricted} } @$unlimited;
+    is( $restricted_by_av{UNRESTRICTED}, 0, 'Unrestricted value is flagged as not restricted' );
+    is( $restricted_by_av{RESTRICTED},   1, 'Value tied to another library is flagged as restricted' );
+
+    # Regression test for the cache key bug reported on bug 32748: a plain call must
+    # not be served the cached result of a no_limit call (or vice versa), since the
+    # two modes return different result sets/shapes.
+    my $limited_again = GetAuthorisedValues('BUG32748');
+    is_deeply(
+        [ sort map { $_->{authorised_value} } @$limited_again ],
+        ['UNRESTRICTED'],
+        'Branch-limited call is not polluted by a previous no_limit call sharing category/opac/branch'
+    );
 };
 
 subtest 'isbn tests' => sub {
