@@ -148,6 +148,7 @@ Foreign key to sip_institutions.sip_institution_id
 =head2 holds_get_captured
 
   data_type: 'tinyint'
+  default_value: 1
   is_nullable: 1
 
 =head2 inhouse_item_types
@@ -291,7 +292,7 @@ __PACKAGE__->add_columns(
   "holds_block_checkin",
   { data_type => "tinyint", is_nullable => 1 },
   "holds_get_captured",
-  { data_type => "tinyint", is_nullable => 1 },
+  { data_type => "tinyint", default_value => 1, is_nullable => 1 },
   "inhouse_item_types",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "inhouse_patron_categories",
@@ -498,8 +499,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-05-24 16:32:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7xlHxjcI/Du780Cz05dbDw
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-08-11 14:14:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:X188nmexWCwsij/WO44ljA
 
 
 __PACKAGE__->add_columns(
