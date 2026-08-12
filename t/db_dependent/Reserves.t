@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 73;
+use Test::More tests => 74;
 use Test::NoWarnings;
 use Test::MockModule;
 use Test::Warn;
@@ -2459,6 +2459,37 @@ subtest 'FixPriority() lowestPriority tests' => sub {
     is( $other->priority, 2, 'Other holds renumbered correctly after normal move' );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'FixPriority() bulk tests' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $biblio  = $builder->build_sample_biblio;
+
+    # Helper: place holds with explicit priorities to avoid tie-breaking ambiguity
+    my @reserve_ids;
+    for my $i ( 1 .. 100 ) {
+        my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $rid    = AddReserve(
+            {
+                branchcode     => $library->branchcode,
+                borrowernumber => $patron->id,
+                biblionumber   => $biblio->id,
+                priority       => $i,
+            }
+        );
+        push @reserve_ids, $rid;
+    }
+
+    # Call FixPriority in such a way as to change every hold's rank
+    FixPriority( { reserve_id => $reserve_ids[99], rank => 1 } );
+
+    is( Koha::Holds->find( $reserve_ids[99] )->priority, 1,   'Priority changed successfully' );
+    is( Koha::Holds->find( $reserve_ids[0] )->priority,  2,   'Priority propagated successfully' );
+    is( Koha::Holds->find( $reserve_ids[98] )->priority, 100, 'Priority propagated successfully' );
 };
 
 subtest 'Hold limit rules count grouped holds as a single unit' => sub {

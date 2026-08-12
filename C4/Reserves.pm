@@ -1892,20 +1892,31 @@ sub FixPriority {
                 splice( @priority, $new_rank, 0, $moving_item );
             }
 
-            # now fix the priority on those that are left....
-            # only updating if changed
-            $query = "
-                UPDATE reserves
-                SET    priority = ?
-                WHERE  reserve_id = ? AND priority != ?
-            ";
+            return unless @priority;            # need at least one row for a valid query
+
+            # To avoid issuing one UPDATE per-row, we generate a query of this form:
+            #   UPDATE reserves SET priority = (
+            #     CASE reserve_id
+            #       WHEN 45 THEN 1
+            #       WHEN 12 THEN 2
+            #     END
+            #   ) WHERE reserve_id IN (
+            #     45,
+            #     12
+            #   )
+            $query = 'UPDATE reserves SET priority = (CASE reserve_id ';
+            $query .= join( ' ', ('WHEN ? THEN ?') x @priority );
+            $query .= ' END) WHERE reserve_id IN (';
+            $query .= join( ', ', ('?') x @priority );
+            $query .= ')';
+
+            my @parameters = (
+                ( map { $priority[$_]->{'reserve_id'}, $_ + 1 } 0 .. ( @priority - 1 ) ),
+                ( map { $_->{'reserve_id'} } @priority )
+            );
+
             $sth = $dbh->prepare($query);
-            for ( my $j = 0 ; $j < @priority ; $j++ ) {
-                $sth->execute(
-                    $j + 1,
-                    $priority[$j]->{'reserve_id'}, $j + 1
-                );
-            }
+            $sth->execute(@parameters);
         }
     );
 }
