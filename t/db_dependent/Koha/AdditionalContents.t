@@ -192,7 +192,7 @@ subtest '->author' => sub {
 
 subtest '->search_for_display' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
