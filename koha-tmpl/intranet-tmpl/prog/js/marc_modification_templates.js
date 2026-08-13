@@ -16,6 +16,20 @@ $(document).ready(function () {
 
     $("#add_action").submit(function () {
         var action = $("#action").val();
+
+        [
+            "#from_ind1",
+            "#from_ind2",
+            "#to_ind1",
+            "#to_ind2",
+            "#conditional_ind1",
+            "#conditional_ind2",
+        ].forEach(function (selector) {
+            if ($(selector).val() === "_") {
+                $(selector).val(" ");
+            }
+        });
+
         if (
             action == "move_field" ||
             action == "copy_field" ||
@@ -423,6 +437,14 @@ function clearFormElements(divId) {
     }
 }
 
+function displayIndicator(value) {
+    if (value === " ") {
+        return "_";
+    }
+
+    return value ?? "";
+}
+
 function editAction(mmta) {
     $("#add_action").show();
     document.getElementById("mmta_id").value = mmta["mmta_id"];
@@ -441,16 +463,18 @@ function editAction(mmta) {
         mmta["use_indicators"]
     );
 
-    document.getElementById("from_ind1").value = mmta["from_ind1"] ?? "";
-    document.getElementById("from_ind2").value = mmta["from_ind2"] ?? "";
-    document.getElementById("to_ind1").value = mmta["to_ind1"] ?? "";
-    document.getElementById("to_ind2").value = mmta["to_ind2"] ?? "";
-    document.getElementById("conditional_ind1").value =
-        mmta["conditional_ind1"] ?? "";
-    document.getElementById("conditional_ind2").value =
-        mmta["conditional_ind2"] ?? "";
-
-    toggleIndicatorFields();
+    document.getElementById("from_ind1").value = displayIndicator(
+        mmta["from_ind1"]
+    );
+    document.getElementById("from_ind2").value = displayIndicator(
+        mmta["from_ind2"]
+    );
+    document.getElementById("to_ind1").value = displayIndicator(
+        mmta["to_ind1"]
+    );
+    document.getElementById("to_ind2").value = displayIndicator(
+        mmta["to_ind2"]
+    );
 
     if (
         mmta["regex_search"] == "" &&
@@ -472,6 +496,15 @@ function editAction(mmta) {
         mmta["conditional_field"];
     document.getElementById("conditional_subfield").value =
         mmta["conditional_subfield"];
+
+    document.getElementById("conditional_ind1").value = displayIndicator(
+        mmta["conditional_ind1"]
+    );
+    document.getElementById("conditional_ind2").value = displayIndicator(
+        mmta["conditional_ind2"]
+    );
+
+    toggleIndicatorFields();
 
     setSelectByValue("conditional_comparison", mmta["conditional_comparison"]);
     $("#conditional_comparison").change();

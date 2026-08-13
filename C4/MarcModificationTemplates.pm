@@ -760,7 +760,7 @@ sub ModifyRecordWithTemplate {
 
             # There was no condition
             else {
-                if ($use_indicators) {
+                if ( $use_indicators && $action ne 'add_field' ) {
                     $field_numbers = field_exists(
                         {
                             record   => $record,
@@ -771,12 +771,11 @@ sub ModifyRecordWithTemplate {
                         }
                     );
 
-                    if ( $field_number == 1 && @$field_numbers ) {
+                    next unless @$field_numbers;
+                    if ( $field_number == 1 ) {
                         $field_numbers = [ $field_numbers->[0] ];
                     }
                 } elsif ( $field_number == 1 ) {
-
-                    # We want to process the first field
                     $field_numbers = [1];
                 }
             }

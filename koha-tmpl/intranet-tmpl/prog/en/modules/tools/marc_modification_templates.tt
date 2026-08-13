@@ -193,8 +193,25 @@
                                         <span>field</span>
 
                                         [% ActionsLoo.from_field | html %][% IF ( ActionsLoo.from_subfield.length ) %]$[% ActionsLoo.from_subfield | html %][% END %]
-                                        [% IF ActionsLoo.use_indicators %]
-                                            <span> (ind1: [% ActionsLoo.from_ind1 | html %], ind2: [% ActionsLoo.from_ind2 | html %]) </span>
+                                        [% IF ActionsLoo.use_indicators && ActionsLoo.from_field >= 10 %]
+                                            <span>
+                                                (ind1:
+                                                [% IF ActionsLoo.from_ind1 == ' ' %]
+                                                    _
+                                                [% ELSIF ActionsLoo.from_ind1.length %]
+                                                    [% ActionsLoo.from_ind1 | html %]
+                                                [% ELSE %]
+                                                    unset
+                                                [% END %],
+                                                ind2:
+                                                [% IF ActionsLoo.from_ind2 == ' ' %]
+                                                    _
+                                                [% ELSIF ActionsLoo.from_ind2.length %]
+                                                    [% ActionsLoo.from_ind2 | html %]
+                                                [% ELSE %]
+                                                    unset
+                                                [% END %])
+                                            </span>
                                         [% END %]
 
                                         [% IF ( ActionsLoo.field_value ) %]
@@ -203,8 +220,25 @@
 
                                         [% IF ( ActionsLoo.to_field ) %]
                                             <span>to</span> [% ActionsLoo.to_field | html %][% IF ( ActionsLoo.to_subfield.length ) %]$[% ActionsLoo.to_subfield | html %][% END %]
-                                            [% IF ActionsLoo.use_indicators %]
-                                                <span> (ind1: [% ActionsLoo.to_ind1 | html %], ind2: [% ActionsLoo.to_ind2 | html %]) </span>
+                                            [% IF ActionsLoo.use_indicators && ActionsLoo.to_field >= 10 %]
+                                                <span>
+                                                    (ind1:
+                                                    [% IF ActionsLoo.to_ind1 == ' ' %]
+                                                        _
+                                                    [% ELSIF ActionsLoo.to_ind1.length %]
+                                                        [% ActionsLoo.to_ind1 | html %]
+                                                    [% ELSE %]
+                                                        unset
+                                                    [% END %],
+                                                    ind2:
+                                                    [% IF ActionsLoo.to_ind2 == ' ' %]
+                                                        _
+                                                    [% ELSIF ActionsLoo.to_ind2.length %]
+                                                        [% ActionsLoo.to_ind2 | html %]
+                                                    [% ELSE %]
+                                                        unset
+                                                    [% END %])
+                                                </span>
                                             [% END %]
 
                                             [% IF ( ActionsLoo.to_regex_search ) %]
@@ -217,8 +251,25 @@
                                             [% IF ( ActionsLoo.conditional_unless ) %]<span>unless</span>[% END %]
 
                                             [% ActionsLoo.conditional_field | html %][% IF ( ActionsLoo.conditional_subfield.length ) %]$[% ActionsLoo.conditional_subfield | html %][% END %]
-                                            [% IF ActionsLoo.use_indicators %]
-                                                <span> (ind1: [% ActionsLoo.conditional_ind1 | html %], ind2: [% ActionsLoo.conditional_ind2 | html %]) </span>
+                                            [% IF ActionsLoo.use_indicators && ActionsLoo.conditional_field >= 10 %]
+                                                <span>
+                                                    (ind1:
+                                                    [% IF ActionsLoo.conditional_ind1 == ' ' %]
+                                                        _
+                                                    [% ELSIF ActionsLoo.conditional_ind1.length %]
+                                                        [% ActionsLoo.conditional_ind1 | html %]
+                                                    [% ELSE %]
+                                                        unset
+                                                    [% END %],
+                                                    ind2:
+                                                    [% IF ActionsLoo.conditional_ind2 == ' ' %]
+                                                        _
+                                                    [% ELSIF ActionsLoo.conditional_ind2.length %]
+                                                        [% ActionsLoo.conditional_ind2 | html %]
+                                                    [% ELSE %]
+                                                        unset
+                                                    [% END %])
+                                                </span>
                                             [% END %]
 
                                             [% IF ( ActionsLoo.conditional_comparison_exists ) %]<span>exists</span>[% END %]
@@ -284,12 +335,6 @@
 
                         field(s) <input type="text" name="from_field" id="from_field" size="3" maxlength="3" /> <span id="character_position">starting from character position </span
                         ><input type="text" name="from_subfield" id="from_subfield" size="2" maxlength="2" title="let blank for the entire field" />
-
-                        <label for="use_indicators">
-                            <input type="checkbox" name="use_indicators" id="use_indicators" />
-                            Use indicators
-                        </label>
-
                         <span id="from_indicators_block" style="display:none;">
                             indicator 1
                             <input type="text" name="from_ind1" id="from_ind1" size="1" maxlength="1" />
@@ -366,6 +411,24 @@
                     <div class="action_line">
                         <label for="description">Description:</label>
                         <input type="text" name="description" id="description" size="60" />
+                    </div>
+
+                    <div class="action_line">
+                        <label for="use_indicators">
+                            <input type="checkbox" name="use_indicators" id="use_indicators" />
+                            Use indicators
+                        </label>
+
+                        <a
+                            href="#"
+                            class="help-tooltip"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            title="Leave an indicator empty to ignore that indicator when matching. Enter _ to match a blank MARC indicator."
+                            aria-label="Indicator input help"
+                        >
+                            <i class="fa fa-question-circle" aria-hidden="true"></i>
+                        </a>
                     </div>
 
                     <fieldset class="action">

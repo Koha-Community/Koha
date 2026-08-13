@@ -3,7 +3,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 151;
+use Test::More tests => 152;
 
 use Koha::Database;
 use Koha::SimpleMARC;
@@ -695,6 +695,91 @@ subtest 'Source indicator matching' => sub {
     is( scalar @fields,            1,      'Only one 650 remains' );
     is( $fields[0]->subfield('a'), 'Cats', 'Field with nonmatching indicator remains' );
     is( $fields[0]->indicator(2),  '0',    'Remaining field has the expected second indicator' );
+};
+
+subtest 'Source indicator no match does not apply action' => sub {
+    plan tests => 6;
+
+    $dbh->do(q|DELETE FROM marc_modification_templates|);
+
+    my $template_id = AddModificationTemplate("indicator source no match");
+
+    AddModificationTemplateAction(
+        $template_id,
+        'delete_field',
+        0,
+        1,
+        '650',
+        '',
+        undef,
+        '3',
+        '',
+        '',
+        '',
+        undef,
+        undef,
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        undef,
+        undef,
+        '',
+        '',
+        '',
+        'Delete 650 fields with indicator 2 equal to 3'
+    );
+
+    my $record = MARC::Record->new;
+    $record->append_fields(
+        MARC::Field->new(
+            650, ' ', '1',
+            a => 'Dogs',
+        ),
+        MARC::Field->new(
+            650, ' ', '2',
+            a => 'Cats',
+        ),
+    );
+
+    is(
+        ModifyRecordWithTemplate( $template_id, $record ),
+        undef,
+        'Template modification completed with no matching indicators'
+    );
+
+    my @fields = $record->field('650');
+
+    is( scalar @fields, 2, 'No 650 fields are deleted when no indicators match' );
+    is_deeply(
+        [ map { $_->subfield('a') } @fields ],
+        [ 'Dogs', 'Cats' ],
+        'Nonmatching 650 fields remain unchanged'
+    );
+
+    $record->append_fields(
+        MARC::Field->new(
+            650, ' ', '3',
+            a => 'Birds',
+        ),
+    );
+
+    is(
+        ModifyRecordWithTemplate( $template_id, $record ),
+        undef,
+        'Template modification completed when one indicator matches'
+    );
+
+    @fields = $record->field('650');
+
+    is( scalar @fields, 2, 'Only the matching 650 field is deleted' );
+    is_deeply(
+        [ map { $_->indicator(2) } @fields ],
+        [ '1', '2' ],
+        '650 fields with nonmatching indicators remain'
+    );
 };
 
 subtest 'Conditional indicator matching' => sub {
