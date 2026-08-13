@@ -28,6 +28,8 @@ use Koha::Devel::Files;
 my $dev_files = Koha::Devel::Files->new( { context => 'tidy' } );
 my @files     = $dev_files->ls_perl_files;
 
+@files = grep { $_ ne 'Koha/Script.pm' } @files;    # has an INIT block, which can't run when required at runtime here
+
 plan tests => scalar(@files) + 1;
 
 for my $file (@files) {

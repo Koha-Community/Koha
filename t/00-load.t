@@ -62,6 +62,7 @@ find(
             return unless $m =~ s/[.]pm$//;
             $m               =~ s{^.*/Koha/}{Koha/};
             $m               =~ s{/}{::}g;
+            return if $m eq 'Koha::Script';    # has an INIT block, which can't run when required at runtime here
             if ( is_testable($m) ) {
                 use_ok($m) || BAIL_OUT("***** PROBLEMS LOADING FILE '$m'");
             }
