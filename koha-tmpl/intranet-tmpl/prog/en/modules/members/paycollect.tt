@@ -446,7 +446,7 @@
     <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         $(document).ready(function() {
             [% IF payment_id && Koha.Preference('FinePaymentAutoPopup') %]
-                window.open('/cgi-bin/koha/members/printfeercpt.pl?action=print&accountlines_id=[% payment_id | html %]&change_given=[% change_given | html %]&borrowernumber=[% patron.borrowernumber | html %]', '_blank');
+                window.open('/cgi-bin/koha/members/printfeercpt.pl?action=print&accountlines_id=[% payment_id | html %]&change=[% change_given | html %]&borrowernumber=[% patron.borrowernumber | html %]', '_blank');
             [% END %]
         });
 

@@ -255,7 +255,7 @@
         }
         $(document).ready(function () {
             if (payment_id && Koha.prefs.FinePaymentAutoPopup) {
-                window.open(`/cgi-bin/koha/members/printfeercpt.pl?action=print&accountlines_id=${payment_id}&change_given=${change_given}&borrowernumber=${patron_id}`, "_blank");
+                window.open(`/cgi-bin/koha/members/printfeercpt.pl?action=print&accountlines_id=${payment_id}&change=${change_given}&borrowernumber=${patron_id}`, "_blank");
             }
 
             $("#pay-fines-form").preventDoubleFormSubmit();
