@@ -26,7 +26,7 @@ website for the Koha project is:</p>
 
 <p>Koha 24.11.18 is a bugfix/maintenance release with security patches.</p>
 
-<p>It includes 1 bugfixes (5 security).</p>
+<p>It includes 1 bugfix (7 security).</p>
 
 <p><strong>System requirements</strong></p>
 
@@ -34,7 +34,23 @@ website for the Koha project is:</p>
 
 <h2 id="bugfixes">Bugfixes</h2>
 
-<h3 id="about">About</h3>
+<h3 id="securitybugs">Security bugs</h3>
+
+<p><ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=30233">30233</a> Remote code execution in user-supplied regex</p>
+
+<blockquote>
+  <p>This change refactors the regular expression handling for Batch Item Modification, MARC Modification templates, and Callnumber splitting. It moves from Perl's traditional compile-time regular expression handling to a more dynamic (but restrictive) run-time regular expression handling more similar to Python's "sub" regex method. This functions to reduce vulnerabilities to code injection into Koha's Perl backend.</li>
+  <li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42746">42746</a> Stored SQL injection via unvalidated 'agefield' in automatic_item_modification_by_age (C4::Items::ToggleNewStatus)</li>
+  <li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42747">42747</a> Stored SQL injection via patroncard layout image_name (patroncards/edit-layout.pl -> create-pdf.pl)</li>
+  <li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42749">42749</a> SQL injection in acqui/parcels.pl via the orderby parameter (ORDER BY direction) reaching C4::Acquisition::GetInvoices</li>
+  <li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42847">42847</a> SIP authentication ignored after initial successful connection</li>
+  <li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=42866">42866</a> SQL Injection in Koha/AdditionalContents.pm search_for_display via the patron lang value (stored / second-order, executed on issue-slip print, unvalidated string context, no placeholder)</li>
+  <li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=43019">43019</a> OPAC pages limited to library are readable by unauthenticated users</li>
+  </ul></p>
+  
+  <h3 id="about">About</h3>
+</blockquote>
 
 <h4 id="otherbugsfixed">Other bugs fixed</h4>
 
