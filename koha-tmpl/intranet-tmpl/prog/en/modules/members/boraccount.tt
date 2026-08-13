@@ -599,7 +599,7 @@
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
             if (payment_id && Koha.prefs.FinePaymentAutoPopup) {
-                window.open(`/cgi-bin/koha/members/printfeercpt.pl?action=print&change_given=${change_given}&accountlines_id=${payment_id}`, "_blank");
+                window.open(`/cgi-bin/koha/members/printfeercpt.pl?action=print&change=${change_given}&accountlines_id=${payment_id}`, "_blank");
             }
 
             var txtActivefilter = _("Filter paid transactions");
