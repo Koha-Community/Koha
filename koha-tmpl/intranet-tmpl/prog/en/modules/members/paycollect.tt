@@ -218,10 +218,10 @@
                                 [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_values %]
                             [% END %]
 
-                            <div class="action">
-                                <input type="submit" name="submitbutton" class="btn btn-primary" value="Confirm" />
+                            <fieldset class="action">
+                                <input id="pay_individual-submit" type="submit" name="submitbutton" class="btn btn-primary" value="Confirm" />
                                 <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>
-                            </div>
+                            </fieldset>
                         </form>
                     [% END %]
                 [% ELSIF ( writeoff_individual ) %]
@@ -292,10 +292,10 @@
                             [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_values %]
                         [% END %]
 
-                        <div class="action">
-                            <input type="submit" class="btn btn-primary" value="Write off this charge" />
+                        <fieldset class="action">
+                            <input id="writeoff_individual_submit" type="submit" class="btn btn-primary" value="Confirm" />
                             <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>
-                        </div>
+                        </fieldset>
                     </form>
                 [% ELSE %]
                     [% IF Koha.Preference('UseCashRegisters') && ( registers.size == 0 ) && ( type != 'WRITEOFF' ) %]
@@ -396,7 +396,7 @@
                                 [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_values %]
                             [% END %]
 
-                            <div class="action">
+                            <fieldset class="action">
                                 [% IF type != 'WRITEOFF' %]
                                     <input type="hidden" name="op" value="cud-pay" />
                                     <input id="paysubmit" type="submit" name="submitbutton" class="btn btn-primary" value="Confirm" />
@@ -405,7 +405,7 @@
                                     <input id="writeoffsubmit" type="submit" name="submitbutton" class="btn btn-primary" value="Confirm" />
                                 [% END %]
                                 <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>
-                            </div>
+                            </fieldset>
                         </form>
                     [% END %]
                 [% END %]
