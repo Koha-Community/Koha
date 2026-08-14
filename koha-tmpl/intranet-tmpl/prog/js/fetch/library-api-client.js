@@ -18,6 +18,15 @@ export class LibraryAPIClient {
                 this.httpClient.get({
                     endpoint: `/${id}`,
                 }),
+            closed_dates: (library_id, params = {}, config) => {
+                const query = new URLSearchParams(params).toString();
+                return this.httpClient.get({
+                    endpoint:
+                        `/${library_id}/closed_dates` +
+                        (query ? "?" + query : ""),
+                    config,
+                });
+            },
         };
     }
 }

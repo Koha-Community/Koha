@@ -40,6 +40,16 @@ export class CircRuleAPIClient {
                 }),
         };
     }
+
+    get rules() {
+        return {
+            get: (params = {}, config) =>
+                this.httpClient.get({
+                    endpoint: "?" + new URLSearchParams(params).toString(),
+                    config,
+                }),
+        };
+    }
 }
 
 export default CircRuleAPIClient;

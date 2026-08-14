@@ -5,17 +5,39 @@ export class BookingAPIClient {
         });
     }
 
+    /**
+     * Return booking create and update operations.
+     *
+     * @returns {Object} Booking API operations.
+     */
     get bookings() {
         return {
-            create: booking =>
+            /**
+             * Create a booking.
+             *
+             * @param {Object} booking Booking representation.
+             * @param {Object} [config] Per-request HTTP configuration.
+             * @returns {Promise<Object>} Created booking.
+             */
+            create: (booking, config) =>
                 this.httpClient.post({
                     endpoint: "/bookings",
                     body: booking,
+                    config,
                 }),
-            update: (booking, id) =>
+            /**
+             * Replace a booking.
+             *
+             * @param {Object} booking Booking representation.
+             * @param {string|number} id Booking identifier.
+             * @param {Object} [config] Per-request HTTP configuration.
+             * @returns {Promise<Object>} Updated booking.
+             */
+            update: (booking, id, config) =>
                 this.httpClient.put({
                     endpoint: "/bookings/" + id,
                     body: booking,
+                    config,
                 }),
         };
     }

@@ -34,6 +34,7 @@ export const APIClient = {
     additional_fields: new AdditionalFieldsAPIClient(HttpClient),
     authorised_values: new AVAPIClient(HttpClient),
     cash: new CashAPIClient(HttpClient),
+    circulation_rules: new CircRuleAPIClient(HttpClient),
     item: new ItemAPIClient(HttpClient),
     sysprefs: new SysprefAPIClient(HttpClient),
     sip2: new SIP2APIClient(HttpClient),
