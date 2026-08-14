@@ -361,7 +361,7 @@ subtest 'login_core() authentication tests' => sub {
         return {
             config => {
                 accounts     => { $uid => { id => $uid,  institution    => 'CPL', password => 'goodpw' } },
-                institutions => { CPL  => { id => 'CPL', implementation => 'ILS', policy => {} } },
+                institutions => { CPL  => { id => 'CPL', implementation => 'ILS', policy   => {} } },
             },
         };
     };

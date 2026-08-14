@@ -933,7 +933,6 @@ sub login_core {
     # authenticated terminal. Only a successful api_auth below re-establishes the session.
     delete $server->{$_} foreach qw( account ils institution policy sip_username sip_password );
 
-
     if ( !exists( $server->{config}->{accounts}->{$uid} ) ) {
         siplog( "LOG_WARNING", "MsgType::login_core: Unknown login '$uid'" );
         $status = 0;
@@ -953,6 +952,7 @@ sub login_core {
             );
             $status = 0;
         } else {
+
             # Store the active account configuration now user has authenticated
             $server->{account}      = $server->{config}->{accounts}->{$uid};
             $server->{institution}  = $server->{config}->{institutions}->{$inst};
