@@ -35,7 +35,7 @@
             [% IF ! onlyinfo %]
                 <th class="nosort">Modify</th>
             [% END %]
-            <th></th>
+            <th class="dtr-control-col">[% t('Expand') | html %]</th>
         </tr>
     </thead>
     <tbody>
