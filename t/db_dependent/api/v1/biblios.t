@@ -850,7 +850,7 @@ subtest 'get_bookings() tests' => sub {
 
 subtest 'get_booking_availability() tests' => sub {
 
-    plan tests => 34;
+    plan tests => 40;
 
     $schema->storage->txn_begin;
 
@@ -949,6 +949,20 @@ subtest 'get_booking_availability() tests' => sub {
     $t->get_ok( "//$userid:$password\@$path?from_date=$from&to_date=$to&excluded_booking_id=" . $booking->booking_id )
         ->status_is(200)
         ->json_is( '/availability' => {} );
+
+    $item->set( { bookable => 0 } )->store;
+    $t->get_ok(
+              "//$userid:$password\@$path?from_date=$from&to_date=$to&item_id="
+            . $item->itemnumber
+            . "&excluded_booking_id="
+            . $booking->booking_id,
+        "Assigned item that became unbookable remains available while editing"
+    )->status_is(200)->json_is( '/item_ids' => [ 0 + $item->itemnumber ] );
+    $t->get_ok(
+        "//$userid:$password\@$path?from_date=$from&to_date=$to&item_id=" . $item->itemnumber,
+        "Unbookable item is rejected outside its booking edit"
+    )->status_is(400)->json_is( '/path' => '/query/item_id' );
+    $item->set( { bookable => 1 } )->store;
 
     subtest 'item_type_id validation and inference' => sub {
         plan tests => 9;

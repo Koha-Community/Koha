@@ -2362,7 +2362,7 @@ sub host_record {
 }
 
 subtest 'check_booking tests' => sub {
-    plan tests => 9;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
@@ -2597,6 +2597,68 @@ subtest 'check_booking tests' => sub {
     );
 
     is( $check_booking, 1, "Koha::Biblio->check_booking returns true when we can book on an item" );
+
+    subtest 'an edit retains its assigned item after it becomes unbookable' => sub {
+        plan tests => 2;
+
+        my $edit_biblio = $builder->build_sample_biblio();
+        my $assigned_item =
+            $builder->build_sample_item( { biblionumber => $edit_biblio->biblionumber, bookable => 1 } );
+        my $unrelated_item =
+            $builder->build_sample_item( { biblionumber => $edit_biblio->biblionumber, bookable => 0 } );
+        my $edit_start = dt_from_string()->add( days => 10 );
+        my $edit_end   = $edit_start->clone->add( days => 7 );
+        my $booking    = $builder->build_object(
+            {
+                class => 'Koha::Bookings',
+                value => {
+                    biblio_id  => $edit_biblio->biblionumber,
+                    item_id    => $assigned_item->itemnumber,
+                    start_date => $edit_start,
+                    end_date   => $edit_end,
+                    status     => 'new',
+                }
+            }
+        );
+        $builder->build_object(
+            {
+                class => 'Koha::Bookings',
+                value => {
+                    biblio_id  => $edit_biblio->biblionumber,
+                    item_id    => $unrelated_item->itemnumber,
+                    start_date => $edit_start,
+                    end_date   => $edit_end,
+                    status     => 'new',
+                }
+            }
+        );
+        $assigned_item->set( { bookable => 0 } )->store;
+
+        is(
+            $edit_biblio->check_booking(
+                {
+                    start_date => $edit_start->clone->add( days => 1 ),
+                    end_date   => $edit_end->clone->add( days => 1 ),
+                    booking_id => $booking->booking_id,
+                    item_id    => $assigned_item->itemnumber,
+                }
+            ),
+            1,
+            'The assigned item remains in the availability pool while editing'
+        );
+        is(
+            $edit_biblio->check_booking(
+                {
+                    start_date => $edit_start->clone->add( days => 1 ),
+                    end_date   => $edit_end->clone->add( days => 1 ),
+                    booking_id => $booking->booking_id,
+                    item_id    => $unrelated_item->itemnumber,
+                }
+            ),
+            0,
+            'An unrelated unbookable item does not enter the availability pool'
+        );
+    };
 
     subtest 'checkouts on non-bookable items do not cause false clashes' => sub {
         plan tests => 2;

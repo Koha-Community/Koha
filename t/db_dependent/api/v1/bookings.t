@@ -292,7 +292,7 @@ subtest 'add() tests' => sub {
 
 subtest 'update() tests' => sub {
 
-    plan tests => 15;
+    plan tests => 21;
 
     $schema->storage->txn_begin;
 
@@ -363,6 +363,66 @@ subtest 'update() tests' => sub {
     $t->put_ok( "//$userid:$password@/api/v1/bookings/$booking_id" => json => $booking_with_updated_field )
         ->status_is(200)
         ->json_is( '/biblio_id' => $biblio->id );
+
+    # An edit retains its assigned item if the effective item type becomes
+    # unbookable after the booking was created. An overlapping booking on a
+    # different item of that now-unbookable type must not consume its capacity.
+    my $itemtype     = $item->itemtype;
+    my $sibling_item = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->id,
+            bookable     => undef,
+            itype        => $item->effective_itemtype,
+        }
+    );
+    my $sibling_booking = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                biblio_id         => $biblio->id,
+                item_id           => $sibling_item->itemnumber,
+                pickup_library_id => $pickup_library->branchcode,
+                patron_id         => $patron->id,
+                start_date        => dt_from_string->add( days => 2 ),
+                end_date          => dt_from_string->add( days => 7 ),
+                status            => 'new',
+            }
+        }
+    );
+    $item->set( { bookable => undef } )->store;
+    $itemtype->set( { bookable => 0 } )->store;
+    $booking_with_updated_field->{end_date} =
+        output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 7 ) } );
+
+    $t->put_ok( "//$userid:$password@/api/v1/bookings/$booking_id" => json => $booking_with_updated_field )
+        ->status_is(200)
+        ->json_is( '/item_id' => $item->itemnumber );
+
+    $itemtype->set( { bookable => 1 } )->store;
+    $item->set( { bookable => 1 } )->store;
+    $sibling_booking->delete;
+
+    my $conflicting_booking = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                biblio_id  => $biblio->id,
+                item_id    => $item->itemnumber,
+                start_date => dt_from_string->add( days => 10 ),
+                end_date   => dt_from_string->add( days => 14 ),
+                status     => 'new',
+            }
+        }
+    );
+    $booking_with_updated_field->{start_date} =
+        output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 10 ) } );
+    $booking_with_updated_field->{end_date} =
+        output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 14 ) } );
+
+    $t->put_ok( "//$userid:$password@/api/v1/bookings/$booking_id" => json => $booking_with_updated_field )
+        ->status_is(400)
+        ->json_is( '/error' => 'Booking would conflict' );
+    $conflicting_booking->delete;
 
     # Authorized attempt to write invalid data
     my $booking_with_invalid_field = {

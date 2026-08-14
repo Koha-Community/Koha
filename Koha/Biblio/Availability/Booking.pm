@@ -129,9 +129,10 @@ C<bookings_trail_period> circulation rules; the same context applies to
 every existing booking, matching the booking calendar. Holiday reasons
 are only emitted when a pickup library is passed.
 
-I<item_id> restricts the calculation to a single bookable item.
-I<booking_id> excludes a booking from the calculation; this is helpful
-when you are updating an existing booking.
+I<item_id> restricts the calculation to a single bookable item. When
+I<booking_id> identifies the booking being edited, its assigned item remains
+eligible for the calculation even if it has since become unbookable.
+I<booking_id> also excludes that booking from the calculation.
 
 =cut
 
@@ -157,8 +158,15 @@ sub check {
     }, $class;
 
     my $bookable_items = $self->{biblio}->bookable_items;
-    $bookable_items = $bookable_items->search( { itemnumber => $self->{item_id} } )
-        if $self->{item_id};
+    if ( $self->{item_id} ) {
+        $bookable_items = $bookable_items->search( { itemnumber => $self->{item_id} } );
+
+        if ( !$bookable_items->count && $self->{booking_id} ) {
+            my $booking = $self->{biblio}->bookings->find( $self->{booking_id} );
+            $bookable_items = $self->{biblio}->items->search( { itemnumber => $self->{item_id} } )
+                if $booking && $booking->item_id && $booking->item_id == $self->{item_id};
+        }
+    }
     $self->{bookable_item_ids} = [ $bookable_items->get_column('itemnumber') ];
 
     my $rules = Koha::CirculationRules->get_effective_rules(

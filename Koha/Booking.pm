@@ -208,6 +208,7 @@ sub store {
                         booking_id => $self->in_storage ? $self->booking_id : undef,
                         branchcode => $self->pickup_library_id,
                         itemtype   => $self->item_id ? $self->item->effective_itemtype : undef,
+                        item_id    => $self->item_id,
                     }
                     );
             }

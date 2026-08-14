@@ -305,6 +305,17 @@ sub get_booking_availability {
         my $item;
         if ( defined( my $item_id = $c->param('item_id') ) ) {
             $item = $biblio->bookable_items->find($item_id);
+
+            # An edit must retain its assigned item even if that item has
+            # since become unbookable. Do not extend this exception to other
+            # items or bookings.
+            unless ($item) {
+                my $booking_id = $c->param('excluded_booking_id');
+                my $booking    = $booking_id ? $biblio->bookings->find($booking_id) : undef;
+                $item = $biblio->items->find($item_id)
+                    if $booking && $booking->item_id && $booking->item_id == $item_id;
+            }
+
             return $c->render_invalid_parameter_value(
                 {
                     path   => '/query/item_id',

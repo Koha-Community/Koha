@@ -67,7 +67,7 @@ subtest 'check() parameter tests' => sub {
 };
 
 subtest 'check() availability tests' => sub {
-    plan tests => 24;
+    plan tests => 26;
 
     $schema->storage->txn_begin;
 
@@ -228,6 +228,23 @@ subtest 'check() availability tests' => sub {
     );
     my $item2_marked = grep { exists $_->{ $item2->itemnumber } } values %{ $single_item->{availability} };
     is( $item2_marked, 0, "Other items are not marked when item_id is passed" );
+
+    $item1->set( { bookable => 0 } )->store;
+    my $edited_unbookable_item = $calc->(
+        %context,
+        item_id    => $item1->itemnumber,
+        booking_id => $booking->booking_id
+    );
+    is_deeply(
+        $edited_unbookable_item->{item_ids}, [ 0 + $item1->itemnumber ],
+        "An edited booking retains its assigned item after it becomes unbookable"
+    );
+    my $new_unbookable_item = $calc->( %context, item_id => $item1->itemnumber );
+    is_deeply(
+        $new_unbookable_item->{item_ids}, [],
+        "An unbookable item remains unavailable outside its booking edit"
+    );
+    $item1->set( { bookable => 1 } )->store;
 
     my $holiday = $day->(20);
     C4::Calendar->new( branchcode => $branch->branchcode )->insert_single_holiday(
