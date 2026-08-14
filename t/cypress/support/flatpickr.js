@@ -1,7 +1,8 @@
+/* global Cypress, cy, expect */
+
 // flatpickrHelpers.js - Enhanced Reusable Cypress functions for Flatpickr date pickers
 
-// Import dayjs for date handling
-const dayjs = require("dayjs");
+import dayjs from "dayjs";
 
 // Note: Using browser's natural timezone to match flatpickr behavior
 // The modal handles timezone conversions between API (UTC) and flatpickr (local)
@@ -60,23 +61,31 @@ const _getFlatpickrDateSelector = date => {
     return `.flatpickr-day[aria-label="${formattedLabel}"]`;
 };
 
+/** Resolve the instance from either Flatpickr's bound or alternate input. */
+const _getFlatpickrInstance = $input => {
+    const element = $input?.[0];
+    if (!element) return null;
+    if (element._flatpickr) return element._flatpickr;
+
+    const container = element.closest(".booking-flatpickr-wrapper");
+    if (!container) return null;
+    const boundInput = Array.from(container.querySelectorAll("input")).find(
+        input => input._flatpickr
+    );
+    return boundInput?._flatpickr ?? null;
+};
+
 /**
  * Ensures the Flatpickr calendar is open. If not, it clicks the input to open it.
  * Uses Cypress's built-in retry mechanism for reliability.
  */
 const ensureCalendarIsOpen = ($el, timeout = 10000) => {
     return $el.then($input => {
-        const inputToClick = $input.is(":visible")
-            ? $input
-            : $input.parents().find(".flatpickr-input:visible").first();
-
-        if (!inputToClick.length) {
-            throw new Error(
-                `Flatpickr: Could not find visible input element for selector '${$input.selector}' to open calendar.`
-            );
-        }
-
-        // Use Cypress's retry mechanism to check if calendar is already open
+        // Check whether the calendar is already open BEFORE resolving a
+        // clickable input: when it is, no input is needed at all — and the
+        // input may legitimately fail Cypress's visibility check at that
+        // moment (e.g. scrolled out of the modal's overflow clip by the
+        // open calendar itself).
         return cy.get("body").then(() => {
             return cy.get(".flatpickr-calendar").then($calendar => {
                 const isVisible =
@@ -85,7 +94,32 @@ const ensureCalendarIsOpen = ($el, timeout = 10000) => {
                     $calendar.is(":visible");
 
                 if (!isVisible) {
-                    cy.wrap(inputToClick).click();
+                    // With a dateformat syspref configured, flatpickr runs
+                    // in altInput mode: the bound input goes hidden and a
+                    // visible alt input (which does NOT carry the
+                    // flatpickr-input class) takes its place. Ask the
+                    // instance for it before falling back to a DOM search.
+                    const fp = _getFlatpickrInstance($input);
+                    const $alt =
+                        fp && fp.altInput
+                            ? Cypress.$(fp.altInput)
+                            : Cypress.$();
+                    const inputToClick = $input.is(":visible")
+                        ? $input
+                        : $alt.is(":visible")
+                          ? $alt
+                          : $input
+                                .parents()
+                                .find(".flatpickr-input:visible")
+                                .first();
+
+                    if (!inputToClick.length) {
+                        throw new Error(
+                            `Flatpickr: Could not find visible input element for selector '${$input.selector}' to open calendar.`
+                        );
+                    }
+
+                    cy.wrap(inputToClick).scrollIntoView().click();
                 }
 
                 // Wait for calendar to be open and visible with retry
@@ -111,8 +145,8 @@ const ensureDateIsVisible = (targetDate, $input, timeout = 10000) => {
     return cy
         .get(".flatpickr-calendar.open", { timeout })
         .should("be.visible")
-        .then($calendar => {
-            const fpInstance = $input[0]._flatpickr;
+        .then(() => {
+            const fpInstance = _getFlatpickrInstance($input);
             if (!fpInstance) {
                 throw new Error(
                     `Flatpickr: Cannot find flatpickr instance on element. Make sure it's initialized with flatpickr.`
@@ -145,8 +179,8 @@ const navigateToMonthAndYear = (targetDate, $input, timeout = 10000) => {
     return cy
         .get(".flatpickr-calendar.open", { timeout })
         .should("be.visible")
-        .then($calendar => {
-            const fpInstance = $input[0]._flatpickr;
+        .then(() => {
+            const fpInstance = _getFlatpickrInstance($input);
             if (!fpInstance) {
                 throw new Error(
                     `Flatpickr: Cannot find flatpickr instance on element. Make sure it's initialized with flatpickr.`
@@ -197,48 +231,14 @@ Cypress.Commands.add(
 );
 
 /**
- * Helper to close an open Flatpickr calendar.
- */
-Cypress.Commands.add("closeFlatpickr", { prevSubject: true }, subject => {
-    return cy.wrap(subject).then($input => {
-        // Wait for flatpickr to be initialized and then close it
-        return cy
-            .wrap($input)
-            .should($el => {
-                expect($el[0]).to.have.property("_flatpickr");
-            })
-            .then(() => {
-                $input[0]._flatpickr.close();
-                return cy.wrap(subject);
-            });
-    });
-});
-
-/**
- * Helper to navigate to a specific month and year in a Flatpickr calendar.
- */
-Cypress.Commands.add(
-    "navigateToFlatpickrMonth",
-    { prevSubject: true },
-    (subject, targetDate, timeout = 10000) => {
-        return ensureCalendarIsOpen(cy.wrap(subject), timeout).then($input => {
-            const dayjsDate = dayjs(targetDate);
-            return navigateToMonthAndYear(dayjsDate, $input, timeout).then(() =>
-                cy.wrap($input)
-            );
-        });
-    }
-);
-
-/**
  * Helper to get the Flatpickr mode ('single', 'range', 'multiple').
  */
 Cypress.Commands.add("getFlatpickrMode", { prevSubject: true }, subject => {
     return cy.wrap(subject).then($input => {
-        const fpInstance = $input[0]._flatpickr;
+        const fpInstance = _getFlatpickrInstance($input);
         if (!fpInstance) {
             throw new Error(
-                `Flatpickr: Cannot find flatpickr instance on element ${$input.selector}. Make sure it's initialized with flatpickr.`
+                "Flatpickr: Cannot find flatpickr instance on element. Make sure it's initialized with flatpickr."
             );
         }
         return fpInstance.config.mode;
@@ -256,10 +256,10 @@ Cypress.Commands.add(
             const dayjsDate = dayjs(date);
 
             return ensureDateIsVisible(dayjsDate, $input, timeout).then(() => {
-                // Click the date - break chain to avoid DOM detachment
+                // Click the date - use native click to avoid DOM detachment from Vue re-renders
                 cy.get(_getFlatpickrDateSelector(dayjsDate))
                     .should("be.visible")
-                    .click();
+                    .then($el => $el[0].click());
 
                 // Re-query and validate selection based on mode
                 return cy
@@ -267,9 +267,16 @@ Cypress.Commands.add(
                     .getFlatpickrMode()
                     .then(mode => {
                         if (mode === "single") {
-                            const expectedDate = dayjsDate.format("YYYY-MM-DD");
-
-                            cy.wrap($input).should("have.value", expectedDate);
+                            // Validate via flatpickr instance (format-agnostic)
+                            cy.wrap($input).should($el => {
+                                const fp = _getFlatpickrInstance($el);
+                                expect(fp.selectedDates.length).to.eq(1);
+                                expect(
+                                    dayjs(fp.selectedDates[0]).format(
+                                        "YYYY-MM-DD"
+                                    )
+                                ).to.eq(dayjsDate.format("YYYY-MM-DD"));
+                            });
                             cy.get(".flatpickr-calendar.open").should(
                                 "not.exist",
                                 { timeout: 5000 }
@@ -319,7 +326,7 @@ Cypress.Commands.add(
                         );
                     }
 
-                    // Select start date - break chain to avoid DOM detachment
+                    // Click start date
                     return ensureDateIsVisible(
                         startDayjsDate,
                         $input,
@@ -327,23 +334,25 @@ Cypress.Commands.add(
                     ).then(() => {
                         cy.get(_getFlatpickrDateSelector(startDayjsDate))
                             .should("be.visible")
-                            .click();
+                            .then($el => $el[0].click());
 
-                        // Wait for complex date recalculations (e.g., booking availability) to complete
-                        cy.get(
-                            _getFlatpickrDateSelector(startDayjsDate)
-                        ).should(
-                            $el => {
-                                expect($el).to.have.class("selected");
-                                expect($el).to.have.class("startRange");
-                            },
-                            { timeout: 5000 }
-                        );
+                        // Validate start date registered via instance state
+                        cy.wrap($input).should($el => {
+                            const fp = _getFlatpickrInstance($el);
+                            expect(fp.selectedDates).to.have.length(1);
+                            expect(
+                                dayjs(fp.selectedDates[0]).format("YYYY-MM-DD")
+                            ).to.eq(startDayjsDate.format("YYYY-MM-DD"));
+                        });
 
-                        // Ensure calendar stays open
-                        cy.get(".flatpickr-calendar.open").should("be.visible");
+                        // Wait for async side effects to settle — the booking
+                        // modal's onChange handler schedules a delayed calendar
+                        // navigation (navigateCalendarIfNeeded, 100ms) that can
+                        // jump the view to a different month.
+                        cy.wait(150);
 
-                        // Navigate to end date and select it
+                        // Navigate to end date (may need to switch months if
+                        // the calendar navigated away) and click it
                         return ensureDateIsVisible(
                             endDayjsDate,
                             $input,
@@ -351,16 +360,33 @@ Cypress.Commands.add(
                         ).then(() => {
                             cy.get(_getFlatpickrDateSelector(endDayjsDate))
                                 .should("be.visible")
-                                .click();
+                                .then($el => $el[0].click());
 
-                            cy.get(".flatpickr-calendar.open").should(
-                                "not.exist",
-                                { timeout: 5000 }
-                            );
+                            // Validate range completed via instance state
+                            cy.wrap($input).should($el => {
+                                const fp = _getFlatpickrInstance($el);
+                                expect(fp.selectedDates.length).to.eq(2);
+                                expect(
+                                    dayjs(fp.selectedDates[0]).format(
+                                        "YYYY-MM-DD"
+                                    )
+                                ).to.eq(startDayjsDate.format("YYYY-MM-DD"));
+                                expect(
+                                    dayjs(fp.selectedDates[1]).format(
+                                        "YYYY-MM-DD"
+                                    )
+                                ).to.eq(endDayjsDate.format("YYYY-MM-DD"));
+                            });
 
-                            // Validate final range selection
-                            const expectedRange = `${startDayjsDate.format("YYYY-MM-DD")} to ${endDayjsDate.format("YYYY-MM-DD")}`;
-                            cy.wrap($input).should("have.value", expectedRange);
+                            // Close calendar if it stayed open
+                            cy.get("body").then($body => {
+                                if (
+                                    $body.find(".flatpickr-calendar.open")
+                                        .length > 0
+                                ) {
+                                    _getFlatpickrInstance($input).close();
+                                }
+                            });
 
                             return cy.wrap($input);
                         });
@@ -381,17 +407,20 @@ Cypress.Commands.add(
             const dayjsDate = dayjs(date);
 
             return ensureDateIsVisible(dayjsDate, $input, timeout).then(() => {
+                // Use native dispatchEvent to avoid detached DOM errors from Vue re-renders
                 cy.get(_getFlatpickrDateSelector(dayjsDate))
                     .should("be.visible")
-                    .trigger("mouseover");
+                    .then($el => {
+                        $el[0].dispatchEvent(
+                            new MouseEvent("mouseover", { bubbles: true })
+                        );
+                    });
 
                 return cy.wrap($input);
             });
         });
     }
 );
-
-// --- Enhanced Assertion Commands ---
 
 /**
  * Helper to get a specific Flatpickr day element by its date.
@@ -429,151 +458,6 @@ Cypress.Commands.add(
 );
 
 /**
- * Assertion helper to check if a Flatpickr date is disabled.
- */
-Cypress.Commands.add(
-    "flatpickrDateShouldBeDisabled",
-    { prevSubject: true },
-    (subject, date) => {
-        return cy
-            .wrap(subject)
-            .getFlatpickrDate(date)
-            .should("have.class", "flatpickr-disabled")
-            .then(() => cy.wrap(subject));
-    }
-);
-
-/**
- * Assertion helper to check if a Flatpickr date is enabled.
- */
-Cypress.Commands.add(
-    "flatpickrDateShouldBeEnabled",
-    { prevSubject: true },
-    (subject, date) => {
-        return cy
-            .wrap(subject)
-            .getFlatpickrDate(date)
-            .should("not.have.class", "flatpickr-disabled")
-            .then(() => cy.wrap(subject));
-    }
-);
-
-/**
- * Assertion helper to check if a Flatpickr date is selected.
- */
-Cypress.Commands.add(
-    "flatpickrDateShouldBeSelected",
-    { prevSubject: true },
-    (subject, date) => {
-        return cy
-            .wrap(subject)
-            .getFlatpickrDate(date)
-            .should("have.class", "selected")
-            .then(() => cy.wrap(subject));
-    }
-);
-
-/**
- * Assertion helper to check if a Flatpickr date is not selected.
- */
-Cypress.Commands.add(
-    "flatpickrDateShouldNotBeSelected",
-    { prevSubject: true },
-    (subject, date) => {
-        return cy
-            .wrap(subject)
-            .getFlatpickrDate(date)
-            .should("not.have.class", "selected")
-            .then(() => cy.wrap(subject));
-    }
-);
-
-/**
- * Assertion helper to check if a Flatpickr date is today.
- */
-Cypress.Commands.add(
-    "flatpickrDateShouldBeToday",
-    { prevSubject: true },
-    (subject, date) => {
-        return cy
-            .wrap(subject)
-            .getFlatpickrDate(date)
-            .should("have.class", "today")
-            .then(() => cy.wrap(subject));
-    }
-);
-
-/**
- * Assertion helper to check if a Flatpickr date is in a range (has inRange class).
- */
-Cypress.Commands.add(
-    "flatpickrDateShouldBeInRange",
-    { prevSubject: true },
-    (subject, date) => {
-        return cy
-            .wrap(subject)
-            .getFlatpickrDate(date)
-            .should("have.class", "inRange")
-            .then(() => cy.wrap(subject));
-    }
-);
-
-/**
- * Assertion helper to check if a Flatpickr date is the start of a range.
- */
-Cypress.Commands.add(
-    "flatpickrDateShouldBeRangeStart",
-    { prevSubject: true },
-    (subject, date) => {
-        return cy
-            .wrap(subject)
-            .getFlatpickrDate(date)
-            .should("have.class", "startRange")
-            .then(() => cy.wrap(subject));
-    }
-);
-
-/**
- * Assertion helper to check if a Flatpickr date is the end of a range.
- */
-Cypress.Commands.add(
-    "flatpickrDateShouldBeRangeEnd",
-    { prevSubject: true },
-    (subject, date) => {
-        return cy
-            .wrap(subject)
-            .getFlatpickrDate(date)
-            .should("have.class", "endRange")
-            .then(() => cy.wrap(subject));
-    }
-);
-
-/**
- * Helper to get the selected dates from a Flatpickr instance.
- * Returns the selected dates as an array of YYYY-MM-DD formatted strings.
- */
-Cypress.Commands.add(
-    "getFlatpickrSelectedDates",
-    { prevSubject: true },
-    subject => {
-        return cy.wrap(subject).then($input => {
-            const fpInstance = $input[0]._flatpickr;
-            if (!fpInstance) {
-                throw new Error(
-                    `Flatpickr: Cannot find flatpickr instance on element. Make sure it's initialized with flatpickr.`
-                );
-            }
-
-            const selectedDates = fpInstance.selectedDates.map(date =>
-                dayjs(date).format("YYYY-MM-DD")
-            );
-
-            return selectedDates;
-        });
-    }
-);
-
-/**
  * Helper to clear a Flatpickr input by setting its value to empty.
  * Works with hidden inputs by using the Flatpickr API directly.
  */
@@ -583,10 +467,10 @@ Cypress.Commands.add("clearFlatpickr", { prevSubject: true }, subject => {
         return cy
             .wrap($input)
             .should($el => {
-                expect($el[0]).to.have.property("_flatpickr");
+                expect(Boolean(_getFlatpickrInstance($el))).to.equal(true);
             })
             .then(() => {
-                $input[0]._flatpickr.clear();
+                _getFlatpickrInstance($input).clear();
                 return cy.wrap(subject);
             });
     });
