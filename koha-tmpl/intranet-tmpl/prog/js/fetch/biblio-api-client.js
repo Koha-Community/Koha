@@ -5,6 +5,15 @@ export class BiblioAPIClient {
         });
     }
 
+    get biblios() {
+        return {
+            delete: id =>
+                this.httpClient.delete({
+                    endpoint: "biblios/" + id,
+                }),
+        };
+    }
+
     get items() {
         return {
             get: id =>
