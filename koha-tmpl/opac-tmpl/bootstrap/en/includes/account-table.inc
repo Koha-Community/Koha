@@ -14,7 +14,7 @@
                     <th>Description</th>
                     <th>Amount</th>
                     <th>Amount outstanding</th>
-                    <th></th>
+                    <th class="dtr-control-col">[% t('Expand') | html %]</th>
                 </tr>
             </thead>
 
@@ -113,7 +113,7 @@
                     <th>Description</th>
                     <th>Fine amount</th>
                     <th>Amount outstanding</th>
-                    <th></th>
+                    <th class="dtr-control-col">[% t('Expand') | html %]</th>
                 </tr>
             </thead>
 
