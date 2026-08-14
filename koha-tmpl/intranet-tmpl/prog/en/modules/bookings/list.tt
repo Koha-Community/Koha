@@ -62,7 +62,6 @@
     <script nonce="[% Koha.CSPNonce | $raw %]">
         dayjs.extend(window.dayjs_plugin_isSameOrBefore);
     </script>
-    [% Asset.js("js/modals/place_booking.js") | $raw %]
     [% Asset.js("js/cancel_booking_modal.js") | $raw %]
     [% Asset.js("js/extend_booking_modal.js") | $raw %]
     [% Asset.js("js/combobox.js") | $raw %]
@@ -70,7 +69,6 @@
     [% Asset.js("js/bookings/common.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var cancel_success = 0;
-        var update_success = 0;
         var bookings_table;
         var timeline;
         let biblionumber = "[% biblionumber | uri %]";
@@ -173,39 +171,23 @@
 
                         // action events
                         onMove: function (data, callback) {
-                            let startDate = dayjs(data.start);
+                            const startDate = dayjs(data.start).toISOString();
+                            const endDate = dayjs(data.end).endOf("day").toISOString();
 
-                            // set end datetime hours and minutes to the end of the day
-                            let endDate = dayjs(data.end).endOf("day");
+                            if (typeof window.openBookingModal === "function") {
+                                window.openBookingModal({
+                                    booking: data.id,
+                                    biblionumber: biblionumber,
+                                    itemnumber: data.group,
+                                    patron: data.patron,
+                                    pickup_library: data.pickup_library,
+                                    start_date: startDate,
+                                    end_date: endDate,
+                                    item_type_id: data.item_type_id,
+                                });
+                            }
 
-                            $("#placeBookingModal").modal(
-                                "show",
-                                $(
-                                    '<button data-booking="' +
-                                        data.id +
-                                        '"  data-biblionumber="' +
-                                        biblionumber +
-                                        '"  data-itemnumber="' +
-                                        data.group +
-                                        '" data-patron="' +
-                                        data.patron +
-                                        '" data-pickup_library="' +
-                                        data.pickup_library +
-                                        '" data-start_date="' +
-                                        startDate.toISOString() +
-                                        '" data-end_date="' +
-                                        endDate.toISOString() +
-                                        '">'
-                                )
-                            );
-                            $("#placeBookingModal").on("hide.bs.modal", function (e) {
-                                if (update_success) {
-                                    update_success = 0;
-                                    callback(data);
-                                } else {
-                                    callback(null);
-                                }
-                            });
+                            callback(null);
                         },
                         onRemove: function (item, callback) {
                             const button = document.createElement("button");
@@ -224,7 +206,7 @@
                     timeline = new vis.Timeline(container, bookingsSet, itemsSet, options);
                 },
                 function (jqXHR, textStatus, errorThrown) {
-                    console.log("Fetch failed");
+                    console.warn("Timeline data fetch failed:", textStatus, errorThrown);
                 }
             );
 

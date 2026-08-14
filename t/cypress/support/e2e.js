@@ -27,13 +27,12 @@
 // Import Select2 helpers
 import "./select2";
 import "./flatpickr.js";
-
-// Error on JS warnings
+import "./vue-select";
 import "./console-hooks";
 
 // Handle common application errors gracefully in booking modal tests
 // This prevents test failures from known JS errors that don't affect functionality
-Cypress.on("uncaught:exception", (err, runnable) => {
+Cypress.on("uncaught:exception", err => {
     // Return false to prevent the error from failing the test
     // These errors can occur when the booking modal JS has timing issues
     if (
@@ -42,10 +41,7 @@ Cypress.on("uncaught:exception", (err, runnable) => {
     ) {
         return false;
     }
-    return true;
-});
 
-Cypress.on("uncaught:exception", err => {
     // Ignoring 'ResizeObserver loop limit exceeded' message from DataTables
     if (err.message.match(/ResizeObserver loop limit exceeded/)) {
         return false;

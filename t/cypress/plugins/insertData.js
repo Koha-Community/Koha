@@ -49,6 +49,7 @@ const { apiGet, apiPost } = require("./api-client.js");
 const insertSampleBiblio = async ({
     item_count,
     options,
+    item_values,
     baseUrl,
     authHeader,
 }) => {
@@ -158,6 +159,12 @@ const insertSampleBiblio = async ({
             in_bundle,
             cover_image_ids,
             localuse,
+            // Bug 17387 added deleted_on to the item read schema; not allowed
+            // on POST. TODO: separate bug should teach
+            // generateDataFromSchema in mockData.js to honor readOnly so this
+            // strip list stops growing every time a new server-set field is
+            // added to any read schema.
+            deleted_on,
             ...rest
         }) => rest
     );
@@ -191,6 +198,15 @@ const insertSampleBiblio = async ({
         } else {
             item.home_library_id = commonLibrary.library_id;
             item.holding_library_id = commonLibrary.library_id;
+        }
+
+        // Caller-provided attribute overrides (API field names). An array
+        // applies per item by index, a plain object to every item.
+        const overrides = Array.isArray(item_values)
+            ? item_values[items.indexOf(item)]
+            : item_values;
+        if (overrides) {
+            Object.assign(item, overrides);
         }
 
         await apiPost({
@@ -273,6 +289,93 @@ const insertSampleHold = async ({
         authHeader,
     });
     return { hold, patron, patron_category };
+};
+
+/**
+ * Creates a booking via the REST API, generating any missing associations.
+ *
+ * @async
+ * @function insertSampleBooking
+ * @param {Object} params - Configuration parameters
+ * @param {Object} [params.biblio] - Biblio to book (optional if item provided)
+ * @param {Object} [params.item] - Item to book; omit item_id for "any item" bookings
+ * @param {Object} [params.patron] - Existing patron (creates one if not provided)
+ * @param {string} [params.pickup_library_id] - Pickup library (defaults to the item's home library)
+ * @param {string} params.start_date - Booking start (RFC3339 date-time)
+ * @param {string} params.end_date - Booking end (RFC3339 date-time)
+ * @param {string} params.baseUrl - Base URL for API calls
+ * @param {string} params.authHeader - Authorization header for API calls
+ * @returns {Promise<Object>} Created booking plus generated patron, when one was created
+ * @throws {Error} When neither biblio nor item is provided, or no pickup library can be derived
+ * @example
+ * const { booking } = await insertSampleBooking({
+ *   item: biblio.items[0],
+ *   patron,
+ *   start_date: dayjs().add(1, "day").startOf("day").toISOString(),
+ *   end_date: dayjs().add(3, "day").endOf("day").toISOString(),
+ *   baseUrl,
+ *   authHeader,
+ * });
+ */
+const insertSampleBooking = async ({
+    biblio,
+    item,
+    patron,
+    pickup_library_id,
+    start_date,
+    end_date,
+    baseUrl,
+    authHeader,
+}) => {
+    const biblio_id = biblio?.biblio_id ?? item?.biblio_id;
+    if (!biblio_id) {
+        throw new Error(
+            "Could not generate sample booking without a biblio or an item"
+        );
+    }
+
+    pickup_library_id ||= item?.home_library_id;
+    if (!pickup_library_id) {
+        throw new Error(
+            "Could not generate sample booking without pickup_library_id or an item with a home library"
+        );
+    }
+
+    let patron_category;
+    let generatedPatron = null;
+    if (!patron) {
+        ({ patron, patron_category } = await insertSamplePatron({
+            library: { library_id: pickup_library_id },
+            baseUrl,
+            authHeader,
+        }));
+        generatedPatron = patron;
+    }
+
+    const generatedBooking = buildSampleObject({
+        object: "booking",
+        values: {
+            biblio_id,
+            item_id: item?.item_id ?? null,
+            // The API rejects bookings specifying both item and item type
+            itemtype_id: null,
+            patron_id: patron.patron_id,
+            pickup_library_id,
+            start_date,
+            end_date,
+        },
+    });
+    const booking = await insertObject({
+        type: "booking",
+        object: generatedBooking,
+        baseUrl,
+        authHeader,
+    });
+
+    return {
+        booking,
+        ...(generatedPatron && { patron: generatedPatron, patron_category }),
+    };
 };
 
 /**
@@ -385,6 +488,50 @@ const insertSampleCheckout = async ({ patron, baseUrl, authHeader }) => {
  *   authHeader: 'Basic dGVzdDp0ZXN0'
  * });
  */
+/**
+ * Inserts circulation rules scoped to the given context.
+ *
+ * Circulation rules have no write API, so this task owns the rows;
+ * specs pass the returned descriptors to deleteSampleObjects for
+ * cleanup instead of touching the table themselves.
+ *
+ * @async
+ * @function insertSampleCirculationRules
+ * @param {Object} params - Configuration parameters
+ * @param {Object} params.rules - Map of rule_name to rule_value
+ * @param {string} [params.library_id] - Branch scope (defaults to all branches)
+ * @param {string} [params.patron_category_id] - Patron category scope (defaults to all categories)
+ * @param {string} [params.item_type_id] - Item type scope (defaults to all item types)
+ * @returns {Promise<Object>} `{ circulation_rules: [{ id }, ...] }` descriptors for deleteSampleObjects
+ * @example
+ * const { circulation_rules } = await insertSampleCirculationRules({
+ *   item_type_id: items[0].item_type_id,
+ *   rules: { bookings_lead_period: 2, bookings_trail_period: 3 },
+ * });
+ */
+const insertSampleCirculationRules = async ({
+    rules,
+    library_id = null,
+    patron_category_id = null,
+    item_type_id = null,
+}) => {
+    const circulation_rules = [];
+    for (const [rule_name, rule_value] of Object.entries(rules)) {
+        const result = await query({
+            sql: "INSERT INTO circulation_rules(branchcode, categorycode, itemtype, rule_name, rule_value) VALUES (?, ?, ?, ?, ?)",
+            values: [
+                library_id,
+                patron_category_id,
+                item_type_id,
+                rule_name,
+                String(rule_value),
+            ],
+        });
+        circulation_rules.push({ id: result.insertId });
+    }
+    return { circulation_rules };
+};
+
 const insertSamplePatron = async ({
     library,
     patron_category,
@@ -507,6 +654,12 @@ const deleteSampleObjects = async allObjects => {
     }
 
     const objectsMap = {
+        booking: {
+            plural: "bookings",
+            table: "bookings",
+            whereColumn: "booking_id",
+            idField: "booking_id",
+        },
         hold: {
             plural: "holds",
             table: "reserves",
@@ -518,6 +671,12 @@ const deleteSampleObjects = async allObjects => {
             table: "issues",
             whereColumn: "issue_id",
             idField: "checkout_id",
+        },
+        circulation_rule: {
+            plural: "circulation_rules",
+            table: "circulation_rules",
+            whereColumn: "id",
+            idField: "id",
         },
         old_checkout: {
             plural: "old_checkouts",
@@ -613,9 +772,11 @@ const deleteSampleObjects = async allObjects => {
     }
 
     const deletionOrder = [
+        "bookings",
         "holds",
         "checkouts",
         "old_checkouts",
+        "circulation_rules",
         "invoice_files",
         "baskets",
         "invoices",
@@ -728,6 +889,25 @@ const insertObject = async ({ type, object, baseUrl, authHeader }) => {
         return apiPost({
             endpoint: "/api/v1/libraries",
             body: library,
+            baseUrl,
+            authHeader,
+        });
+    } else if (type == "booking") {
+        const keysToKeep = [
+            "biblio_id",
+            "item_id",
+            "itemtype_id",
+            "patron_id",
+            "pickup_library_id",
+            "start_date",
+            "end_date",
+        ];
+        const booking = Object.fromEntries(
+            Object.entries(object).filter(([key]) => keysToKeep.includes(key))
+        );
+        return apiPost({
+            endpoint: "/api/v1/bookings",
+            body: booking,
             baseUrl,
             authHeader,
         });
@@ -1105,7 +1285,9 @@ const deleteSampleEdifactMessages = async test_data => {
 module.exports = {
     insertSampleBiblio,
     insertSampleHold,
+    insertSampleBooking,
     insertSampleCheckout,
+    insertSampleCirculationRules,
     insertSamplePatron,
     insertObject,
     deleteSampleObjects,

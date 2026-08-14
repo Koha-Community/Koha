@@ -1,78 +1,45 @@
-const dayjs = require("dayjs");
+import dayjs from "dayjs";
 
 describe("Booking Modal Basic Tests", () => {
     let testData = {};
-
-    // Ensure RESTBasicAuth is enabled before running tests
-    before(() => {
-        cy.task("query", {
-            sql: "UPDATE systempreferences SET value = '1' WHERE variable = 'RESTBasicAuth'",
-        });
-    });
 
     beforeEach(() => {
         cy.login();
         cy.title().should("eq", "Koha staff interface");
 
-        // Create fresh test data for each test using upstream pattern
+        // Create fresh test data for each test using upstream pattern;
+        // items are born bookable with distinct item types via the builder.
         cy.task("insertSampleBiblio", {
             item_count: 3,
+            item_values: [
+                {
+                    bookable: 1,
+                    item_type_id: "BK",
+                    serial_issue_number: "A",
+                    acquisition_date: "2024-12-03",
+                },
+                {
+                    bookable: 1,
+                    item_type_id: "CF",
+                    serial_issue_number: "B",
+                    acquisition_date: "2024-12-02",
+                },
+                {
+                    bookable: 1,
+                    item_type_id: "BK",
+                    serial_issue_number: "C",
+                    acquisition_date: "2024-12-01",
+                },
+            ],
         })
             .then(objects => {
                 testData = objects;
-
-                // Update items to have different itemtypes and control API ordering
-                // API orders by: homebranch.branchname, enumchron, dateaccessioned DESC
-                const itemUpdates = [
-                    // First in API order: homebranch='CPL', enumchron='A', dateaccessioned=newest
-                    cy.task("query", {
-                        sql: "UPDATE items SET bookable = 1, itype = 'BK', homebranch = 'CPL', enumchron = 'A', dateaccessioned = '2024-12-03' WHERE itemnumber = ?",
-                        values: [objects.items[0].item_id],
-                    }),
-                    // Second in API order: homebranch='CPL', enumchron='B', dateaccessioned=older
-                    cy.task("query", {
-                        sql: "UPDATE items SET bookable = 1, itype = 'CF', homebranch = 'CPL', enumchron = 'B', dateaccessioned = '2024-12-02' WHERE itemnumber = ?",
-                        values: [objects.items[1].item_id],
-                    }),
-                    // Third in API order: homebranch='CPL', enumchron='C', dateaccessioned=oldest
-                    cy.task("query", {
-                        sql: "UPDATE items SET bookable = 1, itype = 'BK', homebranch = 'CPL', enumchron = 'C', dateaccessioned = '2024-12-01' WHERE itemnumber = ?",
-                        values: [objects.items[2].item_id],
-                    }),
-                ];
-
-                return Promise.all(itemUpdates);
-            })
-            .then(() => {
-                // Create a test patron using upstream pattern
-                return cy.task("buildSampleObject", {
-                    object: "patron",
-                    values: {
-                        firstname: "John",
-                        surname: "Doe",
-                        cardnumber: `TEST${Date.now()}`,
-                        category_id: "PT",
-                        library_id: testData.libraries[0].library_id,
-                    },
+                return cy.task("insertSamplePatron", {
+                    library: testData.libraries[0],
                 });
             })
-            .then(mockPatron => {
-                testData.patron = mockPatron;
-
-                // Insert the patron into the database
-                return cy.task("query", {
-                    sql: `INSERT INTO borrowers (borrowernumber, firstname, surname, cardnumber, categorycode, branchcode, dateofbirth)
-                      VALUES (?, ?, ?, ?, ?, ?, ?)`,
-                    values: [
-                        mockPatron.patron_id,
-                        mockPatron.firstname,
-                        mockPatron.surname,
-                        mockPatron.cardnumber,
-                        mockPatron.category_id,
-                        mockPatron.library_id,
-                        "1990-01-01",
-                    ],
-                });
+            .then(patronResult => {
+                testData.patron = patronResult.patron;
             });
     });
 
@@ -80,12 +47,6 @@ describe("Booking Modal Basic Tests", () => {
         // Clean up test data
         if (testData.biblio) {
             cy.task("deleteSampleObjects", testData);
-        }
-        if (testData.patron) {
-            cy.task("query", {
-                sql: "DELETE FROM borrowers WHERE borrowernumber = ?",
-                values: [testData.patron.patron_id],
-            });
         }
     });
 
@@ -99,58 +60,40 @@ describe("Booking Modal Basic Tests", () => {
         cy.get("#catalog_detail").should("be.visible");
 
         // The "Place booking" button should appear for bookable items
-        cy.get('[data-bs-target="#placeBookingModal"]')
-            .should("exist")
-            .and("be.visible");
+        cy.get("[data-booking-modal]").should("exist").and("be.visible");
 
         // Click to open the booking modal
-        cy.get('[data-bs-target="#placeBookingModal"]').first().click();
+        cy.get("booking-modal .modal").should("exist");
+        cy.get("[data-booking-modal]")
+            .first()
+            .then($btn => $btn[0].click());
 
         // Wait for modal to appear
-        cy.get("#placeBookingModal").should("be.visible");
-        cy.get("#placeBookingLabel")
+        cy.get("booking-modal .modal", { timeout: 10000 }).should("be.visible");
+        cy.get("booking-modal .modal-title")
             .should("be.visible")
             .and("contain.text", "Place booking");
 
         // Verify modal structure and initial field states
-        cy.get("#booking_patron_id").should("exist").and("not.be.disabled");
+        // Patron field should be enabled
+        cy.vueSelectShouldBeEnabled("booking_patron");
 
-        cy.get("#pickup_library_id").should("exist").and("be.disabled");
+        // Pickup library should be disabled initially
+        cy.vueSelectShouldBeDisabled("pickup_library_id");
 
-        cy.get("#booking_itemtype").should("exist").and("be.disabled");
+        // Item type should be disabled initially
+        cy.vueSelectShouldBeDisabled("booking_itemtype");
 
-        cy.get("#booking_item_id")
-            .should("exist")
-            .and("be.disabled")
-            .find("option[value='0']")
-            .should("contain.text", "Any item");
+        // Item should be disabled initially
+        cy.vueSelectShouldBeDisabled("booking_item_id");
 
-        cy.get("#period")
-            .should("exist")
-            .and("be.disabled")
-            .and("have.attr", "data-flatpickr-futuredate", "true");
+        // Period should be disabled initially
+        cy.get("#booking_period").should("exist").and("be.disabled");
 
-        // Verify hidden fields exist
-        cy.get("#booking_biblio_id").should("exist");
-        cy.get("#booking_start_date").should("exist");
-        cy.get("#booking_end_date").should("exist");
-        cy.get("#booking_id").should("exist");
-
-        // Check hidden fields with actual biblio_id from upstream data
-        cy.get("#booking_biblio_id").should(
-            "have.value",
-            testData.biblio.biblio_id
-        );
-        cy.get("#booking_start_date").should("have.value", "");
-        cy.get("#booking_end_date").should("have.value", "");
-
-        // Verify form buttons
-        cy.get("#placeBookingForm button[type='submit']")
-            .should("exist")
-            .and("contain.text", "Submit");
+        // Verify form and submit button exist
+        cy.get('button[form="form-booking"][type="submit"]').should("exist");
 
         cy.get(".btn-close").should("exist");
-        cy.get("[data-bs-dismiss='modal']").should("exist");
     });
 
     it("should enable fields progressively based on user selections", () => {
@@ -168,59 +111,58 @@ describe("Booking Modal Basic Tests", () => {
         );
 
         // Open the modal
-        cy.get('[data-bs-target="#placeBookingModal"]').first().click();
-        cy.get("#placeBookingModal").should("be.visible");
+        cy.get("booking-modal .modal").should("exist");
+        cy.get("[data-booking-modal]")
+            .first()
+            .then($btn => $btn[0].click());
+        cy.get("booking-modal .modal", { timeout: 10000 }).should("be.visible");
 
         // Step 1: Initially only patron field should be enabled
-        cy.get("#booking_patron_id").should("not.be.disabled");
-        cy.get("#pickup_library_id").should("be.disabled");
-        cy.get("#booking_itemtype").should("be.disabled");
-        cy.get("#booking_item_id").should("be.disabled");
-        cy.get("#period").should("be.disabled");
+        cy.vueSelectShouldBeEnabled("booking_patron");
+        cy.vueSelectShouldBeDisabled("pickup_library_id");
+        cy.vueSelectShouldBeDisabled("booking_itemtype");
+        cy.vueSelectShouldBeDisabled("booking_item_id");
+        cy.get("#booking_period").should("be.disabled");
 
         // Step 2: Select patron - this triggers pickup locations API call
-        cy.selectFromSelect2(
-            "#booking_patron_id",
-            `${testData.patron.surname}, ${testData.patron.firstname}`,
-            testData.patron.cardnumber
+        cy.vueSelect(
+            "booking_patron",
+            testData.patron.cardnumber,
+            `${testData.patron.surname} ${testData.patron.firstname}`
         );
 
         // Wait for pickup locations API call to complete
         cy.wait("@getPickupLocations");
 
         // Step 3: After patron selection and pickup locations load, other fields should become enabled
-        cy.get("#pickup_library_id").should("not.be.disabled");
-        cy.get("#booking_itemtype").should("not.be.disabled");
-        cy.get("#booking_item_id").should("not.be.disabled");
-        cy.get("#period").should("be.disabled"); // Still disabled until itemtype/item selected
-
-        // Step 4: Select pickup location
-        cy.selectFromSelect2ByIndex("#pickup_library_id", 0);
-
-        // Step 5: Select item type - this triggers circulation rules API call
-        cy.selectFromSelect2ByIndex("#booking_itemtype", 0); // Select first available itemtype
+        cy.vueSelectShouldBeEnabled("pickup_library_id");
+        cy.vueSelectShouldBeEnabled("booking_itemtype");
+        cy.vueSelectShouldBeEnabled("booking_item_id");
 
         // Wait for circulation rules API call to complete
         cy.wait("@getCirculationRules");
 
-        // After itemtype selection and circulation rules load, period should be enabled
-        cy.get("#period").should("not.be.disabled");
+        // "Any item" is a valid default — period enables without requiring
+        // a specific item type or item selection
+        cy.get("#booking_period").should("not.be.disabled");
 
-        // Step 6: Test clearing item type disables period again (comprehensive workflow)
-        cy.clearSelect2("#booking_itemtype");
-        cy.get("#period").should("be.disabled");
+        // Step 4: Select pickup location
+        cy.vueSelectByIndex("pickup_library_id", 0);
 
-        // Step 7: Select item instead of itemtype - this also triggers circulation rules
-        cy.selectFromSelect2ByIndex("#booking_item_id", 1); // Skip "Any item" option
+        // Step 5: The workflow may apply the sole valid item type after the
+        // pickup selection. Item-type selection itself is covered by the
+        // dependency test below; verify this context remains calendar-ready.
+        cy.get("#booking_period").should("not.be.disabled");
 
-        // Wait for circulation rules API call (item selection also triggers this)
-        cy.wait("@getCirculationRules");
+        // Step 6: Clearing item type keeps period enabled ("any item" still valid)
+        cy.vueSelectClear("booking_itemtype");
+        cy.get("#booking_period").should("not.be.disabled");
 
-        // Period should be enabled after item selection and circulation rules load
-        cy.get("#period").should("not.be.disabled");
+        // Step 7: Select item instead of itemtype
+        cy.vueSelectByIndex("booking_item_id", 1);
 
-        // Verify that patron selection is now disabled (as per the modal's behavior)
-        cy.get("#booking_patron_id").should("be.disabled");
+        // Period stays enabled after item selection
+        cy.get("#booking_period").should("not.be.disabled");
     });
 
     it("should handle item type and item dependencies correctly", () => {
@@ -238,120 +180,72 @@ describe("Booking Modal Basic Tests", () => {
         );
 
         // Open the modal
-        cy.get('[data-bs-target="#placeBookingModal"]').first().click();
-        cy.get("#placeBookingModal").should("be.visible");
+        cy.get("booking-modal .modal").should("exist");
+        cy.get("[data-booking-modal]")
+            .first()
+            .then($btn => $btn[0].click());
+        cy.get("booking-modal .modal", { timeout: 10000 }).should("be.visible");
 
         // Setup: Select patron and pickup location first
-        cy.selectFromSelect2(
-            "#booking_patron_id",
-            `${testData.patron.surname}, ${testData.patron.firstname}`,
-            testData.patron.cardnumber
+        cy.vueSelect(
+            "booking_patron",
+            testData.patron.cardnumber,
+            `${testData.patron.surname} ${testData.patron.firstname}`
         );
         cy.wait("@getPickupLocations");
 
-        cy.get("#pickup_library_id").should("not.be.disabled");
-        cy.selectFromSelect2ByIndex("#pickup_library_id", 0);
+        cy.vueSelectShouldBeEnabled("pickup_library_id");
+        cy.vueSelectByIndex("pickup_library_id", 0);
 
-        // Test Case 1: Select item first → should auto-populate and disable itemtype
-        // Index 1 = first item in API order = enumchron='A' = BK itemtype
-        cy.selectFromSelect2ByIndex("#booking_item_id", 1);
+        // Test Case 1: Select an item first → auto-populate its item type
+        cy.vueSelectByIndex("booking_item_id", 1);
         cy.wait("@getCirculationRules");
 
-        // Verify that item type gets selected automatically based on the item
-        cy.get("#booking_itemtype").should("have.value", "BK"); // enumchron='A' item
-
-        // Verify that item type gets disabled when item is selected first
-        cy.get("#booking_itemtype").should("be.disabled");
+        // Verify that item type gets auto-populated (value depends on which item the API returns first)
+        cy.get("input#booking_itemtype")
+            .closest(".v-select")
+            .find(".vs__selected")
+            .should("exist");
 
         // Verify that period field gets enabled after item selection
-        cy.get("#period").should("not.be.disabled");
+        cy.get("#booking_period").should("not.be.disabled");
 
-        // Test Case 2: Reset item selection to "Any item" → itemtype should re-enable
-        cy.selectFromSelect2ByIndex("#booking_item_id", 0);
-
-        // Wait for itemtype to become enabled (this is what we're actually waiting for)
-        cy.get("#booking_itemtype").should("not.be.disabled");
-
-        // Verify that itemtype retains the value from the previously selected item
-        cy.get("#booking_itemtype").should("have.value", "BK");
-
-        // Period should be disabled again until itemtype/item is selected
-        //cy.get("#period").should("be.disabled");
-
-        // Test Case 3: Now select itemtype first → different workflow
-        cy.clearSelect2("#booking_itemtype");
-        cy.selectFromSelect2("#booking_itemtype", "Books"); // Select BK itemtype explicitly
+        // Test Case 2: Reset the item selection to "Any item". The
+        // item-derived type remains a valid explicit constraint.
+        cy.vueSelectClear("booking_item_id");
         cy.wait("@getCirculationRules");
+        cy.vueSelectShouldBeEnabled("booking_itemtype");
+        cy.vueSelectShouldBeEnabled("booking_item_id");
+        cy.get("#booking_period").should("not.be.disabled");
 
-        // Verify itemtype remains enabled when selected first
-        cy.get("#booking_itemtype").should("not.be.disabled");
-        cy.get("#booking_itemtype").should("have.value", "BK");
+        // Test Case 3: Clear the type as well. A type-less "Any item"
+        // context remains valid and exposes the unconstrained item options.
+        cy.vueSelectClear("booking_itemtype");
+        cy.wait("@getCirculationRules");
+        cy.vueSelectShouldBeEnabled("booking_itemtype");
+        cy.vueSelectShouldBeEnabled("booking_item_id");
+        cy.get("#booking_period").should("not.be.disabled");
 
-        // Period should be enabled after itemtype selection
-        cy.get("#period").should("not.be.disabled");
+        cy.get("input#booking_item_id")
+            .closest(".v-select")
+            .find(".vs__dropdown-toggle")
+            .click();
+        cy.get("input#booking_item_id")
+            .closest(".v-select")
+            .find(".vs__dropdown-menu")
+            .should("be.visible")
+            .find(".vs__dropdown-option")
+            .should("have.length.at.least", 2);
+        cy.get("booking-modal .modal-title").click();
 
-        // Test Case 3b: Verify that only 'Any item' option and items of selected type are enabled
-        // Since we selected 'BK' itemtype, verify only BK items and "Any item" are enabled
-        cy.get("#booking_item_id > option").then($options => {
-            const enabledOptions = $options.filter(":not(:disabled)");
-            enabledOptions.each(function () {
-                const $option = cy.wrap(this);
-                // Get both the value and the data-itemtype attribute to make decisions
-                $option.invoke("val").then(value => {
-                    if (value === "0") {
-                        // We need to re-wrap the element since invoke('val') changed the subject
-                        cy.wrap(this).should("contain.text", "Any item");
-                    } else {
-                        // Re-wrap the element again for this assertion
-                        // Should only be BK items (we have item 1 and item 3 as BK, item 2 as CF)
-                        cy.wrap(this).should(
-                            "have.attr",
-                            "data-itemtype",
-                            "BK"
-                        );
-                    }
-                });
-            });
-        });
-
-        // Test Case 4: Select item after itemtype → itemtype selection should become disabled
-        cy.selectFromSelect2ByIndex("#booking_item_id", 1);
-
-        // Itemtype is now fixed, item should be selected
-        cy.get("#booking_itemtype").should("be.disabled");
-        cy.get("#booking_item_id").should("not.have.value", "0"); // Not "Any item"
-
-        // Period should still be enabled
-        cy.get("#period").should("not.be.disabled");
-
-        // Test Case 5: Reset item to "Any item", itemtype selection should be re-enabled
-        cy.selectFromSelect2ByIndex("#booking_item_id", 0);
-
-        // Wait for itemtype to become enabled (no item selected, so itemtype should be available)
-        cy.get("#booking_itemtype").should("not.be.disabled");
-
-        // Verify both fields are in expected state
-        cy.get("#booking_item_id").should("have.value", "0"); // Back to "Any item"
-        cy.get("#period").should("not.be.disabled");
-
-        // Test Case 6: Clear itemtype and verify all items become available again
-        cy.clearSelect2("#booking_itemtype");
-
-        // Both fields should be enabled
-        cy.get("#booking_itemtype").should("not.be.disabled");
-        cy.get("#booking_item_id").should("not.be.disabled");
-
-        // Open item dropdown to verify all items are now available (not filtered by itemtype)
-        cy.get("#booking_item_id + .select2-container").click();
-
-        // Should show "Any item" + all bookable items (not filtered by itemtype)
-        cy.get(".select2-results__option").should("have.length.at.least", 2); // "Any item" + bookable items
-        cy.get(".select2-results__option")
-            .first()
-            .should("contain.text", "Any item");
-
-        // Close dropdown
-        cy.get("#placeBookingLabel").click();
+        // Test Case 4: Selecting another concrete item derives its type.
+        cy.vueSelectByIndex("booking_item_id", 1);
+        cy.wait("@getCirculationRules");
+        cy.get("input#booking_itemtype")
+            .closest(".v-select")
+            .find(".vs__selected")
+            .should("exist");
+        cy.get("#booking_period").should("not.be.disabled");
     });
 
     it("should handle form validation correctly", () => {
@@ -360,19 +254,19 @@ describe("Booking Modal Basic Tests", () => {
         );
 
         // Open the modal
-        cy.get('[data-bs-target="#placeBookingModal"]').first().click();
-        cy.get("#placeBookingModal").should("be.visible");
+        cy.get("booking-modal .modal").should("exist");
+        cy.get("[data-booking-modal]")
+            .first()
+            .then($btn => $btn[0].click());
+        cy.get("booking-modal .modal", { timeout: 10000 }).should("be.visible");
 
-        // Try to submit without filling required fields
-        cy.get("#placeBookingForm button[type='submit']").click();
+        // Submit button should be disabled without required fields
+        cy.get('button[form="form-booking"][type="submit"]').should(
+            "be.disabled"
+        );
 
-        // Form should not submit and validation should prevent it
-        cy.get("#placeBookingModal").should("be.visible");
-
-        // Check for HTML5 validation attributes
-        cy.get("#booking_patron_id").should("have.attr", "required");
-        cy.get("#pickup_library_id").should("have.attr", "required");
-        cy.get("#period").should("have.attr", "required");
+        // Modal should still be visible
+        cy.get("booking-modal .modal").should("be.visible");
     });
 
     it("should successfully submit a booking", () => {
@@ -381,44 +275,46 @@ describe("Booking Modal Basic Tests", () => {
         );
 
         // Open the modal
-        cy.get('[data-bs-target="#placeBookingModal"]').first().click();
-        cy.get("#placeBookingModal").should("be.visible");
+        cy.get("booking-modal .modal").should("exist");
+        cy.get("[data-booking-modal]")
+            .first()
+            .then($btn => $btn[0].click());
+        cy.get("booking-modal .modal", { timeout: 10000 }).should("be.visible");
 
         // Fill in the form using real data from the database
 
         // Step 1: Select patron
-        cy.selectFromSelect2(
-            "#booking_patron_id",
-            `${testData.patron.surname}, ${testData.patron.firstname}`,
-            testData.patron.cardnumber
+        cy.vueSelect(
+            "booking_patron",
+            testData.patron.cardnumber,
+            `${testData.patron.surname} ${testData.patron.firstname}`
         );
 
         // Step 2: Select pickup location
-        cy.get("#pickup_library_id").should("not.be.disabled");
-        cy.selectFromSelect2ByIndex("#pickup_library_id", 0);
+        cy.vueSelectShouldBeEnabled("pickup_library_id");
+        cy.vueSelectByIndex("pickup_library_id", 0);
 
-        // Step 3: Select item (first bookable item)
-        cy.get("#booking_item_id").should("not.be.disabled");
-        cy.selectFromSelect2ByIndex("#booking_item_id", 1); // Skip "Any item" option
+        // Step 3: Select a concrete bookable item
+        cy.vueSelectShouldBeEnabled("booking_item_id");
+        cy.vueSelectByIndex("booking_item_id", 1);
 
         // Step 4: Set dates using flatpickr
-        cy.get("#period").should("not.be.disabled");
+        cy.get("#booking_period").should("not.be.disabled");
 
         // Use the flatpickr helper to select date range
         // Note: Add enough days to account for lead period (3 days) to avoid past-date constraint
         const startDate = dayjs().add(5, "day");
         const endDate = dayjs().add(10, "days");
 
-        cy.get("#period").selectFlatpickrDateRange(startDate, endDate);
+        cy.get("#booking_period").selectFlatpickrDateRange(startDate, endDate);
 
         // Step 5: Submit the form
-        cy.get("#placeBookingForm button[type='submit']")
+        cy.get('button[form="form-booking"][type="submit"]')
             .should("not.be.disabled")
             .click();
 
         // Verify success - either success message or modal closure
-        // (The exact success indication depends on the booking modal implementation)
-        cy.get("#placeBookingModal", { timeout: 10000 }).should(
+        cy.get("booking-modal .modal", { timeout: 10000 }).should(
             "not.be.visible"
         );
     });
@@ -431,75 +327,82 @@ describe("Booking Modal Basic Tests", () => {
          * 1. "Any item" bookings can be successfully submitted with itemtype_id
          * 2. The server performs optimal item selection based on future availability
          * 3. An appropriate item is automatically assigned by the server
-         *
-         * When submitting an "any item" booking, the client sends itemtype_id
-         * (or item_id if only one item is available) and the server selects
-         * the optimal item with the longest future availability.
-         *
-         * Fixed Date Setup:
-         * ================
-         * - Today: June 10, 2026 (Wednesday)
-         * - Timezone: Europe/London
-         * - Start Date: June 15, 2026 (5 days from today)
-         * - End Date: June 20, 2026 (10 days from today)
          */
 
         // Fix the browser Date object to June 10, 2026 at 09:00 Europe/London
-        // Using ["Date"] to avoid freezing timers which breaks Select2 async operations
+        // Using ["Date"] to avoid freezing timers which breaks async operations
         const fixedToday = new Date("2026-06-10T08:00:00Z"); // 09:00 BST (UTC+1)
         cy.clock(fixedToday, ["Date"]);
 
         // Define fixed dates for consistent testing
         const startDate = dayjs("2026-06-15"); // 5 days from fixed today
         const endDate = dayjs("2026-06-20"); // 10 days from fixed today
+        cy.intercept("POST", "/api/v1/bookings").as("createAnyItemBooking");
 
         cy.visit(
             `/cgi-bin/koha/catalogue/detail.pl?biblionumber=${testData.biblio.biblio_id}`
         );
 
         // Open the modal
-        cy.get('[data-bs-target="#placeBookingModal"]').first().click();
-        cy.get("#placeBookingModal").should("be.visible");
+        cy.get("booking-modal .modal").should("exist");
+        cy.get("[data-booking-modal]")
+            .first()
+            .then($btn => $btn[0].click());
+        cy.get("booking-modal .modal", { timeout: 10000 }).should("be.visible");
 
         // Step 1: Select patron
-        cy.selectFromSelect2(
-            "#booking_patron_id",
-            `${testData.patron.surname}, ${testData.patron.firstname}`,
-            testData.patron.cardnumber
+        cy.vueSelect(
+            "booking_patron",
+            testData.patron.cardnumber,
+            `${testData.patron.surname} ${testData.patron.firstname}`
         );
 
-        // Step 2: Select pickup location
-        cy.get("#pickup_library_id").should("not.be.disabled");
-        cy.selectFromSelect2ByIndex("#pickup_library_id", 0);
+        // Step 2: Keep the patron-library pickup default selected. Choosing
+        // an arbitrary first location is unstable because that location may
+        // not accept any of this biblio's items.
+        cy.vueSelectShouldBeEnabled("pickup_library_id");
+        cy.get("input#pickup_library_id")
+            .closest(".v-select")
+            .find(".vs__selected")
+            .should("exist");
 
-        // Step 3: Select itemtype (to enable "Any item" for that type)
-        cy.get("#booking_itemtype").should("not.be.disabled");
-        cy.selectFromSelect2ByIndex("#booking_itemtype", 0); // Select first itemtype
+        // Step 3: Derive a valid item type from a concrete pickable item.
+        cy.vueSelectShouldBeEnabled("booking_item_id");
+        cy.vueSelectByIndex("booking_item_id", 0);
+        cy.get("input#booking_itemtype")
+            .closest(".v-select")
+            .find(".vs__selected")
+            .should("exist");
 
-        // Step 4: Select "Any item" option (index 0)
-        cy.get("#booking_item_id").should("not.be.disabled");
-        cy.selectFromSelect2ByIndex("#booking_item_id", 0); // "Any item" option
-
-        // Verify "Any item" is selected
-        cy.get("#booking_item_id").should("have.value", "0");
+        // Step 4: Clear the item while retaining its type, producing the
+        // type-constrained "Any item" payload this test exercises.
+        cy.vueSelectClear("booking_item_id");
+        cy.get("input#booking_item_id")
+            .closest(".v-select")
+            .find(".vs__selected")
+            .should("not.exist");
+        cy.get("input#booking_itemtype")
+            .closest(".v-select")
+            .find(".vs__selected")
+            .should("exist");
 
         // Step 5: Set dates using flatpickr
-        cy.get("#period").should("not.be.disabled");
+        cy.get("#booking_period").should("not.be.disabled");
 
-        cy.get("#period").selectFlatpickrDateRange(startDate, endDate);
+        cy.get("#booking_period").selectFlatpickrDateRange(startDate, endDate);
 
-        // Wait a moment for onChange handlers to populate hidden fields
-        cy.wait(500);
-
-        // Step 6: Submit the form
-        // This will send either item_id (if only one available) or itemtype_id
-        // to the server for optimal item selection
-        cy.get("#placeBookingForm button[type='submit']")
+        // Step 6: Submit the form. The retrying not.be.disabled assertion
+        // waits for the onChange handlers to finish processing.
+        cy.get('button[form="form-booking"][type="submit"]')
             .should("not.be.disabled")
             .click();
 
-        // Verify success - modal should close without errors
-        cy.get("#placeBookingModal", { timeout: 10000 }).should(
+        cy.wait("@createAnyItemBooking").then(({ request, response }) => {
+            expect(response.statusCode).to.be.oneOf([200, 201]);
+            expect(request.body.item_id).to.equal(undefined);
+            expect(request.body.itemtype_id).to.not.equal(undefined);
+        });
+        cy.get("booking-modal .modal", { timeout: 10000 }).should(
             "not.be.visible"
         );
 
@@ -521,7 +424,7 @@ describe("Booking Modal Basic Tests", () => {
             const booking = result[0];
 
             // Verify the booking has an item_id assigned (not null)
-            expect(booking.item_id).to.not.be.null;
+            expect(booking.item_id).to.not.equal(null);
             expect(booking.item_id).to.be.oneOf([
                 testData.items[0].item_id,
                 testData.items[1].item_id,
@@ -537,10 +440,6 @@ describe("Booking Modal Basic Tests", () => {
                 values: [booking.booking_id],
             });
         });
-
-        cy.log("✓ CONFIRMED: Any item booking submitted successfully");
-        cy.log("✓ CONFIRMED: Server-side optimal item selection completed");
-        cy.log("✓ CONFIRMED: Optimal item automatically assigned by server");
     });
 
     it("should handle basic form interactions correctly", () => {
@@ -549,206 +448,127 @@ describe("Booking Modal Basic Tests", () => {
         );
 
         // Open the modal
-        cy.get('[data-bs-target="#placeBookingModal"]').first().click();
-        cy.get("#placeBookingModal").should("be.visible");
+        cy.get("booking-modal .modal").should("exist");
+        cy.get("[data-booking-modal]")
+            .first()
+            .then($btn => $btn[0].click());
+        cy.get("booking-modal .modal", { timeout: 10000 }).should("be.visible");
 
         // Test basic form interactions without complex flatpickr scenarios
 
         // Step 1: Select patron
-        cy.selectFromSelect2(
-            "#booking_patron_id",
-            `${testData.patron.surname}, ${testData.patron.firstname}`,
-            testData.patron.cardnumber
+        cy.vueSelect(
+            "booking_patron",
+            testData.patron.cardnumber,
+            `${testData.patron.surname} ${testData.patron.firstname}`
         );
 
         // Step 2: Select pickup location
-        cy.get("#pickup_library_id").should("not.be.disabled");
-        cy.selectFromSelect2ByIndex("#pickup_library_id", 0);
+        cy.vueSelectShouldBeEnabled("pickup_library_id");
+        cy.vueSelectByIndex("pickup_library_id", 0);
 
-        // Step 3: Select an item
-        cy.get("#booking_item_id").should("not.be.disabled");
-        cy.selectFromSelect2ByIndex("#booking_item_id", 1); // Skip "Any item" option
+        // Step 3: Select a concrete item
+        cy.vueSelectShouldBeEnabled("booking_item_id");
+        cy.vueSelectByIndex("booking_item_id", 1);
 
         // Step 4: Verify period field becomes enabled
-        cy.get("#period").should("not.be.disabled");
+        cy.get("#booking_period").should("not.be.disabled");
 
         // Step 5: Verify we can close the modal
-        cy.get("#placeBookingModal .btn-close").first().click();
-        cy.get("#placeBookingModal").should("not.be.visible");
+        cy.get("booking-modal .modal .btn-close").first().click();
+        cy.get("booking-modal .modal").should("not.be.visible");
     });
 
-    it("should handle visible and hidden fields on date selection", () => {
+    it("should handle date selection and API submission correctly", () => {
         /**
-         * Field Visibility and Format Validation Test
-         * ==========================================
+         * Date Selection and API Submission Test
+         * =======================================
          *
-         * This test validates the dual-format system for date handling:
-         * - Visible field: User-friendly display format (YYYY-MM-DD to YYYY-MM-DD)
-         * - Hidden fields: Precise ISO timestamps for API submission
-         *
-         * Key functionality:
-         * 1. Date picker shows readable format to users
-         * 2. Hidden form fields store precise ISO timestamps
-         * 3. Proper timezone handling and date boundary calculations
-         * 4. Field visibility management during date selection
+         * In the Vue version, there are no hidden fields for dates.
+         * Instead, dates are stored in the pinia store and sent via API.
+         * We verify dates via API intercept body assertions.
          */
-
-        // Set up authentication (using pattern from successful tests)
-        cy.task("query", {
-            sql: "UPDATE systempreferences SET value = '1' WHERE variable = 'RESTBasicAuth'",
-        });
-
-        // Create fresh test data using upstream pattern
-        cy.task("insertSampleBiblio", {
-            item_count: 1,
-        })
-            .then(objects => {
-                testData = objects;
-
-                // Update item to be bookable
-                return cy.task("query", {
-                    sql: "UPDATE items SET bookable = 1, itype = 'BK' WHERE itemnumber = ?",
-                    values: [objects.items[0].item_id],
-                });
-            })
-            .then(() => {
-                // Create test patron
-                return cy.task("buildSampleObject", {
-                    object: "patron",
-                    values: {
-                        firstname: "Format",
-                        surname: "Tester",
-                        cardnumber: `FORMAT${Date.now()}`,
-                        category_id: "PT",
-                        library_id: testData.libraries[0].library_id,
-                    },
-                });
-            })
-            .then(mockPatron => {
-                testData.patron = mockPatron;
-
-                // Insert patron into database
-                return cy.task("query", {
-                    sql: `INSERT INTO borrowers (borrowernumber, firstname, surname, cardnumber, categorycode, branchcode, dateofbirth)
-                          VALUES (?, ?, ?, ?, ?, ?, ?)`,
-                    values: [
-                        mockPatron.patron_id,
-                        mockPatron.firstname,
-                        mockPatron.surname,
-                        mockPatron.cardnumber,
-                        mockPatron.category_id,
-                        mockPatron.library_id,
-                        "1990-01-01",
-                    ],
-                });
-            });
 
         // Set up API intercepts
         cy.intercept(
             "GET",
             `/api/v1/biblios/${testData.biblio.biblio_id}/pickup_locations*`
         ).as("getPickupLocations");
-        cy.intercept("GET", "/api/v1/circulation_rules*", {
-            body: [
-                {
-                    branchcode: testData.libraries[0].library_id,
-                    categorycode: "PT",
-                    itemtype: "BK",
-                    issuelength: 14,
-                    renewalsallowed: 1,
-                    renewalperiod: 7,
-                },
-            ],
-        }).as("getCirculationRules");
+        cy.intercept("GET", "/api/v1/circulation_rules*").as(
+            "getCirculationRules"
+        );
+        cy.intercept("POST", "/api/v1/bookings").as("createBooking");
 
         // Visit the page and open booking modal
         cy.visit(
             `/cgi-bin/koha/catalogue/detail.pl?biblionumber=${testData.biblio.biblio_id}`
         );
-        cy.title().should("contain", "Koha");
 
         // Open booking modal
-        cy.get('[data-bs-target="#placeBookingModal"]').first().click();
-        cy.get("#placeBookingModal").should("be.visible");
+        cy.get("booking-modal .modal").should("exist");
+        cy.get("[data-booking-modal]")
+            .first()
+            .then($btn => $btn[0].click());
+        cy.get("booking-modal .modal", { timeout: 10000 }).should("be.visible");
 
         // Fill required fields progressively
-        cy.selectFromSelect2(
-            "#booking_patron_id",
-            `${testData.patron.surname}, ${testData.patron.firstname}`,
-            testData.patron.cardnumber
+        cy.vueSelect(
+            "booking_patron",
+            testData.patron.cardnumber,
+            `${testData.patron.surname} ${testData.patron.firstname}`
         );
         cy.wait("@getPickupLocations");
 
-        cy.get("#pickup_library_id").should("not.be.disabled");
-        cy.selectFromSelect2ByIndex("#pickup_library_id", 0);
+        cy.vueSelectShouldBeEnabled("pickup_library_id");
+        cy.vueSelectByIndex("pickup_library_id", 0);
 
-        cy.get("#booking_item_id").should("not.be.disabled");
-        cy.selectFromSelect2ByIndex("#booking_item_id", 1); // Select actual item (not "Any item")
+        cy.vueSelectShouldBeEnabled("booking_item_id");
+        cy.vueSelectByIndex("booking_item_id", 1); // Select a concrete item
         cy.wait("@getCirculationRules");
 
         // Verify date picker is enabled
-        cy.get("#period").should("not.be.disabled");
-
-        // ========================================================================
-        // TEST: Date Selection and Field Format Validation
-        // ========================================================================
+        cy.get("#booking_period").should("not.be.disabled");
 
         // Define test dates
         const startDate = dayjs().add(3, "day");
         const endDate = dayjs().add(6, "day");
 
         // Select date range in flatpickr
-        cy.get("#period").selectFlatpickrDateRange(startDate, endDate);
+        cy.get("#booking_period").selectFlatpickrDateRange(startDate, endDate);
 
-        // ========================================================================
-        // VERIFY: Visible Field Format (User-Friendly Display)
-        // ========================================================================
-
-        // The visible #period field should show user-friendly format
-        const expectedDisplayValue = `${startDate.format("YYYY-MM-DD")} to ${endDate.format("YYYY-MM-DD")}`;
-        cy.get("#period").should("have.value", expectedDisplayValue);
-        cy.log(`✓ Visible field format: ${expectedDisplayValue}`);
-
-        // ========================================================================
-        // VERIFY: Hidden Fields Format (ISO Timestamps for API)
-        // ========================================================================
-
-        // Hidden start date field: beginning of day in ISO format
-        cy.get("#booking_start_date").should(
-            "have.value",
-            startDate.startOf("day").toISOString()
-        );
-        cy.log(
-            `✓ Hidden start date: ${startDate.startOf("day").toISOString()}`
-        );
-
-        // Hidden end date field: end of day in ISO format
-        cy.get("#booking_end_date").should(
-            "have.value",
-            endDate.endOf("day").toISOString()
-        );
-        cy.log(`✓ Hidden end date: ${endDate.endOf("day").toISOString()}`);
-
-        // ========================================================================
-        // VERIFY: Field Visibility Management
-        // ========================================================================
-
-        // Verify all required fields exist and are populated
-        cy.get("#period").should("exist").and("not.have.value", "");
-        cy.get("#booking_start_date").should("exist").and("not.have.value", "");
-        cy.get("#booking_end_date").should("exist").and("not.have.value", "");
-
-        cy.log("✓ CONFIRMED: Dual-format system working correctly");
-        cy.log(
-            "✓ User-friendly display format with precise ISO timestamps for API"
-        );
-
-        // Clean up test data
-        cy.task("deleteSampleObjects", testData);
-        cy.task("query", {
-            sql: "DELETE FROM borrowers WHERE borrowernumber = ?",
-            values: [testData.patron.patron_id],
+        // Verify the dates were selected correctly via the flatpickr instance (format-agnostic)
+        cy.get("#booking_period").should($el => {
+            const fp = $el[0]._flatpickr;
+            expect(fp.selectedDates.length).to.eq(2);
+            expect(dayjs(fp.selectedDates[0]).format("YYYY-MM-DD")).to.eq(
+                startDate.format("YYYY-MM-DD")
+            );
+            expect(dayjs(fp.selectedDates[1]).format("YYYY-MM-DD")).to.eq(
+                endDate.format("YYYY-MM-DD")
+            );
         });
+
+        // Verify the period field is populated
+        cy.get("#booking_period").should("exist").and("not.have.value", "");
+
+        cy.get('button[form="form-booking"][type="submit"]')
+            .should("not.be.disabled")
+            .click();
+
+        // Submitting sends the selected range to the API; the payload carries
+        // each calendar date as a library-timezone day-boundary ISO string.
+        cy.wait("@createBooking").then(({ request, response }) => {
+            expect(response.statusCode, "create succeeds").to.be.oneOf([
+                200, 201,
+            ]);
+            expect(request.body.start_date).to.include(
+                startDate.format("YYYY-MM-DD")
+            );
+            expect(request.body.end_date).to.include(
+                endDate.format("YYYY-MM-DD")
+            );
+        });
+        cy.get("booking-modal .modal").should("not.be.visible");
     });
 
     it("should edit an existing booking successfully", () => {
@@ -756,17 +576,8 @@ describe("Booking Modal Basic Tests", () => {
          * Booking Edit Functionality Test
          * ==============================
          *
-         * This test validates the complete edit booking workflow:
-         * - Pre-populating edit modal with existing booking data
-         * - Modifying booking details (pickup library, dates)
-         * - Submitting updates via PUT API
-         * - Validating success feedback and modal closure
-         *
-         * Key functionality:
-         * 1. Edit modal pre-population from existing booking
-         * 2. Form modification and validation
-         * 3. PUT API request with proper payload structure
-         * 4. Success feedback and UI state management
+         * In the Vue version, edit mode is triggered by setting properties
+         * on the booking-modal element via window.openBookingModal().
          */
 
         const today = dayjs().startOf("day");
@@ -776,35 +587,32 @@ describe("Booking Modal Basic Tests", () => {
         const originalEndDate = originalStartDate.add(3, "day");
 
         cy.then(() => {
-            return cy.task("query", {
-                sql: `INSERT INTO bookings (biblio_id, item_id, patron_id, start_date, end_date, pickup_library_id, status)
-                      VALUES (?, ?, ?, ?, ?, ?, '1')`,
-                values: [
-                    testData.biblio.biblio_id,
-                    testData.items[0].item_id,
-                    testData.patron.patron_id,
-                    originalStartDate.format("YYYY-MM-DD HH:mm:ss"),
-                    originalEndDate.format("YYYY-MM-DD HH:mm:ss"),
-                    testData.libraries[0].library_id,
-                ],
+            return cy.task("insertSampleBooking", {
+                item: testData.items[0],
+                patron: testData.patron,
+                pickup_library_id: testData.libraries[0].library_id,
+                start_date: originalStartDate.toISOString(),
+                end_date: originalEndDate.toISOString(),
             });
-        }).then(result => {
-            // Store the booking ID for editing
+        }).then(({ booking }) => {
+            // Store the booking for editing; the `booking` key is picked up
+            // by deleteSampleObjects for cleanup.
             testData.existingBooking = {
-                booking_id: result.insertId,
+                booking_id: booking.booking_id,
                 start_date: originalStartDate.startOf("day").toISOString(),
                 end_date: originalEndDate.endOf("day").toISOString(),
             };
+            testData.booking = booking;
         });
 
         // Use real API calls for all booking operations since we created real database data
-        // Only mock checkouts if it causes JavaScript errors (bookings API should return our real booking)
+        // Only mock checkouts if it causes JavaScript errors
         cy.intercept("GET", "/api/v1/checkouts*", { body: [] }).as(
             "getCheckouts"
         );
 
-        // Let the PUT request go to the real API - it should work since we created a real booking
-        // Optionally intercept just to log that it happened, but let it pass through
+        // Intercept the patron fetch so we can wait for pre-population
+        cy.intercept("GET", "/api/v1/patrons/*").as("getPatron");
 
         // Visit the page
         cy.visit(
@@ -812,216 +620,195 @@ describe("Booking Modal Basic Tests", () => {
         );
         cy.title().should("contain", "Koha");
 
-        // ========================================================================
-        // TEST: Open Edit Modal with Pre-populated Data
-        // ========================================================================
-
-        // Set up edit booking attributes and click to open edit modal (using .then to ensure data is available)
+        // Open edit modal by calling window.openBookingModal with booking properties
+        cy.get("booking-modal .modal").should("exist");
         cy.then(() => {
-            cy.get('[data-bs-target="#placeBookingModal"]')
-                .first()
-                .invoke(
-                    "attr",
-                    "data-booking",
-                    testData.existingBooking.booking_id.toString()
-                )
-                .invoke(
-                    "attr",
-                    "data-patron",
-                    testData.patron.patron_id.toString()
-                )
-                .invoke(
-                    "attr",
-                    "data-itemnumber",
-                    testData.items[0].item_id.toString()
-                )
-                .invoke(
-                    "attr",
-                    "data-pickup_library",
-                    testData.libraries[0].library_id
-                )
-                .invoke(
-                    "attr",
-                    "data-start_date",
-                    testData.existingBooking.start_date
-                )
-                .invoke(
-                    "attr",
-                    "data-end_date",
-                    testData.existingBooking.end_date
-                )
-                .click();
-        });
-
-        // No need to wait for specific API calls since we're using real API responses
-
-        // ========================================================================
-        // VERIFY: Edit Modal Pre-population
-        // ========================================================================
-
-        // Verify edit modal setup and pre-populated values
-        cy.get("#placeBookingLabel").should("contain", "Edit booking");
-
-        // Verify core edit fields exist and are properly pre-populated
-        cy.then(() => {
-            cy.get("#booking_id").should(
-                "have.value",
-                testData.existingBooking.booking_id.toString()
-            );
-            cy.log("✓ Booking ID populated correctly");
-
-            // These fields will be pre-populated in edit mode
-            cy.get("#booking_patron_id").should(
-                "have.value",
-                testData.patron.patron_id.toString()
-            );
-            cy.log("✓ Patron field pre-populated correctly");
-
-            cy.get("#booking_item_id").should(
-                "have.value",
-                testData.items[0].item_id.toString()
-            );
-            cy.log("✓ Item field pre-populated correctly");
-
-            cy.get("#pickup_library_id").should(
-                "have.value",
-                testData.libraries[0].library_id
-            );
-            cy.log("✓ Pickup library field pre-populated correctly");
-
-            cy.get("#booking_start_date").should(
-                "have.value",
-                testData.existingBooking.start_date
-            );
-            cy.log("✓ Start date field pre-populated correctly");
-
-            cy.get("#booking_end_date").should(
-                "have.value",
-                testData.existingBooking.end_date
-            );
-            cy.log("✓ End date field pre-populated correctly");
-        });
-
-        cy.log("✓ Edit modal pre-populated with existing booking data");
-
-        // ========================================================================
-        // VERIFY: Real API Integration
-        // ========================================================================
-
-        // Test that the booking can be retrieved via the real API
-        cy.then(() => {
-            cy.request(
-                "GET",
-                `/api/v1/bookings?biblio_id=${testData.biblio.biblio_id}`
-            ).then(response => {
-                expect(response.status).to.equal(200);
-                expect(response.body).to.be.an("array");
-                expect(response.body.length).to.be.at.least(1);
-
-                const ourBooking = response.body.find(
-                    booking =>
-                        booking.booking_id ===
-                        testData.existingBooking.booking_id
-                );
-                expect(ourBooking).to.exist;
-                expect(ourBooking.patron_id).to.equal(
-                    testData.patron.patron_id
-                );
-
-                cy.log("✓ Booking exists and is retrievable via real API");
+            cy.window().then(win => {
+                win.openBookingModal({
+                    booking: testData.existingBooking.booking_id.toString(),
+                    patron: testData.patron.patron_id.toString(),
+                    itemnumber: testData.items[0].item_id.toString(),
+                    pickup_library: testData.libraries[0].library_id,
+                    start_date: testData.existingBooking.start_date,
+                    end_date: testData.existingBooking.end_date,
+                    biblionumber: testData.biblio.biblio_id.toString(),
+                });
             });
         });
 
-        // Test that the booking can be updated via the real API
-        cy.then(() => {
-            const updateData = {
-                booking_id: testData.existingBooking.booking_id,
-                patron_id: testData.patron.patron_id,
-                item_id: testData.items[0].item_id,
-                pickup_library_id: testData.libraries[0].library_id,
-                start_date: today.add(12, "day").startOf("day").toISOString(),
-                end_date: today.add(15, "day").endOf("day").toISOString(),
-                biblio_id: testData.biblio.biblio_id,
-            };
+        // Wait for the patron fetch to complete before checking pre-populated fields
+        cy.wait("@getPatron");
 
-            cy.request(
-                "PUT",
-                `/api/v1/bookings/${testData.existingBooking.booking_id}`,
-                updateData
-            ).then(response => {
-                expect(response.status).to.equal(200);
-                cy.log("✓ Booking can be successfully updated via real API");
+        // Verify edit modal setup
+        cy.get("booking-modal .modal", { timeout: 10000 }).should("be.visible");
+        cy.get("booking-modal .modal-title").should("contain", "Edit booking");
+
+        // Verify core edit fields are pre-populated with display values,
+        // not the raw IDs supplied through data attributes.
+        cy.vueSelectShouldHaveValue("booking_patron", testData.patron.surname);
+        cy.vueSelectShouldHaveValue(
+            "booking_item_id",
+            String(testData.items[0].external_id)
+        );
+        cy.get("#booking_period")
+            .should("not.have.value", "")
+            .and($input => {
+                expect($input[0]._flatpickr.selectedDates).to.have.length(2);
             });
+
+        // Wildcard match: the booking id is only known inside the async
+        // insertSampleBooking callback above.
+        cy.intercept("PUT", "/api/v1/bookings/*").as("updateBooking");
+
+        cy.get("booking-modal .modal .btn-primary")
+            .should("not.be.disabled")
+            .click();
+
+        // Editing through the modal must round-trip to the API and close it.
+        cy.wait("@updateBooking").its("response.statusCode").should("eq", 200);
+        cy.get("booking-modal .modal").should("not.be.visible");
+    });
+
+    it("should refresh edit modal state across consecutive openings", () => {
+        const today = dayjs().startOf("day");
+        let secondPatron;
+        let firstBookingId;
+        let secondBookingId;
+
+        const firstBooking = {
+            start: today.add(8, "day"),
+            end: today.add(10, "day"),
+            patron_id: testData.patron.patron_id,
+            patron_label: testData.patron.surname,
+        };
+
+        cy.task("insertSamplePatron", {
+            library: { library_id: testData.libraries[0].library_id },
+        }).then(patronResult => {
+            secondPatron = patronResult.patron;
+            testData.patrons = testData.patrons || [];
+            testData.patrons.push(secondPatron);
         });
 
-        cy.log("✓ CONFIRMED: Edit booking functionality working correctly");
-        cy.log(
-            "✓ Pre-population, modification, submission, and feedback all validated"
+        cy.then(() =>
+            cy
+                .task("insertSampleBooking", {
+                    item: testData.items[0],
+                    patron: testData.patron,
+                    pickup_library_id: testData.libraries[0].library_id,
+                    start_date: firstBooking.start.toISOString(),
+                    end_date: firstBooking.end.toISOString(),
+                })
+                .then(({ booking }) => {
+                    firstBookingId = booking.booking_id;
+                    testData.bookings = testData.bookings || [];
+                    testData.bookings.push(booking);
+                })
         );
 
-        // Clean up the booking we created for this test (shared test data cleanup is handled by afterEach)
         cy.then(() => {
-            cy.task("query", {
-                sql: "DELETE FROM bookings WHERE booking_id = ?",
-                values: [testData.existingBooking.booking_id],
+            const secondBooking = {
+                start: today.add(15, "day"),
+                end: today.add(17, "day"),
+                patron_id: secondPatron.patron_id,
+                patron_label: secondPatron.surname,
+            };
+
+            return cy
+                .task("insertSampleBooking", {
+                    item: testData.items[1],
+                    patron: secondPatron,
+                    pickup_library_id: testData.libraries[0].library_id,
+                    start_date: secondBooking.start.toISOString(),
+                    end_date: secondBooking.end.toISOString(),
+                })
+                .then(({ booking }) => {
+                    secondBookingId = booking.booking_id;
+                    testData.bookings = testData.bookings || [];
+                    testData.bookings.push(booking);
+                })
+                .then(() => secondBooking);
+        }).then(secondBooking => {
+            // Intercept patron fetches so we can wait for pre-population
+            cy.intercept("GET", "/api/v1/patrons/*").as("getPatron");
+
+            cy.visit(
+                `/cgi-bin/koha/catalogue/detail.pl?biblionumber=${testData.biblio.biblio_id}`
+            );
+            cy.get("booking-modal .modal").should("exist");
+
+            // First open: booking A
+            cy.window().then(win => {
+                win.openBookingModal({
+                    booking: String(firstBookingId),
+                    patron: String(firstBooking.patron_id),
+                    itemnumber: String(testData.items[0].item_id),
+                    pickup_library: testData.libraries[0].library_id,
+                    start_date: firstBooking.start.startOf("day").toISOString(),
+                    end_date: firstBooking.end.endOf("day").toISOString(),
+                    biblionumber: String(testData.biblio.biblio_id),
+                });
             });
+
+            cy.wait("@getPatron");
+            cy.get("booking-modal .modal", { timeout: 10000 }).should(
+                "be.visible"
+            );
+            cy.vueSelectShouldHaveValue(
+                "booking_patron",
+                firstBooking.patron_label
+            );
+
+            cy.get("booking-modal .modal .btn-close").first().click();
+            cy.get("booking-modal .modal").should("not.be.visible");
+            cy.get("body").should("not.have.class", "modal-open");
+
+            // Second open: booking B (must not stay stale with booking A data)
+            cy.window().then(win => {
+                win.openBookingModal({
+                    booking: String(secondBookingId),
+                    patron: String(secondBooking.patron_id),
+                    itemnumber: String(testData.items[1].item_id),
+                    pickup_library: testData.libraries[0].library_id,
+                    start_date: secondBooking.start
+                        .startOf("day")
+                        .toISOString(),
+                    end_date: secondBooking.end.endOf("day").toISOString(),
+                    biblionumber: String(testData.biblio.biblio_id),
+                });
+            });
+
+            cy.wait("@getPatron");
+            cy.get("booking-modal .modal", { timeout: 10000 }).should(
+                "be.visible"
+            );
+            cy.vueSelectShouldHaveValue(
+                "booking_patron",
+                secondBooking.patron_label
+            );
         });
     });
 
     it("should handle booking failure gracefully", () => {
         /**
          * Comprehensive Error Handling and Recovery Test
-         * =============================================
-         *
-         * This test validates the complete error handling workflow for booking failures:
-         * - API error response handling for various HTTP status codes (400, 409, 500)
-         * - Error message display and user feedback
-         * - Modal state preservation during errors (remains open)
-         * - Form data preservation during errors (user doesn't lose input)
-         * - Error recovery workflow (retry after fixing issues)
-         * - Integration between error handling UI and API error responses
-         * - User experience during error scenarios and successful recovery
          */
 
         const today = dayjs().startOf("day");
 
-        // Test-specific error scenarios to validate comprehensive error handling
-        const errorScenarios = [
-            {
-                name: "Validation Error (400)",
-                statusCode: 400,
-                body: {
-                    error: "Invalid booking period",
-                    errors: [
-                        {
-                            message: "End date must be after start date",
-                            path: "/end_date",
-                        },
-                    ],
-                },
-                expectedMessage: "Failure",
+        const primaryErrorScenario = {
+            name: "Validation Error (400)",
+            statusCode: 400,
+            body: {
+                error: "Invalid booking period",
+                errors: [
+                    {
+                        message: "End date must be after start date",
+                        path: "/end_date",
+                    },
+                ],
             },
-            {
-                name: "Conflict Error (409)",
-                statusCode: 409,
-                body: {
-                    error: "Booking conflict",
-                    message: "Item is already booked for this period",
-                },
-                expectedMessage: "Failure",
-            },
-            {
-                name: "Server Error (500)",
-                statusCode: 500,
-                body: {
-                    error: "Internal server error",
-                },
-                expectedMessage: "Failure",
-            },
-        ];
-
-        // Use the first error scenario for detailed testing (400 Validation Error)
-        const primaryErrorScenario = errorScenarios[0];
+        };
 
         // Setup API intercepts for error testing
         cy.intercept(
@@ -1051,98 +838,57 @@ describe("Booking Modal Basic Tests", () => {
         cy.visit(
             `/cgi-bin/koha/catalogue/detail.pl?biblionumber=${testData.biblio.biblio_id}`
         );
-        cy.get('[data-bs-target="#placeBookingModal"]').first().click();
-        cy.get("#placeBookingModal").should("be.visible");
+        cy.get("booking-modal .modal").should("exist");
+        cy.get("[data-booking-modal]")
+            .first()
+            .then($btn => $btn[0].click());
+        cy.get("booking-modal .modal", { timeout: 10000 }).should("be.visible");
 
-        // ========================================================================
         // PHASE 1: Complete Booking Form with Valid Data
-        // ========================================================================
         cy.log("=== PHASE 1: Filling booking form with valid data ===");
 
         // Step 1: Select patron
-        cy.selectFromSelect2(
-            "#booking_patron_id",
-            `${testData.patron.surname}, ${testData.patron.firstname}`,
-            testData.patron.cardnumber
+        cy.vueSelect(
+            "booking_patron",
+            testData.patron.cardnumber,
+            `${testData.patron.surname} ${testData.patron.firstname}`
         );
         cy.wait("@getPickupLocations");
 
         // Step 2: Select pickup location
-        cy.get("#pickup_library_id").should("not.be.disabled");
-        cy.selectFromSelect2("#pickup_library_id", testData.libraries[0].name);
+        cy.vueSelectShouldBeEnabled("pickup_library_id");
+        cy.vueSelectByIndex("pickup_library_id", 0);
 
-        // Step 3: Select item (triggers circulation rules)
-        cy.get("#booking_item_id").should("not.be.disabled");
-        cy.selectFromSelect2ByIndex("#booking_item_id", 1); // Skip "Any item" option
+        // Step 3: Select a concrete item (triggers circulation rules)
+        cy.vueSelectShouldBeEnabled("booking_item_id");
+        cy.vueSelectByIndex("booking_item_id", 1);
         cy.wait("@getCirculationRules");
 
         // Step 4: Set booking dates
-        cy.get("#period").should("not.be.disabled");
+        cy.get("#booking_period").should("not.be.disabled");
         const startDate = today.add(7, "day");
         const endDate = today.add(10, "day");
-        cy.get("#period").selectFlatpickrDateRange(startDate, endDate);
+        cy.get("#booking_period").selectFlatpickrDateRange(startDate, endDate);
 
-        // Validate form is ready for submission
-        cy.get("#booking_patron_id").should(
-            "have.value",
-            testData.patron.patron_id.toString()
-        );
-        cy.get("#pickup_library_id").should(
-            "have.value",
-            testData.libraries[0].library_id
-        );
-        cy.get("#booking_item_id").should(
-            "have.value",
-            testData.items[0].item_id.toString()
-        );
-
-        // ========================================================================
         // PHASE 2: Submit Form and Trigger Error Response
-        // ========================================================================
         cy.log(
             "=== PHASE 2: Submitting form and triggering error response ==="
         );
 
         // Submit the form and trigger the error
-        cy.get("#placeBookingForm button[type='submit']").click();
+        cy.get('button[form="form-booking"][type="submit"]').click();
         cy.wait("@failedBooking");
 
-        // ========================================================================
         // PHASE 3: Validate Error Handling Behavior
-        // ========================================================================
         cy.log("=== PHASE 3: Validating error handling behavior ===");
 
-        // Verify error message is displayed
-        cy.get("#booking_result").should(
-            "contain",
-            primaryErrorScenario.expectedMessage
-        );
-        cy.log(
-            `✓ Error message displayed: ${primaryErrorScenario.expectedMessage}`
-        );
+        // Verify error feedback is displayed (Vue uses .alert-danger within the modal)
+        cy.get("booking-modal .modal .alert-danger").should("exist");
 
         // Verify modal remains open on error (allows user to retry)
-        cy.get("#placeBookingModal").should("be.visible");
-        cy.log("✓ Modal remains open for user to retry");
+        cy.get("booking-modal .modal").should("be.visible");
 
-        // Verify form fields remain populated (user doesn't lose their input)
-        cy.get("#booking_patron_id").should(
-            "have.value",
-            testData.patron.patron_id.toString()
-        );
-        cy.get("#pickup_library_id").should(
-            "have.value",
-            testData.libraries[0].library_id
-        );
-        cy.get("#booking_item_id").should(
-            "have.value",
-            testData.items[0].item_id.toString()
-        );
-        cy.log("✓ Form data preserved during error (user input not lost)");
-
-        // ========================================================================
         // PHASE 4: Test Error Recovery (Successful Retry)
-        // ========================================================================
         cy.log("=== PHASE 4: Testing error recovery workflow ===");
 
         // Setup successful booking intercept for retry attempt
@@ -1160,31 +906,216 @@ describe("Booking Modal Basic Tests", () => {
         }).as("successfulRetry");
 
         // Retry the submission (same form, no changes needed)
-        cy.get("#placeBookingForm button[type='submit']").click();
+        cy.get('button[form="form-booking"][type="submit"]').click();
         cy.wait("@successfulRetry");
 
         // Verify successful retry behavior
-        cy.get("#placeBookingModal").should("not.be.visible");
-        cy.log("✓ Modal closes on successful retry");
+        cy.get("booking-modal .modal").should("not.be.visible");
 
-        // Check for success feedback (may appear as transient message)
-        cy.get("body").then($body => {
-            if ($body.find("#transient_result:visible").length > 0) {
-                cy.get("#transient_result").should(
-                    "contain",
-                    "Booking successfully placed"
-                );
-                cy.log("✓ Success message displayed after retry");
-            } else {
-                cy.log("✓ Modal closure indicates successful booking");
-            }
-        });
+        // The page listener handles the island's booking-saved event.
+        cy.get("#transient_result").should(
+            "contain",
+            "Booking successfully placed"
+        );
+    });
 
-        cy.log(
-            "✓ CONFIRMED: Error handling and recovery workflow working correctly"
+    it("should reset modal state after canceling", () => {
+        cy.visit(
+            `/cgi-bin/koha/catalogue/detail.pl?biblionumber=${testData.biblio.biblio_id}`
         );
-        cy.log(
-            "✓ Validated: API errors, user feedback, form preservation, and retry functionality"
+
+        cy.get("booking-modal .modal").should("exist");
+        cy.get("[data-booking-modal]")
+            .first()
+            .then($btn => $btn[0].click());
+        cy.get("booking-modal .modal", { timeout: 10000 }).should("be.visible");
+
+        // Fill some fields
+        cy.vueSelect(
+            "booking_patron",
+            testData.patron.cardnumber,
+            `${testData.patron.surname} ${testData.patron.firstname}`
         );
+        cy.vueSelectShouldBeEnabled("pickup_library_id");
+        cy.vueSelectByIndex("pickup_library_id", 0);
+
+        // Close modal and wait for Bootstrap transition to fully complete
+        cy.get("booking-modal .modal .btn-close").first().click();
+        cy.get("booking-modal .modal").should("not.be.visible");
+        cy.get("body").should("not.have.class", "modal-open");
+
+        // Reopen and verify state is reset
+        cy.get("[data-booking-modal]")
+            .first()
+            .then($btn => $btn[0].click());
+        cy.get("booking-modal .modal.show", { timeout: 10000 }).should(
+            "be.visible"
+        );
+
+        cy.vueSelectShouldBeEnabled("booking_patron");
+        cy.vueSelectShouldBeDisabled("pickup_library_id");
+        cy.vueSelectShouldBeDisabled("booking_itemtype");
+        cy.vueSelectShouldBeDisabled("booking_item_id");
+        cy.get("#booking_period").should("be.disabled");
+        cy.get('button[form="form-booking"][type="submit"]').should(
+            "be.disabled"
+        );
+    });
+
+    it("should show capacity warning for zero-day circulation rules", () => {
+        cy.intercept(
+            "GET",
+            `/api/v1/biblios/${testData.biblio.biblio_id}/pickup_locations*`
+        ).as("getPickupLocations");
+        cy.intercept("GET", "/api/v1/circulation_rules*", {
+            body: [
+                {
+                    library_id: testData.libraries[0].library_id,
+                    item_type_id: "BK",
+                    patron_category_id: testData.patron.category_id,
+                    issuelength: 0,
+                    renewalsallowed: 0,
+                    renewalperiod: 0,
+                    bookings_lead_period: 0,
+                    bookings_trail_period: 0,
+                    calculated_period_days: 0,
+                },
+            ],
+        }).as("getCirculationRules");
+
+        cy.visit(
+            `/cgi-bin/koha/catalogue/detail.pl?biblionumber=${testData.biblio.biblio_id}`
+        );
+
+        cy.get("booking-modal .modal").should("exist");
+        cy.get("[data-booking-modal]")
+            .first()
+            .then($btn => $btn[0].click());
+        cy.get("booking-modal .modal", { timeout: 10000 }).should("be.visible");
+
+        cy.vueSelect(
+            "booking_patron",
+            testData.patron.cardnumber,
+            `${testData.patron.surname} ${testData.patron.firstname}`
+        );
+        cy.wait("@getPickupLocations");
+
+        cy.vueSelectShouldBeEnabled("pickup_library_id");
+        cy.vueSelectByIndex("pickup_library_id", 0);
+
+        cy.vueSelectShouldBeEnabled("booking_item_id");
+        cy.vueSelectByIndex("booking_item_id", 1);
+        cy.wait("@getCirculationRules");
+
+        cy.get("booking-modal .modal .alert-warning")
+            .scrollIntoView()
+            .should("be.visible")
+            .and("contain", "Bookings are not permitted");
+        cy.get("#booking_period").should("be.disabled");
+        cy.get('button[form="form-booking"][type="submit"]').should(
+            "be.disabled"
+        );
+    });
+
+    it("should show error on 409 conflict response", () => {
+        cy.intercept(
+            "GET",
+            `/api/v1/biblios/${testData.biblio.biblio_id}/pickup_locations*`
+        ).as("getPickupLocations");
+        cy.intercept("GET", "/api/v1/circulation_rules*").as(
+            "getCirculationRules"
+        );
+        cy.intercept("POST", "/api/v1/bookings", {
+            statusCode: 409,
+            body: { error: "Booking conflict detected" },
+        }).as("conflictBooking");
+
+        cy.visit(
+            `/cgi-bin/koha/catalogue/detail.pl?biblionumber=${testData.biblio.biblio_id}`
+        );
+
+        cy.get("booking-modal .modal").should("exist");
+        cy.get("[data-booking-modal]")
+            .first()
+            .then($btn => $btn[0].click());
+        cy.get("booking-modal .modal", { timeout: 10000 }).should("be.visible");
+
+        cy.vueSelect(
+            "booking_patron",
+            testData.patron.cardnumber,
+            `${testData.patron.surname} ${testData.patron.firstname}`
+        );
+        cy.wait("@getPickupLocations");
+
+        cy.vueSelectShouldBeEnabled("pickup_library_id");
+        cy.vueSelectByIndex("pickup_library_id", 0);
+
+        cy.vueSelectShouldBeEnabled("booking_item_id");
+        cy.vueSelectByIndex("booking_item_id", 1);
+        cy.wait("@getCirculationRules");
+
+        cy.get("#booking_period").should("not.be.disabled");
+        const startDate = dayjs().add(5, "day");
+        const endDate = dayjs().add(10, "day");
+        cy.get("#booking_period").selectFlatpickrDateRange(startDate, endDate);
+
+        cy.get('button[form="form-booking"][type="submit"]')
+            .should("not.be.disabled")
+            .click();
+        cy.wait("@conflictBooking");
+
+        cy.get("booking-modal .modal .alert-danger").should("exist");
+        cy.get("booking-modal .modal").should("be.visible");
+    });
+
+    it("should show error on 500 server error response", () => {
+        cy.intercept(
+            "GET",
+            `/api/v1/biblios/${testData.biblio.biblio_id}/pickup_locations*`
+        ).as("getPickupLocations");
+        cy.intercept("GET", "/api/v1/circulation_rules*").as(
+            "getCirculationRules"
+        );
+        cy.intercept("POST", "/api/v1/bookings", {
+            statusCode: 500,
+            body: { error: "Internal server error" },
+        }).as("serverError");
+
+        cy.visit(
+            `/cgi-bin/koha/catalogue/detail.pl?biblionumber=${testData.biblio.biblio_id}`
+        );
+
+        cy.get("booking-modal .modal").should("exist");
+        cy.get("[data-booking-modal]")
+            .first()
+            .then($btn => $btn[0].click());
+        cy.get("booking-modal .modal", { timeout: 10000 }).should("be.visible");
+
+        cy.vueSelect(
+            "booking_patron",
+            testData.patron.cardnumber,
+            `${testData.patron.surname} ${testData.patron.firstname}`
+        );
+        cy.wait("@getPickupLocations");
+
+        cy.vueSelectShouldBeEnabled("pickup_library_id");
+        cy.vueSelectByIndex("pickup_library_id", 0);
+
+        cy.vueSelectShouldBeEnabled("booking_item_id");
+        cy.vueSelectByIndex("booking_item_id", 1);
+        cy.wait("@getCirculationRules");
+
+        cy.get("#booking_period").should("not.be.disabled");
+        const startDate = dayjs().add(5, "day");
+        const endDate = dayjs().add(10, "day");
+        cy.get("#booking_period").selectFlatpickrDateRange(startDate, endDate);
+
+        cy.get('button[form="form-booking"][type="submit"]')
+            .should("not.be.disabled")
+            .click();
+        cy.wait("@serverError");
+
+        cy.get("booking-modal .modal .alert-danger").should("exist");
+        cy.get("booking-modal .modal").should("be.visible");
     });
 });

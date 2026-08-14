@@ -93,23 +93,48 @@ export function registerIsland(
 }
 
 /**
+ * Schedule island hydration without requiring requestIdleCallback support.
+ *
+ * @param {IdleRequestCallback} cb Hydration callback.
+ * @returns {void}
+ */
+const scheduleIdle: (cb: IdleRequestCallback) => void =
+    typeof window.requestIdleCallback === "function"
+        ? window.requestIdleCallback.bind(window)
+        : cb =>
+              window.setTimeout(
+                  () =>
+                      cb({
+                          didTimeout: false,
+                          timeRemaining: () => 0,
+                      } as IdleDeadline),
+                  1
+              );
+
+/**
  * Hydrates custom elements by scanning the document and loading only necessary components.
  * @param {IslandStoreDefinitions} [storeDefinitions] - The stores islands on this page may request via config.stores.
  * @returns {void}
  */
 export function hydrate(storeDefinitions: IslandStoreDefinitions = {}): void {
-    window.requestIdleCallback(async () => {
+    scheduleIdle(async () => {
         if (componentRegistry.size === 0) {
             return;
         }
 
         const pinia = createPinia();
-        const storesMatrix = Object.fromEntries(
-            Object.entries(storeDefinitions).map(([name, useStore]) => [
-                name,
-                useStore(pinia),
-            ])
-        );
+        // Stores are created lazily so pages only initialize those requested
+        // by the islands they contain.
+        const storeInstances: Record<string, unknown> = {};
+
+        /**
+         * Resolve and cache a store only when an island requests it.
+         *
+         * @param {string} name Registered store name.
+         * @returns {unknown} Resolved store instance.
+         */
+        const resolveStore = (name: string) =>
+            (storeInstances[name] ??= storeDefinitions[name]?.(pinia));
 
         const islandTagNames = Array.from(componentRegistry.keys()).join(", ");
         const requestedIslands = new Set(
@@ -141,21 +166,24 @@ export function hydrate(storeDefinitions: IslandStoreDefinitions = {}): void {
 
             customElements.define(
                 name,
-                defineCustomElement(component as any, {
-                    shadowRoot: false,
-                    ...(config && {
-                        configureApp(app) {
-                            if (config.stores?.length > 0) {
-                                app.use(pinia);
-                                config.stores.forEach(store => {
-                                    app.provide(store, storesMatrix[store]);
-                                });
-                            }
-                            app.config.globalProperties.$__ = $__;
-                            // Further config options can be added here as we expand this further
-                        },
-                    }),
-                })
+                defineCustomElement(
+                    component as Parameters<typeof defineCustomElement>[0],
+                    {
+                        shadowRoot: false,
+                        ...(config && {
+                            configureApp(app) {
+                                if (config.stores?.length > 0) {
+                                    app.use(pinia);
+                                    config.stores.forEach(store => {
+                                        app.provide(store, resolveStore(store));
+                                    });
+                                }
+                                app.config.globalProperties.$__ = $__;
+                                // Further config options can be added here as we expand this further
+                            },
+                        }),
+                    }
+                )
             );
 
             document.dispatchEvent(

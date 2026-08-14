@@ -8,12 +8,28 @@ import {
 import { useMainStore } from "../stores/main";
 import { useNavigationStore } from "../stores/navigation";
 import { useVendorStore } from "../stores/vendors";
+import { useBookingStore } from "../stores/bookings";
 
 /**
  * The islands available in the staff interface.
  * @type {Map<string, WebComponentDynamicImport>}
  */
 const islands: Map<string, WebComponentDynamicImport> = new Map([
+    [
+        "booking-modal",
+        {
+            importFn: async () => {
+                const module = await import(
+                    /* webpackChunkName: "booking-modal" */
+                    "../components/Bookings/BookingModal.vue"
+                );
+                return module.default;
+            },
+            config: {
+                stores: ["bookingStore"],
+            },
+        },
+    ],
     [
         "acquisitions-menu",
         {
@@ -69,6 +85,7 @@ const storeDefinitions: IslandStoreDefinitions = {
     mainStore: useMainStore,
     navigationStore: useNavigationStore,
     vendorStore: useVendorStore,
+    bookingStore: useBookingStore,
 };
 
 // Core islands take the same registration path as plugin islands.

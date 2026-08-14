@@ -298,10 +298,12 @@
         <a id="audit_record" class="btn btn-default" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | html %]&audit=1" role="button"> <i class="fa-solid fa-stethoscope"></i> Audit</a>
     </div>
 
-    [% IF ( Koha.Preference('EnableBooking') &&  CAN_user_circulate_manage_bookings && biblio.items.filter_by_bookable.count ) %]
-        <div class="btn-group"
-            ><button id="placbooking" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#placeBookingModal" data-biblionumber="[% biblionumber | html %]"><i class="fa fa-calendar"></i> Place booking</button></div
-        >
+    [% IF ( Koha.Preference('EnableBooking') && CAN_user_circulate_manage_bookings ) %]
+        [% IF biblio.items.filter_by_bookable.count %]
+            [% INCLUDE 'modals/booking/button-place.inc' %]
+        [% END %]
+        [%# The island also defines window.openBookingModal, which bookings/list.tt needs for editing existing bookings even when no item is currently bookable — do not gate it on bookable items. %]
+        [% INCLUDE 'modals/booking/island.inc' %]
     [% END %]
 
     [% IF Koha.Preference('ArticleRequests') %]
@@ -357,5 +359,3 @@
         </div>
     </div>
 </div>
-
-[% INCLUDE modals/place_booking.inc %]

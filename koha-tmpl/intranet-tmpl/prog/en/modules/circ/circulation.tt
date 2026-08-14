@@ -1142,7 +1142,9 @@
 [% END %]
 [% IF Koha.Preference('EnableBooking') %]
     [% INCLUDE modals/cancel_booking.inc %]
-    [% INCLUDE modals/place_booking.inc %]
+    [% IF CAN_user_circulate_manage_bookings %]
+        [% INCLUDE 'modals/booking/island.inc' %]
+    [% END %]
     [% INCLUDE modals/extend_booking.inc %]
 [% END %]
 
@@ -1358,14 +1360,7 @@
     [% Asset.js("js/members-menu.js") | $raw %]
     [% Asset.js("js/checkouts.js") | $raw %]
     [% IF Koha.Preference('EnableBooking') %]
-        [% Asset.js("lib/dayjs/plugin/isSameOrAfter.js") | $raw %]
-        [% Asset.js("lib/dayjs/plugin/isSameOrBefore.js") | $raw %]
-        <script nonce="[% Koha.CSPNonce | $raw %]">
-            dayjs.extend(window.dayjs_plugin_isSameOrAfter);
-            dayjs.extend(window.dayjs_plugin_isSameOrBefore);
-        </script>
         [% Asset.js("js/extend_booking_modal.js") | $raw %]
-        [% Asset.js("js/modals/place_booking.js") | $raw %]
         [% Asset.js("js/bookings/common.js") | $raw %]
         [% Asset.js("js/tables/bookings.js") | $raw %]
     [% END %]

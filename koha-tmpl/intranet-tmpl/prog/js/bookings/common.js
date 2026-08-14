@@ -1,4 +1,4 @@
-/* global __ escape_str $date Koha */
+/* global __ escape_str $date */
 
 /**
  * Shared rendering helpers for the patron and biblio bookings tables,
@@ -102,8 +102,7 @@ window.BookingsTable = (function () {
             if (permissions.CAN_user_circulate_manage_bookings) {
                 actions += `
                     <button type="button" class="btn btn-default btn-xs edit-action"
-                        data-bs-toggle="modal"
-                        data-bs-target="#placeBookingModal"
+                        data-booking-modal
                         data-booking="%s"
                         data-biblionumber="%s"
                         data-itemnumber="%s"
@@ -206,6 +205,7 @@ window.BookingsTable = (function () {
      *
      * @param {Object} row - The booking row as returned by the bookings API
      * @param {HTMLElement} node - The tr node for the row
+     * @returns {void}
      */
     function highlightRow(row, node) {
         if (row.status !== "new") {
