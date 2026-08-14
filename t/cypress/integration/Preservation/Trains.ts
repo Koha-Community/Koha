@@ -138,7 +138,7 @@ function get_train_items() {
     train_item_1.user_train_item_id = 1;
 
     let train_item_2 = get_items()[1];
-    let processing_attributes = get_attributes();
+    processing_attributes = get_attributes();
     train_item_2.attributes = [
         {
             processing_attribute: processing_attributes[0],
@@ -170,7 +170,7 @@ function get_train_items() {
     train_item_2.user_train_item_id = 2;
 
     let train_item_3 = get_items()[0];
-    let processing_attributes = get_other_attributes();
+    processing_attributes = get_other_attributes();
     train_item_3.attributes = [
         {
             processing_attribute: processing_attributes[0],
