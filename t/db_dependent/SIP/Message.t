@@ -22,7 +22,7 @@
 
 use Modern::Perl;
 use Test::NoWarnings;
-use Test::More tests => 23;
+use Test::More tests => 24;
 use Test::Exception;
 use Test::MockObject;
 use Test::MockModule;
@@ -2005,6 +2005,61 @@ subtest 'Test  convert_nonprinting_characters' => sub {
     }
 
     like( $output, qr/Comment 1 -- Comment 2 -- Comment 3/, "Response contains converted restriction comment" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Test _format_title' => sub {
+
+    plan tests => 2;
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+    my $builder    = t::lib::TestBuilder->new();
+    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
+    my ( $response, $findpatron );
+    my $mocks   = create_mocks( \$response, \$findpatron, \$branchcode );
+    my $mockILS = $mocks->{ils};
+    my $server  = { ils => $mockILS, account => {} };
+
+    my $patron = $builder->build(
+        {
+            source => 'Borrower',
+            value  => {
+                password   => hash_password(PATRON_PW),
+                branchcode => $branchcode,
+            },
+        }
+    );
+    my $biblio = $builder->build_sample_biblio(
+        {
+            title => 'Title',
+        }
+    );
+    $biblio->subtitle("Subtitle")->store;
+    my $item = $builder->build_sample_item(
+        {
+            damaged       => 0,
+            withdrawn     => 0,
+            itemlost      => 0,
+            restricted    => 0,
+            homebranch    => $branchcode,
+            holdingbranch => $branchcode,
+            biblionumber  => $biblio->biblionumber
+        }
+    );
+    my $sip_item = C4::SIP::ILS::Item->new( $item->barcode );
+
+    delete $server->{account}->{aj_field_template};
+    is(
+        C4::SIP::Sip::MsgType::_format_title( { item => $sip_item, server => $server } ), "Title",
+        "When aj_field_template undefined, we get the simple title"
+    );
+
+    $server->{account}->{aj_field_template} = "[% biblio.title %] [% biblio.subtitle %] [% item.barcode %]";
+    is(
+        C4::SIP::Sip::MsgType::_format_title( { item => $sip_item, server => $server } ),
+        "Title Subtitle " . $item->barcode, "When aj_field_template set, we get expected fields"
+    );
 
     $schema->storage->txn_rollback;
 };

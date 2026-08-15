@@ -24,7 +24,8 @@ use Koha::Patrons;
 use Koha::Patron::Attributes;
 use Koha::Plugins;
 use Koha::Items;
-use Koha::DateUtils qw( output_pref );
+use Koha::DateUtils     qw( output_pref );
+use Koha::TemplateUtils qw( process_tt );
 
 use UNIVERSAL::can;
 
@@ -625,10 +626,10 @@ sub handle_checkout {
         $resp .= timestamp;
 
         # Now for the variable fields
-        $resp .= add_field( FID_INST_ID,   $inst,           $server );
-        $resp .= add_field( FID_PATRON_ID, $patron_id,      $server );
-        $resp .= add_field( FID_ITEM_ID,   $item_id,        $server );
-        $resp .= add_field( FID_TITLE_ID,  $item->title_id, $server );
+        $resp .= add_field( FID_INST_ID,   $inst,      $server );
+        $resp .= add_field( FID_PATRON_ID, $patron_id, $server );
+        $resp .= add_field( FID_ITEM_ID,   $item_id,   $server );
+        $resp .= add_field( FID_TITLE_ID,  _format_title( { item => $item, server => $server } ) );
         if ( $item->due_date ) {
             my $due_date =
                 $account->{format_due_date}
@@ -663,7 +664,7 @@ sub handle_checkout {
 
         # If the item is valid, provide the title, otherwise
         # leave it blank
-        $resp .= add_field( FID_TITLE_ID, $item ? $item->title_id : '', $server );
+        $resp .= add_field( FID_TITLE_ID, $item ? _format_title( { item => $item, server => $server } ) : "" );
 
         # Due date is required.  Since it didn't get checked out,
         # it's not due, so leave the date blank
@@ -763,7 +764,7 @@ sub handle_checkin {
 
     if ($item) {
         $resp .= add_field( FID_PERM_LOCN, $item->permanent_location, $server );
-        $resp .= maybe_add( FID_TITLE_ID, $item->title_id, $server );
+        $resp .= maybe_add( FID_TITLE_ID, _format_title( { item => $item, server => $server } ) );
         $resp .= $item->build_additional_item_fields_string($server);
     } else {
         $resp .= add_field( FID_PERM_LOCN, "", $server );
@@ -1343,8 +1344,8 @@ sub handle_item_information {
             $resp .= maybe_add( FID_SCREEN_MSG, "Item is damaged", $server );
         }
 
-        $resp .= add_field( FID_ITEM_ID,  $item->id,       $server );
-        $resp .= add_field( FID_TITLE_ID, $item->title_id, $server );
+        $resp .= add_field( FID_ITEM_ID, $item->id, $server );
+        $resp .= add_field( FID_TITLE_ID, _format_title( { item => $item, server => $server } ) );
 
         $resp .= maybe_add( FID_MEDIA_TYPE,   $item->sip_media_type,      $server );
         $resp .= maybe_add( FID_PERM_LOCN,    $item->permanent_location,  $server );
@@ -1429,8 +1430,8 @@ sub handle_item_status_update {
         $resp .= $status->ok ? '1' : '0';
         $resp .= timestamp;
 
-        $resp .= add_field( FID_ITEM_ID,  $item->id,       $server );
-        $resp .= add_field( FID_TITLE_ID, $item->title_id, $server );
+        $resp .= add_field( FID_ITEM_ID,  $item->id, $server );
+        $resp .= add_field( FID_TITLE_ID, _format_title( { item => $item, server => $server } ) );
         $resp .= maybe_add( FID_ITEM_PROPS, $item->sip_item_properties, $server );
     }
 
@@ -1551,10 +1552,10 @@ sub handle_hold {
 
         ( $status->expiration_date )
             and $resp .= maybe_add( FID_EXPIRATION, timestamp( $status->expiration_date ), $server );
-        $resp .= maybe_add( FID_QUEUE_POS,   $status->queue_position,  $server );
-        $resp .= maybe_add( FID_PICKUP_LOCN, $status->pickup_location, $server );
-        $resp .= maybe_add( FID_ITEM_ID,     $status->item->id,        $server );
-        $resp .= maybe_add( FID_TITLE_ID,    $status->item->title_id,  $server );
+        $resp .= maybe_add( FID_QUEUE_POS,   $status->queue_position,                                       $server );
+        $resp .= maybe_add( FID_PICKUP_LOCN, $status->pickup_location,                                      $server );
+        $resp .= maybe_add( FID_ITEM_ID,     $status->item->id,                                             $server );
+        $resp .= maybe_add( FID_TITLE_ID,    _format_title( { item => $status->item, server => $server } ), $server );
     } else {
 
         # Not ok.  still need required fields
@@ -1618,9 +1619,9 @@ sub handle_renew {
         }
         $resp .= sipbool( desensitize( { status => $status, patron => $patron, server => $server } ) );
         $resp .= timestamp;
-        $resp .= add_field( FID_PATRON_ID, $patron->id,     $server );
-        $resp .= add_field( FID_ITEM_ID,   $item->id,       $server );
-        $resp .= add_field( FID_TITLE_ID,  $item->title_id, $server );
+        $resp .= add_field( FID_PATRON_ID, $patron->id, $server );
+        $resp .= add_field( FID_ITEM_ID,   $item->id,   $server );
+        $resp .= add_field( FID_TITLE_ID,  _format_title( { item => $item, server => $server } ) );
         if ( $item->due_date ) {
             $resp .= add_field( FID_DUE_DATE, timestamp( $item->due_date ), $server );
         } else {
@@ -1641,10 +1642,13 @@ sub handle_renew {
         # If we found the patron or the item, the return the ILS
         # information, otherwise echo back the information we received
         # from the terminal
-        $resp .= add_field( FID_PATRON_ID, $patron ? $patron->id     : $patron_id, $server );
-        $resp .= add_field( FID_ITEM_ID,   $item   ? $item->id       : $item_id,   $server );
-        $resp .= add_field( FID_TITLE_ID,  $item   ? $item->title_id : $title_id,  $server );
-        $resp .= add_field( FID_DUE_DATE,  '', $server );
+        $resp .= add_field( FID_PATRON_ID, $patron ? $patron->id : $patron_id, $server );
+        $resp .= add_field( FID_ITEM_ID,   $item   ? $item->id   : $item_id,   $server );
+        $resp .= add_field(
+            FID_TITLE_ID, $item ? _format_title( { item => $item, server => $server } ) : $title_id,
+            $server
+        );
+        $resp .= add_field( FID_DUE_DATE, '', $server );
     }
 
     if ( $status->fee_amount ) {
@@ -1900,6 +1904,19 @@ sub desensitize {
     return 1;
 }
 
+sub _format_title {
+    my ($params) = @_;
+    my $server   = $params->{server};
+    my $item     = $params->{item};
+    if ( defined $server->{account}->{aj_field_template} && $server->{account}->{aj_field_template} ne '' ) {
+        return process_tt(
+            $server->{account}->{aj_field_template},
+            { biblio => $item->{object}->biblio, item => $item->{object} }
+        );
+    } else {
+        return $item->title_id;
+    }
+}
 1;
 __END__
 

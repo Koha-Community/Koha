@@ -97,6 +97,7 @@ sub add_field {
         );
         $value = '';
     }
+
     $value =~ s/\r\n|\r|\n/ /g;    # CR or LF terminates a sip message
                                    # Protect against them in sip text fields
 
@@ -140,7 +141,7 @@ sub maybe_add {
     }
 
     return ( defined($value) && length($value) )
-        ? add_field( $fid, $value )
+        ? add_field( $fid, $value, $server )
         : '';
 }
 

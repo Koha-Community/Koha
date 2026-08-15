@@ -3,6 +3,7 @@ import { mount } from "@cypress/vue";
 function get_account() {
     return {
         ae_field_template: "",
+        aj_field_template: "",
         allow_additional_materials_checkout: false,
         allow_empty_passwords: false,
         allow_fields: null,

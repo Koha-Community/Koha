@@ -957,6 +957,19 @@ export default {
                         "(Hold patron name) is the name of the patron who has placed a hold on the item being checked in. Use Template Toolkit syntax - the patron fields (Koha::Patron) for the hold patron and item fields are available."
                     ),
             },
+            {
+                name: "aj_field_template",
+                type: "textarea",
+                label: "AJ " + __("field template"),
+                placeholder: "[% biblio.title %]",
+                hideIn: ["List"],
+                group: "templates",
+                toolTip:
+                    "AJ " +
+                    __(
+                        "(Title) is the item's title as sent to the SIP2 client. Use Template Toolkit syntax - the item and biblio fields (Koha::Item, Koha::Biblio) are available."
+                    ),
+            },
         ];
 
         const baseResource = useBaseResource({

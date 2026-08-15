@@ -260,6 +260,7 @@ subtest 'template fields accept long text' => sub {
             class => 'Koha::SIP2::Accounts',
             value => {
                 ae_field_template => $template,
+                aj_field_template => $template,
                 av_field_template => $template,
                 da_field_template => $template,
             },
@@ -268,6 +269,7 @@ subtest 'template fields accept long text' => sub {
 
     my $stored = $account->get_from_storage;
     is( $stored->ae_field_template, $template, 'ae_field_template can store large templates' );
+    is( $stored->aj_field_template, $template, 'aj_field_template can store large templates' );
     is( $stored->av_field_template, $template, 'av_field_template can store large templates' );
     is( $stored->da_field_template, $template, 'da_field_template can store large templates' );
 
