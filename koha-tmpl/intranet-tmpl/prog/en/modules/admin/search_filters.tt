@@ -133,18 +133,22 @@
                             filter_buttons += '" data-filter_name="' + escape_str(filter.name);
                             filter_buttons += '" data-filter_opac="' + filter.opac;
                             filter_buttons += '" data-filter_staff_client="' + filter.staff_client;
-                            filter_buttons += '" ><i class="fa-solid fa-pencil" aria-hidden="true"></i> ' + _("Edit filter") + "</a>";
+                            filter_buttons += '" ><i class="fa-solid fa-pencil" aria-hidden="true"></i> ' + _("Edit filter") + "</a>" + "\n";
                             filter_buttons +=
-                                '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/catalogue/search.pl?edit_filter=' + encodeURIComponent(filter.search_filter_id) + '"><i class="fa fa-search"></i> ' + _("Edit search") + "</a>";
-                            filter_buttons += '<a class="btn btn-default btn-xs delete_filter" onclick="delete_filter(this)"';
+                                '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/catalogue/search.pl?edit_filter=' + encodeURIComponent(filter.search_filter_id) + '"><i class="fa fa-search"></i> ' + _("Edit search") + "</a>" + "\n";
+                            filter_buttons += '<a class="btn btn-default btn-xs delete_filter"';
                             filter_buttons += ' data-filter_id="' + escape_str(filter.search_filter_id);
-                            filter_buttons += '"><i class="fa fa-trash-can"></i> ' + _("Delete") + "</a>";
+                            filter_buttons += '"><i class="fa fa-trash-can"></i> ' + _("Delete") + "</a>" + "\n";
                             return filter_buttons;
                         },
                         searchable: false,
                         orderable: false,
                     },
                 ],
+            });
+            $("body").on("click", ".delete_filter", function (e) {
+                e.preventDefault();
+                delete_filter($(this));
             });
         });
 
@@ -169,20 +173,22 @@
         }
 
         function delete_filter(element) {
-            let filter_id = $(element).data("filter_id");
+            let filter_id = element.data("filter_id");
             let options = {
                 url: "/api/v1/search_filters/" + filter_id,
                 method: "DELETE",
                 contentType: "application/json",
             };
-            $.ajax(options)
-                .then(function (result) {
-                    humanMsg.displayAlert(_("Filter successfully deleted."), { className: "human Success" });
-                    filters_table.DataTable().ajax.reload();
-                })
-                .fail(function (err) {
-                    humanMsg.displayAlert(_("There was an error during saving:") + err.responseText, { className: "humanError" });
-                });
+            if (confirm(_("Are you sure you want to delete this search filter?"))) {
+                $.ajax(options)
+                    .then(function (result) {
+                        humanMsg.displayAlert(_("Filter successfully deleted."), { className: "human Success" });
+                        filters_table.DataTable().ajax.reload();
+                    })
+                    .fail(function (err) {
+                        humanMsg.displayAlert(_("There was an error during saving:") + err.responseText, { className: "humanError" });
+                    });
+            }
         }
 
         function save_search_filter(name, id, opac, staff) {
