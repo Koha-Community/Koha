@@ -1157,6 +1157,7 @@
                             $.ajax({
                                 type: "DELETE",
                                 url: `/api/v1/public/patrons/${logged_in_user_borrowernumber}/article_requests/${article_request_id}?cancellation_reason=OPAC`,
+                                headers: { "CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
                                 success: function (data) {
                                     $("#article_" + article_request_id).hide({
                                         duration: "slow",
