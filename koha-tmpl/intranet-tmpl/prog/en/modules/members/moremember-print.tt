@@ -149,7 +149,7 @@
                                 <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber | uri %]&amp;itemnumber=[% account.itemnumber | uri %]">[% account.item.biblio.title | html %]</a>
                             [% END %]
                         </td>
-                        <td> [% account.note | html_line_break %] </td>
+                        <td> [% account.note | html | html_line_break %] </td>
                         <td class="[% account.amount <= 0 ? 'credit' : 'debit' | html %]"> [% account.amount | $Price %] </td>
                         <td class="[% account.amountoutstanding <= 0 ? 'credit' : 'debit' | html %]"> [% account.amountoutstanding | $Price %] </td>
                     </tr>
