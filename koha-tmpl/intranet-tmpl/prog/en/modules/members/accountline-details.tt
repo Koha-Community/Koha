@@ -133,7 +133,7 @@
                                 </td>
 
                                 <td>
-                                    [% accountline.note | html_line_break %]
+                                    [% accountline.note | html | html_line_break %]
                                 </td>
                                 [% INCLUDE 'additional-fields-display.inc' available=available_additional_fields values=additional_field_values value_only=1 is_table_cell=1 %]
 

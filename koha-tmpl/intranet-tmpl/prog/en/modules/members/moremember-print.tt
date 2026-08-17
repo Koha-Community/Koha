@@ -170,7 +170,7 @@
                             [% END %]
                         </td>
                         <td>
-                            [% account.note | html_line_break %]
+                            [% account.note | html | html_line_break %]
                         </td>
                         [% IF ( account.amount <= 0 ) %]
                             <td class="credit">
