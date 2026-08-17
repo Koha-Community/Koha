@@ -1496,6 +1496,7 @@
                                     allowed: can_see_checkouts
                                 }),
                                 contentType: "application/json",
+                                headers: { "CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content') },
                                 success: function () {
                                     $('#update_privacy_guarantor_checkouts_message')
                                         .fadeIn("slow")
