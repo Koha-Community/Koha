@@ -134,7 +134,7 @@
                             </td>
                             <td>[% IF account.itemnumber %][% Branches.GetName( account.item.homebranch ) | html %][% END %]</td>
                             <td>
-                                [% account.note | html_line_break %]
+                                [% account.note | html | html_line_break %]
                                 [% IF CAN_user_updatecharges_edit_accountline_notes %]
                                     <button
                                         type="button"
