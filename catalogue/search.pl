@@ -556,7 +556,8 @@ if ( $@ || $error ) {
 }
 
 my $hits = $results_hashref->{$server}->{"hits"} // 0;
-if ( $hits == 0 && $basic_search ) {
+if ( $hits == 0 && $basic_search && $operands[0] !~ /^\".*\"$/ ) {
+    my $og_query = $query_desc;
     $operands[0] = '"' . $operands[0] . '"';    #quote it
     ## I. BUILD THE QUERY
     (
@@ -585,6 +586,10 @@ if ( $hits == 0 && $basic_search ) {
     };
     my $quoted_hits = $quoted_results_hashref->{$server}->{"hits"} // 0;
     if ($quoted_hits) {
+        $template->param(
+            quoted_hits => 1,
+            og_query    => $og_query,
+        );
         $results_hashref->{$server} = $quoted_results_hashref->{$server};
         $hits = $quoted_hits;
     }

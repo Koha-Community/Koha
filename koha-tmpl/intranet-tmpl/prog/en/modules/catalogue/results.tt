@@ -72,6 +72,12 @@
     <h1>Search results</h1>
 
     [% IF ( total ) %]
+        [% IF quoted_hits %]
+            <h4 class="info">
+                No result(s) found for your original query: [% og_query %]<br />
+                Your search was retried, quoted
+            </h4>
+        [% END %]
         <h3>
             [% total | html %] result(s) found
             [% IF ( query_desc ) %]for <span class="results_query_desc">'[% query_desc | html %]'</span>[% END %][% IF limit_desc %]
