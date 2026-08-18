@@ -41,12 +41,12 @@
 [% IF error_msg %]
     <div class="alert alert-danger">
         <p>[% error_msg | html %]</p>
-        <button id="close-window" class="btn btn-secondary" onclick="window.close();"> [% t("Close") | html %] </button>
+        <button id="close-window" class="btn btn-default close_window"> [% t("Close") | html %] </button>
     </div>
 [% ELSE %]
     <div class="no-print" style="margin-top: 20px; text-align: center;">
         <button id="print-receipt" class="btn btn-primary"> <i class="fa fa-print"></i> [% t("Print receipt") | html %] </button>
-        <button id="close-window" class="btn btn-secondary" onclick="window.close();"> [% t("Close") | html %] </button>
+        <button id="close-window" class="btn btn-default close_window"> [% t("Close") | html %] </button>
     </div>
 [% END %]
 
