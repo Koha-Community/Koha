@@ -111,7 +111,7 @@
 
         const can_edit_items_from = [% To.json(can_edit_items_from || []) | $raw %];
         const item_type_image_locations = [% To.json(item_type_image_locations) | $raw %];
-        const av_loc = new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.location' })) | $raw %].map( av => [av.lib, av.authorised_value]));
+        const av_loc = new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.location' })) | $raw %].map( av => [av.authorised_value, av.lib]));
         const av_lost = new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.itemlost' })) | $raw %].map( av => [av.authorised_value, av.lib]));
         const av_withdrawn = new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.withdrawn' })) | $raw %].map( av => [av.authorised_value, av.lib]));
         const av_damaged = new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.damaged' })) | $raw %].map( av => [av.authorised_value, av.lib]));
@@ -505,7 +505,7 @@
                         let loc_str = row._strings.location ? row._strings.location.str : row.location;
                         if (row.permanent_location && row.permanent_location != row.location) {
                             let permanent_loc_str = av_loc.get(row.permanent_location);
-                            nodes += "%s (%s)".format(escape_str(permanent_loc_str), escape_str(loc_str));
+                            nodes += "%s<br/>(%s)".format(escape_str(permanent_loc_str), escape_str(loc_str));
                         } else {
                             nodes += escape_str(loc_str);
                         }
