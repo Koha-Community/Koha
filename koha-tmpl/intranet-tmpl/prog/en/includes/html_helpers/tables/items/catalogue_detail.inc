@@ -448,6 +448,7 @@
                 {
                     data: "me.collection_code",
                     datatype: "coded_value:collection_code",
+                    className: "ccode",
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
