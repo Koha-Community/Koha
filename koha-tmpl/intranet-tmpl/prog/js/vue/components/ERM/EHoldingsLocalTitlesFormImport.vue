@@ -95,12 +95,7 @@ export default {
                             orderable: true,
                             width: "100%",
                             render: function (data, type, row, meta) {
-                                return (
-                                    row.name +
-                                    " (#" +
-                                    row.id +
-                                    ")"
-                                )
+                                return row.name + " (#" + row.id + ")"
                             },
                         },
                         {
