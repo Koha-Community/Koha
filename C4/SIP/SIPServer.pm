@@ -399,8 +399,8 @@ sub telnet_transport {
             $pwd = get_clean_string($pwd);
             siplog( "LOG_DEBUG", "telnet_transport 2: uid length %s, pwd length %s", length($uid), length($pwd) );
 
-            if ( exists( $config->{accounts}->{$uid} )
-                && ( $pwd eq $config->{accounts}->{$uid}->{password} ) )
+            if (   exists( $config->{accounts}->{$uid} )
+                && ( $pwd eq $config->{accounts}->{$uid}->{password} )
                 && C4::SIP::Sip::MsgType::login_core( $self, $uid, $pwd ) )
             {
                 $account = $config->{accounts}->{$uid};
