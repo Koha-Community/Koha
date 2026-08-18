@@ -635,7 +635,8 @@ for ( my $i = 0 ; $i < @servers ; $i++ ) {
     my $server = $servers[$i];
     if ( $server && $server =~ /biblioserver/ ) {    # this is the local bibliographic server
         $hits = $results_hashref->{$server}->{"hits"} // 0;
-        if ( $hits == 0 && $basic_search ) {
+        if ( $hits == 0 && $basic_search && $operands[0] !~ /^\".*\"$/ ) {
+            my $og_query = $query_desc;
             $operands[0] = '"' . $operands[0] . '"';    #quote it
             ## I. BUILD THE QUERY
             ( $error, $query, $simple_query, $query_cgi, $query_desc, $limit, $limit_cgi, $limit_desc, $query_type ) =
@@ -665,6 +666,10 @@ for ( my $i = 0 ; $i < @servers ; $i++ ) {
             };
             my $quoted_hits = $quoted_results_hashref->{$server}->{"hits"} // 0;
             if ($quoted_hits) {
+                $template->param(
+                    quoted_hits => 1,
+                    og_query    => $og_query,
+                );
                 $results_hashref->{'biblioserver'} = $quoted_results_hashref->{'biblioserver'};
                 $hits = $quoted_hits;
             }

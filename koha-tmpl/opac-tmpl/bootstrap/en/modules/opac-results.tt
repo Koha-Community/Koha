@@ -143,6 +143,12 @@
             <div class="[% column_class | html %]">
                 [% IF ( searchdesc ) %]
                     [% IF ( total ) %]
+                        [% IF quoted_hits %]
+                            <h4 class="info">
+                                No result(s) found for your original query: [% og_query %]<br />
+                                Your search was retried, quoted
+                            </h4>
+                        [% END %]
                         <h1 id="numresults">
                             Your search returned [% total | html %] results.
                             <a
