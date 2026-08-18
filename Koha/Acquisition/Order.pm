@@ -654,6 +654,7 @@ sub to_api_mapping {
         parent_ordernumber            => 'parent_order_id',
         quantityreceived              => 'quantity_received',
         replacementprice              => 'replacement_price',
+        servicing_instruction         => undef,                       # EDIFACT related
         sort1                         => 'statistics_1',
         sort1_authcat                 => 'statistics_1_authcat',
         sort2                         => 'statistics_2',
