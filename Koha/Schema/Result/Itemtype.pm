@@ -375,8 +375,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-02-27 18:28:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nIbK4y9VAP6U+o7feeGsDA
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-08-18 09:40:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3sUQnki/t9TLhH4ORPeg5Q
 
 __PACKAGE__->add_columns(
     '+automatic_checkin'            => { is_boolean => 1 },
