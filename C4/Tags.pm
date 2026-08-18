@@ -22,6 +22,8 @@ use Modern::Perl;
 use base 'Exporter';
 use C4::Context;
 
+use Module::Load::Conditional qw( check_install );
+
 BEGIN {
     our @EXPORT_OK = qw(
         get_tags get_tag_rows
@@ -54,7 +56,6 @@ BEGIN {
 
 use Carp qw( carp );
 
-use Module::Load::Conditional qw( check_install );
 use Koha::Tags;
 use Koha::Tags::Approvals;
 use Koha::Tags::Indexes;
