@@ -47,7 +47,8 @@ sub call {
     my $request_path   = $req->path    // q{};
 
     my %path_exceptions = (
-        '/ilsdi.pl' => 1,
+        '/ilsdi.pl'                   => 1,
+        '/opac-account-pay-return.pl' => 1,
     );
 
     #NOTE: Ignore ErrorDocument requests for CSRF
