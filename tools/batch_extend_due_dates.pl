@@ -88,13 +88,15 @@ if ( $op eq 'form' || $op eq 'cud-form' ) {
         my $split_chars = C4::Context->preference('BarcodeSeparators');
         my @barcodelist = grep /\S/, ( split /[$split_chars]/, $list );
         @barcodelist = uniq @barcodelist;
-
         @barcodelist = map { barcodedecode($_) } @barcodelist;
+
+        my $item_search = { barcode => { -in => \@barcodelist } };
+        $item_search->{itype} = { -in => \@itemtypecodes } if @itemtypecodes;
 
         # Note: adding lc for case insensitivity
         my %itemdata =
             map { lc( $_->{barcode} ) => $_->{itemnumber} } @{ Koha::Items->search(
-                { barcode => { -in => \@barcodelist } },
+                $item_search,
                 { columns => [ 'itemnumber', 'barcode' ] }
             )->unblessed
             };
