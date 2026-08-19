@@ -166,7 +166,7 @@ subtest 'Bibliographic record detail page must not explode even with invalid met
     <controlfield tag="004">00satmrnu0</controlfield>
     <controlfield tag="008">00ar19881981bdkldan</controlfield>
     </record>};
-    $biblio->metadata->metadata($invalid_data)->store();
+    $biblio->metadata->_result->update( { metadata => $invalid_data } );
 
     $driver->get( $base_url . "/catalogue/detail.pl?biblionumber=$biblionumber" );
 
