@@ -81,7 +81,7 @@ sub check_db {
     my $sysprefs_in_db = $dbh->selectall_arrayref(
         q{
         SELECT * from systempreferences
-        WHERE variable NOT IN ('marcflavour', 'Version', 'FrameworksLoaded')
+        WHERE variable NOT IN ('marcflavour', 'Version', 'FrameworksLoaded', 'automatic_item_modification_by_age_configuration')
         ORDER BY variable
     }, { Slice => {} }
     );
