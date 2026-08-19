@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 28;
+use Test::More tests => 29;
 
 use Test::MockModule;
 use Test::Exception;
@@ -3013,6 +3013,42 @@ subtest 'filter_by_available' => sub {
         $biblio->items->filter_by_available->count,
         0,
         "Filtered to 0 available items, 1 is lost, 1 is damaged, 1 is withdrawn, 1 is checked out, 1 is notforloan"
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filters on a limited resultset' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { branchcode => $patron->branchcode } );
+
+    my $biblio = $builder->build_sample_biblio();
+    $builder->build_sample_item( { biblionumber => $biblio->biblionumber } ) for 1 .. 3;
+
+    C4::Circulation::AddIssue( $patron, $_->barcode ) for $biblio->items->as_list;
+
+    my $limited = $biblio->items->search( {}, { order_by => 'itemnumber', rows => 2 } );
+
+    is( $limited->filter_by_checked_out->count, 2, "filter_by_checked_out works on a resultset with a limit" );
+    lives_ok { $limited->filter_by_in_transit->as_list } "filter_by_in_transit works on a resultset with a limit";
+    lives_ok { $limited->filter_by_has_holds->as_list } "filter_by_has_holds works on a resultset with a limit";
+    lives_ok { $limited->filter_by_has_recalls->as_list } "filter_by_has_recalls works on a resultset with a limit";
+    lives_ok { $limited->filter_by_available->as_list } "filter_by_available works on a resultset with a limit";
+
+    # Only the oldest item is checked out, so the two newest items should have no checkouts
+    my $ordered_biblio = $builder->build_sample_biblio();
+    my @ordered_items =
+        map { $builder->build_sample_item( { biblionumber => $ordered_biblio->biblionumber } ) } 1 .. 3;
+    C4::Circulation::AddIssue( $patron, $ordered_items[0]->barcode );
+
+    my $newest_two = $ordered_biblio->items->search( {}, { order_by => { -desc => 'itemnumber' }, rows => 2 } );
+    is(
+        $newest_two->filter_by_checked_out->count, 0,
+        "filter_by_checked_out only considers the items an ordered resultset with a limit contains"
     );
 
     $schema->storage->txn_rollback;
