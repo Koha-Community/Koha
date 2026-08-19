@@ -462,7 +462,7 @@
         const only_one_order = [% only_one_order ? 1 : 0 | html %];
         Koha.addPrefs({
             AcqCreateItem: [% Koha.Preference('AcqCreateItem') ? 1 : 0 | html %],
-            UniqueItemFields: [% Koha.Preference('UniqueItemFields') || '' | html %],
+            UniqueItemFields: "[% Koha.Preference('UniqueItemFields') || '' | html %]",
         });
         Koha.addPermissions({
             CAN_user_acquisition: [% CAN_user_acquisition ? 1 : 0 | html %],
