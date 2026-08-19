@@ -919,7 +919,7 @@ tables:
             - "[%- USE Price -%]"
             - "The following [% IF overdues.count() > 1 %]items are[% ELSE %]item is[% END %] currently overdue:"
             - ""
-            - "[% FOREACH odue IN overdues %]"
+            - "[%- FOREACH odue IN overdues %]"
             - "[% odue.item.biblio.title %]"
             - "by [% odue.item.biblio.author %]"
             - "[%- IF odue.item.itemcallnumber %]"
