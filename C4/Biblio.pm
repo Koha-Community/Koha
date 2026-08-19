@@ -89,6 +89,7 @@ use C4::Charset     qw(
     nsb_clean
     SetMarcUnicodeFlag
     SetUTF8Flag
+    StripNonXmlChars
 );
 use C4::Languages;
 use C4::Linker;
@@ -2363,6 +2364,7 @@ sub TransformHtmlToMarc {
 
                     # between 001 and 009 (included)
                 } elsif ( $fval ne '' ) {
+                    $fval     = StripNonXmlChars($fval);
                     $newfield = MARC::Field->new( $tag, $fval, );
                 }
 
@@ -2387,6 +2389,7 @@ sub TransformHtmlToMarc {
                     if ( $fval ne '' && $newfield ) {
                         $newfield->add_subfields( $fkey => $fval );
                     } elsif ( $fval ne '' ) {
+                        $fval     = StripNonXmlChars($fval);
                         $newfield = MARC::Field->new( $tag, $ind1, $ind2, $fkey => $fval );
                     }
                     $j += 2;
