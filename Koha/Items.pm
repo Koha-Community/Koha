@@ -239,7 +239,7 @@ sub filter_by_checked_out {
 
     $params //= {};
     my $checkouts = Koha::Checkouts->search(
-        { %$params, 'me.itemnumber' => { -in => $self->_resultset->get_column('itemnumber')->as_query }, },
+        { %$params, 'me.itemnumber' => { -in => $self->_itemnumber_subquery }, },
         {
             columns  => ['itemnumber'],
             distinct => 1
@@ -266,7 +266,7 @@ sub filter_by_in_transit {
     $params->{datecancelled} = undef;
 
     my $transfers = Koha::Item::Transfers->search(
-        { %$params, 'me.itemnumber' => { -in => $self->_resultset->get_column('itemnumber')->as_query }, },
+        { %$params, 'me.itemnumber' => { -in => $self->_itemnumber_subquery }, },
         {
             columns  => ['itemnumber'],
             distinct => 1
@@ -289,7 +289,7 @@ sub filter_by_has_holds {
 
     $params //= {};
     my $holds = Koha::Holds->search(
-        { %$params, 'me.itemnumber' => { -in => $self->_resultset->get_column('itemnumber')->as_query }, },
+        { %$params, 'me.itemnumber' => { -in => $self->_itemnumber_subquery }, },
         {
             columns  => ['itemnumber'],
             distinct => 1
@@ -313,7 +313,7 @@ sub filter_by_has_recalls {
     $params //= {};
     my $recalls = Koha::Recalls->search(
         {
-            %$params, 'me.item_id' => { -in => $self->_resultset->get_column('itemnumber')->as_query },
+            %$params, 'me.item_id' => { -in => $self->_itemnumber_subquery },
             'me.item_level' => 1,
         },
         {
@@ -370,11 +370,27 @@ sub filter_by_available {
         $self->filter_by_has_holds,   $self->filter_by_has_recalls
         )
     {
-        $available = $available->search(
-            { 'me.itemnumber' => { -not_in => $not_available->_resultset->get_column('itemnumber')->as_query } } );
+        $available = $available->search( { 'me.itemnumber' => { -not_in => $not_available->_itemnumber_subquery } } );
     }
 
     return $available;
+}
+
+=head3 _itemnumber_subquery
+
+Returns this set's itemnumbers as a subquery for use in IN clauses.
+
+=cut
+
+sub _itemnumber_subquery {
+    my ($self) = @_;
+
+    # Select only the itemnumber column so the subquery stays small. The as_subselect_rs
+    # wrap keeps any LIMIT inside a derived table, MariaDB doesn't allow LIMIT directly
+    # in an IN subquery. Keep the ORDER BY so a limited set still selects the same items,
+    # the database ignores it when there is no LIMIT.
+    return $self->_resultset->search( undef, { columns => ['itemnumber'] } )->as_subselect_rs->get_column('itemnumber')
+        ->as_query;
 }
 
 =head3 move_to_biblio
