@@ -66,10 +66,11 @@ sub login {
     }
 
     my $current_session;
+    my $session_id;
     my $current_session_cookie = $c->req->cookie('CGISESSID');
     if ($current_session_cookie) {
-        my $current_session_id = $current_session_cookie->value;
-        $current_session = Koha::Session->get_session( { sessionID => $current_session_id } );
+        $session_id      = $current_session_cookie->value;
+        $current_session = Koha::Session->get_session( { sessionID => $session_id } );
     }
 
     unless ( $provider_config && $provider_config->{authorize_url} ) {
@@ -91,10 +92,15 @@ sub login {
     if ($is_callback) {
 
         # callback, check CSRF token
+        unless ($session_id) {
+            my $error = "wrong_csrf_token";
+            return $c->redirect_to( $uri . "?auth_error=$error" );
+        }
+
         unless (
             Koha::Token->new->check_csrf(
                 {
-                    session_id => $c->req->cookie('CGISESSID')->value,
+                    session_id => $session_id,
                     token      => $c->param('state'),
                 }
             )
@@ -105,8 +111,14 @@ sub login {
         }
     } else {
 
-        # initial request, generate CSRF token
-        $state = Koha::Token->new->generate_csrf( { session_id => $c->req->cookie('CGISESSID')->value } );
+        # initial request — create session if needed (IdP-initiated flow)
+        unless ($session_id) {
+            $current_session = Koha::Session->get_session( {} );
+            $session_id      = $current_session->id;
+            $c->cookie( CGISESSID => $session_id, { path => '/' } );
+        }
+
+        $state = Koha::Token->new->generate_csrf( { session_id => $session_id } );
 
         Koha::Auth::Identity::Referer->store_referer(
             {
