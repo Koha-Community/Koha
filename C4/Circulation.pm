@@ -3002,7 +3002,7 @@ sub MarkIssueReturned {
     my $schema = Koha::Database->schema;
 
     # FIXME Improve the return value and handle it from callers
-    $schema->txn_do(
+    my $rv = $schema->txn_do(
         sub {
 
             my $patron = Koha::Patrons->find($borrowernumber);
@@ -3014,7 +3014,9 @@ sub MarkIssueReturned {
                 $issue->returndate( \'NOW()' )->store->discard_changes;     # update and refetch
             }
 
-            $issue->checkin_library( C4::Context->userenv->{'branch'} );
+            my $checkin_library = defined C4::Context->userenv
+                && exists C4::Context->userenv->{'branch'} ? C4::Context->userenv->{'branch'} : $issue->branchcode;
+            $issue->checkin_library($checkin_library);
 
             # Create the old_issues entry
             my $old_checkout = Koha::Old::Checkout->new( $issue->unblessed )->store;
