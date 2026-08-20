@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 18;
+use Test::More tests => 19;
 use Test::Exception;
 use Test::MockModule;
 
@@ -1673,6 +1673,68 @@ subtest 'debit description from notice' => sub {
     )->store;
 
     is( $account_line3->description, 'From notice', 'Notice overrides manual description' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'no userenv' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    C4::Context->unset_userenv();
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $account = $patron->account;
+
+    my $library = $builder->build( { source => 'Branch' } );
+    t::lib::Mocks::mock_preference( 'MarkLostItemsAsReturned', 'onpayment' );
+
+    my $item = $builder->build_sample_item(
+        {
+            library  => $library->{branchcode},
+            barcode  => 'some_barcode_12',
+            itype    => 'BK',
+            itemlost => 1,
+        }
+    )->store();
+
+    my $checkout = Koha::Checkout->new(
+        {
+            borrowernumber => $patron->borrowernumber,
+            itemnumber     => $item->itemnumber,
+            branchcode     => $library->{branchcode},
+        }
+    )->store();
+
+    my $debit_1 = Koha::Account::Line->new(
+        {
+            borrowernumber    => $patron->borrowernumber,
+            debit_type_code   => "LOST",
+            status            => "UNRETURNED",
+            amount            => 100,
+            amountoutstanding => 100,
+            interface         => 'commandline',
+            itemnumber        => $item->itemnumber,
+        }
+    )->store;
+
+    my $lines_count_before = $account->lines->count;
+
+    $account->pay(
+        {
+            amount    => 100,
+            lines     => [$debit_1],
+            interface => 'commandline',
+        }
+    );
+
+    my $issue_0      = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
+    my $old_checkout = Koha::Old::Checkouts->find( { itemnumber => $item->itemnumber } );
+
+    ok( !defined $issue_0, 'The issue is deleted' );
+
+    is( $old_checkout->checkin_library, $library->{branchcode}, "Checkin library set from checkout" );
 
     $schema->storage->txn_rollback;
 };
