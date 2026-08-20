@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Exception;
 
 use t::lib::TestBuilder;
@@ -122,6 +122,41 @@ subtest 'filter_by_active() tests' => sub {
     # If we change quantities on order_5 (partial), we should no longer see it
     $order_5->quantityreceived(2)->store;
     is( $this_orders_rs->filter_by_active->count, 2, 'Dropped one order as expected' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_by_active() tests with an aliased resultset' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio;
+    my $item   = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $order  = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                biblionumber            => $biblio->biblionumber,
+                datecancellationprinted => undef,
+                orderstatus             => 'ordered',
+                quantity                => 1,
+                quantityreceived        => 0,
+            }
+        }
+    );
+    $builder->build(
+        {
+            source => 'AqordersItem',
+            value  => {
+                ordernumber => $order->ordernumber,
+                itemnumber  => $item->itemnumber,
+            }
+        }
+    );
+
+    is( $item->orders->filter_by_active->count, 1, 'Active orders are returned from an aliased resultset' );
 
     $schema->storage->txn_rollback;
 };

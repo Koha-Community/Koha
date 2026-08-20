@@ -160,6 +160,7 @@ on this order (checking quantity and quantityreceived).
 
 sub filter_by_active {
     my ($self) = @_;
+    my $source_alias = $self->_resultset->current_source_alias;
     return $self->search(
         {
             '-or' => [
@@ -169,7 +170,7 @@ sub filter_by_active {
                 },
                 { 'orderstatus' => [ 'ordered', 'partial' ] }
             ],
-            quantityreceived => { '<', \['COALESCE(me.quantity,0)'] },
+            quantityreceived => { '<', \["COALESCE($source_alias.quantity,0)"] },
         },
         { join => 'basket' }
     );
