@@ -911,7 +911,14 @@
                     [%# Duplicate found while editing an existing record %]
                     [% IF duplicate.forbid_duplicate_creation %]
                         <h3>Duplicate record found</h3>
-                        <p>This record is a duplicate of <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicate.biblionumber | uri %]" onclick="openWindow('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicate.biblionumber | uri %]&amp;popup=1', 'DuplicateBiblio','800','600'); return false;">[% duplicate.title | html %] <i class="fa-solid fa-window-restore"></i></a>. Save cancelled.</p>
+                        <p
+                            >This record is a duplicate of
+                            <a
+                                href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicate.biblionumber | uri %]"
+                                onclick="openWindow('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicate.biblionumber | uri %]&amp;popup=1', 'DuplicateBiblio','800','600'); return false;"
+                                >[% duplicate.title | html %] <i class="fa-solid fa-window-restore"></i></a
+                            >. Save cancelled.</p
+                        >
                         [% IF ( CAN_user_editcatalogue_edit_items ) %]
                             <form action="/cgi-bin/koha/cataloguing/additem.pl" method="get">
                                 <input type="hidden" name="biblionumber" value="[% duplicate.biblionumber | html %]" />
@@ -925,7 +932,14 @@
                         [% END %]
                     [% ELSE %]
                         <h3>Duplicate record suspected</h3>
-                        <p>This record may be a duplicate of <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicate.biblionumber | uri %]" onclick="openWindow('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicate.biblionumber | uri %]&amp;popup=1', 'DuplicateBiblio','800','600'); return false;">[% duplicate.title | html %] <i class="fa-solid fa-window-restore"></i></a>. Save anyway?</p>
+                        <p
+                            >This record may be a duplicate of
+                            <a
+                                href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicate.biblionumber | uri %]"
+                                onclick="openWindow('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicate.biblionumber | uri %]&amp;popup=1', 'DuplicateBiblio','800','600'); return false;"
+                                >[% duplicate.title | html %] <i class="fa-solid fa-window-restore"></i></a
+                            >. Save anyway?</p
+                        >
                         <form action="/cgi-bin/koha/cataloguing/addbiblio.pl" method="get">
                             <button type="submit" class="new" onclick="confirmnotdup('view'); return false;"><i class="fa fa-fw fa-save"></i> Yes, save record</button>
                         </form>
