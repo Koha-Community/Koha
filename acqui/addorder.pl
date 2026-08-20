@@ -123,12 +123,12 @@ use JSON qw ( to_json encode_json decode_json );
 use C4::Acquisition qw( FillWithDefaultValues ModOrderUsers );
 use C4::Auth        qw( get_template_and_user );
 use C4::Barcodes;
-use C4::Biblio      qw( AddBiblio GetMarcFromKohaField TransformHtmlToXml TransformKohaToMarc );
-use C4::Budgets     qw( GetBudget GetBudgetSpent GetBudgetOrdered FieldsForCalculatingFundValues );
-use C4::Items       qw( AddItemFromMarc );
-use C4::Log         qw( logaction );
-use C4::Output      qw( output_html_with_http_headers );
-use C4::Search      qw( FindDuplicate );
+use C4::Biblio  qw( AddBiblio GetMarcFromKohaField TransformHtmlToXml TransformKohaToMarc );
+use C4::Budgets qw( GetBudget GetBudgetSpent GetBudgetOrdered FieldsForCalculatingFundValues );
+use C4::Items   qw( AddItemFromMarc );
+use C4::Log     qw( logaction );
+use C4::Output  qw( output_html_with_http_headers );
+use C4::Search;
 use C4::Suggestions qw( ModSuggestion );
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Currencies;
@@ -334,9 +334,9 @@ if ( $op eq 'cud-order' ) {
             C4::Acquisition::FillWithDefaultValues($record);
 
             if ( !$confirm_not_duplicate ) {
-                my ( $dupe_biblionumber, $dupe_title ) = FindDuplicate($record);
+                my ($duplicate) = C4::Search::FindDuplicateWithMatchingRules($record);
 
-                if ($dupe_biblionumber) {
+                if ($duplicate) {
                     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
                         {
                             template_name => "acqui/neworderempty_duplicate.tt",
@@ -356,11 +356,10 @@ if ( $op eq 'cud-order' ) {
                     my $basketno     = $input->param('basketno')     // '';
 
                     $template->param(
-                        biblionumber   => $dupe_biblionumber,
-                        duplicatetitle => $dupe_title,
-                        booksellerid   => $booksellerid,
-                        basketno       => $basketno,
-                        vars_loop      => \@vars_loop,
+                        duplicate    => $duplicate,
+                        booksellerid => $booksellerid,
+                        basketno     => $basketno,
+                        vars_loop    => \@vars_loop,
                     );
 
                     output_html_with_http_headers $input, $cookie, $template->output;

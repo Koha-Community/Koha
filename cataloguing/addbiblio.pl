@@ -816,7 +816,7 @@ if ( $op eq "cud-addbiblio" ) {
         build_tabs( $template, $record, $dbh, $encoding, $input );
 
         my $duplicate_additional_info = q{};
-        my $dup_biblio                = Koha::Biblios->find($duplicate);
+        my $dup_biblio                = Koha::Biblios->find( $duplicate->{biblionumber} );
         if ($dup_biblio) {
             my $lang           = C4::Languages::getlanguage();
             my $branch         = C4::Context->userenv ? C4::Context->userenv->{branch} : q{};
