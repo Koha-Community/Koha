@@ -101,6 +101,7 @@ subtest 'add_to_bundle' => sub {
 
     $schema->storage->txn_begin;
 
+    t::lib::Mocks::mock_preference( 'EasyAnalyticalRecords', 0 );
     my $item       = $builder->build_sample_item;
     my $itemnumber = $item->itemnumber;
     my $patron     = $builder->build_object(
