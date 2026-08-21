@@ -48,6 +48,11 @@ This script will connect to the Stomp server (RabbitMQ) and subscribe to the Ela
 If a Stomp server is not active it will poll the database every 10s for new jobs in the Elasticsearch queue
 and process them in batches every second.
 
+--m --max-processes specifies how many jobs to process simultaneously
+
+Max processes will be set from the command line option, the environment variable MAX_PROCESSES, or the koha-conf file, in that order of precedence.
+By default the script will only run one job at a time.
+
 =cut
 
 use Modern::Perl;
@@ -55,8 +60,10 @@ use JSON qw( decode_json );
 use Try::Tiny;
 use Pod::Usage;
 use Getopt::Long;
+use Parallel::ForkManager;
 use List::MoreUtils qw( natatime );
 use Time::HiRes;
+use Storable qw(dclone);
 
 use C4::Context;
 use Koha::Logger;
@@ -68,12 +75,18 @@ use Koha::SearchEngine::Indexer;
 my $help;
 my $batch_size = 10;
 
+my $max_processes = $ENV{MAX_PROCESSES};
+$max_processes ||= C4::Context->config('background_jobs_worker')->{max_processes}
+    if C4::Context->config('background_jobs_worker');
+$max_processes ||= 1;
+
 my $not_found_retries = {};
 my $max_retries       = $ENV{MAX_RETRIES} || 10;
 
 GetOptions(
-    'h|help'         => \$help,
-    'b|batch_size=s' => \$batch_size
+    'm|max-processes=i' => \$max_processes,
+    'h|help'            => \$help,
+    'b|batch_size=s'    => \$batch_size
 ) || pod2usage(1);
 
 pod2usage(0) if $help;
@@ -94,6 +107,8 @@ if ( $notification_method eq 'STOMP' ) {
     $error ||= "Cannot connect to the message broker, the jobs will be processed anyway" unless $conn;
     warn $error if $error;
 }
+
+my $pm = Parallel::ForkManager->new($max_processes);
 
 if ($conn) {
 
@@ -121,6 +136,7 @@ while (1) {
         if ( !defined $frame ) {
 
             # maybe log connection problems
+            $pm->reap_finished_children;
             next;    # will reconnect automatically
         }
 
@@ -195,8 +211,13 @@ while (1) {
 
         push @jobs, $job;
         if ( @jobs >= $batch_size || !$conn->can_read( { timeout => '0.1' } ) ) {
-            commit(@jobs);
+            my $commit_jobs = dclone( \@jobs );
             @jobs = ();
+            $pm->start and next;
+            srand();    # ensure each child process begins with a new seed
+            commit( @{$commit_jobs} );
+            $pm->finish;
+            sleep 10;
         }
 
     } else {
@@ -208,10 +229,15 @@ while (1) {
             { status => 'new', queue => 'elastic_index' },
             { rows   => $batch_size }
         )->as_list;
-        commit(@jobs);
+        my $commit_jobs = dclone( \@jobs );
         @jobs = ();
+        $pm->start and next;
+        srand();    # ensure each child process begins with a new seed
+        commit( @{$commit_jobs} );
+        $pm->finish;
         sleep 10;
     }
+    $pm->reap_finished_children;
 
 }
 $conn->disconnect;
