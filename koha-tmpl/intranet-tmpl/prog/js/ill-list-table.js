@@ -339,6 +339,20 @@ $(document).ready(function () {
                 },
                 {
                     data: "", // Request details
+                    datatype: "related-object",
+                    related: "extended_attributes",
+                    relatedKey: "type",
+                    relatedValue: [
+                        "article_title",
+                        "title",
+                        "article_author",
+                        "author",
+                        "issue",
+                        "volume",
+                        "year",
+                        "pages",
+                    ],
+                    relatedSearchOn: "value",
                     orderable: false,
                     render: function (data, type, row, meta) {
                         let display = "";
