@@ -1841,8 +1841,6 @@ subtest 'Test exclude_letter_code parameter for SendQueuedMessages' => sub {
         }
     )->store->borrowernumber;
 
-    $dbh->do(q|DELETE FROM message_queue|);
-
     # Create messages with different letter codes
     my $message_digest1 = {
         'letter' => {
