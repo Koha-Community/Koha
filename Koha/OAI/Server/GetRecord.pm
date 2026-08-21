@@ -40,7 +40,7 @@ sub new {
     # Primary table in select aliased to `main` so we can reuse this WHERE clause
     my $where = 'main.biblionumber = ?';
     $where .=
-        ' AND EXISTS (SELECT 1 FROM biblio WHERE biblio.biblionumber = main.biblionumber AND NOT biblio.opac_suppressed)'
+        ' AND NOT EXISTS (SELECT 1 FROM biblio WHERE biblio.biblionumber = main.biblionumber AND biblio.opac_suppressed)'
         if C4::Context->is_opac_suppressed;
     if ($items_included) {
 

@@ -85,7 +85,7 @@ STAGELOOP:
         }
 
         $where .=
-            " AND EXISTS (SELECT 1 FROM biblio WHERE biblio.biblionumber = main.biblionumber AND NOT biblio.opac_suppressed)"
+            " AND NOT EXISTS (SELECT 1 FROM biblio WHERE biblio.biblionumber = main.biblionumber AND biblio.opac_suppressed)"
             if C4::Context->is_opac_suppressed;
 
         my @bind_params = @part_bind_params;
