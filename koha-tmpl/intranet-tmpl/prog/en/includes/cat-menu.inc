@@ -79,10 +79,10 @@
         </ul>
     [% END %]
 
-    [% IF ( CAN_user_tools_items_batchmod || ( CAN_user_stockrotation_manage_rotas && Koha.Preference('StockRotation') ) ) %]
+    [% IF ( CAN_user_tools_items_modification_by_age || ( CAN_user_stockrotation_manage_rotas && Koha.Preference('StockRotation') ) ) %]
         <h5>Automation</h5>
         <ul>
-            [% IF ( CAN_user_tools_items_batchmod ) %]
+            [% IF ( CAN_user_tools_items_modification_by_age ) %]
                 <li>
                     <a href="/cgi-bin/koha/tools/automatic_item_modification_by_age.pl">Item modifications by age</a>
                 </li>
