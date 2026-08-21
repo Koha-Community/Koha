@@ -47,14 +47,14 @@ sub new {
         # Take latest timestamp of biblio and any items
         # Or timestamp of deleted items where bib not deleted
         $sql .= "
-            SELECT timestamp
+            SELECT main.timestamp AS timestamp
             FROM   biblio_metadata main
             WHERE  $where
               UNION
-            SELECT deleteditems.timestamp FROM deleteditems main JOIN biblio USING (biblionumber)
+            SELECT main.timestamp FROM deleteditems main JOIN biblio USING (biblionumber)
             WHERE  $where
               UNION
-            SELECT timestamp from items main
+            SELECT main.timestamp from items main
             WHERE  $where
         ";
         push @bind_params, $biblionumber;
@@ -65,7 +65,7 @@ sub new {
         ";
     } else {
         $sql = "
-            SELECT max(timestamp) as timestamp
+            SELECT max(main.timestamp) as timestamp
             FROM   biblio_metadata main
             WHERE  $where
         ";
