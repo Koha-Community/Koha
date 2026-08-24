@@ -7,9 +7,10 @@ use C4::Biblio qw( AddBiblio );
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;
 use Koha::Database;
+use Koha::Subscription;
 
 use Test::NoWarnings;
-use Test::More tests => 31;
+use Test::More tests => 33;
 
 BEGIN {
     use_ok(
@@ -196,6 +197,62 @@ subtest 'GetInvoices() returns financial totals' => sub {
     ok( exists $inv2->{total_tax_included}, 'GetInvoices returns total_tax_included' );
     ok( exists $inv2->{total_adj},          'GetInvoices returns total_adj' );
     cmp_ok( $inv2->{total_tax_included}, '>=', 0, 'total_tax_included is non-negative' );
+};
+
+subtest 'GetInvoices() financial totals are not inflated by multiple subscriptions on a biblio' => sub {
+    plan tests => 2;
+
+    my ($sub_biblionumber) = AddBiblio( MARC::Record->new, '' );
+
+    my $sub_order = Koha::Acquisition::Order->new(
+        {
+            basketno     => $basketno,
+            quantity     => 3,
+            biblionumber => $sub_biblionumber,
+            budget_id    => $budget->{budget_id},
+        }
+    )->store;
+
+    my $sub_invoiceid = AddInvoice(
+        invoicenumber => 'invoice_subs_test', booksellerid => $booksellerid, unknown => "unknown",
+    );
+    my $sub_invoice = GetInvoice($sub_invoiceid);
+
+    my $order_data = $sub_order->unblessed;
+    $order_data->{unitprice}              = 7;
+    $order_data->{unitprice_tax_excluded} = 7;
+    $order_data->{unitprice_tax_included} = 7;
+
+    ModReceiveOrder(
+        {
+            biblionumber     => $sub_biblionumber,
+            order            => $order_data,
+            quantityreceived => 3,
+            invoice          => $sub_invoice,
+        }
+    );
+
+    my @inv_before = GetInvoices( invoicenumber => 'invoice_subs_test' );
+    my $inv_before = $inv_before[0];
+
+    # Attach two subscriptions to the order's biblio. The subscription table
+    # is LEFT JOINed on biblionumber in GetInvoices(), so without correlated
+    # subqueries these totals would be multiplied by the number of
+    # subscriptions on the biblio.
+    Koha::Subscription->new( { biblionumber => $sub_biblionumber } )->store;
+    Koha::Subscription->new( { biblionumber => $sub_biblionumber } )->store;
+
+    my @inv_after = GetInvoices( invoicenumber => 'invoice_subs_test' );
+    my $inv_after = $inv_after[0];
+
+    is(
+        $inv_after->{total_tax_excluded}, $inv_before->{total_tax_excluded},
+        'total_tax_excluded is unaffected by additional subscriptions on the biblio'
+    );
+    is(
+        $inv_after->{total_tax_included}, $inv_before->{total_tax_included},
+        'total_tax_included is unaffected by additional subscriptions on the biblio'
+    );
 };
 
 my $invoicesummary1 = GetInvoice($invoiceid1);
