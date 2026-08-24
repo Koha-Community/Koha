@@ -871,7 +871,8 @@ function patron_autocomplete(node, options) {
                         display_cardnumber: true,
                         invert_name: true,
                         showDiffFirstname:
-                            showPatronFirstnameIfDifferentThanPreferredname,
+                            Koha.prefs
+                                .ShowPatronFirstnameIfDifferentThanPreferredname,
                     }) +
                     " " +
                     (item.date_of_birth
@@ -912,7 +913,7 @@ function patron_autocomplete(node, options) {
 function expandPatronSearchFields(search_fields) {
     switch (search_fields) {
         case "standard":
-            return defaultPatronSearchFields;
+            return Koha.prefs.DefaultPatronSearchFields;
             break;
         case "full_address":
             return "streetnumber|streettype|address|address2|city|state|zipcode|country";
@@ -932,8 +933,8 @@ function expandPatronSearchFields(search_fields) {
  * Build patron search query
  * - term: The full search term input by the user
  * You can then pass a list of options:
- * - search_type: (String) 'contains' or 'starts_with', defaults to defaultPatronSearchMethod (see js_includes.inc)
- * - search_fields: (String) comma-separated list of specific fields, defaults to defaultPatronSearchFields (see js_includes.inc)
+ * - search_type: (String) 'contains' or 'starts_with', defaults to DefaultPatronSearchMethod (see js_includes.inc)
+ * - search_fields: (String) comma-separated list of specific fields, defaults to DefaultPatronSearchFields (see js_includes.inc)
  * - extended_attribute_types: (JSON object) contains the patron searchable attribute types to be searched on (see patron-search.inc)
  * - table_prefix: (String) table name to prefix the fields with, defaults to 'me'
  */
@@ -964,7 +965,8 @@ function buildPatronSearchQuery(term, options) {
         leading_wildcard = options.search_type === "contains" ? "%" : "";
         // If not, use DefaultPatronSearchMethod system preference instead
     } else {
-        leading_wildcard = defaultPatronSearchMethod === "contains" ? "%" : "";
+        leading_wildcard =
+            Koha.prefs.DefaultPatronSearchMethod === "contains" ? "%" : "";
     }
 
     let searched_attribute_fields = [];
@@ -981,7 +983,7 @@ function buildPatronSearchQuery(term, options) {
         });
         // If not, we use DefaultPatronSearchFields system preference instead
     } else {
-        search_fields = defaultPatronSearchFields.split("|");
+        search_fields = Koha.prefs.DefaultPatronSearchFields.split("|");
     }
 
     // Add each pattern for each search field
@@ -1027,7 +1029,7 @@ function buildPatronSearchQuery(term, options) {
             options.extended_attribute_types &&
             options.extended_attribute_types.length > 0) ||
             searched_attribute_fields.length > 0) &&
-        extendedPatronAttributes
+        Koha.prefs.ExtendedPatronAttributes
     ) {
         extended_attribute_codes_to_search =
             searched_attribute_fields.length > 0

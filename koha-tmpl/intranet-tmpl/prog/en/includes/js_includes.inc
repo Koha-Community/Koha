@@ -44,7 +44,7 @@
     Koha.addPrefs({
         DefaultPatronSearchFields: "[% Koha.Preference('DefaultPatronSearchFields') || 'firstname|preferred_name|middle_name|surname|othernames|cardnumber|userid' | html %]",
         DefaultPatronSearchMethod: "[% Koha.Preference('DefaultPatronSearchMethod') || 'contains' | html %]",
-        ExtendedPatronAttributes: "[% Koha.Preference('ExtendedPatronAttributes') | html %]",
+        ExtendedPatronAttributes: [% Koha.Preference('ExtendedPatronAttributes') ? 1 : 0 | html %],
         ShowPatronFirstnameIfDifferentThanPreferredname: [% Koha.Preference('ShowPatronFirstnameIfDifferentThanPreferredname') ? 1 : 0 | html %],
     });
 
