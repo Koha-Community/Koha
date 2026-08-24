@@ -199,8 +199,8 @@ subtest 'GetInvoices() returns financial totals' => sub {
     cmp_ok( $inv2->{total_tax_included}, '>=', 0, 'total_tax_included is non-negative' );
 };
 
-subtest 'GetInvoices() financial totals are not inflated by multiple subscriptions on a biblio' => sub {
-    plan tests => 2;
+subtest 'GetInvoices() totals are not inflated by multiple subscriptions on a biblio' => sub {
+    plan tests => 4;
 
     my ($sub_biblionumber) = AddBiblio( MARC::Record->new, '' );
 
@@ -252,6 +252,14 @@ subtest 'GetInvoices() financial totals are not inflated by multiple subscriptio
     is(
         $inv_after->{total_tax_included}, $inv_before->{total_tax_included},
         'total_tax_included is unaffected by additional subscriptions on the biblio'
+    );
+    is(
+        $inv_after->{receiveditems}, $inv_before->{receiveditems},
+        'receiveditems is unaffected by additional subscriptions on the biblio'
+    );
+    is(
+        $inv_after->{itemsexpected}, $inv_before->{itemsexpected},
+        'itemsexpected is unaffected by additional subscriptions on the biblio'
     );
 };
 

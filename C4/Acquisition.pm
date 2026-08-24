@@ -2433,8 +2433,14 @@ sub GetInvoices {
               NULL
             )
           ) AS is_linked_to_subscriptions,
-          SUM(aqorders.quantityreceived) AS receiveditems,
-          SUM(aqorders.quantity) AS itemsexpected,
+          COALESCE(
+            (SELECT SUM(o.quantityreceived) FROM aqorders o WHERE o.invoiceid = aqinvoices.invoiceid),
+            0
+          ) AS receiveditems,
+          COALESCE(
+            (SELECT SUM(o.quantity) FROM aqorders o WHERE o.invoiceid = aqinvoices.invoiceid),
+            0
+          ) AS itemsexpected,
           COALESCE(
             (SELECT SUM(o.unitprice_tax_excluded * o.quantity) FROM aqorders o WHERE o.invoiceid = aqinvoices.invoiceid),
             0
