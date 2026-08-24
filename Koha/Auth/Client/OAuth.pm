@@ -82,10 +82,7 @@ sub _get_data_and_patron {
         my $code         = $tx->res->code || 'No response';
 
         return if $code ne '200';
-        my $claim =
-              $tx->res->headers->content_type =~ m!^(application/json|text/javascript)(;\s*charset=\S+)?$!
-            ? $tx->res->json
-            : Mojo::Parameters->new( $tx->res->body )->to_hash;
+        my $claim = $tx->res->json // Mojo::Parameters->new( $tx->res->body )->to_hash;
 
         foreach my $key ( keys %$mapping ) {
             my $pkey  = $mapping->{$key};
