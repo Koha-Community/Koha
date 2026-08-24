@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 # Copyright 2025 Koha Development Team
 #
@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockModule;
 use Test::NoWarnings;
 
@@ -252,6 +252,106 @@ subtest '_get_data_and_patron() no patron found tests' => sub {
     # Verify results
     is( $mapped_data->{email}, 'nonexistent@example.com', 'Email mapped correctly' );
     is( $found_patron,         undef,                     'No patron found for non-existent email' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest '_get_data_and_patron() userinfo_url with extra Content-Type params (bug 43375)' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $client = Koha::Auth::Client::OAuth->new;
+
+    # Create test patron
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { email => 'graph@example.com' }
+        }
+    );
+
+    # Create provider with email matchpoint
+    my $provider = $builder->build_object(
+        {
+            class => 'Koha::Auth::Identity::Providers',
+            value => {
+                matchpoint => 'email',
+                mapping    => encode_json(
+                    {
+                        email     => 'mail',
+                        firstname => 'givenName',
+                        surname   => 'surname',
+                    }
+                )
+            }
+        }
+    );
+
+    # Mock UserAgent - simulate Microsoft Graph API response
+    # Content-Type: application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false;charset=utf-8
+    my $ua_mock      = Test::MockModule->new('Mojo::UserAgent');
+    my $tx_mock      = Test::MockModule->new('Mojo::Transaction::HTTP');
+    my $res_mock     = Test::MockModule->new('Mojo::Message::Response');
+    my $headers_mock = Test::MockModule->new('Mojo::Headers');
+
+    $headers_mock->mock(
+        'content_type',
+        sub {
+            'application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false;charset=utf-8';
+        }
+    );
+    $res_mock->mock( 'code', sub { '200' } );
+    $res_mock->mock(
+        'json',
+        sub {
+            return {
+                mail      => 'graph@example.com',
+                givenName => 'Azure',
+                surname   => 'User',
+            };
+        }
+    );
+    $res_mock->mock(
+        'headers',
+        sub {
+            my $headers = {};
+            bless $headers, 'Mojo::Headers';
+            return $headers;
+        }
+    );
+
+    $tx_mock->mock(
+        'res',
+        sub {
+            my $res = {};
+            bless $res, 'Mojo::Message::Response';
+            return $res;
+        }
+    );
+
+    $ua_mock->mock(
+        'get',
+        sub {
+            my $tx = {};
+            bless $tx, 'Mojo::Transaction::HTTP';
+            return $tx;
+        }
+    );
+
+    my $data   = { access_token => 'ms_graph_token' };
+    my $config = { userinfo_url => 'https://graph.microsoft.com/v1.0/me' };
+
+    my ( $mapped_data, $found_patron ) = $client->_get_data_and_patron(
+        {
+            provider => $provider,
+            data     => $data,
+            config   => $config
+        }
+    );
+
+    is( $mapped_data->{email}, 'graph@example.com', 'Email mapped from MS Graph response with OData Content-Type' );
+    is( $found_patron->id,     $patron->id,         'Patron found despite extra Content-Type parameters' );
 
     $schema->storage->txn_rollback;
 };
