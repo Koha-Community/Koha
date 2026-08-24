@@ -196,6 +196,12 @@
             table_dt.columns().visible(true, false);
             let hidden_ids = _dt_visibility(table_settings, table_dt);
             table_dt.columns(hidden_ids).visible(false, false);
+            for (const [key, value] of Object.entries(user_colvis)) {
+                table_dt.columns(key).visible(value, false);
+            }
+            // A column without any value on the current page is hidden, even if
+            // the user asked for it. The user choice is not modified, the column
+            // is displayed again on the pages where it has values.
             table_dt.columns().every(function () {
                 let i = this.index();
                 let is_empty = true;
@@ -210,9 +216,6 @@
                     table_dt.columns(i).visible(false, false);
                 }
             });
-            for (const [key, value] of Object.entries(user_colvis)) {
-                table_dt.columns(key).visible(value, false);
-            }
         }
 
         $(document).ready(function () {
