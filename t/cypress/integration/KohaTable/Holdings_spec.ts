@@ -359,6 +359,63 @@ describe("catalogue/detail/holdings_table with items", () => {
                 );
             });
     });
+
+    it("Does not display a column that is empty on the current page", function () {
+        // Do not use `() => {` or this.objects won't be retrieved
+        const biblio_id = this.objects.biblio.biblio_id;
+        const call_number_column = `#${table_id} th[data-colname="itemcallnumber"]`;
+
+        // The filters row is a clone of the header and carries the same
+        // data-colname, so it must stay off for the assertions below.
+        cy.set_syspref("AlwaysShowHoldingsTableFilters", 0);
+
+        // Keep a call number on the first page only
+        cy.intercept("GET", `/api/v1/biblios/${biblio_id}/items*`, req => {
+            const is_second_page = req.query._page == 2;
+            req.continue(res => {
+                if (!Array.isArray(res.body)) return;
+                res.body = res.body.map(item => ({
+                    ...item,
+                    callnumber: is_second_page ? null : "CN_" + item.item_id,
+                }));
+            });
+        }).as("searchItems");
+
+        cy.visit("/cgi-bin/koha/catalogue/detail.pl?biblionumber=" + biblio_id);
+        cy.wait("@searchItems");
+
+        // Turn the column off then on, to record a user choice
+        cy.get(`#${table_id}_wrapper .buttons-colvis`).click();
+        cy.get(`#${table_id}_wrapper .dt-button-collection`)
+            .contains("Call number")
+            .click();
+        cy.get(`#${table_id}_wrapper .dt-button-collection`)
+            .contains("Call number")
+            .click();
+        // The column has values on the first page, so it is displayed there
+        cy.get(call_number_column).should("exist");
+        cy.get("body").type("{esc}", { force: true });
+
+        // The column has no value on the second page, it must not be displayed
+        cy.get(
+            `#${table_id}_wrapper .top.pager .dt-paging-button.next`
+        ).click();
+        cy.wait("@searchItems");
+        cy.get(`#${table_id}_wrapper .dt-info`).contains(
+            `Showing 21 to ${baseTotalCount} of ${baseTotalCount} entries`
+        );
+        cy.get(call_number_column).should("not.exist");
+
+        // The user choice is kept, the column is displayed again on the first page
+        cy.get(
+            `#${table_id}_wrapper .top.pager .dt-paging-button.previous`
+        ).click();
+        cy.wait("@searchItems");
+        cy.get(`#${table_id}_wrapper .dt-info`).contains(
+            `Showing 1 to ${RESTdefaultPageSize} of ${baseTotalCount} entries`
+        );
+        cy.get(call_number_column).should("exist");
+    });
 });
 
 describe("catalogue/detail/holdings_table without items", () => {
