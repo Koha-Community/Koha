@@ -434,6 +434,7 @@
                 $("#basket_groups a[href='#opened_panel']").tab("show");
             }
 
+            let grouped_dt, ungrouped_dt;
             if (!grouping) {
                 let dt_params = {
                     autoWidth: false,
@@ -444,20 +445,24 @@
                 $("#basket_group_opened").kohaTable(dt_params);
                 $("#basket_group_closed").kohaTable(dt_params);
             } else {
-                grouped = $("#grouped").kohaTable({
-                    dom: "t",
-                    autoWidth: false,
-                    language: {
-                        emptyTable: _("There are no baskets in this group"),
-                    },
-                });
-                ungrouped = $("#ungrouped").kohaTable({
-                    dom: "t",
-                    autoWidth: false,
-                    language: {
-                        emptyTable: _("There are no ungrouped baskets"),
-                    },
-                });
+                grouped_dt = $("#grouped")
+                    .kohaTable({
+                        dom: "t",
+                        autoWidth: false,
+                        language: {
+                            emptyTable: _("There are no baskets in this group"),
+                        },
+                    })
+                    .DataTable();
+                ungrouped_dt = $("#ungrouped")
+                    .kohaTable({
+                        dom: "t",
+                        autoWidth: false,
+                        language: {
+                            emptyTable: _("There are no ungrouped baskets"),
+                        },
+                    })
+                    .DataTable();
             }
 
             $("#basketgroupcolumns").on("click", ".addtogroup", function () {
@@ -468,8 +473,8 @@
                         .addClass("removefromgroup")
                         .html('<i class="fa fa-trash-can" aria-hidden="true"></i> ' + _("Remove"));
                     row.removeClass("ungrouped").addClass("grouped");
-                    ungrouped.row(row).remove().draw();
-                    grouped.row.add(row).draw();
+                    ungrouped_dt.row(row).remove().draw();
+                    grouped_dt.row.add(row).draw();
                 }
             });
 
@@ -482,8 +487,8 @@
                         .html('<i class="fa fa-plus" aria-hidden="true"></i> ' + _("Add to group"));
                     $(this).removeClass("").addClass("");
                     row.removeClass("grouped").addClass("ungrouped");
-                    grouped.row(row).remove().draw();
-                    ungrouped.row.add(row).draw();
+                    grouped_dt.row(row).remove().draw();
+                    ungrouped_dt.row.add(row).draw();
                 }
             });
 
