@@ -68,14 +68,22 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $attribute_filters;
-my $vars = $input->Vars;
-for my $k ( keys %$vars ) {
-    if ( $k =~ /^Filter_borrower_attributes\.(\d+)$/ ) {
-        my $val = $vars->{$k};
-        $val =~ s/\*/%/g if $val;
-        $attribute_filters->{$1} = $val;
-    }
+my $library_id = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+my @attribute_types =
+    Koha::Patron::Attribute::Types->search_with_library_limits( {}, {}, $library_id )->as_list;
+my %allowed_attribute_codes = map { $_->code => 1 } @attribute_types;
+
+my $attribute_filters = {};
+my $vars              = $input->Vars;
+for my $key ( keys %$vars ) {
+    next unless index( $key, 'Filter_borrower_attributes.' ) == 0;
+
+    my $code = substr( $key, length('Filter_borrower_attributes.') );
+    next unless exists $allowed_attribute_codes{$code};
+
+    my $value = $vars->{$key};
+    $value =~ s/\*/%/g if $value;
+    $attribute_filters->{$code} = $value;
 }
 
 # Allowed values for Line and Column
@@ -94,21 +102,8 @@ my %allowed_fields = (
     "borrowers.branchcode"   => 1,
 );
 
-# Validate Line parameter
-my $line = "branch";
-if ( $line_input && $allowed_fields{$line_input} ) {
-    $line = $line_input;
-} elsif ( $line_input && $line_input =~ /^borrower_attributes\.(\d+)$/ ) {
-    $line = $line_input;
-}
-
-# Validate Column parameter
-my $column = "datetime";
-if ( $column_input && $allowed_fields{$column_input} ) {
-    $column = $column_input;
-} elsif ( $column_input && $column_input =~ /^borrower_attributes\.(\d+)$/ ) {
-    $column = $column_input;
-}
+my $line   = report_field( $line_input,   'branch',   \%allowed_fields, \%allowed_attribute_codes );
+my $column = report_field( $column_input, 'datetime', \%allowed_fields, \%allowed_attribute_codes );
 
 # Validate DisplayBy parameter
 my $podsp = "";
@@ -253,10 +248,8 @@ foreach ( sort { $ccodes->{$a} cmp $ccodes->{$b} } keys %$ccodes ) {
 my $CGIextChoice = ('CSV');               # FIXME translation
 my $CGIsepChoice = GetDelimiterChoices;
 
-my $library_id      = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
-my $attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits( {}, {}, $library_id );
 my %attribute_types_by_class;
-while ( my ($attribute_type) = $attribute_types->next ) {
+for my $attribute_type (@attribute_types) {
     $attribute_type = $attribute_type->unblessed;
     if ( $attribute_type->{authorised_value_category} ) {
         my $authorised_values = C4::Koha::GetAuthorisedValues( $attribute_type->{authorised_value_category} );
@@ -354,7 +347,7 @@ sub calculate {
         : ( $line =~ /homebranch/ )           ? @$filters[11]
         : ( $line =~ /holdingbranch/ )        ? @$filters[12]
         : ( $line =~ /borrowers.branchcode/ ) ? @$filters[13]
-        : ($line_attribute_type)              ? $attribute_filters->{$line_attribute_type}
+        : ( defined $line_attribute_type )    ? $attribute_filters->{$line_attribute_type}
         :                                       undef;
 
     if ( $line =~ /ccode/ or $line =~ /location/ or $line =~ /homebranch/ or $line =~ /holdingbranch/ ) {
@@ -375,7 +368,7 @@ sub calculate {
         : ( $column =~ /homebranch/ )           ? @$filters[11]
         : ( $column =~ /holdingbranch/ )        ? @$filters[12]
         : ( $column =~ /borrowers.branchcode/ ) ? @$filters[13]
-        : ($column_attribute_type)              ? $attribute_filters->{$column_attribute_type}
+        : ( defined $column_attribute_type )    ? $attribute_filters->{$column_attribute_type}
         :                                         undef;
 
     if ( $column =~ /ccode/ or $column =~ /location/ or $column =~ /homebranch/ or $column =~ /holdingbranch/ ) {
@@ -402,7 +395,7 @@ sub calculate {
         :                               $linefield;
 
     my $strsth;
-    if ($line_attribute_type) {
+    if ( defined $line_attribute_type ) {
         $strsth = "SELECT attribute FROM borrower_attributes WHERE code = ? ";
     } else {
         $strsth = "SELECT distinctrow $linefield FROM statistics ";
@@ -435,7 +428,7 @@ sub calculate {
     push @loopfilter, { crit => 'SQL =', sql => 1, filter => $strsth };
     my $sth  = $dbh->prepare($strsth);
     my @bind = ();
-    if ($line_attribute_type) {
+    if ( defined $line_attribute_type ) {
         push @bind, $line_attribute_type;
     }
     if ( (@linefilter) and ( $linefilter[0] ) and ( $linefilter[1] ) ) {
@@ -500,7 +493,7 @@ sub calculate {
         : ( $colfield =~ /^month/ )  ? "  month($column)"
         :                              $colfield;
     my $strsth2;
-    if ($column_attribute_type) {
+    if ( defined $column_attribute_type ) {
         $strsth2 = "SELECT attribute FROM borrower_attributes WHERE code = ? ";
     } else {
         $strsth2 = "SELECT distinctrow $colfield FROM statistics ";
@@ -534,7 +527,7 @@ sub calculate {
     push @loopfilter, { crit => 'SQL =', sql => 1, filter => $strsth2 };
     my $sth2  = $dbh->prepare($strsth2);
     my @bind2 = ();
-    if ($column_attribute_type) {
+    if ( defined $column_attribute_type ) {
         push @bind2, $column_attribute_type;
     }
     if ( (@colfilter) and ( $colfilter[0] ) and ( $colfilter[1] ) ) {
@@ -587,15 +580,26 @@ sub calculate {
         table_set( \%table, $row->{rowtitle}, 'totalrow', 0 );
     }
 
+    my %required_attribute_codes = map { $_ => 1 } grep { $attribute_filters->{$_} } keys %$attribute_filters;
+    $required_attribute_codes{$line_attribute_type}   = 1 if defined $line_attribute_type;
+    $required_attribute_codes{$column_attribute_type} = 1 if defined $column_attribute_type;
+
+    my @required_attribute_codes = sort keys %required_attribute_codes;
+    my %attribute_aliases;
+    my $attribute_index = 0;
+    for my $attribute_code (@required_attribute_codes) {
+        $attribute_aliases{$attribute_code} = 'attribute_' . $attribute_index++;
+    }
+
     # preparing calculation
     my $strcalc = "SELECT ";
-    if ($line_attribute_type) {
-        $strcalc .= "TRIM(attribute_$line_attribute_type.attribute) AS line_attribute, ";
+    if ( defined $line_attribute_type ) {
+        $strcalc .= "TRIM($attribute_aliases{$line_attribute_type}.attribute) AS line_attribute, ";
     } else {
         $strcalc .= "TRIM($linefield), ";
     }
-    if ($column_attribute_type) {
-        $strcalc .= "TRIM(attribute_$column_attribute_type.attribute) AS column_attribute, ";
+    if ( defined $column_attribute_type ) {
+        $strcalc .= "TRIM($attribute_aliases{$column_attribute_type}.attribute) AS column_attribute, ";
     } else {
         $strcalc .= "TRIM($colfield), ";
     }
@@ -615,14 +619,10 @@ sub calculate {
         FROM statistics
         LEFT JOIN borrowers ON statistics.borrowernumber=borrowers.borrowernumber
     ";
-    foreach my $type ( keys %$attribute_filters ) {
-        if (   ( $line_attribute_type and $line_attribute_type eq $type )
-            or $column_attribute_type and $column_attribute_type eq $type
-            or $attribute_filters->{$type} )
-        {
-            $strcalc .=
-                " LEFT JOIN borrower_attributes AS attribute_$type ON (statistics.borrowernumber = attribute_$type.borrowernumber AND attribute_$type.code = ?) ";
-        }
+    for my $type (@required_attribute_codes) {
+        my $alias = $attribute_aliases{$type};
+        $strcalc .=
+            " LEFT JOIN borrower_attributes AS $alias ON (statistics.borrowernumber = $alias.borrowernumber AND $alias.code = ?) ";
     }
     $strcalc .=
         "LEFT JOIN (SELECT * FROM items UNION SELECT * FROM deleteditems) items ON statistics.itemnumber=items.itemnumber "
@@ -661,21 +661,16 @@ sub calculate {
     $strcalc .= " AND monthname(datetime) = ?"       if ($monthsel);
     $strcalc .= " AND statistics.type = ?"           if ($type);
 
-    foreach ( keys %$attribute_filters ) {
-        if ( $attribute_filters->{$_} ) {
-            $strcalc .= " AND attribute_$_.attribute LIKE ?";
+    for my $type (@required_attribute_codes) {
+        if ( $attribute_filters->{$type} ) {
+            $strcalc .= " AND $attribute_aliases{$type}.attribute LIKE ?";
         }
     }
 
     # Build bind array for the main calculation query
     # First, add the attribute filter codes for the JOINs (in the same order as the JOINs above)
-    for my $type ( keys %$attribute_filters ) {
-        if (   ( $line_attribute_type and $line_attribute_type eq $type )
-            or $column_attribute_type and $column_attribute_type eq $type
-            or $attribute_filters->{$type} )
-        {
-            push @bind3, $type;
-        }
+    for my $type (@required_attribute_codes) {
+        push @bind3, $type;
     }
 
     # Then add the filter values
@@ -698,31 +693,31 @@ sub calculate {
     push @bind3, $type                      if ($type);
 
     # Add attribute filter values
-    for my $type ( keys %$attribute_filters ) {
+    for my $type (@required_attribute_codes) {
         if ( $attribute_filters->{$type} ) {
             push @bind3, $attribute_filters->{$type};
         }
     }
 
     $strcalc .= " GROUP BY ";
-    if ($line_attribute_type) {
+    if ( defined $line_attribute_type ) {
         $strcalc .= " line_attribute, ";
     } else {
         $strcalc .= " $linefield, ";
     }
-    if ($column_attribute_type) {
+    if ( defined $column_attribute_type ) {
         $strcalc .= " column_attribute ";
     } else {
         $strcalc .= " $colfield ";
     }
 
     $strcalc .= " ORDER BY ";
-    if ($line_attribute_type) {
+    if ( defined $line_attribute_type ) {
         $strcalc .= " line_attribute, ";
     } else {
         $strcalc .= " $lineorder, ";
     }
-    if ($column_attribute_type) {
+    if ( defined $column_attribute_type ) {
         $strcalc .= " column_attribute ";
     } else {
         $strcalc .= " $colorder ";
@@ -781,9 +776,18 @@ sub calculate {
     # 	# the foot (totals by borrower type)
     $globalline{loopfooter} = \@loopfooter;
     $globalline{total}      = $grantotal;
-    $globalline{line}       = $line_attribute_type   ? $line_attribute_type   : $line;
-    $globalline{column}     = $column_attribute_type ? $column_attribute_type : $column;
+    $globalline{line}       = defined $line_attribute_type   ? $line_attribute_type   : $line;
+    $globalline{column}     = defined $column_attribute_type ? $column_attribute_type : $column;
     return [ ( \%globalline ) ];
+}
+
+sub report_field {
+    my ( $value, $default, $allowed_fields, $allowed_attribute_codes ) = @_;
+    return $value if defined $value && exists $allowed_fields->{$value};
+    return $default unless defined $value && index( $value, 'borrower_attributes.' ) == 0;
+
+    my $code = substr( $value, length('borrower_attributes.') );
+    return exists $allowed_attribute_codes->{$code} ? $value : $default;
 }
 
 sub null_to_zzempty {
