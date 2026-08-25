@@ -182,28 +182,25 @@ $(document).ready(function () {
                                 sort: "reservedate",
                             },
                         },
-                        ...(DisplayAddHoldGroups
-                            ? [
-                                  {
-                                      data: function (oObj) {
-                                          title = "";
-                                          if (oObj.hold_group_id) {
-                                              var link =
-                                                  '<a class="hold-group" href="/cgi-bin/koha/reserve/hold-group.pl?hold_group_id=' +
-                                                  oObj.hold_group_id +
-                                                  '">' +
-                                                  oObj.hold_group_id +
-                                                  "</a>";
+                        {
+                            data: function (oObj) {
+                                title = "";
+                                if (
+                                    DisplayAddHoldGroups &&
+                                    oObj.hold_group_id
+                                ) {
+                                    var link =
+                                        '<a class="hold-group" href="/cgi-bin/koha/reserve/hold-group.pl?hold_group_id=' +
+                                        oObj.hold_group_id +
+                                        '">' +
+                                        oObj.hold_group_id +
+                                        "</a>";
 
-                                              title =
-                                                  "<span>" + link + "</span>";
-                                          }
-
-                                          return title;
-                                      },
-                                  },
-                              ]
-                            : []),
+                                    title = "<span>" + link + "</span>";
+                                }
+                                return title;
+                            },
+                        },
                         {
                             data: function (oObj) {
                                 title =
