@@ -43,6 +43,7 @@ use Koha::AuthorisedValues;
 use Koha::Biblios;
 use Koha::Biblio::ItemGroup::Items;
 use Koha::Biblio::ItemGroups;
+use Koha::Biblio::Metadata::Extractor;
 use Koha::BiblioFrameworks;
 use Koha::Controller::Catalogue;
 use Koha::CoverImages;
@@ -166,10 +167,14 @@ $template->param( ocoins => !$invalid_marc_record ? $biblio->get_coins : undef )
 # some useful variables for enhanced content;
 # in each case, we're grabbing the first value we find in
 # the record and normalizing it
-my $upc  = $biblio->normalized_upc;
-my $ean  = $biblio->normalized_ean;
-my $oclc = $biblio->normalized_oclc;
-my $isbn = GetNormalizedISBN( undef, $marc_record, $marcflavour );
+my ( $upc, $ean, $oclc, $isbn );
+if ($marc_record) {
+    my $extractor = Koha::Biblio::Metadata::Extractor->new( { metadata => $marc_record } );
+    $upc  = $extractor->get_normalized_upc;
+    $ean  = $extractor->get_normalized_ean;
+    $oclc = $extractor->get_normalized_oclc;
+    $isbn = GetNormalizedISBN( undef, $marc_record, $marcflavour );
+}
 my $content_identifier_exists;
 if ( $isbn or $ean or $oclc or $upc ) {
     $content_identifier_exists = 1;
