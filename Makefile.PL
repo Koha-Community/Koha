@@ -679,10 +679,6 @@ $file_map->{'koha-tmpl/intranet-tmpl/prog/css/bookings.css'}     = 'blib/INTRANE
 $file_map->{'koha-tmpl/intranet-tmpl/prog/css/bookings-rtl.css'} = 'blib/INTRANET_TMPL_DIR/prog/css/bookings-rtl.css';
 $file_map->{'koha-tmpl/intranet-tmpl/prog/css/calendar.css'}     = 'blib/INTRANET_TMPL_DIR/prog/css/calendar.css';
 $file_map->{'koha-tmpl/intranet-tmpl/prog/css/calendar-rtl.css'} = 'blib/INTRANET_TMPL_DIR/prog/css/calendar-rtl.css';
-$file_map->{'koha-tmpl/intranet-tmpl/prog/css/edifact_interchange.css'} =
-    'blib/INTRANET_TMPL_DIR/prog/css/edifact_interchange.css';
-$file_map->{'koha-tmpl/intranet-tmpl/prog/css/edifact_interchange-rtl.css'} =
-    'blib/INTRANET_TMPL_DIR/prog/css/edifact_interchange-rtl.css';
 $file_map->{'koha-tmpl/intranet-tmpl/prog/css/holds.css'}        = 'blib/INTRANET_TMPL_DIR/prog/css/holds.css';
 $file_map->{'koha-tmpl/intranet-tmpl/prog/css/holds-rtl.css'}    = 'blib/INTRANET_TMPL_DIR/prog/css/holds-rtl.css';
 $file_map->{'koha-tmpl/intranet-tmpl/prog/css/ill-requests.css'} = 'blib/INTRANET_TMPL_DIR/prog/css/ill-requests.css';
