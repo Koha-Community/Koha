@@ -36,11 +36,11 @@
 
     <div class="page-section">
         <fieldset class="action filters" style="cursor:pointer;">
-            <a id="resolved_filter"><i class="fa fa-bars"></i> Include resolved</a>
+            <a id="resolved_filter"><i class="fa fa-eye"></i> Include resolved</a>
             <input type="checkbox" id="hide_resolved_concerns" style="display:none;" />
             [% FOR st IN status %]
-                <a id="[% st.authorised_value | html %]_filter"><i class="fa fa-filter"></i> Hide [% st.lib | html %]</a>
-                <input type="checkbox" id="hide_[% st.authorised_value | html %]" style="display:none;" class="status-filter-checkbox" />
+                <a id="[% st.authorised_value | html %]_filter"><i class="fa fa-eye-slash"></i> Hide [% st.lib | html %]</a>
+                <input type="checkbox" id="hide_[% st.authorised_value | html %]" style="display:none;" />
             [% END %]
         </fieldset>
 
@@ -89,9 +89,10 @@
                 source: "catalog",
                 status: function () {
                     let avfilters = ["-and"];
-                    document.querySelectorAll(".status-filter-checkbox:checked").forEach(el => {
-                        let av = el.id.split("_")[1];
-                        avfilters.push({ "!=": av });
+                    statuses.forEach(s => {
+                        if ($(`#hide_${s.authorised_value}`).is(":checked")) {
+                            avfilters.push({ "!=": s.authorised_value });
+                        }
                     });
 
                     if (avfilters.length === 1) {
@@ -263,9 +264,9 @@
             var txtInactivefilter = _("Hide resolved");
             function adjust_filter_label() {
                 if ($("#hide_resolved_concerns").is(":checked")) {
-                    $("#resolved_filter").html('<i class="fa fa-bars"></i> ' + txtActivefilter);
+                    $("#resolved_filter").html('<i class="fa fa-eye"></i> ' + txtActivefilter);
                 } else {
-                    $("#resolved_filter").html('<i class="fa fa-filter"></i> ' + txtInactivefilter);
+                    $("#resolved_filter").html('<i class="fa fa-eye-slash"></i> ' + txtInactivefilter);
                 }
             }
             $("#resolved_filter").on("click", function () {
@@ -282,9 +283,9 @@
 
                 $(`#${av}_filter`).on("click", function () {
                     if ($(`#hide_${av}`).is(":checked")) {
-                        $(this).html('<i class="fa fa-filter"></i> ' + _("Hide ") + st.lib);
+                        $(this).html('<i class="fa fa-eye-slash"></i> ' + _("Hide ") + st.lib);
                     } else {
-                        $(this).html('<i class="fa fa-bars"></i> ' + _("Include ") + st.lib);
+                        $(this).html('<i class="fa fa-eye"></i> ' + _("Include ") + st.lib);
                     }
                     $(`#hide_${av}`).prop("checked", !$(`#hide_${av}`).is(":checked"));
                     tickets.DataTable().draw();
