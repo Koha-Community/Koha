@@ -2116,13 +2116,18 @@ sub _koha_notify_reserve {
     };
 
     while ( my ( $mtt, $letter_code ) = each %{ $messagingprefs->{transports} } ) {
+
+        # Notice is handled by TalkingTech_itiva_outbound.pl, there is nothing to queue here
+        next
+            if $mtt eq 'itiva'
+            && C4::Context->preference('TalkingTechItivaPhoneNotification')
+            && $patron->phone;
+
         if (
             ( $mtt eq 'email'  and not $to_address )                # No email address
             or ( $mtt eq 'sms' and not $patron->smsalertnumber )    # No SMS number
-            or ( $mtt eq 'itiva'
-                and C4::Context->preference('TalkingTechItivaPhoneNotification')
-            )                                                       # Notice is handled by TalkingTech_itiva_outbound.pl
-            or ( $mtt eq 'phone' and not $patron->phone )           # No phone number to call
+            or ( $mtt eq 'itiva' )    # Itiva is turned off, or there is no phone number for Itiva to call
+            or ( $mtt eq 'phone' and not $patron->phone )    # No phone number to call
             )
         {
             unless ($notification_sent) {
