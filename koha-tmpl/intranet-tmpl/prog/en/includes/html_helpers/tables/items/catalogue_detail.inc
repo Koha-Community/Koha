@@ -498,11 +498,15 @@
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
+                        let loc_str = row._strings.location ? row._strings.location.str : row.location;
+
+                        if (!loc_str) {
+                            return "";
+                        }
                         let nodes = '<span class="shelvingloc">';
                         // If permanent location is defined, show description or code and
                         // display current location in parentheses. If not, display current location.
                         // Note that permanent location is a code, and location may be an authval.
-                        let loc_str = row._strings.location ? row._strings.location.str : row.location;
                         if (row.permanent_location && row.permanent_location != row.location) {
                             let permanent_loc_str = av_loc.get(row.permanent_location);
                             nodes += "%s<br/>(%s)".format(escape_str(permanent_loc_str), escape_str(loc_str));
