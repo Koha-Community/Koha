@@ -20,6 +20,7 @@ use Modern::Perl;
 # Dummy app for testing the plugin
 use Mojolicious::Lite;
 use Try::Tiny;
+use Test::MockModule;
 
 use Koha::ActionLogs;
 use Koha::Cities;
@@ -580,7 +581,7 @@ get '/ill_requests_count_sort_correctness' => sub {
 # The tests
 
 use Test::NoWarnings;
-use Test::More tests => 15;
+use Test::More tests => 16;
 use Test::Mojo;
 
 subtest 'extract_reserved_params() tests' => sub {
@@ -848,6 +849,83 @@ subtest '_parse_dbic_query datetime fixup' => sub {
             { q => { '-and' => [ { module => 'CRONJOBS', action => { '-in' => [ 'ADD', 'MODIFY' ] } } ] } } )
         ->status_is(200)
         ->json_is( '' => { '-and' => [ { module => 'CRONJOBS', action => { '-in' => [ 'ADD', 'MODIFY' ] } } ] } );
+};
+
+subtest '_parse_dbic_query timezone fixup' => sub {
+    plan tests => 18;
+
+    my $t = Test::Mojo->new;
+
+    # Mock the system timezone to UTC for predictable results
+    my $context = Test::MockModule->new('C4::Context');
+    $context->mock( 'tz', sub { 'UTC' } );
+
+    # Test 1: datetime with +00:00 timezone offset inside -and
+    $t->get_ok( '/merge_q_params_datetime' => json =>
+            { q => { '-and' => [ { timestamp => { '>=' => '2026-08-01T00:00:00+00:00' }, module => 'MEMBERS' } ] } } )
+        ->status_is(200)
+        ->json_is( '' => { '-and' => [ { timestamp => { '>=' => '2026-08-01 00:00:00' }, module => 'MEMBERS' } ] } );
+
+    # Test 2: datetime with -05:00 timezone offset inside -and
+    # 2026-08-01T12:00:00-05:00 = 2026-08-01T17:00:00Z (UTC-5 to UTC)
+    $t->get_ok( '/merge_q_params_datetime' => json =>
+            { q => { '-and' => [ { timestamp => { '<=' => '2026-08-01T12:00:00-05:00' }, module => 'MEMBERS' } ] } } )
+        ->status_is(200)
+        ->json_is( '' => { '-and' => [ { timestamp => { '<=' => '2026-08-01 17:00:00' }, module => 'MEMBERS' } ] } );
+
+    # Test 3: datetime with +05:30 timezone offset inside -or
+    # 2026-08-01T00:00:00+05:30 = 2026-07-31T18:30:00Z (UTC+5:30 to UTC)
+    $t->get_ok(
+        '/merge_q_params_datetime' => json => {
+            q => {
+                '-or' => [
+                    { timestamp => { '>=' => '2026-08-01T00:00:00+05:30' } },
+                    { timestamp => { '<=' => '2026-07-01T00:00:00-03:00' } },
+                ]
+            }
+        }
+    )->status_is(200)->json_is(
+        '' => {
+            '-or' => [
+                { timestamp => { '>=' => '2026-07-31 18:30:00' } },
+                { timestamp => { '<=' => '2026-07-01 03:00:00' } },
+            ]
+        }
+    );
+
+    # Test 4: datetime with +00:00 timezone in -between
+    $t->get_ok(
+        '/merge_q_params_datetime' => json => {
+            q => {
+                '-and' =>
+                    [ { timestamp => { '-between' => [ '2026-08-01T00:00:00+00:00', '2026-08-05T23:59:59+00:00' ] } } ]
+            }
+        }
+        )
+        ->status_is(200)
+        ->json_is(
+        '' => { '-and' => [ { timestamp => { '-between' => [ '2026-08-01 00:00:00', '2026-08-05 23:59:59' ] } } ] } );
+
+    # Test 5: datetime with mixed timezone formats (Z and offset)
+    $t->get_ok(
+        '/merge_q_params_datetime' => json => {
+            q => {
+                '-and' => [ { timestamp => { '>=' => '2026-08-01T00:00:00Z', '<=' => '2026-08-05T23:59:59+00:00' } } ]
+            }
+        }
+        )
+        ->status_is(200)
+        ->json_is(
+        '' => { '-and' => [ { timestamp => { '>=' => '2026-08-01 00:00:00', '<=' => '2026-08-05 23:59:59' } } ] } );
+
+    # Test 6: datetime with me. prefix and timezone offset
+    # 2026-08-01T00:00:00-10:00 = 2026-08-01T10:00:00Z
+    $t->get_ok( '/merge_q_params_datetime' => json =>
+            { q => { '-and' => [ { 'me.timestamp' => { '>=' => '2026-08-01T00:00:00-10:00' } } ] } } )
+        ->status_is(200)
+        ->json_is( '' => { '-and' => [ { 'me.timestamp' => { '>=' => '2026-08-01 10:00:00' } } ] } );
+
+    $context->unmock('tz');
 };
 
 subtest '_parse_dbic_query boolean fixup' => sub {
