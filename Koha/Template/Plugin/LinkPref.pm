@@ -20,8 +20,6 @@ package Koha::Template::Plugin::LinkPref;
 
 use Modern::Perl;
 
-use Koha::Patrons;
-
 use Template::Plugin::Filter;
 use base qw( Template::Plugin::Filter );
 our $DYNAMIC = 1;
@@ -58,7 +56,7 @@ Koha::Template::Plugin::LinkPref - TT plugin for wrapping a system preference na
 
 [% "SYSTEM_PREFERENCE_NAME" | html | $LinkPref %]
 
-This filter scrubs HTML using profiles predefined in C4::Scrubber
+This filter wraps a system preference name in a link to that preference if the user has permission.
 
 =head1 METHODS
 
