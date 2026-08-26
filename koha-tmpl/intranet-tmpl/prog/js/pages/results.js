@@ -160,13 +160,13 @@ $(document).ready(function () {
 
     $("#cartsubmit").click(function (e) {
         e.preventDefault();
-        addMultiple();
+        addMultiple($(".selection:checked"));
     });
 
     $(".addtolist").on("click", function (e) {
         e.preventDefault();
         var shelfnumber = $(this).data("shelfnumber");
-        var vshelf = vShelfAdd();
+        var vshelf = vShelfAdd($(".selection:checked"));
         if (vshelf) {
             if ($(this).hasClass("morelists")) {
                 openWindow(
