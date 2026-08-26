@@ -1,5 +1,4 @@
 [% USE raw %]
-[% USE To %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
@@ -357,8 +356,7 @@
         Koha.addPrefs({
             OPACBaseURL: "[% Koha.Preference('OPACBaseURL') | html %]",
         });
-    </script>
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+
         [% IF msg %]
             const msg_alert = [% msg.json | json #Using JSON.Escape %];
         [% ELSE %]
