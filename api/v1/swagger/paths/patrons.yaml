@@ -354,6 +354,14 @@
         description: Case insensitive search on primary_contact_method
         required: false
         type: string
+      - name: permissions
+        in: query
+        description: Required permissions for returned patrons
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: csv
       - $ref: "../swagger.yaml#/parameters/match"
       - $ref: "../swagger.yaml#/parameters/order_by"
       - $ref: "../swagger.yaml#/parameters/page"

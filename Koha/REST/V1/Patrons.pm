@@ -54,13 +54,31 @@ sub list {
             if $restricted;
 
         my $patrons_rs = Koha::Patrons->search($query);
-        my $patrons    = $c->objects->search($patrons_rs);
+
+        my $permissions = $c->param('permissions');
+        $c->req->params->remove('permissions');
+        if ($permissions) {
+            foreach my $permission ( split /\s*,\s*/, $permissions ) {
+                $patrons_rs = $patrons_rs->filter_by_have_permission($permission);
+            }
+        }
+
+        my $patrons = $c->objects->search($patrons_rs);
 
         return $c->render(
             status  => 200,
             openapi => $patrons
         );
     } catch {
+        if ( blessed $_ && $_->isa('Koha::Exceptions::ObjectNotFound') ) {
+            return $c->render(
+                status  => 400,
+                openapi => {
+                    error_code => 'invalid_query',
+                    error      => 'Specified permission could not be found'
+                }
+            );
+        }
         $c->unhandled_exception($_);
     };
 }

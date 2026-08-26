@@ -755,6 +755,7 @@ function patron_autocomplete(node, options) {
     let on_select_callback;
     let on_select_add_to;
     let additional_filters;
+    let permissions;
 
     if (options) {
         if (options["link-to"]) {
@@ -774,6 +775,9 @@ function patron_autocomplete(node, options) {
         }
         if (options["on-remove-callback"]) {
             on_remove_callback = options["on-remove-callback"];
+        }
+        if (options["permissions"]) {
+            permissions = options["permissions"];
         }
     }
     return (node
@@ -796,6 +800,10 @@ function patron_autocomplete(node, options) {
                     q: JSON.stringify(q),
                     _order_by: "+me.surname,+me.firstname",
                 };
+                if (permissions) {
+                    params.permissions = permissions;
+                }
+
                 $.ajax({
                     data: params,
                     type: "GET",

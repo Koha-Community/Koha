@@ -81,6 +81,7 @@ export default {
                 },
                 "additional-filters":
                     props.patronAutoCompleteOptions?.["additional-filters"],
+                permissions: props.patronAutoCompleteOptions?.["permissions"],
             });
 
             if (props.modelValue) {

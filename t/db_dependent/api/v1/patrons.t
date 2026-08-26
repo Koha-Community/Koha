@@ -75,7 +75,7 @@ $mocked_letters->mock(
 
 subtest 'list() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
     unauthorized_access_tests( 'GET', undef, undef );
@@ -282,6 +282,50 @@ subtest 'list() tests' => sub {
 
         $schema->storage->txn_rollback;
     };
+
+    subtest 'permissions filtering tests' => sub {
+        plan tests => 11;
+
+        $schema->storage->txn_begin;
+
+        Koha::Patrons->search()->delete();
+
+        my $librarian = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { flags => 2**4 }    # borrowers flag
+            }
+        );
+        my $password = 'thePassword123';
+        $librarian->set_password( { password => $password, skip_validation => 1 } );
+        my $userid = $librarian->userid;
+
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { flags => 0 }       # no permissions
+            }
+        );
+
+        my $res = $t->get_ok("//$userid:$password@/api/v1/patrons")->status_is(200)->tx->res->json;
+
+        is( scalar @{$res}, 2, 'Both patrons returned without permissions filtering' );
+
+        $res = $t->get_ok("//$userid:$password@/api/v1/patrons?permissions=borrowers")->status_is(200)->tx->res->json;
+
+        is( scalar @{$res}, 1, 'Only one patron returned with permissions filtering' );
+
+        $res =
+            $t->get_ok("//$userid:$password@/api/v1/patrons?permissions=borrowers,parameters.manage_accounts")
+            ->status_is(200)
+            ->tx->res->json;
+
+        is( scalar @{$res}, 0, 'No patrons with matching permissions returned' );
+
+        $res = $t->get_ok("//$userid:$password@/api/v1/patrons?permissions=bad_permission")->status_is(400);
+
+        $schema->storage->txn_rollback;
+    }
 };
 
 subtest 'get() tests' => sub {
