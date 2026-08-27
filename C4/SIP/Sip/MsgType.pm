@@ -486,9 +486,9 @@ sub build_patron_status {
 
         $resp .= patron_status_string( $patron, $server );
         $resp .= $lang . timestamp();
-        if ( defined $server->{account}->{ae_field_template} ) {
+        if ( $server->{account}->{ae_field_template} ) {
             $resp .=
-                add_field( FID_PERSONAL_NAME, $patron->format( $server->{account}->{ae_field_template}, $server ) );
+                add_field( FID_PERSONAL_NAME, $patron->format( $server->{account}->{ae_field_template} ), $server );
         } else {
             $resp .= add_field( FID_PERSONAL_NAME, $patron->name, $server );
         }
@@ -1108,7 +1108,7 @@ sub handle_patron_info {
         # while the patron ID we got from the SC is valid, let's
         # use the one returned from the ILS, just in case...
         $resp .= add_field( FID_PATRON_ID, $patron->id, $server );
-        if ( defined $server->{account}->{ae_field_template} ) {
+        if ( $server->{account}->{ae_field_template} ) {
             $resp .=
                 add_field( FID_PERSONAL_NAME, $patron->format( $server->{account}->{ae_field_template} ), $server );
         } else {
@@ -1480,8 +1480,13 @@ sub handle_patron_enable {
         $resp .= patron_status_string( $patron, $server );
         $resp .= $patron->language . timestamp();
 
-        $resp .= add_field( FID_PATRON_ID,     $patron->id,                                                $server );
-        $resp .= add_field( FID_PERSONAL_NAME, $patron->format( $server->{account}->{ae_field_template} ), $server );
+        $resp .= add_field( FID_PATRON_ID, $patron->id, $server );
+        if ( $server->{account}->{ae_field_template} ) {
+            $resp .=
+                add_field( FID_PERSONAL_NAME, $patron->format( $server->{account}->{ae_field_template} ), $server );
+        } else {
+            $resp .= add_field( FID_PERSONAL_NAME, $patron->name, $server );
+        }
         if ( defined($patron_pwd) ) {
             $resp .= add_field( FID_VALID_PATRON_PWD, sipbool( $patron->check_password($patron_pwd) ), $server );
         }
