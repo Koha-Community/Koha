@@ -147,7 +147,6 @@ export default {
             options: {
                 embed: "title",
                 ordering: false,
-                dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
                 lengthMenu: [
                     [10, 20, 50, 100],
                     [10, 20, 50, 100],

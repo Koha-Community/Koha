@@ -160,7 +160,6 @@ export default {
             options: {
                 embed: "resources+count,vendor.name",
                 ordering: false,
-                dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
                 lengthMenu: [
                     [10, 20, 50, 100],
                     [10, 20, 50, 100],

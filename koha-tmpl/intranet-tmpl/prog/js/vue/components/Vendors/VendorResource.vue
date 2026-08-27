@@ -1003,7 +1003,7 @@ export default {
                                           ]
                                         : []),
                                 ],
-                                dom: '<<"table_entries">>',
+                                tableFeatures: [],
                                 data: componentData.resource.contracts,
                             },
                         },

@@ -135,7 +135,7 @@ export default {
                 },
             ],
             options: {
-                dom: "t",
+                tableFeatures: [],
                 embed: "patron,library,extended_attributes,+strings",
                 pageLength: settings.value.per_page || 5,
                 processing: false,
