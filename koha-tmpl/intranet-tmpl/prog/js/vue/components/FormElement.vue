@@ -1,6 +1,6 @@
 <template>
     <label
-        v-if="attr.label"
+        v-if="attr.label && attr.type != 'hidden'"
         :for="getElementId"
         :class="{ required: attr.required }"
         :style="{ ...attr.style }"
@@ -202,7 +202,9 @@
         }}</span>
     </template>
     <ToolTip v-if="attr.toolTip" :toolTip="attr.toolTip"></ToolTip>
-    <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
+    <span v-if="attr.required && attr.type != 'hidden'" class="required">{{
+        $__("Required")
+    }}</span>
     <span style="margin-left: 5px" class="error" v-if="fieldInputError">
         {{ attr.formErrorMessage }}
     </span>
