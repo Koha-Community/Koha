@@ -128,7 +128,7 @@
                     {
                         data: function (row, meta, val, type) {
                             let filter = row;
-                            let filter_buttons = '<a class="btn btn-default btn-xs edit_filter me-1" onclick="edit_filter(this)"';
+                            let filter_buttons = '<a class="btn btn-default btn-xs edit_filter me-1"';
                             filter_buttons += ' data-filter_id="' + escape_str(filter.search_filter_id);
                             filter_buttons += '" data-filter_name="' + escape_str(filter.name);
                             filter_buttons += '" data-filter_opac="' + filter.opac;
@@ -146,6 +146,10 @@
                     },
                 ],
             });
+            $("body").on("click", ".edit_filter", function (e) {
+                e.preventDefault();
+                edit_filter($(this));
+            });
             $("body").on("click", ".delete_filter", function (e) {
                 e.preventDefault();
                 delete_filter($(this));
@@ -161,10 +165,10 @@
         });
 
         function edit_filter(element) {
-            let filter_id = $(element).data("filter_id");
-            let filter_name = $(element).data("filter_name");
-            let filter_opac = $(element).data("filter_opac");
-            let filter_staff_client = $(element).data("filter_staff_client");
+            let filter_id = element.data("filter_id");
+            let filter_name = element.data("filter_name");
+            let filter_opac = element.data("filter_opac");
+            let filter_staff_client = element.data("filter_staff_client");
             $("#filter_edit_name").val(filter_name);
             $("#filter_edit_id").val(filter_id);
             $("#filter_edit_opac").prop("checked", filter_opac);
