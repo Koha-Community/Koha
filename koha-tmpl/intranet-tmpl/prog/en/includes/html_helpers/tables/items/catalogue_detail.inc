@@ -11,17 +11,13 @@
         <thead>
             <tr>
                 <th id="[% tab | html %]_checkbox" data-colname="checkbox" class="no-sort"></th>
-                [% IF Koha.Preference('LocalCoverImages') %]
-                    <th id="[% tab | html %]_cover_image" data-colname="cover_image">Cover image</th>
-                [% END %]
-                [% IF ( item_level_itypes ) %]<th id="[% tab | html %]_itype" data-colname="itype">Item type</th>[% END %]
+                <th id="[% tab | html %]_cover_image" data-colname="cover_image">Cover image</th>
+                <th id="[% tab | html %]_itype" data-colname="itype">Item type</th>
                 <th id="[% tab | html %]_holdingbranch" data-colname="holdingbranch">Current library</th>
                 <th id="[% tab | html %]_homebranch" data-colname="homebranch">Home library</th>
                 <th id="[% tab | html %]_location" data-colname="location">Shelving location</th>
                 <th id="[% tab | html %]_ccode" data-colname="ccode">Collection</th>
-                [% IF Koha.Preference('EnableItemGroups') %]
-                    <th id="[% tab | html %]_item_group" data-colname="item_group">Item group</th>
-                [% END %]
+                <th id="[% tab | html %]_item_group" data-colname="item_group">Item group</th>
                 <th id="[% tab | html %]_itemcallnumber" data-colname="itemcallnumber">Call number</th>
                 <th id="[% tab | html %]_enumchron" data-colname="enumchron">Serial enumeration / chronology</th>
                 <th id="[% tab | html %]_status" data-colname="status">Status</th>
@@ -39,11 +35,12 @@
                 <th id="[% tab | html %]_materials" data-colname="materials">Materials specified</th>
                 <th id="[% tab | html %]_itemnotes" data-colname="itemnotes">Public notes</th>
                 <th id="[% tab | html %]_itemnotes_nonpublic" data-colname="itemnotes_nonpublic">Non-public notes</th>
-                [% IF Koha.Preference('EasyAnalyticalRecords') %]<th id="[% tab | html %]_hostrecord" data-colname="hostrecord">Host records</th>[% END %]
-                [% IF ( analyze ) %]<th id="[% tab | html %]_usedin" data-colname="usedin">Used in</th><th></th>[% END %]
-                [% IF Koha.Preference('UseCourseReserves') %]<th id="[% tab | html %]_course_reserves" data-colname="course_reserves">Course reserves</th>[% END %]
+                <th id="[% tab | html %]_hostrecord" data-colname="hostrecord">Host records</th>
+                <th id="[% tab | html %]_usedin" data-colname="usedin">Used in</th>
+                <th id="[% tab | html %]_create_analytics" data-colname="create_analytics"></th>
+                <th id="[% tab | html %]_course_reserves" data-colname="course_reserves">Course reserves</th>
                 <th id="[% tab | html %]_spinelabel" data-colname="spinelabel" class="no-sort">Spine label</th>
-                [% IF ( CAN_user_editcatalogue_edit_items || CAN_user_editcatalogue_fast_cataloging && is_fast_add ) %]<th id="[% tab | html %]_actions" data-colname="actions" class="no-sort no-export">&nbsp;</th>[% END %]
+                <th id="[% tab | html %]_actions" data-colname="actions" class="no-sort no-export">&nbsp;</th>
             </tr>
         </thead>
     </table>
@@ -357,6 +354,23 @@
             }
         });
 
+        const column_visibility_conditions = {
+            cover_image: !!Koha.prefs.LocalCoverImages,
+            itype: !!Koha.prefs.item_level_itypes,
+            item_group: !!Koha.prefs.EnableItemGroups,
+            hostrecord: !!Koha.prefs.EasyAnalyticalRecords,
+            usedin: !!analyze,
+            create_analytics: !!analyze,
+            course_reserves: !!Koha.prefs.UseCourseReserves,
+            actions: !!Koha.permissions.CAN_user_editcatalogue_edit_items,
+        };
+        [items_table_settings.holdings, items_table_settings.otherholdings].forEach(settings => {
+            Object.entries(column_visibility_conditions).forEach(([columnname, visible]) => {
+                let column = settings.columns.find(c => c.columnname == columnname);
+                if (column) column.visibility_condition = visible;
+            });
+        });
+
         let user_colvis = { holdings: {}, otherholdings: {} };
         function build_items_table(tab_id, add_filters, dt_options, drawcallback) {
             let table_dt;
@@ -416,60 +430,53 @@
                         }
                     },
                 },
-                ...(Koha.prefs.LocalCoverImages
-                    ? [
-                          {
-                              data: "",
-                              className: "cover",
-                              searchable: false,
-                              orderable: false,
-                              render: function (data, type, row, meta) {
-                                  if (!row.cover_image_ids.length > 0) {
-                                      return "";
-                                  }
-                                  let node = '<div class="bookcoverimg">';
-                                  node += '<div class="cover-slider">';
-                                  row.cover_image_ids.forEach(id => {
-                                      node += '<div class="cover-image local-coverimg">';
-                                      node += '<a href="/cgi-bin/koha/catalogue/image.pl?imagenumber=%s" title="%s">'.format(id, _("Local cover image"));
-                                      node += '<img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&imagenumber=%s" data-link="/cgi-bin/koha/catalogue/imageviewer.pl?itemnumber=%s&imagenumber=%s" alt="%s" />'.format(
-                                          id,
-                                          row.item_id,
-                                          id,
-                                          _("Local cover image")
-                                      );
-                                      node += "</a>";
-                                      node += "</div>";
-                                  });
-                                  node += "</div>";
-                                  node += "</div>";
-                                  return node;
-                              },
-                          },
-                      ]
-                    : []),
-                ...(Koha.prefs.item_level_itypes
-                    ? [
-                          {
-                              data: "me.item_type_id", // FIXME Cannot filter by biblioitem.itemtype
-                              datatype: "coded_value:item_type",
-                              dataFilter: "item_types",
-                              className: "itype",
-                              searchable: true,
-                              orderable: true,
-                              render: function (data, type, row, meta) {
-                                  let node = "";
-                                  let item_type_description = row._strings.item_type_id ? row._strings.item_type_id.str : row.item_type_id;
-                                  if (!Koha.prefs.noItemTypeImages) {
-                                      let image_location = item_type_image_locations[row.item_type_id];
-                                      node += image_location ? '<img class="itemtype-image" src="%s" alt="" /> '.format(escape_str(image_location), escape_str(item_type_description), escape_str(item_type_description)) : "";
-                                  }
-                                  node += '<span class="itypedesc itypetext">%s</span>'.format(escape_str(item_type_description));
-                                  return node;
-                              },
-                          },
-                      ]
-                    : []),
+                {
+                    data: "",
+                    className: "cover",
+                    searchable: false,
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        if (!Koha.prefs.LocalCoverImages || !row.cover_image_ids.length > 0) {
+                            return "";
+                        }
+                        let node = '<div class="bookcoverimg">';
+                        node += '<div class="cover-slider">';
+                        row.cover_image_ids.forEach(id => {
+                            node += '<div class="cover-image local-coverimg">';
+                            node += '<a href="/cgi-bin/koha/catalogue/image.pl?imagenumber=%s" title="%s">'.format(id, _("Local cover image"));
+                            node += '<img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&imagenumber=%s" data-link="/cgi-bin/koha/catalogue/imageviewer.pl?itemnumber=%s&imagenumber=%s" alt="%s" />'.format(
+                                id,
+                                row.item_id,
+                                id,
+                                _("Local cover image")
+                            );
+                            node += "</a>";
+                            node += "</div>";
+                        });
+                        node += "</div>";
+                        node += "</div>";
+                        return node;
+                    },
+                },
+                {
+                    data: "me.item_type_id", // FIXME Cannot filter by biblioitem.itemtype
+                    datatype: "coded_value:item_type",
+                    dataFilter: "item_types",
+                    className: "itype",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        if (!Koha.prefs.item_level_itypes) return "";
+                        let node = "";
+                        let item_type_description = row._strings.item_type_id ? row._strings.item_type_id.str : row.item_type_id;
+                        if (!Koha.prefs.noItemTypeImages) {
+                            let image_location = item_type_image_locations[row.item_type_id];
+                            node += image_location ? '<img class="itemtype-image" src="%s" alt="" /> '.format(escape_str(image_location), escape_str(item_type_description), escape_str(item_type_description)) : "";
+                        }
+                        node += '<span class="itypedesc itypetext">%s</span>'.format(escape_str(item_type_description));
+                        return node;
+                    },
+                },
                 {
                     data: "holding_library.name:me.holding_library_id",
                     datatype: "coded_value:library",
@@ -527,23 +534,19 @@
                         return escape_str(row._strings.collection_code ? row._strings.collection_code.str : row.collection_code);
                     },
                 },
-                ...(Koha.prefs.EnableItemGroups
-                    ? [
-                          {
-                              data: "item_group_item.item_group.description",
-                              className: "item_group",
-                              searchable: true,
-                              orderable: true,
-                              render: function (data, type, row, meta) {
-                                  if (row.item_group_item) {
-                                      return escape_str(row.item_group_item.item_group.description);
-                                  } else {
-                                      return "";
-                                  }
-                              },
-                          },
-                      ]
-                    : []),
+                {
+                    data: "item_group_item.item_group.description",
+                    className: "item_group",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        if (Koha.prefs.EnableItemGroups && row.item_group_item) {
+                            return escape_str(row.item_group_item.item_group.description);
+                        } else {
+                            return "";
+                        }
+                    },
+                },
                 {
                     data: "me.callnumber",
                     className: "itemcallnumber",
@@ -840,68 +843,57 @@
                         return escape_str(row.internal_notes);
                     },
                 },
-                ...(Koha.prefs.EasyAnalyticalRecords
-                    ? [
-                          {
-                              data: "biblio.title",
-                              searchable: false,
-                              orderable: true,
-                              render: function (data, type, row, meta) {
-                                  if (row.biblio_id == biblionumber) return "";
-                                  return '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=%s">%s</a>'.format(row.biblio_id, row.biblio.title);
-                              },
-                          },
-                      ]
-                    : []),
-                ...(analyze
-                    ? [
-                          {
-                              data: "analytics_count",
-                              searchable: false,
-                              orderable: false,
-                              render: function (data, type, row, meta) {
-                                  if (row.analytics_count == 0) return "";
-                                  return '<a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&amp;q=%s">%s</a>'.format(row.item_id, _("%s analytics").format(row.analytics_count));
-                              },
-                          },
-                          {
-                              data: "analytics_count", // create analytics link
-                              searchable: false,
-                              orderable: false,
-                              render: function (data, type, row, meta) {
-                                  return '<a href="/cgi-bin/koha/cataloguing/addbiblio.pl?hostbiblionumber=%s&amp;hostitemnumber=%s">%s</a>'.format(row.biblio_id, row.item_id, _("Create analytics"));
-                              },
-                          },
-                      ]
-                    : []),
-                ...(Koha.prefs.UseCourseReserves
-                    ? [
-                          {
-                              data: "course_item.course_reserves.course.course_name",
-                              searchable: true,
-                              orderable: true,
-                              render: function (data, type, row, meta) {
-                                  let nodes = "";
-                                  if (!row.course_item) return nodes;
-                                  row.course_item.course_reserves.forEach((cr, i) => {
-                                      let c = cr.course;
-                                      if (c.enabled != "yes") return;
-                                      nodes += "<p>";
-                                      nodes += '<a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=%s">'.format(c.course_id);
-                                      nodes += escape_str(c.course_name);
-                                      if (c.section) {
-                                          nodes += " " + escape_str(c.section);
-                                      }
-                                      if (c.term) {
-                                          nodes += " " + av_courses_term.get(c.term.toString());
-                                      }
-                                      nodes += "</p>";
-                                  });
-                                  return nodes;
-                              },
-                          },
-                      ]
-                    : []),
+                {
+                    data: "biblio.title",
+                    searchable: false,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        if (!Koha.prefs.EasyAnalyticalRecords || row.biblio_id == biblionumber) return "";
+                        return '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=%s">%s</a>'.format(row.biblio_id, row.biblio.title);
+                    },
+                },
+                {
+                    data: "analytics_count",
+                    searchable: false,
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        if (!analyze || row.analytics_count == 0) return "";
+                        return '<a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&amp;q=%s">%s</a>'.format(row.item_id, _("%s analytics").format(row.analytics_count));
+                    },
+                },
+                {
+                    data: "analytics_count", // create analytics link
+                    searchable: false,
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        if (!analyze) return "";
+                        return '<a href="/cgi-bin/koha/cataloguing/addbiblio.pl?hostbiblionumber=%s&amp;hostitemnumber=%s">%s</a>'.format(row.biblio_id, row.item_id, _("Create analytics"));
+                    },
+                },
+                {
+                    data: "course_item.course_reserves.course.course_name",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        let nodes = "";
+                        if (!Koha.prefs.UseCourseReserves || !row.course_item) return nodes;
+                        row.course_item.course_reserves.forEach((cr, i) => {
+                            let c = cr.course;
+                            if (c.enabled != "yes") return;
+                            nodes += "<p>";
+                            nodes += '<a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=%s">'.format(c.course_id);
+                            nodes += escape_str(c.course_name);
+                            if (c.section) {
+                                nodes += " " + escape_str(c.section);
+                            }
+                            if (c.term) {
+                                nodes += " " + av_courses_term.get(c.term.toString());
+                            }
+                            nodes += "</p>";
+                        });
+                        return nodes;
+                    },
+                },
                 {
                     data: "",
                     searchable: false,
@@ -910,49 +902,41 @@
                         return '<a class="btn btn-default btn-xs print-label" href="/cgi-bin/koha/labels/spinelabel-print.pl?barcode=%s"><i class="fa fa-print"></i> %s</a>'.format(escape_str(row.external_id), escape_str(_("Print label")));
                     },
                 },
-                ...(Koha.permissions.CAN_user_editcatalogue_edit_items
-                    ? [
-                          {
-                              data: function (row, type, val, meta) {
-                                  let nodes = "";
-                                  if (can_edit_items_from.includes(row.home_library_id) || !can_edit_items_from.length) {
-                                      if (Koha.prefs.LocalCoverImages || Koha.prefs.OPACLocalCoverImages) {
-                                          nodes += '<div class="btn-group dropup">';
-                                          nodes +=
-                                              ' <a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=%s&itemnumber=%s#edititem"><i class="fa-solid fa-pencil"></i> %s</a><a class="btn btn-default btn-xs dropdown-toggle" data-bs-toggle="dropdown"><span class="caret"></span></a>'.format(
-                                                  row.biblio_id,
-                                                  row.item_id,
-                                                  _("Edit")
-                                              );
-                                          nodes += ' <ul class="dropdown-menu">';
-                                          nodes += '  <li><a class="dropdown-item" href="/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=%s&amp;filetype=image"><i class="fa fa-upload"></i> %s</a></li>'.format(
-                                              row.item_id,
-                                              _("Upload image")
-                                          );
-                                          nodes += " </ul>";
-                                          nodes += "</div>";
-                                      } else {
-                                          nodes += '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=%s&itemnumber=%s#edititem"><i class="fa-solid fa-pencil"></i> %s</a>'.format(
-                                              row.biblio_id,
-                                              row.item_id,
-                                              _("Edit")
-                                          );
-                                      }
-                                  }
-                                  if (bundlesEnabled) {
-                                      nodes += '<button class="btn btn-default btn-xs details-control"><i class="fa fa-folder"></i> %s</button>'.format(
-                                          _("Manage bundle (%s|%s)").format(row.bundle_items_not_lost_count, row.bundle_items_lost_count)
-                                      );
-                                  }
+                {
+                    data: function (row, type, val, meta) {
+                        let nodes = "";
+                        if (!Koha.permissions.CAN_user_editcatalogue_edit_items) return nodes;
+                        if (can_edit_items_from.includes(row.home_library_id) || !can_edit_items_from.length) {
+                            if (Koha.prefs.LocalCoverImages || Koha.prefs.OPACLocalCoverImages) {
+                                nodes += '<div class="btn-group dropup">';
+                                nodes +=
+                                    ' <a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=%s&itemnumber=%s#edititem"><i class="fa-solid fa-pencil"></i> %s</a><a class="btn btn-default btn-xs dropdown-toggle" data-bs-toggle="dropdown"><span class="caret"></span></a>'.format(
+                                        row.biblio_id,
+                                        row.item_id,
+                                        _("Edit")
+                                    );
+                                nodes += ' <ul class="dropdown-menu">';
+                                nodes += '  <li><a class="dropdown-item" href="/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=%s&amp;filetype=image"><i class="fa fa-upload"></i> %s</a></li>'.format(row.item_id, _("Upload image"));
+                                nodes += " </ul>";
+                                nodes += "</div>";
+                            } else {
+                                nodes += '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=%s&itemnumber=%s#edititem"><i class="fa-solid fa-pencil"></i> %s</a>'.format(
+                                    row.biblio_id,
+                                    row.item_id,
+                                    _("Edit")
+                                );
+                            }
+                        }
+                        if (bundlesEnabled) {
+                            nodes += '<button class="btn btn-default btn-xs details-control"><i class="fa fa-folder"></i> %s</button>'.format(_("Manage bundle (%s|%s)").format(row.bundle_items_not_lost_count, row.bundle_items_lost_count));
+                        }
 
-                                  return nodes;
-                              },
-                              className: "actions",
-                              searchable: false,
-                              orderable: false,
-                          },
-                      ]
-                    : []),
+                        return nodes;
+                    },
+                    className: "actions",
+                    searchable: false,
+                    orderable: false,
+                },
             ];
             var items_table = $("#" + tab_id + "_table").kohaTable(
                 {
