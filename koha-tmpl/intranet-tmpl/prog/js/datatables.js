@@ -122,6 +122,7 @@ function get_DT_defaults(tableFeatures = ["full"]) {
 
         layout,
 
+        paging: hasPaging,
         buttons: [],
         lengthMenu: [
             [10, 20, 50, 100, -1],
@@ -1622,7 +1623,6 @@ function update_search_description(
             {},
             dataTablesDefaults,
             {
-                paging: true,
                 searching: true,
                 language: {
                     emptyTable: options.emptyTable
