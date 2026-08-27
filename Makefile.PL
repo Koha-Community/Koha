@@ -393,23 +393,24 @@ my $target_map = {
     './virtualshelves'                                 => 'INTRANET_CGI_DIR',
 
     # ignore files and directories created by the install itself
-    './pm_to_blib'                               => 'NONE',
-    './blib'                                     => 'NONE',
-    '.git-blame-ignore-revs'                     => 'NONE',
-    './.github'                                  => 'NONE',
-    '.prettierrc.js'                             => 'NONE',
-    '.sass-lint.yml'                             => 'NONE',
-    '.scss-lint.yml'                             => 'NONE',
-    'gulpfile.js'                                => 'NONE',
-    'package.json'                               => 'NONE',
-    'yarn.lock'                                  => 'NONE',
-    'cypress.config.ts'                          => 'NONE',
-    'tsconfig.json'                              => 'NONE',
-    'webpack.config.js'                          => 'NONE',
-    'rspack.config.js'                           => 'NONE',
-    'eslint.config.mjs'                          => 'NONE',
-    '.codespell-ignore'                          => 'NONE',
-    './koha-tmpl/intranet-tmpl/prog/js/vue/dist' => 'NONE',
+    './pm_to_blib'                                => 'NONE',
+    './blib'                                      => 'NONE',
+    '.git-blame-ignore-revs'                      => 'NONE',
+    './.github'                                   => 'NONE',
+    '.prettierrc.js'                              => 'NONE',
+    '.sass-lint.yml'                              => 'NONE',
+    '.scss-lint.yml'                              => 'NONE',
+    'gulpfile.js'                                 => 'NONE',
+    'package.json'                                => 'NONE',
+    'yarn.lock'                                   => 'NONE',
+    'cypress.config.ts'                           => 'NONE',
+    'tsconfig.json'                               => 'NONE',
+    'webpack.config.js'                           => 'NONE',
+    'rspack.config.js'                            => 'NONE',
+    'eslint.config.mjs'                           => 'NONE',
+    '.codespell-ignore'                           => 'NONE',
+    './koha-tmpl/intranet-tmpl/prog/js/vue/dist'  => 'NONE',
+    './koha-tmpl/opac-tmpl/bootstrap/js/vue/dist' => 'NONE',
 };
 
 =head1 CONFIGURATION OPTIONS
@@ -1942,6 +1943,8 @@ sub top_targets {
     #NOTE: Copy the generated vue dist files into the relevant blib
     $compile_step .= "move_compiled_js: compile_css_js pm_to_blib\n";
     $compile_step .= "\t" . 'cp -r koha-tmpl/intranet-tmpl/prog/js/vue/dist blib/INTRANET_TMPL_DIR/prog/js/vue/' . "\n";
+    $compile_step .=
+        "\t" . 'cp -r koha-tmpl/opac-tmpl/bootstrap/js/vue/dist blib/OPAC_TMPL_DIR/bootstrap/js/vue/' . "\n";
     $compile_step .= "\n";
 
     my $top_targets = $compile_step . "\n" . $inherited;
