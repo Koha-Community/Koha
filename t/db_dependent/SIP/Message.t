@@ -55,7 +55,7 @@ use constant PATRON_PW => 'do_not_ever_use_this_one';
 subtest 'Testing Patron Status Request V2' => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
-    plan tests => 13;
+    plan tests => 15;
     $C4::SIP::Sip::protocol_version = 2;
     test_request_patron_status_v2();
     $schema->storage->txn_rollback;
@@ -64,7 +64,7 @@ subtest 'Testing Patron Status Request V2' => sub {
 subtest 'Testing Patron Info Request V2' => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
-    plan tests => 35;
+    plan tests => 36;
     $C4::SIP::Sip::protocol_version = 2;
     test_request_patron_info_v2();
     $schema->storage->txn_rollback;
@@ -1016,6 +1016,29 @@ sub test_request_patron_status_v2 {
     check_field( $respcode, $response, FID_VALID_PATRON_PWD, 'Y',                 'Verified code CQ' );
     check_field( $respcode, $response, FID_SCREEN_MSG,       '.+', 'Verified non-empty screen message', 'regex' );
 
+    # Test customized patron name in AE with same sip request
+    $server->{account}->{ae_field_template} = "X[% patron.surname %]Y";
+    $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    undef $response;
+    $msg->handle_patron_status($server);
+    $respcode = substr( $response, 0, 2 );
+    check_field(
+        $respcode, $response, FID_PERSONAL_NAME, 'X' . $patron1->{surname} . 'Y',
+        'Check customized patron name'
+    );
+
+    # A blank ae_field_template should fall back to the patron name
+    $server->{account}->{ae_field_template} = "";
+    $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    undef $response;
+    $msg->handle_patron_status($server);
+    $respcode = substr( $response, 0, 2 );
+    check_field(
+        $respcode, $response, FID_PERSONAL_NAME, "$patron1->{firstname} $patron1->{surname}",
+        'Verified patron name is sent when ae_field_template is blank'
+    );
+    delete $server->{account}->{ae_field_template};
+
     # Now, we pass a wrong password and verify CQ again
     $siprequest =
           PATRON_STATUS_REQ
@@ -1080,6 +1103,7 @@ sub test_request_patron_info_v2 {
         {
             source => 'Borrower',
             value  => {
+                firstname  => 'John',
                 password   => hash_password(PATRON_PW),
                 branchcode => $branchcode2,
             },
@@ -1132,6 +1156,18 @@ sub test_request_patron_info_v2 {
         $respcode, $response, FID_PERSONAL_NAME, 'X' . $patron2->{surname} . 'Y',
         'Check customized patron name'
     );
+
+    # A blank ae_field_template should fall back to the patron name
+    $server->{account}->{ae_field_template} = "";
+    $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    undef $response;
+    $msg->handle_patron_info($server);
+    $respcode = substr( $response, 0, 2 );
+    check_field(
+        $respcode, $response, FID_PERSONAL_NAME, "$patron2->{firstname} $patron2->{surname}",
+        'Verified patron name is sent when ae_field_template is blank'
+    );
+    delete $server->{account}->{ae_field_template};
 
     # Test patron_branchcode_in_ao
     $server->{account}->{patron_branchcode_in_ao} = "1";
