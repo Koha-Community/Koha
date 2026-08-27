@@ -120,10 +120,19 @@ export default {
                 columnActions[i].push("show");
             }
         };
+        const column_actions = computed(() => {
+            let columnActions = props.instancedResource.tableOptions.actions;
+
+            if (typeof columnActions === "function") {
+                columnActions = columnActions(parentResource.value);
+            }
+
+            return columnActions;
+        });
         const getTableColumns = resourceAttrs => {
             let get_lib_from_av = props.instancedResource.get_lib_from_av;
             let thisResource = props.instancedResource;
-            let columnActions = thisResource.tableOptions.actions;
+            let columnActions = column_actions.value;
 
             const columns = resourceAttrs.reduce((acc, attr, i) => {
                 const shouldFieldBeHidden =
@@ -325,20 +334,24 @@ export default {
                 }
                 return col;
             });
-            return props.instancedResource.tableOptions;
+            return {
+                ...props.instancedResource.tableOptions,
+                actions: column_actions.value,
+            };
         });
 
         const tableEventList = computed(() => {
-            const actionButtons = props.instancedResource.tableOptions.actions[
-                "-1"
-            ].reduce((acc, curr) => {
-                if (typeof curr === "object") {
-                    const actionName = Object.keys(curr)[0];
-                    if (!curr[actionName].callback) return acc;
-                    acc[actionName] = curr[actionName].callback;
-                }
-                return acc;
-            }, {});
+            const actionButtons = column_actions.value["-1"].reduce(
+                (acc, curr) => {
+                    if (typeof curr === "object") {
+                        const actionName = Object.keys(curr)[0];
+                        if (!curr[actionName].callback) return acc;
+                        acc[actionName] = curr[actionName].callback;
+                    }
+                    return acc;
+                },
+                {}
+            );
             return { ...tableEvents.value, ...actionButtons };
         });
         onBeforeMount(() => {
