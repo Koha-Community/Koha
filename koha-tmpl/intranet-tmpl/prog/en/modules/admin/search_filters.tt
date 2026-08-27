@@ -128,17 +128,17 @@
                     {
                         data: function (row, meta, val, type) {
                             let filter = row;
-                            let filter_buttons = '<a class="btn btn-default btn-xs edit_filter" onclick="edit_filter(this)"';
+                            let filter_buttons = '<a class="btn btn-default btn-xs edit_filter me-1" onclick="edit_filter(this)"';
                             filter_buttons += ' data-filter_id="' + escape_str(filter.search_filter_id);
                             filter_buttons += '" data-filter_name="' + escape_str(filter.name);
                             filter_buttons += '" data-filter_opac="' + filter.opac;
                             filter_buttons += '" data-filter_staff_client="' + filter.staff_client;
-                            filter_buttons += '" ><i class="fa-solid fa-pencil" aria-hidden="true"></i> ' + _("Edit filter") + "</a>" + "\n";
+                            filter_buttons += '" ><i class="fa-solid fa-pencil" aria-hidden="true"></i> ' + _("Edit filter") + "</a>";
                             filter_buttons +=
-                                '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/catalogue/search.pl?edit_filter=' + encodeURIComponent(filter.search_filter_id) + '"><i class="fa fa-search"></i> ' + _("Edit search") + "</a>" + "\n";
+                                '<a class="btn btn-default btn-xs me-1" href="/cgi-bin/koha/catalogue/search.pl?edit_filter=' + encodeURIComponent(filter.search_filter_id) + '"><i class="fa fa-search"></i> ' + _("Edit search") + "</a>";
                             filter_buttons += '<a class="btn btn-default btn-xs delete_filter"';
                             filter_buttons += ' data-filter_id="' + escape_str(filter.search_filter_id);
-                            filter_buttons += '"><i class="fa fa-trash-can"></i> ' + _("Delete") + "</a>" + "\n";
+                            filter_buttons += '"><i class="fa fa-trash-can"></i> ' + _("Delete") + "</a>";
                             return filter_buttons;
                         },
                         searchable: false,
