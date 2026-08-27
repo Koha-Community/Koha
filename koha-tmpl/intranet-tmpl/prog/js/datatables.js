@@ -1585,6 +1585,13 @@ function update_search_description(
             }
         }
 
+        if (
+            settings.pageLength !== undefined &&
+            !Number.isInteger(settings.pageLength)
+        ) {
+            settings.pageLength = parseInt(settings.pageLength, 10);
+        }
+
         settings["buttons"] = _dt_buttons({ settings, table_settings });
 
         var default_column_defs = [
