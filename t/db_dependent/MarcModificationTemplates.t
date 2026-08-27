@@ -3,7 +3,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 152;
+use Test::More tests => 153;
 
 use Koha::Database;
 use Koha::SimpleMARC;
@@ -779,6 +779,87 @@ subtest 'Source indicator no match does not apply action' => sub {
         [ map { $_->indicator(2) } @fields ],
         [ '1', '2' ],
         '650 fields with nonmatching indicators remain'
+    );
+};
+
+subtest 'Update field creates field when source indicators do not match' => sub {
+    plan tests => 6;
+
+    $dbh->do(q|DELETE FROM marc_modification_templates|);
+
+    my $template_id = AddModificationTemplate("indicator update no match");
+
+    AddModificationTemplateAction(
+        $template_id,
+        'update_field',
+        0,
+        1,
+        '650',
+        'a',
+        undef,
+        '3',
+        'New value',
+        '',
+        '',
+        undef,
+        undef,
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        undef,
+        undef,
+        '',
+        '',
+        '',
+        'Update or add 650$a with indicator 2 equal to 3'
+    );
+
+    my $record = MARC::Record->new;
+    $record->append_fields(
+        MARC::Field->new(
+            650, ' ', '1',
+            a => 'Dogs',
+        ),
+        MARC::Field->new(
+            650, ' ', '2',
+            a => 'Cats',
+        ),
+    );
+
+    is(
+        ModifyRecordWithTemplate( $template_id, $record ),
+        undef,
+        'Template modification completed'
+    );
+
+    my @fields = $record->field('650');
+
+    is( scalar @fields, 3, 'A new 650 is created when no existing field matches the indicators' );
+
+    my %fields_by_value = map { $_->subfield('a') => $_ } @fields;
+
+    ok(
+        exists $fields_by_value{'Dogs'},
+        'First nonmatching field remains present'
+    );
+
+    ok(
+        exists $fields_by_value{'Cats'},
+        'Second nonmatching field remains present'
+    );
+
+    ok(
+        exists $fields_by_value{'New value'},
+        'New field was created'
+    );
+
+    is(
+        $fields_by_value{'New value'}->indicator(2),
+        '3',
+        'New field has the requested second indicator'
     );
 };
 

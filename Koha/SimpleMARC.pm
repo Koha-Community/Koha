@@ -193,12 +193,15 @@ used to indicate character position. Defaults to position C<0>.
 =cut
 
 sub update_field {
-    my ($params)      = @_;
-    my $record        = $params->{record};
-    my $fieldName     = $params->{field};
-    my $subfieldName  = $params->{subfield};
-    my @values        = @{ $params->{values} };
-    my $field_numbers = $params->{field_numbers} // [];
+    my ($params)           = @_;
+    my $record             = $params->{record};
+    my $fieldName          = $params->{field};
+    my $subfieldName       = $params->{subfield};
+    my @values             = @{ $params->{values} };
+    my $field_numbers      = $params->{field_numbers} // [];
+    my $ind1               = $params->{ind1};
+    my $ind2               = $params->{ind2};
+    my $create_if_no_match = $params->{create_if_no_match};
 
     if ( !( $record && $fieldName ) ) { return; }
 
@@ -219,8 +222,9 @@ sub update_field {
         } else {
             _update_subfield(
                 {
-                    record        => $record, field => $fieldName, subfield => $subfieldName, values => \@values,
-                    field_numbers => $field_numbers
+                    record             => $record, field => $fieldName,  subfield => $subfieldName, values => \@values,
+                    field_numbers      => $field_numbers, ind1 => $ind1, ind2     => $ind2,
+                    create_if_no_match => $create_if_no_match,
                 }
             );
         }
@@ -312,20 +316,23 @@ Updates the value of a subfield
 =cut
 
 sub _update_subfield {
-    my ($params)      = @_;
-    my $record        = $params->{record};
-    my $fieldName     = $params->{field};
-    my $subfieldName  = $params->{subfield};
-    my @values        = @{ $params->{values} };
-    my $dont_erase    = $params->{dont_erase};
-    my $field_numbers = $params->{field_numbers} // [];
-    my $ind1          = $params->{ind1};
-    my $ind2          = $params->{ind2};
-    my $i             = 0;
+    my ($params)           = @_;
+    my $record             = $params->{record};
+    my $fieldName          = $params->{field};
+    my $subfieldName       = $params->{subfield};
+    my @values             = @{ $params->{values} };
+    my $dont_erase         = $params->{dont_erase};
+    my $field_numbers      = $params->{field_numbers} // [];
+    my $ind1               = $params->{ind1};
+    my $ind2               = $params->{ind2};
+    my $create_if_no_match = $params->{create_if_no_match};
+    my $i                  = 0;
 
     my @fields = $record->field($fieldName);
 
-    if (@$field_numbers) {
+    if ($create_if_no_match) {
+        @fields = ();
+    } elsif (@$field_numbers) {
         @fields = map { $_ <= @fields ? $fields[ $_ - 1 ] : () } @$field_numbers;
     }
 
@@ -804,9 +811,9 @@ sub _copy_move_field {
     my @new_fields;
     for my $from_field (@from_fields) {
         my $new_field = $from_field->clone;
+        $new_field->{_tag} = $toFieldName;    # Should be replaced by set_tag, introduced by MARC::Field 2.0.4
         $new_field->set_indicator( 1, $to_ind1 ) if defined $to_ind1;
         $new_field->set_indicator( 2, $to_ind2 ) if defined $to_ind2;
-        $new_field->{_tag} = $toFieldName;    # Should be replaced by set_tag, introduced by MARC::Field 2.0.4
         if ( $regex and $regex->{search} ) {
             for my $subfield ( $new_field->subfields ) {
                 my $value = $subfield->[1];

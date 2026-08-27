@@ -4754,7 +4754,6 @@ CREATE TABLE `marc_modification_template_actions` (
   PRIMARY KEY (`mmta_id`),
   KEY `mmta_ibfk_1` (`template_id`),
   CONSTRAINT `mmta_ibfk_1` FOREIGN KEY (`template_id`) REFERENCES `marc_modification_templates` (`template_id`) ON DELETE CASCADE ON UPDATE CASCADE
-);
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

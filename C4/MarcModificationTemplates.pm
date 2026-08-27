@@ -722,6 +722,8 @@ sub ModifyRecordWithTemplate {
             }
         }
 
+        my $create_if_no_match = 0;
+
         if ($do) {
 
             # field_number == 0 if all field need to be updated
@@ -771,8 +773,13 @@ sub ModifyRecordWithTemplate {
                         }
                     );
 
-                    next unless @$field_numbers;
-                    if ( $field_number == 1 ) {
+                    if ( !@$field_numbers ) {
+                        if ( $action eq 'update_field' ) {
+                            $create_if_no_match = 1;
+                        } else {
+                            next;
+                        }
+                    } elsif ( $field_number == 1 ) {
                         $field_numbers = [ $field_numbers->[0] ];
                     }
                 } elsif ( $field_number == 1 ) {
@@ -831,11 +838,14 @@ sub ModifyRecordWithTemplate {
             } elsif ( $action eq 'update_field' ) {
                 update_field(
                     {
-                        record        => $record,
-                        field         => $from_field,
-                        subfield      => $from_subfield,
-                        values        => [$field_value],
-                        field_numbers => $field_numbers,
+                        record             => $record,
+                        field              => $from_field,
+                        subfield           => $from_subfield,
+                        values             => [$field_value],
+                        field_numbers      => $field_numbers,
+                        ind1               => $from_ind1,
+                        ind2               => $from_ind2,
+                        create_if_no_match => $create_if_no_match,
                     }
                 );
             } elsif ( $action eq 'move_field' ) {

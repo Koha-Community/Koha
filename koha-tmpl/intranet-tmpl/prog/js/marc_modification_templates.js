@@ -222,28 +222,17 @@ function toggleCharacterPositionField() {
         $("#character_position").hide();
     }
 
-    if ($("#from_field").val().length > 0 && $("#from_field").val() < 10) {
-        hide("from_indicators_block");
-    } else if ($("#use_indicators").is(":checked")) {
-        show("from_indicators_block");
-    }
-
     if (
         $("#conditional_field").val().length > 0 &&
         $("#conditional_field").val() < 10
     ) {
         $("#conditional_subfield").val("");
         $("#conditional_subfield").hide();
-        hide("conditional_indicators_block");
     } else {
         $("#conditional_subfield").show();
-        if (
-            $("#use_indicators").is(":checked") &&
-            $("#conditional_block").is(":visible")
-        ) {
-            show("conditional_indicators_block");
-        }
     }
+
+    toggleIndicatorFields();
 }
 
 function updateAllEvery() {
@@ -310,7 +299,6 @@ function onActionChange(selectObj) {
     }
 
     toggleCharacterPositionField();
-    toggleIndicatorFields();
 }
 
 function onConditionalChange(selectObj) {
@@ -504,8 +492,6 @@ function editAction(mmta) {
         mmta["conditional_ind2"]
     );
 
-    toggleIndicatorFields();
-
     setSelectByValue("conditional_comparison", mmta["conditional_comparison"]);
     $("#conditional_comparison").change();
 
@@ -549,8 +535,6 @@ function cancelEditAction() {
     document.getElementById("to_ind2").value = "";
     document.getElementById("conditional_ind1").value = "";
     document.getElementById("conditional_ind2").value = "";
-
-    toggleIndicatorFields();
 
     $("#to_regex_search").val("");
     $("#to_regex_replace").val("");
