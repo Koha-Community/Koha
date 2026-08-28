@@ -206,7 +206,9 @@ sub generate_subfield_form {
             my $all_itemtypes = Koha::ItemTypes->search_with_localization;
             my $filtered_itemtypes;
             if ($branch_limit) {
-                $filtered_itemtypes = Koha::ItemTypes->search_with_localization( { branchcode => $branch_limit } );
+                $filtered_itemtypes =
+                    Koha::ItemTypes->search_with_library_limits( {}, {}, $branch_limit )
+                    ->order_by_translated_description;
             } else {
                 $filtered_itemtypes = $all_itemtypes;
             }
