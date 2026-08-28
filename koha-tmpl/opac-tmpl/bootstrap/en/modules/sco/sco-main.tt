@@ -8,6 +8,7 @@
 [% USE AdditionalContents %]
 [% USE Branches %]
 [% SET SCOMainUserBlock = AdditionalContents.get( location => "SCOMainUserBlock", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
+[% PROCESS 'i18n.inc' %]
 [% PROCESS 'html_helpers.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title
