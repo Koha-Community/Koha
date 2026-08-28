@@ -179,8 +179,8 @@ subtest 'authorised values restricted to another library (bug 32748)' => sub {
 
     t::lib::Mocks::mock_userenv( { branchcode => $branch1->branchcode } );
 
-    my $biblio    = $builder->build_sample_biblio( { value => { frameworkcode => '' } } );
-    my $subfields = Koha::UI::Form::Builder::Item->new( { biblionumber => $biblio->biblionumber } )->edit_form;
+    my $biblio     = $builder->build_sample_biblio( { value => { frameworkcode => '' } } );
+    my $subfields  = Koha::UI::Form::Builder::Item->new( { biblionumber => $biblio->biblionumber } )->edit_form;
     my ($subfield) = grep { $_->{kohafield} eq 'items.notforloan' } @$subfields;
 
     ok(
