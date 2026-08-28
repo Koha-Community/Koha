@@ -21,6 +21,6 @@ return {
         }
         );
 
-        say $out "Set default fill_other_biblio_holds_policy rule for itemtypes with other policies set";
+        say_info( $out, "Set default fill_other_biblio_holds_policy rule for itemtypes with other policies set" );
     },
 };
