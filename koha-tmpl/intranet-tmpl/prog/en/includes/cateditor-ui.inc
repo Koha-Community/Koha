@@ -430,6 +430,17 @@
             });
         }
 
+        function addMissingMandatory008(record) {
+            if (record.field("008")) return;
+
+            let fieldInfo = KohaBackend.GetTagInfo(record.frameworkcode || "", "008");
+            if (!fieldInfo || fieldInfo.mandatory != "1") return;
+
+            let field008 = new MARC.Field("008", " ", " ", []);
+            field008.addSubfield(["@", ""]);
+            record.addFieldGrouped(field008);
+        }
+
         function loadRecord(recid, editor, callback) {
             var parts = recid.split("/");
             if (parts.length != 2) return false;
@@ -441,6 +452,9 @@
                     var remove_control_num = (Koha.prefs.autoControlNumber == "OFF" ? false : true) && parts[0] === "duplicate";
                     if (remove_control_num) {
                         record.removeField("001");
+                    }
+                    if (Koha.prefs.marcflavour == "MARC21" && parts[0] === "catalog") {
+                        addMissingMandatory008(record);
                     }
                     if (parts[0] === "duplicate") {
                         let today = new Date();
