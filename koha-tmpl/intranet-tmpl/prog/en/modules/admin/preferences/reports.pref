@@ -1,8 +1,14 @@
 Reports:
-    Reports Access:
-     -
-         - pref: LimitReportsByLibrary
-           choices:
-               1: Enable
-               0: Disable
-         - "limiting report access based on staff home library."
+    Options:
+        -
+            - Download a maximum of
+            - pref: ReportsExportLimit
+              class: integer
+            - "rows when exporting report results.<br><strong>NOTE:</strong><ul><li>Using LIMIT in a report overrides this setting.</li><li>It does not limit results for 'Open in DataTables' export options.</li></ul>"
+    Reports access:
+        -
+            - pref: LimitReportsByLibrary
+              choices:
+                  1: Enable
+                  0: Disable
+            - "limiting report access based on staff home library."
