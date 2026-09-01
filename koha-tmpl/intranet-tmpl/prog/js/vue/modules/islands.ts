@@ -165,7 +165,15 @@ export function hydrate(storeDefinitions: IslandStoreDefinitions = {}): void {
             );
         });
 
-        Promise.all(islandPromises).then(() => {
+        Promise.allSettled(islandPromises).then(results => {
+            results.forEach(result => {
+                if (result.status === "rejected") {
+                    console.error(
+                        "[islands] Island hydration failed:",
+                        result.reason
+                    );
+                }
+            });
             document.dispatchEvent(new CustomEvent("koha:islands-ready"));
         });
     });
