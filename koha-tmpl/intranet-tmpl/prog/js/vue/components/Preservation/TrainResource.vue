@@ -395,7 +395,7 @@ export default {
                     componentData.additionalProps.value.item_table.columns.push(
                         {
                             name: "actions",
-                            className: "actions noExport",
+                            className: "actions no-export",
                             title: $__("Actions"),
                             searchable: false,
                             orderable: false,

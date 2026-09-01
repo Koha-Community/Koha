@@ -81,7 +81,7 @@ export default {
                         data: function (row, type, val, meta) {
                             return '<div class="actions"></div>';
                         },
-                        className: "actions noExport",
+                        className: "actions no-export",
                         searchable: false,
                         orderable: false,
                     },
