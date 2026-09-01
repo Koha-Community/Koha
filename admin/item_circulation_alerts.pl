@@ -63,9 +63,19 @@ sub show {
 # toggle a preference via ajax
 sub toggle {
     my ($input) = @_;
-    my $id = $input->param('id');
+    my ( $template, $user, $cookie ) = get_template_and_user(
+        {
+            template_name => "admin/item_circulation_alerts.tt",
+            query         => $input,
+            type          => "intranet",
+            flagsrequired => { parameters => 'manage_item_circ_alerts' },
+            debug         => defined( $input->param('debug') ),
+        }
+    );
+
+    my $id     = $input->param('id');
     my $branch = $input->param('branch');
-    my ($category, $item_type, $notification) = split('-', $id);
+    my ( $category, $item_type, $notification ) = split( '-', $id );
     $category  =~ s/_/*/;
     $item_type =~ s/_/*/;
 
@@ -98,7 +108,7 @@ sub toggle {
         push @classes, 'disabled' if $non_default_also;
         $response->{classes} = join(' ', @classes);
     }
-    print $input->header;
+    print $input->header( -cookie => $cookie );
     print encode_json($response);
 }
 
