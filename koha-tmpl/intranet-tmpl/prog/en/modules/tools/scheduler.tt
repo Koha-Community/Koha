@@ -40,6 +40,10 @@
 <div class="alert alert-info">Failed to add scheduled task</div>
 [% END %]
 
+[% IF ( job_delete_failed ) %]
+    <div class="alert alert-info">Failed to delete scheduled task: invalid job ID</div>
+[% END %]
+
 <form name="form1" action="scheduler.pl" method="post">
     [% INCLUDE 'csrf-token.inc' %]
 <input type="hidden" name="op" value="cud-add" />
