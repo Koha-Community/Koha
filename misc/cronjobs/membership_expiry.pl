@@ -280,7 +280,8 @@ while ( my $expiring_patron = $upcoming_mem_expires->next ) {
         $which_notice = $letter_expiry;
     }
 
-    my $is_notice_mandatory = grep( $expiring_patron->categorycode, @mandatory_expiry_notice_categories );
+    my $categorycode        = $expiring_patron->categorycode;
+    my $is_notice_mandatory = grep( /^$categorycode$/, @mandatory_expiry_notice_categories );
     my $letter_params       = $expiring_patron->create_expiry_notice_parameters(
         { letter_code => $which_notice, forceprint => $forceprint, is_notice_mandatory => $is_notice_mandatory } );
 
