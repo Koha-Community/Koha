@@ -324,6 +324,41 @@ our $MARC21_THESAURUS_TO_CONTROL_FIELD_008_11 = {
     notspecified  => '|',
 };
 
+# The subset of $MARC21_THESAURUS_TO_CONTROL_FIELD_008_11 keys that
+# C4::Heading uses to mean "no specific thesaurus could be identified from
+# the source heading's indicators" (a blank/unrecognised indicator 2, or
+# indicator 2 = 4), rather than a genuine, named thesaurus. Kept private -
+# callers should go through has_known_thesaurus() rather than consulting
+# this directly.
+my $UNDEFINED_THESAURUS_VALUES = {
+    notdefined   => 1,
+    notspecified => 1,
+};
+
+=head3 has_known_thesaurus
+
+    if ( Koha::Authority->has_known_thesaurus($thesaurus) ) { ... }
+
+Returns true if C<$thesaurus> (as derived by C4::Heading from MARC
+indicator 2 / subfield $2, e.g. 'lcsh', 'mesh', or a raw $2 code such as
+'fast') identifies an actual thesaurus. Returns false if C<$thesaurus> is
+undefined, or is one of the placeholder values C4::Heading returns when
+no thesaurus could be identified from the source heading's indicators
+('notdefined', 'notspecified').
+
+Callers that want to code a new authority's 008/11 (and 040$f) from a
+heading's thesaurus should check this first, and leave the site's own
+default (I<MARCAuthorityControlField008>) in place otherwise.
+
+=cut
+
+sub has_known_thesaurus {
+    my ( $class, $thesaurus ) = @_;
+
+    return 0 unless defined $thesaurus;
+    return $UNDEFINED_THESAURUS_VALUES->{$thesaurus} ? 0 : 1;
+}
+
 =head3 default_marc21_008
 
     my $default_008 = Koha::Authority->default_marc21_008;

@@ -824,8 +824,11 @@ sub LinkBibHeadingsToAuthorities {
                         # thesaurus instead of relying on AddAuthority()'s LCSH-only default.
                         # AddAuthority() only defaults 008/040 when they aren't already present
                         # on the record, so pre-populating them here is sufficient - no change
-                        # to AddAuthority() itself is needed.
-                        if ( $heading->{thesaurus} ) {
+                        # to AddAuthority() itself is needed. Skip this when the heading's
+                        # thesaurus couldn't actually be identified (bug 31925 comment 30) - in
+                        # that case the site's own MARCAuthorityControlField008 default should
+                        # apply, the same as it always has, rather than being overridden.
+                        if ( Koha::Authority->has_known_thesaurus( $heading->{thesaurus} ) ) {
                             my $date = POSIX::strftime( '%y%m%d', localtime );
                             $marcrecordauth->insert_fields_ordered(
                                 MARC::Field->new(
