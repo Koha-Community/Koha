@@ -626,10 +626,10 @@ sub handle_checkout {
         $resp .= timestamp;
 
         # Now for the variable fields
-        $resp .= add_field( FID_INST_ID,   $inst,      $server );
-        $resp .= add_field( FID_PATRON_ID, $patron_id, $server );
-        $resp .= add_field( FID_ITEM_ID,   $item_id,   $server );
-        $resp .= add_field( FID_TITLE_ID,  _format_title( { item => $item, server => $server } ) );
+        $resp .= add_field( FID_INST_ID,   $inst,                                                 $server );
+        $resp .= add_field( FID_PATRON_ID, $patron_id,                                            $server );
+        $resp .= add_field( FID_ITEM_ID,   $item_id,                                              $server );
+        $resp .= add_field( FID_TITLE_ID,  _format_title( { item => $item, server => $server } ), $server );
         if ( $item->due_date ) {
             my $due_date =
                 $account->{format_due_date}
@@ -664,7 +664,7 @@ sub handle_checkout {
 
         # If the item is valid, provide the title, otherwise
         # leave it blank
-        $resp .= add_field( FID_TITLE_ID, $item ? _format_title( { item => $item, server => $server } ) : "" );
+        $resp .= add_field( FID_TITLE_ID, $item ? _format_title( { item => $item, server => $server } ) : "", $server );
 
         # Due date is required.  Since it didn't get checked out,
         # it's not due, so leave the date blank
@@ -764,7 +764,7 @@ sub handle_checkin {
 
     if ($item) {
         $resp .= add_field( FID_PERM_LOCN, $item->permanent_location, $server );
-        $resp .= maybe_add( FID_TITLE_ID, _format_title( { item => $item, server => $server } ) );
+        $resp .= maybe_add( FID_TITLE_ID, _format_title( { item => $item, server => $server } ), $server );
         $resp .= $item->build_additional_item_fields_string($server);
     } else {
         $resp .= add_field( FID_PERM_LOCN, "", $server );
@@ -1344,8 +1344,8 @@ sub handle_item_information {
             $resp .= maybe_add( FID_SCREEN_MSG, "Item is damaged", $server );
         }
 
-        $resp .= add_field( FID_ITEM_ID, $item->id, $server );
-        $resp .= add_field( FID_TITLE_ID, _format_title( { item => $item, server => $server } ) );
+        $resp .= add_field( FID_ITEM_ID,  $item->id,                                             $server );
+        $resp .= add_field( FID_TITLE_ID, _format_title( { item => $item, server => $server } ), $server );
 
         $resp .= maybe_add( FID_MEDIA_TYPE,   $item->sip_media_type,      $server );
         $resp .= maybe_add( FID_PERM_LOCN,    $item->permanent_location,  $server );
@@ -1430,8 +1430,8 @@ sub handle_item_status_update {
         $resp .= $status->ok ? '1' : '0';
         $resp .= timestamp;
 
-        $resp .= add_field( FID_ITEM_ID,  $item->id, $server );
-        $resp .= add_field( FID_TITLE_ID, _format_title( { item => $item, server => $server } ) );
+        $resp .= add_field( FID_ITEM_ID,  $item->id,                                             $server );
+        $resp .= add_field( FID_TITLE_ID, _format_title( { item => $item, server => $server } ), $server );
         $resp .= maybe_add( FID_ITEM_PROPS, $item->sip_item_properties, $server );
     }
 
@@ -1619,9 +1619,9 @@ sub handle_renew {
         }
         $resp .= sipbool( desensitize( { status => $status, patron => $patron, server => $server } ) );
         $resp .= timestamp;
-        $resp .= add_field( FID_PATRON_ID, $patron->id, $server );
-        $resp .= add_field( FID_ITEM_ID,   $item->id,   $server );
-        $resp .= add_field( FID_TITLE_ID,  _format_title( { item => $item, server => $server } ) );
+        $resp .= add_field( FID_PATRON_ID, $patron->id,                                           $server );
+        $resp .= add_field( FID_ITEM_ID,   $item->id,                                             $server );
+        $resp .= add_field( FID_TITLE_ID,  _format_title( { item => $item, server => $server } ), $server );
         if ( $item->due_date ) {
             $resp .= add_field( FID_DUE_DATE, timestamp( $item->due_date ), $server );
         } else {
