@@ -380,3 +380,42 @@ describe("Form features", () => {
         cy.get("#vendors_list");
     });
 });
+
+describe("Custom load events", () => {
+    beforeEach(() => {
+        cy.login();
+        cy.title().should("eq", "Koha staff interface");
+    });
+
+    it("Should fire koha:vue-loaded once a Vue app has rendered", () => {
+        cy.visit("/cgi-bin/koha/acquisition/vendors", {
+            onBeforeLoad(win) {
+                const events: string[] = [];
+                (win as any).kohaVueLoaded = events;
+                win.document.addEventListener("koha:vue-loaded", e =>
+                    events.push((e as CustomEvent).detail.module)
+                );
+            },
+        });
+        cy.window().its("kohaVueLoaded").should("include", "acquisitions");
+    });
+
+    it("Should fire koha:island-loaded and koha:islands-ready once islands hydrate", () => {
+        cy.visit("/cgi-bin/koha/acqui/acqui-home.pl", {
+            onBeforeLoad(win) {
+                const events: string[] = [];
+                (win as any).kohaIslandEvents = events;
+                win.document.addEventListener("koha:island-loaded", e =>
+                    events.push((e as CustomEvent).detail.name)
+                );
+                win.document.addEventListener("koha:islands-ready", () =>
+                    events.push("islands-ready")
+                );
+            },
+        });
+        cy.window()
+            .its("kohaIslandEvents")
+            .should("include", "acquisitions-menu")
+            .and("include", "islands-ready");
+    });
+});
