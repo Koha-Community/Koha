@@ -23,7 +23,8 @@
 </template>
 
 <script>
-import { inject, onBeforeMount, ref } from "vue";
+import { inject, onBeforeMount } from "vue";
+import { useVueModule } from "../../composables/vueModule.js";
 import { APIClient } from "../../fetch/api-client.js";
 import Breadcrumbs from "../Breadcrumbs.vue";
 import Help from "../Help.vue";
@@ -35,15 +36,12 @@ import { $__ } from "@koha-vue/i18n";
 
 export default {
     setup() {
-        const mainStore = inject("mainStore");
-
-        const { loading, loaded, setError } = mainStore;
+        const { loading, loaded, setError, initialized, onModuleReady } =
+            useVueModule("ill");
 
         const ILLStore = inject("ILLStore");
 
         const { config } = storeToRefs(ILLStore);
-
-        const initialized = ref(false);
 
         onBeforeMount(() => {
             loading();
@@ -59,8 +57,7 @@ export default {
                         false
                     );
                 }
-                loaded();
-                initialized.value = true;
+                onModuleReady();
             });
         });
 
