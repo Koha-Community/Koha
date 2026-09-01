@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 27;
+use Test::More tests => 28;
 use Test::NoWarnings;
 use Test::MockModule;
 use Test::Warn;
@@ -1115,7 +1115,7 @@ subtest "LinkBibHeadingsToAuthorities record generation tests" => sub {
 };
 
 subtest "LinkBibHeadingsToAuthorities codes new authorities with the source thesaurus (bug 31925)" => sub {
-    plan tests => 7;
+    plan tests => 11;
 
     my $biblio_mod = Test::MockModule->new('C4::Linker::Default');
     $biblio_mod->mock(
@@ -1171,6 +1171,35 @@ subtest "LinkBibHeadingsToAuthorities codes new authorities with the source thes
         substr( $authority->field('008')->data(), 11, 1 ), 'a',
         'Non-subject heading (700) keeps the default LCSH 008/11=a coding, unaffected by this fix'
     );
+
+    # Case 5: blank ind2 (thesaurus not identified at all) - must respect the
+    # MARCAuthorityControlField008 syspref default, not be forced to 'z' (bug 31925 comment 30)
+    $biblio = $builder->build_sample_biblio();
+    $record = $biblio->metadata->record;
+    $field  = MARC::Field->new( '650', '', ' ', 'a' => 'Unidentified thesaurus' );
+    $record->append_fields($field);
+    LinkBibHeadingsToAuthorities( $linker, $record, "", undef, 650 );
+    $authority = GetAuthority( $record->subfield( '650', '9' ) );
+    is(
+        substr( $authority->field('008')->data(), 11, 1 ), 'a',
+        'Blank ind2 (no thesaurus identified) keeps the syspref default 008/11=a, not forced to z'
+    );
+    is( $authority->subfield( '040', 'f' ), undef, 'Blank ind2 (no thesaurus identified) gets no 040$f' );
+
+    # Case 6: ind2=4 (explicitly "source not specified") - must also respect a customised
+    # MARCAuthorityControlField008 syspref default rather than being forced to '|'
+    t::lib::Mocks::mock_preference( 'MARCAuthorityControlField008', '|| acn||aabn           | a|a     d' );
+    $biblio = $builder->build_sample_biblio();
+    $record = $biblio->metadata->record;
+    $field  = MARC::Field->new( '650', '', '4', 'a' => 'Source not specified' );
+    $record->append_fields($field);
+    LinkBibHeadingsToAuthorities( $linker, $record, "", undef, 650 );
+    $authority = GetAuthority( $record->subfield( '650', '9' ) );
+    is(
+        substr( $authority->field('008')->data(), 11, 1 ), 'n',
+        'ind2=4 (source not specified) respects a customised syspref default 008/11=n, not forced to |'
+    );
+    is( $authority->subfield( '040', 'f' ), undef, 'ind2=4 (source not specified) gets no 040$f' );
 };
 
 subtest 'autoControlNumber tests' => sub {
