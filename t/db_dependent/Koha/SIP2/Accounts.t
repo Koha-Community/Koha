@@ -249,7 +249,7 @@ subtest 'system_preference_overrides' => sub {
 
 subtest 'template fields accept long text' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
