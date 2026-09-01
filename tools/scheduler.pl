@@ -114,7 +114,11 @@ if ( $op eq 'cud-add' ) {
     }
 } elsif ( $op eq 'cud-delete' ) {
     my $jobid = $input->param('jobid');
-    remove_at_job($jobid);
+    if ( defined $jobid && $jobid =~ /\A\d+\z/ ) {
+        remove_at_job($jobid);
+    } else {
+        $template->param( job_delete_failed => 1 );
+    }
 }
 
 my $jobs = get_jobs();
