@@ -209,31 +209,57 @@ export default {
                                     }
 
                                     if (should_display) {
-                                        content.push(
-                                            `<a class="${action_name} btn btn-default btn-xs" role="button"><i class="${action[action_name].icon}"></i> ${action[action_name].text}</a>`
-                                        );
+                                        content.push({
+                                            action_name,
+                                            icon: action[action_name].icon,
+                                            text: action[action_name].text,
+                                        });
                                     }
                                 } else if (action == "edit") {
-                                    content.push(
-                                        '<a class="edit btn btn-default btn-xs" role="button"><i class="fa fa-pencil"></i> ' +
-                                            $__("Edit") +
-                                            "</a>"
-                                    );
+                                    content.push({
+                                        action_name: "edit",
+                                        icon: "fa fa-pencil",
+                                        text: $__("Edit"),
+                                    });
                                 } else if (action == "delete") {
-                                    content.push(
-                                        '<a class="delete btn btn-default btn-xs" role="button"><i class="fa fa-trash"></i> ' +
-                                            $__("Delete") +
-                                            "</a>"
-                                    );
+                                    content.push({
+                                        action_name: "delete",
+                                        icon: "fa fa-trash",
+                                        text: $__("Delete"),
+                                    });
                                 } else if (action == "remove") {
-                                    content.push(
-                                        '<a class="remove btn btn-default btn-xs" role="button"><i class="fa fa-remove"></i> ' +
-                                            $__("Remove") +
-                                            "</a>"
-                                    );
+                                    content.push({
+                                        action_name: "remove",
+                                        icon: "fa fa-remove",
+                                        text: $__("Remove"),
+                                    });
                                 }
                             });
-                            return content.join(" ");
+
+                            if (!props?.actionsDropdown || content.length < 2) {
+                                return content
+                                    .map(
+                                        x =>
+                                            `<a class="${x.action_name} btn btn-default btn-xs" role="button"><i class="${x.icon}"></i> ${x.text}</a>`
+                                    )
+                                    .join(" ");
+                            }
+
+                            let result = `<div class="btn-group">`;
+                            result += `<a class="${content[0].action_name} btn btn-default btn-xs" role="button"><i class="${content[0].icon}"></i> ${content[0].text}</a>`;
+                            result += `<a class="btn btn-default btn-xs dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>`;
+                            result += `<ul class="dropdown-menu">`;
+                            result += content
+                                .slice(1)
+                                .map(
+                                    x =>
+                                        `<li><a class="${x.action_name} dropdown-item" role="button"><i class="${x.icon}"></i> ${x.text}</a></li>`
+                                )
+                                .join(" ");
+                            result += `</ul>`;
+                            result += `</div>`;
+
+                            return result;
                         },
                     },
                 ];
@@ -318,6 +344,10 @@ export default {
         actions: {
             type: Object,
             default: {},
+        },
+        actionsDropdown: {
+            type: Boolean,
+            default: false,
         },
         options: {
             type: Object,
