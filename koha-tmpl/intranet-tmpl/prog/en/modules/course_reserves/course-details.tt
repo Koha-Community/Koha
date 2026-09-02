@@ -373,7 +373,9 @@
         $(document).ready(function () {
             $("#rm_items_button").on("click", function (e) {
                 e.preventDefault();
-                $("#rm_items").submit();
+                if (confirmDelete(_("Are you sure you want to remove all items from the course?"))) {
+                    $("#rm_items").submit();
+                }
             });
 
             var rtable = $("#course_reserves_table").kohaTable(
@@ -390,10 +392,6 @@
                     cr_id = $(this).data("cr-id");
                     $("#del_reserve_" + cr_id).submit();
                 }
-            });
-
-            $("#rm_items").click(function () {
-                return confirmDelete(_("Are you sure you want to remove all items from the course?"));
             });
 
             $("#delete_course").on("submit", function () {
