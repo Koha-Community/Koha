@@ -17,12 +17,13 @@
 
 use Modern::Perl;
 
-use CGI  qw ( -utf8 );
+use CGI qw( -utf8 );
+use CGI::Cookie;
 use JSON qw( encode_json );
 
 #use Data::Dump 'pp';
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth qw( check_cookie_auth get_template_and_user );
 use C4::Context;
 use C4::ItemCirculationAlertPreference;
 use C4::Output qw( output_html_with_http_headers );
@@ -64,15 +65,20 @@ sub show {
 # toggle a preference via ajax
 sub toggle {
     my ($input) = @_;
-    my ( $template, $user, $cookie ) = get_template_and_user(
-        {
-            template_name => "admin/item_circulation_alerts.tt",
-            query         => $input,
-            type          => "intranet",
-            flagsrequired => { parameters => 'manage_item_circ_alerts' },
-            debug         => defined( $input->param('debug') ),
-        }
-    );
+
+    my %cookies = CGI::Cookie->fetch();
+    my ($auth_status);
+    if ( exists $cookies{'CGISESSID'} ) {
+        ($auth_status) = check_cookie_auth(
+            $cookies{'CGISESSID'}->value,
+            { parameters => 'manage_item_circ_alerts' },
+        );
+    }
+
+    unless ( $auth_status && $auth_status eq 'ok' ) {
+        print $input->header( -type => 'text/plain', -status => '403 Forbidden' );
+        exit 0;
+    }
 
     my $id     = $input->param('id');
     my $branch = $input->param('branch');
@@ -111,7 +117,7 @@ sub toggle {
         push @classes, 'disabled' if $non_default_also;
         $response->{classes} = join( ' ', @classes );
     }
-    print $input->header( -cookie => $cookie );
+    print $input->header;
     print encode_json($response);
 }
 
