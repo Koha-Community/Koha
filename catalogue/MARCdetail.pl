@@ -105,7 +105,7 @@ my $tagslib = &GetMarcStructure( 1, $frameworkcode );
 my $biblio  = GetBiblioData($biblionumber);
 
 $template->param( ocoins => $biblio_object->get_coins );
-my @metadata_errors = $biblio_object->metadata->metadata_errors->as_list;
+my @metadata_errors = eval { $biblio_object->metadata->metadata_errors->as_list };
 $template->param( metadata_errors => \@metadata_errors ) if @metadata_errors;
 
 #count of item linked

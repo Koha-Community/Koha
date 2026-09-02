@@ -114,18 +114,14 @@ $template->param(
     item_lists  => Koha::Item::Lists->get_manageable_lists( Koha::Patrons->find($borrowernumber) )
 );
 
-my $marc_record         = eval { $biblio->metadata->record };
-my $invalid_marc_record = $@ || !$marc_record;
+my $biblio_metadata     = eval                    { $biblio->metadata };
+my $marc_record         = $biblio_metadata ? eval { $biblio_metadata->record } : undef;
+my $decoding_exception  = $@;
+my $invalid_marc_record = !$marc_record;
 if ($invalid_marc_record) {
-    $template->param( decoding_error => $@ );
-    my $marc_xml = C4::Charset::StripNonXmlChars( $biblio->metadata->metadata );
 
-    $marc_record = eval {
-        MARC::Record::new_from_xml(
-            $marc_xml, 'UTF-8',
-            C4::Context->preference('marcflavour')
-        );
-    };
+    # Metadata that cannot be repaired at all
+    $template->param( decoding_error => $decoding_exception );
 }
 
 my $op = $query->param('op') || q{};
@@ -164,7 +160,7 @@ my $showallitems = $query->param('showallitems');
 my $marcflavour  = C4::Context->preference("marcflavour");
 
 $template->param( ocoins => !$invalid_marc_record ? $biblio->get_coins : undef );
-my @metadata_errors = $biblio->metadata->metadata_errors->as_list;
+my @metadata_errors = $biblio_metadata ? eval { $biblio_metadata->metadata_errors->as_list } : ();
 $template->param( metadata_errors => \@metadata_errors ) if @metadata_errors;
 
 # some useful variables for enhanced content;
