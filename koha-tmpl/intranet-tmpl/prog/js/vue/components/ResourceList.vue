@@ -352,7 +352,11 @@ export default {
                 },
                 {}
             );
-            return { ...tableEvents.value, ...actionButtons };
+            return {
+                ...tableEvents.value,
+                ...actionButtons,
+                ...props.instancedResource.tableOptions?.additionalEvents,
+            };
         });
         onBeforeMount(() => {
             let loading_promises = [];
