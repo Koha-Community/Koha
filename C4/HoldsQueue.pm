@@ -725,7 +725,8 @@ RETRY:
   about the hold it has been mapped to.
 
   This routine attempts to match the holds in the following priority
-  1 - If local holds priority is enabled we check all requests to see if local matches can be found
+  1 - If local holds priority is enabled, and LocalHoldsPriorityScope includes the holds queue,
+      we check all requests to see if local matches can be found
   2 - We check for item level matches and fill those
   3 - We now loop the remaining requests in priority order attempting to fill with
       a - Items where HoldsQueuePrioritizeBranch matches either from items held at the pickup branch, or at the least cost branch (if Transport Cost Matrix is being used)

@@ -436,7 +436,8 @@ is( scalar(@$holds_queue), 2, "Holds not filled with items from closed libraries
 t::lib::Mocks::mock_preference( 'HoldsQueueSkipClosed', 0 );
 
 ## Test LocalHoldsPriority
-t::lib::Mocks::mock_preference( 'LocalHoldsPriority', 'GiveLibrary' );
+t::lib::Mocks::mock_preference( 'LocalHoldsPriority',      'GiveLibrary' );
+t::lib::Mocks::mock_preference( 'LocalHoldsPriorityScope', 'checkin_and_queue' );
 
 $dbh->do("DELETE FROM circulation_rules");
 Koha::CirculationRules->set_rule(
@@ -1035,6 +1036,7 @@ subtest "Test Local Holds Priority - Bib level" => sub {
 
     Koha::Biblios->delete();
     t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              'GiveLibrary' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityScope',         'checkin_and_queue' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl',   'homebranch' );
     my $branch   = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -1196,7 +1198,7 @@ subtest "Test Local Holds Priority - Item level hold over Record level hold (Bug
     t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              'GiveLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl',   'homebranch' );
-    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityScope', 'checkin_and_queue' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityScope',         'checkin_and_queue' );
     my $branch   = $builder->build_object( { class => 'Koha::Libraries' } );
     my $branch2  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $category = $builder->build_object(
@@ -1266,6 +1268,7 @@ subtest "Test Local Holds Priority - Get correct item for item level hold" => su
 
     Koha::Biblios->delete();
     t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              'GiveLibrary' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityScope',         'checkin_and_queue' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl',   'homebranch' );
     my $branch   = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -1350,6 +1353,7 @@ subtest "Test Local Holds Priority - Ensure no duplicate requests in holds queue
     Koha::Biblios->delete();
 
     t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              'GiveLibrary' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityScope',         'checkin_and_queue' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl',   'homebranch' );
     my $branch   = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -1515,6 +1519,7 @@ subtest 'Excludes from local holds priority' => sub {
     Koha::Holds->delete;
 
     t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              'GiveLibrary' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityScope',         'checkin_and_queue' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl',   'homebranch' );
 
@@ -2687,6 +2692,7 @@ subtest "local_holdgroup_match uses exclusivity controls, not LocalHoldsPriority
     # Exclusivity (PickupLibrary/holdingbranch): pickup lib_a vs lib_c holdingbranch -> NOT in group -> flag = 0
 
     t::lib::Mocks::mock_preference( 'LocalHoldsPriority',                 'GiveLibrary' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityScope',            'checkin_and_queue' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl',    'HomeLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl',      'homebranch' );
     t::lib::Mocks::mock_preference( 'LocalHoldsExclusivityPeriod',        7 );
