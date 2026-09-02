@@ -1483,6 +1483,61 @@ sub has_restricting_overdues {
     return 0;
 }
 
+=head3 lift_overdue_restrictions
+
+  $patron->lift_overdue_restrictions;
+
+Removes the patron's OVERDUES restriction if the conditions set by the
+AutoRemoveOverduesRestrictions system preference are met.
+
+The preference selects which condition applies:
+- no: never lift the restriction
+- when_no_overdue: lift once the patron has no overdues at all
+- when_no_overdue_causing_debarment: lift once the patron has no overdues that
+  would themselves cause a restriction
+
+B<Parameters:> none
+
+B<Returns:> true when a restriction was removed, false otherwise.
+
+B<Note:> This reconciles the patron's restriction against their current overdue
+state rather than undoing a particular checkout, so it is safe to call
+repeatedly and safe to call outside the transaction that returned an item. It
+must run after the returns it is meant to account for, otherwise the returned
+items still count towards the patron's overdues and the restriction stands.
+
+Callers looping over many of a patron's checkouts should call this once, after
+the loop; per checkout it reaches the same answer while repeating
+has_restricting_overdues, which walks the circulation rules per delay.
+
+=cut
+
+sub lift_overdue_restrictions {
+    my ($self) = @_;
+
+    my $auto_remove_overdues_restrictions = C4::Context->preference('AutoRemoveOverduesRestrictions');
+    my $overdue_restrictions              = $self->restrictions->search( { type => 'OVERDUES' } );
+
+    if (   $auto_remove_overdues_restrictions eq 'no'
+        || !$self->is_debarred
+        || !$overdue_restrictions->count )
+    {
+        return 0;
+    }
+
+    my $remove_restrictions =
+        $auto_remove_overdues_restrictions eq 'when_no_overdue_causing_debarment'
+        ? !$self->has_restricting_overdues()
+        : !$self->has_overdues();
+
+    if ($remove_restrictions) {
+        Koha::Patron::Debarments::DelUniqueDebarment( { borrowernumber => $self->borrowernumber, type => 'OVERDUES' } );
+        return 1;
+    }
+
+    return 0;
+}
+
 =head3 update_lastseen
 
   $patron->update_lastseen('activity');

@@ -3038,14 +3038,18 @@ and offline_circ/process_koc.pl.
 
 The last optional parameter allows passing skip_record_index to the item store call.
 
+The archival itself is performed by L<Koha::Checkout/mark_returned> and the
+OVERDUES restriction is lifted by L<Koha::Patron/lift_overdue_restrictions>.
+Both run in one transaction here, so a failure in either leaves the checkout
+untouched.
+
 =cut
 
 sub MarkIssueReturned {
     my ( $borrowernumber, $itemnumber, $returndate, $privacy, $params ) = @_;
 
     # Retrieve the issue
-    my $issue            = Koha::Checkouts->find( { itemnumber => $itemnumber } ) or return;
-    my $issue_branchcode = $issue->branchcode;
+    my $issue = Koha::Checkouts->find( { itemnumber => $itemnumber } ) or return;
 
     return
         unless $issue->borrowernumber ==
@@ -3055,61 +3059,25 @@ sub MarkIssueReturned {
 
     my $schema = Koha::Database->schema;
 
+    my $checkin_library = defined C4::Context->userenv
+        && exists C4::Context->userenv->{'branch'} ? C4::Context->userenv->{'branch'} : $issue->branchcode;
+
     # FIXME Improve the return value and handle it from callers
-    my $rv = $schema->txn_do(
+    $schema->txn_do(
         sub {
-
-            my $patron = Koha::Patrons->find($borrowernumber);
-
-            # Update the returndate value
-            if ($returndate) {
-                $issue->returndate($returndate)->store->discard_changes;    # update and refetch
-            } else {
-                $issue->returndate( \'NOW()' )->store->discard_changes;     # update and refetch
-            }
-
-            my $checkin_library = defined C4::Context->userenv
-                && exists C4::Context->userenv->{'branch'} ? C4::Context->userenv->{'branch'} : $issue->branchcode;
-            $issue->checkin_library($checkin_library);
-
-            # Create the old_issues entry
-            my $old_checkout = Koha::Old::Checkout->new( $issue->unblessed )->store;
-
-            # Update accountlines
-            my $accountlines = Koha::Account::Lines->search( { issue_id => $issue->issue_id } );
-            $accountlines->update( { old_issue_id => $issue->issue_id, issue_id => undef } );
-
-            # anonymise patron checkout immediately if $privacy set to 2 and AnonymousPatron is set to a valid borrowernumber
-            if ( $privacy && $privacy == 2 ) {
-                $old_checkout->anonymize;
-            }
-
-            # And finally delete the issue
-            $issue->delete;
-
-            $issue->item->onloan(undef)->store(
+            $issue->mark_returned(
                 {
-                    log_action        => 0,
+                    borrowernumber    => $borrowernumber,
+                    checkin_library   => $checkin_library,
+                    returndate        => $returndate,
+                    privacy           => $privacy,
                     skip_record_index => $params->{skip_record_index},
-                    skip_holds_queue  => $params->{skip_holds_queue}
+                    skip_holds_queue  => $params->{skip_holds_queue},
                 }
             );
 
-            my $item = Koha::Items->find($itemnumber);
-            $item->last_returned_by( $patron->borrowernumber )->store;
-
             # Possibly remove any OVERDUES related debarment
-            my $overdue_restrictions = $patron->restrictions->search( { type => 'OVERDUES' } );
-            if ( C4::Context->preference('AutoRemoveOverduesRestrictions') ne 'no' && $patron->is_debarred ) {
-                my $remove_restrictions =
-                    C4::Context->preference('AutoRemoveOverduesRestrictions') eq 'when_no_overdue_causing_debarment'
-                    ? !$patron->has_restricting_overdues()
-                    : !$patron->has_overdues;
-                if ( $remove_restrictions && $overdue_restrictions->count ) {
-                    DelUniqueDebarment( { borrowernumber => $borrowernumber, type => 'OVERDUES' } );
-                }
-            }
-
+            Koha::Patrons->find($borrowernumber)->lift_overdue_restrictions;
         }
     );
 

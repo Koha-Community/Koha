@@ -24,6 +24,7 @@ use DateTime;
 use Try::Tiny qw( catch try );
 
 use C4::Circulation qw( AddRenewal CanBookBeRenewed LostItem MarkIssueReturned );
+use Koha::Account::Lines;
 use Koha::Booking;
 use Koha::Checkouts::Renewals;
 use Koha::Checkouts::ReturnClaims;
@@ -32,6 +33,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::ILL::ISO18626::Request;
 use Koha::Items;
 use Koha::Libraries;
+use Koha::Old::Checkout;
 
 use base qw(Koha::Object);
 
@@ -193,6 +195,91 @@ sub booking {
     my $booking_rs = $self->_result->booking;
     return unless $booking_rs;
     return Koha::Booking->_new_from_dbic($booking_rs);
+}
+
+=head3 mark_returned
+
+  my $issue_id = $checkout->mark_returned(
+      {
+          borrowernumber    => $borrowernumber,   # optional
+          checkin_library   => $checkin_library,  # optional
+          returndate        => $returndate,       # optional
+          privacy           => $privacy,          # optional
+          skip_record_index => 1,                 # optional
+          skip_holds_queue  => 1,                 # optional
+      }
+  );
+
+Archives the checkout: sets returndate, copies the row to old_issues, reassigns
+the checkout's accountlines to the archived row, deletes the issues row, clears
+items.onloan and records items.last_returned_by.
+
+B<Parameters:> all optional
+- borrowernumber: the patron the caller believes holds the checkout. Return is
+  void if it does not match the issue borrower, so an item checked out to another
+  patron is never returned by mistake. Omit to skip the assertion.
+- checkin_library: stored on the archived checkout. A parameter rather than a
+  C4::Context->userenv read, so callers without a user environment - cronjobs in
+  particular - can record the correct library, or none
+- returndate: the date of return (defaults to the database's current date)
+- privacy: the patron's privacy setting. When it is 2 the archived checkout is
+  anonymised immediately
+- skip_record_index: relayed to the items.onloan store
+- skip_holds_queue: relayed to the items.onloan store
+
+B<Returns:> The issue_id of the archived checkout.
+
+=cut
+
+sub mark_returned {
+    my ( $self, $params ) = @_;
+
+    my $borrowernumber = $self->borrowernumber;
+
+    if ( defined $params->{borrowernumber} && $borrowernumber != $params->{borrowernumber} ) {
+        return;
+    }
+
+    my $issue_id = $self->issue_id;
+
+    my $schema = Koha::Database->schema;
+
+    $schema->txn_do(
+        sub {
+            # update the issue
+            $self->returndate( $params->{returndate} || \'NOW()' )->store->discard_changes;
+
+            $self->checkin_library( $params->{checkin_library} );
+
+            # store the updated issue as an old_checkout entry
+            my $old_checkout = Koha::Old::Checkout->new( $self->unblessed )->store;
+
+            if ( $params->{privacy} && $params->{privacy} == 2 ) {
+                $old_checkout->anonymize;
+            }
+
+            # update the related accountlines
+            my $accountlines = Koha::Account::Lines->search( { issue_id => $issue_id } );
+            $accountlines->update( { old_issue_id => $issue_id, issue_id => undef } );
+
+            # get the related item
+            my $item = $self->item;
+
+            # delete the issue
+            $self->delete;
+
+            # update the item
+            $item->onloan(undef)->store(
+                {
+                    log_action        => 0,
+                    skip_record_index => $params->{skip_record_index},
+                    skip_holds_queue  => $params->{skip_holds_queue}
+                }
+            );
+            $item->last_returned_by($borrowernumber);
+        }
+    );
+    return $issue_id;
 }
 
 =head3 attempt_auto_renew
