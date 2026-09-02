@@ -24,6 +24,7 @@ import {
  * @param {String} resourceConfig.resourceName - The name of the resource.
  * @param {String} resourceConfig.idAttr - The name of the id attribute of the resource.
  * @param {String} resourceConfig.nameAttr - The name attribute of the resource.
+ * @param {Function} resourceConfig.describeResource - Optional function returning a textual description of the resource, for use in modals.
  * @param {String} resourceConfig.components - An object containing the names of the components ("show", "add", "list", "edit")
  * @param {Object} resourceConfig.i18n - The i18n object.
  * @param {Object} resourceConfig.apiClient - The API client for the resource.
@@ -252,7 +253,9 @@ export function useBaseResource(resourceConfig) {
             ? resource[resourceConfig.idAttr]
             : resourceConfig.newResource[resourceConfig.idAttr];
         let resourceName = resource
-            ? resource[resourceConfig.nameAttr]
+            ? resourceConfig.describeResource
+                ? resourceConfig.describeResource(resource)
+                : resource[resourceConfig.nameAttr]
             : resourceConfig.newResource[resourceConfig.nameAttr];
 
         setConfirmationDialog(
@@ -301,7 +304,9 @@ export function useBaseResource(resourceConfig) {
             ? resource[resourceConfig.idAttr]
             : resourceConfig.newResource[resourceConfig.idAttr];
         let resourceName = resource
-            ? resource[resourceConfig.nameAttr]
+            ? resourceConfig.describeResource
+                ? resourceConfig.describeResource(resource)
+                : resource[resourceConfig.nameAttr]
             : resourceConfig.newResource[resourceConfig.nameAttr];
 
         setConfirmationDialog(
