@@ -621,8 +621,6 @@ if ( $biblio && !$breedingid ) {
         $exception->rethrow unless ( $exception->isa('Koha::Exceptions::Metadata::Invalid') );
         $record = undef;
         $template->param( INVALID_METADATA => $exception );
-    } elsif ( my @repairs = @{ $biblio->metadata->object_messages } ) {
-        $template->param( INVALID_METADATA => join( "\n", map { $_->payload } @repairs ) );
     }
 }
 if ($breedingid) {
@@ -703,23 +701,7 @@ if ($biblionumber) {
 # quick-links to the affected fields where the field still exists in the record.
 if ( $biblio && $is_a_modif ) {
     my @existing_errors = eval { $biblio->metadata->metadata_errors->as_list };
-    if (@existing_errors) {
-        $template->param(
-            existing_metadata_errors => [
-                map {
-                    my $tag      = $_->tag;
-                    my $subfield = $_->subfield;
-                    {
-                        id        => $_->id,
-                        message   => $_->message,
-                        field_ref => $tag ? ( $subfield ? "$tag\$$subfield" : $tag ) : '',
-                        tag       => $tag      // '',
-                        subfield  => $subfield // '',
-                    }
-                } @existing_errors
-            ]
-        );
-    }
+    $template->param( existing_metadata_errors => \@existing_errors ) if @existing_errors;
 }
 
 #-------------------------------------------------------------------------------------

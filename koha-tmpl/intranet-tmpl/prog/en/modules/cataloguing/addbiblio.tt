@@ -279,7 +279,7 @@
                 method: "DELETE",
                 success: function () {
                     $item.remove();
-                    if ($("#nonxml-error-list li").length === 0) {
+                    if ($("#nonxml-error-list tr").length === 0) {
                         $("#nonxml-errors-notice").remove();
                     }
                 },
@@ -908,29 +908,14 @@
 
 [% WRAPPER 'main-container.inc' wide_centered => 1 %]
     [% IF existing_metadata_errors %]
-        <div class="alert alert-warning" id="nonxml-errors-notice">
-            <h2>Data quality warnings</h2>
-            <p><strong>This record could not be saved as-is and was automatically modified when it was last saved. Please review the affected fields and correct or confirm the data.</strong></p>
-            <ul id="nonxml-error-list">
-                [% FOREACH err IN existing_metadata_errors %]
-                    <li id="nonxml-error-[% err.id | html %]">
-                        [% IF err.tag %]
-                            <a class="nonxml-linkfield btn btn-link" href="#" data-tag="[% err.tag | html %]" [% IF err.subfield %]data-subfield="[% err.subfield | html %]"[% END %]>
-                                <i class="fa fa-arrow-right" aria-hidden="true"></i>
-                                Go to [% err.field_ref | html %]
-                            </a>
-                        [% END %]
-                        <code>[% err.message | html %]</code>
-                        <button class="nonxml-resolve btn btn-default btn-xs" data-error-id="[% err.id | html %]" data-biblio-id="[% biblionumber | html %]"> Mark resolved </button>
-                    </li>
-                [% END %]
-            </ul>
-        </div>
+        [% WRAPPER 'metadata_repairs.inc' errors=existing_metadata_errors resolvable=1 biblionumber=biblionumber %]
+            <p>Please review the affected fields and correct or confirm the data.</p>
+        [% END %]
     [% END %]
     [% IF ( INVALID_METADATA ) %]
         <div class="alert alert-warning">
             <h1>Errors found</h1>
-            <p><strong>This record had encoding issues, non-xml characters have been stripped in order to allow editing. Please be cautious when saving that some data may have been removed from the record.</strong></p>
+            <p><strong>This record had encoding issues that could not be repaired, so it cannot be loaded for editing.</strong></p>
             <pre class="problem">[% INVALID_METADATA | html %]</pre>
         </div>
     [% END %]
