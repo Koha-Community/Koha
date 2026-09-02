@@ -55,7 +55,7 @@
         <div class="alert alert-info audio-alert-action">
             <p>Payment received</p>
             <p>
-                <a id="print-payment-receipt-button" target="_blank" href="/cgi-bin/koha/members/printfeercpt.pl?action=print&amp;accountlines_id=[% payment_id | uri %]&amp;change_given=[% change_given | uri %]" class="btn btn-default"
+                <a id="print-payment-receipt-button" target="_blank" href="/cgi-bin/koha/members/printfeercpt.pl?action=print&amp;accountlines_id=[% payment_id | uri %]&amp;change=[% change_given | uri %]" class="btn btn-default"
                     ><i class="fa fa-print"></i> Print receipt</a
                 >
                 [% IF patron.notice_email_address %]
