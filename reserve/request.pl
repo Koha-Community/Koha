@@ -607,21 +607,16 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                             my @pickup_locations = $item_object->pickup_locations( { patron => $patron } )->as_list;
                             $item->{pickup_locations_count} = scalar @pickup_locations;
 
-                            if ( @pickup_locations || C4::Context->preference('AllowHoldPolicyOverride') ) {
-                                $num_items_available++;
-                                $item->{override} = 1;
-                                $num_override++;
+                            $num_items_available++;
+                            $item->{override} = 1;
+                            $num_override++;
 
-                                my $default_pickup_location;
+                            my $default_pickup_location;
 
-                                ($default_pickup_location) =
-                                    grep { $_->branchcode eq $default_pickup_branch } @pickup_locations;
+                            ($default_pickup_location) =
+                                grep { $_->branchcode eq $default_pickup_branch } @pickup_locations;
 
-                                $item->{default_pickup_location} = $default_pickup_location;
-                            } else {
-                                $item->{available}    = 0;
-                                $item->{not_holdable} = "no_valid_pickup_location";
-                            }
+                            $item->{default_pickup_location} = $default_pickup_location;
                         } else {
                             $num_alreadyheld++;
                         }
