@@ -36,7 +36,7 @@
 
     <div class="page-section">
         <fieldset class="action filters" style="cursor:pointer;">
-            <a id="resolved_filter"><i class="fa fa-eye"></i> Include resolved</a>
+            <a id="resolved_filter"><i class="fa fa-eye"></i> Show resolved</a>
             <input type="checkbox" id="hide_resolved_concerns" style="display:none;" />
             [% FOR st IN status %]
                 <a id="[% st.authorised_value | html %]_filter"><i class="fa fa-eye-slash"></i> Hide [% st.lib | html %]</a>
@@ -260,7 +260,7 @@
                 external_filter_nodes
             );
 
-            var txtActivefilter = _("Include resolved");
+            var txtActivefilter = _("Show resolved");
             var txtInactivefilter = _("Hide resolved");
             function adjust_filter_label() {
                 if ($("#hide_resolved_concerns").is(":checked")) {
@@ -285,7 +285,7 @@
                     if ($(`#hide_${av}`).is(":checked")) {
                         $(this).html('<i class="fa fa-eye-slash"></i> ' + _("Hide ") + st.lib);
                     } else {
-                        $(this).html('<i class="fa fa-eye"></i> ' + _("Include ") + st.lib);
+                        $(this).html('<i class="fa fa-eye"></i> ' + _("Show ") + st.lib);
                     }
                     $(`#hide_${av}`).prop("checked", !$(`#hide_${av}`).is(":checked"));
                     tickets.DataTable().draw();
