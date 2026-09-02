@@ -51,10 +51,14 @@
             <div class="alert alert-info audio-alert-action">
                 <p>Payment received</p>
                 <p>
-                    <a target="_blank" href="/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=[% payment_id | uri %]&tendered=[% tendered | uri %]&change=[% change | uri %]" class="btn btn-default"
+                    <a
+                        id="print-payment-receipt-button"
+                        target="_blank"
+                        href="/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=[% payment_id | uri %]&tendered=[% tendered | uri %]&change=[% change | uri %]"
+                        class="btn btn-default"
                         ><i class="fa fa-print"></i> Print receipt</a
                     >
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#emailReceiptModal" class="btn btn-default"><i class="fa-solid fa-envelope"></i> Email receipt</a>
+                    <a id="email-payment-receipt-button" href="#" data-bs-toggle="modal" data-bs-target="#emailReceiptModal" class="btn btn-default"><i class="fa-solid fa-envelope"></i> Email receipt</a>
                 </p>
             </div>
         [% END %]

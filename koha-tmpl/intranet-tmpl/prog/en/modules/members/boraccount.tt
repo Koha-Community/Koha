@@ -51,6 +51,26 @@
         <div id="receipt_sent_dialog" class="alert alert-warning"> Receipt not sent, failed to find template. </div>
     [% END %]
 
+    [% IF payment_id && !Koha.Preference('FinePaymentAutoPopup') %]
+        <div class="alert alert-info audio-alert-action">
+            <p>Payment received</p>
+            <p>
+                <a id="print-payment-receipt-button" target="_blank" href="/cgi-bin/koha/members/printfeercpt.pl?action=print&amp;accountlines_id=[% payment_id | uri %]&amp;change_given=[% change_given | uri %]" class="btn btn-default"
+                    ><i class="fa fa-print"></i> Print receipt</a
+                >
+                [% IF patron.notice_email_address %]
+                    <form method="post" action="/cgi-bin/koha/members/boraccount.pl" class="d-inline">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="op" value="cud-send_receipt" />
+                        <input type="hidden" name="accountlines_id" value="[% payment_id | html %]" />
+                        <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
+                        <button id="email-payment-receipt-button" type="submit" class="btn btn-default"><i class="fa-solid fa-envelope"></i> Email receipt</button>
+                    </form>
+                [% END %]
+            </p>
+        </div>
+    [% END %]
+
     [% INCLUDE 'members-toolbar.inc' %]
     <h1>Account for [% INCLUDE 'patron-title.inc' %]</h1>
     <form action="/cgi-bin/koha/members/boraccount.pl" method="get">[% INCLUDE 'csrf-token.inc' %]<input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" /></form>

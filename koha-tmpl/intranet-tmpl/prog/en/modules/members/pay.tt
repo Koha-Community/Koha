@@ -44,6 +44,30 @@
 
     <h1>Make a payment</h1>
 
+    [% IF payment_id && !Koha.Preference('FinePaymentAutoPopup') %]
+        <div class="alert alert-info audio-alert-action">
+            <p>Payment received</p>
+            <p>
+                <a
+                    id="print-payment-receipt-button"
+                    target="_blank"
+                    href="/cgi-bin/koha/members/printfeercpt.pl?action=print&amp;accountlines_id=[% payment_id | uri %]&amp;change_given=[% change_given | uri %]&amp;borrowernumber=[% patron.borrowernumber | uri %]"
+                    class="btn btn-default"
+                    ><i class="fa fa-print"></i> Print receipt</a
+                >
+                [% IF patron.notice_email_address %]
+                    <form method="post" action="/cgi-bin/koha/members/boraccount.pl" class="d-inline">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="op" value="cud-send_receipt" />
+                        <input type="hidden" name="accountlines_id" value="[% payment_id | html %]" />
+                        <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
+                        <button id="email-payment-receipt-button" type="submit" class="btn btn-default"><i class="fa-solid fa-envelope"></i> Email receipt</button>
+                    </form>
+                [% END %]
+            </p>
+        </div>
+    [% END %]
+
     <!-- The manual invoice and credit buttons -->
     <div id="account-tabs" class="toptabs">
         <ul class="nav nav-tabs" role="tablist">
