@@ -175,6 +175,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
+    [% Asset.js("lib/dompurify/purify.min.js") | $raw %]
     <script>
         $(document).ready(function () {
             $("#noticestable").kohaTable({
@@ -189,11 +190,13 @@
 
                 var noticeid = $(this).data("noticeid");
 
-                // Use shadow DOM for notice content preview
+                // Sanitize before rendering in the shadow DOM
                 var srcdoc = $("#notice" + noticeid).text();
+                var sanitized = DOMPurify.sanitize(srcdoc, { WHOLE_DOCUMENT: true });
+
                 var shadowHost = document.createElement("div");
                 var shadowRoot = shadowHost.attachShadow({ mode: "open" });
-                shadowRoot.innerHTML = srcdoc;
+                shadowRoot.innerHTML = sanitized;
 
                 $("#noticeModal .modal-body").html("");
                 $("#noticeModal .modal-body")[0].appendChild(shadowHost);
