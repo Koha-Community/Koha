@@ -20,6 +20,7 @@ package Koha::Booking;
 use Modern::Perl;
 
 use Koha::Exceptions::Booking;
+use Koha::CirculationRules;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 use Koha::Patrons;
