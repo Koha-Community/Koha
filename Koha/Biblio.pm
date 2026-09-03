@@ -370,58 +370,27 @@ sub check_booking {
     my $branchcode = $params->{branchcode};
     my $itemtype   = $params->{itemtype};
 
-    my $lead_rule = Koha::CirculationRules->get_effective_rule(
+    my $rules = Koha::CirculationRules->get_effective_rules(
         {
-            rule_name  => 'bookings_lead_period',
+            rules      => [ 'bookings_lead_period', 'bookings_trail_period' ],
             itemtype   => $itemtype,
             branchcode => $branchcode,
         }
     );
-    my $lead_days = $lead_rule && defined $lead_rule->rule_value ? $lead_rule->rule_value : 0;
-
-    my $trail_rule = Koha::CirculationRules->get_effective_rule(
-        {
-            rule_name  => 'bookings_trail_period',
-            itemtype   => $itemtype,
-            branchcode => $branchcode,
-        }
-    );
-    my $trail_days = $trail_rule && defined $trail_rule->rule_value ? $trail_rule->rule_value : 0;
+    my $lead_days  = $rules->{bookings_lead_period}  // 0;
+    my $trail_days = $rules->{bookings_trail_period} // 0;
 
     my $bookable_items = $self->bookable_items;
     my $total_bookable = $bookable_items->count;
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
 
-    # Expand bounds to account for lead/trail buffer zones on both sides
-    my $expanded_start = $start_date->clone->subtract( days => $lead_days + $trail_days );
-    my $expanded_end   = $end_date->clone->add( days => $trail_days + $lead_days );
-
-    my $existing_bookings = $self->bookings(
+    my $existing_bookings = $self->bookings->filter_by_active->filter_by_overlapping(
         {
-            '-and' => [
-                {
-                    '-or' => [
-                        start_date => {
-                            '-between' => [
-                                $dtf->format_datetime($start_date),
-                                $dtf->format_datetime($expanded_end),
-                            ]
-                        },
-                        end_date => {
-                            '-between' => [
-                                $dtf->format_datetime($expanded_start),
-                                $dtf->format_datetime($end_date),
-                            ]
-                        },
-                        {
-                            start_date => { '<' => $dtf->format_datetime($start_date) },
-                            end_date   => { '>' => $dtf->format_datetime($end_date) }
-                        }
-                    ]
-                },
-                { status => { '-not_in' => [ 'cancelled', 'completed' ] } }
-            ]
+            start_date => $start_date,
+            end_date   => $end_date,
+            lead_days  => $lead_days,
+            trail_days => $trail_days,
         }
     );
 

@@ -263,54 +263,23 @@ sub _assign_item_for_booking {
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
 
-    my $lead_rule = Koha::CirculationRules->get_effective_rule(
+    my $rules = Koha::CirculationRules->get_effective_rules(
         {
-            rule_name  => 'bookings_lead_period',
+            rules      => [ 'bookings_lead_period', 'bookings_trail_period' ],
             itemtype   => $biblio->biblioitem->itemtype,
             branchcode => $self->pickup_library_id,
         }
     );
-    my $lead_days = $lead_rule && defined $lead_rule->rule_value ? $lead_rule->rule_value : 0;
+    my $lead_days  = $rules->{bookings_lead_period}  // 0;
+    my $trail_days = $rules->{bookings_trail_period} // 0;
 
-    my $trail_rule = Koha::CirculationRules->get_effective_rule(
+    # Exclude items whose effective booking period overlaps the new one
+    my $existing_bookings = $biblio->bookings->filter_by_active->filter_by_overlapping(
         {
-            rule_name  => 'bookings_trail_period',
-            itemtype   => $biblio->biblioitem->itemtype,
-            branchcode => $self->pickup_library_id,
-        }
-    );
-    my $trail_days = $trail_rule && defined $trail_rule->rule_value ? $trail_rule->rule_value : 0;
-
-    # Exclude items whose effective booking period (core period ± lead/trail)
-    # overlaps the new booking's effective period, matching check_booking()
-    my $expanded_start = $start_date->clone->subtract( days => $lead_days + $trail_days );
-    my $expanded_end   = $end_date->clone->add( days => $trail_days + $lead_days );
-
-    my $existing_bookings = $biblio->bookings(
-        {
-            '-and' => [
-                {
-                    '-or' => [
-                        start_date => {
-                            '-between' => [
-                                $dtf->format_datetime($start_date),
-                                $dtf->format_datetime($expanded_end)
-                            ]
-                        },
-                        end_date => {
-                            '-between' => [
-                                $dtf->format_datetime($expanded_start),
-                                $dtf->format_datetime($end_date)
-                            ]
-                        },
-                        {
-                            start_date => { '<' => $dtf->format_datetime($start_date) },
-                            end_date   => { '>' => $dtf->format_datetime($end_date) }
-                        }
-                    ]
-                },
-                { status => { '-not_in' => [ 'cancelled', 'completed' ] } }
-            ]
+            start_date => $start_date,
+            end_date   => $end_date,
+            lead_days  => $lead_days,
+            trail_days => $trail_days,
         }
     );
 
