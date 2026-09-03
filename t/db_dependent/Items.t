@@ -669,9 +669,46 @@ subtest 'SearchItems test' => sub {
 };
 
 subtest 'SearchItems security tests' => sub {
-    plan tests => 1;
-    my ($items) = SearchItems( { field => 'homebranch', operator => 'is', query => 'test' } );
-    pass("Invalid 'is' query no longer throws fatal error");
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $builder = t::lib::TestBuilder->new;
+    $builder->build_sample_item;
+    $builder->build_sample_item;
+
+    my ( $items, $total, $baseline_total );
+
+    ( undef, $baseline_total ) = SearchItems( {} );
+
+    # A time-based blind SQL injection payload. If it were interpolated into the
+    # SQL as-is, it would either error out, delay the response by 5 seconds, or
+    # (since SLEEP() returns 0/false) filter out every row - never matching the
+    # baseline count. The fix must recognise this is not a valid 'is'/'is not'
+    # value and drop the filter instead of building SQL from it.
+    my $sqli_payload = q{NULL) AND (SELECT 2540 FROM (SELECT(SLEEP(5)))xfIp)-- gHSR};
+    ( $items, $total ) = SearchItems( { field => 'homebranch', operator => 'is', query => $sqli_payload } );
+    is(
+        $total, $baseline_total,
+        "SQL injection payload is not executed - filter is dropped, count matches unfiltered baseline"
+    );
+
+    ($items) = SearchItems( { field => 'homebranch', operator => 'is', query => 'test' } );
+    ok( defined $items, "Invalid 'is' query does not throw a fatal error" );
+
+    ($items) = SearchItems( { field => 'homebranch', operator => 'is', query => 'null' } );
+    ok( defined $items, "'is null' query still works" );
+
+    ($items) = SearchItems( { field => 'homebranch', operator => 'is', query => 'NULL' } );
+    ok( defined $items, "'is NULL' query still works (case-insensitive)" );
+
+    ($items) = SearchItems( { field => 'homebranch', operator => 'is', query => 'not null' } );
+    ok( defined $items, "'is not null' query still works" );
+
+    ($items) = SearchItems( { field => 'homebranch', operator => 'is', query => 'not Null' } );
+    ok( defined $items, "'is not Null' query still works (case-insensitive)" );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'Koha::Item(s) tests' => sub {
