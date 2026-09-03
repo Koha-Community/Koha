@@ -2412,7 +2412,8 @@ sub AddReturn {
 
     # Extract context objects
     my $issue = $availability->context->{checkout};
-    $patron   = $availability->context->{patron};
+    $patron           = $availability->context->{patron};
+    $iso18626_request = $issue->iso18626_request if $issue;
 
     # Data consistency check for issued items - must run before any blocker
     # handling so that DB corruption is never masked by an early return
@@ -2450,18 +2451,6 @@ sub AddReturn {
     my $itemnumber     = $item->itemnumber;
     my $itemtype       = $item->effective_itemtype;
     my $localuse_count = $item->localuse || 0;
-
-    # Data consistency check for issued items
-    if ( $issue && !$patron ) {
-        die
-            "Data inconsistency: barcode $barcode (itemnumber:$itemnumber) claims to be issued to non-existent borrowernumber '"
-            . $issue->borrowernumber . "'\n"
-            . Dumper( $issue->unblessed ) . "\n";
-        $iso18626_request = $issue->iso18626_request;
-    } else {
-        $messages->{'NotIssued'} = $barcode;
-        $item->onloan(undef)->store( { skip_record_index => 1, skip_holds_queue => 1 } ) if defined $item->onloan;
-    }
 
     # Handle not issued items (continued)
     if ( !$issue ) {
