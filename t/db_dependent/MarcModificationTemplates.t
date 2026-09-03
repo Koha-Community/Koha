@@ -782,12 +782,12 @@ subtest 'Source indicator no match does not apply action' => sub {
     );
 };
 
-subtest 'Update field creates field when source indicators do not match' => sub {
-    plan tests => 6;
+subtest 'Update field changes indicators on existing field' => sub {
+    plan tests => 5;
 
     $dbh->do(q|DELETE FROM marc_modification_templates|);
 
-    my $template_id = AddModificationTemplate("indicator update no match");
+    my $template_id = AddModificationTemplate("indicator update existing");
 
     AddModificationTemplateAction(
         $template_id,
@@ -796,17 +796,9 @@ subtest 'Update field creates field when source indicators do not match' => sub 
         1,
         '650',
         'a',
+        '7',
         undef,
-        '3',
-        'New value',
-        '',
-        '',
-        undef,
-        undef,
-        '',
-        '',
-        '',
-        '',
+        'Test',
         '',
         '',
         undef,
@@ -814,18 +806,22 @@ subtest 'Update field creates field when source indicators do not match' => sub 
         '',
         '',
         '',
-        'Update or add 650$a with indicator 2 equal to 3'
+        '',
+        '',
+        '',
+        undef,
+        undef,
+        '',
+        '',
+        '',
+        'Update 650$a and set indicator 1 to 7'
     );
 
     my $record = MARC::Record->new;
     $record->append_fields(
         MARC::Field->new(
-            650, ' ', '1',
-            a => 'Dogs',
-        ),
-        MARC::Field->new(
-            650, ' ', '2',
-            a => 'Cats',
+            650, ' ', '0',
+            a => 'Test',
         ),
     );
 
@@ -837,29 +833,28 @@ subtest 'Update field creates field when source indicators do not match' => sub 
 
     my @fields = $record->field('650');
 
-    is( scalar @fields, 3, 'A new 650 is created when no existing field matches the indicators' );
-
-    my %fields_by_value = map { $_->subfield('a') => $_ } @fields;
-
-    ok(
-        exists $fields_by_value{'Dogs'},
-        'First nonmatching field remains present'
-    );
-
-    ok(
-        exists $fields_by_value{'Cats'},
-        'Second nonmatching field remains present'
-    );
-
-    ok(
-        exists $fields_by_value{'New value'},
-        'New field was created'
+    is(
+        scalar @fields,
+        1,
+        'Existing 650 is updated instead of creating a duplicate'
     );
 
     is(
-        $fields_by_value{'New value'}->indicator(2),
-        '3',
-        'New field has the requested second indicator'
+        $fields[0]->subfield('a'),
+        'Test',
+        'Existing subfield value remains correct'
+    );
+
+    is(
+        $fields[0]->indicator(1),
+        '7',
+        'First indicator is updated'
+    );
+
+    is(
+        $fields[0]->indicator(2),
+        '0',
+        'Unset second indicator is preserved'
     );
 };
 

@@ -17,19 +17,6 @@ $(document).ready(function () {
     $("#add_action").submit(function () {
         var action = $("#action").val();
 
-        [
-            "#from_ind1",
-            "#from_ind2",
-            "#to_ind1",
-            "#to_ind2",
-            "#conditional_ind1",
-            "#conditional_ind2",
-        ].forEach(function (selector) {
-            if ($(selector).val() === "_") {
-                $(selector).val(" ");
-            }
-        });
-
         if (
             action == "move_field" ||
             action == "copy_field" ||
@@ -116,6 +103,18 @@ $(document).ready(function () {
                 }
             }
         }
+        [
+            "#from_ind1",
+            "#from_ind2",
+            "#to_ind1",
+            "#to_ind2",
+            "#conditional_ind1",
+            "#conditional_ind2",
+        ].forEach(function (selector) {
+            if ($(selector).val() === "_") {
+                $(selector).val(" ");
+            }
+        });
     });
 
     $("#conditional_field,#from_field").change(function () {
