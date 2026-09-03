@@ -263,6 +263,29 @@ sub _assign_item_for_booking {
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
 
+    my $lead_rule = Koha::CirculationRules->get_effective_rule(
+        {
+            rule_name  => 'bookings_lead_period',
+            itemtype   => $biblio->biblioitem->itemtype,
+            branchcode => $self->pickup_library_id,
+        }
+    );
+    my $lead_days = $lead_rule && defined $lead_rule->rule_value ? $lead_rule->rule_value : 0;
+
+    my $trail_rule = Koha::CirculationRules->get_effective_rule(
+        {
+            rule_name  => 'bookings_trail_period',
+            itemtype   => $biblio->biblioitem->itemtype,
+            branchcode => $self->pickup_library_id,
+        }
+    );
+    my $trail_days = $trail_rule && defined $trail_rule->rule_value ? $trail_rule->rule_value : 0;
+
+    # Exclude items whose effective booking period (core period ± lead/trail)
+    # overlaps the new booking's effective period, matching check_booking()
+    my $expanded_start = $start_date->clone->subtract( days => $lead_days + $trail_days );
+    my $expanded_end   = $end_date->clone->add( days => $trail_days + $lead_days );
+
     my $existing_bookings = $biblio->bookings(
         {
             '-and' => [
@@ -271,12 +294,12 @@ sub _assign_item_for_booking {
                         start_date => {
                             '-between' => [
                                 $dtf->format_datetime($start_date),
-                                $dtf->format_datetime($end_date)
+                                $dtf->format_datetime($expanded_end)
                             ]
                         },
                         end_date => {
                             '-between' => [
-                                $dtf->format_datetime($start_date),
+                                $dtf->format_datetime($expanded_start),
                                 $dtf->format_datetime($end_date)
                             ]
                         },
@@ -290,15 +313,6 @@ sub _assign_item_for_booking {
             ]
         }
     );
-
-    my $lead_rule = Koha::CirculationRules->get_effective_rule(
-        {
-            rule_name  => 'bookings_lead_period',
-            itemtype   => $biblio->biblioitem->itemtype,
-            branchcode => $self->pickup_library_id,
-        }
-    );
-    my $lead_days = $lead_rule && defined $lead_rule->rule_value ? $lead_rule->rule_value : 0;
 
     my $checkouts = $biblio->current_checkouts->search(
         { date_due => { '>=' => $dtf->format_datetime( $start_date->clone->subtract( days => $lead_days ) ) } } );

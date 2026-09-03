@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::NoWarnings;
 
 use Test::Warn;
@@ -1433,6 +1433,103 @@ subtest 'lead/trail period enforcement tests' => sub {
         }
     )->store;
     ok( $booking4->in_storage, 'Booking OK when checkout is due before the lead period starts' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest '_assign_item_for_booking() respects lead/trail periods' => sub {
+    plan tests => 3;
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => "Koha::Patrons" } );
+    t::lib::Mocks::mock_userenv( { patron => $patron } );
+
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $itemtype = $builder->build_object( { class => 'Koha::ItemTypes' } );
+    my $biblio   = $builder->build_sample_biblio( { itemtype => $itemtype->itemtype } );
+    my $item_x   = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itype        => $itemtype->itemtype,
+            homebranch   => $library->branchcode,
+            bookable     => 1,
+        }
+    );
+    my $item_y = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itype        => $itemtype->itemtype,
+            homebranch   => $library->branchcode,
+            bookable     => 1,
+        }
+    );
+
+    # Set lead=3 days, trail=2 days
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => $library->branchcode,
+            itemtype   => $itemtype->itemtype,
+            rules      => {
+                bookings_lead_period  => 3,
+                bookings_trail_period => 2,
+            }
+        }
+    );
+
+    # X booked today+5 to today+10 (effective period today+2 to today+12)
+    # Y booked today+40 to today+45 (effective period today+37 to today+47)
+    Koha::Booking->new(
+        {
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            item_id           => $item_x->itemnumber,
+            pickup_library_id => $library->branchcode,
+            start_date        => dt_from_string->add( days => 5 )->truncate( to => 'day' ),
+            end_date          => dt_from_string->add( days => 10 )->truncate( to => 'day' ),
+        }
+    )->store;
+    Koha::Booking->new(
+        {
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            item_id           => $item_y->itemnumber,
+            pickup_library_id => $library->branchcode,
+            start_date        => dt_from_string->add( days => 40 )->truncate( to => 'day' ),
+            end_date          => dt_from_string->add( days => 45 )->truncate( to => 'day' ),
+        }
+    )->store;
+
+    # Any-item booking today+12 to today+14: effective period today+9 to today+16
+    # overlaps X's trail period, so only Y may be assigned
+    my $booking = Koha::Booking->new(
+        {
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            pickup_library_id => $library->branchcode,
+            start_date        => dt_from_string->add( days => 12 )->truncate( to => 'day' ),
+            end_date          => dt_from_string->add( days => 14 )->truncate( to => 'day' ),
+        }
+    )->store;
+    ok( $booking->in_storage, 'Any-item booking stored when a compliant item exists' );
+    is(
+        $booking->item_id, $item_y->itemnumber,
+        'Item whose trail period overlaps the new booking is not auto-assigned'
+    );
+
+    # Both items now excluded for the same period
+    throws_ok {
+        Koha::Booking->new(
+            {
+                patron_id         => $patron->borrowernumber,
+                biblio_id         => $biblio->biblionumber,
+                pickup_library_id => $library->branchcode,
+                start_date        => dt_from_string->add( days => 12 )->truncate( to => 'day' ),
+                end_date          => dt_from_string->add( days => 14 )->truncate( to => 'day' ),
+            }
+        )->store;
+    }
+    'Koha::Exceptions::Booking::Clash',
+        'Throws when no item is available outside the lead/trail periods';
 
     $schema->storage->txn_rollback;
 };
