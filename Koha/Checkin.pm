@@ -221,14 +221,6 @@ sub credits {
 
 =head2 Internal methods
 
-=head3 to_api_mapping
-
-=cut
-
-sub to_api_mapping {
-    return { timestamp => undef };
-}
-
 =head3 _type
 
 =cut
