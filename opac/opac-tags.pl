@@ -34,6 +34,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use CGI::Cookie;    # need to check cookies before having CGI parse the POST request
 use Array::Utils qw( array_minus );
+use JSON         qw( encode_json );
 
 use C4::Auth qw( check_cookie_auth get_template_and_user );
 use C4::Context;
@@ -59,8 +60,8 @@ my %counts        = ();
 my @errors        = ();
 my $perBibResults = {};
 
-# Indexes of @errors that do not apply to a particular biblionumber.
-my @globalErrorIndexes = ();
+# Errors that do not apply to a particular biblionumber.
+my @global_errors = ();
 
 sub ajax_auth_cgi {    # returns CGI object
     my $needed_flags  = shift;
@@ -69,12 +70,16 @@ sub ajax_auth_cgi {    # returns CGI object
     my $sessid        = $cookies{'CGISESSID'}->value;
     my ($auth_status) = check_cookie_auth( $sessid, $needed_flags );
     if ( $auth_status ne "ok" ) {
-        output_with_http_headers $input, undef,
-            "window.alert('Your CGI session cookie ($sessid) is not current.  "
-            . "Please refresh the page and try again.');\n", 'js';
+        output_with_http_headers $input, undef, encode_json( { error => 'session_expired' } ), 'json';
         exit 0;
     }
     return $input;
+}
+
+sub _error_to_alert {
+    my ($error) = @_;
+    my ($key)   = keys %$error;
+    return { key => $key, arg => $error->{$key} };
 }
 
 # The trick here is to support multiple tags added to multiple biblios in one POST.
@@ -90,8 +95,9 @@ foreach ( $query->param ) {
     if (/^newtag(.*)/) {
         my $biblionumber = $1;
         unless ( $biblionumber =~ /^\d+$/ ) {
-            push @errors, { +'badparam' => $_ };
-            push @globalErrorIndexes, $#errors;
+            my $error = { badparam => $_ };
+            push @errors,        $error;
+            push @global_errors, $error;
             next;
         }
         $newtags{$biblionumber} = $query->param($_);
@@ -122,8 +128,9 @@ unless ( C4::Context->preference('TagsEnabled') ) {
 
 if ($add_op) {
     unless ($loggedinuser) {
-        push @errors, { +'login' => 1 };
-        push @globalErrorIndexes, $#errors;
+        my $error = { login => 1 };
+        push @errors,        $error;
+        push @global_errors, $error;
         %newtags = ();    # zero out any attempted additions
         @deltags = ();    # zero out any attempted deletions
     }
@@ -182,53 +189,27 @@ if ( $op eq 'cud-add' ) {
 if ($is_ajax) {
     my $sum = 0;
     foreach ( values %counts ) { $sum += $_; }
-    my $js_reply = sprintf( "response = {\n\tadded: %d,\n\tdeleted: %d,\n\terrors: %d", $sum, $dels, scalar @errors );
+
+    my $reply = {
+        added   => $sum,
+        deleted => $dels,
+        errors  => scalar @errors,
+    };
 
     # If no add attempts were made, flag global errors.
-    if (@globalErrorIndexes) {
-        $js_reply .= ",\n\tglobal_errors: [";
-        my $first = 1;
-        foreach (@globalErrorIndexes) {
-            $js_reply .= "," unless $first;
-            $first = 0;
-            $js_reply .= "\n\t\t$_";
-        }
-        $js_reply .= "\n\t]";
-    }
-
-    my $err_string = '';
-    if ( scalar @errors ) {
-        $err_string = ",\n\talerts: [";    # open response_function
-        my $i = 1;
-        foreach (@errors) {
-            my $key = ( keys %$_ )[0];
-            ( my $quote_escaped = $_->{$key} ) =~ s|"|\\"|g;
-            $err_string .= sprintf qq{\n\t\t KOHA.Tags.tag_message.%s("%s")}, $key, $quote_escaped;
-            if ( $i < scalar @errors ) { $err_string .= ","; }
-            $i++;
-        }
-        $err_string .= "\n\t]\n";          # close response_function
-    }
+    $reply->{global_errors} = [ map { _error_to_alert($_) } @global_errors ] if @global_errors;
+    $reply->{alerts}        = [ map { _error_to_alert($_) } @errors ]        if @errors;
 
     # Add per-biblionumber results for use on results page
-    my $js_perbib = "";
     for my $bib ( keys %$perBibResults ) {
         my $bibResult = $perBibResults->{$bib};
-        my $js_bibres = ",\n\t$bib: {\n\t\tadded: $bibResult->{adds}";
-        $js_bibres .= ",\n\t\terrors: [";
-        my $i = 0;
-        foreach ( @{ $bibResult->{errors} } ) {
-            $js_bibres .= "," if ($i);
-            my $key = ( keys %$_ )[0];
-            ( my $quote_escaped = $_->{$key} ) =~ s|"|\\"|g;
-            $js_bibres .= sprintf qq{\n\t\t\t KOHA.Tags.tag_message.%s("%s")}, $key, $quote_escaped;
-            $i++;
-        }
-        $js_bibres .= "\n\t\t]\n\t}";
-        $js_perbib .= $js_bibres;
+        $reply->{$bib} = {
+            added  => $bibResult->{adds},
+            errors => [ map { _error_to_alert($_) } @{ $bibResult->{errors} } ],
+        };
     }
 
-    output_with_http_headers( $query, undef, "$js_reply\n$err_string\n$js_perbib\n};", 'js' );
+    output_with_http_headers( $query, undef, encode_json($reply), 'json' );
     exit;
 }
 
@@ -373,14 +354,14 @@ The third tag is all markup, and will be rejected.
 
 =head1 EXAMPLE AJAX JSON response
 
-response = {
+{
     added: 2,
     deleted: 0,
     errors: 2,
     alerts: [
-         KOHA.Tags.tag_message.scrubbed("foobar"),
-          KOHA.Tags.tag_message.scrubbed_all_bad("1"),
-     ],
-};
+        { key: "scrubbed", arg: "foobar" },
+        { key: "scrubbed_all_bad", arg: 1 }
+    ]
+}
 
 =cut

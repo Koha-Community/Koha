@@ -3,14 +3,8 @@ if (typeof KOHA == "undefined" || !KOHA) {
 }
 
 /**
-* A namespace for Tags related functions.
-
-$.ajaxSetup({
-    url: "/cgi-bin/koha/opac-tags.pl",
-    type: "POST",
-    dataType: "script"
-});
-*/
+ * A namespace for Tags related functions.
+ */
 KOHA.Tags = {
     add_tag_button: function (bibnum, tag) {
         var mynewtag = "newtag" + bibnum;
@@ -19,14 +13,14 @@ KOHA.Tags = {
         mydata[mynewtag] = tag;
         mydata["csrf_token"] = $('meta[name="csrf-token"]').attr("content");
         mydata["op"] = "cud-add";
-        var response; // AJAX from server will assign value to response.
         $.post(
             "/cgi-bin/koha/opac-tags.pl",
             mydata,
-            function (data) {
-                // alert("AJAX Response: " + data);
-                eval(data);
-                // alert("counts: " + response["added"] + response["deleted"] + response["errors"]);
+            function (response) {
+                if (response.error) {
+                    KOHA.Tags.session_expired();
+                    return;
+                }
                 KOHA.Tags.set_tag_status(
                     mytagid + "_status",
                     KOHA.Tags.common_status(
@@ -36,10 +30,12 @@ KOHA.Tags = {
                     )
                 );
                 if (response.alerts) {
-                    alert(response.alerts.join("\n\n"));
+                    alert(
+                        response.alerts.map(KOHA.Tags.build_alert).join("\n\n")
+                    );
                 }
             },
-            "script"
+            "json"
         );
         return false;
     },
@@ -66,6 +62,13 @@ KOHA.Tags = {
     },
     clear_all_tag_status: function () {
         $(".tagstatus").empty().hide();
+    },
+    session_expired: function () {
+        alert(
+            __(
+                "Your session has expired. Please refresh the page and try again."
+            )
+        );
     },
 
     tag_message: {
@@ -114,6 +117,10 @@ KOHA.Tags = {
         },
     },
 
+    build_alert: function (alert) {
+        return KOHA.Tags.tag_message[alert.key](alert.arg);
+    },
+
     // Used to tag multiple items at once.  The main difference
     // is that status is displayed on a per item basis.
     add_multitags_button: function (bibarray, tag) {
@@ -124,12 +131,14 @@ KOHA.Tags = {
         }
         mydata["csrf_token"] = $('meta[name="csrf-token"]').attr("content");
         mydata["op"] = "cud-add";
-        var response; // AJAX from server will assign value to response.
         $.post(
             "/cgi-bin/koha/opac-tags.pl",
             mydata,
-            function (data) {
-                eval(data);
+            function (response) {
+                if (response.error) {
+                    KOHA.Tags.session_expired();
+                    return;
+                }
                 KOHA.Tags.clear_all_tag_status();
                 var bibErrors = false;
 
@@ -165,13 +174,9 @@ KOHA.Tags = {
                                 mytagid + "_status",
                                 errstat
                             );
-                            var errmsg = "";
-                            for (var e = 0; e < errors.length; e++) {
-                                if (e) {
-                                    errmsg += "\n\n";
-                                }
-                                errmsg += errors[e];
-                            }
+                            var errmsg = errors
+                                .map(KOHA.Tags.build_alert)
+                                .join("\n\n");
                             $("#" + errid).click(function () {
                                 alert(errmsg);
                             });
@@ -180,24 +185,21 @@ KOHA.Tags = {
                 }
 
                 if (bibErrors || response["global_errors"]) {
-                    var msg = "";
+                    var msg_parts = [];
                     if (bibErrors) {
-                        msg = __("Unable to add one or more tags.");
+                        msg_parts.push(__("Unable to add one or more tags."));
                     }
 
                     // Show global errors in a dialog.
                     if (response["global_errors"]) {
-                        var global_errors = response["global_errors"];
-                        var msg;
-                        for (var e = 0; e < global_errors.length; e++) {
-                            msg += "\n\n";
-                            msg += response.alerts[global_errors[e]];
-                        }
+                        response["global_errors"].forEach(function (alert) {
+                            msg_parts.push(KOHA.Tags.build_alert(alert));
+                        });
                     }
-                    alert(msg);
+                    alert(msg_parts.join("\n\n"));
                 }
             },
-            "script"
+            "json"
         );
         return false;
     },
