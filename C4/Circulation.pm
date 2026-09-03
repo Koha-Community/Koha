@@ -2492,7 +2492,7 @@ sub AddReturn {
             local_use   => 0,
             interface   => C4::Context->interface,
         }
-    )->store;
+    )->store->discard_changes;
 
     # Handle BlockedWithdrawn blocker first - this was the earliest early
     # return in the original code, before any status updates ran
@@ -2633,9 +2633,12 @@ sub AddReturn {
                 my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
                 $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
 
+                my $error_messages = { WasReturned => 0, DataCorrupted => $error };
+                _attach_messages_to_checkin( $checkin_record, $error_messages );
+
                 return (
-                    0, { WasReturned => 0, DataCorrupted => $error }, $issue,
-                    $patron_unblessed
+                    0, $error_messages, $issue,
+                    $patron_unblessed, $checkin_record
                 );
             }
 
@@ -5374,6 +5377,17 @@ sub _attach_messages_to_checkin {
     my ( $checkin, $messages ) = @_;
 
     return unless $checkin && $messages && ref $messages eq 'HASH';
+
+    # Error messages
+    if ( $messages->{DataCorrupted} ) {
+        $checkin->add_message(
+            {
+                message => 'data_corrupted',
+                type    => 'error',
+                payload => { error => $messages->{DataCorrupted} },
+            }
+        );
+    }
 
     # Transfer messages
     if ( $messages->{WasTransfered} ) {
