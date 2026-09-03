@@ -121,9 +121,9 @@ subtest 'list() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'delete() tests' => sub {
+subtest 'cancel() tests' => sub {
 
-    plan tests => 14;
+    plan tests => 19;
 
     $schema->storage->txn_begin;
 
@@ -160,16 +160,14 @@ subtest 'delete() tests' => sub {
     );
 
     # Unauthorized access
-    $t->delete_ok(
-        "//$unauth_userid:$password@/api/v1/transfers/" . $transfer->id => json => { cancellation_reason => 'Manual' } )
-        ->status_is(403);
-
-    # A cancellation reason is mandatory
-    $t->delete_ok( "//$userid:$password@/api/v1/transfers/" . $transfer->id )->status_is(400);
+    $t->post_ok( "//$unauth_userid:$password@/api/v1/transfers/"
+            . $transfer->id
+            . "/cancellation" => json => { cancellation_reason => 'Manual' } )->status_is(403);
 
     # Not found
-    $t->delete_ok( "//$userid:$password@/api/v1/transfers/"
-            . ( $transfer->id + 1000 ) => json => { cancellation_reason => 'Manual' } )->status_is(404);
+    $t->post_ok( "//$userid:$password@/api/v1/transfers/"
+            . ( $transfer->id + 1000 )
+            . "/cancellation" => json => { cancellation_reason => 'Manual' } )->status_is(404);
 
     # Cannot cancel an already-received transfer
     my $arrived_item     = $builder->build_sample_item;
@@ -184,27 +182,52 @@ subtest 'delete() tests' => sub {
             }
         }
     );
-    $t->delete_ok( "//$userid:$password@/api/v1/transfers/"
-            . $arrived_transfer->id => json => { cancellation_reason => 'Manual' } )->status_is(400);
+    $t->post_ok( "//$userid:$password@/api/v1/transfers/"
+            . $arrived_transfer->id
+            . "/cancellation" => json => { cancellation_reason => 'Manual' } )
+        ->status_is(409)
+        ->json_is( '/error_code' => 'already_arrived' );
+
+    # The cancellation reason is optional and defaults to 'Manual'
+    my $default_item     = $builder->build_sample_item;
+    my $default_transfer = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber    => $default_item->itemnumber,
+                datesent      => \'NOW()',
+                datearrived   => undef,
+                datecancelled => undef,
+            }
+        }
+    );
+    $t->post_ok( "//$userid:$password@/api/v1/transfers/" . $default_transfer->id . "/cancellation" )
+        ->status_is(200)
+        ->json_is( '/cancellation_reason' => 'Manual' );
 
     # Cancel an in-transit transfer with the supplied reason
-    $t->delete_ok(
-        "//$userid:$password@/api/v1/transfers/" . $transfer->id => json => { cancellation_reason => 'WrongTransfer' } )
-        ->status_is(204);
+    $t->post_ok( "//$userid:$password@/api/v1/transfers/"
+            . $transfer->id
+            . "/cancellation" => json => { cancellation_reason => 'WrongTransfer' } )
+        ->status_is(200)
+        ->json_is( '/transfer_id'         => $transfer->id )
+        ->json_is( '/cancellation_reason' => 'WrongTransfer' );
 
     $transfer->discard_changes;
     ok( defined $transfer->datecancelled, 'The transfer has been cancelled' );
     is( $transfer->cancellation_reason, 'WrongTransfer', 'The supplied cancellation reason is recorded' );
 
     # Cannot cancel an already-cancelled transfer
-    $t->delete_ok(
-        "//$userid:$password@/api/v1/transfers/" . $transfer->id => json => { cancellation_reason => 'Manual' } )
-        ->status_is(400);
+    $t->post_ok( "//$userid:$password@/api/v1/transfers/"
+            . $transfer->id
+            . "/cancellation" => json => { cancellation_reason => 'Manual' } )
+        ->status_is(409)
+        ->json_is( '/error_code' => 'already_cancelled' );
 
     $schema->storage->txn_rollback;
 };
 
-subtest 'delete() - UseRecalls integration' => sub {
+subtest 'cancel() - UseRecalls integration' => sub {
 
     plan tests => 3;
 
@@ -245,9 +268,9 @@ subtest 'delete() - UseRecalls integration' => sub {
         }
     );
 
-    $t->delete_ok(
-        "//$userid:$password@/api/v1/transfers/" . $transfer->id => json => { cancellation_reason => 'Manual' } )
-        ->status_is(204);
+    $t->post_ok( "//$userid:$password@/api/v1/transfers/"
+            . $transfer->id
+            . "/cancellation" => json => { cancellation_reason => 'Manual' } )->status_is(200);
 
     $recall->discard_changes;
     is( $recall->status, 'requested', 'The in-transit recall was reverted when the transfer was cancelled' );

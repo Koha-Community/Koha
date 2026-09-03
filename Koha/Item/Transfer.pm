@@ -235,7 +235,9 @@ sub to_api_mapping {
     };
 }
 
-=head3 type
+=head3 _type
+
+Returns the DBIC resultset class name backing this object.
 
 =cut
 

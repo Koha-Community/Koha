@@ -215,16 +215,15 @@
                 e.preventDefault();
                 var transfer_id = $(this).data("transfer-id");
                 $.ajax({
-                    method: "DELETE",
-                    url: `/api/v1/transfers/${transfer_id}`,
+                    method: "POST",
+                    url: `/api/v1/transfers/${transfer_id}/cancellation`,
                     contentType: "application/json",
-                    data: JSON.stringify({ cancellation_reason: "Manual" }),
                 })
                     .done(function () {
                         transfers_table.DataTable().ajax.reload(null, false);
                     })
                     .fail(function (xhr) {
-                        if (xhr.status === 404) {
+                        if (xhr.status === 404 || xhr.status === 409) {
                             // The transfer was already received or cancelled elsewhere; refresh so the row drops off
                             alert(_("This transfer no longer exists. It may have already been received or cancelled."));
                             transfers_table.DataTable().ajax.reload(null, false);

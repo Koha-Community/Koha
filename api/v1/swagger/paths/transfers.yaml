@@ -86,33 +86,38 @@
     x-koha-authorization:
       permissions:
         circulate: circulate_remaining_permissions
-"/transfers/{transfer_id}":
-  delete:
-    x-mojo-to: Transfers#delete
-    operationId: deleteTransfer
+"/transfers/{transfer_id}/cancellation":
+  post:
+    x-mojo-to: Transfers#cancel
+    operationId: cancelTransfer
     tags:
       - transfers
-    summary: Cancel transfer
+    summary: Cancel a transfer
+    description: |
+      Cancels the given transfer. If the item has an associated in-transit
+      recall, the recall's transfer is reverted as well.
     parameters:
       - $ref: "../swagger.yaml#/parameters/transfer_id_pp"
       - name: body
         in: body
-        description: A JSON object describing how to cancel the transfer
-        required: true
+        required: false
+        description: A JSON object containing optional cancellation information
         schema:
           type: object
           properties:
             cancellation_reason:
               type: string
-              description: The reason the transfer is being cancelled
-          required:
-            - cancellation_reason
+              description: |
+                Reason for cancelling the transfer. Defaults to `Manual` when
+                not supplied.
           additionalProperties: false
     produces:
       - application/json
     responses:
-      "204":
+      "200":
         description: Transfer cancelled
+        schema:
+          $ref: "../swagger.yaml#/definitions/transfer"
       "400":
         description: Bad request
         schema:
@@ -127,6 +132,15 @@
           $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Transfer not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: |
+          Conflict. The transfer cannot be cancelled. Possible `error_code`
+          attribute values:
+
+          * `already_arrived` - The transfer has already arrived.
+          * `already_cancelled` - The transfer has already been cancelled.
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "500":

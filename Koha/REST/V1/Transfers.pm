@@ -46,38 +46,67 @@ sub list {
     };
 }
 
-=head3 delete
+=head3 cancel
 
-Controller function that handles cancelling an item transfer
+POST /transfers/{transfer_id}/cancellation
+
+Controller function that handles cancelling an item transfer. The transfer is
+cancelled with the reason passed in the request body (defaulting to C<Manual>),
+and when recalls are in use any in-transit recall for the item has its transfer
+reverted.
 
 =cut
 
-sub delete {
+sub cancel {
     my $c = shift->openapi->valid_input or return;
 
-    my $transfer = Koha::Item::Transfers->find( $c->param('transfer_id') );
+    my $transfer = $c->objects->find_rs( Koha::Item::Transfers->new, $c->param('transfer_id') );
 
     return $c->render_resource_not_found("Transfer")
         unless $transfer;
 
-    return $c->render( status => 400, openapi => { error => "Transfer has already been received" } )
-        if $transfer->datearrived;
+    if ( $transfer->datearrived ) {
+        return $c->render(
+            status  => 409,
+            openapi => {
+                error      => "Transfer has already arrived",
+                error_code => 'already_arrived',
+            }
+        );
+    }
 
-    return $c->render( status => 400, openapi => { error => "Transfer has already been cancelled" } )
-        if $transfer->datecancelled;
+    if ( $transfer->datecancelled ) {
+        return $c->render(
+            status  => 409,
+            openapi => {
+                error      => "Transfer has already been cancelled",
+                error_code => 'already_cancelled',
+            }
+        );
+    }
+
+    my $body   = $c->req->json                // {};
+    my $reason = $body->{cancellation_reason} // 'Manual';
 
     return try {
-        my $body = $c->req->json;
+        $transfer->cancel( { reason => $reason, force => 1 } );
 
-        $transfer->cancel( { reason => $body->{cancellation_reason}, force => 1 } );
-
-        # Revert an in transit recall tied to this item, as returns.pl does
+        # If there's a recall in transit for this item, revert it.
+        #
+        # FIXME: This recall-revert-on-cancel trigger is duplicated with
+        # Koha::Checkin->cancel_transfer. It really belongs one level down,
+        # in Koha::Item::Transfer->cancel, so that *every* transfer
+        # cancellation reverts an in-transit recall regardless of the caller.
         if ( C4::Context->preference('UseRecalls') ) {
             my $recall = Koha::Recalls->find( { item_id => $transfer->itemnumber, status => 'in_transit' } );
             $recall->revert_transfer if $recall;
         }
 
-        return $c->render_resource_deleted;
+        $transfer->discard_changes;
+        return $c->render(
+            status  => 200,
+            openapi => $c->objects->to_api($transfer)
+        );
     } catch {
         $c->unhandled_exception($_);
     };
