@@ -57,6 +57,7 @@ use Digest::MD5 qw( md5_base64 );
 use Encode;
 use C4::Context;
 use Koha::Exceptions::Token;
+use Koha::Logger;
 use Koha::Session;
 
 use base qw(Class::Accessor);
@@ -138,6 +139,10 @@ sub generate_csrf {
     Like: generate({ type => 'JWT', ... })
     Note that JWT is designed to encode a structure but here we are actually only allowing a value
     that will be store in the key 'id'.
+
+    Pass an 'expires' epoch timestamp to have the token carry a standard
+    JWT "exp" claim; check_jwt/check will then reject the token once that
+    time has passed. Omit it for a token with no expiry.
 
 =cut
 
@@ -303,7 +308,8 @@ sub _gen_jwt {
 
     return Mojo::JWT->new(
         claims => { id => $params->{id} },
-        secret => $params->{secret}
+        secret => $params->{secret},
+        ( $params->{expires} ? ( expires => $params->{expires} ) : () ),
     )->encode;
 }
 
@@ -311,7 +317,11 @@ sub _chk_jwt {
     my ($params) = @_;
     return if !$params->{id} || !$params->{secret} || !$params->{token};
 
-    my $claims = Mojo::JWT->new( secret => $params->{secret} )->decode( $params->{token} );
+    my $claims = eval { Mojo::JWT->new( secret => $params->{secret} )->decode( $params->{token} ) };
+    if ($@) {
+        Koha::Logger->get->warn("check_jwt failed to decode token: $@");
+        return;
+    }
 
     return 1 if exists $claims->{id} && $claims->{id} eq $params->{id};
 }

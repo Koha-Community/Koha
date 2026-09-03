@@ -20,6 +20,7 @@ package Koha::Result::Availability;
 use Modern::Perl;
 
 use Koha::Exceptions;
+use Koha::Logger;
 use Koha::Token;
 
 use Try::Tiny qw( catch try );
@@ -226,15 +227,25 @@ sub token_params {
     Koha::Exception->throw("Subclass must implement token_params");
 }
 
+=head3 TOKEN_EXPIRY_SECONDS
+
+How long an C<as_token> confirmation token remains valid for. Confirmation
+tokens are meant to be round-tripped within a single staff interaction
+(scan, see the confirmation prompt, confirm), not stored or reused later.
+
+=cut
+
+use constant TOKEN_EXPIRY_SECONDS => 300;    # 5 minutes
+
 =head3 as_token
 
-Generates a JWT confirmation token.
+Generates a JWT confirmation token, valid for C<TOKEN_EXPIRY_SECONDS>.
 
 =cut
 
 sub as_token {
     my ($self) = @_;
-    return Koha::Token->new->generate_jwt( { id => $self->_token_id } );
+    return Koha::Token->new->generate_jwt( { id => $self->_token_id, expires => time + TOKEN_EXPIRY_SECONDS } );
 }
 
 =head3 check_token
@@ -248,6 +259,7 @@ sub check_token {
     return try {
         Koha::Token->new->check_jwt( { id => $self->_token_id, token => $token } );
     } catch {
+        Koha::Logger->get->warn("check_token failed: $_");
         return 0;
     };
 }
