@@ -19,7 +19,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 89;
+use Test::More tests => 90;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -8152,6 +8152,35 @@ subtest 'Tests for BlockReturnOfWithdrawnItems' => sub {
         \@return,
         [ 0, { NotIssued => $item->barcode, withdrawn => 1 }, undef, {} ],
         "Item returned as withdrawn, no other messages"
+    );
+};
+
+subtest 'Tests for Wrongbranch blocker (AllowReturnToBranch)' => sub {
+
+    plan tests => 1;
+
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'homebranch' );
+    my $library_a = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_b = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $item      = $builder->build_sample_item(
+        { homebranch => $library_a->branchcode, holdingbranch => $library_a->branchcode } );
+
+    my @return = AddReturn( $item->barcode, $library_b->branchcode, 0, undef );
+    is_deeply(
+        \@return,
+        [
+            0,
+            {
+                NotIssued   => $item->barcode,
+                Wrongbranch => {
+                    Wrongbranch => $library_b->branchcode,
+                    Rightbranch => $library_a->branchcode,
+                }
+            },
+            undef,
+            {}
+        ],
+        "AddReturn reports the Wrongbranch blocker with the item's homebranch as the right branch"
     );
 };
 
