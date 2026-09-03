@@ -74,8 +74,8 @@
     [% IF ( total ) %]
         [% IF quoted_hits %]
             <h4 class="info">
-                No result(s) found for your original query: [% og_query %]<br />
-                Your search was retried, quoted
+                [% tx("No result(s) found for your original query: {og_query}", { og_query = og_query }) | html %]<br />
+                [% t("Your search was retried, quoted") | html %]
             </h4>
         [% END %]
         <h3>
