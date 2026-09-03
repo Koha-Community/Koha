@@ -19,9 +19,10 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 81;
+use Test::More tests => 82;
 use Test::Exception;
 use Test::MockModule;
+use Test::MockObject;
 use Test::Deep qw( cmp_deeply );
 use Test::Warn;
 
@@ -8203,6 +8204,126 @@ subtest 'Tests for Wrongbranch blocker (AllowReturnToBranch)' => sub {
         ],
         "AddReturn reports the Wrongbranch blocker with the item's homebranch as the right branch"
     );
+};
+subtest '_attach_messages_to_checkin() tests' => sub {
+
+    plan tests => 34;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $item    = $builder->build_sample_item( { library => $library->branchcode } );
+
+    my $checkin = Koha::Checkin->new(
+        {
+            item_id    => $item->itemnumber,
+            library_id => $library->branchcode,
+            interface  => 'commandline',
+        }
+    )->store;
+
+    my $mock_recall = Test::MockObject->new();
+    $mock_recall->mock( 'id', sub { 111 } );
+    my $mock_claim = Test::MockObject->new();
+    $mock_claim->mock( 'id', sub { 222 } );
+    my $mock_auto_claim = Test::MockObject->new();
+    $mock_auto_claim->mock( 'id', sub { 333 } );
+    my $mock_host_item = Test::MockObject->new();
+    $mock_host_item->mock( 'itemnumber', sub { 444 } );
+
+    # Exercise every message key _attach_messages_to_checkin recognises in
+    # a single pass. Some combinations (e.g. Debarred + PrevDebarred +
+    # ForeverDebarred) never co-occur in a real AddReturn call, but the
+    # function itself doesn't mutually exclude them, so this is fine for
+    # full branch coverage of the translation logic itself.
+    my $messages = {
+        DataCorrupted       => 'boom',
+        WasTransfered       => 42,
+        TransferTo          => 'CPL',
+        TransferTrigger     => 'ReturnToHome',
+        NeedsTransfer       => 'MPL',
+        WrongTransfer       => 'FPL',
+        WrongTransferItem   => 55,
+        TransferArrived     => 'ORIGIN',
+        ResFound            => { ResFound => 'Waiting', reserve_id => 5, borrowernumber => 6, branchcode => 'CPL' },
+        RecallFound         => $mock_recall,
+        RecallNeedsTransfer => 1,
+        LostItemFeeRefunded => 1,
+        LostItemFeeCharged  => 1,
+        LostItemFeeRestored => 1,
+        LostItemPaymentNotRefunded  => 1,
+        ProcessingFeeRefunded       => 1,
+        NotIssued                   => $item->barcode,
+        LocalUse                    => 1,
+        WasLost                     => 1,
+        withdrawn                   => 1,
+        WasReturned                 => 1,
+        Debarred                    => '2027-01-01',
+        PrevDebarred                => '2026-01-01',
+        ForeverDebarred             => '9999-12-31',
+        NotForLoanStatusUpdated     => { from => 0,     to => 1 },
+        ItemLocationUpdated         => { from => 'GEN', to => 'FIC' },
+        ReturnClaims                => $mock_claim,
+        ClaimAutoResolved           => $mock_auto_claim,
+        Wrongbranch                 => { Wrongbranch => 'CPL', Rightbranch => 'MPL' },
+        RecallPlacedAtHoldingBranch => 1,
+        InBundle                    => $mock_host_item,
+    };
+
+    C4::Circulation::_attach_messages_to_checkin( $checkin, $messages );
+
+    my @m       = @{ $checkin->object_messages };
+    my %by_code = map { $_->message => $_ } @m;
+
+    is( scalar(@m), 27, 'One message attached per recognised key' );
+
+    ok( $by_code{data_corrupted}, 'data_corrupted attached' );
+    is( $by_code{data_corrupted}->payload->{error}, 'boom', 'data_corrupted payload' );
+
+    ok( $by_code{transferred}, 'transferred attached' );
+    is( $by_code{transferred}->payload->{transfer_id}, 42, 'transferred payload transfer_id' );
+
+    ok( $by_code{needs_transfer},   'needs_transfer attached' );
+    ok( $by_code{wrong_transfer},   'wrong_transfer attached' );
+    ok( $by_code{transfer_arrived}, 'transfer_arrived attached' );
+
+    ok( $by_code{hold_found}, 'hold_found attached' );
+    is( $by_code{hold_found}->payload->{reserve_id}, 5, 'hold_found payload reserve_id' );
+
+    ok( $by_code{recall_found}, 'recall_found attached' );
+    is( $by_code{recall_found}->payload->{recall_id}, 111, 'recall_found payload recall_id' );
+
+    ok( $by_code{lost_item_fee_refunded},         'lost_item_fee_refunded attached' );
+    ok( $by_code{lost_item_fee_charged},          'lost_item_fee_charged attached' );
+    ok( $by_code{lost_item_fee_restored},         'lost_item_fee_restored attached' );
+    ok( $by_code{lost_item_payment_not_refunded}, 'lost_item_payment_not_refunded attached' );
+    ok( $by_code{processing_fee_refunded},        'processing_fee_refunded attached' );
+
+    ok( $by_code{not_issued},   'not_issued attached' );
+    ok( $by_code{local_use},    'local_use attached' );
+    ok( $by_code{was_lost},     'was_lost attached' );
+    ok( $by_code{withdrawn},    'withdrawn attached' );
+    ok( $by_code{was_returned}, 'was_returned attached' );
+
+    ok( $by_code{debarred},              'debarred attached' );
+    ok( $by_code{previously_debarred},   'previously_debarred attached' );
+    ok( $by_code{indefinitely_debarred}, 'indefinitely_debarred attached' );
+
+    ok( $by_code{not_for_loan_status_updated}, 'not_for_loan_status_updated attached' );
+    ok( $by_code{item_location_updated},       'item_location_updated attached' );
+
+    ok( $by_code{return_claim},        'return_claim attached' );
+    ok( $by_code{claim_auto_resolved}, 'claim_auto_resolved attached' );
+
+    ok( $by_code{wrong_branch}, 'wrong_branch attached' );
+    is( $by_code{wrong_branch}->payload->{wrong_branch}, 'CPL', 'wrong_branch payload' );
+
+    ok( $by_code{recall_placed_at_holding_branch}, 'recall_placed_at_holding_branch attached' );
+
+    ok( $by_code{in_bundle}, 'in_bundle attached' );
+    is( $by_code{in_bundle}->payload->{host_item_id}, 444, 'in_bundle payload host_item_id' );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'Tests for transfer not in transit' => sub {
