@@ -8161,14 +8161,19 @@ subtest "CanBookBeIssued + needsconfirmation message" => sub {
 
 subtest 'Tests for BlockReturnOfWithdrawnItems' => sub {
 
-    plan tests => 1;
+    plan tests => 2;
 
     t::lib::Mocks::mock_preference( 'BlockReturnOfWithdrawnItems', 1 );
     t::lib::Mocks::mock_preference( 'RecordLocalUseOnReturn',      0 );
     my $item = $builder->build_sample_item();
     $item->withdrawn(1)->itemlost(1)->store;
-    my ( $doreturn, $messages ) = AddReturn( $item->barcode, $item->homebranch, 0, undef );
-    is( $doreturn, 0, "Item returned as withdrawn, no other messages" );
+    my @return = AddReturn( $item->barcode, $item->homebranch, 0, undef );
+    is_deeply(
+        [ @return[ 0 .. 3 ] ],
+        [ 0, { NotIssued => $item->barcode, withdrawn => 1 }, undef, {} ],
+        "Item returned as withdrawn, no other messages"
+    );
+    isa_ok( $return[4], 'Koha::Checkin', 'AddReturn returns the created checkin record' );
 };
 
 subtest 'Tests for Wrongbranch blocker (AllowReturnToBranch)' => sub {
@@ -8183,7 +8188,7 @@ subtest 'Tests for Wrongbranch blocker (AllowReturnToBranch)' => sub {
 
     my @return = AddReturn( $item->barcode, $library_b->branchcode, 0, undef );
     is_deeply(
-        \@return,
+        [ @return[ 0 .. 3 ] ],
         [
             0,
             {
@@ -8240,7 +8245,7 @@ subtest 'Tests for transfer not in transit' => sub {
 
 subtest 'Tests for RecordLocalUseOnReturn' => sub {
 
-    plan tests => 6;
+    plan tests => 5;
 
     t::lib::Mocks::mock_preference( 'RecordLocalUseOnReturn', 0 );
     my $item = $builder->build_sample_item();
@@ -8252,17 +8257,23 @@ subtest 'Tests for RecordLocalUseOnReturn' => sub {
     );
 
     $item->withdrawn(1)->itemlost(1)->store;
-    my ( $doreturn, $messages ) = AddReturn( $item->barcode, $item->homebranch, 0, undef );
-    is( $doreturn, 0, "RecordLocalUSeOnReturn is off, no local use recorded" );
+    my @return = AddReturn( $item->barcode, $item->homebranch, 0, undef );
+    is_deeply(
+        [ @return[ 0 .. 3 ] ],
+        [ 0, { NotIssued => $item->barcode, withdrawn => 1 }, undef, {} ],
+        "RecordLocalUSeOnReturn is off, no local use recorded"
+    );
 
     AddReturn( $item_2->barcode, $item_2->homebranch );
     $item_2->discard_changes;    # refresh
     is( $item_2->localuse, undef, 'Without RecordLocalUseOnReturn no localuse is recorded.' );
 
     t::lib::Mocks::mock_preference( 'RecordLocalUseOnReturn', 1 );
-    my ( $doreturn2, $messages2 ) = AddReturn( $item->barcode, $item->homebranch, 0, undef );
-    is( $doreturn2,             0, "Local use is recorded" );
-    is( $messages2->{LocalUse}, 1, "LocalUse message set" );
+    my @return2 = AddReturn( $item->barcode, $item->homebranch, 0, undef );
+    is_deeply(
+        [ @return2[ 0 .. 3 ] ],
+        [ 0, { NotIssued => $item->barcode, withdrawn => 1, LocalUse => 1 }, undef, {} ], "Local use is recorded"
+    );
 
     AddReturn( $item_2->barcode, $item_2->homebranch );
     $item_2->discard_changes;    # refresh
