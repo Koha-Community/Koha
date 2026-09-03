@@ -19,13 +19,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::NoWarnings;
 use Test::Exception;
 use Test::MockObject;
 
 use Koha::Result::Availability;
 use Koha::Item::Availability::Checkin::Result;
+use Koha::Token;
 
 subtest 'new() creates empty result' => sub {
 
@@ -199,4 +200,50 @@ subtest 'as_token() / check_token() round-trip' => sub {
     ok( $token,                                     'as_token generates a token' );
     ok( $result->check_token($token),               'check_token validates the token' );
     ok( !$result->check_token('totally-not-a-jwt'), 'check_token rejects invalid token' );
+};
+
+subtest 'check_token() rejects mismatched context and expired tokens' => sub {
+
+    plan tests => 3;
+
+    my $mock_item = Test::MockObject->new();
+    $mock_item->mock( 'id', sub { 99 } );
+    my $mock_other_item = Test::MockObject->new();
+    $mock_other_item->mock( 'id', sub { 100 } );
+    my $mock_user = Test::MockObject->new();
+    $mock_user->mock( 'id', sub { 5 } );
+
+    my $result = Koha::Item::Availability::Checkin::Result->new();
+    $result->add_confirmation( NotIssued => 'ABC123' );
+    $result->set_context( item => $mock_item );
+    $result->set_context( user => $mock_user );
+    my $token = $result->as_token;
+
+    my $other_result = Koha::Item::Availability::Checkin::Result->new();
+    $other_result->add_confirmation( NotIssued => 'ABC123' );
+    $other_result->set_context( item => $mock_other_item );
+    $other_result->set_context( user => $mock_user );
+    ok(
+        !$other_result->check_token($token),
+        'A token minted for one item does not validate against a different item'
+    );
+
+    my $confirmed_differently = Koha::Item::Availability::Checkin::Result->new();
+    $confirmed_differently->add_confirmation( SomethingElse => 1 );
+    $confirmed_differently->set_context( item => $mock_item );
+    $confirmed_differently->set_context( user => $mock_user );
+    ok(
+        !$confirmed_differently->check_token($token),
+        'A token minted for one confirmation set does not validate against a different one'
+    );
+
+    # Directly forge an already-expired token for the same id, bypassing
+    # as_token's TOKEN_EXPIRY_SECONDS, to confirm expiry is enforced.
+    my $expired_token = Koha::Token->new->generate_jwt(
+        {
+            id      => $result->_token_id,
+            expires => time - 10,
+        }
+    );
+    ok( !$result->check_token($expired_token), 'An expired token is rejected' );
 };
