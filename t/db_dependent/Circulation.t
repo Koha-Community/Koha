@@ -19,7 +19,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 90;
+use Test::More tests => 91;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -8917,6 +8917,41 @@ subtest 'Bug 40866: CanBookBeIssued returns correct number of values' => sub {
 
     is( scalar @result, 4, 'CanBookBeIssued returns exactly 4 values' );
     ok( ref( $result[0] ) eq 'HASH', 'First return value is issuingimpossible hashref' );
+};
+
+subtest 'Bug 41728: AddReturn marks the linked ISO18626 request as LoanCompleted' => sub {
+    plan tests => 2;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library->branchcode } } );
+    my $item = $builder->build_sample_item( { library => $library->branchcode } );
+
+    t::lib::Mocks::mock_userenv( { patron => $patron, branchcode => $library->branchcode } );
+    my $checkout = AddIssue( $patron, $item->barcode );
+
+    my $iso18626_request = $builder->build_object(
+        {
+            class => 'Koha::ILL::ISO18626::Requests',
+            value => { status => 'Loaned', issue_id => $checkout->id },
+        }
+    );
+
+    my $mock_request = Test::MockModule->new('Koha::ILL::ISO18626::Request');
+    $mock_request->mock(
+        'send_message',
+        sub {
+            my ( $self, $type, $message ) = @_;
+            $self->add_message( { type => $type, message => $message } );
+            return 1;
+        }
+    );
+
+    AddReturn( $item->barcode, $library->branchcode );
+
+    $iso18626_request->discard_changes;
+    is( $iso18626_request->status, 'LoanCompleted', 'AddReturn marks the linked ISO18626 request as LoanCompleted' );
+    ok( $iso18626_request->messages->count > 0, 'AddReturn sends a supplyingAgencyMessage for the completed loan' );
 };
 
 $schema->storage->txn_rollback;
