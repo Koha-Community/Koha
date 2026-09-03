@@ -266,7 +266,7 @@ sub _assign_item_for_booking {
     my $rules = Koha::CirculationRules->get_effective_rules(
         {
             rules      => [ 'bookings_lead_period', 'bookings_trail_period' ],
-            itemtype   => $biblio->biblioitem->itemtype,
+            itemtype   => $self->{_itemtype_filter} // $biblio->biblioitem->itemtype,
             branchcode => $self->pickup_library_id,
         }
     );

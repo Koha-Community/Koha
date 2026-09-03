@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::NoWarnings;
 
 use Test::Warn;
@@ -1530,6 +1530,89 @@ subtest '_assign_item_for_booking() respects lead/trail periods' => sub {
     }
     'Koha::Exceptions::Booking::Clash',
         'Throws when no item is available outside the lead/trail periods';
+
+    $schema->storage->txn_rollback;
+};
+
+subtest '_assign_item_for_booking() uses the itemtype_id filter for lead/trail period lookup' => sub {
+    plan tests => 3;
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => "Koha::Patrons" } );
+    t::lib::Mocks::mock_userenv( { patron => $patron } );
+
+    my $library        = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $default_itype  = $builder->build_object( { class => 'Koha::ItemTypes' } );
+    my $filtered_itype = $builder->build_object( { class => 'Koha::ItemTypes' } );
+
+    # No lead/trail rule for the biblio's default itemtype; lead=3, trail=2
+    # for the itemtype requested via itemtype_id.
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => $library->branchcode,
+            itemtype   => $filtered_itype->itemtype,
+            rules      => {
+                bookings_lead_period  => 3,
+                bookings_trail_period => 2,
+            }
+        }
+    );
+
+    my $biblio = $builder->build_sample_biblio( { itemtype => $default_itype->itemtype } );
+    my $item   = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itype        => $filtered_itype->itemtype,
+            homebranch   => $library->branchcode,
+            bookable     => 1,
+        }
+    );
+
+    # Existing booking on the only item of the filtered itemtype: today+10 to today+20
+    # Effective period (lead=3, trail=2): today+7 to today+22
+    Koha::Booking->new(
+        {
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            item_id           => $item->itemnumber,
+            pickup_library_id => $library->branchcode,
+            start_date        => dt_from_string->add( days => 10 )->truncate( to => 'day' ),
+            end_date          => dt_from_string->add( days => 20 )->truncate( to => 'day' ),
+        }
+    )->store;
+
+    # New "any item of $filtered_itype" booking starting inside the existing
+    # item's trail period. If the rule lookup used the biblio's default
+    # itemtype (which has no rule configured) instead of the requested
+    # itemtype_id, no clash would be detected and the item would be wrongly
+    # assigned.
+    my $clashing = Koha::Booking->new(
+        {
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            pickup_library_id => $library->branchcode,
+            start_date        => dt_from_string->add( days => 21 )->truncate( to => 'day' ),
+            end_date          => dt_from_string->add( days => 23 )->truncate( to => 'day' ),
+        }
+    );
+    $clashing->set_itemtype_filter( $filtered_itype->itemtype );
+    throws_ok { $clashing->store } 'Koha::Exceptions::Booking::Clash',
+        "_assign_item_for_booking uses the itemtype_id filter's lead/trail rule, not the biblio's default itemtype";
+
+    # Same request, but starting after the item's effective period ends, should succeed
+    my $ok_booking = Koha::Booking->new(
+        {
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            pickup_library_id => $library->branchcode,
+            start_date        => dt_from_string->add( days => 26 )->truncate( to => 'day' ),
+            end_date          => dt_from_string->add( days => 30 )->truncate( to => 'day' ),
+        }
+    );
+    $ok_booking->set_itemtype_filter( $filtered_itype->itemtype );
+    $ok_booking->store;
+    ok( $ok_booking->in_storage, 'Booking OK once outside the effective period' );
+    is( $ok_booking->item_id, $item->itemnumber, 'Item of the filtered itemtype is assigned' );
 
     $schema->storage->txn_rollback;
 };
