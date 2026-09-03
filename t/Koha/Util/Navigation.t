@@ -8,7 +8,7 @@ use t::lib::Mocks;
 use Koha::Util::Navigation;
 
 subtest 'Tests for local_referer' => sub {
-    plan tests => 16;
+    plan tests => 18;
 
     my ( $referer, $base );
     my $cgi = Test::MockObject->new;
@@ -98,4 +98,19 @@ subtest 'Tests for local_referer' => sub {
     );
     $base = 'http://koha.nl';
     is( Koha::Util::Navigation::local_referer($cgi), '/', 'no opacbaseurl, custom url, protocol diff' );
+
+    # logout.x should not be part of the referer
+    t::lib::Mocks::mock_preference( 'staffClientBaseURL', 'https://staff.koha.nl' );
+    $referer = 'https://staff.koha.nl/cgi-bin/koha/mainpage.pl?logout.x=1';
+    is(
+        Koha::Util::Navigation::local_referer( $cgi, { staff => 1 } ), '/cgi-bin/koha/mainpage.pl',
+        'logout.x is removed from the referer'
+    );
+
+    t::lib::Mocks::mock_preference( 'OPACBaseURL', 'https://koha.nl' );
+    $referer = 'https://koha.nl/cgi-bin/koha/opac-detail.pl?biblionumber=42&logout.x=1';
+    is(
+        Koha::Util::Navigation::local_referer($cgi), '/cgi-bin/koha/opac-detail.pl?biblionumber=42',
+        'logout.x is removed from the referer, but other params are kept'
+    );
 };
