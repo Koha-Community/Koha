@@ -24,6 +24,7 @@ use Try::Tiny qw( catch try );
 use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Letters;
+use C4::Scrubber;
 use Koha::ProblemReport;
 use Koha::Libraries;
 use Koha::Patrons;
@@ -65,10 +66,12 @@ $template->param(
 my $op = $input->param('op') || '';
 if ( $op eq 'cud-addreport' ) {
 
-    my $subject     = $input->param('subject');
-    my $message     = $input->param('message');
+    my $scrubber = C4::Scrubber->new();
+
+    my $subject     = $scrubber->scrub( $input->param('subject') );
+    my $message     = $scrubber->scrub( $input->param('message') );
     my $problempage = $input->param('problempage');
-    $problempage = Encode::decode_utf8 uri_unescape $problempage;
+    $problempage = $scrubber->scrub( Encode::decode_utf8 uri_unescape $problempage );
     my $recipient = $input->param('recipient') || 'admin';
 
     try {
