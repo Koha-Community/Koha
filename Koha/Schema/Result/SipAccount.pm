@@ -42,6 +42,11 @@ Foreign key to sip_institutions.sip_institution_id
   data_type: 'text'
   is_nullable: 1
 
+=head2 aj_field_template
+
+  data_type: 'text'
+  is_nullable: 1
+
 =head2 allow_additional_materials_checkout
 
   data_type: 'tinyint'
@@ -258,6 +263,8 @@ __PACKAGE__->add_columns(
   "sip_institution_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "ae_field_template",
+  { data_type => "text", is_nullable => 1 },
+  "aj_field_template",
   { data_type => "text", is_nullable => 1 },
   "allow_additional_materials_checkout",
   { data_type => "tinyint", is_nullable => 1 },
@@ -507,8 +514,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-07-31 09:49:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kiap7dJXmDiRJSCtxIwhbA
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-09-03 10:54:32
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iRZT2rhXkofAyAqxaPaK5Q
 
 
 __PACKAGE__->add_columns(
