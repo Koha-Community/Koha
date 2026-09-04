@@ -68,18 +68,39 @@ subtest 'password validation - account lock out' => sub {
 
     t::lib::Mocks::mock_preference( 'FailedLoginAttempts', 1 );
 
+    # Use a separate account to make the API calls, so that we do not lock out the target account
+    my $caller = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }     # No top-level permissions
+        }
+    );
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $caller->borrowernumber,
+                module_bit     => 4,
+                code           => 'api_validate_password',
+            },
+        }
+    );
+    my $caller_password = 'thePassword123';
+    $caller->set_password( { password => $caller_password, skip_validation => 1 } );
+    my $caller_userid = $caller->userid;
+
     my $json = {
         identifier => $userid,
         password   => "bad",
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
+    $t->post_ok( "//$caller_userid:$caller_password@/api/v1/auth/password/validation" => json => $json )
         ->status_is(400)
         ->json_is( { error => q{Validation failed} } );
 
     $json->{password} = $password;
 
-    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
+    $t->post_ok( "//$caller_userid:$caller_password@/api/v1/auth/password/validation" => json => $json )
         ->status_is(400)
         ->json_is( { error => q{Validation failed} } );
 
