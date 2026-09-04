@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::NoWarnings;
 use Test::Mojo;
 use Test::MockModule;
@@ -152,6 +152,43 @@ subtest 'registration and verification' => sub {
     $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     $t->request_ok($tx)->status_is(401);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Prevent overwriting an existing secret' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'TwoFactorAuthentication', 'enabled' );
+    t::lib::Mocks::mock_preference( 'RESTBasicAuth',           1 );
+
+    my $password = 'AbcdEFG123';
+    my $patron   = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 20 }    # Staff access and Patron info
+        }
+    );
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    $patron->auth_method('two-factor');
+    $patron->encode_secret("nv4v65dpobpxgzldojsxiii");
+    $patron->store;
+    my $original_secret = $patron->secret;
+    my $userid          = $patron->userid;
+
+    # Knowing only the password must not be enough to re-register 2FA and overwrite the existing secret
+    my $tx = $t->ua->build_tx( POST => "//$userid:$password\@/api/v1/auth/two-factor/registration" );
+    $t->request_ok($tx)->status_is(401);
+
+    $tx = $t->ua->build_tx( POST => "//$userid:$password\@/api/v1/auth/two-factor/registration/verification" );
+    $t->request_ok($tx)->status_is(401);
+
+    $patron = $patron->get_from_storage;
+    is( $patron->auth_method, 'two-factor',     'auth_method is unchanged' );
+    is( $patron->secret,      $original_secret, 'secret is unchanged' );
 
     $schema->storage->txn_rollback;
 };
