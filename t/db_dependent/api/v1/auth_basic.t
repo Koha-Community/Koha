@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -121,6 +121,7 @@ subtest 'failure tests' => sub {
     my $bad_password = '123456789';
 
     t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+    t::lib::Mocks::mock_preference( 'FailedLoginAttempts', '' );
 
     my $patron = $builder->build_object(
         { class => 'Koha::Patrons', value => { userid => 'tomasito', flags => 2**4 } } );
@@ -149,6 +150,33 @@ subtest 'failure tests' => sub {
     $t->get_ok("//$userid:$password@/api/v1/patrons")
       ->status_is( 401, 'Basic authentication is disabled' )
       ->json_is( '/error' => 'Basic authentication disabled', 'Expected error message rendered' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'account lock out' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+
+    my $password = 'AbcdEFG123';
+
+    my $patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { userid => 'tomasito', flags => 2**4 } } );
+    $patron->set_password( { password => $password } );
+    my $userid = $patron->userid;
+
+    $t->get_ok("//$userid:$password@/api/v1/patrons")->status_is( 200, 'All good' );
+
+    t::lib::Mocks::mock_preference( 'FailedLoginAttempts', 1 );
+    $patron->login_attempts(1)->store;
+
+    $t->get_ok("//$userid:$password@/api/v1/patrons")
+        ->status_is( 403, 'Correct password rejected' )
+        ->json_is( '/error' => 'Account has been locked', 'Error message returned' );
 
     $schema->storage->txn_rollback;
 };
