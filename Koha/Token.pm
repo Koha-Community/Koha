@@ -228,6 +228,16 @@ sub decode_jwt {
 
 # --- Internal routines ---
 
+=head3 _add_default_csrf_params
+
+    $params = _add_default_csrf_params( $params );
+
+Fills in the default C<session_id>, C<id> and C<secret> values used to
+generate or check a CSRF token when the caller did not supply them. Returns
+the augmented parameters hashref.
+
+=cut
+
 sub _add_default_csrf_params {
     my ($params) = @_;
     $params->{session_id} //= DEFA_SESSION_ID;
@@ -248,6 +258,16 @@ sub _add_default_csrf_params {
     $params->{secret} //= md5_base64( Encode::encode( 'UTF-8', $pw ) ),
         return $params;
 }
+
+=head3 _gen_csrf
+
+    my $token = _gen_csrf( $params );
+
+Generates a CSRF token for the given C<id> and C<secret>, seeding
+L<WWW::CSRF> with random bytes from a non-blocking source. Returns undef if
+C<id> or C<secret> is missing.
+
+=cut
 
 sub _gen_csrf {
 
@@ -270,6 +290,16 @@ sub _gen_csrf {
     return $token;
 }
 
+=head3 _chk_csrf
+
+    my $is_valid = _chk_csrf( $params );
+
+Checks a CSRF token against the given C<id> and C<secret>, honouring an
+optional C<MaxAge> (defaulting to C<CSRF_EXPIRY_HOURS>). Returns true when
+the token is valid, false otherwise.
+
+=cut
+
 sub _chk_csrf {
     my ($params) = @_;
     return if !$params->{id} || !$params->{secret} || !$params->{token};
@@ -283,6 +313,16 @@ sub _chk_csrf {
     return $csrf_status == WWW::CSRF::CSRF_OK();
 }
 
+=head3 _gen_rand
+
+    my $token = _gen_rand( $params );
+
+Generates a random string. The length is taken from C<length> (defaulting to
+1), or a C<pattern> may be supplied to override it. Throws
+L<Koha::Exceptions::Token::BadPattern> if the pattern is invalid.
+
+=cut
+
 sub _gen_rand {
     my ($params) = @_;
     my $length = $params->{length} || 1;
@@ -295,12 +335,31 @@ sub _gen_rand {
     return $token;
 }
 
+=head3 _add_default_jwt_params
+
+    $params = _add_default_jwt_params( $params );
+
+Fills in the default C<secret> used to generate or check a JWT when the
+caller did not supply one. Returns the augmented parameters hashref.
+
+=cut
+
 sub _add_default_jwt_params {
     my ($params) = @_;
     my $pw = C4::Context->config('pass');
     $params->{secret} //= md5_base64( Encode::encode( 'UTF-8', $pw ) ),
         return $params;
 }
+
+=head3 _gen_jwt
+
+    my $token = _gen_jwt( $params );
+
+Generates a JWT carrying the given C<id> claim, signed with C<secret>. When
+an C<expires> epoch timestamp is supplied, the token carries a standard JWT
+C<exp> claim. Returns undef if C<id> or C<secret> is missing.
+
+=cut
 
 sub _gen_jwt {
     my ($params) = @_;
@@ -312,6 +371,17 @@ sub _gen_jwt {
         ( $params->{expires} ? ( expires => $params->{expires} ) : () ),
     )->encode;
 }
+
+=head3 _chk_jwt
+
+    my $is_valid = _chk_jwt( $params );
+
+Checks a JWT against the given C<id> and C<secret>. Decoding is wrapped so
+that an expired, tampered or malformed token is logged and treated as
+invalid rather than throwing. Returns true when the token's C<id> claim
+matches, false or undef otherwise.
+
+=cut
 
 sub _chk_jwt {
     my ($params) = @_;
@@ -325,6 +395,15 @@ sub _chk_jwt {
 
     return 1 if exists $claims->{id} && $claims->{id} eq $params->{id};
 }
+
+=head3 _decode_jwt
+
+    my $id = _decode_jwt( $params );
+
+Decodes a JWT signed with C<secret> and returns its C<id> claim. Returns
+undef if C<token> or C<secret> is missing.
+
+=cut
 
 sub _decode_jwt {
     my ($params) = @_;
