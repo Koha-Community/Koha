@@ -14,6 +14,7 @@
                     :resource="resource"
                     :componentPropData="componentPropData"
                 />
+                <slot name="list-header" :resource="resource"></slot>
             </template>
             <template #filters="{ table }">
                 <ResourceListFilters
