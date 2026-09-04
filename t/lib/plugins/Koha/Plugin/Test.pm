@@ -343,6 +343,52 @@ sub api_routes {
         }
       }
     }
+  },
+  "/public/patrons/echo_raw": {
+    "post": {
+      "x-mojo-to": "Test::Controller#echo_raw",
+      "operationId": "EchoRawPayload",
+      "tags": ["patrons"],
+      "consumes": ["application/xml"],
+      "produces": ["application/xml"],
+      "x-koha-raw-payload": true,
+      "parameters": [
+        {
+          "name": "body",
+          "in": "body",
+          "required": true,
+          "schema": { "type": "object", "additionalProperties": true }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "The request body, echoed back untouched"
+        }
+      }
+    }
+  },
+  "/public/patrons/echo_converted": {
+    "post": {
+      "x-mojo-to": "Test::Controller#echo_converted",
+      "operationId": "EchoConvertedPayload",
+      "tags": ["patrons"],
+      "consumes": ["application/xml"],
+      "produces": ["application/json"],
+      "parameters": [
+        {
+          "name": "body",
+          "in": "body",
+          "required": true,
+          "schema": { "type": "object", "additionalProperties": true }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "The request body, as seen by the controller after the default XML<->JSON conversion",
+          "schema": { "type": "object", "additionalProperties": true }
+        }
+      }
+    }
   }
 }
     };
