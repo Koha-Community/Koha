@@ -1199,6 +1199,12 @@
                             <input id="expiration_date" name="expiration_date" id="to" size="10" type="text" class="flatpickr" data-flatpickr-futuredate="true" />
                         </li>
 
+                        <li id="non_priority_list_item">
+                            <label for="non_priority">Non priority hold:</label>
+                            <input name="non_priority" id="non_priority" type="checkbox" />
+                            <span class="hint">A non priority hold doesn't prevent a current checkout from renewing</span>
+                        </li>
+
                         [% IF ( Koha.Preference('DisplayAddHoldGroups') ) %]
                             <li id="hold_group_list_item">
                                 <label for="hold_group">Treat as hold group: </label>
