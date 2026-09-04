@@ -286,7 +286,19 @@ sub authenticate_api_request {
         }
     }
 
-    $c->stash('koha.user' => $user);
+    if (
+        $user
+        && (   $c->req->url->to_abs->path eq '/api/v1/auth/two-factor/registration'
+            || $c->req->url->to_abs->path eq '/api/v1/auth/two-factor/registration/verification' )
+        && $user->auth_method eq 'two-factor'
+        )
+    {
+        # If the user already enabled 2FA they don't need to register again.
+        # The password alone must not be enough to overwrite an existing 2FA secret
+        Koha::Exceptions::Authentication->throw( error => 'Cannot request this route.' );
+    }
+
+    $c->stash( 'koha.user' => $user );
     C4::Context->interface('api');
 
     if ( $user and !$cookie_auth ) { # cookie-auth sets this and more, don't mess with that
