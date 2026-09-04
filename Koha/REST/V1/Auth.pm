@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use C4::Auth qw( check_cookie_auth checkpw_internal get_session haspermission );
+use C4::Auth qw( check_cookie_auth checkpw get_session haspermission );
 use C4::Context;
 
 use Koha::ApiKeys;
@@ -339,17 +339,26 @@ sub _basic_auth {
     my $decoded_credentials = decode_base64($credentials);
     my ( $identifier, $password ) = split( /:/, $decoded_credentials, 2 );
 
-    my $patron = Koha::Patrons->find_by_identifier($identifier);
+    my ( $status, undef, undef, $patron ) = checkpw( $identifier, $password );
 
-    unless ( checkpw_internal( $identifier, $password ) ) {
+    if ( defined $status && $status == 1 ) {
+        return $patron;
+    }
+
+    if ( defined $status && $status == 0 ) {
         Koha::Exceptions::Authorization::Unauthorized->throw( error => 'Invalid password' );
     }
 
-    if ( $patron->password_expired ) {
+    if ( defined $status && $status == -2 ) {
         Koha::Exceptions::Authorization::Unauthorized->throw( error => 'Password has expired' );
     }
 
-    return $patron;
+    if ( not defined $status ) {
+        Koha::Exceptions::Authorization::Unauthorized->throw( error => 'Account has been locked' );
+    }
+
+    # Generic error to catch the other (potentially missed) cases
+    Koha::Exceptions::Authentication::Required->throw( error => 'Authentication failure.' );
 }
 
 =head3 _set_userenv
