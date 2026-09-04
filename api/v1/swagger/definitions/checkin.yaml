@@ -124,4 +124,13 @@ properties:
       - array
       - "null"
     description: Credit account lines (embeddable)
+  messages:
+    type:
+      - array
+      - "null"
+    description: |
+      Post-checkin messages indicating events that occurred during processing.
+      Each entry has `message` (lower_snake_case identifier), `type`
+      (info/warning/error), and optional `payload` (object with additional
+      context).
 additionalProperties: false

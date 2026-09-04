@@ -6,6 +6,13 @@
     tags:
       - checkins
     summary: Get checkin availability
+    description: |
+      EXPERIMENTAL - DO NOT RELY on this, it is subject to change!
+
+      Returns what a check-in of the item would require: blockers, which
+      prevent it, and confirmations, which staff need to acknowledge. When
+      confirmations are needed, a `confirmation_token` is returned, to be
+      passed to `POST /checkins`.
     parameters:
       - name: item_id
         in: query
@@ -14,7 +21,7 @@
         type: integer
       - name: library_id
         in: query
-        description: Internal library identifier
+        description: Internal library identifier. Defaults to the logged in library
         required: false
         type: string
     produces:
@@ -25,11 +32,17 @@
         schema:
           $ref: "../swagger.yaml#/definitions/checkin_availability"
       "400":
-        description: Bad request
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+          * `invalid_parameter_value` - Unknown library_id
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "403":
-        description: Access forbidden
+        description: |
+          Access forbidden. Possible `error_code` attribute values:
+
+          * `library_not_allowed` - The user cannot act on library_id (IndependentBranches)
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "404":
@@ -57,6 +70,20 @@
     tags:
       - checkins
     summary: Check in (return) an item
+    description: |
+      EXPERIMENTAL - DO NOT RELY on this, it is subject to change!
+
+      Exactly one of `item_id` or `external_id` must be provided.
+      Passing both simultaneously is not allowed.
+
+      When the check-in needs confirmations, a 412 response is returned with
+      a `confirmation_token`, to be passed back in the `confirmation` query
+      parameter. This is a workflow gate, so staff acknowledge the
+      situation, not an authorization control: any user allowed to check in
+      items can obtain a token from `GET /checkins/availability`.
+
+      A check-in of an item that was not checked out is recorded, with a
+      null `checkout_id`.
     parameters:
       - name: body
         in: body
@@ -67,16 +94,22 @@
           properties:
             item_id:
               type: integer
-              description: Internal item identifier
+              description: Internal item identifier. Mutually exclusive with external_id.
             external_id:
               type: string
-              description: Item barcode
+              description: Item barcode. Mutually exclusive with item_id.
             library_id:
               type: string
-              description: Library where the return takes place
+              description: Library where the return takes place. Defaults to the logged in library
             exempt_fine:
               type: boolean
               description: Exempt fines on this return
+            return_date:
+              type: string
+              description: Override return date (ISO 8601 date-time). Requires SpecifyReturnDate
+            dropbox_mode:
+              type: boolean
+              description: Use book drop mode (calculate return date as last open day)
           additionalProperties: false
       - name: confirmation
         in: query
@@ -118,7 +151,9 @@
         description: |
           Bad request. Possible `error_code` attribute values:
 
-          * `MISSING_OR_WRONG_PARAMETERS`
+          * `missing_item_identifier` - Neither item_id nor external_id provided
+          * `mutually_exclusive_parameters` - Both item_id and external_id provided
+          * `invalid_parameter_value` - Unknown library_id, or return_date that cannot be parsed
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -127,20 +162,36 @@
           $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: |
-          Checkin not authorized. Possible `error_code` attribute values:
+          Checkin blocked or forbidden. Possible `error_code` attribute values:
 
-          * `CHECKIN_NOT_AUTHORIZED`
+          * `checkin_blocked` - Item has blockers preventing checkin.
+            Possible keys in the `blockers` object:
+            - `blocked_withdrawn` - Item is withdrawn (BlockReturnOfWithdrawnItems enabled)
+            - `blocked_lost` - Item is lost (BlockReturnOfLostItems enabled)
+            - `wrong_branch` - Item cannot be returned at this branch (AllowReturnToBranch policy).
+              Value is an object with `wrong_branch` and `right_branch` keys.
+          * `no_permission_for_exempt_fine` - updatecharges.writeoff permission required
+          * `return_date_not_allowed` - Return date override requires the SpecifyReturnDate preference
+          * `library_not_allowed` - The user cannot act on library_id (IndependentBranches)
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Item not found
         schema:
           $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: |
+          Conflict. Possible `error_code` attribute values:
+
+          * `item_without_barcode` - The item has no barcode, it cannot be checked in
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "412":
         description: |
           Confirmation required. Possible `error_code` attribute values:
 
-          * `CONFIRMATION_REQUIRED`
+          * `confirmation_required` - Staff must confirm before checkin proceeds.
+            Response includes a `confirmation_token` JWT to pass back on retry.
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "500":
