@@ -19,6 +19,8 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
+use JSON qw( decode_json );
+
 =head1 API
 
 =head2 Methods
@@ -32,6 +34,29 @@ sub bother {
     return $c->render(
         status  => 200,
         openapi => { bothered => Mojo::JSON->true }
+    );
+}
+
+=head3 echo_raw
+
+=cut
+
+sub echo_raw {
+    my ($c) = @_;
+    $c->res->headers->content_type('application/xml');
+    return $c->render( status => 200, data => $c->req->body );
+}
+
+=head3 echo_converted
+
+=cut
+
+sub echo_converted {
+    my ($c) = @_;
+    my $received = decode_json( $c->req->body );
+    return $c->render(
+        status  => 200,
+        openapi => { received => $received }
     );
 }
 
