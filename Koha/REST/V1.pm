@@ -72,7 +72,10 @@ sub startup {
             Koha::Cache::Memory::Lite->flush();
 
             # Convert XML payload to JSON and validate against schema
-            if ( $c->req->headers->content_type && $c->req->headers->content_type =~ /application\/xml/ ) {
+            if (   $c->req->headers->content_type
+                && $c->req->headers->content_type =~ /application\/xml/
+                && !_route_wants_raw_payload($c) )
+            {
                 try {
                     my $xml = $c->req->body;
 
@@ -109,7 +112,10 @@ sub startup {
             my ($c) = @_;
 
             # Check if the response header content_type is application/xml
-            if ( $c->res->headers->content_type && $c->res->headers->content_type eq 'application/xml' ) {
+            if (   $c->res->headers->content_type
+                && $c->res->headers->content_type eq 'application/xml'
+                && !_route_wants_raw_payload($c) )
+            {
 
                 # Convert JSON to XML
                 my $xml = to_xml( decode_json( $c->res->body ) );
@@ -227,6 +233,25 @@ sub startup {
     $self->plugin('Koha::REST::Plugin::Auth::IdP');
     $self->plugin('Koha::REST::Plugin::Auth::PublicRoutes');
     $self->plugin( 'Mojolicious::Plugin::OAuth2' => $oauth_configuration );
+}
+
+=head3 _route_wants_raw_payload
+
+    my $bool = _route_wants_raw_payload($c);
+
+Returns true if the matched route's own spec sets C<x-koha-raw-payload>,
+meaning it wants to send/receive its declared content type as-is and should be left
+alone by the generic XML<->JSON conversion hooks.
+
+=cut
+
+sub _route_wants_raw_payload {
+    my ($c) = @_;
+
+    my $op_spec = $c->openapi->spec || $c->match->endpoint->pattern->defaults->{'openapi.op_spec'};
+    return 0 unless $op_spec;
+
+    return $op_spec->{'x-koha-raw-payload'} ? 1 : 0;
 }
 
 =head3 to_xml
