@@ -1173,8 +1173,7 @@ function syspref_autocomplete(node) {
                 };
 
                 let params = {
-                    _page: 1,
-                    _per_page: 10,
+                    _per_page: -1,
                     _order_by: "+me.variable",
                 };
                 client.sysprefs.getAll(query, params).then(data => {
@@ -1187,6 +1186,13 @@ function syspref_autocomplete(node) {
             },
             focus: function (event, ui) {
                 event.preventDefault(); // Don't replace the text field
+            },
+            open: function (event, ui) {
+                const menu = $(this).autocomplete("widget");
+                menu.css({
+                    "max-height": "20em",
+                    "overflow-y": "auto",
+                });
             },
         })
         .data("ui-autocomplete")._renderItem = function (ul, item) {
