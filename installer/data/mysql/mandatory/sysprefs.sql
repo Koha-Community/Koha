@@ -404,8 +404,6 @@ INSERT INTO systempreferences ( `variable`, `value` ) VALUES
 ('LibraryThingForLibrariesEnabled','0'),
 ('LibraryThingForLibrariesID',''),
 ('LibraryThingForLibrariesTabbedView','0'),
-('LibrisKey', ''),
-('LibrisURL', 'http://api.libris.kb.se/bibspell/'),
 ('LinkerConsiderDiacritics', '0'),
 ('LinkerConsiderThesaurus','0'),
 ('LinkerKeepStale','0'),
