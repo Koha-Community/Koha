@@ -31,8 +31,8 @@ use C4::Context;
 use Module::Load qw( load );
 use List::Util   qw( none first );
 
-# Package-level cache for authority types from frameworks
-my %authority_type_cache;
+use Koha::Cache::Memory::Lite;
+use Koha::MarcSubfieldStructures;
 
 =head1 NAME
 
@@ -315,29 +315,39 @@ sub _filter_diacritics {
 
 Load authority type mappings from marc_subfield_structure.
 Shared by both MARC21 and UNIMARC implementations.
-Results are cached at package level.
+
+Results are cached in Koha::Cache::Memory::Lite, so the mapping is
+re-read from the database at most once per request - avoiding both a
+per-heading database round trip and a process-lifetime cache that would
+never notice a framework being edited via the staff interface.
 
 =cut
 
 sub _load_authority_types_from_frameworks {
-    my $cache_key = shift // 'default';
+    my $cache_key_suffix = shift // 'default';
+    my $cache_key        = "C4::Heading::authority_type_cache:$cache_key_suffix";
 
-    unless ( exists $authority_type_cache{$cache_key} ) {
-        my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare(
-            "SELECT DISTINCT tagfield, authtypecode
-             FROM marc_subfield_structure
-             WHERE frameworkcode = '' AND authtypecode <> ''"
-        );
-        $sth->execute();
+    my $memory_cache = Koha::Cache::Memory::Lite->get_instance;
+    my $cached       = $memory_cache->get_from_cache($cache_key);
+    return $cached if $cached;
 
-        $authority_type_cache{$cache_key} = {};
-        while ( my ( $tag, $auth_type ) = $sth->fetchrow ) {
-            $authority_type_cache{$cache_key}->{$tag} = $auth_type;
+    my $mappings = {};
+    my $rs       = Koha::MarcSubfieldStructures->search(
+        {
+            frameworkcode => '',
+            authtypecode  => { '!=' => '' },
+        },
+        {
+            columns  => [qw( tagfield authtypecode )],
+            distinct => 1,
         }
+    );
+    while ( my $row = $rs->next ) {
+        $mappings->{ $row->tagfield } = $row->authtypecode;
     }
 
-    return $authority_type_cache{$cache_key};
+    $memory_cache->set_in_cache( $cache_key, $mappings );
+    return $mappings;
 }
 
 =head2 _marc_format_handler
