@@ -390,8 +390,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('LibraryThingForLibrariesEnabled','0',NULL,'Enable or Disable Library Thing for Libraries Features','YesNo'),
 ('LibraryThingForLibrariesID','',NULL,'See:http://librarything.com/forlibraries/','Free'),
 ('LibraryThingForLibrariesTabbedView','0',NULL,'Put LibraryThingForLibraries Content in Tabs.','YesNo'),
-('LibrisKey', '', NULL, 'This key must be obtained at http://api.libris.kb.se/. It is unique for the IP of the server.', 'Free'),
-('LibrisURL', 'http://api.libris.kb.se/bibspell/', NULL, 'This is the base URL for the Libris spellchecking API.','Free'),
 ('LinkerConsiderDiacritics', '0', NULL, 'Linker should consider diacritics', 'YesNo'),
 ('LinkerConsiderThesaurus','0',NULL,'If ON the authority linker will only search for 6XX authorities from the same source as the heading','YesNo'),
 ('LinkerKeepStale','0',NULL,'If ON the authority linker will keep existing authority links for headings where it is unable to find a match.','YesNo'),
