@@ -398,6 +398,14 @@ properties:
       - object
       - "null"
     description: Library of the patron
+  notification_summary:
+    type:
+      - object
+      - "null"
+    description: |
+      Summary of how the patron will be notified (embeddable). Only present
+      when the requesting user is allowed to see the patron. Keys:
+      `hold_fill_notified` (bool), `primary_contact_method` (string).
   protected:
     type:
       - boolean

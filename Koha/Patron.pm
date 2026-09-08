@@ -3362,6 +3362,17 @@ sub to_api {
 
     $json_patron->{self_renewal_available} = $self->is_eligible_for_self_renewal();
 
+    # The notification_summary embed is patron information: strip it out
+    # unless the requesting user is allowed to see this patron. The generic
+    # embed machinery computes it via the notification_summary accessor
+    # without a user context, so the gate must be enforced here where the
+    # requesting user (and is_accessible) are available.
+    if ( exists $json_patron->{notification_summary}
+        && !$self->is_accessible($params) )
+    {
+        delete $json_patron->{notification_summary};
+    }
+
     return $json_patron;
 }
 
@@ -3626,6 +3637,36 @@ Return the patron's account balance
 sub account_balance {
     my ($self) = @_;
     return $self->account->balance;
+}
+
+=head3 notification_summary
+
+    my $summary = $patron->notification_summary;
+
+Returns a hashref summarising how the patron will be notified, for use as
+an embeddable representation on the API (C<x-koha-embed: notification_summary>).
+
+The structure is:
+
+    {
+        hold_fill_notified     => 0|1,       # will be notified when a hold is filled
+        primary_contact_method => 'email',   # the patron's primary contact method
+    }
+
+Note: this is patron information and MUST only be exposed to consumers
+allowed to see the patron. C<Koha::Patron::to_api> strips it out when the
+requesting user is not allowed to see the patron (see C<is_accessible>),
+because the generic embed machinery cannot enforce that gate itself.
+
+=cut
+
+sub notification_summary {
+    my ($self) = @_;
+
+    return {
+        hold_fill_notified     => $self->has_messaging_preference( { message_name => 'Hold_Filled' } ) ? 1 : 0,
+        primary_contact_method => $self->primary_contact_method,
+    };
 }
 
 =head3 notify_library_of_registration

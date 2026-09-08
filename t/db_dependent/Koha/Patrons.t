@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 52;
+use Test::More tests => 53;
 use Test::Warn;
 use Test::Exception;
 use Test::MockModule;
@@ -4332,6 +4332,56 @@ subtest 'set_permissions' => sub {
     t::lib::Mocks::mock_userenv( { patron => $non_super, flags => 1 } );    # flags=1 = superlibrarian
     eval { $patron->set_permissions( { superlibrarian => 1 } ) };
     is( $@, '', 'set_permissions: guard skipped when session user is a superlibrarian' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'notification_summary embed and permission gating' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    # Two library groups that hide patron info from each other
+    my $group_a = Koha::Library::Group->new( { title => 'NS Group A', ft_hide_patron_info => 1 } )->store;
+    my $group_b = Koha::Library::Group->new( { title => 'NS Group B', ft_hide_patron_info => 1 } )->store;
+    my $lib_a   = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $lib_b   = $builder->build_object( { class => 'Koha::Libraries' } );
+    Koha::Library::Group->new( { parent_id => $group_a->id, branchcode => $lib_a->branchcode } )->store;
+    Koha::Library::Group->new( { parent_id => $group_b->id, branchcode => $lib_b->branchcode } )->store;
+
+    # The patron whose notification info we want to expose (in library A)
+    my $target = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $lib_a->branchcode } } );
+
+    # A user who CAN see the target: superlibrarian
+    my $can_see = $builder->build_object(
+        { class => 'Koha::Patrons', value => { branchcode => $lib_a->branchcode, flags => 1 } } );
+
+    # A user who CANNOT see the target: no view_borrower_infos_from_any_libraries,
+    # and only in library B (a different hide-patron-info group)
+    my $cannot_see = $builder->build_object(
+        { class => 'Koha::Patrons', value => { branchcode => $lib_b->branchcode, flags => 0 } } );
+
+    # The method returns the expected structure
+    my $summary = $target->notification_summary;
+    is( ref($summary), 'HASH', 'notification_summary returns a hashref' );
+    ok( exists $summary->{hold_fill_notified},     'summary has hold_fill_notified' );
+    ok( exists $summary->{primary_contact_method}, 'summary has primary_contact_method' );
+
+    # Embedded and visible to a permitted user
+    t::lib::Mocks::mock_userenv( { patron => $can_see, flags => 1, branchcode => $lib_a->branchcode } );
+    my $seen = $target->to_api( { embed => { notification_summary => {} }, user => $can_see } );
+    ok( exists $seen->{notification_summary}, 'notification_summary present for a user who can see the patron' );
+
+    # Stripped for a user who cannot see the patron
+    t::lib::Mocks::mock_userenv( { patron => $cannot_see, flags => 0, branchcode => $lib_b->branchcode } );
+    my $hidden = $target->to_api( { embed => { notification_summary => {} }, user => $cannot_see } );
+    ok(
+        !exists $hidden->{notification_summary},
+        'notification_summary stripped for a user who cannot see the patron'
+    );
+
+    # Sanity: identity is also redacted for the denied user (existing behaviour)
+    is( $hidden->{surname}, undef, 'patron surname is redacted for a user who cannot see the patron' );
 
     $schema->storage->txn_rollback;
 };
