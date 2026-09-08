@@ -254,6 +254,13 @@ If use_frameworks is true, authority types are loaded from marc_subfield_structu
 instead of using the hardcoded defaults. This allows local customization of
 authority types per tag via MARC bibliographic frameworks.
 
+This only overrides the authority type for a tag Koha already hardcodes as a
+heading field (see %bib_heading_fields below) - unlike UNIMARC, it cannot add
+a wholly new heading tag, since valid_heading_tag() still consults the
+hardcoded tables regardless of use_frameworks. Overrides also only apply
+when parsing a bib heading, never when parsing a heading from an authority
+record's own field (see parse_heading()'s $auth parameter).
+
 =cut
 
 sub new {
@@ -359,8 +366,13 @@ sub parse_heading {
 
     my $field_info = $heading_fields->{$tag};
 
-    # Use framework override if available, otherwise use hardcoded default
-    my $auth_type = $self->{_framework_overrides}->{$tag} // $field_info->{'auth_type'};
+    # Framework overrides come from the bib framework's tag-to-authtype linking, so they only
+    # apply when parsing a *bib* heading. An authority record's own heading (auth => true) keeps
+    # its hardcoded auth_type regardless - it is not something a bib framework link controls.
+    my $auth_type =
+         !$auth
+        ? $self->{_framework_overrides}->{$tag} // $field_info->{'auth_type'}
+        : $field_info->{'auth_type'};
 
     my $thesaurus =
         $tag =~ m/6../
