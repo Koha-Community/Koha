@@ -145,6 +145,7 @@ sub _shared_preferences {
         AuthorityMergeMode
         UseAuthoritiesForTracings
         CatalogModuleRelink
+        LinkerUseFrameworkAuthTypes
         hide_marc
         IntranetBiblioDefaultView
         LabelMARCView
