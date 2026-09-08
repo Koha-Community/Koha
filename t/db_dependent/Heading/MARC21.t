@@ -18,12 +18,12 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Koha::Caches;
+use Koha::Cache::Memory::Lite;
 use Koha::MarcSubfieldStructures;
 
 BEGIN {
@@ -67,7 +67,7 @@ subtest 'Personal names' => sub {
 };
 
 subtest 'LinkerUseFrameworkAuthTypes' => sub {
-    plan tests => 3;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -109,9 +109,7 @@ subtest 'LinkerUseFrameworkAuthTypes' => sub {
         }
     );
 
-    no warnings 'once';
-    %C4::Heading::authority_type_cache = ();
-    Koha::Caches->get_instance->flush_all;
+    Koha::Cache::Memory::Lite->get_instance->flush;
 
     $field   = MARC::Field->new( '650', ' ', '0', a => 'Test' );
     $heading = C4::Heading->new_from_field($field);
@@ -121,6 +119,79 @@ subtest 'LinkerUseFrameworkAuthTypes' => sub {
     $field   = MARC::Field->new( '600', ' ', '0', a => 'Person' );
     $heading = C4::Heading->new_from_field($field);
     is( $heading->auth_type(), 'PERSO_NAME', 'Falls back to hardcoded for unconfigured tags' );
+
+    # Test 4: the mapping is cached for the rest of the request - changing the
+    # underlying framework link without flushing the cache must not be picked up
+    $mss->set( { authtypecode => 'PERSO_NAME' } )->store;
+    $field   = MARC::Field->new( '650', ' ', '0', a => 'Test' );
+    $heading = C4::Heading->new_from_field($field);
+    is(
+        $heading->auth_type(), $custom_auth_type->authtypecode,
+        'Stale mapping is still served until the cache is flushed'
+    );
+
+    # Test 5: flushing Koha::Cache::Memory::Lite - as happens automatically between
+    # requests - picks up the change
+    Koha::Cache::Memory::Lite->get_instance->flush;
+    $field   = MARC::Field->new( '650', ' ', '0', a => 'Test' );
+    $heading = C4::Heading->new_from_field($field);
+    is( $heading->auth_type(), 'PERSO_NAME', 'Flushing the cache picks up the updated framework mapping' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Framework override only applies to bib headings' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'LinkerUseFrameworkAuthTypes', 1 );
+
+    my $custom_auth_type = $builder->build_object(
+        {
+            class => 'Koha::Authority::Types',
+            value => { auth_tag_to_report => '150' }
+        }
+    );
+
+    # Delete any existing 100$a in default framework to avoid unique constraint violation
+    Koha::MarcSubfieldStructures->search(
+        {
+            frameworkcode => '',
+            tagfield      => '100',
+            tagsubfield   => 'a',
+        }
+    )->delete;
+
+    # Link bib tag 100 to our custom auth type - this is a bib-side link, it should
+    # have no bearing on how a 100 field is parsed *from an authority record*
+    $builder->build_object(
+        {
+            class => 'Koha::MarcSubfieldStructures',
+            value => {
+                frameworkcode => '',
+                tagfield      => '100',
+                tagsubfield   => 'a',
+                authtypecode  => $custom_auth_type->authtypecode,
+            }
+        }
+    );
+
+    Koha::Cache::Memory::Lite->get_instance->flush;
+
+    my $bib_field   = MARC::Field->new( '100', '1', '', a => 'Doe, Jane' );
+    my $bib_heading = C4::Heading->new_from_field($bib_field);
+    is(
+        $bib_heading->auth_type(), $custom_auth_type->authtypecode,
+        'Framework override applies when parsing a bib heading'
+    );
+
+    my $auth_field   = MARC::Field->new( '100', '1', '', a => 'Doe, Jane' );
+    my $auth_heading = C4::Heading->new_from_field( $auth_field, undef, 1 );
+    is(
+        $auth_heading->auth_type(), 'PERSO_NAME',
+        'Framework override is ignored when parsing a heading from an authority record'
+    );
 
     $schema->storage->txn_rollback;
 };

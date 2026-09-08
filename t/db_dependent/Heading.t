@@ -32,7 +32,7 @@ use MARC::Field;
 use utf8;
 use C4::AuthoritiesMarc qw/ AddAuthority /;
 
-use Koha::Caches;
+use Koha::Cache::Memory::Lite;
 use Koha::MarcSubfieldStructures;
 
 BEGIN {
@@ -413,7 +413,7 @@ subtest 'LinkerUseFrameworkAuthTypes' => sub {
     plan tests => 2;
 
     my $schema  = Koha::Database->new->schema;
-    my $cache   = Koha::Caches->get_instance;
+    my $cache   = Koha::Cache::Memory::Lite->get_instance;
     my $builder = t::lib::TestBuilder->new;
     $schema->storage->txn_begin;
 
@@ -465,8 +465,8 @@ subtest 'LinkerUseFrameworkAuthTypes' => sub {
             }
         );
 
-        # Clear all caches
-        Koha::Caches->get_instance->flush_all;
+        # Clear the request-level cache so the new framework mapping is re-read
+        $cache->flush;
 
         my $field   = MARC::Field->new( '650', ' ', '0', a => 'Test subject' );
         my $heading = C4::Heading->new_from_field($field);
