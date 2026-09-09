@@ -26,13 +26,7 @@
                 v-show="calendarEnabled"
                 ref="calendarWrapperRef"
                 class="booking-calendar-wrapper"
-                :style="
-                    calendarRenderWidth
-                        ? {
-                              '--booking-calendar-render-width': `${calendarRenderWidth}px`,
-                          }
-                        : undefined
-                "
+                :style="calendarWrapperStyle"
             >
                 <div class="booking-date-picker">
                     <BookingCalendar
@@ -76,19 +70,17 @@
                         </template>
                         <template #legend>
                             <div class="calendar-legend">
-                                <template
-                                    v-for="(entry, index) in legendEntries"
+                                <span
+                                    v-for="entry in legendEntries"
                                     :key="entry.kind"
+                                    class="calendar-legend__item"
                                 >
                                     <span
                                         class="booking-marker-dot"
-                                        :class="[
-                                            `booking-marker-dot--${entry.kind}`,
-                                            index > 0 ? 'ms-3' : '',
-                                        ]"
+                                        :class="`booking-marker-dot--${entry.kind}`"
                                     ></span>
                                     {{ entry.label }}
-                                </template>
+                                </span>
                             </div>
                         </template>
                     </BookingCalendar>
@@ -544,6 +536,17 @@ const calendarWrapperRef = ref<HTMLElement | null>(null);
 // real box instead is immune to that (or to any other neighbour's
 // intrinsic width).
 const calendarRenderWidth = ref<number | null>(null);
+// Months shown (BookingCalendar decides); two legend columns per month.
+const calendarMonths = ref(2);
+
+const calendarWrapperStyle = computed(() => ({
+    "--booking-legend-columns": String(calendarMonths.value * 2),
+    ...(calendarRenderWidth.value
+        ? {
+              "--booking-calendar-render-width": `${calendarRenderWidth.value}px`,
+          }
+        : {}),
+}));
 let calendarResizeObserver: ResizeObserver | null = null;
 
 /**
@@ -631,12 +634,16 @@ function onCalendarLeave(): void {
 /**
  * Attach feedback behavior after Flatpickr creates its calendar.
  *
- * @param {{calendarContainer?: HTMLElement}} instance Flatpickr instance.
+ * @param {{calendarContainer?: HTMLElement, config?: {showMonths?: number}}} instance Flatpickr instance.
  * @returns {void}
  */
-function onPickerReady(instance: { calendarContainer?: HTMLElement }): void {
+function onPickerReady(instance: {
+    calendarContainer?: HTMLElement;
+    config?: { showMonths?: number };
+}): void {
     if (!instance.calendarContainer) return;
     calendarContainer = instance.calendarContainer;
+    calendarMonths.value = instance.config?.showMonths || 1;
     observeCalendarWidth(instance.calendarContainer);
 }
 
@@ -951,14 +958,8 @@ const clearDateRange = (): void => {
     align-self: stretch;
 }
 
-/* Sized to the flatpickr calendar's own rendered width (tracked at
-   runtime into --booking-calendar-render-width - see
-   observeCalendarWidth), not left to stretch across the wrapper - the
-   calendar-legend slot right above shares this flex column and is a
-   flex-wrap row whose natural (unwrapped) width is wider than the
-   two-month calendar, so any width derived from "this column's
-   content" would follow the legend instead of the calendar it's meant
-   to match. */
+/* As wide as the calendar (--booking-calendar-render-width, see
+   observeCalendarWidth), so the panels line up with it and the legend. */
 .booking-hover-feedback,
 .booking-day-details {
     width: var(--booking-calendar-render-width, 100%);
@@ -986,13 +987,28 @@ const clearDateRange = (): void => {
     margin-bottom: var(--booking-space-lg);
 }
 
+/* As wide as the calendar and centred with it (same render width as
+   the panels below); two content-sized columns per month spread edge to
+   edge, so legend, calendar and panels read as one unit. */
 .calendar-legend {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--booking-space-md);
+    display: grid;
+    grid-template-columns: repeat(
+        var(--booking-legend-columns, 4),
+        max-content
+    );
+    justify-content: space-between;
+    column-gap: var(--booking-space-md);
+    row-gap: var(--booking-space-sm);
+    width: var(--booking-calendar-render-width, 100%);
+    box-sizing: border-box;
+    align-self: center;
     font-size: var(--booking-text-sm);
     margin-top: var(--booking-space-lg);
+}
+
+.calendar-legend__item {
+    display: flex;
+    align-items: center;
 }
 
 .alert {

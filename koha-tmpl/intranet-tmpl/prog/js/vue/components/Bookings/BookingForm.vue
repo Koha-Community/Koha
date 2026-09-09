@@ -856,12 +856,8 @@ onUnmounted(closeSession);
    rules aren't (and don't need to be) scoped under .booking-form, the
    same as .booking-hover-feedback/.booking-day-details below. */
 .calendar-legend {
-    padding: 0.5rem 0.75rem 0;
+    padding: 0.5rem 0 0;
     margin-bottom: var(--booking-space-md);
-    font-size: var(--booking-text-sm);
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
 }
 
 /* .flatpickr-prev-month/.flatpickr-next-month are position:absolute;
