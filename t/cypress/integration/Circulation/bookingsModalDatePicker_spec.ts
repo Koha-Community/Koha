@@ -100,8 +100,15 @@ describe("Booking Modal Date Picker Tests", () => {
         // Only auto-select item if not overridden
         if (options.skipItemSelection !== true) {
             cy.vueSelectShouldBeEnabled("booking_item_id");
+            // The picker stays enabled on the previous context's data while
+            // the item-specific availability is refetched; the redraw that
+            // applies it would wipe any hover state set in between.
+            cy.intercept("GET", "/api/v1/biblios/*/booking_availability*").as(
+                "getItemAvailability"
+            );
             cy.vueSelectByIndex("booking_item_id", 1); // Select second item (CF)
             cy.wait("@getCirculationRules");
+            cy.wait("@getItemAvailability");
 
             // Verify date picker is now enabled
             cy.get("#booking_period").should("not.be.disabled");
@@ -170,38 +177,37 @@ describe("Booking Modal Date Picker Tests", () => {
             which: 13,
         });
 
-        cy.get(".flatpickr-calendar.open").should("not.exist");
+        // Inline calendar: stays visible, only focus returns to the input.
+        cy.get(".flatpickr-calendar.open").should("be.visible");
         cy.focused().should("have.attr", "id", "booking_period");
         cy.get("#booking_period").should("not.have.value", "");
     });
 
-    it("closes on Escape and on a click elsewhere in the same modal", () => {
-        // The calendar is appended inside the booking modal (Bootstrap's
-        // focus trap otherwise clips/redirects it - see BookingCalendar's
-        // buildConfig). Bootstrap's modal-dialog content stops click
-        // propagation to keep its own backdrop-dismiss logic from firing
-        // on clicks inside the dialog, which also swallowed Flatpickr's
-        // own outside-click listener for any click elsewhere in that same
-        // modal - only a click fully outside the modal still closed it.
+    it("stays visible on Escape and on a click elsewhere in the same modal", () => {
+        // The inline calendar never closes; Escape from a day returns
+        // focus to the input.
         const fixedToday = pinnedToday();
         cy.clock(fixedToday.toDate(), ["Date"]);
 
         setupModalForDateTesting();
 
-        cy.get("#booking_period").click();
         cy.get(".flatpickr-calendar.open").should("be.visible");
-        cy.get("#booking_period").trigger("keydown", {
-            key: "Escape",
-            code: "Escape",
-            keyCode: 27,
-            which: 27,
-        });
-        cy.get(".flatpickr-calendar.open").should("not.exist");
+        cy.get(".flatpickr-day:not(.hidden):not(.flatpickr-disabled)")
+            .first()
+            .focus()
+            .should("have.focus")
+            .trigger("keydown", {
+                key: "Escape",
+                code: "Escape",
+                keyCode: 27,
+                which: 27,
+            });
+        cy.focused().should("have.attr", "id", "booking_period");
+        cy.get(".flatpickr-calendar.open").should("be.visible");
 
-        cy.get("#booking_period").click();
-        cy.get(".flatpickr-calendar.open").should("be.visible");
         cy.get("booking-modal .modal .modal-header").click();
-        cy.get(".flatpickr-calendar.open").should("not.exist");
+        cy.get(".flatpickr-calendar.open").should("be.visible");
+        cy.get("#booking_period").should("have.value", "");
     });
 
     it("should initialize flatpickr with correct future-date constraints", () => {
@@ -707,10 +713,16 @@ describe("Booking Modal Date Picker Tests", () => {
         // Setup modal
         setupModalForDateTesting({ skipItemSelection: true });
 
-        // Select the item that has the blocker booking (items[0] = index 0)
+        // Select the item that has the blocker booking (items[0] = index 0),
+        // and wait for its availability: the hover previews below are
+        // wiped by the redraw that applies it (see setupModalForDateTesting)
         cy.vueSelectShouldBeEnabled("booking_item_id");
+        cy.intercept("GET", "/api/v1/biblios/*/booking_availability*").as(
+            "getBlockerItemAvailability"
+        );
         cy.vueSelectByIndex("booking_item_id", 0);
         cy.wait("@getFixedDateRules");
+        cy.wait("@getBlockerItemAvailability");
 
         cy.get("#booking_period").should("not.be.disabled");
 

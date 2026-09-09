@@ -1,18 +1,6 @@
 import dayjs from "dayjs";
 
-// The always-on, two-month calendar redraws itself (Flatpickr's
-// buildDays(), rebuilding every day cell) in response to reactive
-// marker/disable recomputation that a date pick itself can trigger -
-// selectFlatpickrDateRange already retries the click itself against a
-// freshly-requeried element to absorb this, but a real, if rare, race
-// remains where a click lands exactly as a rebuild replaces the cell.
-// It surfaces as roughly one failure per full-suite run, on whichever
-// test happens to click at the wrong moment - never the same test twice
-// - consistent with an environment-timing race rather than a bug in any
-// one test. Retries are the standard, honest mitigation for that class
-// of flakiness; investigated at length (see Bug 41129 commit history)
-// without a full elimination found yet.
-describe("Booking Modal Basic Tests", { retries: { runMode: 2 } }, () => {
+describe("Booking Modal Basic Tests", () => {
     let testData = {};
 
     beforeEach(() => {

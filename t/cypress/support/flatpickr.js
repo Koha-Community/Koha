@@ -58,7 +58,10 @@ const _getFlatpickrDateSelector = date => {
     const day = dayjsDate.date();
     const year = dayjsDate.year();
     const formattedLabel = `${month} ${day}, ${year}`;
-    return `.flatpickr-day[aria-label="${formattedLabel}"]`;
+    // With showMonths > 1 a date near a month boundary also exists as a
+    // hidden overflow cell in the neighbouring grid; only the visible
+    // cell is clickable.
+    return `.flatpickr-day:not(.hidden)[aria-label="${formattedLabel}"]`;
 };
 
 /** Resolve the instance from either Flatpickr's bound or alternate input. */
@@ -280,9 +283,12 @@ Cypress.Commands.add(
             const dayjsDate = dayjs(date);
 
             return ensureDateIsVisible(dayjsDate, $input, timeout).then(() => {
-                // Click the date - use native click to avoid DOM detachment from Vue re-renders
+                // Every day is disabled until availability has loaded, and
+                // a click on a disabled day is silently ignored. Native
+                // click avoids DOM detachment from Vue re-renders.
                 cy.get(_getFlatpickrDateSelector(dayjsDate))
                     .should("be.visible")
+                    .and("not.have.class", "flatpickr-disabled")
                     .then($el => $el[0].click());
 
                 // Re-query and validate selection based on mode
@@ -363,8 +369,11 @@ Cypress.Commands.add(
                     ).then(() => {
                         const startSelector =
                             _getFlatpickrDateSelector(startDayjsDate);
+                        // Every day is disabled until availability has
+                        // loaded; a click on a disabled day is ignored.
                         cy.get(startSelector)
                             .should("be.visible")
+                            .and("not.have.class", "flatpickr-disabled")
                             .then($el => $el[0].click());
 
                         // Validate start date registered via instance state.
@@ -415,6 +424,7 @@ Cypress.Commands.add(
                                 _getFlatpickrDateSelector(endDayjsDate);
                             cy.get(endSelector)
                                 .should("be.visible")
+                                .and("not.have.class", "flatpickr-disabled")
                                 .then($el => $el[0].click());
 
                             // Validate range completed via instance state -
