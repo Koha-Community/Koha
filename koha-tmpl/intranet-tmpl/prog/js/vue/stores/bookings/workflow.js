@@ -257,6 +257,16 @@ export function useBookingWorkflow({
             CALENDAR_BUFFER_DAYS + (maxPeriod && maxPeriod > 0 ? maxPeriod : 0)
         );
         if (to.diff(from, "day") > 366) {
+            // maxPeriod pushed the window past what we're willing to fetch
+            // in one request. Dates beyond this point get no availability
+            // data and render as unavailable rather than confirmed-free;
+            // log it so an oversized circulation rule is diagnosable.
+            console.warn(
+                `Booking availability window clamped to 366 days (requested ${to.diff(
+                    from,
+                    "day"
+                )}); dates beyond ${formatYMD(addDays(from, 366))} will show as unavailable.`
+            );
             to = addDays(from, 366);
         }
         return { from: formatYMD(from), to: formatYMD(to) };
@@ -361,7 +371,12 @@ export function useBookingWorkflow({
 
         const transition = beginTransition();
         const biblionumber = sessionBiblionumber.value;
-        if (!biblionumber) return false;
+        if (!biblionumber) {
+            console.warn(
+                "initializeSession: no biblionumber supplied; the session was opened but no contextual data will be fetched."
+            );
+            return false;
+        }
 
         return runTransition(transition, async () => {
             const patronId = input.patronId ?? input.patron?.patron_id ?? null;
