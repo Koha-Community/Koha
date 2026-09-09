@@ -1439,7 +1439,7 @@ sub has_restricting_overdues {
     my $now = dt_from_string();
 
     my ( $itemtype, $branchcode ) = ( "", "" );
-    while ( my $overdue = $overdues->next ) {
+    foreach my $overdue ( $overdues->as_list ) {
 
         # Short circuit if we're looking at the same branch and itemtype combination as last time as we've
         # checked the oldest for this combination already
