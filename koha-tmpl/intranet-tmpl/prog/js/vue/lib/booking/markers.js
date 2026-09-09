@@ -24,8 +24,8 @@ const MARKER_TYPE_MAP = Object.freeze({
  */
 export function getMarkerTypeLabel(type) {
     const labels = {
-        booked: $__("Booked"),
-        "checked-out": $__("Checked out"),
+        booked: $__("Unavailable"),
+        "checked-out": $__("Unavailable"),
         lead: $__("Lead period"),
         "lead-floor": $__("Minimum lead time from today"),
         "lead-theoretical": $__("Lead period for a follow-up booking"),
@@ -171,14 +171,7 @@ export function getDateFeedbackMessage(date, context) {
         return { message: reason, variant: "danger" };
     }
 
-    const info = getEnabledInfo({
-        leadDays,
-        trailDays,
-        isSelectingStart,
-        isSelectingEnd,
-        unavailableByDate,
-        dateKey,
-    });
+    const info = getEnabledInfo({ isSelectingStart, isSelectingEnd });
     return info ? { message: info, variant: "info" } : null;
 }
 
@@ -275,61 +268,19 @@ function getDisabledReason(d, dateKey, ctx) {
 /**
  * Generate info message for an enabled (selectable) date.
  *
+ * Pure instruction - day-count numbers live permanently in the
+ * booking-constraint-info box now, and per-marker context (lead/trail
+ * adjacency, barcodes) lives in the day-details panel, so this has one
+ * job: say what to do next.
+ *
  * @param {Object} ctx Calendar feedback context.
+ * @param {boolean} ctx.isSelectingStart
+ * @param {boolean} ctx.isSelectingEnd
  * @returns {string|null} Translated selection guidance when applicable.
  */
 function getEnabledInfo(ctx) {
-    // Collect context appendages from markers
-    const appendages = [];
-    const markerReasons = collectMarkerReasons(
-        ctx.unavailableByDate,
-        ctx.dateKey
-    );
-    if (markerReasons.has("lead-floor")) {
-        appendages.push($__("within minimum lead time from today"));
-    }
-    if (markerReasons.has("lead-theoretical")) {
-        appendages.push(
-            $__("within lead time required after an existing booking's trail")
-        );
-    }
-    if (markerReasons.has("lead")) {
-        appendages.push($__("hovering an existing booking's lead period"));
-    }
-    if (markerReasons.has("trail")) {
-        appendages.push($__("hovering an existing booking's trail period"));
-    }
-
-    const suffix =
-        appendages.length > 0 ? " \u2022 " + appendages.join(", ") : "";
-
-    if (ctx.isSelectingStart) {
-        const extras = [];
-        if (ctx.leadDays > 0) {
-            extras.push(
-                $__("Lead period: %s days before start").format(ctx.leadDays)
-            );
-        }
-        if (ctx.trailDays > 0) {
-            extras.push(
-                $__("Trail period: %s days after return").format(ctx.trailDays)
-            );
-        }
-        const detail = extras.length > 0 ? ". " + extras.join(". ") : "";
-        return $__("Select a start date") + detail + suffix;
-    }
-
-    if (ctx.isSelectingEnd) {
-        const detail =
-            ctx.trailDays > 0
-                ? ". " +
-                  $__("Trail period: %s days after return").format(
-                      ctx.trailDays
-                  )
-                : "";
-        return $__("Select an end date") + detail + suffix;
-    }
-
+    if (ctx.isSelectingStart) return $__("Select a start date");
+    if (ctx.isSelectingEnd) return $__("Select an end date");
     return null;
 }
 

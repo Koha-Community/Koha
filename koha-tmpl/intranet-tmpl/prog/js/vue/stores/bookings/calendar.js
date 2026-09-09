@@ -39,6 +39,8 @@ import {
  * @property {import('vue').ComputedRef<Map<string, {reason: string, severity: "hard"|"soft"}>>} disabledByDate
  * @property {import('vue').ComputedRef<Map<string, Array<{kind: string, className: string, tooltip?: string}>>>} markersByDate
  * @property {import('vue').ComputedRef<Map<string, string>>} classByDate
+ * @property {import('vue').ComputedRef<string[]>} relevantItemIds
+ * @property {import('vue').ComputedRef<{leadDays: number, trailDays: number}>} bufferConfig
  * @property {import('vue').ComputedRef<import('@koha-vue/lib/booking/types/bookings').UnavailableByDate>} unavailableByDate
  * @property {(range: {start: Date, end: Date}|null) => void} setViewport
  * @property {(opts?: {dateRangeConstraint?: string|null, customDateRangeFormula?: ((rules: import('@koha-vue/lib/booking/types/bookings').CirculationRule) => number|null)|null}) => void} configureConstraints
@@ -208,6 +210,8 @@ export function useBookingCalendarState({ data, draft }) {
         disabledByDate: maps.disabledByDate,
         markersByDate: maps.markersByDate,
         classByDate: maps.classByDate,
+        relevantItemIds: maps.relevantItemIds,
+        bufferConfig: maps.bufferConfig,
 
         unavailableByDate: maps.unavailableByDate,
 

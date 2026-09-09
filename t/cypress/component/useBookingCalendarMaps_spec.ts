@@ -205,7 +205,6 @@ describe("useBookingCalendarMaps (disabledByDate by item availability)", () => {
     it("emits a booked marker entry on a day with a booking", () => {
         cy.mount(ComposableHost, {
             props: defaultProps({
-                bookableItems: [item("1"), item("2")],
                 availability: availabilityOf({
                     "2026-03-15": { "1": ["booking"] },
                 }),
@@ -230,6 +229,95 @@ describe("useBookingCalendarMaps (disabledByDate by item availability)", () => {
             expect(markers).to.exist;
             expect(
                 markers.some(m => m.className === "booking-day--checked-out")
+            ).to.be.true;
+        });
+    });
+
+    it("does not mark a day Unavailable when only one of several relevant items is booked", () => {
+        cy.mount(ComposableHost, {
+            props: defaultProps({
+                bookableItems: [item("1"), item("2")],
+                availability: availabilityOf({
+                    "2026-03-15": { "1": ["booking"] },
+                }),
+            }),
+        }).then(({ wrapper }) => {
+            // Item 2 is still free, so the day is still fully bookable -
+            // colouring it Unavailable would contradict disabledByDate,
+            // which agrees the day isn't disabled (see the "does not
+            // hard-disable" test above for the same fixture).
+            const markers = wrapper.vm.markersByDate.get("2026-03-15");
+            expect(markers?.some(m => m.className === "booking-day--booked")).to
+                .not.be.true;
+        });
+    });
+
+    it("marks a day partial when only one of several relevant items is booked", () => {
+        cy.mount(ComposableHost, {
+            props: defaultProps({
+                bookableItems: [item("1"), item("2")],
+                availability: availabilityOf({
+                    "2026-03-15": { "1": ["booking"] },
+                }),
+            }),
+        }).then(({ wrapper }) => {
+            const markers = wrapper.vm.markersByDate.get("2026-03-15");
+            expect(markers.some(m => m.className === "booking-day--partial")).to
+                .be.true;
+        });
+    });
+
+    it("does not mark a day partial once every relevant item is booked", () => {
+        cy.mount(ComposableHost, {
+            props: defaultProps({
+                bookableItems: [item("1"), item("2")],
+                availability: availabilityOf({
+                    "2026-03-15": { "1": ["booking"], "2": ["booking"] },
+                }),
+            }),
+        }).then(({ wrapper }) => {
+            const markers = wrapper.vm.markersByDate.get("2026-03-15");
+            expect(markers.some(m => m.className === "booking-day--partial")).to
+                .not.be.true;
+        });
+    });
+
+    it("marks a day Unavailable when a specific item selection narrows to just the booked item", () => {
+        cy.mount(ComposableHost, {
+            props: defaultProps({
+                bookableItems: [item("1"), item("2")],
+                bookingItemId: "1",
+                availability: availabilityOf({
+                    "2026-03-15": { "1": ["booking"] },
+                }),
+            }),
+        }).then(({ wrapper }) => {
+            // Item 2's availability is irrelevant once item 1 is the only
+            // one the patron can actually get.
+            const markers = wrapper.vm.markersByDate.get("2026-03-15");
+            expect(markers.some(m => m.className === "booking-day--booked")).to
+                .be.true;
+            expect(markers.some(m => m.className === "booking-day--partial")).to
+                .not.be.true;
+        });
+    });
+
+    it("marks a day Unavailable when every relevant item is blocked by a mix of booking and checkout", () => {
+        cy.mount(ComposableHost, {
+            props: defaultProps({
+                bookableItems: [item("1"), item("2")],
+                availability: availabilityOf({
+                    "2026-03-15": { "1": ["booking"], "2": ["checkout"] },
+                }),
+            }),
+        }).then(({ wrapper }) => {
+            const markers = wrapper.vm.markersByDate.get("2026-03-15");
+            expect(
+                markers.some(
+                    m =>
+                        m.className === "booking-day--booked" ||
+                        m.className === "booking-day--checked-out"
+                )
             ).to.be.true;
         });
     });
@@ -879,7 +967,7 @@ describe("useBookingCalendarMaps (DOM smoke tests)", () => {
     it("markersByDate kind 'booked' renders booking-day--booked", () => {
         cy.mount(RangeHostWithPicker, {
             props: {
-                bookableItems: [item("1"), item("2")],
+                bookableItems: [item("1")],
                 availability: availabilityOf({
                     "2026-03-15": { "1": ["booking"] },
                 }),

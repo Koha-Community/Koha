@@ -599,9 +599,15 @@ describe("Booking Modal Date Picker Tests", () => {
          * ======================================================================
          *
          * In the Vue version, lead/trail periods are indicated via:
-         * - booking-day--hover-lead / booking-day--hover-trail classes on hover
+         * - booking-day--lead / booking-day--trail day classes, applied to
+         *   every existing booking's window but unstyled unless it's the
+         *   one directly adjacent to the hovered gap
+         *   (booking-day--existing-lead-adjacent / --existing-trail-adjacent)
+         * - booking-day--my-lead-buffer / --my-trail-buffer previewing my
+         *   own prospective booking's buffer relative to the hovered
+         *   candidate - both bands preview together even before a start
+         *   date is chosen (see PHASE 1)
          * - flatpickr-disabled class for dates that cannot be selected
-         * - booking-day--lead / booking-day--trail day classes
          *
          * The Vue version disables dates with lead/trail conflicts via the
          * disable function rather than applying leadDisable/trailDisable classes.
@@ -670,6 +676,13 @@ describe("Booking Modal Date Picker Tests", () => {
         cy.wait("@getFixedDateRules");
 
         cy.get("#booking_period").should("not.be.disabled");
+
+        // The constraint-info box states the active lead/trail day counts
+        // up front, permanently - not just on hover.
+        cy.get(".booking-constraint-info")
+            .should("contain.text", "Lead period: 2 days before start")
+            .and("contain.text", "Trail period: 3 days after return");
+
         cy.get("#booking_period").as("fp");
         cy.get("@fp").openFlatpickr();
 
@@ -757,6 +770,33 @@ describe("Booking Modal Date Picker Tests", () => {
         getDateByISO("2026-06-13").should(
             "not.have.class",
             "flatpickr-disabled"
+        );
+
+        // Both bands preview around the hovered candidate even before a
+        // start is chosen - lead before it (June 11-12), trail after it
+        // (June 14-16, trailDays=3) - matching the old UI's behaviour.
+        getDateByISO("2026-06-11")
+            .should("have.class", "booking-day--my-lead-buffer")
+            .and("have.class", "booking-day--run-start");
+        getDateByISO("2026-06-12")
+            .should("have.class", "booking-day--my-lead-buffer")
+            .and("have.class", "booking-day--run-end");
+        getDateByISO("2026-06-14")
+            .should("have.class", "booking-day--my-trail-buffer")
+            .and("have.class", "booking-day--run-start");
+        getDateByISO("2026-06-15")
+            .should("have.class", "booking-day--my-trail-buffer")
+            .and("not.have.class", "booking-day--run-start")
+            .and("not.have.class", "booking-day--run-end");
+        getDateByISO("2026-06-16")
+            .should("have.class", "booking-day--my-trail-buffer")
+            .and("have.class", "booking-day--run-end");
+
+        // The feedback bar is pure instruction now - day counts live
+        // permanently in the booking-constraint-info box instead.
+        cy.get(".booking-hover-feedback").should(
+            "have.text",
+            "Select a start date"
         );
 
         // ========================================================================
@@ -893,7 +933,12 @@ describe("Booking Modal Date Picker Tests", () => {
          * Booking Day Marker Visual Indicator Test
          * =======================================
          *
-         * Days with existing bookings carry the booking-day--booked class.
+         * No item is pre-selected in this test, so both items[0] and
+         * items[1] are relevant. A date only carries booking-day--booked
+         * once every relevant item is booked there (mirrors
+         * disabledByDate's allBlocked test) - a date with only one of the
+         * two items booked carries booking-day--partial instead, since
+         * the other item is still free and the date remains selectable.
          */
 
         const fixedToday = pinnedToday();
@@ -970,6 +1015,8 @@ describe("Booking Modal Date Picker Tests", () => {
         // ========================================================================
         // TEST 1: Single Booking Marker Dots (Days 10, 11, 12)
         // ========================================================================
+        // Only items[0] is booked here - items[1] is still free, so these
+        // dates read as partial, not fully booked.
 
         const singleDotDates = [
             today.add(10, "day"),
@@ -980,7 +1027,7 @@ describe("Booking Modal Date Picker Tests", () => {
         singleDotDates.forEach(date => {
             cy.get("@markerFlatpickr")
                 .getFlatpickrDate(date.toDate())
-                .should("have.class", "booking-day--booked");
+                .should("have.class", "booking-day--partial");
         });
 
         // ========================================================================
@@ -1009,25 +1056,28 @@ describe("Booking Modal Date Picker Tests", () => {
         emptyDates.forEach(date => {
             cy.get("@markerFlatpickr")
                 .getFlatpickrDate(date.toDate())
-                .should("not.have.class", "booking-day--booked");
+                .should("not.have.class", "booking-day--booked")
+                .and("not.have.class", "booking-day--partial");
         });
 
         // ========================================================================
         // TEST 4: Isolated Single Booking (Day 15) - Boundary Detection
         // ========================================================================
+        // Only items[0] is booked here too - partial, not fully booked.
 
         const isolatedBookingDate = today.add(15, "day");
 
         // Verify isolated booking day HAS marker dot
         cy.get("@markerFlatpickr")
             .getFlatpickrDate(isolatedBookingDate.toDate())
-            .should("have.class", "booking-day--booked");
+            .should("have.class", "booking-day--partial");
 
         // Verify adjacent dates DON'T have marker dots
         [today.add(14, "day"), today.add(16, "day")].forEach(adjacentDate => {
             cy.get("@markerFlatpickr")
                 .getFlatpickrDate(adjacentDate.toDate())
-                .should("not.have.class", "booking-day--booked");
+                .should("not.have.class", "booking-day--booked")
+                .and("not.have.class", "booking-day--partial");
         });
     });
 
@@ -1544,13 +1594,17 @@ describe("Booking Modal Date Picker Tests", () => {
                     );
 
                     // Hover a date whose trail overlaps with bookings
-                    // Day 13 trail should get hover-trail class on hover
+                    // Day 13 is the closest adjacent trail day, so hovering
+                    // it (or the gap it sits in) colours it in
                     cy.get("@flatpickrInput2").hoverFlatpickrDate(
                         today.add(13, "day").toDate()
                     );
                     cy.get("@flatpickrInput2")
                         .getFlatpickrDate(today.add(13, "day").toDate())
-                        .should("have.class", "booking-day--hover-trail");
+                        .should(
+                            "have.class",
+                            "booking-day--existing-trail-adjacent"
+                        );
 
                     // ================================================================
                     // SCENARIO 4: Visual feedback - lead period hover classes
@@ -1565,7 +1619,10 @@ describe("Booking Modal Date Picker Tests", () => {
                     );
                     cy.get("@flatpickrInput2")
                         .getFlatpickrDate(today.add(8, "day").toDate())
-                        .should("have.class", "booking-day--hover-lead");
+                        .should(
+                            "have.class",
+                            "booking-day--existing-lead-adjacent"
+                        );
                 });
             });
 

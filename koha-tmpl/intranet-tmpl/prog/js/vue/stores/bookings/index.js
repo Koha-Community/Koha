@@ -764,6 +764,7 @@ export const useBookingStore = defineStore("bookings", () => {
         pickupLibraryId: draft.pickupLibraryId,
         selectedDateRange: draft.selectedDateRange,
         pickerModelValue: draft.pickerModelValue,
+        rangeAnchor: draft.rangeAnchor,
         minDate: draft.minDate,
         setSelectedDates: draft.setSelectedDates,
 
@@ -781,6 +782,8 @@ export const useBookingStore = defineStore("bookings", () => {
         disabledByDate: availability.disabledByDate,
         markersByDate: availability.markersByDate,
         classByDate: availability.classByDate,
+        relevantItemIds: availability.relevantItemIds,
+        bufferConfig: availability.bufferConfig,
         unavailableByDate: availability.unavailableByDate,
 
         zeroCapacityMessage: validation.zeroCapacityMessage,

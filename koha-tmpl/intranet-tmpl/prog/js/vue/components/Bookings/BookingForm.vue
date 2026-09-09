@@ -448,26 +448,102 @@ onUnmounted(closeSession);
     --booking-success-border: hsl(var(--booking-success-hue), 70%, 40%);
     --booking-border-width: 1px;
     --booking-marker-size: max(4px, 0.25em);
+    --booking-neutral-hue: 210;
+    --booking-holiday-hue: 0;
+
+    /* Feedback-bar / alert variants (not calendar day states) */
     --booking-warning-hue: 45;
     --booking-danger-hue: 354;
     --booking-info-hue: 195;
+
+    /* Selected period (my chosen start..end range) */
     --booking-selected-hue: 48;
     --booking-selected-bg: hsl(var(--booking-selected-hue), 100%, 89%);
     --booking-selected-bg-hover: hsl(var(--booking-selected-hue), 100%, 80%);
     --booking-selected-text: hsl(var(--booking-selected-hue), 60%, 20%);
-    --booking-unavailable-bg: hsl(var(--booking-danger-hue), 70%, 94%);
-    --booking-unavailable-bg-hover: hsl(var(--booking-danger-hue), 70%, 88%);
-    --booking-unavailable-text: hsl(var(--booking-danger-hue), 55%, 45%);
+
+    /* Unavailable: an existing booking's own occupied days, whether
+       booked or checked out - both mean "you can't have this day", so
+       they share one colour rather than one each. */
+    --booking-unavailable-hue: 300;
+    --booking-unavailable-bg: hsl(var(--booking-unavailable-hue), 55%, 88%);
+    --booking-unavailable-bg-hover: hsl(
+        var(--booking-unavailable-hue),
+        55%,
+        80%
+    );
+    --booking-unavailable-text: hsl(var(--booking-unavailable-hue), 70%, 23%);
+
+    /* Lead/trail period - one colour each, shared by both the adjacent
+       existing booking's window (hover-scoped, see onDayHover) and my
+       own prospective booking's buffer preview. They're the same
+       concept (a required lead/trail gap) regardless of whose booking
+       it belongs to, so one colour per concept instead of one per
+       owner keeps the palette from growing with every new source of
+       lead/trail shading. */
+    --booking-lead-hue: 4;
+    --booking-lead-bg: hsl(var(--booking-lead-hue), 75%, 90%);
+    --booking-lead-bg-hover: hsl(var(--booking-lead-hue), 75%, 82%);
+    --booking-lead-text: hsl(var(--booking-lead-hue), 90%, 25%);
+
+    --booking-trail-hue: 34;
+    --booking-trail-bg: hsl(var(--booking-trail-hue), 85%, 87%);
+    --booking-trail-bg-hover: hsl(var(--booking-trail-hue), 85%, 78%);
+    --booking-trail-text: hsl(var(--booking-trail-hue), 90%, 22%);
+
+    /* Clash: my buffer overlaps an adjacent existing booking's buffer.
+       Deliberately darker/more saturated than the regular pastel band -
+       at matching pastel lightness these read as near-identical by
+       contrast ratio, so the rarer clash states need a real lightness
+       step to stay visually distinct, not just a hue change. */
+    --booking-clash-trail-lead-hue: 150;
+    --booking-clash-trail-lead-bg: hsl(
+        var(--booking-clash-trail-lead-hue),
+        65%,
+        72%
+    );
+    --booking-clash-trail-lead-bg-hover: hsl(
+        var(--booking-clash-trail-lead-hue),
+        65%,
+        64%
+    );
+    --booking-clash-trail-lead-text: hsl(
+        var(--booking-clash-trail-lead-hue),
+        70%,
+        20%
+    );
+
+    --booking-clash-lead-trail-hue: 271;
+    --booking-clash-lead-trail-bg: hsl(
+        var(--booking-clash-lead-trail-hue),
+        60%,
+        74%
+    );
+    --booking-clash-lead-trail-bg-hover: hsl(
+        var(--booking-clash-lead-trail-hue),
+        60%,
+        66%
+    );
+    --booking-clash-lead-trail-text: hsl(
+        var(--booking-clash-lead-trail-hue),
+        70%,
+        22%
+    );
+
+    /* Used only by the day-details panel's marker-dot swatches for
+       lead-floor/lead-theoretical/trail-theoretical (see below) - these
+       aren't shown on the calendar grid itself, only inside the
+       hover-triggered detail panel, so a plain neutral grey is enough
+       to tell them apart from the other marker rows there. */
     --booking-buffer-bg: hsl(var(--booking-neutral-hue), 12%, 88%);
-    --booking-buffer-bg-hover: hsl(var(--booking-neutral-hue), 12%, 82%);
-    --booking-buffer-text: hsl(var(--booking-neutral-hue), 10%, 40%);
-    --booking-neutral-hue: 210;
-    --booking-holiday-hue: 0;
-    --booking-warning-bg: hsl(var(--booking-warning-hue), 100%, 85%);
+    --booking-buffer-text: hsl(var(--booking-neutral-hue), 27%, 23%);
+
+    --booking-holiday-bg: hsl(var(--booking-holiday-hue), 20%, 78%);
+    --booking-holiday-text: hsl(var(--booking-holiday-hue), 35%, 18%);
+
     --booking-neutral-100: hsl(var(--booking-neutral-hue), 15%, 92%);
     --booking-neutral-300: hsl(var(--booking-neutral-hue), 15%, 75%);
     --booking-neutral-600: hsl(var(--booking-neutral-hue), 10%, 45%);
-    --booking-holiday-bg: hsl(var(--booking-holiday-hue), 0%, 85%);
     --booking-space-xs: 0.125rem;
     --booking-space-sm: 0.25rem;
     --booking-space-md: 0.5rem;
@@ -497,36 +573,172 @@ onUnmounted(closeSession);
         5px 0 0 var(--booking-selected-bg);
 }
 
-.flatpickr-calendar .flatpickr-day.booking-day--lead-floor,
-.flatpickr-calendar .flatpickr-day.booking-day--lead-theoretical,
-.flatpickr-calendar .flatpickr-day.booking-day--trail-theoretical {
-    background-color: var(--booking-buffer-bg);
-    border-color: var(--booking-buffer-bg);
-    color: var(--booking-buffer-text);
+.flatpickr-calendar .flatpickr-day.booking-constrained-range-marker {
+    background-color: var(--booking-selected-bg) !important;
+    border-color: var(--booking-selected-bg) !important;
+    color: var(--booking-selected-text) !important;
 }
 
-.flatpickr-calendar .flatpickr-day.booking-day--lead-floor:hover,
-.flatpickr-calendar .flatpickr-day.booking-day--lead-theoretical:hover,
-.flatpickr-calendar .flatpickr-day.booking-day--trail-theoretical:hover {
-    background-color: var(--booking-buffer-bg-hover);
-    border-color: var(--booking-buffer-bg-hover);
+.flatpickr-calendar .flatpickr-day.booking-constrained-range-marker:hover {
+    background-color: var(--booking-selected-bg-hover) !important;
+    border-color: var(--booking-selected-bg-hover) !important;
 }
+
+/* Before hover, only an actual occupied/closed day (booked, checked
+   out, holiday) gets any styling - lead-floor/lead-theoretical/
+   trail-theoretical/plain lead/trail are all constraint-only signals
+   (buffer requirements, not an actual booking on that day) and
+   deliberately carry no colour here. They still block selection via
+   flatpickr's native disabled look, and the day-details panel/hover
+   feedback bar explain why on hover; a permanent grey layer under all
+   of that was exactly the "busy calendar" this was built to avoid. */
 
 .flatpickr-calendar .flatpickr-day.booking-day--booked,
-.flatpickr-calendar .flatpickr-day.booking-day--checked-out,
-.flatpickr-calendar .flatpickr-day.booking-day--lead,
-.flatpickr-calendar .flatpickr-day.booking-day--trail {
+.flatpickr-calendar .flatpickr-day.booking-day--checked-out {
     background-color: var(--booking-unavailable-bg);
     border-color: var(--booking-unavailable-bg);
     color: var(--booking-unavailable-text);
 }
 
 .flatpickr-calendar .flatpickr-day.booking-day--booked:hover,
-.flatpickr-calendar .flatpickr-day.booking-day--checked-out:hover,
-.flatpickr-calendar .flatpickr-day.booking-day--lead:hover,
-.flatpickr-calendar .flatpickr-day.booking-day--trail:hover {
+.flatpickr-calendar .flatpickr-day.booking-day--checked-out:hover {
     background-color: var(--booking-unavailable-bg-hover);
     border-color: var(--booking-unavailable-bg-hover);
+}
+
+.flatpickr-calendar .flatpickr-day.booking-day--holiday {
+    background-color: var(--booking-holiday-bg);
+    border-color: var(--booking-holiday-bg);
+    color: var(--booking-holiday-text);
+}
+
+/* Partial availability: some, but not all, relevant items are booked or
+   checked out here. The day stays clickable via a different item, so it
+   keeps no background colour - just a quiet dot hinting there's detail
+   worth checking (see the day-details panel on hover/focus). Deliberately
+   neutral rather than one of the state hues, since it isn't claiming
+   which state applies, only that one exists. */
+.flatpickr-calendar .flatpickr-day.booking-day--partial::after {
+    content: "";
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: var(--booking-marker-size);
+    height: var(--booking-marker-size);
+    border-radius: var(--booking-border-radius-full);
+    background: var(--booking-neutral-600);
+}
+
+/* Lead period, one colour regardless of whose booking it belongs to:
+   the adjacent existing booking's window (adjacency-scoped - only the
+   booking immediately before/after the hovered gap, added/removed
+   directly in onDayHover) or my own prospective booking's buffer
+   preview (live while picking, or pinned once both dates are
+   committed - see classByDate).
+
+   Every band cell bridges into the flatpickr layout gap on both sides
+   via box-shadow (matching the old UI's technique, so a run of days
+   reads as one continuous strip instead of separate pills) and is
+   square by default - only the true start/end of a run (marked by
+   applyAdjacencyClass with --run-start/--run-end, see onDayHover) gets
+   rounded back to flatpickr's own pill radius. */
+.flatpickr-calendar .flatpickr-day.booking-day--existing-lead-adjacent,
+.flatpickr-calendar .flatpickr-day.booking-day--existing-trail-adjacent,
+.flatpickr-calendar .flatpickr-day.booking-day--my-lead-buffer,
+.flatpickr-calendar .flatpickr-day.booking-day--my-trail-buffer {
+    border-radius: 0 !important;
+}
+
+.flatpickr-calendar .flatpickr-day.booking-day--existing-lead-adjacent,
+.flatpickr-calendar .flatpickr-day.booking-day--my-lead-buffer {
+    background-color: var(--booking-lead-bg) !important;
+    border-color: var(--booking-lead-bg) !important;
+    color: var(--booking-lead-text) !important;
+    box-shadow:
+        -5px 0 0 var(--booking-lead-bg),
+        5px 0 0 var(--booking-lead-bg) !important;
+}
+
+.flatpickr-calendar .flatpickr-day.booking-day--existing-lead-adjacent:hover,
+.flatpickr-calendar .flatpickr-day.booking-day--my-lead-buffer:hover {
+    background-color: var(--booking-lead-bg-hover) !important;
+    border-color: var(--booking-lead-bg-hover) !important;
+    box-shadow:
+        -5px 0 0 var(--booking-lead-bg-hover),
+        5px 0 0 var(--booking-lead-bg-hover) !important;
+}
+
+.flatpickr-calendar .flatpickr-day.booking-day--existing-trail-adjacent,
+.flatpickr-calendar .flatpickr-day.booking-day--my-trail-buffer {
+    background-color: var(--booking-trail-bg) !important;
+    border-color: var(--booking-trail-bg) !important;
+    color: var(--booking-trail-text) !important;
+    box-shadow:
+        -5px 0 0 var(--booking-trail-bg),
+        5px 0 0 var(--booking-trail-bg) !important;
+}
+
+.flatpickr-calendar .flatpickr-day.booking-day--existing-trail-adjacent:hover,
+.flatpickr-calendar .flatpickr-day.booking-day--my-trail-buffer:hover {
+    background-color: var(--booking-trail-bg-hover) !important;
+    border-color: var(--booking-trail-bg-hover) !important;
+    box-shadow:
+        -5px 0 0 var(--booking-trail-bg-hover),
+        5px 0 0 var(--booking-trail-bg-hover) !important;
+}
+
+/* Clash: my buffer overlaps an adjacent existing booking's buffer.
+   Two-class compound selectors outrank the single-class rules above
+   regardless of source order. */
+.flatpickr-calendar
+    .flatpickr-day.booking-day--existing-lead-adjacent.booking-day--my-trail-buffer {
+    background-color: var(--booking-clash-trail-lead-bg) !important;
+    border-color: var(--booking-clash-trail-lead-bg) !important;
+    color: var(--booking-clash-trail-lead-text) !important;
+    box-shadow:
+        -5px 0 0 var(--booking-clash-trail-lead-bg),
+        5px 0 0 var(--booking-clash-trail-lead-bg) !important;
+}
+
+.flatpickr-calendar
+    .flatpickr-day.booking-day--existing-lead-adjacent.booking-day--my-trail-buffer:hover {
+    background-color: var(--booking-clash-trail-lead-bg-hover) !important;
+    border-color: var(--booking-clash-trail-lead-bg-hover) !important;
+    box-shadow:
+        -5px 0 0 var(--booking-clash-trail-lead-bg-hover),
+        5px 0 0 var(--booking-clash-trail-lead-bg-hover) !important;
+}
+
+.flatpickr-calendar
+    .flatpickr-day.booking-day--existing-trail-adjacent.booking-day--my-lead-buffer {
+    background-color: var(--booking-clash-lead-trail-bg) !important;
+    border-color: var(--booking-clash-lead-trail-bg) !important;
+    color: var(--booking-clash-lead-trail-text) !important;
+    box-shadow:
+        -5px 0 0 var(--booking-clash-lead-trail-bg),
+        5px 0 0 var(--booking-clash-lead-trail-bg) !important;
+}
+
+.flatpickr-calendar
+    .flatpickr-day.booking-day--existing-trail-adjacent.booking-day--my-lead-buffer:hover {
+    background-color: var(--booking-clash-lead-trail-bg-hover) !important;
+    border-color: var(--booking-clash-lead-trail-bg-hover) !important;
+    box-shadow:
+        -5px 0 0 var(--booking-clash-lead-trail-bg-hover),
+        5px 0 0 var(--booking-clash-lead-trail-bg-hover) !important;
+}
+
+.flatpickr-calendar .flatpickr-day.booking-day--run-start {
+    border-radius: 150px 0 0 150px !important;
+}
+
+.flatpickr-calendar .flatpickr-day.booking-day--run-end {
+    border-radius: 0 150px 150px 0 !important;
+}
+
+.flatpickr-calendar .flatpickr-day.booking-day--run-start.booking-day--run-end {
+    border-radius: 150px !important;
 }
 
 .flatpickr-calendar .flatpickr-day.booking-intermediate-blocked {
@@ -646,9 +858,7 @@ onUnmounted(closeSession);
 }
 
 .booking-marker-dot--booked,
-.booking-marker-dot--checked-out,
-.booking-marker-dot--lead,
-.booking-marker-dot--trail {
+.booking-marker-dot--checked-out {
     background: var(--booking-unavailable-bg);
 }
 
@@ -658,8 +868,32 @@ onUnmounted(closeSession);
     background: var(--booking-buffer-bg);
 }
 
+/* The day-details panel only ever describes the currently-hovered day,
+   so a "lead"/"trail" marker there is always the hover-adjacent one by
+   construction - these match the calendar day's own adjacency colour
+   rather than the always-on grey above. */
+.booking-marker-dot--lead {
+    background: var(--booking-lead-bg);
+}
+
+.booking-marker-dot--trail {
+    background: var(--booking-trail-bg);
+}
+
+.booking-marker-dot--clash-trail-lead {
+    background: var(--booking-clash-trail-lead-bg);
+}
+
+.booking-marker-dot--clash-lead-trail {
+    background: var(--booking-clash-lead-trail-bg);
+}
+
 .booking-marker-dot--holiday {
     background: var(--booking-holiday-bg);
+}
+
+.booking-marker-dot--partial {
+    background: var(--booking-neutral-600);
 }
 
 .booking-hover-feedback {
@@ -698,29 +932,27 @@ onUnmounted(closeSession);
 }
 
 .booking-day-details {
-    padding: 0 0.75rem;
-    max-height: 0;
-    min-height: 0;
+    /* Fixed footprint, opacity-only transition: flatpickr computes the
+       popup's on-screen position once (see BookingCalendar.vue's
+       positionCalendarInModal) and never recalculates it as this panel's
+       content changes on hover, so animating height/padding here could
+       grow the calendar past the viewport after it's already been placed -
+       the same bug just fixed for .booking-hover-feedback. */
+    padding: 0.5rem 0.75rem;
+    min-height: 4.5rem;
+    max-height: 6rem;
+    overflow-y: auto;
     opacity: 0;
-    overflow: hidden;
-    margin-top: 0;
+    margin-top: 0.25rem;
     margin-bottom: 0;
     background-color: var(--booking-neutral-100);
     border-radius: 0 0 var(--booking-border-radius-sm)
         var(--booking-border-radius-sm);
     font-size: var(--booking-text-sm);
-    transition:
-        max-height 100ms ease,
-        opacity 100ms ease,
-        padding 100ms ease,
-        margin-top 100ms ease;
+    transition: opacity 100ms ease;
 }
 
 .booking-day-details--visible {
-    padding: 0.5rem 0.75rem;
-    margin-top: 0.25rem;
-    min-height: 1.25rem;
-    max-height: 10em;
     opacity: 1;
 }
 

@@ -11,7 +11,9 @@
 import {
     calculateMaxEndDate,
     createDisableFunction,
+    findAdjacentBufferDates,
     findFirstBlockingDate,
+    myBufferDates,
 } from "@koha-vue/lib/booking/availability/predicate.js";
 import { extractBookingConfiguration } from "@koha-vue/lib/booking/availability/predicate.js";
 
@@ -582,5 +584,100 @@ describe("findFirstBlockingDate (lead/trail period influence)", () => {
         );
         expectSameDay(result.firstBlockingDate, "2026-03-23");
         expect(result.reason).to.equal("all_items_have_conflicts");
+    });
+});
+
+describe("findAdjacentBufferDates", () => {
+    // Booking A occupies Mar 15-18, trail Mar 19-20.
+    // Booking B occupies Mar 30, lead Mar 28-29.
+    const map = mapOf({
+        "2026-03-15": { "1": ["booking"] },
+        "2026-03-16": { "1": ["booking"] },
+        "2026-03-17": { "1": ["booking"] },
+        "2026-03-18": { "1": ["booking"] },
+        "2026-03-19": { "1": ["trail"] },
+        "2026-03-20": { "1": ["trail"] },
+        "2026-03-28": { "1": ["lead"] },
+        "2026-03-29": { "1": ["lead"] },
+        "2026-03-30": { "1": ["booking"] },
+    });
+
+    it("finds the whole trail window when hovering its first day", () => {
+        // Regression: the first cut only walked backward from the hover
+        // point, so hovering the window's own first day found just that
+        // one day instead of the full contiguous run.
+        const result = findAdjacentBufferDates(map, "2026-03-19", ["1"]);
+        expect(result.trailDates).to.deep.equal(["2026-03-19", "2026-03-20"]);
+    });
+
+    it("finds the whole trail window when hovering its last day", () => {
+        const result = findAdjacentBufferDates(map, "2026-03-20", ["1"]);
+        expect(result.trailDates).to.deep.equal(["2026-03-19", "2026-03-20"]);
+    });
+
+    it("finds the whole lead window when hovering its first day", () => {
+        const result = findAdjacentBufferDates(map, "2026-03-28", ["1"]);
+        expect(result.leadDates).to.deep.equal(["2026-03-28", "2026-03-29"]);
+    });
+
+    it("finds the whole lead window when hovering its last day", () => {
+        // Regression: the lead walk only went forward from the hover
+        // point, so hovering the window's own last day found just that
+        // one day instead of the full contiguous run.
+        const result = findAdjacentBufferDates(map, "2026-03-29", ["1"]);
+        expect(result.leadDates).to.deep.equal(["2026-03-28", "2026-03-29"]);
+    });
+
+    it("finds both neighbours when hovering anywhere in the open gap between them", () => {
+        const result = findAdjacentBufferDates(map, "2026-03-24", ["1"]);
+        expect(result.trailDates).to.deep.equal(["2026-03-19", "2026-03-20"]);
+        expect(result.leadDates).to.deep.equal(["2026-03-28", "2026-03-29"]);
+    });
+
+    it("returns nothing when the hovered date is itself booked", () => {
+        const result = findAdjacentBufferDates(map, "2026-03-16", ["1"]);
+        expect(result.trailDates).to.deep.equal([]);
+        expect(result.leadDates).to.deep.equal([]);
+    });
+
+    it("returns nothing when there is no booking in range either side", () => {
+        const isolated = mapOf({
+            "2026-03-15": { "1": ["booking"] },
+        });
+        const result = findAdjacentBufferDates(isolated, "2026-03-16", ["1"]);
+        expect(result.trailDates).to.deep.equal([]);
+        expect(result.leadDates).to.deep.equal([]);
+    });
+
+    it("only considers the given item ids", () => {
+        // Same map but item "2" has no bookings at all - nothing adjacent.
+        const result = findAdjacentBufferDates(map, "2026-03-24", ["2"]);
+        expect(result.trailDates).to.deep.equal([]);
+        expect(result.leadDates).to.deep.equal([]);
+    });
+});
+
+describe("myBufferDates", () => {
+    it("returns the lead window before the boundary in chronological order", () => {
+        expect(myBufferDates("2026-03-15", 3, "lead")).to.deep.equal([
+            "2026-03-12",
+            "2026-03-13",
+            "2026-03-14",
+        ]);
+    });
+
+    it("returns the trail window after the boundary in chronological order", () => {
+        expect(myBufferDates("2026-03-15", 3, "trail")).to.deep.equal([
+            "2026-03-16",
+            "2026-03-17",
+            "2026-03-18",
+        ]);
+    });
+
+    it("returns an empty array when days is zero or missing", () => {
+        expect(myBufferDates("2026-03-15", 0, "lead")).to.deep.equal([]);
+        expect(myBufferDates("2026-03-15", undefined, "trail")).to.deep.equal(
+            []
+        );
     });
 });

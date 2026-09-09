@@ -5,6 +5,17 @@
             {{ $__("Select booking period") }}
         </legend>
 
+        <Alert
+            v-if="constraintHelpText"
+            variant="info"
+            extra-class="booking-constraint-info"
+        >
+            <small>
+                <strong>{{ $__("Booking constraints active:") }}</strong>
+                {{ constraintHelpText }}
+            </small>
+        </Alert>
+
         <div class="calendar-legend">
             <span
                 class="booking-marker-dot booking-marker-dot--selected"
@@ -15,9 +26,29 @@
             ></span>
             {{ $__("Unavailable") }}
             <span
-                class="booking-marker-dot booking-marker-dot--lead-theoretical ms-3"
+                class="booking-marker-dot booking-marker-dot--partial ms-3"
             ></span>
-            {{ $__("Lead or trail period") }}
+            {{ $__("Some items unavailable") }}
+            <span
+                class="booking-marker-dot booking-marker-dot--lead ms-3"
+            ></span>
+            {{ $__("Lead period") }}
+            <span
+                class="booking-marker-dot booking-marker-dot--trail ms-3"
+            ></span>
+            {{ $__("Trail period") }}
+            <span
+                class="booking-marker-dot booking-marker-dot--clash-trail-lead ms-3"
+            ></span>
+            {{ $__("My trail overlaps an existing lead period") }}
+            <span
+                class="booking-marker-dot booking-marker-dot--clash-lead-trail ms-3"
+            ></span>
+            {{ $__("My lead overlaps an existing trail period") }}
+            <span
+                class="booking-marker-dot booking-marker-dot--holiday ms-3"
+            ></span>
+            {{ $__("Library closed") }}
         </div>
 
         <div class="form-group">
@@ -59,20 +90,6 @@
             <span class="required">{{ $__("Required") }}</span>
         </div>
 
-        <Alert
-            v-if="
-                dateRangeConstraint &&
-                (maxBookingPeriod === null || maxBookingPeriod > 0)
-            "
-            variant="info"
-            extra-class="booking-constraint-info"
-        >
-            <small>
-                <strong>{{ $__("Booking constraint active:") }}</strong>
-                {{ constraintHelpText }}
-            </small>
-        </Alert>
-
         <div v-if="errorMessage" class="alert alert-danger mt-2">
             {{ errorMessage }}
         </div>
@@ -92,6 +109,11 @@ import {
     getDateFeedbackMessage,
     getMarkerDescription,
 } from "../../lib/booking/markers.js";
+import {
+    findAdjacentBufferDates,
+    myBufferDates,
+} from "../../lib/booking/availability/predicate.js";
+import { formatYMD, toDay } from "../../lib/booking/dates.js";
 import type { CalendarMarker } from "../../lib/booking/types/bookings.d.ts";
 
 withDefaults(
@@ -110,8 +132,20 @@ const emit = defineEmits<{
     (e: "clear-dates"): void;
 }>();
 
-const CLASS_BOOKING_DAY_HOVER_LEAD = "booking-day--hover-lead";
-const CLASS_BOOKING_DAY_HOVER_TRAIL = "booking-day--hover-trail";
+const CLASS_EXISTING_LEAD_ADJACENT = "booking-day--existing-lead-adjacent";
+const CLASS_EXISTING_TRAIL_ADJACENT = "booking-day--existing-trail-adjacent";
+const CLASS_MY_LEAD_BUFFER = "booking-day--my-lead-buffer";
+const CLASS_MY_TRAIL_BUFFER = "booking-day--my-trail-buffer";
+const CLASS_RUN_START = "booking-day--run-start";
+const CLASS_RUN_END = "booking-day--run-end";
+const ADJACENCY_CLASSES = [
+    CLASS_EXISTING_LEAD_ADJACENT,
+    CLASS_EXISTING_TRAIL_ADJACENT,
+    CLASS_MY_LEAD_BUFFER,
+    CLASS_MY_TRAIL_BUFFER,
+    CLASS_RUN_START,
+    CLASS_RUN_END,
+];
 
 const componentId = useId();
 const dayDetailsId = `booking-day-details-${componentId}`;
@@ -132,6 +166,9 @@ const {
     disabledByDate,
     markersByDate,
     classByDate,
+    rangeAnchor,
+    relevantItemIds,
+    bufferConfig,
 } = storeToRefs(store);
 interface PickerExposed {
     clear: () => void;
@@ -139,28 +176,43 @@ interface PickerExposed {
 const pickerRef = ref<PickerExposed | null>(null);
 
 const constraintHelpText = computed((): string => {
-    if (!dateRangeConstraint.value) return "";
     const period = maxBookingPeriod.value;
+    const { leadDays, trailDays } = bufferConfig.value;
+    const parts: string[] = [];
 
-    const baseMessages: Record<string, string> = {
-        issuelength: period
-            ? $__("Booking period limited to checkout length (%s days)").format(
-                  period
-              )
-            : $__("Booking period limited to checkout length"),
-        issuelength_with_renewals: period
-            ? $__(
-                  "Booking period limited to checkout length with renewals (%s days)"
-              ).format(period)
-            : $__("Booking period limited to checkout length with renewals"),
-        default: period
-            ? $__(
-                  "Booking period limited by circulation rules (%s days)"
-              ).format(period)
-            : $__("Booking period limited by circulation rules"),
-    };
+    if (dateRangeConstraint.value && (period === null || period > 0)) {
+        const baseMessages: Record<string, string> = {
+            issuelength: period
+                ? $__(
+                      "Booking period limited to checkout length (%s days)"
+                  ).format(period)
+                : $__("Booking period limited to checkout length"),
+            issuelength_with_renewals: period
+                ? $__(
+                      "Booking period limited to checkout length with renewals (%s days)"
+                  ).format(period)
+                : $__(
+                      "Booking period limited to checkout length with renewals"
+                  ),
+            default: period
+                ? $__(
+                      "Booking period limited by circulation rules (%s days)"
+                  ).format(period)
+                : $__("Booking period limited by circulation rules"),
+        };
+        parts.push(
+            baseMessages[dateRangeConstraint.value] || baseMessages.default
+        );
+    }
 
-    return baseMessages[dateRangeConstraint.value] || baseMessages.default;
+    if (leadDays > 0) {
+        parts.push($__("Lead period: %s days before start").format(leadDays));
+    }
+    if (trailDays > 0) {
+        parts.push($__("Trail period: %s days after return").format(trailDays));
+    }
+
+    return parts.join(". ");
 });
 
 const initialViewport = computed(() => {
@@ -190,11 +242,74 @@ const composedDisabled = computed(() => {
     };
 });
 
-// Track the last hovered cell so we can strip lead/trail hover classes
-// when the hover moves to a new cell. Mirrors the per-cell mouseout
-// behavior the legacy `events.mjs` adapter implemented.
-let lastHoverElement: HTMLElement | null = null;
 let lastDescribedElement: HTMLElement | null = null;
+
+/**
+ * Map every currently-rendered flatpickr day element by its YYYY-MM-DD
+ * key, so adjacency/buffer-preview classes can be patched onto cells
+ * other than the one actually hovered.
+ *
+ * @param {HTMLElement|null} container Flatpickr calendar container.
+ * @returns {Map<string, HTMLElement>} Day elements keyed by date.
+ */
+function buildDayElementMap(
+    container: HTMLElement | null
+): Map<string, HTMLElement> {
+    const map = new Map<string, HTMLElement>();
+    if (!container) return map;
+    container
+        .querySelectorAll<HTMLElement & { dateObj?: Date }>(".flatpickr-day")
+        .forEach(day => {
+            if (!day.dateObj) return;
+            map.set(formatYMD(day.dateObj), day);
+        });
+    return map;
+}
+
+// Elements this module has added an adjacency/buffer-preview class to,
+// so the next hover pass (or leaving the calendar) can strip them again
+// without having to re-derive which dates they came from.
+let adjacencyElements: Set<HTMLElement> = new Set();
+
+/**
+ * Remove every adjacency/buffer-preview class previously applied.
+ *
+ * @returns {void}
+ */
+function clearAdjacencyClasses(): void {
+    adjacencyElements.forEach(el => el.classList.remove(...ADJACENCY_CLASSES));
+    adjacencyElements = new Set();
+}
+
+/**
+ * Apply one adjacency/buffer-preview class to a set of dates, tracking
+ * the touched elements so clearAdjacencyClasses can find them again.
+ *
+ * dates is always a chronologically-ordered, contiguous run (both
+ * findAdjacentBufferDates and myBufferDates guarantee this), so the
+ * first/last entries also get --run-start/--run-end to control which
+ * end(s) of the run render rounded vs. square (see the CSS in
+ * BookingForm.vue) - a single-day run gets both, rounding it fully.
+ *
+ * @param {Map<string, HTMLElement>} dayMap Day elements keyed by date.
+ * @param {string[]} dates YYYY-MM-DD keys to mark, in run order.
+ * @param {string} className Class to apply.
+ * @returns {void}
+ */
+function applyAdjacencyClass(
+    dayMap: Map<string, HTMLElement>,
+    dates: string[],
+    className: string
+): void {
+    dates.forEach((ymd, index) => {
+        const el = dayMap.get(ymd);
+        if (!el) return;
+        el.classList.add(className);
+        if (index === 0) el.classList.add(CLASS_RUN_START);
+        if (index === dates.length - 1) el.classList.add(CLASS_RUN_END);
+        adjacencyElements.add(el);
+    });
+}
 
 /**
  * Replace booking-owned descriptions on a calendar day.
@@ -226,29 +341,14 @@ function setDayDescriptions(
 }
 
 /**
- * Remove booking lead and trail hover classes from a day.
- *
- * @param {HTMLElement|null} el Calendar day to clear.
- * @returns {void}
- */
-function clearHoverClasses(el: HTMLElement | null): void {
-    if (!el) return;
-    el.classList.remove(
-        CLASS_BOOKING_DAY_HOVER_LEAD,
-        CLASS_BOOKING_DAY_HOVER_TRAIL
-    );
-}
-
-/**
  * Hide marker details and clear hover-specific day state.
  *
  * @returns {void}
  */
 function hideDayDetails(): void {
     if (dayDetailsPanel) updateDayDetailsPanel(dayDetailsPanel, []);
-    clearHoverClasses(lastHoverElement);
+    clearAdjacencyClasses();
     setDayDescriptions(lastDescribedElement);
-    lastHoverElement = null;
 }
 
 // Hover feedback bar: a contextual <div> appended inside flatpickr's
@@ -287,11 +387,11 @@ function ensureFeedbackBar(container: HTMLElement): HTMLDivElement {
 /**
  * Return the calendar day-details panel, creating it when necessary.
  *
- * Sits directly below the hover-feedback bar and lists every marker
- * (booked/lead/trail/checked-out, with barcode) for the hovered or
- * focused day - the data the old floating tooltip used to show, but
- * anchored in the calendar's own layout so it never overlaps the day
- * cells it describes.
+ * Sits directly below the hover-feedback bar and lists the booked/
+ * checked-out items (with barcode) for the hovered or focused day - the
+ * one thing colour and the feedback bar can't say on their own. Anchored
+ * in the calendar's own layout so it never overlaps the day cells it
+ * describes.
  *
  * @param {HTMLElement} container Flatpickr calendar container.
  * @returns {HTMLDivElement} Calendar-owned day-details element.
@@ -387,6 +487,7 @@ function updateFeedbackBar(
 function onCalendarLeave(): void {
     if (feedbackBar) updateFeedbackBar(feedbackBar, null);
     if (dayDetailsPanel) updateDayDetailsPanel(dayDetailsPanel, []);
+    clearAdjacencyClasses();
 }
 
 /**
@@ -429,27 +530,67 @@ function onDayHover(payload: {
     element?: HTMLElement | null;
     trigger?: "pointer" | "focus";
 }): void {
-    if (lastHoverElement && lastHoverElement !== payload.element) {
-        clearHoverClasses(lastHoverElement);
-    }
-    lastHoverElement = payload.element ?? null;
-
     const markers = getBookingMarkersForDate(
         store.unavailableByDate,
         payload.ymd,
         bookableItems.value || []
     );
 
-    if (payload.element) {
-        const hasLead = markers.some((m: CalendarMarker) => m.type === "lead");
-        const hasTrail = markers.some(
-            (m: CalendarMarker) => m.type === "trail"
+    clearAdjacencyClasses();
+    if (calendarContainer) {
+        const dayMap = buildDayElementMap(calendarContainer);
+
+        // Existing bookings' lead/trail: only the booking immediately
+        // adjacent to the hovered gap gets coloured (see
+        // findAdjacentBufferDates) - every other existing booking stays a
+        // completely ordinary-looking date until hovered near instead.
+        const { leadDates, trailDates } = findAdjacentBufferDates(
+            store.unavailableByDate,
+            payload.ymd,
+            relevantItemIds.value
         );
-        if (hasLead) {
-            payload.element.classList.add(CLASS_BOOKING_DAY_HOVER_LEAD);
-        }
-        if (hasTrail) {
-            payload.element.classList.add(CLASS_BOOKING_DAY_HOVER_TRAIL);
+        applyAdjacencyClass(dayMap, leadDates, CLASS_EXISTING_LEAD_ADJACENT);
+        applyAdjacencyClass(dayMap, trailDates, CLASS_EXISTING_TRAIL_ADJACENT);
+
+        // My own prospective booking's lead/trail buffer. Before a start is
+        // chosen, both bands preview relative to the hovered candidate
+        // (matching the old UI, whose trail calculation was always
+        // hover-relative and never branched on whether a start was
+        // chosen - only lead did). Once a start is chosen, the lead
+        // buffer is fixed to it, and the trail buffer previews live
+        // relative to whatever candidate end is currently hovered.
+        // Boundaries are derived from payload.ymd (already a plain
+        // calendar-day string, like findAdjacentBufferDates uses) rather
+        // than payload.date - comparing/arithmetic on the raw Date risks
+        // a timezone-dependent off-by-one that the string form
+        // sidesteps entirely.
+        const { leadDays, trailDays } = bufferConfig.value;
+        const anchor = rangeAnchor.value;
+        const hoveredDay = toDay(payload.ymd);
+        if (!anchor) {
+            applyAdjacencyClass(
+                dayMap,
+                myBufferDates(hoveredDay, leadDays, "lead"),
+                CLASS_MY_LEAD_BUFFER
+            );
+            applyAdjacencyClass(
+                dayMap,
+                myBufferDates(hoveredDay, trailDays, "trail"),
+                CLASS_MY_TRAIL_BUFFER
+            );
+        } else {
+            applyAdjacencyClass(
+                dayMap,
+                myBufferDates(anchor, leadDays, "lead"),
+                CLASS_MY_LEAD_BUFFER
+            );
+            if (!hoveredDay.isBefore(toDay(anchor), "day")) {
+                applyAdjacencyClass(
+                    dayMap,
+                    myBufferDates(hoveredDay, trailDays, "trail"),
+                    CLASS_MY_TRAIL_BUFFER
+                );
+            }
         }
     }
 
@@ -475,9 +616,18 @@ function onDayHover(payload: {
         }
     }
 
-    if (dayDetailsPanel) updateDayDetailsPanel(dayDetailsPanel, markers);
+    // The day-details panel's one job is barcodes booked/checked out on
+    // this exact date - lead/trail/holiday/limited-availability are
+    // already conveyed by the day's own colour, the constraint-info box,
+    // and the top feedback bar, so restating them here would be a third
+    // copy of the same information.
+    const dayDetailMarkers = markers.filter(
+        m => m.type === "booked" || m.type === "checked-out"
+    );
+    if (dayDetailsPanel)
+        updateDayDetailsPanel(dayDetailsPanel, dayDetailMarkers);
 
-    if (!payload.element || markers.length === 0) {
+    if (!payload.element || dayDetailMarkers.length === 0) {
         if (payload.trigger === "focus" && payload.element) {
             setDayDescriptions(
                 payload.element,

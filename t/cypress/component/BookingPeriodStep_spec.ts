@@ -110,6 +110,38 @@ describe("BookingPeriodStep — constraint info alert", () => {
         mountStep({ circulationRules: [{ issuelength: 7 }] });
         cy.get(".booking-constraint-info").should("not.exist");
     });
+
+    it("also states the active lead and trail day counts", () => {
+        mountStep(
+            {
+                circulationRules: [
+                    {
+                        issuelength: 7,
+                        bookings_lead_period: 2,
+                        bookings_trail_period: 1,
+                    },
+                ],
+            },
+            { constraints: { dateRangeConstraint: "issuelength" } }
+        );
+        cy.get(".booking-constraint-info")
+            .should(
+                "contain.text",
+                "Booking period limited to checkout length (7 days)"
+            )
+            .and("contain.text", "Lead period: 2 days before start")
+            .and("contain.text", "Trail period: 1 days after return");
+    });
+
+    it("shows the alert for lead/trail alone when there is no max-period constraint", () => {
+        mountStep({
+            circulationRules: [{ bookings_lead_period: 3 }],
+        });
+        cy.get(".booking-constraint-info").should(
+            "contain.text",
+            "Lead period: 3 days before start"
+        );
+    });
 });
 
 describe("BookingPeriodStep — constraintHelpText per variant", () => {
@@ -244,7 +276,7 @@ describe("BookingPeriodStep — accessibility", () => {
             .and(
                 "have.attr",
                 "title",
-                "Booked (Barcode: N/A)\nBooked (Barcode: visible-barcode)"
+                "Unavailable (Barcode: N/A)\nUnavailable (Barcode: visible-barcode)"
             );
         cy.focused()
             .should("have.attr", "aria-describedby")
@@ -259,13 +291,113 @@ describe("BookingPeriodStep — accessibility", () => {
                 expect(details?.getAttribute("role")).to.equal("status");
                 expect(details?.getAttribute("aria-live")).to.equal("polite");
                 expect(details?.textContent).to.contain(
-                    "Booked (Barcode: visible-barcode)"
+                    "Unavailable (Barcode: visible-barcode)"
                 );
                 expect(details?.textContent).to.contain(
-                    "Booked (Barcode: N/A)"
+                    "Unavailable (Barcode: N/A)"
                 );
                 expect(details?.textContent).not.to.contain("987");
                 expect(details?.textContent).not.to.contain("654");
+            });
+    });
+
+    it("narrows the day-details panel to booked/checked-out rows only", () => {
+        cy.intercept("GET", "**/api/v1/biblios/1/items*", {
+            body: [
+                {
+                    item_id: 987,
+                    item_type_id: "BK",
+                    home_library_id: "CPL",
+                    external_id: "visible-barcode",
+                },
+            ],
+        });
+        cy.intercept("GET", "**/api/v1/biblios/1/pickup_locations*", {
+            body: [
+                {
+                    library_id: "CPL",
+                    name: "Centerville",
+                    pickup_items: [987],
+                },
+            ],
+        });
+        cy.intercept("GET", "**/api/v1/circulation_rules*", {
+            body: [{ issuelength: 14 }],
+        });
+        cy.intercept("GET", "**/api/v1/biblios/1/booking_availability*", {
+            body: {
+                item_ids: [987, 654],
+                availability: {
+                    "2026-03-14": {
+                        987: {
+                            blockers: { booking: 1 },
+                            confirms: {},
+                            warnings: {},
+                        },
+                        // A different item's lead-period tag on the same
+                        // date - should surface as the day's colour and
+                        // in the top feedback bar's disabled reason, but
+                        // not as a row here (that's a barcode panel now).
+                        654: {
+                            blockers: {},
+                            confirms: {},
+                            warnings: { lead: 1 },
+                        },
+                    },
+                },
+            },
+        }).as("bookingAvailability");
+        cy.intercept("GET", "**/api/v1/libraries/CPL/closed_dates*", {
+            body: [],
+        });
+
+        mountStep(
+            {},
+            {
+                workflowInput: {
+                    biblionumber: 1,
+                    patron: {
+                        patron_id: 42,
+                        category_id: "ST",
+                        library_id: "CPL",
+                    },
+                    itemtypeId: "BK",
+                    pickupLibraryId: "CPL",
+                    selectedDateRange: ["2026-03-10", "2026-03-11"],
+                },
+            }
+        );
+        cy.wait("@bookingAvailability");
+
+        cy.get("#booking_period").focus().trigger("keydown", {
+            key: "ArrowDown",
+            code: "ArrowDown",
+            keyCode: 40,
+            which: 40,
+        });
+        for (let i = 0; i < 3; i++) {
+            cy.focused().trigger("keydown", {
+                key: "ArrowRight",
+                code: "ArrowRight",
+                keyCode: 39,
+                which: 39,
+            });
+        }
+        cy.focused()
+            .should("have.attr", "aria-label", "March 14, 2026")
+            .and("have.attr", "aria-describedby")
+            .then(describedBy => {
+                const ids = String(describedBy).split(/\s+/);
+                const details = ids
+                    .map(id => document.getElementById(id))
+                    .find(element =>
+                        element?.classList.contains("booking-day-details")
+                    );
+                expect(details).not.to.equal(undefined);
+                expect(details?.textContent).to.contain(
+                    "Unavailable (Barcode: visible-barcode)"
+                );
+                expect(details?.textContent).not.to.contain("Lead period");
             });
     });
 });

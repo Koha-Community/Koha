@@ -282,6 +282,168 @@ export function createDisableFunction(
 }
 
 /**
+ * Whether any of the given items carry a reason on a map entry.
+ *
+ * @param {Object|undefined} entry Per-item reason sets for one date.
+ * @param {string[]} itemIds Candidate items (union, not "every item").
+ * @param {string} reason Reason token to look for.
+ * @returns {boolean}
+ */
+function anyItemHasReason(entry, itemIds, reason) {
+    if (!entry) return false;
+    return itemIds.some(id => entry[id]?.has(reason));
+}
+
+/**
+ * Nearest date carrying "booking" or "checkout" for any of the given
+ * items, walking day-by-day from (and including) `from` in `direction`.
+ *
+ * @param {import('../types/bookings.d.ts').UnavailableByDate} map Availability map.
+ * @param {import('dayjs').Dayjs} from Date to start the walk from, inclusive.
+ * @param {1|-1} direction +1 walks forward, -1 walks backward.
+ * @param {string[]} itemIds Relevant item ids.
+ * @param {number} maxWalkDays Safety bound on the walk.
+ * @returns {import('dayjs').Dayjs|null} The nearest occupied date, or null.
+ */
+function nearestOccupiedDate(map, from, direction, itemIds, maxWalkDays) {
+    let d = from.clone();
+    for (let i = 0; i < maxWalkDays; i++) {
+        const key = d.format("YYYY-MM-DD");
+        const entry = map[key];
+        if (
+            anyItemHasReason(entry, itemIds, "booking") ||
+            anyItemHasReason(entry, itemIds, "checkout")
+        ) {
+            return d;
+        }
+        d = d.add(direction, "day");
+    }
+    return null;
+}
+
+/**
+ * The full contiguous run of dates carrying `reason`, walking outward in
+ * `direction` from (and including) `from` until the tag stops.
+ *
+ * @param {import('../types/bookings.d.ts').UnavailableByDate} map Availability map.
+ * @param {import('dayjs').Dayjs} from Date to start the walk from, inclusive.
+ * @param {1|-1} direction +1 walks forward, -1 walks backward.
+ * @param {string} reason Reason token to look for.
+ * @param {string[]} itemIds Relevant item ids.
+ * @param {number} maxWalkDays Safety bound on the walk.
+ * @returns {string[]} YYYY-MM-DD keys, chronological order.
+ */
+function taggedRun(map, from, direction, reason, itemIds, maxWalkDays) {
+    const dates = [];
+    let d = from.clone();
+    for (let i = 0; i < maxWalkDays; i++) {
+        const key = d.format("YYYY-MM-DD");
+        if (!anyItemHasReason(map[key], itemIds, reason)) break;
+        if (direction > 0) dates.push(key);
+        else dates.unshift(key);
+        d = d.add(direction, "day");
+    }
+    return dates;
+}
+
+/**
+ * Existing bookings' lead/trail dates immediately adjacent to a hovered
+ * gap: the trail window of the closest booking ending at or before the
+ * hovered date, and the lead window of the closest booking starting at or
+ * after it. The server pre-marks every existing booking's lead/trail
+ * window in the map already; this finds the nearest booking in each
+ * direction and expands the full contiguous tagged run bordering it, so
+ * hovering anywhere in the gap - not just inside the window itself -
+ * reveals the whole adjacent window. Returns nothing when the hovered
+ * date is itself part of an existing booking (not "bookable space" to
+ * preview from).
+ *
+ * @param {import('../types/bookings.d.ts').UnavailableByDate} map Availability map.
+ * @param {string} hoveredYmd Hovered date, YYYY-MM-DD.
+ * @param {string[]} itemIds Relevant item ids (already narrowed by selection).
+ * @param {number} [maxWalkDays] Safety bound on each walk.
+ * @returns {{trailDates: string[], leadDates: string[]}} YYYY-MM-DD keys, chronological order.
+ */
+export function findAdjacentBufferDates(
+    map,
+    hoveredYmd,
+    itemIds,
+    maxWalkDays = 60
+) {
+    const hovered = toDay(hoveredYmd);
+    const hoveredEntry = map[hovered.format("YYYY-MM-DD")];
+    if (
+        anyItemHasReason(hoveredEntry, itemIds, "booking") ||
+        anyItemHasReason(hoveredEntry, itemIds, "checkout")
+    ) {
+        return { trailDates: [], leadDates: [] };
+    }
+
+    let trailDates = [];
+    const closestBefore = nearestOccupiedDate(
+        map,
+        hovered,
+        -1,
+        itemIds,
+        maxWalkDays
+    );
+    if (closestBefore) {
+        trailDates = taggedRun(
+            map,
+            closestBefore.add(1, "day"),
+            1,
+            "trail",
+            itemIds,
+            maxWalkDays
+        );
+    }
+
+    let leadDates = [];
+    const closestAfter = nearestOccupiedDate(
+        map,
+        hovered,
+        1,
+        itemIds,
+        maxWalkDays
+    );
+    if (closestAfter) {
+        leadDates = taggedRun(
+            map,
+            closestAfter.subtract(1, "day"),
+            -1,
+            "lead",
+            itemIds,
+            maxWalkDays
+        );
+    }
+
+    return { trailDates, leadDates };
+}
+
+/**
+ * Date keys for my own booking's lead or trail buffer relative to a
+ * boundary date - pure day arithmetic, no availability lookup, since this
+ * previews where the buffer *would* land rather than whether it conflicts
+ * (createDisableFunction already decides that).
+ *
+ * @param {import('dayjs').Dayjs|Date|string} boundary Start (for lead) or end (for trail).
+ * @param {number} days Lead or trail day count.
+ * @param {"lead"|"trail"} kind Which buffer this is.
+ * @returns {string[]} YYYY-MM-DD keys, chronological order.
+ */
+export function myBufferDates(boundary, days, kind) {
+    if (!days || days <= 0) return [];
+    const b = toDay(boundary);
+    const dates = [];
+    for (let i = 1; i <= days; i++) {
+        const d = kind === "lead" ? b.subtract(i, "day") : b.add(i, "day");
+        dates.push(d.format("YYYY-MM-DD"));
+    }
+    if (kind === "lead") dates.reverse();
+    return dates;
+}
+
+/**
  * Find the first date where a booking range [startDate, candidateEnd] would
  * conflict with all items, walking the availability map day by day and
  * accumulating per-item conflicts: once every candidate item has a conflict

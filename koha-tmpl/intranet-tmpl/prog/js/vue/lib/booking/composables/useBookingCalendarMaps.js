@@ -17,10 +17,12 @@ import { computed } from "vue";
 import { isoArrayToDates, toDay } from "../dates.js";
 import { serverMapToUnavailableByDate } from "../availability/server-map.js";
 import {
+    CONSTRAINT_MODE_END_DATE_ONLY,
     calculateMaxEndDate,
     createDisableFunction,
     extractBookingConfiguration,
     findFirstBlockingDate,
+    myBufferDates,
     toEffectiveRules,
     trailWindowConflicts,
 } from "../availability/predicate.js";
@@ -32,7 +34,8 @@ const CLASS_BOOKING_CONSTRAINED_RANGE_MARKER =
 const CLASS_BOOKING_INTERMEDIATE_BLOCKED = "booking-intermediate-blocked";
 const CLASS_BOOKING_LOAN_BOUNDARY = "booking-loan-boundary";
 const CLASS_BOOKING_TRAIL_THEORETICAL = "booking-day--trail-theoretical";
-const CONSTRAINT_MODE_END_DATE_ONLY = "end_date_only";
+const CLASS_BOOKING_MY_LEAD_BUFFER = "booking-day--my-lead-buffer";
+const CLASS_BOOKING_MY_TRAIL_BUFFER = "booking-day--my-trail-buffer";
 
 /**
  * @param {Object} inputs
@@ -96,6 +99,18 @@ export function useBookingCalendarMaps({
     /** True once the availability payload for the current context arrived */
     const availabilityReady = computed(() => availability?.value != null);
 
+    // Lead/trail day counts from circulation rules, shared by the
+    // constrained-range math above and the my-own-buffer preview below.
+    const bufferConfig = computed(() =>
+        extractBookingConfiguration(
+            toEffectiveRules(
+                circulationRules?.value,
+                constraintOptions?.value || {}
+            ),
+            undefined
+        )
+    );
+
     const unavailableByDate = computed(() =>
         serverMapToUnavailableByDate(availability?.value)
     );
@@ -104,15 +119,10 @@ export function useBookingCalendarMaps({
         // Until availability arrives nothing is safely selectable
         if (!availabilityReady.value) return () => true;
 
-        const opts = constraintOptions?.value || {};
-        const config = extractBookingConfiguration(
-            toEffectiveRules(circulationRules?.value, opts),
-            undefined
-        );
         const selDates = isoArrayToDates(selectedDateRange?.value || []);
         return createDisableFunction(
             unavailableByDate.value,
-            config,
+            bufferConfig.value,
             bookableItems.value || [],
             bookingItemId?.value != null ? String(bookingItemId.value) : null,
             selDates,
@@ -203,22 +213,58 @@ export function useBookingCalendarMaps({
         /** @type {Map<string, Array<{kind:string,className:string,tooltip?:string}>>} */
         const result = new Map();
         const items = bookableItems.value || [];
+        const itemIds = relevantItemIds.value;
 
-        Object.keys(unavailableByDate.value).forEach(dateKey => {
+        Object.entries(unavailableByDate.value).forEach(([dateKey, byItem]) => {
+            // A day only reads as Unavailable once every item relevant
+            // to the current selection is actually booked/checked out
+            // (mirrors disabledByDate's allBlocked test). Otherwise a
+            // free item is still bookable behind the scenes, and
+            // colouring the day Unavailable would contradict its own
+            // clickability.
+            const blockedCount = itemIds.filter(id => {
+                const reasons = byItem[id];
+                return (
+                    !!reasons &&
+                    (reasons.has("booking") || reasons.has("checkout"))
+                );
+            }).length;
+            const allRelevantBlocked =
+                itemIds.length > 0 && blockedCount === itemIds.length;
+
             const markers = getBookingMarkersForDate(
                 unavailableByDate.value,
                 dateKey,
                 items
-            );
-            if (markers.length === 0) return;
-            result.set(
-                dateKey,
-                markers.map(m => ({
+            )
+                .filter(
+                    m =>
+                        allRelevantBlocked ||
+                        (m.type !== "booked" && m.type !== "checked-out")
+                )
+                .map(m => ({
                     kind: m.type,
                     className: `booking-day--${m.type}`,
                     tooltip: getMarkerDescription(m),
-                }))
-            );
+                }));
+
+            // Some, but not all, relevant items are booked/checked out: the
+            // day stays fully bookable (another item is free) but isn't
+            // ordinary either - a quiet dot says "check here" without
+            // claiming the day is unavailable. Suppressed once the day is
+            // already Unavailable above, so the two channels never stack.
+            if (!allRelevantBlocked && blockedCount > 0) {
+                markers.push({
+                    kind: "partial",
+                    className: "booking-day--partial",
+                    tooltip: $__(
+                        "Some items unavailable - see details for this date"
+                    ),
+                });
+            }
+
+            if (markers.length === 0) return;
+            result.set(dateKey, markers);
         });
 
         return result;
@@ -366,6 +412,31 @@ export function useBookingCalendarMaps({
             );
         });
 
+        // My own booking's lead/trail buffer, once both dates are
+        // committed. Before that (no anchor, or anchor with no end yet)
+        // there's no fixed boundary to pin the trail side to, so the live
+        // preview is instead applied directly to the DOM on hover (see
+        // BookingPeriodStep.vue's onDayHover), which can track the
+        // currently-hovered candidate end.
+        const selDates = isoArrayToDates(selectedDateRange?.value || []);
+        if (selDates.length === 2) {
+            const { leadDays, trailDays } = bufferConfig.value;
+            const [committedStart, committedEnd] = selDates;
+            const addClass = (key, className) => {
+                const existing = result.get(key);
+                result.set(
+                    key,
+                    existing ? `${existing} ${className}` : className
+                );
+            };
+            myBufferDates(committedStart, leadDays, "lead").forEach(key =>
+                addClass(key, CLASS_BOOKING_MY_LEAD_BUFFER)
+            );
+            myBufferDates(committedEnd, trailDays, "trail").forEach(key =>
+                addClass(key, CLASS_BOOKING_MY_TRAIL_BUFFER)
+            );
+        }
+
         return result;
     });
 
@@ -376,14 +447,7 @@ export function useBookingCalendarMaps({
      * @returns {string[]} YYYY-MM-DD keys.
      */
     function trailTheoreticalDates() {
-        const config = extractBookingConfiguration(
-            toEffectiveRules(
-                circulationRules?.value,
-                constraintOptions?.value || {}
-            ),
-            undefined
-        );
-        const trailDays = config.trailDays;
+        const trailDays = bufferConfig.value.trailDays;
         if (!trailDays || trailDays <= 0) return [];
 
         const map = unavailableByDate.value;
@@ -468,5 +532,7 @@ export function useBookingCalendarMaps({
         loanBoundaryTimes,
         unavailableByDate,
         availabilityReady,
+        relevantItemIds,
+        bufferConfig,
     };
 }
