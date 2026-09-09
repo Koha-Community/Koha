@@ -601,7 +601,7 @@ describe("Booking Modal Date Picker Tests", () => {
          * In the Vue version, lead/trail periods are indicated via:
          * - booking-day--hover-lead / booking-day--hover-trail classes on hover
          * - flatpickr-disabled class for dates that cannot be selected
-         * - booking-marker-dot--lead / booking-marker-dot--trail for marker dots
+         * - booking-day--lead / booking-day--trail day classes
          *
          * The Vue version disables dates with lead/trail conflicts via the
          * disable function rather than applying leadDisable/trailDisable classes.
@@ -888,13 +888,12 @@ describe("Booking Modal Date Picker Tests", () => {
         cy.get("#booking_period").should("not.have.value", "");
     });
 
-    it("should show booking marker dots for dates with existing bookings", () => {
+    it("should mark dates with existing bookings", () => {
         /**
-         * Booking Marker Dots Visual Indicator Test
-         * ==========================================
+         * Booking Day Marker Visual Indicator Test
+         * =======================================
          *
-         * Marker dots render as .booking-marker-grid with
-         * .booking-marker-dot children.
+         * Days with existing bookings carry the booking-day--booked class.
          */
 
         const fixedToday = pinnedToday();
@@ -981,14 +980,7 @@ describe("Booking Modal Date Picker Tests", () => {
         singleDotDates.forEach(date => {
             cy.get("@markerFlatpickr")
                 .getFlatpickrDate(date.toDate())
-                .within(() => {
-                    cy.get(".booking-marker-grid")
-                        .should("exist")
-                        .and("have.length", 1);
-                    cy.get(".booking-marker-grid .booking-marker-dot")
-                        .should("exist")
-                        .and("have.length.at.least", 1);
-                });
+                .should("have.class", "booking-day--booked");
         });
 
         // ========================================================================
@@ -1000,15 +992,7 @@ describe("Booking Modal Date Picker Tests", () => {
         multipleDotDates.forEach(date => {
             cy.get("@markerFlatpickr")
                 .getFlatpickrDate(date.toDate())
-                .within(() => {
-                    cy.get(".booking-marker-grid").should("exist");
-                    // Dots are aggregated by type (booked/checked-out), not per-booking.
-                    // 2 bookings of type "booked" = 1 dot with count 2.
-                    cy.get(".booking-marker-grid .booking-marker-dot").should(
-                        "have.length.at.least",
-                        1
-                    );
-                });
+                .should("have.class", "booking-day--booked");
         });
 
         // ========================================================================
@@ -1025,9 +1009,7 @@ describe("Booking Modal Date Picker Tests", () => {
         emptyDates.forEach(date => {
             cy.get("@markerFlatpickr")
                 .getFlatpickrDate(date.toDate())
-                .within(() => {
-                    cy.get(".booking-marker-grid").should("not.exist");
-                });
+                .should("not.have.class", "booking-day--booked");
         });
 
         // ========================================================================
@@ -1039,20 +1021,13 @@ describe("Booking Modal Date Picker Tests", () => {
         // Verify isolated booking day HAS marker dot
         cy.get("@markerFlatpickr")
             .getFlatpickrDate(isolatedBookingDate.toDate())
-            .within(() => {
-                cy.get(".booking-marker-grid").should("exist");
-                cy.get(".booking-marker-grid .booking-marker-dot")
-                    .should("exist")
-                    .and("have.length.at.least", 1);
-            });
+            .should("have.class", "booking-day--booked");
 
         // Verify adjacent dates DON'T have marker dots
         [today.add(14, "day"), today.add(16, "day")].forEach(adjacentDate => {
             cy.get("@markerFlatpickr")
                 .getFlatpickrDate(adjacentDate.toDate())
-                .within(() => {
-                    cy.get(".booking-marker-grid").should("not.exist");
-                });
+                .should("not.have.class", "booking-day--booked");
         });
     });
 

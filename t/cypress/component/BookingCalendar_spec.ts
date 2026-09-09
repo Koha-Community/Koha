@@ -304,15 +304,26 @@ describe("BookingCalendar", () => {
             cy.get("@onUpdate").its("lastCall.args.0").should("have.length", 2);
         });
 
-        it("renders booking marker dots and aggregate counts", () => {
+        it("applies marker classes and combines their tooltips", () => {
             mountCalendar({
                 markersByDate: new Map([
                     [
                         "2026-03-15",
                         [
-                            { kind: "booked", tooltip: "Barcode 1" },
-                            { kind: "booked", tooltip: "Barcode 2" },
-                            { kind: "checked-out" },
+                            {
+                                kind: "booked",
+                                className: "booking-day--booked",
+                                tooltip: "Booked (Barcode: 1)",
+                            },
+                            {
+                                kind: "booked",
+                                className: "booking-day--booked",
+                                tooltip: "Booked (Barcode: 2)",
+                            },
+                            {
+                                kind: "checked-out",
+                                className: "booking-day--checked-out",
+                            },
                         ],
                     ],
                 ]),
@@ -320,15 +331,13 @@ describe("BookingCalendar", () => {
             openCalendar();
 
             day("March 15, 2026")
-                .find(".booking-marker-dot--booked")
-                .should("exist");
-            day("March 15, 2026")
-                .find(".booking-marker-count")
-                .first()
-                .should("contain", "2");
-            day("March 15, 2026")
-                .find(".booking-marker-dot--checked-out")
-                .should("exist");
+                .should("have.class", "booking-day--booked")
+                .and("have.class", "booking-day--checked-out")
+                .and(
+                    "have.attr",
+                    "title",
+                    "Booked (Barcode: 1)\nBooked (Barcode: 2)"
+                );
         });
 
         it("applies updated calendar classes without losing the anchor", () => {

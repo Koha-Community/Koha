@@ -1,8 +1,8 @@
 /**
- * Marker generation and aggregation for the booking system.
+ * Marker generation for the booking calendar.
  *
- * This module handles generation of calendar markers from availability data
- * and aggregation of markers by type for display purposes.
+ * This module derives per-day calendar markers from availability data and
+ * the translated labels and hover feedback that describe them.
  *
  * @module markers
  */
@@ -15,10 +15,6 @@ const MARKER_TYPE_MAP = Object.freeze({
     booking: "booked",
     checkout: "checked-out",
 });
-const CLASS_BOOKING_MARKER_COUNT = "booking-marker-count";
-const CLASS_BOOKING_MARKER_DOT = "booking-marker-dot";
-const CLASS_BOOKING_MARKER_GRID = "booking-marker-grid";
-const CLASS_BOOKING_MARKER_ITEM = "booking-marker-item";
 
 /**
  * Get the translated display label for a marker type.
@@ -37,6 +33,20 @@ export function getMarkerTypeLabel(type) {
         holiday: $__("Library closed"),
     };
     return labels[type] || type;
+}
+
+/**
+ * Describe a marker with its type label and barcode as one reorderable
+ * translation, e.g. "Booked (Barcode: 3999900000001)".
+ *
+ * @param {import('./types/bookings.d.ts').CalendarMarker} marker
+ * @returns {string}
+ */
+export function getMarkerDescription(marker) {
+    return $__("%s (Barcode: %s)").format(
+        getMarkerTypeLabel(marker.type),
+        marker.barcode || $__("N/A")
+    );
 }
 
 /**
@@ -98,57 +108,6 @@ export function getBookingMarkersForDate(
         }
     }
     return markers;
-}
-
-/**
- * Aggregate markers by type for display
- * @param {Array} markers - Array of booking markers
- * @returns {import('./types/bookings.d.ts').MarkerAggregation} Aggregated counts by type
- */
-export function aggregateMarkersByType(markers) {
-    return markers.reduce((acc, marker) => {
-        // Lead/trail markers (including the lead-floor / lead-theoretical
-        // variants carried by the server availability map) are reflected
-        // through CSS class names and hover feedback, not the dot grid.
-        if (
-            marker.type !== "lead" &&
-            marker.type !== "lead-floor" &&
-            marker.type !== "lead-theoretical" &&
-            marker.type !== "trail"
-        ) {
-            acc[marker.type] = (acc[marker.type] || 0) + 1;
-        }
-        return acc;
-    }, {});
-}
-
-/**
- * Build the DOM grid for aggregated booking markers.
- *
- * @param {import('./types/bookings.d.ts').MarkerAggregation} aggregatedMarkers - counts by marker type
- * @returns {HTMLDivElement} container element with marker items
- */
-export function buildMarkerGrid(aggregatedMarkers) {
-    const gridContainer = document.createElement("div");
-    gridContainer.className = CLASS_BOOKING_MARKER_GRID;
-    Object.entries(aggregatedMarkers).forEach(([type, count]) => {
-        const markerSpan = document.createElement("span");
-        markerSpan.className = CLASS_BOOKING_MARKER_ITEM;
-
-        const dot = document.createElement("span");
-        dot.className = `${CLASS_BOOKING_MARKER_DOT} ${CLASS_BOOKING_MARKER_DOT}--${type}`;
-        dot.title = getMarkerTypeLabel(type);
-        markerSpan.appendChild(dot);
-
-        if (count > 0) {
-            const countSpan = document.createElement("span");
-            countSpan.className = CLASS_BOOKING_MARKER_COUNT;
-            countSpan.textContent = ` ${count}`;
-            markerSpan.appendChild(countSpan);
-        }
-        gridContainer.appendChild(markerSpan);
-    });
-    return gridContainer;
 }
 
 /**

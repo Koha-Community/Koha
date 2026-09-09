@@ -22,18 +22,17 @@ import {
     extractBookingConfiguration,
     findFirstBlockingDate,
     toEffectiveRules,
+    trailWindowConflicts,
 } from "../availability/predicate.js";
-import { getBookingMarkersForDate } from "../markers.js";
+import { getBookingMarkersForDate, getMarkerDescription } from "../markers.js";
 import { $__ } from "@koha-vue/i18n";
 
 const CLASS_BOOKING_CONSTRAINED_RANGE_MARKER =
     "booking-constrained-range-marker";
 const CLASS_BOOKING_INTERMEDIATE_BLOCKED = "booking-intermediate-blocked";
 const CLASS_BOOKING_LOAN_BOUNDARY = "booking-loan-boundary";
+const CLASS_BOOKING_TRAIL_THEORETICAL = "booking-day--trail-theoretical";
 const CONSTRAINT_MODE_END_DATE_ONLY = "end_date_only";
-
-/** Marker kinds surfaced through hover feedback and CSS only, not the dot badge */
-const BADGELESS_MARKER_KINDS = new Set(["lead-floor", "lead-theoretical"]);
 
 /**
  * @param {Object} inputs
@@ -210,14 +209,14 @@ export function useBookingCalendarMaps({
                 unavailableByDate.value,
                 dateKey,
                 items
-            ).filter(m => !BADGELESS_MARKER_KINDS.has(m.type));
+            );
             if (markers.length === 0) return;
             result.set(
                 dateKey,
                 markers.map(m => ({
                     kind: m.type,
-                    className: `booking-marker-dot--${m.type}`,
-                    tooltip: m.itemName,
+                    className: `booking-day--${m.type}`,
+                    tooltip: getMarkerDescription(m),
                 }))
             );
         });
@@ -265,8 +264,18 @@ export function useBookingCalendarMaps({
         const result = new Map();
         const anchor = rangeAnchor?.value;
         const maxPeriod = maxBookingPeriod?.value;
+        const rules = effectiveRules.value;
+        const isEndDateOnly =
+            rules?.booking_constraint_mode === CONSTRAINT_MODE_END_DATE_ONLY;
 
-        if (anchor && maxPeriod && maxPeriod > 0) {
+        // Pre-paint the full constrained range only when the end date is
+        // forced (end_date_only mode): there the system has already decided
+        // the span, so showing it upfront is informative. When the user is
+        // actually choosing the end date, painting the whole max-period
+        // range the instant the anchor is picked reads as though the choice
+        // has been made for them; that range is instead revealed
+        // progressively through hover (disabledFn / rangePreviewFn).
+        if (isEndDateOnly && anchor && maxPeriod && maxPeriod > 0) {
             const start = toDay(anchor);
             let end = calculateMaxEndDate(anchor, maxPeriod);
 
@@ -325,9 +334,6 @@ export function useBookingCalendarMaps({
         // range so they render distinctly from the regular constrained-range
         // highlight, signalling that those days are inside the fixed span
         // but cannot be clicked.
-        const rules = effectiveRules.value;
-        const isEndDateOnly =
-            rules?.booking_constraint_mode === CONSTRAINT_MODE_END_DATE_ONLY;
         if (isEndDateOnly && anchor && maxPeriod && maxPeriod > 0) {
             const start = toDay(anchor);
             // Forced end = start + maxPeriod - 1 (start counts as day 1);
@@ -350,8 +356,66 @@ export function useBookingCalendarMaps({
             }
         }
 
+        trailTheoreticalDates().forEach(key => {
+            const existing = result.get(key);
+            result.set(
+                key,
+                existing
+                    ? `${existing} ${CLASS_BOOKING_TRAIL_THEORETICAL}`
+                    : CLASS_BOOKING_TRAIL_THEORETICAL
+            );
+        });
+
         return result;
     });
+
+    /**
+     * Dates the new booking cannot end on, and so cannot start on either,
+     * because its trail window would run into an existing conflict.
+     *
+     * @returns {string[]} YYYY-MM-DD keys.
+     */
+    function trailTheoreticalDates() {
+        const config = extractBookingConfiguration(
+            toEffectiveRules(
+                circulationRules?.value,
+                constraintOptions?.value || {}
+            ),
+            undefined
+        );
+        const trailDays = config.trailDays;
+        if (!trailDays || trailDays <= 0) return [];
+
+        const map = unavailableByDate.value;
+        const selectedItem =
+            bookingItemId?.value != null ? String(bookingItemId.value) : null;
+        const allItemIds = (bookableItems.value || []).map(i =>
+            String(i.item_id)
+        );
+        const keys = new Set();
+
+        Object.keys(map).forEach(blockedKey => {
+            const blocked = toDay(blockedKey);
+            for (let offset = 1; offset <= trailDays; offset++) {
+                const d = blocked.subtract(offset, "day");
+                const key = d.format("YYYY-MM-DD");
+                if (map[key]) continue;
+                if (
+                    trailWindowConflicts(
+                        map,
+                        d,
+                        trailDays,
+                        selectedItem,
+                        allItemIds
+                    )
+                ) {
+                    keys.add(key);
+                }
+            }
+        });
+
+        return [...keys];
+    }
 
     /**
      * Validate a tentative range without mutating the booking draft.

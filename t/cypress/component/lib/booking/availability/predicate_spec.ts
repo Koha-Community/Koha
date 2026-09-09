@@ -394,6 +394,15 @@ describe("createDisableFunction (draft-window edge cases)", () => {
         });
         expect(fn(new Date(2026, 2, 20))).to.be.true;
     });
+
+    it("blocks a start whose one-day trail window hits the next booking's lead", () => {
+        const fn = makeDisableFn({
+            rules: { bookings_trail_period: 1 },
+            map: { "2026-03-17": { "1": ["lead"] } },
+        });
+        expect(fn(new Date(2026, 2, 16))).to.be.true;
+        expect(fn(new Date(2026, 2, 15))).to.be.false;
+    });
 });
 
 describe("findFirstBlockingDate (empty cases)", () => {

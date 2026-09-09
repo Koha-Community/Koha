@@ -241,7 +241,11 @@ describe("BookingPeriodStep — accessibility", () => {
         }
         cy.focused()
             .should("have.attr", "aria-label", "March 14, 2026")
-            .and("have.attr", "title", "visible-barcode");
+            .and(
+                "have.attr",
+                "title",
+                "Booked (Barcode: N/A)\nBooked (Barcode: visible-barcode)"
+            );
         cy.focused()
             .should("have.attr", "aria-describedby")
             .then(describedBy => {

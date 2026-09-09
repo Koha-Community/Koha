@@ -213,9 +213,8 @@ describe("useBookingCalendarMaps (disabledByDate by item availability)", () => {
         }).then(({ wrapper }) => {
             const markers = wrapper.vm.markersByDate.get("2026-03-15");
             expect(markers, "markers for Mar 15").to.exist;
-            expect(
-                markers.some(m => m.className === "booking-marker-dot--booked")
-            ).to.be.true;
+            expect(markers.some(m => m.className === "booking-day--booked")).to
+                .be.true;
         });
     });
 
@@ -230,16 +229,12 @@ describe("useBookingCalendarMaps (disabledByDate by item availability)", () => {
             const markers = wrapper.vm.markersByDate.get("2026-03-15");
             expect(markers).to.exist;
             expect(
-                markers.some(
-                    m => m.className === "booking-marker-dot--checked-out"
-                )
+                markers.some(m => m.className === "booking-day--checked-out")
             ).to.be.true;
         });
     });
 
-    it("keeps lead-floor / lead-theoretical out of the marker badges", () => {
-        // The server map carries these display layers; they surface via
-        // hover feedback and CSS, not the per-day marker badge.
+    it("emits lead-floor / lead-theoretical marker entries as day classes", () => {
         cy.mount(ComposableHost, {
             props: defaultProps({
                 availability: availabilityOf({
@@ -249,7 +244,36 @@ describe("useBookingCalendarMaps (disabledByDate by item availability)", () => {
                 }),
             }),
         }).then(({ wrapper }) => {
-            expect(wrapper.vm.markersByDate.has("2026-03-15")).to.be.false;
+            const classes = wrapper.vm.markersByDate
+                .get("2026-03-15")
+                .map(m => m.className);
+            expect(classes).to.include("booking-day--lead-floor");
+            expect(classes).to.include("booking-day--lead-theoretical");
+        });
+    });
+
+    it("tags days whose trail window would hit an existing conflict", () => {
+        // Anchor Mar 10, trail 2 days, booking on Mar 15: an end on Mar 13
+        // or Mar 14 would push the trail into the booking.
+        cy.mount(ComposableHost, {
+            props: defaultProps({
+                availability: availabilityOf({
+                    "2026-03-15": { "1": ["booking"] },
+                }),
+                modelValue: [new Date("2026-03-10")],
+                circulationRules: [{ bookings_trail_period: 2 }],
+            }),
+        }).then(({ wrapper }) => {
+            const classByDate = wrapper.vm.classByDate;
+            expect(classByDate.get("2026-03-13")).to.include(
+                "booking-day--trail-theoretical"
+            );
+            expect(classByDate.get("2026-03-14")).to.include(
+                "booking-day--trail-theoretical"
+            );
+            expect(classByDate.get("2026-03-12") || "").to.not.include(
+                "booking-day--trail-theoretical"
+            );
         });
     });
 
@@ -360,6 +384,13 @@ describe("useBookingCalendarMaps (anchor-aware soft severity)", () => {
 });
 
 describe("useBookingCalendarMaps (classByDate constrained-range)", () => {
+    // The constrained-range pre-paint only applies in end_date_only mode
+    // (see the "end-date-only mode" describe block below), where the end
+    // date is forced rather than chosen. In the normal mode - where the
+    // user picks their own end date - the range is revealed progressively
+    // through hover (disabledFn / rangePreviewFn) instead of being painted
+    // the instant the anchor is clicked, so it doesn't read as though the
+    // choice has already been made for them.
     it("returns no constrained-range entries when there is no anchor", () => {
         cy.mount(ComposableHost, {
             props: defaultProps({
@@ -367,7 +398,6 @@ describe("useBookingCalendarMaps (classByDate constrained-range)", () => {
                 maxBookingPeriod: 5,
             }),
         }).then(({ wrapper }) => {
-            // No anchor → classByDate has no constrained-range marker.
             const has = key =>
                 (wrapper.vm.classByDate.get(key) || "").includes(
                     "booking-constrained-range-marker"
@@ -377,7 +407,7 @@ describe("useBookingCalendarMaps (classByDate constrained-range)", () => {
         });
     });
 
-    it("marks anchor through anchor + maxBookingPeriod - 1 as constrained range", () => {
+    it("does not pre-paint the constrained range once an anchor is picked", () => {
         cy.mount(ComposableHost, {
             props: defaultProps({
                 modelValue: [new Date(2026, 2, 10), null],
@@ -388,16 +418,15 @@ describe("useBookingCalendarMaps (classByDate constrained-range)", () => {
                 (wrapper.vm.classByDate.get(key) || "").includes(
                     "booking-constrained-range-marker"
                 );
-            expect(has("2026-03-10")).to.be.true;
-            expect(has("2026-03-14")).to.be.true;
-            expect(has("2026-03-15")).to.be.false;
+            // Would have been anchor..anchor+maxPeriod-1 under the old
+            // eager-highlight behaviour; none of it is pre-painted now.
+            expect(has("2026-03-10")).to.be.false;
+            expect(has("2026-03-12")).to.be.false;
+            expect(has("2026-03-14")).to.be.false;
         });
     });
 
     it("emits no constrained-range entries when maxBookingPeriod is missing or zero", () => {
-        // The anchor day still gets the loan-boundary class (which doesn't
-        // depend on maxPeriod), so we assert on the absence of the
-        // constrained-range class specifically, not the whole entry.
         cy.mount(ComposableHost, {
             props: defaultProps({
                 modelValue: [new Date(2026, 2, 10), null],
@@ -410,65 +439,6 @@ describe("useBookingCalendarMaps (classByDate constrained-range)", () => {
                 );
             expect(has("2026-03-10")).to.be.false;
             expect(has("2026-03-14")).to.be.false;
-        });
-    });
-
-    it("moves the highlight when the anchor changes", () => {
-        let host;
-        cy.mount(ComposableHost, {
-            props: defaultProps({
-                modelValue: [new Date(2026, 2, 10), null],
-                maxBookingPeriod: 5,
-            }),
-        }).then(({ wrapper }) => {
-            host = wrapper;
-            expect(
-                (wrapper.vm.classByDate.get("2026-03-14") || "").includes(
-                    "booking-constrained-range-marker"
-                )
-            ).to.be.true;
-        });
-        cy.then(() =>
-            host.setProps({ modelValue: [new Date(2026, 2, 20), null] })
-        );
-        cy.then(() => {
-            expect(
-                (host.vm.classByDate.get("2026-03-14") || "").includes(
-                    "booking-constrained-range-marker"
-                )
-            ).to.be.false;
-            expect(
-                (host.vm.classByDate.get("2026-03-24") || "").includes(
-                    "booking-constrained-range-marker"
-                )
-            ).to.be.true;
-        });
-    });
-
-    it("clamps the highlight at the first blocking date inside the constrained range", () => {
-        // anchor=Mar 10, maxPeriod=10 → naive constrained range Mar 10-19.
-        // With a booking blocking Mar 15, findFirstBlockingDate clamps the
-        // highlight at Mar 14. Days past the blocker stay unhighlighted.
-        cy.mount(ComposableHost, {
-            props: defaultProps({
-                availability: availabilityOf({
-                    "2026-03-15": { "1": ["booking"] },
-                }),
-                modelValue: [new Date(2026, 2, 10), null],
-                maxBookingPeriod: 10,
-            }),
-        }).then(({ wrapper }) => {
-            const has = key =>
-                (wrapper.vm.classByDate.get(key) || "").includes(
-                    "booking-constrained-range-marker"
-                );
-            expect(has("2026-03-10")).to.be.true;
-            expect(has("2026-03-14")).to.be.true;
-            expect(has("2026-03-15")).to.be.false;
-            // Days past the blocker stay unhighlighted even though they sit
-            // within anchor+maxPeriod — proving the clamp, not an accidental
-            // gap on the blocker day.
-            expect(has("2026-03-18")).to.be.false;
         });
     });
 });
@@ -625,11 +595,11 @@ describe("useBookingCalendarMaps (selected-item awareness)", () => {
             const lead = wrapper.vm.markersByDate.get("2026-03-13");
             const trail = wrapper.vm.markersByDate.get("2026-03-17");
             expect(lead).to.exist;
-            expect(lead.some(m => m.className === "booking-marker-dot--lead"))
-                .to.be.true;
+            expect(lead.some(m => m.className === "booking-day--lead")).to.be
+                .true;
             expect(trail).to.exist;
-            expect(trail.some(m => m.className === "booking-marker-dot--trail"))
-                .to.be.true;
+            expect(trail.some(m => m.className === "booking-day--trail")).to.be
+                .true;
         });
     });
 });
@@ -906,7 +876,7 @@ describe("useBookingCalendarMaps (DOM smoke tests)", () => {
         day("March 15, 2026").should("have.class", "flatpickr-disabled");
     });
 
-    it("markersByDate kind 'booked' renders booking-marker-dot--booked", () => {
+    it("markersByDate kind 'booked' renders booking-day--booked", () => {
         cy.mount(RangeHostWithPicker, {
             props: {
                 bookableItems: [item("1"), item("2")],
@@ -920,16 +890,16 @@ describe("useBookingCalendarMaps (DOM smoke tests)", () => {
             },
         });
         cy.get("#booking_period").click();
-        day("March 15, 2026").should(
-            "have.class",
-            "booking-marker-dot--booked"
-        );
+        day("March 15, 2026").should("have.class", "booking-day--booked");
     });
 
     it("classByDate merges booking-loan-boundary and constrained-range-marker on the right days", () => {
         // Anchor=Mar 10, issuelength=5 → boundaries at Mar 10 and Mar 15.
         // The class must land on the day cell via the classByDate output;
-        // this validates the merge with the constrained-range class.
+        // this validates the merge with the constrained-range class. The
+        // constrained-range marker only pre-paints in end_date_only mode
+        // (see the "end-date-only mode" describe block) - that's the only
+        // mode this merge can occur in now.
         cy.mount(RangeHostWithPicker, {
             props: {
                 bookableItems: [item("1")],
@@ -937,7 +907,12 @@ describe("useBookingCalendarMaps (DOM smoke tests)", () => {
                 holidays: [],
                 modelValue: [new Date("2026-03-10"), null],
                 maxBookingPeriod: 10,
-                circulationRules: [{ issuelength: 5 }],
+                circulationRules: [
+                    {
+                        issuelength: 5,
+                        booking_constraint_mode: "end_date_only",
+                    },
+                ],
             },
         });
         cy.get("#booking_period").click();

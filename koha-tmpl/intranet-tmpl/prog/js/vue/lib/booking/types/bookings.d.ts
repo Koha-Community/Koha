@@ -157,9 +157,6 @@ export type ConstraintResult<T> = {
     constraintApplied: boolean;
 };
 
-/** Aggregated counts by marker type for the markers grid. */
-export type MarkerAggregation = Record<string, number>;
-
 /**
  * Common identifier type used across UI (string or number).
  */

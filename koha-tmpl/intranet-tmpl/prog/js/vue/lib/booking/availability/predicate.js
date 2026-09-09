@@ -71,7 +71,13 @@ function leadWindowConflicts(map, start, leadDays, selectedItem, allItemIds) {
  * @param {Array<import('../types/bookings.d.ts').Id>} allItemIds Candidate items.
  * @returns {boolean} Whether the trail window conflicts.
  */
-function trailWindowConflicts(map, end, trailDays, selectedItem, allItemIds) {
+export function trailWindowConflicts(
+    map,
+    end,
+    trailDays,
+    selectedItem,
+    allItemIds
+) {
     if (trailDays <= 0) return false;
     return rangeHasConflict(
         map,
@@ -115,7 +121,16 @@ function forcedEndDate(start, config) {
  */
 function endDateOnlyStartBlocked(d, config, map, selectedItem, allItemIds) {
     const targetEnd = forcedEndDate(d, config) ?? d;
-    return rangeHasConflict(map, d, targetEnd, selectedItem, allItemIds);
+    return (
+        rangeHasConflict(map, d, targetEnd, selectedItem, allItemIds) ||
+        trailWindowConflicts(
+            map,
+            targetEnd,
+            config.trailDays,
+            selectedItem,
+            allItemIds
+        )
+    );
 }
 
 /**
@@ -202,10 +217,22 @@ export function createDisableFunction(
                 if (d.isBefore(today.add(leadDays, "day"), "day")) return true;
             }
 
-            return leadWindowConflicts(
+            if (
+                leadWindowConflicts(
+                    unavailableByDate,
+                    d,
+                    leadDays,
+                    selectedItem,
+                    allItemIds
+                )
+            ) {
+                return true;
+            }
+
+            return trailWindowConflicts(
                 unavailableByDate,
                 d,
-                leadDays,
+                trailDays,
                 selectedItem,
                 allItemIds
             );

@@ -25,7 +25,6 @@ import {
 } from "vue";
 import type { Instance, DayElement } from "flatpickr/dist/types/instance";
 import type { Options } from "flatpickr/dist/types/options";
-import { buildMarkerGrid } from "../../lib/booking/markers.js";
 import { $__ } from "@koha-vue/i18n";
 
 type YMD = string;
@@ -260,15 +259,14 @@ function onDayCreate(
 
     const markers = props.markersByDate?.get(key);
     if (markers && markers.length > 0) {
-        const aggregatedMarkers: Record<string, number> = {};
+        const tooltips: string[] = [];
         markers.forEach(marker => {
             if (marker.className) dayElem.classList.add(marker.className);
-            if (marker.tooltip) dayElem.setAttribute("title", marker.tooltip);
-            aggregatedMarkers[marker.kind] =
-                (aggregatedMarkers[marker.kind] || 0) + 1;
+            if (marker.tooltip) tooltips.push(marker.tooltip);
         });
-        const grid = buildMarkerGrid(aggregatedMarkers);
-        if (grid.hasChildNodes()) dayElem.appendChild(grid);
+        if (tooltips.length > 0) {
+            dayElem.setAttribute("title", [...new Set(tooltips)].join("\n"));
+        }
     }
 }
 
@@ -528,12 +526,17 @@ function positionCalendarInModal(fp: Instance): void {
     const calendar = fp.calendarContainer;
     const calendarHeight = calendar.offsetHeight;
     const calendarWidth = calendar.offsetWidth;
-    const showAbove =
-        window.innerHeight - inputBounds.bottom < calendarHeight &&
-        inputBounds.top > calendarHeight;
-    const top = showAbove
+    const viewportBottom = window.innerHeight - 8;
+    const fitsBelow = inputBounds.bottom + 2 + calendarHeight <= viewportBottom;
+    const fitsAbove = inputBounds.top - 2 - calendarHeight >= 0;
+    const showAbove = !fitsBelow && fitsAbove;
+    const preferredTop = showAbove
         ? inputBounds.top - calendarHeight - 2
         : inputBounds.bottom + 2;
+    const top = Math.max(
+        0,
+        Math.min(preferredTop, viewportBottom - calendarHeight)
+    );
     const maxLeft = Math.max(0, window.innerWidth - calendarWidth);
     const left = Math.max(0, Math.min(inputBounds.left, maxLeft));
 

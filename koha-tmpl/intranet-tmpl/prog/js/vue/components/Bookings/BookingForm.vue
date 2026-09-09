@@ -62,7 +62,6 @@
             :step-number="stepNumber.period"
             :calendar-enabled="readiness.isCalendarReady"
             :error-message="store.error.message"
-            :has-selected-dates="selectedDateRange?.length > 0"
             @clear-dates="clearDateRange"
         />
     </form>
@@ -446,28 +445,29 @@ onUnmounted(closeSession);
 :root {
     --booking-success-hue: 134;
     --booking-success-bg: hsl(var(--booking-success-hue), 40%, 90%);
-    --booking-success-bg-hover: hsl(var(--booking-success-hue), 35%, 85%);
     --booking-success-border: hsl(var(--booking-success-hue), 70%, 40%);
-    --booking-success-border-hover: hsl(var(--booking-success-hue), 75%, 30%);
-    --booking-success-text: hsl(var(--booking-success-hue), 80%, 20%);
-    --booking-constraint-marker: hsl(var(--booking-success-hue), 61%, 41%);
     --booking-border-width: 1px;
     --booking-marker-size: max(4px, 0.25em);
-    --booking-marker-grid-gap: 0.25rem;
-    --booking-marker-grid-offset: -0.75rem;
     --booking-warning-hue: 45;
     --booking-danger-hue: 354;
     --booking-info-hue: 195;
+    --booking-selected-hue: 48;
+    --booking-selected-bg: hsl(var(--booking-selected-hue), 100%, 89%);
+    --booking-selected-bg-hover: hsl(var(--booking-selected-hue), 100%, 80%);
+    --booking-selected-text: hsl(var(--booking-selected-hue), 60%, 20%);
+    --booking-unavailable-bg: hsl(var(--booking-danger-hue), 70%, 94%);
+    --booking-unavailable-bg-hover: hsl(var(--booking-danger-hue), 70%, 88%);
+    --booking-unavailable-text: hsl(var(--booking-danger-hue), 55%, 45%);
+    --booking-buffer-bg: hsl(var(--booking-neutral-hue), 12%, 88%);
+    --booking-buffer-bg-hover: hsl(var(--booking-neutral-hue), 12%, 82%);
+    --booking-buffer-text: hsl(var(--booking-neutral-hue), 10%, 40%);
     --booking-neutral-hue: 210;
     --booking-holiday-hue: 0;
     --booking-warning-bg: hsl(var(--booking-warning-hue), 100%, 85%);
-    --booking-warning-bg-hover: hsl(var(--booking-warning-hue), 100%, 70%);
     --booking-neutral-100: hsl(var(--booking-neutral-hue), 15%, 92%);
     --booking-neutral-300: hsl(var(--booking-neutral-hue), 15%, 75%);
-    --booking-neutral-500: hsl(var(--booking-neutral-hue), 10%, 55%);
     --booking-neutral-600: hsl(var(--booking-neutral-hue), 10%, 45%);
     --booking-holiday-bg: hsl(var(--booking-holiday-hue), 0%, 85%);
-    --booking-holiday-text: hsl(var(--booking-holiday-hue), 0%, 40%);
     --booking-space-xs: 0.125rem;
     --booking-space-sm: 0.25rem;
     --booking-space-md: 0.5rem;
@@ -487,27 +487,52 @@ onUnmounted(closeSession);
     --booking-transition-fast: 0.15s ease-in-out;
 }
 
-.flatpickr-calendar .booking-constrained-range-marker {
-    background-color: var(--booking-success-bg) !important;
-    border: var(--booking-border-width) solid var(--booking-success-border) !important;
-    color: var(--booking-success-text) !important;
+.flatpickr-calendar .flatpickr-day.inRange,
+.flatpickr-calendar .flatpickr-day.inRange:hover,
+.flatpickr-calendar .flatpickr-day.today.inRange {
+    background: var(--booking-selected-bg);
+    border-color: var(--booking-selected-bg);
+    box-shadow:
+        -5px 0 0 var(--booking-selected-bg),
+        5px 0 0 var(--booking-selected-bg);
 }
 
-.flatpickr-calendar .flatpickr-day.booking-constrained-range-marker {
-    background-color: var(--booking-success-bg) !important;
-    border-color: var(--booking-success-border) !important;
-    color: var(--booking-success-text) !important;
+.flatpickr-calendar .flatpickr-day.booking-day--lead-floor,
+.flatpickr-calendar .flatpickr-day.booking-day--lead-theoretical,
+.flatpickr-calendar .flatpickr-day.booking-day--trail-theoretical {
+    background-color: var(--booking-buffer-bg);
+    border-color: var(--booking-buffer-bg);
+    color: var(--booking-buffer-text);
 }
 
-.flatpickr-calendar .flatpickr-day.booking-constrained-range-marker:hover {
-    background-color: var(--booking-success-bg-hover) !important;
-    border-color: var(--booking-success-border-hover) !important;
+.flatpickr-calendar .flatpickr-day.booking-day--lead-floor:hover,
+.flatpickr-calendar .flatpickr-day.booking-day--lead-theoretical:hover,
+.flatpickr-calendar .flatpickr-day.booking-day--trail-theoretical:hover {
+    background-color: var(--booking-buffer-bg-hover);
+    border-color: var(--booking-buffer-bg-hover);
+}
+
+.flatpickr-calendar .flatpickr-day.booking-day--booked,
+.flatpickr-calendar .flatpickr-day.booking-day--checked-out,
+.flatpickr-calendar .flatpickr-day.booking-day--lead,
+.flatpickr-calendar .flatpickr-day.booking-day--trail {
+    background-color: var(--booking-unavailable-bg);
+    border-color: var(--booking-unavailable-bg);
+    color: var(--booking-unavailable-text);
+}
+
+.flatpickr-calendar .flatpickr-day.booking-day--booked:hover,
+.flatpickr-calendar .flatpickr-day.booking-day--checked-out:hover,
+.flatpickr-calendar .flatpickr-day.booking-day--lead:hover,
+.flatpickr-calendar .flatpickr-day.booking-day--trail:hover {
+    background-color: var(--booking-unavailable-bg-hover);
+    border-color: var(--booking-unavailable-bg-hover);
 }
 
 .flatpickr-calendar .flatpickr-day.booking-intermediate-blocked {
-    background-color: hsl(var(--booking-success-hue), 40%, 90%) !important;
-    border-color: hsl(var(--booking-success-hue), 40%, 70%) !important;
-    color: hsl(var(--booking-success-hue), 40%, 50%) !important;
+    background-color: var(--booking-selected-bg) !important;
+    border-color: var(--booking-selected-bg) !important;
+    color: var(--booking-selected-text) !important;
     cursor: not-allowed !important;
     opacity: 0.7 !important;
 }
@@ -517,8 +542,8 @@ onUnmounted(closeSession);
 }
 
 .flatpickr-calendar .flatpickr-day.booking-intermediate-blocked:hover {
-    background-color: hsl(var(--booking-success-hue), 40%, 85%) !important;
-    border-color: hsl(var(--booking-success-hue), 40%, 60%) !important;
+    background-color: var(--booking-selected-bg-hover) !important;
+    border-color: var(--booking-selected-bg-hover) !important;
 }
 
 .booking-extended-attributes {
@@ -528,7 +553,7 @@ onUnmounted(closeSession);
 }
 
 .booking-form .step-block {
-    margin-bottom: var(--booking-space-lg);
+    margin-bottom: var(--booking-space-md);
 }
 
 .booking-form .step-header {
@@ -541,7 +566,7 @@ onUnmounted(closeSession);
 .booking-form hr {
     border: none;
     border-top: var(--booking-border-width) solid var(--booking-neutral-100);
-    margin: var(--booking-space-2xl) 0;
+    margin: var(--booking-space-lg) 0;
 }
 
 .booking-flatpickr-input,
@@ -558,8 +583,7 @@ onUnmounted(closeSession);
 }
 
 .booking-form .calendar-legend {
-    margin-top: var(--booking-space-lg);
-    margin-bottom: var(--booking-space-lg);
+    margin-bottom: var(--booking-space-md);
     font-size: var(--booking-text-sm);
     display: flex;
     align-items: center;
@@ -609,25 +633,6 @@ onUnmounted(closeSession);
     margin-bottom: var(--booking-space-lg);
 }
 
-.booking-marker-grid {
-    position: relative;
-    top: var(--booking-marker-grid-offset);
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--booking-marker-grid-gap);
-    width: fit-content;
-    max-width: 90%;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: normal;
-}
-
-.booking-marker-item {
-    display: inline-flex;
-    align-items: center;
-}
-
 .booking-marker-dot {
     display: inline-block;
     width: var(--booking-marker-size);
@@ -636,77 +641,44 @@ onUnmounted(closeSession);
     vertical-align: middle;
 }
 
-.booking-marker-count {
-    font-size: var(--booking-text-xs);
-    margin-left: var(--booking-space-xs);
-    line-height: 1;
-    font-weight: normal;
-    color: var(--booking-neutral-600);
+.booking-marker-dot--selected {
+    background: var(--booking-selected-bg);
 }
 
-.booking-marker-dot--booked {
-    background: var(--booking-warning-bg);
-}
-
-.booking-marker-dot--checked-out {
-    background: hsl(var(--booking-danger-hue), 60%, 85%);
-}
-
-.booking-marker-dot--lead {
-    background: hsl(var(--booking-info-hue), 60%, 85%);
-}
-
+.booking-marker-dot--booked,
+.booking-marker-dot--checked-out,
+.booking-marker-dot--lead,
 .booking-marker-dot--trail {
-    background: var(--booking-warning-bg);
+    background: var(--booking-unavailable-bg);
+}
+
+.booking-marker-dot--lead-floor,
+.booking-marker-dot--lead-theoretical,
+.booking-marker-dot--trail-theoretical {
+    background: var(--booking-buffer-bg);
 }
 
 .booking-marker-dot--holiday {
     background: var(--booking-holiday-bg);
 }
 
-.booking-marker-dot--constraint {
-    background: var(--booking-constraint-marker);
-}
-
-.flatpickr-day.booking-day--hover-lead {
-    background-color: hsl(var(--booking-info-hue), 60%, 85%, 0.2) !important;
-}
-
-.flatpickr-day.booking-day--hover-trail {
-    background-color: hsl(
-        var(--booking-warning-hue),
-        100%,
-        70%,
-        0.2
-    ) !important;
-}
-
 .booking-hover-feedback {
-    padding: 0 0.75rem;
-    max-height: 0;
-    min-height: 0;
+    padding: 0.5rem 0.75rem;
+    min-height: 3rem;
     opacity: 0;
-    overflow: hidden;
-    margin-top: 0;
+    margin-top: 0.5rem;
     margin-bottom: 0;
     border-radius: 0 0 var(--booking-border-radius-sm)
         var(--booking-border-radius-sm);
     font-size: var(--booking-text-sm);
     text-align: center;
     transition:
-        max-height 100ms ease,
         opacity 100ms ease,
-        padding 100ms ease,
-        margin-top 100ms ease,
         background-color 100ms ease,
         color 100ms ease;
 }
 
 .booking-hover-feedback--visible {
-    padding: 0.5rem 0.75rem;
-    margin-top: 0.5rem;
-    min-height: 1.25rem;
-    max-height: 10em;
     opacity: 1;
 }
 

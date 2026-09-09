@@ -5,6 +5,21 @@
             {{ $__("Select booking period") }}
         </legend>
 
+        <div class="calendar-legend">
+            <span
+                class="booking-marker-dot booking-marker-dot--selected"
+            ></span>
+            {{ $__("Selected period") }}
+            <span
+                class="booking-marker-dot booking-marker-dot--booked ms-3"
+            ></span>
+            {{ $__("Unavailable") }}
+            <span
+                class="booking-marker-dot booking-marker-dot--lead-theoretical ms-3"
+            ></span>
+            {{ $__("Lead or trail period") }}
+        </div>
+
         <div class="form-group">
             <label for="booking_period" class="required">{{
                 $__("Booking period")
@@ -58,34 +73,6 @@
             </small>
         </Alert>
 
-        <div class="calendar-legend" @mouseleave="hideTooltip">
-            <span class="booking-marker-dot booking-marker-dot--booked"></span>
-            {{ $__("Booked") }}
-            <span
-                class="booking-marker-dot booking-marker-dot--lead ms-3"
-            ></span>
-            {{ $__("Lead period") }}
-            <span
-                class="booking-marker-dot booking-marker-dot--trail ms-3"
-            ></span>
-            {{ $__("Trail period") }}
-            <span
-                class="booking-marker-dot booking-marker-dot--checked-out ms-3"
-            ></span>
-            {{ $__("Checked out") }}
-            <span
-                class="booking-marker-dot booking-marker-dot--holiday ms-3"
-            ></span>
-            {{ $__("Closed") }}
-            <span
-                v-if="dateRangeConstraint && hasSelectedDates"
-                class="booking-marker-dot booking-marker-dot--constraint ms-3"
-            ></span>
-            <span v-if="dateRangeConstraint && hasSelectedDates" class="ms-1">
-                {{ $__("Required end date") }}
-            </span>
-        </div>
-
         <div v-if="errorMessage" class="alert alert-danger mt-2">
             {{ errorMessage }}
         </div>
@@ -117,7 +104,7 @@
                         `booking-marker-dot--${marker.type}`,
                     ]"
                 />
-                {{ formatMarkerDescription(marker) }}
+                {{ getMarkerDescription(marker) }}
             </div>
         </div>
     </Teleport>
@@ -134,7 +121,7 @@ import { formatApiError } from "@fetch/api-error";
 import {
     getBookingMarkersForDate,
     getDateFeedbackMessage,
-    getMarkerTypeLabel,
+    getMarkerDescription,
 } from "../../lib/booking/markers.js";
 import type { CalendarMarker } from "../../lib/booking/types/bookings.d.ts";
 
@@ -150,12 +137,10 @@ withDefaults(
         stepNumber: number;
         calendarEnabled?: boolean;
         errorMessage?: string;
-        hasSelectedDates?: boolean;
     }>(),
     {
         calendarEnabled: true,
         errorMessage: "",
-        hasSelectedDates: false,
     }
 );
 
@@ -190,19 +175,6 @@ interface PickerExposed {
     clear: () => void;
 }
 const pickerRef = ref<PickerExposed | null>(null);
-
-/**
- * Format a marker label and barcode as one reorderable translation.
- *
- * @param {CalendarMarker} marker Calendar marker to describe.
- * @returns {string} Localized marker description.
- */
-function formatMarkerDescription(marker: CalendarMarker): string {
-    return $__("%s (Barcode: %s)").format(
-        getMarkerTypeLabel(marker.type),
-        marker.barcode || $__("N/A")
-    );
-}
 
 const constraintHelpText = computed((): string => {
     if (!dateRangeConstraint.value) return "";

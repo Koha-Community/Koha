@@ -146,13 +146,10 @@ describe("Booking Modal Timezone Tests", () => {
             .getFlatpickrDate(bookingDate.toDate())
             .should("have.class", "flatpickr-disabled");
 
-        // Verify booking marker dot is present (visual indicator)
-        // Vue version uses .booking-marker-grid with .booking-marker-dot children
+        // Verify the day carries the booked marker class (visual indicator)
         cy.get("@flatpickrInput")
             .getFlatpickrDate(bookingDate.toDate())
-            .within(() => {
-                cy.get(".booking-marker-grid").should("exist");
-            });
+            .should("have.class", "booking-day--booked");
 
         // Verify adjacent dates are NOT disabled (no date shift)
         const dayBefore = bookingDate.subtract(1, "day");
@@ -206,9 +203,7 @@ describe("Booking Modal Timezone Tests", () => {
 
             cy.get("@flatpickrInput")
                 .getFlatpickrDate(date.toDate())
-                .within(() => {
-                    cy.get(".booking-marker-grid").should("exist");
-                });
+                .should("have.class", "booking-day--booked");
         });
 
         // The day before and after should NOT be disabled
