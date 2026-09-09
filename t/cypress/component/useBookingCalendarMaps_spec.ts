@@ -29,6 +29,13 @@ const item = id => ({
     barcode: `bar-${id}`,
 });
 
+// A marker's className may itself be space-separated (a run-start/
+// run-end modifier alongside the base class, applied when the day
+// bridges into or stands as a contiguous Unavailable run) - mirrors how
+// onDayCreate in BookingCalendar.vue actually consumes it.
+const markerHasClass = (marker, className) =>
+    (marker.className || "").split(/\s+/).includes(className);
+
 // Raw endpoint payload from per-date reason arrays:
 // availabilityOf({ "2026-03-15": { "1": ["booking"] } })
 const BLOCKER_REASONS = new Set(["booking", "checkout", "lead", "trail"]);
@@ -212,8 +219,55 @@ describe("useBookingCalendarMaps (disabledByDate by item availability)", () => {
         }).then(({ wrapper }) => {
             const markers = wrapper.vm.markersByDate.get("2026-03-15");
             expect(markers, "markers for Mar 15").to.exist;
-            expect(markers.some(m => m.className === "booking-day--booked")).to
-                .be.true;
+            expect(markers.some(m => markerHasClass(m, "booking-day--booked")))
+                .to.be.true;
+        });
+    });
+
+    it("never tags an isolated Unavailable day with run-start or run-end", () => {
+        // Unlike the hover-preview lead/trail bands, Unavailable never
+        // rounds - it's the always-on, most emphatic state on the grid,
+        // and a flat-edged block reads as a stronger "this is occupied"
+        // signal than a softened pill shape (see the UX spec §2).
+        cy.mount(ComposableHost, {
+            props: defaultProps({
+                availability: availabilityOf({
+                    "2026-03-15": { "1": ["booking"] },
+                }),
+            }),
+        }).then(({ wrapper }) => {
+            const marker = wrapper.vm.markersByDate
+                .get("2026-03-15")
+                .find(m => m.kind === "booked");
+            expect(markerHasClass(marker, "booking-day--run-start")).to.not.be
+                .true;
+            expect(markerHasClass(marker, "booking-day--run-end")).to.not.be
+                .true;
+        });
+    });
+
+    it("never tags any day of a multi-day Unavailable run with run-start or run-end", () => {
+        cy.mount(ComposableHost, {
+            props: defaultProps({
+                availability: availabilityOf({
+                    "2026-03-15": { "1": ["booking"] },
+                    "2026-03-16": { "1": ["booking"] },
+                    "2026-03-17": { "1": ["booking"] },
+                }),
+            }),
+        }).then(({ wrapper }) => {
+            const markerFor = date =>
+                wrapper.vm.markersByDate
+                    .get(date)
+                    .find(m => m.kind === "booked");
+
+            for (const date of ["2026-03-15", "2026-03-16", "2026-03-17"]) {
+                const marker = markerFor(date);
+                expect(markerHasClass(marker, "booking-day--run-start")).to.not
+                    .be.true;
+                expect(markerHasClass(marker, "booking-day--run-end")).to.not.be
+                    .true;
+            }
         });
     });
 
@@ -228,7 +282,7 @@ describe("useBookingCalendarMaps (disabledByDate by item availability)", () => {
             const markers = wrapper.vm.markersByDate.get("2026-03-15");
             expect(markers).to.exist;
             expect(
-                markers.some(m => m.className === "booking-day--checked-out")
+                markers.some(m => markerHasClass(m, "booking-day--checked-out"))
             ).to.be.true;
         });
     });
@@ -295,8 +349,8 @@ describe("useBookingCalendarMaps (disabledByDate by item availability)", () => {
             // Item 2's availability is irrelevant once item 1 is the only
             // one the patron can actually get.
             const markers = wrapper.vm.markersByDate.get("2026-03-15");
-            expect(markers.some(m => m.className === "booking-day--booked")).to
-                .be.true;
+            expect(markers.some(m => markerHasClass(m, "booking-day--booked")))
+                .to.be.true;
             expect(markers.some(m => m.className === "booking-day--partial")).to
                 .not.be.true;
         });
@@ -315,8 +369,8 @@ describe("useBookingCalendarMaps (disabledByDate by item availability)", () => {
             expect(
                 markers.some(
                     m =>
-                        m.className === "booking-day--booked" ||
-                        m.className === "booking-day--checked-out"
+                        markerHasClass(m, "booking-day--booked") ||
+                        markerHasClass(m, "booking-day--checked-out")
                 )
             ).to.be.true;
         });

@@ -481,53 +481,67 @@ onUnmounted(closeSession);
        it belongs to, so one colour per concept instead of one per
        owner keeps the palette from growing with every new source of
        lead/trail shading. */
-    --booking-lead-hue: 4;
-    --booking-lead-bg: hsl(var(--booking-lead-hue), 75%, 90%);
-    --booking-lead-bg-hover: hsl(var(--booking-lead-hue), 75%, 82%);
-    --booking-lead-text: hsl(var(--booking-lead-hue), 90%, 25%);
+    /* Lead/trail lightness is a deliberate mid-tone, not a pale pastel:
+       a first-pass pale green for lead (matching the old pastel tier)
+       collapsed toward the pale-yellow Selected-period colour under
+       protanopia simulation (Machado/Oliveira/Fair 2009 matrices) - see
+       core/notes/2026-09-07-bug-41129-booking-calendar-ux-spec.md §1.
+       This lightness step is what actually separates them, same
+       principle as the clash-vs-lead/trail step below. */
+    --booking-lead-hue: 120;
+    --booking-lead-bg: hsl(var(--booking-lead-hue), 75%, 72%);
+    --booking-lead-bg-hover: hsl(var(--booking-lead-hue), 75%, 64%);
+    --booking-lead-text: hsl(var(--booking-lead-hue), 85%, 20%);
 
-    --booking-trail-hue: 34;
-    --booking-trail-bg: hsl(var(--booking-trail-hue), 85%, 87%);
-    --booking-trail-bg-hover: hsl(var(--booking-trail-hue), 85%, 78%);
-    --booking-trail-text: hsl(var(--booking-trail-hue), 90%, 22%);
+    --booking-trail-hue: 205;
+    --booking-trail-bg: hsl(var(--booking-trail-hue), 80%, 70%);
+    --booking-trail-bg-hover: hsl(var(--booking-trail-hue), 80%, 62%);
+    --booking-trail-text: hsl(var(--booking-trail-hue), 90%, 20%);
 
     /* Clash: my buffer overlaps an adjacent existing booking's buffer.
-       Deliberately darker/more saturated than the regular pastel band -
-       at matching pastel lightness these read as near-identical by
-       contrast ratio, so the rarer clash states need a real lightness
-       step to stay visually distinct, not just a hue change. */
-    --booking-clash-trail-lead-hue: 150;
+       A clash is a clash regardless of direction - both directions
+       (my-trail-into-existing-lead, my-lead-into-existing-trail) share
+       one hue; which one applies is stated in the label text, not the
+       colour (see the two marker-dot rules below and the legend). Kept
+       as two identically-valued variable groups rather than merged into
+       one, to avoid a wider rename across every usage site - do not let
+       these two drift apart again. Deliberately darker/more saturated
+       than the regular pastel band - at matching pastel lightness these
+       read as near-identical by contrast ratio, so the rarer clash
+       states need a real lightness step to stay visually distinct, not
+       just a hue change. */
+    --booking-clash-trail-lead-hue: 260;
     --booking-clash-trail-lead-bg: hsl(
         var(--booking-clash-trail-lead-hue),
-        65%,
-        72%
+        55%,
+        68%
     );
     --booking-clash-trail-lead-bg-hover: hsl(
         var(--booking-clash-trail-lead-hue),
-        65%,
-        64%
+        55%,
+        60%
     );
     --booking-clash-trail-lead-text: hsl(
         var(--booking-clash-trail-lead-hue),
-        70%,
+        65%,
         20%
     );
 
-    --booking-clash-lead-trail-hue: 271;
+    --booking-clash-lead-trail-hue: 260;
     --booking-clash-lead-trail-bg: hsl(
         var(--booking-clash-lead-trail-hue),
-        60%,
-        74%
+        55%,
+        68%
     );
     --booking-clash-lead-trail-bg-hover: hsl(
         var(--booking-clash-lead-trail-hue),
-        60%,
-        66%
+        55%,
+        60%
     );
     --booking-clash-lead-trail-text: hsl(
         var(--booking-clash-lead-trail-hue),
-        70%,
-        22%
+        65%,
+        20%
     );
 
     /* Used only by the day-details panel's marker-dot swatches for
@@ -593,17 +607,32 @@ onUnmounted(closeSession);
    feedback bar explain why on hover; a permanent grey layer under all
    of that was exactly the "busy calendar" this was built to avoid. */
 
+/* Consecutive Unavailable days bridge into one contiguous strip (same
+   box-shadow technique as the hover-preview bands below) instead of a
+   row of separate pills - and unlike those hover-preview bands, stay
+   square at every cell, both ends of the run included. Unavailable is
+   the always-on, most emphatic state on the grid; a flat-edged block
+   reads as a stronger "this is occupied" signal than a softened pill
+   shape, and there's exactly one rounding rule to reason about (always
+   square) instead of two. */
 .flatpickr-calendar .flatpickr-day.booking-day--booked,
 .flatpickr-calendar .flatpickr-day.booking-day--checked-out {
     background-color: var(--booking-unavailable-bg);
     border-color: var(--booking-unavailable-bg);
     color: var(--booking-unavailable-text);
+    border-radius: 0;
+    box-shadow:
+        -5px 0 0 var(--booking-unavailable-bg),
+        5px 0 0 var(--booking-unavailable-bg);
 }
 
 .flatpickr-calendar .flatpickr-day.booking-day--booked:hover,
 .flatpickr-calendar .flatpickr-day.booking-day--checked-out:hover {
     background-color: var(--booking-unavailable-bg-hover);
     border-color: var(--booking-unavailable-bg-hover);
+    box-shadow:
+        -5px 0 0 var(--booking-unavailable-bg-hover),
+        5px 0 0 var(--booking-unavailable-bg-hover);
 }
 
 .flatpickr-calendar .flatpickr-day.booking-day--holiday {
@@ -612,13 +641,23 @@ onUnmounted(closeSession);
     color: var(--booking-holiday-text);
 }
 
-/* Partial availability: some, but not all, relevant items are booked or
-   checked out here. The day stays clickable via a different item, so it
-   keeps no background colour - just a quiet dot hinting there's detail
-   worth checking (see the day-details panel on hover/focus). Deliberately
-   neutral rather than one of the state hues, since it isn't claiming
-   which state applies, only that one exists. */
-.flatpickr-calendar .flatpickr-day.booking-day--partial::after {
+/* A quiet dot hinting there's booking detail worth checking (barcodes,
+   the "x of y items booked" summary - see the day-details panel on
+   hover/focus), on every day that actually has some: Partial (some, but
+   not all, relevant items booked - the day stays clickable via a
+   different item, so it keeps no background colour of its own) and
+   Unavailable alike (every relevant item booked - the solid background
+   already says "you can't have this day", but that's a different fact
+   from "there's booking detail behind it", and hiding the dot there
+   read as inconsistent - a day that's Unavailable for a very different
+   reason than plain Partial-availability shouldn't look like it has
+   *less* going on underneath it). Deliberately one neutral dot
+   regardless of how many items are actually involved, not one dot per
+   item (see the UX spec §7) - it's a "there's detail here" hint, not a
+   raw inventory count. */
+.flatpickr-calendar .flatpickr-day.booking-day--partial::after,
+.flatpickr-calendar .flatpickr-day.booking-day--booked::after,
+.flatpickr-calendar .flatpickr-day.booking-day--checked-out::after {
     content: "";
     position: absolute;
     bottom: 4px;
@@ -688,11 +727,18 @@ onUnmounted(closeSession);
         5px 0 0 var(--booking-trail-bg-hover) !important;
 }
 
-/* Clash: my buffer overlaps an adjacent existing booking's buffer.
-   Two-class compound selectors outrank the single-class rules above
-   regardless of source order. */
+/* Clash: my buffer overlaps an adjacent existing booking's buffer -
+   only once that overlap is a genuine conflict (booking-day--my-lead-
+   real-conflict / --my-trail-real-conflict, added in onDayHover from
+   leadWindowConflicts/trailWindowConflicts), not merely two bands whose
+   date ranges happen to touch. In "any item" mode the adjacent band can
+   light up from one candidate item while a different one stays free, in
+   which case the two colours are left to overlap plainly rather than
+   claim a clash that wouldn't actually block the booking. Three-class
+   compound selectors outrank the single-class rules above regardless of
+   source order. */
 .flatpickr-calendar
-    .flatpickr-day.booking-day--existing-lead-adjacent.booking-day--my-trail-buffer {
+    .flatpickr-day.booking-day--existing-lead-adjacent.booking-day--my-trail-buffer.booking-day--my-trail-real-conflict {
     background-color: var(--booking-clash-trail-lead-bg) !important;
     border-color: var(--booking-clash-trail-lead-bg) !important;
     color: var(--booking-clash-trail-lead-text) !important;
@@ -702,7 +748,7 @@ onUnmounted(closeSession);
 }
 
 .flatpickr-calendar
-    .flatpickr-day.booking-day--existing-lead-adjacent.booking-day--my-trail-buffer:hover {
+    .flatpickr-day.booking-day--existing-lead-adjacent.booking-day--my-trail-buffer.booking-day--my-trail-real-conflict:hover {
     background-color: var(--booking-clash-trail-lead-bg-hover) !important;
     border-color: var(--booking-clash-trail-lead-bg-hover) !important;
     box-shadow:
@@ -711,7 +757,7 @@ onUnmounted(closeSession);
 }
 
 .flatpickr-calendar
-    .flatpickr-day.booking-day--existing-trail-adjacent.booking-day--my-lead-buffer {
+    .flatpickr-day.booking-day--existing-trail-adjacent.booking-day--my-lead-buffer.booking-day--my-lead-real-conflict {
     background-color: var(--booking-clash-lead-trail-bg) !important;
     border-color: var(--booking-clash-lead-trail-bg) !important;
     color: var(--booking-clash-lead-trail-text) !important;
@@ -721,7 +767,7 @@ onUnmounted(closeSession);
 }
 
 .flatpickr-calendar
-    .flatpickr-day.booking-day--existing-trail-adjacent.booking-day--my-lead-buffer:hover {
+    .flatpickr-day.booking-day--existing-trail-adjacent.booking-day--my-lead-buffer.booking-day--my-lead-real-conflict:hover {
     background-color: var(--booking-clash-lead-trail-bg-hover) !important;
     border-color: var(--booking-clash-lead-trail-bg-hover) !important;
     box-shadow:
@@ -739,6 +785,16 @@ onUnmounted(closeSession);
 
 .flatpickr-calendar .flatpickr-day.booking-day--run-start.booking-day--run-end {
     border-radius: 150px !important;
+}
+
+/* The anchor/hover/selected date itself, when a lead or trail band
+   sits flush against it (see applyMyBuffer in BookingPeriodStep.vue) -
+   forced square so it butts against the band's own square near edge
+   instead of poking a rounded corner into the middle of the strip via
+   flatpickr's native startRange/endRange/selected rounding. */
+.flatpickr-calendar .flatpickr-day.booking-day--adjoins-lead,
+.flatpickr-calendar .flatpickr-day.booking-day--adjoins-trail {
+    border-radius: 0 !important;
 }
 
 .flatpickr-calendar .flatpickr-day.booking-intermediate-blocked {
@@ -794,18 +850,53 @@ onUnmounted(closeSession);
         box-shadow var(--booking-transition-fast);
 }
 
-.booking-form .calendar-legend {
+/* Lives inside flatpickr's own calendarContainer (see ensureLegend in
+   BookingPeriodStep.vue), not the surrounding .booking-form - flatpickr
+   appends its popup to the modal root, not as a child of the form, so
+   these rules aren't (and don't need to be) scoped under .booking-form,
+   the same as .booking-hover-feedback/.booking-day-details below. */
+.calendar-legend {
+    padding: 0.5rem 0.75rem 0;
     margin-bottom: var(--booking-space-md);
     font-size: var(--booking-text-sm);
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
 }
 
-.booking-form .calendar-legend .booking-marker-dot {
+/* .flatpickr-prev-month/.flatpickr-next-month are position:absolute;
+   top:0 with no positioned ancestor of their own between them and
+   .flatpickr-calendar (also position:absolute) - so top:0 resolves
+   against the *calendar's* top edge, not the months row's. That only
+   ever looked right because .flatpickr-months used to be the
+   calendar's first child, putting the two edges at the same place by
+   coincidence. Now that the legend sits above it, the month/year text
+   (normal flow, inside .flatpickr-months) moves down but the arrows
+   stay pinned to the calendar's top - overlapping the legend instead
+   of sitting inline with the month/year row. Anchoring the arrows to
+   .flatpickr-months itself fixes this regardless of what precedes it. */
+.flatpickr-months {
+    position: relative;
+}
+
+/* Legend swatches: square by default, matching the solid day-cell fill
+   every state but Partial actually renders as (Selected/Unavailable/
+   Lead/Trail/Clash/Holiday). Partial is the one legend entry that's
+   genuinely a dot with no background fill on the grid, so it's the only
+   one restored to round below - everything else here would otherwise
+   mislead by drawing a rounded swatch for a state that's actually a
+   flat-edged day-cell background. */
+.calendar-legend .booking-marker-dot {
     width: calc(var(--booking-marker-size) * 2) !important;
     height: calc(var(--booking-marker-size) * 2) !important;
     margin-right: calc(var(--booking-space-sm) * 1.5);
     border: var(--booking-border-width) solid hsla(0, 0%, 0%, 0.15);
+    border-radius: 0;
+}
+
+.calendar-legend .booking-marker-dot--partial {
+    border-radius: var(--booking-border-radius-full);
+    border: none;
 }
 
 .booking-date-picker {
@@ -954,6 +1045,11 @@ onUnmounted(closeSession);
 
 .booking-day-details--visible {
     opacity: 1;
+}
+
+.booking-day-details-summary {
+    font-weight: 700;
+    margin-bottom: var(--booking-space-xs);
 }
 
 .booking-day-details-row {

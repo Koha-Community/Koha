@@ -215,13 +215,17 @@ export function useBookingCalendarMaps({
         const items = bookableItems.value || [];
         const itemIds = relevantItemIds.value;
 
-        Object.entries(unavailableByDate.value).forEach(([dateKey, byItem]) => {
-            // A day only reads as Unavailable once every item relevant
-            // to the current selection is actually booked/checked out
-            // (mirrors disabledByDate's allBlocked test). Otherwise a
-            // free item is still bookable behind the scenes, and
-            // colouring the day Unavailable would contradict its own
-            // clickability.
+        // A day only reads as Unavailable once every item relevant to the
+        // current selection is actually booked/checked out (mirrors
+        // disabledByDate's allBlocked test) - otherwise a free item is
+        // still bookable behind the scenes, and colouring the day
+        // Unavailable would contradict its own clickability. Computed
+        // fully up front (not inline in the loop below) so the run-start/
+        // run-end pass can check a date's neighbours regardless of
+        // Object.entries iteration order.
+        const blockedDates = new Set();
+        Object.keys(unavailableByDate.value).forEach(dateKey => {
+            const byItem = unavailableByDate.value[dateKey];
             const blockedCount = itemIds.filter(id => {
                 const reasons = byItem[id];
                 return (
@@ -229,8 +233,20 @@ export function useBookingCalendarMaps({
                     (reasons.has("booking") || reasons.has("checkout"))
                 );
             }).length;
-            const allRelevantBlocked =
-                itemIds.length > 0 && blockedCount === itemIds.length;
+            if (itemIds.length > 0 && blockedCount === itemIds.length) {
+                blockedDates.add(dateKey);
+            }
+        });
+
+        Object.entries(unavailableByDate.value).forEach(([dateKey, byItem]) => {
+            const blockedCount = itemIds.filter(id => {
+                const reasons = byItem[id];
+                return (
+                    !!reasons &&
+                    (reasons.has("booking") || reasons.has("checkout"))
+                );
+            }).length;
+            const allRelevantBlocked = blockedDates.has(dateKey);
 
             const markers = getBookingMarkersForDate(
                 unavailableByDate.value,
@@ -247,6 +263,15 @@ export function useBookingCalendarMaps({
                     className: `booking-day--${m.type}`,
                     tooltip: getMarkerDescription(m),
                 }));
+
+            // Unavailable days bridge into one contiguous strip via
+            // box-shadow (see the CSS in BookingForm.vue) but stay
+            // square-cornered at every cell, both ends of a run included
+            // - unlike lead/trail (transient hover previews of a
+            // boundary), Unavailable is the always-on, most emphatic
+            // state on the grid, and a flat-edged block reads as a
+            // stronger "this is occupied" signal than a softened pill
+            // shape. No run-boundary detection needed here as a result.
 
             // Some, but not all, relevant items are booked/checked out: the
             // day stays fully bookable (another item is free) but isn't

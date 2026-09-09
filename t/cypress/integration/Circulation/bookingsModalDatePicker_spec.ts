@@ -804,21 +804,34 @@ describe("Booking Modal Date Picker Tests", () => {
         // Both bands preview around the hovered candidate even before a
         // start is chosen - lead before it (June 11-12), trail after it
         // (June 14-16, trailDays=3) - matching the old UI's behaviour.
+        // Only the far edge of each band ever rounds (June 11 for lead,
+        // June 16 for trail); the near edge, flush against the hovered
+        // candidate, stays square - and the candidate cell itself is
+        // marked adjoins-lead/adjoins-trail so its own native rounding
+        // is suppressed on both sides too, keeping the whole strip
+        // continuous instead of every segment rounding independently.
         getDateByISO("2026-06-11")
             .should("have.class", "booking-day--my-lead-buffer")
-            .and("have.class", "booking-day--run-start");
+            .and("have.class", "booking-day--run-start")
+            .and("not.have.class", "booking-day--run-end");
         getDateByISO("2026-06-12")
             .should("have.class", "booking-day--my-lead-buffer")
-            .and("have.class", "booking-day--run-end");
+            .and("not.have.class", "booking-day--run-start")
+            .and("not.have.class", "booking-day--run-end");
+        getDateByISO("2026-06-13")
+            .should("have.class", "booking-day--adjoins-lead")
+            .and("have.class", "booking-day--adjoins-trail");
         getDateByISO("2026-06-14")
             .should("have.class", "booking-day--my-trail-buffer")
-            .and("have.class", "booking-day--run-start");
+            .and("not.have.class", "booking-day--run-start")
+            .and("not.have.class", "booking-day--run-end");
         getDateByISO("2026-06-15")
             .should("have.class", "booking-day--my-trail-buffer")
             .and("not.have.class", "booking-day--run-start")
             .and("not.have.class", "booking-day--run-end");
         getDateByISO("2026-06-16")
             .should("have.class", "booking-day--my-trail-buffer")
+            .and("not.have.class", "booking-day--run-start")
             .and("have.class", "booking-day--run-end");
 
         // The feedback bar is pure instruction now - day counts live
@@ -1473,6 +1486,35 @@ describe("Booking Modal Date Picker Tests", () => {
                 cy.get("@flatpickrInput")
                     .getFlatpickrDate(today.add(15, "day").toDate())
                     .should("not.have.class", "flatpickr-disabled");
+
+                // Day 16's lead window (14-15) overlaps items 0/1's trail
+                // tag (13-14, trailDays=2) on day 14 - my own lead-buffer
+                // band still previews there (that's about a hypothetical
+                // new booking of mine, unrelated to whether the existing
+                // one is "Unavailable"), but item 2 is free throughout,
+                // so days 10-12 are only "partial" (§6) - not every
+                // relevant item is blocked. The existing-booking
+                // trail-adjacent highlight only belongs around a
+                // genuinely Unavailable slot (see
+                // core/notes/2026-09-07-bug-41129-booking-calendar-ux-spec.md
+                // §2/§6), so it must not appear here, and neither must
+                // the clash gate class (leadWindowConflicts requires
+                // every candidate item to be blocked somewhere in the
+                // window, which isn't true while item 2 stays free).
+                cy.get("@flatpickrInput").hoverFlatpickrDate(
+                    today.add(16, "day").toDate()
+                );
+                cy.get("@flatpickrInput")
+                    .getFlatpickrDate(today.add(14, "day").toDate())
+                    .should("have.class", "booking-day--my-lead-buffer")
+                    .and(
+                        "not.have.class",
+                        "booking-day--existing-trail-adjacent"
+                    )
+                    .and(
+                        "not.have.class",
+                        "booking-day--my-lead-real-conflict"
+                    );
 
                 // Actually click day 15 to verify it's selectable
                 cy.get("@flatpickrInput").selectFlatpickrDate(

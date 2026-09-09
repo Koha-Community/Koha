@@ -123,11 +123,24 @@ export function getBookingMarkersForDate(
 /**
  * Generate a contextual feedback message for a hovered calendar date.
  *
+ * leadDays/trailDays/maxPeriod must be the already-derived effective
+ * values (e.g. useBookingCalendarMaps's bufferConfig, built via
+ * extractBookingConfiguration/toEffectiveRules) rather than raw
+ * circulation-rule fields - maxPeriod in particular depends on the
+ * active dateRangeConstraint mode (plain issuelength vs. issuelength
+ * with renewals vs. a custom formula), which a bare rules object
+ * doesn't carry. Passing raw rules here previously fell back to bare
+ * issuelength unconditionally, understating maxPeriod and - since this
+ * check runs before the marker-based reasons below - reporting "exceeds
+ * maximum booking period" instead of the actual disabling conflict.
+ *
  * @param {Date} date - The date being hovered
  * @param {Object} context
  * @param {boolean} context.isDisabled - Whether the date is disabled in the calendar
  * @param {string[]} context.selectedDateRange - Currently selected dates (ISO strings)
- * @param {Object} context.circulationRules - First circulation rule object
+ * @param {number} [context.leadDays] - Effective lead days
+ * @param {number} [context.trailDays] - Effective trail days
+ * @param {number} [context.maxPeriod] - Effective max booking period
  * @param {Object} context.unavailableByDate - Unavailability map from store
  * @param {string[]} [context.holidays] - Holiday date strings (YYYY-MM-DD)
  * @returns {{ message: string, variant: "info"|"warning"|"danger" } | null}
@@ -136,7 +149,9 @@ export function getDateFeedbackMessage(date, context) {
     const {
         isDisabled,
         selectedDateRange,
-        circulationRules,
+        leadDays = 0,
+        trailDays = 0,
+        maxPeriod = 0,
         unavailableByDate,
         holidays,
     } = context;
@@ -144,13 +159,6 @@ export function getDateFeedbackMessage(date, context) {
     const currentDay = today();
     const d = toDay(date);
     const dateKey = formatYMD(date);
-
-    const leadDays = Number(circulationRules?.bookings_lead_period) || 0;
-    const trailDays = Number(circulationRules?.bookings_trail_period) || 0;
-    const maxPeriod =
-        Number(circulationRules?.maxPeriod) ||
-        Number(circulationRules?.issuelength) ||
-        0;
 
     const hasStart = selectedDateRange && selectedDateRange.length >= 1;
     const isSelectingEnd = hasStart;

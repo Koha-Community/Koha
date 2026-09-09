@@ -6,50 +6,17 @@
         </legend>
 
         <Alert
-            v-if="constraintHelpText"
+            v-if="constraintParts.length > 0"
             variant="info"
             extra-class="booking-constraint-info"
         >
-            <small>
-                <strong>{{ $__("Booking constraints active:") }}</strong>
-                {{ constraintHelpText }}
-            </small>
+            <strong>{{ $__("Booking constraints active:") }}</strong>
+            <ul>
+                <li v-for="part in constraintParts" :key="part">
+                    {{ part }}
+                </li>
+            </ul>
         </Alert>
-
-        <div class="calendar-legend">
-            <span
-                class="booking-marker-dot booking-marker-dot--selected"
-            ></span>
-            {{ $__("Selected period") }}
-            <span
-                class="booking-marker-dot booking-marker-dot--booked ms-3"
-            ></span>
-            {{ $__("Unavailable") }}
-            <span
-                class="booking-marker-dot booking-marker-dot--partial ms-3"
-            ></span>
-            {{ $__("Some items unavailable") }}
-            <span
-                class="booking-marker-dot booking-marker-dot--lead ms-3"
-            ></span>
-            {{ $__("Lead period") }}
-            <span
-                class="booking-marker-dot booking-marker-dot--trail ms-3"
-            ></span>
-            {{ $__("Trail period") }}
-            <span
-                class="booking-marker-dot booking-marker-dot--clash-trail-lead ms-3"
-            ></span>
-            {{ $__("My trail overlaps an existing lead period") }}
-            <span
-                class="booking-marker-dot booking-marker-dot--clash-lead-trail ms-3"
-            ></span>
-            {{ $__("My lead overlaps an existing trail period") }}
-            <span
-                class="booking-marker-dot booking-marker-dot--holiday ms-3"
-            ></span>
-            {{ $__("Library closed") }}
-        </div>
 
         <div class="form-group">
             <label for="booking_period" class="required">{{
@@ -111,7 +78,9 @@ import {
 } from "../../lib/booking/markers.js";
 import {
     findAdjacentBufferDates,
+    leadWindowConflicts,
     myBufferDates,
+    trailWindowConflicts,
 } from "../../lib/booking/availability/predicate.js";
 import { formatYMD, toDay } from "../../lib/booking/dates.js";
 import type { CalendarMarker } from "../../lib/booking/types/bookings.d.ts";
@@ -138,6 +107,23 @@ const CLASS_MY_LEAD_BUFFER = "booking-day--my-lead-buffer";
 const CLASS_MY_TRAIL_BUFFER = "booking-day--my-trail-buffer";
 const CLASS_RUN_START = "booking-day--run-start";
 const CLASS_RUN_END = "booking-day--run-end";
+// Gate the clash colours on a genuine conflict (leadWindowConflicts/
+// trailWindowConflicts - the same "every relevant item actually
+// conflicts somewhere in the window" test the disable logic uses), not
+// merely on the two bands' date ranges happening to touch. In "any
+// item" mode, existing-lead/trail-adjacent lights up as soon as ONE
+// candidate item is tagged (see findAdjacentBufferDates), which can
+// coincide with my-buffer on days that don't actually block a
+// different, still-free item - a clash colour there would be
+// misleading, not just decorative.
+const CLASS_MY_LEAD_REAL_CONFLICT = "booking-day--my-lead-real-conflict";
+const CLASS_MY_TRAIL_REAL_CONFLICT = "booking-day--my-trail-real-conflict";
+// Marks the boundary date itself (the anchor, or the hovered candidate
+// start/end) when a lead/trail band sits flush against it, so its own
+// native flatpickr rounding can be suppressed on that side - see
+// applyMyBuffer.
+const CLASS_ADJOINS_LEAD = "booking-day--adjoins-lead";
+const CLASS_ADJOINS_TRAIL = "booking-day--adjoins-trail";
 const ADJACENCY_CLASSES = [
     CLASS_EXISTING_LEAD_ADJACENT,
     CLASS_EXISTING_TRAIL_ADJACENT,
@@ -145,6 +131,10 @@ const ADJACENCY_CLASSES = [
     CLASS_MY_TRAIL_BUFFER,
     CLASS_RUN_START,
     CLASS_RUN_END,
+    CLASS_MY_LEAD_REAL_CONFLICT,
+    CLASS_MY_TRAIL_REAL_CONFLICT,
+    CLASS_ADJOINS_LEAD,
+    CLASS_ADJOINS_TRAIL,
 ];
 
 const componentId = useId();
@@ -156,7 +146,6 @@ const store = inject<BookingStore>("bookingStore") as BookingStore;
 const {
     bookableItems,
     selectedDateRange,
-    circulationRules,
     holidays,
     pickerModelValue,
     minDate,
@@ -175,7 +164,7 @@ interface PickerExposed {
 }
 const pickerRef = ref<PickerExposed | null>(null);
 
-const constraintHelpText = computed((): string => {
+const constraintParts = computed((): string[] => {
     const period = maxBookingPeriod.value;
     const { leadDays, trailDays } = bufferConfig.value;
     const parts: string[] = [];
@@ -212,7 +201,7 @@ const constraintHelpText = computed((): string => {
         parts.push($__("Trail period: %s days after return").format(trailDays));
     }
 
-    return parts.join(". ");
+    return parts;
 });
 
 const initialViewport = computed(() => {
@@ -286,27 +275,39 @@ function clearAdjacencyClasses(): void {
  * the touched elements so clearAdjacencyClasses can find them again.
  *
  * dates is always a chronologically-ordered, contiguous run (both
- * findAdjacentBufferDates and myBufferDates guarantee this), so the
- * first/last entries also get --run-start/--run-end to control which
- * end(s) of the run render rounded vs. square (see the CSS in
- * BookingForm.vue) - a single-day run gets both, rounding it fully.
+ * findAdjacentBufferDates and myBufferDates guarantee this). Which
+ * end(s) may round is governed by `edges` rather than always both:
+ * lead/trail bands always sit flush against a specific anchor/hover
+ * date on one side (the old UI never rounded that side - only the far
+ * edge, away from the anchor, ever got a cap), whereas an Unavailable
+ * run has two genuinely free ends. See the CSS in BookingForm.vue for
+ * how --run-start/--run-end translate to border-radius.
  *
  * @param {Map<string, HTMLElement>} dayMap Day elements keyed by date.
  * @param {string[]} dates YYYY-MM-DD keys to mark, in run order.
  * @param {string} className Class to apply.
+ * @param {"both"|"start"|"end"} [edges="both"] Which run end(s) may round.
  * @returns {void}
  */
 function applyAdjacencyClass(
     dayMap: Map<string, HTMLElement>,
     dates: string[],
-    className: string
+    className: string,
+    edges: "both" | "start" | "end" = "both"
 ): void {
     dates.forEach((ymd, index) => {
         const el = dayMap.get(ymd);
         if (!el) return;
         el.classList.add(className);
-        if (index === 0) el.classList.add(CLASS_RUN_START);
-        if (index === dates.length - 1) el.classList.add(CLASS_RUN_END);
+        if (index === 0 && (edges === "both" || edges === "start")) {
+            el.classList.add(CLASS_RUN_START);
+        }
+        if (
+            index === dates.length - 1 &&
+            (edges === "both" || edges === "end")
+        ) {
+            el.classList.add(CLASS_RUN_END);
+        }
         adjacencyElements.add(el);
     });
 }
@@ -346,7 +347,7 @@ function setDayDescriptions(
  * @returns {void}
  */
 function hideDayDetails(): void {
-    if (dayDetailsPanel) updateDayDetailsPanel(dayDetailsPanel, []);
+    if (dayDetailsPanel) updateDayDetailsPanel(dayDetailsPanel, [], 0);
     clearAdjacencyClasses();
     setDayDescriptions(lastDescribedElement);
 }
@@ -362,6 +363,55 @@ let dayDetailsPanel: HTMLDivElement | null = null;
 let calendarContainer: HTMLElement | null = null;
 
 type FeedbackVariant = "info" | "warning" | "danger";
+
+/**
+ * Return the calendar legend, creating it when necessary.
+ *
+ * Inserted as the calendar's first child, above the month/year header
+ * (.flatpickr-months) - a real child of flatpickr's own container
+ * rather than a conditionally-rendered Vue block, so it shows and hides
+ * with the calendar for free instead of needing its own open/close
+ * tracking. Only means anything once you're looking at coloured days,
+ * so it has no reason to occupy space while the picker is closed.
+ *
+ * @param {HTMLElement} container Flatpickr calendar container.
+ * @returns {HTMLDivElement} Calendar-owned legend element.
+ */
+function ensureLegend(container: HTMLElement): HTMLDivElement {
+    let legend = container.querySelector<HTMLDivElement>(".calendar-legend");
+    if (!legend) {
+        legend = document.createElement("div");
+        legend.className = "calendar-legend";
+        const entries: Array<[string, string]> = [
+            ["selected", $__("Selected period")],
+            ["booked", $__("Unavailable")],
+            ["partial", $__("Some items unavailable")],
+            ["lead", $__("Lead period")],
+            ["trail", $__("Trail period")],
+            // Both clash directions share one colour (a clash is a
+            // clash), so one legend entry covers both - which direction
+            // applies was never shown anywhere but this legend text, and
+            // showing it twice for an identical swatch was confusing,
+            // not informative. Either clash-* class works here since
+            // both resolve to the same --booking-clash-*-bg value.
+            ["clash-trail-lead", $__("Lead/trail conflict")],
+            ["holiday", $__("Library closed")],
+        ];
+        entries.forEach(([kind, label], index) => {
+            const dot = document.createElement("span");
+            dot.className = `booking-marker-dot booking-marker-dot--${kind}${
+                index > 0 ? " ms-3" : ""
+            }`;
+            legend.appendChild(dot);
+            legend.appendChild(document.createTextNode(label));
+        });
+        container.insertBefore(
+            legend,
+            container.querySelector(".flatpickr-months")
+        );
+    }
+    return legend;
+}
 
 /**
  * Return the calendar feedback bar, creating it when necessary.
@@ -410,22 +460,33 @@ function ensureDayDetailsPanel(container: HTMLElement): HTMLDivElement {
 }
 
 /**
- * Render the marker list for a day into the day-details panel, or
- * collapse the panel when there is nothing to show.
+ * Render a "x of y items booked" summary plus the marker list for a day
+ * into the day-details panel, or collapse the panel when there is
+ * nothing to show.
  *
  * @param {HTMLDivElement} panel Calendar day-details element.
- * @param {CalendarMarker[]} markers Markers to describe.
+ * @param {CalendarMarker[]} markers Booked/checked-out markers to describe, already scoped to relevantItemIds.
+ * @param {number} totalRelevant Count of relevant items (the same scope the markers are filtered to).
  * @returns {void}
  */
 function updateDayDetailsPanel(
     panel: HTMLDivElement,
-    markers: CalendarMarker[]
+    markers: CalendarMarker[],
+    totalRelevant: number
 ): void {
     panel.replaceChildren();
     if (markers.length === 0) {
         panel.classList.remove("booking-day-details--visible");
         return;
     }
+    const summary = document.createElement("div");
+    summary.className = "booking-day-details-summary";
+    summary.appendChild(
+        document.createTextNode(
+            $__("%s of %s items booked").format(markers.length, totalRelevant)
+        )
+    );
+    panel.appendChild(summary);
     for (const marker of markers) {
         const row = document.createElement("div");
         row.className = "booking-day-details-row";
@@ -486,7 +547,7 @@ function updateFeedbackBar(
  */
 function onCalendarLeave(): void {
     if (feedbackBar) updateFeedbackBar(feedbackBar, null);
-    if (dayDetailsPanel) updateDayDetailsPanel(dayDetailsPanel, []);
+    if (dayDetailsPanel) updateDayDetailsPanel(dayDetailsPanel, [], 0);
     clearAdjacencyClasses();
 }
 
@@ -499,6 +560,7 @@ function onCalendarLeave(): void {
 function onPickerReady(instance: { calendarContainer?: HTMLElement }): void {
     if (!instance.calendarContainer) return;
     calendarContainer = instance.calendarContainer;
+    ensureLegend(calendarContainer);
     feedbackBar = ensureFeedbackBar(calendarContainer);
     dayDetailsPanel = ensureDayDetailsPanel(calendarContainer);
     calendarContainer.addEventListener("mouseleave", onCalendarLeave);
@@ -540,6 +602,8 @@ function onDayHover(payload: {
     if (calendarContainer) {
         const dayMap = buildDayElementMap(calendarContainer);
 
+        const { leadDays, trailDays } = bufferConfig.value;
+
         // Existing bookings' lead/trail: only the booking immediately
         // adjacent to the hovered gap gets coloured (see
         // findAdjacentBufferDates) - every other existing booking stays a
@@ -547,10 +611,22 @@ function onDayHover(payload: {
         const { leadDates, trailDates } = findAdjacentBufferDates(
             store.unavailableByDate,
             payload.ymd,
-            relevantItemIds.value
+            relevantItemIds.value,
+            leadDays,
+            trailDays
         );
-        applyAdjacencyClass(dayMap, leadDates, CLASS_EXISTING_LEAD_ADJACENT);
-        applyAdjacencyClass(dayMap, trailDates, CLASS_EXISTING_TRAIL_ADJACENT);
+        applyAdjacencyClass(
+            dayMap,
+            leadDates,
+            CLASS_EXISTING_LEAD_ADJACENT,
+            "start"
+        );
+        applyAdjacencyClass(
+            dayMap,
+            trailDates,
+            CLASS_EXISTING_TRAIL_ADJACENT,
+            "end"
+        );
 
         // My own prospective booking's lead/trail buffer. Before a start is
         // chosen, both bands preview relative to the hovered candidate
@@ -564,31 +640,102 @@ function onDayHover(payload: {
         // than payload.date - comparing/arithmetic on the raw Date risks
         // a timezone-dependent off-by-one that the string form
         // sidesteps entirely.
-        const { leadDays, trailDays } = bufferConfig.value;
         const anchor = rangeAnchor.value;
         const hoveredDay = toDay(payload.ymd);
+        const itemIds = relevantItemIds.value;
+
+        /**
+         * Apply a my-buffer band, plus its "real conflict" gate class
+         * when the window actually conflicts (see the constants above).
+         *
+         * A lead band always sits flush against its boundary date (the
+         * anchor, or the hovered candidate start) on its near side, and
+         * a trail band always sits flush against its boundary on its
+         * near side too - old UI never rounded that side, only the far
+         * edge (see applyAdjacencyClass's edges param). The boundary
+         * cell itself is marked with an "adjoins" class so its own
+         * native flatpickr rounding can be suppressed on that side too,
+         * keeping the whole strip - band, then boundary cell, then
+         * whatever follows - reading as continuous rather than one more
+         * independently-rounded pill.
+         *
+         * @param {import('dayjs').Dayjs|Date} rawBoundary Lead/trail boundary date.
+         * @param {number} days Lead/trail day count.
+         * @param {"lead"|"trail"} kind Which buffer this is.
+         * @param {string} bufferClass CLASS_MY_LEAD_BUFFER or CLASS_MY_TRAIL_BUFFER.
+         * @param {string} conflictClass Gate class to add when genuinely conflicting.
+         * @returns {void}
+         */
+        function applyMyBuffer(
+            rawBoundary,
+            days,
+            kind,
+            bufferClass,
+            conflictClass
+        ) {
+            const boundary = toDay(rawBoundary);
+            const dates = myBufferDates(boundary, days, kind);
+            if (dates.length === 0) return;
+            const edges = kind === "lead" ? "start" : "end";
+            applyAdjacencyClass(dayMap, dates, bufferClass, edges);
+            const conflicts =
+                kind === "lead"
+                    ? leadWindowConflicts(
+                          store.unavailableByDate,
+                          boundary,
+                          days,
+                          null,
+                          itemIds
+                      )
+                    : trailWindowConflicts(
+                          store.unavailableByDate,
+                          boundary,
+                          days,
+                          null,
+                          itemIds
+                      );
+            if (conflicts) {
+                applyAdjacencyClass(dayMap, dates, conflictClass, edges);
+            }
+            const boundaryEl = dayMap.get(boundary.format("YYYY-MM-DD"));
+            if (boundaryEl) {
+                const adjoinsClass =
+                    kind === "lead" ? CLASS_ADJOINS_LEAD : CLASS_ADJOINS_TRAIL;
+                boundaryEl.classList.add(adjoinsClass);
+                adjacencyElements.add(boundaryEl);
+            }
+        }
+
         if (!anchor) {
-            applyAdjacencyClass(
-                dayMap,
-                myBufferDates(hoveredDay, leadDays, "lead"),
-                CLASS_MY_LEAD_BUFFER
+            applyMyBuffer(
+                hoveredDay,
+                leadDays,
+                "lead",
+                CLASS_MY_LEAD_BUFFER,
+                CLASS_MY_LEAD_REAL_CONFLICT
             );
-            applyAdjacencyClass(
-                dayMap,
-                myBufferDates(hoveredDay, trailDays, "trail"),
-                CLASS_MY_TRAIL_BUFFER
+            applyMyBuffer(
+                hoveredDay,
+                trailDays,
+                "trail",
+                CLASS_MY_TRAIL_BUFFER,
+                CLASS_MY_TRAIL_REAL_CONFLICT
             );
         } else {
-            applyAdjacencyClass(
-                dayMap,
-                myBufferDates(anchor, leadDays, "lead"),
-                CLASS_MY_LEAD_BUFFER
+            applyMyBuffer(
+                anchor,
+                leadDays,
+                "lead",
+                CLASS_MY_LEAD_BUFFER,
+                CLASS_MY_LEAD_REAL_CONFLICT
             );
             if (!hoveredDay.isBefore(toDay(anchor), "day")) {
-                applyAdjacencyClass(
-                    dayMap,
-                    myBufferDates(hoveredDay, trailDays, "trail"),
-                    CLASS_MY_TRAIL_BUFFER
+                applyMyBuffer(
+                    hoveredDay,
+                    trailDays,
+                    "trail",
+                    CLASS_MY_TRAIL_BUFFER,
+                    CLASS_MY_TRAIL_REAL_CONFLICT
                 );
             }
         }
@@ -599,13 +746,12 @@ function onDayHover(payload: {
         try {
             const isHardDisabled =
                 !!payload.disabled && payload.disabled.severity !== "soft";
-            const rules = Array.isArray(circulationRules.value)
-                ? circulationRules.value[0] || {}
-                : circulationRules.value || {};
             const feedback = getDateFeedbackMessage(payload.date, {
                 isDisabled: isHardDisabled,
                 selectedDateRange: selectedDateRange.value,
-                circulationRules: rules,
+                leadDays: bufferConfig.value.leadDays,
+                trailDays: bufferConfig.value.trailDays,
+                maxPeriod: bufferConfig.value.maxPeriod,
                 unavailableByDate: store.unavailableByDate,
                 holidays: holidays.value || [],
             });
@@ -616,16 +762,29 @@ function onDayHover(payload: {
         }
     }
 
-    // The day-details panel's one job is barcodes booked/checked out on
-    // this exact date - lead/trail/holiday/limited-availability are
-    // already conveyed by the day's own colour, the constraint-info box,
-    // and the top feedback bar, so restating them here would be a third
-    // copy of the same information.
+    // The day-details panel's one job is a "x of y items booked" summary
+    // plus barcodes for those booked/checked-out items on this exact date
+    // - lead/trail/holiday/limited-availability are already conveyed by
+    // the day's own colour, the constraint-info box, and the top feedback
+    // bar, so restating them here would be a third copy of the same
+    // information. Scoped to relevantItemIds so the count and the list
+    // agree with the same "every relevant item" invariant the disable
+    // logic and day colour already use (see the UX spec §6) - an item
+    // outside the current selection scope (a different item type, or a
+    // specific item nobody picked) shouldn't inflate either number.
+    const relevantIds = relevantItemIds.value;
+    const relevantIdSet = new Set(relevantIds);
     const dayDetailMarkers = markers.filter(
-        m => m.type === "booked" || m.type === "checked-out"
+        m =>
+            (m.type === "booked" || m.type === "checked-out") &&
+            relevantIdSet.has(m.item)
     );
     if (dayDetailsPanel)
-        updateDayDetailsPanel(dayDetailsPanel, dayDetailMarkers);
+        updateDayDetailsPanel(
+            dayDetailsPanel,
+            dayDetailMarkers,
+            relevantIds.length
+        );
 
     if (!payload.element || dayDetailMarkers.length === 0) {
         if (payload.trigger === "focus" && payload.element) {

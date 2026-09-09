@@ -18,8 +18,10 @@ import { toDay, today as todayDate } from "../dates.js";
 export const CONSTRAINT_MODE_END_DATE_ONLY = "end_date_only";
 import {
     CONFLICT_REASONS,
+    HARD_CONFLICT_REASONS,
     dateHasConflict,
     rangeHasConflict,
+    setHasAny,
 } from "./server-map.js";
 
 /**
@@ -49,7 +51,13 @@ export function calculateMaxEndDate(startDate, maxPeriod) {
  * @param {Array<import('../types/bookings.d.ts').Id>} allItemIds Candidate items.
  * @returns {boolean} Whether the lead window conflicts.
  */
-function leadWindowConflicts(map, start, leadDays, selectedItem, allItemIds) {
+export function leadWindowConflicts(
+    map,
+    start,
+    leadDays,
+    selectedItem,
+    allItemIds
+) {
     if (leadDays <= 0) return false;
     return rangeHasConflict(
         map,
@@ -295,8 +303,28 @@ function anyItemHasReason(entry, itemIds, reason) {
 }
 
 /**
- * Nearest date carrying "booking" or "checkout" for any of the given
- * items, walking day-by-day from (and including) `from` in `direction`.
+ * Whether every one of the given items is booked or checked out on a map
+ * entry - the same "Unavailable" invariant markersByDate/disabledByDate
+ * use (§6 of the UX spec): a slot only counts as genuinely occupied once
+ * every relevant item is blocked there, not as soon as one is. A day
+ * where only some items are booked is "partial", not "Unavailable", and
+ * shouldn't anchor the existing-booking lead/trail highlight - dots
+ * still show for that day (via markersByDate's own partial handling),
+ * just not the surrounding coloured band.
+ *
+ * @param {Object|undefined} entry Per-item reason sets for one date.
+ * @param {string[]} itemIds Relevant items (every one, not just one).
+ * @returns {boolean}
+ */
+function allItemsBlocked(entry, itemIds) {
+    if (!entry || itemIds.length === 0) return false;
+    return itemIds.every(id => setHasAny(entry[id], HARD_CONFLICT_REASONS));
+}
+
+/**
+ * Nearest date where every relevant item is booked or checked out (a
+ * genuine "Unavailable" slot, §6), walking day-by-day from (and
+ * including) `from` in `direction`.
  *
  * @param {import('../types/bookings.d.ts').UnavailableByDate} map Availability map.
  * @param {import('dayjs').Dayjs} from Date to start the walk from, inclusive.
@@ -309,11 +337,7 @@ function nearestOccupiedDate(map, from, direction, itemIds, maxWalkDays) {
     let d = from.clone();
     for (let i = 0; i < maxWalkDays; i++) {
         const key = d.format("YYYY-MM-DD");
-        const entry = map[key];
-        if (
-            anyItemHasReason(entry, itemIds, "booking") ||
-            anyItemHasReason(entry, itemIds, "checkout")
-        ) {
+        if (allItemsBlocked(map[key], itemIds)) {
             return d;
         }
         d = d.add(direction, "day");
@@ -322,52 +346,40 @@ function nearestOccupiedDate(map, from, direction, itemIds, maxWalkDays) {
 }
 
 /**
- * The full contiguous run of dates carrying `reason`, walking outward in
- * `direction` from (and including) `from` until the tag stops.
- *
- * @param {import('../types/bookings.d.ts').UnavailableByDate} map Availability map.
- * @param {import('dayjs').Dayjs} from Date to start the walk from, inclusive.
- * @param {1|-1} direction +1 walks forward, -1 walks backward.
- * @param {string} reason Reason token to look for.
- * @param {string[]} itemIds Relevant item ids.
- * @param {number} maxWalkDays Safety bound on the walk.
- * @returns {string[]} YYYY-MM-DD keys, chronological order.
- */
-function taggedRun(map, from, direction, reason, itemIds, maxWalkDays) {
-    const dates = [];
-    let d = from.clone();
-    for (let i = 0; i < maxWalkDays; i++) {
-        const key = d.format("YYYY-MM-DD");
-        if (!anyItemHasReason(map[key], itemIds, reason)) break;
-        if (direction > 0) dates.push(key);
-        else dates.unshift(key);
-        d = d.add(direction, "day");
-    }
-    return dates;
-}
-
-/**
  * Existing bookings' lead/trail dates immediately adjacent to a hovered
- * gap: the trail window of the closest booking ending at or before the
- * hovered date, and the lead window of the closest booking starting at or
- * after it. The server pre-marks every existing booking's lead/trail
- * window in the map already; this finds the nearest booking in each
- * direction and expands the full contiguous tagged run bordering it, so
- * hovering anywhere in the gap - not just inside the window itself -
- * reveals the whole adjacent window. Returns nothing when the hovered
- * date is itself part of an existing booking (not "bookable space" to
- * preview from).
+ * gap: the trail window after the closest booking ending at or before the
+ * hovered date, and the lead window before the closest booking starting
+ * at or after it. Returns nothing when the hovered date is itself part
+ * of an existing booking (not "bookable space" to preview from).
+ *
+ * The band width comes from leadDays/trailDays (the same effective
+ * circulation-rule values driving my own buffer preview, see
+ * bufferConfig/myBufferDates) applied relative to the anchor, not from
+ * walking each item's own server-tagged lead/trail run: when several
+ * items' bookings combine to form one Unavailable span but start on
+ * different days (e.g. item A from the 13th, item B from the 14th, both
+ * booked through the 15th - Unavailable only once both are booked, from
+ * the 14th), each item's own tagged window is relative to *its own*
+ * booking start, so a plain per-item tag walk would union them into a
+ * wider band than the 14th's own leadDays actually calls for. Anchoring
+ * on the combined Unavailable start/end and applying the day-count
+ * directly keeps the band consistent with what the constraint-info box
+ * states, regardless of how many items' bookings happen to overlap here.
  *
  * @param {import('../types/bookings.d.ts').UnavailableByDate} map Availability map.
  * @param {string} hoveredYmd Hovered date, YYYY-MM-DD.
  * @param {string[]} itemIds Relevant item ids (already narrowed by selection).
- * @param {number} [maxWalkDays] Safety bound on each walk.
+ * @param {number} [leadDays] Effective lead-period day count.
+ * @param {number} [trailDays] Effective trail-period day count.
+ * @param {number} [maxWalkDays] Safety bound on the anchor search.
  * @returns {{trailDates: string[], leadDates: string[]}} YYYY-MM-DD keys, chronological order.
  */
 export function findAdjacentBufferDates(
     map,
     hoveredYmd,
     itemIds,
+    leadDays = 0,
+    trailDays = 0,
     maxWalkDays = 60
 ) {
     const hovered = toDay(hoveredYmd);
@@ -388,14 +400,7 @@ export function findAdjacentBufferDates(
         maxWalkDays
     );
     if (closestBefore) {
-        trailDates = taggedRun(
-            map,
-            closestBefore.add(1, "day"),
-            1,
-            "trail",
-            itemIds,
-            maxWalkDays
-        );
+        trailDates = myBufferDates(closestBefore, trailDays, "trail");
     }
 
     let leadDates = [];
@@ -407,16 +412,8 @@ export function findAdjacentBufferDates(
         maxWalkDays
     );
     if (closestAfter) {
-        leadDates = taggedRun(
-            map,
-            closestAfter.subtract(1, "day"),
-            -1,
-            "lead",
-            itemIds,
-            maxWalkDays
-        );
+        leadDates = myBufferDates(closestAfter, leadDays, "lead");
     }
-
     return { trailDates, leadDates };
 }
 

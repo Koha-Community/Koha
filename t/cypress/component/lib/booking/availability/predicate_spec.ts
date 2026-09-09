@@ -606,17 +606,17 @@ describe("findAdjacentBufferDates", () => {
         // Regression: the first cut only walked backward from the hover
         // point, so hovering the window's own first day found just that
         // one day instead of the full contiguous run.
-        const result = findAdjacentBufferDates(map, "2026-03-19", ["1"]);
+        const result = findAdjacentBufferDates(map, "2026-03-19", ["1"], 2, 2);
         expect(result.trailDates).to.deep.equal(["2026-03-19", "2026-03-20"]);
     });
 
     it("finds the whole trail window when hovering its last day", () => {
-        const result = findAdjacentBufferDates(map, "2026-03-20", ["1"]);
+        const result = findAdjacentBufferDates(map, "2026-03-20", ["1"], 2, 2);
         expect(result.trailDates).to.deep.equal(["2026-03-19", "2026-03-20"]);
     });
 
     it("finds the whole lead window when hovering its first day", () => {
-        const result = findAdjacentBufferDates(map, "2026-03-28", ["1"]);
+        const result = findAdjacentBufferDates(map, "2026-03-28", ["1"], 2, 2);
         expect(result.leadDates).to.deep.equal(["2026-03-28", "2026-03-29"]);
     });
 
@@ -624,36 +624,105 @@ describe("findAdjacentBufferDates", () => {
         // Regression: the lead walk only went forward from the hover
         // point, so hovering the window's own last day found just that
         // one day instead of the full contiguous run.
-        const result = findAdjacentBufferDates(map, "2026-03-29", ["1"]);
+        const result = findAdjacentBufferDates(map, "2026-03-29", ["1"], 2, 2);
         expect(result.leadDates).to.deep.equal(["2026-03-28", "2026-03-29"]);
     });
 
     it("finds both neighbours when hovering anywhere in the open gap between them", () => {
-        const result = findAdjacentBufferDates(map, "2026-03-24", ["1"]);
+        const result = findAdjacentBufferDates(map, "2026-03-24", ["1"], 2, 2);
         expect(result.trailDates).to.deep.equal(["2026-03-19", "2026-03-20"]);
         expect(result.leadDates).to.deep.equal(["2026-03-28", "2026-03-29"]);
     });
 
     it("returns nothing when the hovered date is itself booked", () => {
-        const result = findAdjacentBufferDates(map, "2026-03-16", ["1"]);
+        const result = findAdjacentBufferDates(map, "2026-03-16", ["1"], 2, 2);
         expect(result.trailDates).to.deep.equal([]);
         expect(result.leadDates).to.deep.equal([]);
     });
 
-    it("returns nothing when there is no booking in range either side", () => {
+    it("returns nothing when there is no booking within reach in either direction", () => {
+        const empty = mapOf({});
+        const result = findAdjacentBufferDates(
+            empty,
+            "2026-03-16",
+            ["1"],
+            2,
+            2
+        );
+        expect(result.trailDates).to.deep.equal([]);
+        expect(result.leadDates).to.deep.equal([]);
+    });
+
+    it("computes the band from leadDays/trailDays even when the server left the window untagged", () => {
+        // Only the booking itself is in the map - no separate "trail"/
+        // "lead" reason entries at all, unlike the main fixture above.
+        // The band width comes from leadDays/trailDays applied to the
+        // anchor now (not from walking pre-tagged reason entries in the
+        // map), so it must still compute correctly here.
         const isolated = mapOf({
             "2026-03-15": { "1": ["booking"] },
         });
-        const result = findAdjacentBufferDates(isolated, "2026-03-16", ["1"]);
-        expect(result.trailDates).to.deep.equal([]);
-        expect(result.leadDates).to.deep.equal([]);
+        const result = findAdjacentBufferDates(
+            isolated,
+            "2026-03-16",
+            ["1"],
+            2,
+            2
+        );
+        expect(result.trailDates).to.deep.equal(["2026-03-16", "2026-03-17"]);
     });
 
     it("only considers the given item ids", () => {
         // Same map but item "2" has no bookings at all - nothing adjacent.
-        const result = findAdjacentBufferDates(map, "2026-03-24", ["2"]);
+        const result = findAdjacentBufferDates(map, "2026-03-24", ["2"], 2, 2);
         expect(result.trailDates).to.deep.equal([]);
         expect(result.leadDates).to.deep.equal([]);
+    });
+
+    it("does not anchor on a date where only some relevant items are booked", () => {
+        // Item "1" is booked on the 15th, item "2" is still free there -
+        // a "partial" day (§6), not "Unavailable". The existing-booking
+        // lead/trail highlight is only meaningful around a genuinely
+        // Unavailable slot; a partial one still gets its own dot
+        // (markersByDate's concern, not this function's), but must not
+        // anchor the surrounding coloured band.
+        const partial = mapOf({
+            "2026-03-15": { "1": ["booking"] },
+        });
+        const result = findAdjacentBufferDates(
+            partial,
+            "2026-03-20",
+            ["1", "2"],
+            2,
+            2
+        );
+        expect(result.trailDates).to.deep.equal([]);
+        expect(result.leadDates).to.deep.equal([]);
+    });
+
+    it("sizes the lead band from leadDays relative to the combined anchor, not a per-item tag union", () => {
+        // Item "1" is booked from the 13th (its own lead: 11th-12th),
+        // item "2" from the 14th (its own lead: 12th-13th) - both booked
+        // through the 15th, so the combined Unavailable span (every
+        // relevant item blocked) only starts on the 14th. A per-item tag
+        // union would wrongly widen the band to the 11th-13th (3 days);
+        // the correct band is exactly leadDays=2 before the 14th: the
+        // 12th-13th.
+        const staggered = mapOf({
+            "2026-03-11": { "1": ["lead"] },
+            "2026-03-12": { "1": ["lead"], "2": ["lead"] },
+            "2026-03-13": { "1": ["booking"], "2": ["lead"] },
+            "2026-03-14": { "1": ["booking"], "2": ["booking"] },
+            "2026-03-15": { "1": ["booking"], "2": ["booking"] },
+        });
+        const result = findAdjacentBufferDates(
+            staggered,
+            "2026-03-09",
+            ["1", "2"],
+            2,
+            2
+        );
+        expect(result.leadDates).to.deep.equal(["2026-03-12", "2026-03-13"]);
     });
 });
 

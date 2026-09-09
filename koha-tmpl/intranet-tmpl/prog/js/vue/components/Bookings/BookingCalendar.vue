@@ -262,7 +262,12 @@ function onDayCreate(
     if (markers && markers.length > 0) {
         const tooltips: string[] = [];
         markers.forEach(marker => {
-            if (marker.className) dayElem.classList.add(marker.className);
+            // className may itself be space-separated (e.g. a run-start/
+            // run-end modifier alongside the base class) - classList.add
+            // rejects a single token containing whitespace, so split it.
+            if (marker.className) {
+                dayElem.classList.add(...marker.className.split(/\s+/));
+            }
             if (marker.tooltip) tooltips.push(marker.tooltip);
         });
         if (tooltips.length > 0) {

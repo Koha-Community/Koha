@@ -202,6 +202,18 @@ describe("BookingPeriodStep — accessibility", () => {
                     home_library_id: "CPL",
                     external_id: "visible-barcode",
                 },
+                // No external_id here deliberately - the panel must fall
+                // back to "N/A" for this one without ever leaking its raw
+                // item_id, and it still needs to be a *known* bookable
+                // item (not merely present in booking_availability's
+                // item_ids) to count as relevant - see relevantItemIds
+                // (useBookingCalendarMaps.js), the same scoping the day
+                // colour and clash gating already use.
+                {
+                    item_id: 654,
+                    item_type_id: "BK",
+                    home_library_id: "CPL",
+                },
             ],
         });
         cy.intercept("GET", "**/api/v1/biblios/1/pickup_locations*", {
@@ -290,6 +302,7 @@ describe("BookingPeriodStep — accessibility", () => {
                 expect(details).not.to.equal(undefined);
                 expect(details?.getAttribute("role")).to.equal("status");
                 expect(details?.getAttribute("aria-live")).to.equal("polite");
+                expect(details?.textContent).to.contain("2 of 2 items booked");
                 expect(details?.textContent).to.contain(
                     "Unavailable (Barcode: visible-barcode)"
                 );
