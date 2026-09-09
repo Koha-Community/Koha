@@ -405,7 +405,9 @@ properties:
     description: |
       Summary of how the patron will be notified (embeddable). Only present
       when the requesting user is allowed to see the patron. Keys:
-      `hold_fill_notified` (bool), `primary_contact_method` (string).
+      `hold_fill_notified` (bool), `hold_fill_transports` (array of strings),
+      `recall_waiting_notified` (bool), `recall_waiting_transports` (array of
+      strings), `primary_contact_method` (string).
   protected:
     type:
       - boolean

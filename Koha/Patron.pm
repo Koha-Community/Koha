@@ -3649,9 +3649,15 @@ an embeddable representation on the API (C<x-koha-embed: notification_summary>).
 The structure is:
 
     {
-        hold_fill_notified     => 0|1,       # will be notified when a hold is filled
-        primary_contact_method => 'email',   # the patron's primary contact method
+        hold_fill_notified        => 0|1,               # notified when a hold is filled
+        hold_fill_transports      => [ 'email', 'sms' ], # transports for the Hold_Filled notice
+        recall_waiting_notified   => 0|1,               # notified when a recall is set waiting
+        recall_waiting_transports => [ 'email' ],        # transports for the Recall_Waiting notice
+        primary_contact_method    => 'email',           # the patron's primary contact method
     }
+
+The C<*_notified> flags are true when at least one transport is configured for
+the corresponding notice. The C<*_transports> lists give those transports (sorted).
 
 Note: this is patron information and MUST only be exposed to consumers
 allowed to see the patron. C<Koha::Patron::to_api> strips it out when the
@@ -3663,9 +3669,36 @@ because the generic embed machinery cannot enforce that gate itself.
 sub notification_summary {
     my ($self) = @_;
 
+    my $hold_filled_prefs = C4::Members::Messaging::GetMessagingPreferences(
+        {
+            borrowernumber => $self->borrowernumber,
+            message_name   => 'Hold_Filled',
+        }
+    );
+
+    my @hold_transports =
+        $hold_filled_prefs && $hold_filled_prefs->{transports}
+        ? sort keys %{ $hold_filled_prefs->{transports} }
+        : ();
+
+    my $recall_waiting_prefs = C4::Members::Messaging::GetMessagingPreferences(
+        {
+            borrowernumber => $self->borrowernumber,
+            message_name   => 'Recall_Waiting',
+        }
+    );
+
+    my @recall_transports =
+        $recall_waiting_prefs && $recall_waiting_prefs->{transports}
+        ? sort keys %{ $recall_waiting_prefs->{transports} }
+        : ();
+
     return {
-        hold_fill_notified     => $self->has_messaging_preference( { message_name => 'Hold_Filled' } ) ? 1 : 0,
-        primary_contact_method => $self->primary_contact_method,
+        hold_fill_notified        => scalar(@hold_transports) ? 1 : 0,
+        hold_fill_transports      => \@hold_transports,
+        recall_waiting_notified   => scalar(@recall_transports) ? 1 : 0,
+        recall_waiting_transports => \@recall_transports,
+        primary_contact_method    => $self->primary_contact_method,
     };
 }
 

@@ -33,6 +33,7 @@ use utf8;
 use C4::Circulation qw( AddIssue AddReturn );
 use C4::Biblio;
 use C4::Auth qw( checkpw checkpw_hash );
+use C4::Members::Messaging;
 
 use Koha::ActionLogs;
 use Koha::Holds;
@@ -4337,7 +4338,7 @@ subtest 'set_permissions' => sub {
 };
 
 subtest 'notification_summary embed and permission gating' => sub {
-    plan tests => 6;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
@@ -4366,6 +4367,43 @@ subtest 'notification_summary embed and permission gating' => sub {
     is( ref($summary), 'HASH', 'notification_summary returns a hashref' );
     ok( exists $summary->{hold_fill_notified},     'summary has hold_fill_notified' );
     ok( exists $summary->{primary_contact_method}, 'summary has primary_contact_method' );
+    is( ref( $summary->{hold_fill_transports} ),      'ARRAY', 'hold_fill_transports is an arrayref' );
+    is( ref( $summary->{recall_waiting_transports} ), 'ARRAY', 'recall_waiting_transports is an arrayref' );
+
+    # With a Hold_Filled preference set, the transports are reported and the flag is true
+    my $attr = Koha::Database->new->schema->resultset('MessageAttribute')->find( { message_name => 'Hold_Filled' } );
+    C4::Members::Messaging::SetMessagingPreference(
+        {
+            borrowernumber          => $target->borrowernumber,
+            message_attribute_id    => $attr->message_attribute_id,
+            message_transport_types => [qw( email sms )],
+        }
+    );
+    my $notified = $target->notification_summary;
+    is( $notified->{hold_fill_notified}, 1, 'hold_fill_notified true once a transport is set' );
+    is_deeply(
+        $notified->{hold_fill_transports},
+        [ 'email', 'sms' ],
+        'hold_fill_transports lists the configured transports, sorted'
+    );
+
+    # With a Recall_Waiting preference set, the recall transports are reported
+    my $recall_attr =
+        Koha::Database->new->schema->resultset('MessageAttribute')->find( { message_name => 'Recall_Waiting' } );
+    C4::Members::Messaging::SetMessagingPreference(
+        {
+            borrowernumber          => $target->borrowernumber,
+            message_attribute_id    => $recall_attr->message_attribute_id,
+            message_transport_types => [qw( email )],
+        }
+    );
+    my $recall_notified = $target->notification_summary;
+    is( $recall_notified->{recall_waiting_notified}, 1, 'recall_waiting_notified true once a transport is set' );
+    is_deeply(
+        $recall_notified->{recall_waiting_transports},
+        ['email'],
+        'recall_waiting_transports lists the configured transports, sorted'
+    );
 
     # Embedded and visible to a permitted user
     t::lib::Mocks::mock_userenv( { patron => $can_see, flags => 1, branchcode => $lib_a->branchcode } );
