@@ -850,7 +850,7 @@ subtest 'get_bookings() tests' => sub {
 
 subtest 'get_booking_availability() tests' => sub {
 
-    plan tests => 29;
+    plan tests => 34;
 
     $schema->storage->txn_begin;
 
@@ -1012,6 +1012,19 @@ subtest 'get_booking_availability() tests' => sub {
             "Item's own type overrides a passed item_type_id"
         )->status_is(200)->json_is( "/availability/$lead_day/$inferred_id/blockers/lead" => 1 );
     };
+
+    # A range of exactly 366 days is the inclusive upper bound (delta_days <= 366)
+    my $exactly_366 = $today->clone->add( days => 366 )->ymd;
+    $t->get_ok(
+        "//$userid:$password\@$path?from_date=$from&to_date=$exactly_366",
+        "Range of exactly 366 days is accepted"
+    )->status_is(200);
+
+    my $one_over_366 = $today->clone->add( days => 367 )->ymd;
+    $t->get_ok(
+        "//$userid:$password\@$path?from_date=$from&to_date=$one_over_366",
+        "Range of 367 days is rejected"
+    )->status_is(400)->json_is( '/path' => '/query/to_date' );
 
     $schema->storage->txn_rollback;
 };
