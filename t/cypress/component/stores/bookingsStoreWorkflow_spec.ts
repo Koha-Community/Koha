@@ -382,6 +382,46 @@ describe("bookings store workflow", () => {
             });
     });
 
+    it("disables the calendar when an availability refresh fails", () => {
+        cy.intercept("GET", "**/api/v1/biblios/1/pickup_locations*", {
+            body: [
+                { ...LOCATION, library_id: "OLD" },
+                { ...LOCATION, library_id: "CURRENT" },
+            ],
+        });
+        cy.intercept(
+            "GET",
+            "**/api/v1/biblios/1/booking_availability*",
+            req => {
+                if (String(req.query.pickup_library_id) === "CURRENT") {
+                    req.destroy();
+                    return;
+                }
+                req.reply({ body: { item_ids: [101], availability: {} } });
+            }
+        );
+
+        const store = makeStore();
+        cy.then(() =>
+            store.openForCreate({
+                biblionumber: 1,
+                patron: PATRON,
+                itemtypeId: "BK",
+                pickupLibraryId: "OLD",
+            })
+        )
+            .then(() => {
+                expect(store.readiness.isCalendarReady).to.equal(true);
+                return store
+                    .changeBookingContext({ pickupLibraryId: "CURRENT" })
+                    .catch(() => undefined);
+            })
+            .then(() => {
+                expect(store.bookingAvailability).to.not.equal(null);
+                expect(store.readiness.isCalendarReady).to.equal(false);
+            });
+    });
+
     it("publishes holidays only for the latest pickup library", () => {
         const oldHolidaysStarted = deferred();
         cy.intercept("GET", "**/api/v1/biblios/1/pickup_locations*", {

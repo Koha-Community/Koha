@@ -301,6 +301,8 @@ function buildNoItemsAvailableMessage(
  * @property {boolean} hasAvailableItems The constraint pipeline yields
  *   at least one item.
  * @property {boolean} isCalendarReady Safe to enable the date picker.
+ * @property {boolean} availabilityError The most recent availability
+ *   fetch for the current context failed; refreshContext() can retry it.
  *
  * @typedef {{ ok: true, item_id: import('@koha-vue/lib/booking/types/bookings').Id|null, itemtype_id: import('@koha-vue/lib/booking/types/bookings').Id|null } | { ok: false }} ResolvedItem
  *
@@ -509,7 +511,9 @@ function useValidationSection({ status, data, draft, availability }) {
             (data.bookableItems.value?.length ?? 0) > 0
     );
     const contextDataReady = computed(
-        () => data.bookingAvailability.value != null
+        () =>
+            data.bookingAvailability.value != null &&
+            !data.bookingAvailabilityError.value
     );
     const formPrefilterValid = computed(
         () => !patronSelectionRequired.value || !!draft.bookingPatron.value
@@ -540,6 +544,7 @@ function useValidationSection({ status, data, draft, availability }) {
         formPrefilterValid: formPrefilterValid.value,
         hasAvailableItems: hasAvailableItems.value,
         isCalendarReady: isCalendarReady.value,
+        availabilityError: data.bookingAvailabilityError.value,
     }));
 
     // Clear pending errors as soon as the user changes any

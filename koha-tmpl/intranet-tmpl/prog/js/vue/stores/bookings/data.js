@@ -124,6 +124,7 @@ function makeWithErrorHandling(loading) {
  * @typedef {Object} DataSection
  * @property {import('vue').Ref<BookableItem[]>} bookableItems
  * @property {import('vue').Ref<BookingAvailabilityResponse|null>} bookingAvailability
+ * @property {import('vue').Ref<boolean>} bookingAvailabilityError Whether the most recent (non-superseded) availability fetch failed, leaving bookingAvailability stale.
  * @property {import('vue').Ref<PickupLocation[]>} pickupLocations
  * @property {import('vue').Ref<ItemType[]>} itemTypes
  * @property {import('vue').Ref<CirculationRule[]>} circulationRules
@@ -187,6 +188,16 @@ export function useDataSection({ status }) {
     const bookableItems = ref([]);
     /** @type {import('vue').Ref<BookingAvailabilityResponse|null>} Raw availability payload. */
     const bookingAvailability = ref(null);
+    /**
+     * True when the most recent (non-superseded) booking-availability fetch
+     * failed. bookingAvailability deliberately keeps serving the previous
+     * context's payload across refetches (see fetchBookingAvailability), so
+     * consumers that gate calendar interactivity on data being present must
+     * also check this flag to avoid treating stale, unconfirmed availability
+     * as current.
+     * @type {import('vue').Ref<boolean>}
+     */
+    const bookingAvailabilityError = ref(false);
     /** Bumped on writes so pre-write responses and cache entries become stale. */
     let bookingAvailabilityVersion = 0;
     /** @type {Map<string, BookingAvailabilityResponse>} Availability payloads keyed by fetch context. */
@@ -297,6 +308,7 @@ export function useDataSection({ status }) {
             const cached = bookingAvailabilityCache.get(key);
             if (isCurrentRequest("bookingAvailability", generation)) {
                 bookingAvailability.value = cached;
+                bookingAvailabilityError.value = false;
             }
             return cached;
         }
@@ -318,6 +330,7 @@ export function useDataSection({ status }) {
                 bookingAvailabilityVersion === cacheVersion &&
                 isCurrentRequest("bookingAvailability", generation)
             ) {
+                bookingAvailabilityError.value = false;
                 bookingAvailability.value = result;
             }
             return result;
@@ -325,6 +338,7 @@ export function useDataSection({ status }) {
             if (!isCurrentRequest("bookingAvailability", generation)) {
                 return bookingAvailability.value;
             }
+            bookingAvailabilityError.value = true;
             throw error;
         }
     }, "bookingAvailability");
@@ -562,6 +576,7 @@ export function useDataSection({ status }) {
      */
     function resetContextData() {
         bookingAvailability.value = null;
+        bookingAvailabilityError.value = false;
         circulationRules.value = [];
         circulationRulesContext.value = null;
         holidays.value = [];
@@ -658,6 +673,7 @@ export function useDataSection({ status }) {
     return {
         bookableItems,
         bookingAvailability,
+        bookingAvailabilityError,
         pickupLocations,
         itemTypes,
         circulationRules,
