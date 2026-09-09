@@ -45,7 +45,6 @@ export type DisabledInput =
     | Map<YMD, DisabledSpec>
     | ((date: Date) => DisabledSpec | null);
 export type SelectedRange = Date[] | null;
-type RangeState = "idle" | "picking-end" | "committed";
 
 interface Viewport {
     year: number;
@@ -99,8 +98,6 @@ type FlatpickrBoundInput = HTMLInputElement & { _flatpickr?: Instance };
 const inputRef = ref<HTMLInputElement | null>(null);
 const fpInstance = shallowRef<Instance | null>(null);
 let keyboardInputElement: HTMLInputElement | null = null;
-
-const rangeState = ref<RangeState>("idle");
 
 let hoverRafScheduled = false;
 let latestHoverDate: Date | null = null;
@@ -661,16 +658,6 @@ function onCalendarMouseLeave(e: MouseEvent): void {
 }
 
 /**
- * Set the picker range state only when it has changed.
- *
- * @param {RangeState} next Next range state.
- * @returns {void}
- */
-function setRangeState(next: RangeState): void {
-    if (rangeState.value !== next) rangeState.value = next;
-}
-
-/**
  * Build booking-specific Flatpickr options over Koha's ambient defaults.
  *
  * @returns {Partial<Options>} Flatpickr options owned by the calendar.
@@ -770,7 +757,7 @@ function handleReady(_d: Date[], _s: string, fp: Instance): void {
 }
 
 /**
- * Publish selected dates, range state, and the current viewport.
+ * Publish selected dates and the current viewport.
  *
  * @param {Date[]} selectedDates Flatpickr's current selection.
  * @param {string} _dateStr Flatpickr's formatted selection.
@@ -782,13 +769,6 @@ function handleChange(
     _dateStr: string,
     fp: Instance
 ): void {
-    if (selectedDates.length === 0) {
-        setRangeState("idle");
-    } else if (selectedDates.length === 1) {
-        setRangeState("picking-end");
-    } else {
-        setRangeState("committed");
-    }
     emit("update:modelValue", normalizeOutput(selectedDates));
     emit("update:viewport", {
         year: fp.currentYear,
@@ -863,20 +843,15 @@ function applyExternalValue(v: SelectedRange): void {
         : null;
     if (v == null || (Array.isArray(v) && (v.length === 0 || v[0] == null))) {
         fp.clear(false, false);
-        setRangeState("idle");
         return;
     }
 
-    const isFullCommittedRange =
-        Array.isArray(v) && v.length >= 2 && v[0] != null && v[1] != null;
     const dateInput = v.filter(date => date != null);
     fp.setDate(dateInput as Parameters<Instance["setDate"]>[0], false);
     if (fp.isOpen && focusedDate) {
         const restoredDay = dayElementForDate(fp, focusedDate);
         if (restoredDay) focusDayElement(fp, restoredDay);
     }
-
-    setRangeState(isFullCommittedRange ? "committed" : "picking-end");
 }
 
 /**
