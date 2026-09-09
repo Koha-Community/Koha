@@ -97,6 +97,7 @@ type FlatpickrBoundInput = HTMLInputElement & { _flatpickr?: Instance };
 const inputRef = ref<HTMLInputElement | null>(null);
 const fpInstance = shallowRef<Instance | null>(null);
 let keyboardInputElement: HTMLInputElement | null = null;
+let outsideClickHandler: ((e: MouseEvent) => void) | null = null;
 
 let hoverRafScheduled = false;
 let latestHoverDate: Date | null = null;
@@ -784,8 +785,29 @@ function handleChange(
  *
  * @returns {void}
  */
-function handleOpen(): void {
+function handleOpen(_d: Date[], _s: string, fp: Instance): void {
     keyboardInputElement?.setAttribute("aria-expanded", "true");
+
+    // Flatpickr's own document click-listener closes the popup on any
+    // outside click, but here the popup is appended inside the booking
+    // modal (see buildConfig - Bootstrap's focus trap otherwise clips or
+    // redirects it). Bootstrap's modal-dialog content stops click
+    // propagation to keep the backdrop's own dismiss logic from firing on
+    // clicks inside the dialog, and that also swallows Flatpickr's
+    // listener for any click elsewhere in the *same* modal - only a click
+    // fully outside the modal was still reaching it. Register our own
+    // capture-phase listener instead: capture always runs before that
+    // later bubble-phase stopPropagation, so it isn't affected.
+    outsideClickHandler = (e: MouseEvent) => {
+        const target = e.target as Node | null;
+        if (!target || !fp.isOpen) return;
+        const input = fp.altInput ?? fp.input;
+        if (fp.calendarContainer.contains(target) || input?.contains(target)) {
+            return;
+        }
+        fp.close();
+    };
+    document.addEventListener("mousedown", outsideClickHandler, true);
 }
 
 /**
@@ -795,6 +817,10 @@ function handleOpen(): void {
  */
 function handleClose(): void {
     keyboardInputElement?.setAttribute("aria-expanded", "false");
+    if (outsideClickHandler) {
+        document.removeEventListener("mousedown", outsideClickHandler, true);
+        outsideClickHandler = null;
+    }
 }
 
 /**
@@ -909,6 +935,10 @@ function destroyInstance(): void {
     }
     keyboardInputElement?.removeEventListener("keydown", onInputKeyDown, true);
     keyboardInputElement = null;
+    if (outsideClickHandler) {
+        document.removeEventListener("mousedown", outsideClickHandler, true);
+        outsideClickHandler = null;
+    }
     if (fp.altInput) {
         delete (fp.altInput as FlatpickrBoundInput)._flatpickr;
     }

@@ -167,6 +167,35 @@ describe("Booking Modal Date Picker Tests", () => {
         cy.get("#booking_period").should("not.have.value", "");
     });
 
+    it("closes on Escape and on a click elsewhere in the same modal", () => {
+        // The calendar is appended inside the booking modal (Bootstrap's
+        // focus trap otherwise clips/redirects it - see BookingCalendar's
+        // buildConfig). Bootstrap's modal-dialog content stops click
+        // propagation to keep its own backdrop-dismiss logic from firing
+        // on clicks inside the dialog, which also swallowed Flatpickr's
+        // own outside-click listener for any click elsewhere in that same
+        // modal - only a click fully outside the modal still closed it.
+        const fixedToday = pinnedToday();
+        cy.clock(fixedToday.toDate(), ["Date"]);
+
+        setupModalForDateTesting();
+
+        cy.get("#booking_period").click();
+        cy.get(".flatpickr-calendar.open").should("be.visible");
+        cy.get("#booking_period").trigger("keydown", {
+            key: "Escape",
+            code: "Escape",
+            keyCode: 27,
+            which: 27,
+        });
+        cy.get(".flatpickr-calendar.open").should("not.exist");
+
+        cy.get("#booking_period").click();
+        cy.get(".flatpickr-calendar.open").should("be.visible");
+        cy.get("booking-modal .modal .modal-header").click();
+        cy.get(".flatpickr-calendar.open").should("not.exist");
+    });
+
     it("should initialize flatpickr with correct future-date constraints", () => {
         const fixedToday = pinnedToday();
         cy.clock(fixedToday.toDate(), ["Date"]);
