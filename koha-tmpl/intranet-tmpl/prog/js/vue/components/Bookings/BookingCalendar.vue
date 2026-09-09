@@ -11,6 +11,9 @@
             :disabled="inputDisabled"
             readonly
         />
+        <slot name="clear-button"></slot>
+        <slot name="required"></slot>
+        <slot name="legend"></slot>
     </div>
 </template>
 
@@ -97,7 +100,6 @@ type FlatpickrBoundInput = HTMLInputElement & { _flatpickr?: Instance };
 const inputRef = ref<HTMLInputElement | null>(null);
 const fpInstance = shallowRef<Instance | null>(null);
 let keyboardInputElement: HTMLInputElement | null = null;
-let outsideClickHandler: ((e: MouseEvent) => void) | null = null;
 
 let hoverRafScheduled = false;
 let latestHoverDate: Date | null = null;
@@ -412,7 +414,7 @@ function shiftedMonthDate(date: Date, monthDelta: number): Date {
 }
 
 /**
- * Open the picker from its input and transfer keyboard focus to a day.
+ * Transfer keyboard focus from the (always-visible) input into the grid.
  *
  * @param {KeyboardEvent} e Input keyboard event.
  * @returns {void}
@@ -420,12 +422,6 @@ function shiftedMonthDate(date: Date, monthDelta: number): Date {
 function onInputKeyDown(e: KeyboardEvent): void {
     const fp = fpInstance.value;
     if (!fp || props.inputDisabled) return;
-
-    if (e.key === "Escape" && fp.isOpen) {
-        stopKeyboardEvent(e);
-        fp.close();
-        return;
-    }
 
     if (
         e.key !== "Enter" &&
@@ -437,7 +433,6 @@ function onInputKeyDown(e: KeyboardEvent): void {
     }
 
     stopKeyboardEvent(e);
-    fp.open();
     requestAnimationFrame(() => {
         if (fpInstance.value === fp) focusInitialCalendarDay(fp);
     });
@@ -455,10 +450,9 @@ function onCalendarKeyDown(e: KeyboardEvent): void {
 
     if (e.key === "Escape") {
         stopKeyboardEvent(e);
-        // Focusing first mirrors Flatpickr's own focusAndClose helper. If the
-        // input's focus handler opens the picker, the following close wins.
+        // Nothing to close (the calendar is always visible) - just return
+        // keyboard focus to the input, a reasonable "step back out" gesture.
         keyboardInputElement?.focus();
-        fp.close();
         return;
     }
 
@@ -522,39 +516,6 @@ function onCalendarKeyDown(e: KeyboardEvent): void {
 }
 
 /**
- * Position a modal-owned popup calendar in viewport coordinates.
- *
- * @param {Instance} fp Active Flatpickr instance.
- * @returns {void}
- */
-function positionCalendarInModal(fp: Instance): void {
-    const inputBounds = fp._positionElement.getBoundingClientRect();
-    const calendar = fp.calendarContainer;
-    const calendarHeight = calendar.offsetHeight;
-    const calendarWidth = calendar.offsetWidth;
-    const viewportBottom = window.innerHeight - 8;
-    const fitsBelow = inputBounds.bottom + 2 + calendarHeight <= viewportBottom;
-    const fitsAbove = inputBounds.top - 2 - calendarHeight >= 0;
-    const showAbove = !fitsBelow && fitsAbove;
-    const preferredTop = showAbove
-        ? inputBounds.top - calendarHeight - 2
-        : inputBounds.bottom + 2;
-    const top = Math.max(
-        0,
-        Math.min(preferredTop, viewportBottom - calendarHeight)
-    );
-    const maxLeft = Math.max(0, window.innerWidth - calendarWidth);
-    const left = Math.max(0, Math.min(inputBounds.left, maxLeft));
-
-    calendar.classList.toggle("arrowTop", !showAbove);
-    calendar.classList.toggle("arrowBottom", showAbove);
-    calendar.style.position = "fixed";
-    calendar.style.top = `${top}px`;
-    calendar.style.left = `${left}px`;
-    calendar.style.right = "auto";
-}
-
-/**
  * Apply accessible dialog and month-control semantics after redraws.
  *
  * @param {Instance} fp Active Flatpickr instance.
@@ -562,7 +523,10 @@ function positionCalendarInModal(fp: Instance): void {
  */
 function syncCalendarKeyboardSemantics(fp: Instance): void {
     const calendar = fp.calendarContainer;
-    calendar.setAttribute("role", "dialog");
+    // Not role="dialog" - that implies a modal-like popup window with its
+    // own focus-trap expectations, which doesn't fit a calendar that's
+    // permanently part of the page's normal content.
+    calendar.setAttribute("role", "group");
     calendar.setAttribute("aria-label", $__("Choose date"));
 
     const controls: Array<[HTMLElement, string]> = [
@@ -675,32 +639,39 @@ function buildConfig(): Partial<Options> {
     // calendar.inc owns the translated locale, display format, arrows, and
     // other Koha page defaults. This component only supplies booking-range
     // behavior.
+    //
+    // inline: true renders the calendar permanently in normal document
+    // flow, right after the input, instead of a floating popup that opens
+    // on click - the input itself becomes a read-only display of the
+    // current selection (see the greyed styling below), all the actual
+    // interaction happening in the always-visible grid. This also sidesteps
+    // the Bootstrap modal focus-trap issue the previous popup-mode config
+    // worked around (appendTo/position, now removed): there's no floating
+    // element under <body> to redirect focus away from any more.
+    //
+    // animate: false avoids flatpickr's default fade-in-down entrance
+    // animation, which would otherwise still fire once against the
+    // permanently-forced .open class below (its .animate.open CSS keyframe
+    // doesn't check for inline mode).
     const cfg: Partial<Options> = {
         mode: "range",
         allowInput: false,
         dateFormat: "Y-m-d",
+        inline: true,
+        showMonths: 2,
+        animate: false,
         // Koha's page defaults add Yesterday/Today/Tomorrow shortcuts.
         // They bypass booking range constraints, so omit them entirely.
         plugins: [],
         disable: hardDisableConfig.value ?? [],
         onChange: handleChange,
         onReady: handleReady,
-        onOpen: handleOpen,
         onClose: handleClose,
         onMonthChange: handleMonthChange,
         onYearChange: handleMonthChange,
         onDayCreate,
     };
 
-    // Bootstrap's modal focus trap redirects focus that moves to a calendar
-    // appended under <body>. Keep the popup directly under its modal, outside
-    // the scrollable dialog, and use viewport coordinates so it is neither
-    // redirected nor clipped.
-    const modal = inputRef.value?.closest<HTMLElement>(".modal");
-    if (modal) {
-        cfg.appendTo = modal;
-        cfg.position = positionCalendarInModal;
-    }
     if (props.minDate != null) cfg.minDate = props.minDate;
     return cfg;
 }
@@ -742,17 +713,21 @@ function handleReady(_d: Date[], _s: string, fp: Instance): void {
     syncInputSemantics(fp);
     syncCalendarKeyboardSemantics(fp);
     keyboardInputElement = fp.altInput ?? inputRef.value;
-    keyboardInputElement?.setAttribute("aria-haspopup", "dialog");
     fp.calendarContainer.id = "booking_period_calendar";
     keyboardInputElement?.setAttribute(
         "aria-controls",
         fp.calendarContainer.id
     );
-    keyboardInputElement?.setAttribute(
-        "aria-expanded",
-        fp.isOpen ? "true" : "false"
-    );
     keyboardInputElement?.addEventListener("keydown", onInputKeyDown, true);
+
+    // The calendar is permanently visible now (inline), never a popup that
+    // opens/closes - keep .flatpickr-day's own .open CSS class present too
+    // (harmless alongside .inline, see buildConfig's comment on `animate`)
+    // since existing Cypress specs already wait on it. onClose re-adds it
+    // defensively: flatpickr's own internal logic still calls close() from
+    // a few code paths regardless of config.inline (e.g. after a completed
+    // range selection), and unlike open(), close() has no inline guard.
+    fp.calendarContainer.classList.add("open");
 
     const cal = fp.calendarContainer;
     if (cal) {
@@ -766,66 +741,44 @@ function handleReady(_d: Date[], _s: string, fp: Instance): void {
 }
 
 /**
- * Publish selected dates and the current viewport.
+ * Publish selected dates.
+ *
+ * Deliberately does not also report the viewport: onMonthChange/
+ * onYearChange (handleMonthChange, below) already cover every actual
+ * navigation, and mode is hardcoded to "range" in buildConfig, where
+ * Flatpickr's own selectDate() forces shouldChangeMonth to false - a
+ * date pick never moves the visible months in this component, so a
+ * second, independent viewport emit here would always report an
+ * unchanged value. That used to happen on every single date pick
+ * regardless, needlessly re-triggering the parent's viewport-driven
+ * availability/holidays refetch (see BookingPeriodStep.vue's
+ * onUpdateViewport) moments after the pick was already done.
  *
  * @param {Date[]} selectedDates Flatpickr's current selection.
  * @param {string} _dateStr Flatpickr's formatted selection.
- * @param {Instance} fp Active Flatpickr instance.
+ * @param {Instance} _fp Active Flatpickr instance.
  * @returns {void}
  */
 function handleChange(
     selectedDates: Date[],
     _dateStr: string,
-    fp: Instance
+    _fp: Instance
 ): void {
     emit("update:modelValue", normalizeOutput(selectedDates));
-    emit("update:viewport", {
-        year: fp.currentYear,
-        month: fp.currentMonth,
-    });
 }
 
 /**
- * Mark the calendar popup as expanded for assistive technology.
+ * Keep the calendar's .open class present even if Flatpickr's own internal
+ * logic calls close() (it has no config.inline guard, unlike open()) - the
+ * calendar never actually closes in this always-visible design.
  *
+ * @param {Date[]} _d Flatpickr's selected dates.
+ * @param {string} _s Flatpickr's formatted selection.
+ * @param {Instance} fp Active Flatpickr instance.
  * @returns {void}
  */
-function handleOpen(_d: Date[], _s: string, fp: Instance): void {
-    keyboardInputElement?.setAttribute("aria-expanded", "true");
-
-    // Flatpickr's own document click-listener closes the popup on any
-    // outside click, but here the popup is appended inside the booking
-    // modal (see buildConfig - Bootstrap's focus trap otherwise clips or
-    // redirects it). Bootstrap's modal-dialog content stops click
-    // propagation to keep the backdrop's own dismiss logic from firing on
-    // clicks inside the dialog, and that also swallows Flatpickr's
-    // listener for any click elsewhere in the *same* modal - only a click
-    // fully outside the modal was still reaching it. Register our own
-    // capture-phase listener instead: capture always runs before that
-    // later bubble-phase stopPropagation, so it isn't affected.
-    outsideClickHandler = (e: MouseEvent) => {
-        const target = e.target as Node | null;
-        if (!target || !fp.isOpen) return;
-        const input = fp.altInput ?? fp.input;
-        if (fp.calendarContainer.contains(target) || input?.contains(target)) {
-            return;
-        }
-        fp.close();
-    };
-    document.addEventListener("mousedown", outsideClickHandler, true);
-}
-
-/**
- * Mark the calendar popup as collapsed for assistive technology.
- *
- * @returns {void}
- */
-function handleClose(): void {
-    keyboardInputElement?.setAttribute("aria-expanded", "false");
-    if (outsideClickHandler) {
-        document.removeEventListener("mousedown", outsideClickHandler, true);
-        outsideClickHandler = null;
-    }
+function handleClose(_d: Date[], _s: string, fp: Instance): void {
+    fp.calendarContainer.classList.add("open");
 }
 
 /**
@@ -882,7 +835,10 @@ function applyExternalValue(v: SelectedRange): void {
 
     const dateInput = v.filter(date => date != null);
     fp.setDate(dateInput as Parameters<Instance["setDate"]>[0], false);
-    if (fp.isOpen && focusedDate) {
+    // focusedDate is only non-null when the calendar already had focus
+    // (computed above) - restoring it there is the relevant guard now,
+    // not fp.isOpen (always visible, so no longer a meaningful signal).
+    if (focusedDate) {
         const restoredDay = dayElementForDate(fp, focusedDate);
         if (restoredDay) focusDayElement(fp, restoredDay);
     }
@@ -940,10 +896,6 @@ function destroyInstance(): void {
     }
     keyboardInputElement?.removeEventListener("keydown", onInputKeyDown, true);
     keyboardInputElement = null;
-    if (outsideClickHandler) {
-        document.removeEventListener("mousedown", outsideClickHandler, true);
-        outsideClickHandler = null;
-    }
     if (fp.altInput) {
         delete (fp.altInput as FlatpickrBoundInput)._flatpickr;
     }
@@ -1063,12 +1015,92 @@ watch(
 </script>
 
 <style>
+/* Flatpickr always inserts its inline calendar right after the bound
+   input (self._input.nextSibling), so DOM order is fixed as input,
+   calendar, then whatever the required/legend slots render (they exist
+   as the input's next siblings before Flatpickr's one-time insertion,
+   so the calendar lands between the input and them). The explicit order
+   values below are what actually put the required hint and legend
+   visually between the input and the calendar, regardless of that DOM
+   order - clear-button isn't among them since it's positioned out of
+   the flex flow entirely, overlaid on the input itself (below). */
 .booking-flatpickr-wrapper {
     position: relative;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
 }
-.modal > .flatpickr-calendar {
-    pointer-events: auto;
+.booking-flatpickr-input {
+    order: 0;
+    /* Room for the overlaid clear button, see [slot="clear-button"]. */
+    padding-right: 2.25rem;
+}
+.booking-period-required {
+    order: 1;
+}
+.calendar-legend {
+    order: 2;
+}
+/* align-self: center, not the wrapper's default align-items: stretch -
+   stretch would otherwise force the calendar to the wrapper's full
+   cross-axis width (matching the full-width input above it) rather than
+   its own natural, fixed 2-month content width. */
+.flatpickr-calendar {
+    order: 3;
+    align-self: center;
+}
+/* The clear button lives in BookingPeriodStep.vue (clearing dates has
+   store-level side effects beyond the picker's own state) but renders
+   here, overlaid on the input rather than beside it, so the input's own
+   width and styling match every other .form-control in the modal - a
+   separate flex sibling used to force the input to share row space with
+   the button. top: 0 relies on the input being this wrapper's first
+   flex item (order: 0, no margin), so it starts flush with the
+   wrapper's own top edge; the fixed height/offset below approximates
+   Bootstrap's own .form-control box (padding-y 0.375rem, line-height
+   1.5, 1px borders) since nothing here can measure the input's actual
+   rendered height in pure CSS. */
+.booking-clear-overlay {
+    position: absolute;
+    top: 0;
+    right: 0.25rem;
+    height: 2.375rem;
+    display: flex;
+    align-items: center;
+}
+/* _flatpickr.scss hardcodes .flatpickr-calendar/.flatpickr-days to one
+   month's fixed pixel width with overflow: hidden - correct for the
+   single-month popup every other flatpickr instance in Koha uses, but it
+   silently clips the second month's .dayContainer entirely out of view
+   for showMonths: 2 (the elements exist in the DOM, they're just hidden).
+   Letting these size to their content instead - each .dayContainer still
+   carries its own fixed width - is the general fix for any N months, not
+   just 2, and the overflow:hidden these rules also drop existed to hide
+   the month-to-month slide transition, which animate: false disables.
+
+   !important is load-bearing here, not decorative: Flatpickr's own
+   setCalendarWidth() runs once, one rAF after init(), and sets
+   calendarContainer/daysContainer width as an inline style computed from
+   .dayContainer's measured offsetWidth at that instant - inline styles
+   always beat stylesheet rules regardless of selector specificity. Worse,
+   that one-shot measurement is unreliable early in an inline calendar's
+   life (it has measured 0, baking in a ~2px width forever, with nothing
+   ever re-running setCalendarWidth to correct it) - so this can't be
+   fixed by only winning the specificity fight, since there's no stylesheet
+   specificity high enough to out-rank an inline style at all. */
+.flatpickr-calendar.multiMonth,
+.flatpickr-calendar.multiMonth .flatpickr-innerContainer,
+.flatpickr-calendar.multiMonth .flatpickr-days {
+    width: auto !important;
+    overflow: visible;
+}
+/* Read-only display of the current selection - the actual interaction
+   happens in the always-visible calendar below, not by typing or
+   clicking into this field. Muted rather than fully disabled-looking,
+   since the clear (x) button next to it stays fully active. */
+.booking-flatpickr-input[readonly] {
+    background-color: var(--booking-neutral-100, #f8f9fa);
+    color: var(--booking-neutral-600, #6c757d);
+    cursor: default;
 }
 .flatpickr-day:focus-visible,
 .flatpickr-prev-month:focus-visible,

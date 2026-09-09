@@ -850,11 +850,11 @@ onUnmounted(closeSession);
         box-shadow var(--booking-transition-fast);
 }
 
-/* Lives inside flatpickr's own calendarContainer (see ensureLegend in
-   BookingPeriodStep.vue), not the surrounding .booking-form - flatpickr
-   appends its popup to the modal root, not as a child of the form, so
-   these rules aren't (and don't need to be) scoped under .booking-form,
-   the same as .booking-hover-feedback/.booking-day-details below. */
+/* Passed into BookingCalendar's legend slot (see the template in
+   BookingPeriodStep.vue) and rendered as a flex child of its own
+   .booking-flatpickr-wrapper, not a descendant of .booking-form - these
+   rules aren't (and don't need to be) scoped under .booking-form, the
+   same as .booking-hover-feedback/.booking-day-details below. */
 .calendar-legend {
     padding: 0.5rem 0.75rem 0;
     margin-bottom: var(--booking-space-md);
@@ -899,31 +899,8 @@ onUnmounted(closeSession);
     border: none;
 }
 
-.booking-date-picker {
-    display: flex;
-    align-items: stretch;
-    width: 100%;
-}
-
-.booking-date-picker > .form-control {
-    flex: 1 1 auto;
-    min-width: 0;
+.booking-flatpickr-input {
     margin-bottom: 0;
-}
-
-.booking-date-picker-append {
-    display: flex;
-    margin-left: -1px;
-}
-
-.booking-date-picker-append .btn {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-}
-
-.booking-date-picker > .form-control:not(:last-child) {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
 }
 
 .booking-form .vs__selected {
@@ -987,14 +964,17 @@ onUnmounted(closeSession);
     background: var(--booking-neutral-600);
 }
 
+/* Standard Bootstrap .alert styling (colour, border, padding, radius)
+   comes from Alert's own variant prop now - info/warning/danger map
+   directly onto alert-info/alert-warning/alert-danger. Only the fade-
+   in-place behaviour is custom: the box stays in the document flow at
+   a fixed footprint and opacity-fades rather than mounting/unmounting,
+   so rapid movement between adjacent hovered days doesn't flicker. */
 .booking-hover-feedback {
-    padding: 0.5rem 0.75rem;
     min-height: 3rem;
     opacity: 0;
     margin-top: 0.5rem;
     margin-bottom: 0;
-    border-radius: 0 0 var(--booking-border-radius-sm)
-        var(--booking-border-radius-sm);
     font-size: var(--booking-text-sm);
     text-align: center;
     transition:
@@ -1007,38 +987,13 @@ onUnmounted(closeSession);
     opacity: 1;
 }
 
-.booking-hover-feedback--info {
-    color: hsl(var(--booking-info-hue), 80%, 20%);
-    background-color: hsl(var(--booking-info-hue), 40%, 93%);
-}
-
-.booking-hover-feedback--danger {
-    color: hsl(var(--booking-danger-hue), 80%, 20%);
-    background-color: hsl(var(--booking-danger-hue), 40%, 93%);
-}
-
-.booking-hover-feedback--warning {
-    color: hsl(var(--booking-warning-hue), 80%, 20%);
-    background-color: hsl(var(--booking-warning-hue), 100%, 93%);
-}
-
 .booking-day-details {
-    /* Fixed footprint, opacity-only transition: flatpickr computes the
-       popup's on-screen position once (see BookingCalendar.vue's
-       positionCalendarInModal) and never recalculates it as this panel's
-       content changes on hover, so animating height/padding here could
-       grow the calendar past the viewport after it's already been placed -
-       the same bug just fixed for .booking-hover-feedback. */
-    padding: 0.5rem 0.75rem;
     min-height: 4.5rem;
     max-height: 6rem;
     overflow-y: auto;
     opacity: 0;
     margin-top: 0.25rem;
     margin-bottom: 0;
-    background-color: var(--booking-neutral-100);
-    border-radius: 0 0 var(--booking-border-radius-sm)
-        var(--booking-border-radius-sm);
     font-size: var(--booking-text-sm);
     transition: opacity 100ms ease;
 }

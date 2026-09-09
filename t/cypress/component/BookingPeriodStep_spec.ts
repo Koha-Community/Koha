@@ -427,7 +427,7 @@ describe("BookingPeriodStep — clear button", () => {
             },
             { "onClear-dates": onClear }
         );
-        cy.get(".booking-date-picker-append button").click();
+        cy.get(".booking-clear-overlay button").click();
         cy.then(() => {
             const store = useBookingStore();
             expect(store.selectedDateRange).to.deep.equal([]);
@@ -435,12 +435,77 @@ describe("BookingPeriodStep — clear button", () => {
         cy.get("@onClear").should("have.been.calledOnce");
     });
 
-    it("disables the clear button when calendarEnabled is false", () => {
+    it("hides the picker (and its clear button) behind a placeholder when calendarEnabled is false", () => {
         // calendarEnabled false is how the parent step gates input until
-        // upstream selections (item type / patron) are made. The clear
-        // button mirrors the picker's enabled state so users can't reset
-        // a disabled control.
+        // upstream selections (item type / patron) are made. The picker
+        // itself stays mounted (v-show, not v-if) so Flatpickr's instance
+        // is never torn down and rebuilt as calendarEnabled flips true/
+        // false while upstream selections load - only visually hidden,
+        // with an explanatory placeholder shown in its place.
         mountStep({}, { calendarEnabled: false });
-        cy.get(".booking-date-picker-append button").should("be.disabled");
+        cy.get(".booking-clear-overlay button").should("not.be.visible");
+        cy.get(".booking-calendar-placeholder").should("be.visible");
+    });
+});
+
+describe("BookingPeriodStep — availability refresh failure", () => {
+    it("offers a retry action, and re-fetches availability when clicked", () => {
+        cy.intercept("GET", "**/api/v1/biblios/1/items*", {
+            body: [
+                { item_id: 987, item_type_id: "BK", home_library_id: "CPL" },
+            ],
+        });
+        cy.intercept("GET", "**/api/v1/biblios/1/pickup_locations*", {
+            body: [
+                {
+                    library_id: "CPL",
+                    name: "Centerville",
+                    pickup_items: [987],
+                },
+            ],
+        });
+        cy.intercept("GET", "**/api/v1/circulation_rules*", {
+            body: [{ issuelength: 14 }],
+        });
+        cy.intercept("GET", "**/api/v1/libraries/CPL/closed_dates*", {
+            body: [],
+        });
+        cy.intercept("GET", "**/api/v1/biblios/1/booking_availability*", req =>
+            req.destroy()
+        ).as("failedAvailability");
+
+        mountStep(
+            {},
+            {
+                calendarEnabled: false,
+                workflowInput: {
+                    biblionumber: 1,
+                    patron: {
+                        patron_id: 42,
+                        category_id: "ST",
+                        library_id: "CPL",
+                    },
+                    itemtypeId: "BK",
+                    pickupLibraryId: "CPL",
+                },
+            }
+        );
+        cy.wait("@failedAvailability");
+
+        cy.get(".booking-calendar-placeholder--error")
+            .should("be.visible")
+            .and("contain.text", "Booking availability could not be loaded");
+        cy.get(".booking-calendar-placeholder--error button").should(
+            "contain.text",
+            "Retry"
+        );
+
+        cy.intercept("GET", "**/api/v1/biblios/1/booking_availability*", {
+            body: { item_ids: [987], availability: {} },
+        }).as("retriedAvailability");
+        cy.get(".booking-calendar-placeholder--error button").click();
+        cy.wait("@retriedAvailability");
+
+        cy.get(".booking-calendar-placeholder--error").should("not.exist");
     });
 });

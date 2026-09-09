@@ -22,39 +22,152 @@
             <label for="booking_period" class="required">{{
                 $__("Booking period")
             }}</label>
-            <div class="booking-date-picker">
-                <BookingCalendar
-                    ref="pickerRef"
-                    :model-value="pickerModelValue"
-                    :viewport="initialViewport"
-                    :min-date="minDate"
-                    :disabled="composedDisabled"
-                    :markers-by-date="markersByDate"
-                    :class-by-date="classByDate"
-                    :input-disabled="!calendarEnabled"
-                    @update:model-value="store.setSelectedDates"
-                    @update:viewport="onUpdateViewport"
-                    @day-hover="onDayHover"
-                    @day-leave="onDayLeave"
-                    @select-attempt-blocked="onSelectAttemptBlocked"
-                    @ready="onPickerReady"
-                />
-                <div class="booking-date-picker-append">
-                    <button
-                        type="button"
-                        class="btn btn-outline-secondary"
-                        :disabled="!calendarEnabled"
-                        :title="$__('Clear selected dates')"
-                        @click="clearDateRange"
+            <div
+                v-show="calendarEnabled"
+                ref="calendarWrapperRef"
+                class="booking-calendar-wrapper"
+                :style="
+                    calendarRenderWidth
+                        ? {
+                              '--booking-calendar-render-width': `${calendarRenderWidth}px`,
+                          }
+                        : undefined
+                "
+            >
+                <div class="booking-date-picker">
+                    <BookingCalendar
+                        ref="pickerRef"
+                        :model-value="pickerModelValue"
+                        :viewport="initialViewport"
+                        :min-date="minDate"
+                        :disabled="composedDisabled"
+                        :markers-by-date="markersByDate"
+                        :class-by-date="classByDate"
+                        :input-disabled="!calendarEnabled"
+                        @update:model-value="store.setSelectedDates"
+                        @update:viewport="onUpdateViewport"
+                        @day-hover="onDayHover"
+                        @day-leave="onDayLeave"
+                        @select-attempt-blocked="onSelectAttemptBlocked"
+                        @ready="onPickerReady"
                     >
-                        <i class="fa fa-times" aria-hidden="true"></i>
-                        <span class="visually-hidden">{{
-                            $__("Clear selected dates")
-                        }}</span>
-                    </button>
+                        <template #clear-button>
+                            <div class="booking-clear-overlay">
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-secondary border-0"
+                                    :title="$__('Clear selected dates')"
+                                    @click="clearDateRange"
+                                >
+                                    <i
+                                        class="fa fa-times"
+                                        aria-hidden="true"
+                                    ></i>
+                                    <span class="visually-hidden">{{
+                                        $__("Clear selected dates")
+                                    }}</span>
+                                </button>
+                            </div>
+                        </template>
+                        <template #required>
+                            <span class="required booking-period-required">{{
+                                $__("Required")
+                            }}</span>
+                        </template>
+                        <template #legend>
+                            <div class="calendar-legend">
+                                <template
+                                    v-for="(entry, index) in legendEntries"
+                                    :key="entry.kind"
+                                >
+                                    <span
+                                        class="booking-marker-dot"
+                                        :class="[
+                                            `booking-marker-dot--${entry.kind}`,
+                                            index > 0 ? 'ms-3' : '',
+                                        ]"
+                                    ></span>
+                                    {{ entry.label }}
+                                </template>
+                            </div>
+                        </template>
+                    </BookingCalendar>
                 </div>
+                <Alert
+                    :id="feedbackId"
+                    class="booking-hover-feedback"
+                    :class="feedbackClasses"
+                    :variant="feedbackDisplay?.variant || 'info'"
+                    role="status"
+                    live="polite"
+                >
+                    {{ feedbackDisplay?.message }}
+                </Alert>
+                <Alert
+                    :id="dayDetailsId"
+                    class="booking-day-details"
+                    :class="{
+                        'booking-day-details--visible':
+                            dayDetailsMarkers.length > 0,
+                    }"
+                    variant="secondary"
+                    role="status"
+                    live="polite"
+                >
+                    <div
+                        v-if="dayDetailsMarkers.length > 0"
+                        class="booking-day-details-summary"
+                    >
+                        {{
+                            $__("%s of %s items booked").format(
+                                dayDetailsMarkers.length,
+                                dayDetailsTotalRelevant
+                            )
+                        }}
+                    </div>
+                    <div
+                        v-for="(marker, index) in dayDetailsMarkers"
+                        :key="`${marker.type}-${index}`"
+                        class="booking-day-details-row"
+                    >
+                        <span
+                            class="booking-marker-dot"
+                            :class="`booking-marker-dot--${marker.type}`"
+                        ></span>
+                        {{ getMarkerDescription(marker) }}
+                    </div>
+                </Alert>
             </div>
-            <span class="required">{{ $__("Required") }}</span>
+            <div
+                v-if="!calendarEnabled && !readiness.availabilityError"
+                class="booking-calendar-placeholder"
+            >
+                <i class="fa fa-calendar-o" aria-hidden="true"></i>
+                {{
+                    $__(
+                        "The booking calendar isn't available yet - select a patron, pickup location, and item type or item, and confirm bookings are available for this record"
+                    )
+                }}
+            </div>
+            <div
+                v-else-if="!calendarEnabled && readiness.availabilityError"
+                class="booking-calendar-placeholder booking-calendar-placeholder--error"
+            >
+                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                {{
+                    $__(
+                        "Booking availability could not be loaded for this selection."
+                    )
+                }}
+                <button
+                    type="button"
+                    class="btn btn-link"
+                    :disabled="retryingAvailability"
+                    @click="retryAvailability"
+                >
+                    {{ $__("Retry") }}
+                </button>
+            </div>
         </div>
 
         <div v-if="errorMessage" class="alert alert-danger mt-2">
@@ -64,7 +177,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, onBeforeUnmount, ref, useId } from "vue";
+import { computed, inject, onBeforeUnmount, onMounted, ref, useId } from "vue";
 import Alert from "../Alert.vue";
 import BookingCalendar from "./BookingCalendar.vue";
 import type { useBookingStore } from "../../stores/bookings";
@@ -141,10 +254,29 @@ const componentId = useId();
 const dayDetailsId = `booking-day-details-${componentId}`;
 const feedbackId = `booking-feedback-${componentId}`;
 
+// Legend entries: swatch kind + translated label. Static after setup, so a
+// plain array is enough - no reactive dependency drives these.
+const legendEntries: Array<{ kind: string; label: string }> = [
+    { kind: "selected", label: $__("Current selection") },
+    { kind: "booked", label: $__("Unavailable") },
+    { kind: "partial", label: $__("Bookings present") },
+    { kind: "lead", label: $__("Lead period") },
+    { kind: "trail", label: $__("Trail period") },
+    // Both clash directions share one colour (a clash is a clash), so one
+    // legend entry covers both - which direction applies was never shown
+    // anywhere but this legend text, and showing it twice for an
+    // identical swatch was confusing, not informative. Either clash-*
+    // class works here since both resolve to the same
+    // --booking-clash-*-bg value.
+    { kind: "clash-trail-lead", label: $__("Lead/trail conflict") },
+    { kind: "holiday", label: $__("Library closed") },
+];
+
 type BookingStore = ReturnType<typeof useBookingStore>;
 const store = inject<BookingStore>("bookingStore") as BookingStore;
 const {
     bookableItems,
+    readiness,
     selectedDateRange,
     holidays,
     pickerModelValue,
@@ -159,6 +291,26 @@ const {
     relevantItemIds,
     bufferConfig,
 } = storeToRefs(store);
+
+const retryingAvailability = ref(false);
+
+/**
+ * Retry the availability fetch for the current context after a failure.
+ *
+ * @returns {Promise<void>}
+ */
+async function retryAvailability(): Promise<void> {
+    retryingAvailability.value = true;
+    try {
+        await store.refreshContext();
+    } catch (error) {
+        if ((error as Error)?.name === "AbortError") return;
+        store.setError(formatApiError(error), "api");
+    } finally {
+        retryingAvailability.value = false;
+    }
+}
+
 interface PickerExposed {
     clear: () => void;
 }
@@ -238,6 +390,16 @@ let lastDescribedElement: HTMLElement | null = null;
  * key, so adjacency/buffer-preview classes can be patched onto cells
  * other than the one actually hovered.
  *
+ * Each visible month pads its own first/last row to a full week with
+ * .prevMonthDay/.nextMonthDay filler cells borrowed from the adjacent
+ * month - carrying a real dateObj for that date, but hidden (Koha's
+ * _flatpickr.scss adds .hidden and visually suppresses them, since the
+ * date already renders for real in its own month's panel). Left
+ * unfiltered, querySelectorAll returns both the real cell and the
+ * filler for that date, and whichever comes later in DOM order (the
+ * following month's filler, for a date near a month boundary) wins the
+ * map entry - pointing adjacency classes at a cell nothing ever shows.
+ *
  * @param {HTMLElement|null} container Flatpickr calendar container.
  * @returns {Map<string, HTMLElement>} Day elements keyed by date.
  */
@@ -247,7 +409,9 @@ function buildDayElementMap(
     const map = new Map<string, HTMLElement>();
     if (!container) return map;
     container
-        .querySelectorAll<HTMLElement & { dateObj?: Date }>(".flatpickr-day")
+        .querySelectorAll<
+            HTMLElement & { dateObj?: Date }
+        >(".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)")
         .forEach(day => {
             if (!day.dateObj) return;
             map.set(formatYMD(day.dateObj), day);
@@ -347,179 +511,94 @@ function setDayDescriptions(
  * @returns {void}
  */
 function hideDayDetails(): void {
-    if (dayDetailsPanel) updateDayDetailsPanel(dayDetailsPanel, [], 0);
+    updateDayDetailsPanel([], 0);
     clearAdjacencyClasses();
     setDayDescriptions(lastDescribedElement);
 }
 
-// Hover feedback bar: a contextual <div> appended inside flatpickr's
-// calendarContainer that explains why a day is disabled or what the user
-// can do next. Reuses the .booking-hover-feedback CSS shipped in
-// BookingForm.vue. Hides are deferred one frame so rapid movement
-// between adjacent days doesn't flicker.
-let feedbackBar: HTMLDivElement | null = null;
+// Hover feedback bar and day-details panel: plain reactive template
+// elements living as siblings of the calendar (see the template above),
+// not appended into flatpickr's calendarContainer - there's no popup
+// open/close state to piggyback on any more now that the calendar is
+// always visible, so a conditionally-rendered Vue block does the same
+// job with less machinery than building/inserting DOM nodes by hand.
+// Hides are deferred one frame so rapid movement between adjacent days
+// doesn't flicker.
+const feedbackDisplay = ref<{
+    message: string;
+    variant: FeedbackVariant;
+} | null>(null);
 let feedbackHideTimer: number | null = null;
-let dayDetailsPanel: HTMLDivElement | null = null;
+const dayDetailsMarkers = ref<CalendarMarker[]>([]);
+const dayDetailsTotalRelevant = ref(0);
 let calendarContainer: HTMLElement | null = null;
+const calendarWrapperRef = ref<HTMLElement | null>(null);
+
+// The hover-feedback/day-details alerts are sized to the flatpickr
+// calendar's actual rendered width via this ref rather than a CSS
+// intrinsic-sizing trick (e.g. a max-content grid track) - the
+// calendar-legend slot is a flex-wrap row whose own max-content
+// contribution is the sum of all its entries unwrapped, wider than the
+// two-month calendar itself, which threw off any ancestor sizing
+// derived from "widest child's intrinsic content width". Measuring the
+// real box instead is immune to that (or to any other neighbour's
+// intrinsic width).
+const calendarRenderWidth = ref<number | null>(null);
+let calendarResizeObserver: ResizeObserver | null = null;
+
+/**
+ * Track the flatpickr calendar's rendered width so the alerts below it
+ * can be sized to match.
+ *
+ * @param {HTMLElement} container Flatpickr calendar container.
+ * @returns {void}
+ */
+function observeCalendarWidth(container: HTMLElement): void {
+    calendarResizeObserver?.disconnect();
+    calendarResizeObserver = new ResizeObserver(entries => {
+        const entry = entries[0];
+        if (entry) calendarRenderWidth.value = entry.contentRect.width;
+    });
+    calendarResizeObserver.observe(container);
+}
 
 type FeedbackVariant = "info" | "warning" | "danger";
 
-/**
- * Return the calendar legend, creating it when necessary.
- *
- * Inserted as the calendar's first child, above the month/year header
- * (.flatpickr-months) - a real child of flatpickr's own container
- * rather than a conditionally-rendered Vue block, so it shows and hides
- * with the calendar for free instead of needing its own open/close
- * tracking. Only means anything once you're looking at coloured days,
- * so it has no reason to occupy space while the picker is closed.
- *
- * @param {HTMLElement} container Flatpickr calendar container.
- * @returns {HTMLDivElement} Calendar-owned legend element.
- */
-function ensureLegend(container: HTMLElement): HTMLDivElement {
-    let legend = container.querySelector<HTMLDivElement>(".calendar-legend");
-    if (!legend) {
-        legend = document.createElement("div");
-        legend.className = "calendar-legend";
-        const entries: Array<[string, string]> = [
-            ["selected", $__("Selected period")],
-            ["booked", $__("Unavailable")],
-            ["partial", $__("Some items unavailable")],
-            ["lead", $__("Lead period")],
-            ["trail", $__("Trail period")],
-            // Both clash directions share one colour (a clash is a
-            // clash), so one legend entry covers both - which direction
-            // applies was never shown anywhere but this legend text, and
-            // showing it twice for an identical swatch was confusing,
-            // not informative. Either clash-* class works here since
-            // both resolve to the same --booking-clash-*-bg value.
-            ["clash-trail-lead", $__("Lead/trail conflict")],
-            ["holiday", $__("Library closed")],
-        ];
-        entries.forEach(([kind, label], index) => {
-            const dot = document.createElement("span");
-            dot.className = `booking-marker-dot booking-marker-dot--${kind}${
-                index > 0 ? " ms-3" : ""
-            }`;
-            legend.appendChild(dot);
-            legend.appendChild(document.createTextNode(label));
-        });
-        container.insertBefore(
-            legend,
-            container.querySelector(".flatpickr-months")
-        );
-    }
-    return legend;
-}
-
-/**
- * Return the calendar feedback bar, creating it when necessary.
- *
- * @param {HTMLElement} container Flatpickr calendar container.
- * @returns {HTMLDivElement} Calendar-owned feedback element.
- */
-function ensureFeedbackBar(container: HTMLElement): HTMLDivElement {
-    let bar = container.querySelector<HTMLDivElement>(
-        ".booking-hover-feedback"
-    );
-    if (!bar) {
-        bar = document.createElement("div");
-        bar.className = "booking-hover-feedback";
-        bar.id = feedbackId;
-        bar.setAttribute("role", "status");
-        bar.setAttribute("aria-live", "polite");
-        container.appendChild(bar);
-    }
-    return bar;
-}
-
-/**
- * Return the calendar day-details panel, creating it when necessary.
- *
- * Sits directly below the hover-feedback bar and lists the booked/
- * checked-out items (with barcode) for the hovered or focused day - the
- * one thing colour and the feedback bar can't say on their own. Anchored
- * in the calendar's own layout so it never overlaps the day cells it
- * describes.
- *
- * @param {HTMLElement} container Flatpickr calendar container.
- * @returns {HTMLDivElement} Calendar-owned day-details element.
- */
-function ensureDayDetailsPanel(container: HTMLElement): HTMLDivElement {
-    let panel = container.querySelector<HTMLDivElement>(".booking-day-details");
-    if (!panel) {
-        panel = document.createElement("div");
-        panel.className = "booking-day-details";
-        panel.id = dayDetailsId;
-        panel.setAttribute("role", "status");
-        panel.setAttribute("aria-live", "polite");
-        container.appendChild(panel);
-    }
-    return panel;
-}
+const feedbackClasses = computed(() =>
+    feedbackDisplay.value ? ["booking-hover-feedback--visible"] : []
+);
 
 /**
  * Render a "x of y items booked" summary plus the marker list for a day
  * into the day-details panel, or collapse the panel when there is
  * nothing to show.
  *
- * @param {HTMLDivElement} panel Calendar day-details element.
  * @param {CalendarMarker[]} markers Booked/checked-out markers to describe, already scoped to relevantItemIds.
  * @param {number} totalRelevant Count of relevant items (the same scope the markers are filtered to).
  * @returns {void}
  */
 function updateDayDetailsPanel(
-    panel: HTMLDivElement,
     markers: CalendarMarker[],
     totalRelevant: number
 ): void {
-    panel.replaceChildren();
-    if (markers.length === 0) {
-        panel.classList.remove("booking-day-details--visible");
-        return;
-    }
-    const summary = document.createElement("div");
-    summary.className = "booking-day-details-summary";
-    summary.appendChild(
-        document.createTextNode(
-            $__("%s of %s items booked").format(markers.length, totalRelevant)
-        )
-    );
-    panel.appendChild(summary);
-    for (const marker of markers) {
-        const row = document.createElement("div");
-        row.className = "booking-day-details-row";
-        const dot = document.createElement("span");
-        dot.className = `booking-marker-dot booking-marker-dot--${marker.type}`;
-        row.appendChild(dot);
-        row.appendChild(document.createTextNode(getMarkerDescription(marker)));
-        panel.appendChild(row);
-    }
-    panel.classList.add("booking-day-details--visible");
+    dayDetailsMarkers.value = markers;
+    dayDetailsTotalRelevant.value = totalRelevant;
 }
 
 /**
  * Show contextual day feedback or schedule it to be hidden.
  *
- * @param {HTMLDivElement} bar Calendar feedback element.
  * @param {{message: string, variant: FeedbackVariant}|null} feedback Feedback to show.
  * @returns {void}
  */
 function updateFeedbackBar(
-    bar: HTMLDivElement,
     feedback: { message: string; variant: FeedbackVariant } | null
 ): void {
     if (!feedback) {
         if (feedbackHideTimer == null) {
             feedbackHideTimer = window.setTimeout(() => {
                 feedbackHideTimer = null;
-                bar.classList.remove(
-                    "booking-hover-feedback--visible",
-                    "booking-hover-feedback--info",
-                    "booking-hover-feedback--warning",
-                    "booking-hover-feedback--danger"
-                );
+                feedbackDisplay.value = null;
             }, 16);
         }
         return;
@@ -528,16 +607,7 @@ function updateFeedbackBar(
         clearTimeout(feedbackHideTimer);
         feedbackHideTimer = null;
     }
-    bar.textContent = feedback.message;
-    bar.classList.remove(
-        "booking-hover-feedback--info",
-        "booking-hover-feedback--warning",
-        "booking-hover-feedback--danger"
-    );
-    bar.classList.add(
-        "booking-hover-feedback--visible",
-        `booking-hover-feedback--${feedback.variant}`
-    );
+    feedbackDisplay.value = feedback;
 }
 
 /**
@@ -546,8 +616,8 @@ function updateFeedbackBar(
  * @returns {void}
  */
 function onCalendarLeave(): void {
-    if (feedbackBar) updateFeedbackBar(feedbackBar, null);
-    if (dayDetailsPanel) updateDayDetailsPanel(dayDetailsPanel, [], 0);
+    updateFeedbackBar(null);
+    updateDayDetailsPanel([], 0);
     clearAdjacencyClasses();
 }
 
@@ -560,23 +630,25 @@ function onCalendarLeave(): void {
 function onPickerReady(instance: { calendarContainer?: HTMLElement }): void {
     if (!instance.calendarContainer) return;
     calendarContainer = instance.calendarContainer;
-    ensureLegend(calendarContainer);
-    feedbackBar = ensureFeedbackBar(calendarContainer);
-    dayDetailsPanel = ensureDayDetailsPanel(calendarContainer);
-    calendarContainer.addEventListener("mouseleave", onCalendarLeave);
+    observeCalendarWidth(instance.calendarContainer);
 }
+
+onMounted(() => {
+    calendarWrapperRef.value?.addEventListener("mouseleave", onCalendarLeave);
+});
 
 onBeforeUnmount(() => {
     if (feedbackHideTimer != null) {
         clearTimeout(feedbackHideTimer);
         feedbackHideTimer = null;
     }
-    if (calendarContainer) {
-        calendarContainer.removeEventListener("mouseleave", onCalendarLeave);
-        calendarContainer = null;
-    }
-    feedbackBar = null;
-    dayDetailsPanel = null;
+    calendarWrapperRef.value?.removeEventListener(
+        "mouseleave",
+        onCalendarLeave
+    );
+    calendarContainer = null;
+    calendarResizeObserver?.disconnect();
+    calendarResizeObserver = null;
 });
 
 /**
@@ -742,24 +814,22 @@ function onDayHover(payload: {
     }
 
     let hasFeedback = false;
-    if (feedbackBar) {
-        try {
-            const isHardDisabled =
-                !!payload.disabled && payload.disabled.severity !== "soft";
-            const feedback = getDateFeedbackMessage(payload.date, {
-                isDisabled: isHardDisabled,
-                selectedDateRange: selectedDateRange.value,
-                leadDays: bufferConfig.value.leadDays,
-                trailDays: bufferConfig.value.trailDays,
-                maxPeriod: bufferConfig.value.maxPeriod,
-                unavailableByDate: store.unavailableByDate,
-                holidays: holidays.value || [],
-            });
-            updateFeedbackBar(feedbackBar, feedback);
-            hasFeedback = !!feedback;
-        } catch {
-            updateFeedbackBar(feedbackBar, null);
-        }
+    try {
+        const isHardDisabled =
+            !!payload.disabled && payload.disabled.severity !== "soft";
+        const feedback = getDateFeedbackMessage(payload.date, {
+            isDisabled: isHardDisabled,
+            selectedDateRange: selectedDateRange.value,
+            leadDays: bufferConfig.value.leadDays,
+            trailDays: bufferConfig.value.trailDays,
+            maxPeriod: bufferConfig.value.maxPeriod,
+            unavailableByDate: store.unavailableByDate,
+            holidays: holidays.value || [],
+        });
+        updateFeedbackBar(feedback);
+        hasFeedback = !!feedback;
+    } catch {
+        updateFeedbackBar(null);
     }
 
     // The day-details panel's one job is a "x of y items booked" summary
@@ -779,12 +849,7 @@ function onDayHover(payload: {
             (m.type === "booked" || m.type === "checked-out") &&
             relevantIdSet.has(m.item)
     );
-    if (dayDetailsPanel)
-        updateDayDetailsPanel(
-            dayDetailsPanel,
-            dayDetailMarkers,
-            relevantIds.length
-        );
+    updateDayDetailsPanel(dayDetailMarkers, relevantIds.length);
 
     if (!payload.element || dayDetailMarkers.length === 0) {
         if (payload.trigger === "focus" && payload.element) {
@@ -810,7 +875,7 @@ function onDayHover(payload: {
  */
 function onDayLeave(): void {
     hideDayDetails();
-    if (feedbackBar) updateFeedbackBar(feedbackBar, null);
+    updateFeedbackBar(null);
 }
 
 /**
@@ -857,22 +922,49 @@ const clearDateRange = (): void => {
     margin-bottom: var(--booking-space-lg);
 }
 
-.booking-date-picker {
-    display: flex;
-    align-items: center;
-}
-
-:deep(.booking-flatpickr-wrapper) {
-    flex: 1;
-    margin-right: var(--booking-space-md);
-}
-
+/* The clear button used to be a flex sibling sharing this row with the
+   picker, sized against it via align-items - it's now overlaid on the
+   input itself (see BookingCalendar's own clear-button slot styling),
+   so .booking-date-picker just wraps the one component with nothing
+   else to lay out alongside it. */
 :deep(.booking-flatpickr-input) {
     width: 100%;
 }
 
-.booking-date-picker-append {
-    flex-shrink: 0;
+.booking-calendar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Sized to the flatpickr calendar's own rendered width (tracked at
+   runtime into --booking-calendar-render-width - see
+   observeCalendarWidth), not left to stretch across the wrapper - the
+   calendar-legend slot right above shares this flex column and is a
+   flex-wrap row whose natural (unwrapped) width is wider than the
+   two-month calendar, so any width derived from "this column's
+   content" would follow the legend instead of the calendar it's meant
+   to match. */
+.booking-hover-feedback,
+.booking-day-details {
+    width: var(--booking-calendar-render-width, 100%);
+}
+
+.booking-period-required {
+    display: block;
+}
+
+.booking-calendar-placeholder {
+    display: flex;
+    align-items: center;
+    gap: var(--booking-space-sm);
+    min-height: 8rem;
+    padding: var(--booking-space-lg);
+    background-color: var(--booking-neutral-100);
+    border: 1px dashed var(--booking-neutral-300);
+    border-radius: var(--booking-border-radius-sm);
+    color: var(--booking-neutral-600);
+    font-style: italic;
 }
 
 .booking-constraint-info {
@@ -905,5 +997,20 @@ const clearDateRange = (): void => {
     color: hsl(var(--booking-danger-hue), 80%, 20%);
     background-color: hsl(var(--booking-danger-hue), 40%, 90%);
     border-color: hsl(var(--booking-danger-hue), 40%, 70%);
+}
+
+.alert-warning {
+    color: hsl(var(--booking-warning-hue), 80%, 20%);
+    background-color: hsl(var(--booking-warning-hue), 60%, 90%);
+    border-color: hsl(var(--booking-warning-hue), 60%, 70%);
+}
+
+/* Neutral, not tied to any of the semantic hues above - used for the
+   day-details panel, which reports plain fact (who's booked/checked
+   out this date) rather than anything requiring a severity colour. */
+.alert-secondary {
+    color: var(--booking-neutral-600);
+    background-color: var(--booking-neutral-100);
+    border-color: var(--booking-neutral-300);
 }
 </style>

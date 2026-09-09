@@ -122,9 +122,14 @@ const ensureCalendarIsOpen = ($el, timeout = 10000) => {
                     cy.wrap(inputToClick).scrollIntoView().click();
                 }
 
-                // Wait for calendar to be open and visible with retry
+                // Wait for calendar to be open and visible with retry.
+                // scrollIntoView first: the calendar now renders inline
+                // (always visible, no longer a floating popup), so it can
+                // genuinely sit below the fold in a modal's own scrollable
+                // area rather than always floating on top of everything.
                 return cy
                     .get(".flatpickr-calendar.open", { timeout })
+                    .scrollIntoView()
                     .should("be.visible")
                     .then(() => cy.wrap($input));
             });
@@ -144,6 +149,7 @@ const ensureDateIsVisible = (targetDate, $input, timeout = 10000) => {
 
     return cy
         .get(".flatpickr-calendar.open", { timeout })
+        .scrollIntoView()
         .should("be.visible")
         .then(() => {
             const fpInstance = _getFlatpickrInstance($input);
@@ -152,17 +158,30 @@ const ensureDateIsVisible = (targetDate, $input, timeout = 10000) => {
                     `Flatpickr: Cannot find flatpickr instance on element. Make sure it's initialized with flatpickr.`
                 );
             }
-            const currentMonth = fpInstance.currentMonth;
-            const currentYear = fpInstance.currentYear;
+            // showMonths > 1 (the booking calendar shows two) keeps every
+            // month from currentMonth through currentMonth + showMonths - 1
+            // visible at once - comparing only against the first displayed
+            // month would wrongly navigate away from a date that's already
+            // visible in the second one, destabilising an in-progress range
+            // selection (see BookingCalendar.vue's focusCalendarDate for the
+            // same month-range math).
+            const firstMonth =
+                fpInstance.currentYear * 12 + fpInstance.currentMonth;
+            const lastMonth =
+                firstMonth + Math.max(fpInstance.config.showMonths || 1, 1) - 1;
+            const targetAbsMonth = targetYear * 12 + targetMonth;
 
             // Check if we need to navigate
-            if (currentMonth !== targetMonth || currentYear !== targetYear) {
+            if (targetAbsMonth < firstMonth || targetAbsMonth > lastMonth) {
                 return navigateToMonthAndYear(dayjsDate, $input, timeout);
             }
 
-            // Already in correct month/year, just verify the date is visible
+            // Already visible, just verify the date is visible
             const selector = _getFlatpickrDateSelector(dayjsDate);
-            return cy.get(selector, { timeout: 5000 }).should("be.visible");
+            return cy
+                .get(selector, { timeout: 5000 })
+                .scrollIntoView()
+                .should("be.visible");
         });
 };
 
@@ -178,6 +197,7 @@ const navigateToMonthAndYear = (targetDate, $input, timeout = 10000) => {
 
     return cy
         .get(".flatpickr-calendar.open", { timeout })
+        .scrollIntoView()
         .should("be.visible")
         .then(() => {
             const fpInstance = _getFlatpickrInstance($input);
@@ -195,7 +215,10 @@ const navigateToMonthAndYear = (targetDate, $input, timeout = 10000) => {
             if (monthDiff === 0) {
                 // Already in correct month, verify target date is visible
                 const selector = _getFlatpickrDateSelector(dayjsDate);
-                return cy.get(selector, { timeout: 5000 }).should("be.visible");
+                return cy
+                    .get(selector, { timeout: 5000 })
+                    .scrollIntoView()
+                    .should("be.visible");
             }
 
             // Use flatpickr's changeMonth method for faster navigation
@@ -205,6 +228,7 @@ const navigateToMonthAndYear = (targetDate, $input, timeout = 10000) => {
             const selector = _getFlatpickrDateSelector(dayjsDate);
             return cy
                 .get(selector, { timeout: 5000 })
+                .scrollIntoView()
                 .should("be.visible")
                 .should($el => {
                     // Ensure the element is actually the date we want
@@ -314,6 +338,11 @@ Cypress.Commands.add(
         return ensureCalendarIsOpen(cy.wrap(subject), timeout).then($input => {
             const startDayjsDate = dayjs(startDate);
             const endDayjsDate = dayjs(endDate);
+            // Re-querying by id (rather than reusing this captured $input)
+            // for the retry-sensitive assertions below sidesteps any risk
+            // of $input referring to a stale/detached element reference by
+            // the time a retry runs.
+            const inputId = $input[0].id;
 
             // Validate range mode first
             return cy
@@ -332,13 +361,37 @@ Cypress.Commands.add(
                         $input,
                         timeout
                     ).then(() => {
-                        cy.get(_getFlatpickrDateSelector(startDayjsDate))
+                        const startSelector =
+                            _getFlatpickrDateSelector(startDayjsDate);
+                        cy.get(startSelector)
                             .should("be.visible")
                             .then($el => $el[0].click());
 
-                        // Validate start date registered via instance state
-                        cy.wrap($input).should($el => {
-                            const fp = _getFlatpickrInstance($el);
+                        // Validate start date registered via instance state.
+                        // The always-on calendar can redraw itself (Flatpickr's
+                        // buildDays(), rebuilding every day cell) in the
+                        // moment right after a click, in response to reactive
+                        // marker/disable recomputation the click itself
+                        // triggers - occasionally landing the click above on
+                        // a cell mid-rebuild and silently dropping it. Rather
+                        // than fail outright, re-click by selector (never the
+                        // original, possibly now-detached $el) until the
+                        // instance actually reflects the start date; a
+                        // transient "no Flatpickr instance" is likewise
+                        // treated as "not settled yet", not a hard failure.
+                        cy.get(`#${inputId}`).should($el => {
+                            let fp;
+                            try {
+                                fp = _getFlatpickrInstance($el);
+                            } catch {
+                                fp = null;
+                            }
+                            if (!fp || fp.selectedDates.length < 1) {
+                                const dayEl =
+                                    document.querySelector(startSelector);
+                                dayEl && dayEl.click();
+                            }
+                            expect(fp, "Flatpickr instance").to.exist;
                             expect(fp.selectedDates).to.have.length(1);
                             expect(
                                 dayjs(fp.selectedDates[0]).format("YYYY-MM-DD")
@@ -358,13 +411,28 @@ Cypress.Commands.add(
                             $input,
                             timeout
                         ).then(() => {
-                            cy.get(_getFlatpickrDateSelector(endDayjsDate))
+                            const endSelector =
+                                _getFlatpickrDateSelector(endDayjsDate);
+                            cy.get(endSelector)
                                 .should("be.visible")
                                 .then($el => $el[0].click());
 
-                            // Validate range completed via instance state
-                            cy.wrap($input).should($el => {
-                                const fp = _getFlatpickrInstance($el);
+                            // Validate range completed via instance state -
+                            // same retry-by-selector rationale as the start
+                            // date above.
+                            cy.get(`#${inputId}`).should($el => {
+                                let fp;
+                                try {
+                                    fp = _getFlatpickrInstance($el);
+                                } catch {
+                                    fp = null;
+                                }
+                                if (!fp || fp.selectedDates.length < 2) {
+                                    const dayEl =
+                                        document.querySelector(endSelector);
+                                    dayEl && dayEl.click();
+                                }
+                                expect(fp, "Flatpickr instance").to.exist;
                                 expect(fp.selectedDates.length).to.eq(2);
                                 expect(
                                     dayjs(fp.selectedDates[0]).format(

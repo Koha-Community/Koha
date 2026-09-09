@@ -100,7 +100,11 @@ describe("BookingCalendar", () => {
     });
 
     describe("keyboard interaction", () => {
-        it("keeps the popup inside its modal focus boundary", () => {
+        it("renders inline as two months, right after the input", () => {
+            // The calendar is a permanent part of the page now, not a
+            // popup - no modal-appending/positioning workaround needed
+            // (the previous "keeps the popup inside its modal focus
+            // boundary" test covered that removed behaviour).
             cy.mount({
                 components: { BookingCalendar },
                 data: () => ({ viewport: MARCH_2026 }),
@@ -118,23 +122,28 @@ describe("BookingCalendar", () => {
                 `,
             });
 
-            cy.get("#booking_period").focus();
-            cy.get("[data-cy='modal'] > .flatpickr-calendar")
-                .should("exist")
-                .and("have.css", "position", "fixed");
+            cy.get("[data-cy='modal'] .flatpickr-calendar")
+                .should("have.class", "inline")
+                .and("have.class", "multiMonth")
+                .and("be.visible");
+            cy.get(".flatpickr-calendar .dayContainer").should(
+                "have.length",
+                2
+            );
         });
 
-        it("opens, moves by day and month, and restores focus on Escape", () => {
+        it("moves keyboard focus into the grid and by day and month", () => {
             mountCalendar();
             cy.get("#booking_period").focus();
             pressKey("Enter", 13);
 
-            cy.get("#booking_period")
-                .should("have.attr", "aria-haspopup", "dialog")
-                .and("have.attr", "aria-controls", "booking_period_calendar")
-                .and("have.attr", "aria-expanded", "true");
+            cy.get("#booking_period").should(
+                "have.attr",
+                "aria-controls",
+                "booking_period_calendar"
+            );
             cy.get(".flatpickr-calendar.open")
-                .should("have.attr", "role", "dialog")
+                .should("have.attr", "role", "group")
                 .and("have.attr", "aria-label", "Choose date");
             cy.focused()
                 .should("have.class", "flatpickr-day")
@@ -151,11 +160,11 @@ describe("BookingCalendar", () => {
             pressKey("PageUp", 33);
             cy.focused().should("have.attr", "aria-label", "March 9, 2026");
 
+            // Escape returns focus to the input - there's nothing to close,
+            // the calendar stays exactly as visible as it was.
             pressKey("Escape", 27);
-            cy.get(".flatpickr-calendar.open").should("not.exist");
-            cy.focused()
-                .should("have.attr", "id", "booking_period")
-                .and("have.attr", "aria-expanded", "false");
+            cy.get(".flatpickr-calendar.open").should("exist");
+            cy.focused().should("have.attr", "id", "booking_period");
         });
 
         it("selects a range with Enter and Space", () => {
@@ -172,7 +181,10 @@ describe("BookingCalendar", () => {
             pressKey(" ", 32);
 
             cy.get("@onUpdate").its("lastCall.args.0").should("have.length", 2);
-            cy.get(".flatpickr-calendar.open").should("not.exist");
+            // The calendar stays visible (it's inline, not a popup) - only
+            // focus returns to the input, matching flatpickr's own
+            // range-complete behaviour.
+            cy.get(".flatpickr-calendar.open").should("exist");
             cy.focused().should("have.attr", "id", "booking_period");
         });
 
@@ -392,7 +404,11 @@ describe("BookingCalendar", () => {
             openCalendar();
 
             day("March 15, 2026").should("exist");
-            cy.get(".flatpickr-next-month").click();
+            // force: true - two months side by side can push the next-month
+            // arrow past the component-test viewport's default width; this
+            // test is only checking the click triggers the emit, not that
+            // the arrow is comfortably reachable at any viewport size.
+            cy.get(".flatpickr-next-month").click({ force: true });
             cy.get("@onViewport").should("have.been.called");
         });
 

@@ -32,6 +32,14 @@ describe("Booking Modal Timezone Tests", () => {
     let testData = {};
 
     beforeEach(() => {
+        // The booking calendar now renders inline (always visible,
+        // two months) instead of a popup, making the modal taller than
+        // Cypress's 660px default viewport height - a real browser on
+        // any normal-height screen handles the resulting nested-scroll
+        // (outer .modal + .modal-body, both overflow-y: auto) without
+        // issue, but Cypress's own scrollIntoView() does not reliably
+        // walk that chain under a position: fixed ancestor.
+        cy.viewport(1280, 1600);
         cy.login();
         cy.title().should("eq", "Koha staff interface");
 
