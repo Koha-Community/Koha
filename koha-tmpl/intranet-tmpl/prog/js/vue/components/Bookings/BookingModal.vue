@@ -234,7 +234,6 @@ onMounted(() => {
     if (!modalElement.value) return;
     bsModal = new window.bootstrap.Modal(modalElement.value, {
         backdrop: "static",
-        keyboard: false,
     });
     modalElement.value.addEventListener("hidden.bs.modal", handleHidden);
     if (props.open) showModal();

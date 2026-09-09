@@ -121,9 +121,16 @@ describe("BookingModal", () => {
         cy.then(() => {
             expect(ModalStub.latest.options).to.deep.equal({
                 backdrop: "static",
-                keyboard: false,
             });
             expect(ModalStub.latest.showCalls).to.equal(1);
+        });
+    });
+
+    it("leaves Escape-to-close at Bootstrap's default (not disabled)", () => {
+        mountModal({ open: true });
+
+        cy.then(() => {
+            expect(ModalStub.latest.options).to.not.have.property("keyboard");
         });
     });
 
