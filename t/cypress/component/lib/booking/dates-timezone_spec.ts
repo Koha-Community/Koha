@@ -12,6 +12,8 @@ import {
     toStartOfDayISO,
     toEndOfDayISO,
     datePart,
+    addDays,
+    formatYMD,
 } from "@koha-vue/lib/booking/dates.js";
 
 describe("Library-timezone day-boundary contract helpers", () => {
@@ -52,5 +54,57 @@ describe("Library-timezone day-boundary contract helpers", () => {
     it("returns empty strings for invalid input", () => {
         expect(toStartOfDayISO(null)).to.eq("");
         expect(datePart("not-a-date")).to.eq("");
+    });
+});
+
+describe("Library-timezone day-boundary contract helpers across a DST transition", () => {
+    // Europe/London observes DST (GMT/BST), unlike the fixed-offset zone
+    // above. The lead/trail-period window math (addDays) and the API
+    // day-boundary serialization both need to keep landing on the same
+    // calendar date across a boundary where the UTC offset itself changes
+    // mid-range, or a booking window silently drifts by an hour into the
+    // wrong day.
+    const LIBRARY_TZ = "Europe/London";
+    let originalTimezone;
+
+    beforeEach(() => {
+        originalTimezone = window["$timezone"];
+        window["$timezone"] = () => LIBRARY_TZ;
+    });
+
+    afterEach(() => {
+        window["$timezone"] = originalTimezone;
+    });
+
+    // 2026-03-29: clocks spring forward 01:00 GMT -> 02:00 BST. Start of day
+    // is still GMT (UTC+0); end of day is already BST (UTC+1).
+    it("keeps the same calendar date across the spring-forward transition", () => {
+        const localDate = new Date(2026, 2, 29);
+        expect(toStartOfDayISO(localDate)).to.eq("2026-03-29T00:00:00.000Z");
+        expect(toEndOfDayISO(localDate)).to.eq("2026-03-29T22:59:59.999Z");
+        expect(datePart(toStartOfDayISO(localDate))).to.eq("2026-03-29");
+        expect(datePart(toEndOfDayISO(localDate))).to.eq("2026-03-29");
+    });
+
+    // 2026-10-25: clocks fall back 02:00 BST -> 01:00 GMT. Start of day is
+    // still BST (UTC+1); end of day is already GMT (UTC+0).
+    it("keeps the same calendar date across the fall-back transition", () => {
+        const localDate = new Date(2026, 9, 25);
+        expect(toStartOfDayISO(localDate)).to.eq("2026-10-24T23:00:00.000Z");
+        expect(toEndOfDayISO(localDate)).to.eq("2026-10-25T23:59:59.999Z");
+        expect(datePart(toStartOfDayISO(localDate))).to.eq("2026-10-25");
+        expect(datePart(toEndOfDayISO(localDate))).to.eq("2026-10-25");
+    });
+
+    // A lead/trail-period window is built by adding whole days to a booking
+    // boundary (see predicate.js's leadWindowConflicts/trailWindowConflicts).
+    // That arithmetic must stay in whole calendar days across a DST switch,
+    // not drift by the transition's missing/repeated hour.
+    it("adds whole calendar days across a spring-forward boundary", () => {
+        expect(formatYMD(addDays("2026-03-27", 3))).to.eq("2026-03-30");
+    });
+
+    it("adds whole calendar days across a fall-back boundary", () => {
+        expect(formatYMD(addDays("2026-10-23", 3))).to.eq("2026-10-26");
     });
 });
