@@ -117,13 +117,17 @@ sub add {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Booking::Clash') ) {
             return $c->render(
                 status  => 400,
-                openapi => { error => "Booking would conflict" }
+                openapi => {
+                    error      => "Booking would conflict",
+                    error_code => "booking_would_conflict",
+                }
             );
         } elsif ( blessed $_ and $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
             return $c->render(
                 status  => 409,
                 openapi => {
-                    error => "Duplicate booking_id",
+                    error      => "Duplicate booking_id",
+                    error_code => "duplicate_booking_id",
                 }
             );
         }
@@ -166,7 +170,10 @@ sub update {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Booking::Clash') ) {
             return $c->render(
                 status  => 400,
-                openapi => { error => "Booking would conflict" }
+                openapi => {
+                    error      => "Booking would conflict",
+                    error_code => "booking_would_conflict",
+                }
             );
         }
 

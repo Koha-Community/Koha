@@ -196,7 +196,7 @@ subtest 'get() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 16;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
 
@@ -280,7 +280,8 @@ subtest 'add() tests' => sub {
     warning_like {
         $t->post_ok( "//$userid:$password@/api/v1/bookings" => json => $booking )
             ->status_is(409)
-            ->json_is( "/error" => "Duplicate booking_id" );
+            ->json_is( "/error"      => "Duplicate booking_id" )
+            ->json_is( "/error_code" => "duplicate_booking_id" );
     }
     qr/Duplicate ID/;
 
@@ -292,7 +293,7 @@ subtest 'add() tests' => sub {
 
 subtest 'update() tests' => sub {
 
-    plan tests => 21;
+    plan tests => 22;
 
     $schema->storage->txn_begin;
 
@@ -421,7 +422,8 @@ subtest 'update() tests' => sub {
 
     $t->put_ok( "//$userid:$password@/api/v1/bookings/$booking_id" => json => $booking_with_updated_field )
         ->status_is(400)
-        ->json_is( '/error' => 'Booking would conflict' );
+        ->json_is( '/error'      => 'Booking would conflict' )
+        ->json_is( '/error_code' => 'booking_would_conflict' );
     $conflicting_booking->delete;
 
     # Authorized attempt to write invalid data
@@ -582,7 +584,7 @@ subtest 'patch() tests' => sub {
 
 subtest 'add() with itemtype_id tests' => sub {
 
-    plan tests => 16;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
 
@@ -711,7 +713,8 @@ subtest 'add() with itemtype_id tests' => sub {
 
     $t->post_ok( "//$userid:$password@/api/v1/bookings" => json => $booking_should_fail )
         ->status_is(400)
-        ->json_is( '/error' => 'Booking would conflict' );
+        ->json_is( '/error'      => 'Booking would conflict' )
+        ->json_is( '/error_code' => 'booking_would_conflict' );
 
     $schema->storage->txn_rollback;
 };
