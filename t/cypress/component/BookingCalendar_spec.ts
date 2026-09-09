@@ -26,6 +26,11 @@ const mountCalendar = (props = {}) =>
 const openCalendar = () => cy.get("#booking_period").click();
 
 describe("BookingCalendar", () => {
+    // Two-month layout these tests assume; width tests set their own.
+    beforeEach(() => {
+        cy.viewport(1000, 700);
+    });
+
     describe("booking range state", () => {
         it("omits Koha's ambient date shortcut plugins", () => {
             mountCalendar();
@@ -130,6 +135,46 @@ describe("BookingCalendar", () => {
                 "have.length",
                 2
             );
+        });
+
+        it("renders a single month when the wrapper is too narrow for two", () => {
+            cy.viewport(420, 800);
+            mountCalendar();
+
+            cy.get(".flatpickr-calendar")
+                .should("have.class", "inline")
+                .and("not.have.class", "multiMonth");
+            cy.get(".flatpickr-calendar .dayContainer").should(
+                "have.length",
+                1
+            );
+        });
+
+        it("rebuilds with the month count that fits when the width changes, keeping the selection", () => {
+            cy.viewport(1000, 800);
+            mountCalendar({
+                modelValue: [new Date("2026-03-10"), new Date("2026-03-14")],
+            });
+            cy.get(".flatpickr-calendar .dayContainer").should(
+                "have.length",
+                2
+            );
+
+            cy.viewport(420, 800);
+            cy.get(".flatpickr-calendar .dayContainer").should(
+                "have.length",
+                1
+            );
+            day("March 10, 2026").should("have.class", "startRange");
+            day("March 14, 2026").should("have.class", "endRange");
+
+            cy.viewport(1000, 800);
+            cy.get(".flatpickr-calendar .dayContainer").should(
+                "have.length",
+                2
+            );
+            day("March 10, 2026").should("have.class", "startRange");
+            day("March 14, 2026").should("have.class", "endRange");
         });
 
         it("moves keyboard focus into the grid and by day and month", () => {

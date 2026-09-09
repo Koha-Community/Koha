@@ -1,5 +1,5 @@
 <template>
-    <div class="booking-flatpickr-wrapper">
+    <div ref="rootRef" class="booking-flatpickr-wrapper">
         <input
             id="booking_period"
             ref="inputRef"
@@ -97,9 +97,15 @@ const emit = defineEmits<{
 
 type FlatpickrBoundInput = HTMLInputElement & { _flatpickr?: Instance };
 
+const rootRef = ref<HTMLElement | null>(null);
 const inputRef = ref<HTMLInputElement | null>(null);
 const fpInstance = shallowRef<Instance | null>(null);
 let keyboardInputElement: HTMLInputElement | null = null;
+
+// Two months when two .dayContainer grids fit the wrapper, otherwise
+// one; starts at two, corrected from the measured width below.
+const showMonths = ref(2);
+let availableWidthObserver: ResizeObserver | null = null;
 
 let hoverRafScheduled = false;
 let latestHoverDate: Date | null = null;
@@ -658,7 +664,7 @@ function buildConfig(): Partial<Options> {
         allowInput: false,
         dateFormat: "Y-m-d",
         inline: true,
-        showMonths: 2,
+        showMonths: showMonths.value,
         animate: false,
         // Koha's page defaults add Yesterday/Today/Tomorrow shortcuts.
         // They bypass booking range constraints, so omit them entirely.
@@ -919,11 +925,74 @@ function clear(): void {
 
 defineExpose({ clear });
 
+/**
+ * Months (1 or 2) that fit side by side in `width`, measured against
+ * the live .dayContainer ($daysWidth in _flatpickr.scss) plus the
+ * calendar's borders; without an instance the current count stands.
+ *
+ * @param {number} width Available wrapper width in px.
+ * @returns {number} 1 or 2.
+ */
+function monthsThatFit(width: number): number {
+    const fp = fpInstance.value;
+    if (!fp) return showMonths.value;
+    const calendar = fp.calendarContainer;
+    const grid = calendar.querySelector<HTMLElement>(".dayContainer");
+    if (!grid?.offsetWidth) return showMonths.value;
+    const borders = calendar.offsetWidth - calendar.clientWidth;
+    return width >= grid.offsetWidth * 2 + borders ? 2 : 1;
+}
+
+/**
+ * Rebuild the calendar when the wrapper's width crosses the two-month
+ * threshold: Flatpickr builds its grids once at init, so a new
+ * showMonths needs a new instance (createInstance re-applies model
+ * value and viewport). Rebuilt on the next frame: resizing the observed
+ * element from inside the callback triggers the browser's
+ * ResizeObserver loop error.
+ *
+ * @returns {void}
+ */
+function observeAvailableWidth(): void {
+    if (!rootRef.value || typeof ResizeObserver === "undefined") return;
+    let rebuildScheduled = false;
+    availableWidthObserver = new ResizeObserver(entries => {
+        const width = entries[0]?.contentRect.width ?? 0;
+        // display: none measures 0; nothing to decide until shown.
+        if (!width) return;
+        showMonths.value = monthsThatFit(width);
+        if (rebuildScheduled) return;
+        rebuildScheduled = true;
+        requestAnimationFrame(() => {
+            rebuildScheduled = false;
+            const fp = fpInstance.value;
+            if (!fp || fp.config.showMonths === showMonths.value) return;
+            destroyInstance();
+            createInstance();
+        });
+    });
+    availableWidthObserver.observe(rootRef.value);
+}
+
 onMounted(() => {
     createInstance();
+    // Settle the count synchronously so a narrow mount never paints two
+    // months first; the observer handles later resizes.
+    const width = rootRef.value?.clientWidth ?? 0;
+    if (width) {
+        const months = monthsThatFit(width);
+        if (months !== showMonths.value) {
+            showMonths.value = months;
+            destroyInstance();
+            createInstance();
+        }
+    }
+    observeAvailableWidth();
 });
 
 onBeforeUnmount(() => {
+    availableWidthObserver?.disconnect();
+    availableWidthObserver = null;
     destroyInstance();
 });
 

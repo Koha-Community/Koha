@@ -26,6 +26,9 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import flatpickrLib from "flatpickr";
+// calendar.inc loads Flatpickr's stylesheet on staff pages; the month
+// count depends on the grid's fixed width.
+import "flatpickr/dist/flatpickr.css";
 
 dayjsLib.extend(utc);
 dayjsLib.extend(timezone);

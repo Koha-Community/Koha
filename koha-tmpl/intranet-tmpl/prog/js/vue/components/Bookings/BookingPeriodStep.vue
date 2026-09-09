@@ -557,7 +557,14 @@ function observeCalendarWidth(container: HTMLElement): void {
     calendarResizeObserver?.disconnect();
     calendarResizeObserver = new ResizeObserver(entries => {
         const entry = entries[0];
-        if (entry) calendarRenderWidth.value = entry.contentRect.width;
+        if (!entry) return;
+        // Written on the next frame: the write re-renders and resizes the
+        // alerts while ResizeObserver is still delivering (BookingCalendar
+        // observes an ancestor), which the browser reports as a loop error.
+        const width = entry.contentRect.width;
+        requestAnimationFrame(() => {
+            calendarRenderWidth.value = width;
+        });
     });
     calendarResizeObserver.observe(container);
 }
@@ -935,6 +942,13 @@ const clearDateRange = (): void => {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+/* Full wrapper width, not shrink-wrapped: BookingCalendar reads its
+   root's width as the space available for one or two months. The
+   calendar still centres itself within it. */
+.booking-date-picker {
+    align-self: stretch;
 }
 
 /* Sized to the flatpickr calendar's own rendered width (tracked at
