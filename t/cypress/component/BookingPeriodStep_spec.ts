@@ -250,21 +250,22 @@ describe("BookingPeriodStep — accessibility", () => {
             .should("have.attr", "aria-describedby")
             .then(describedBy => {
                 const ids = String(describedBy).split(/\s+/);
-                const tooltip = ids
+                const details = ids
                     .map(id => document.getElementById(id))
-                    .find(
-                        element => element?.getAttribute("role") === "tooltip"
+                    .find(element =>
+                        element?.classList.contains("booking-day-details")
                     );
-                expect(tooltip).not.to.equal(undefined);
-                expect(tooltip?.getAttribute("aria-live")).to.equal("polite");
-                expect(tooltip?.textContent).to.contain(
+                expect(details).not.to.equal(undefined);
+                expect(details?.getAttribute("role")).to.equal("status");
+                expect(details?.getAttribute("aria-live")).to.equal("polite");
+                expect(details?.textContent).to.contain(
                     "Booked (Barcode: visible-barcode)"
                 );
-                expect(tooltip?.textContent).to.contain(
+                expect(details?.textContent).to.contain(
                     "Booked (Barcode: N/A)"
                 );
-                expect(tooltip?.textContent).not.to.contain("987");
-                expect(tooltip?.textContent).not.to.contain("654");
+                expect(details?.textContent).not.to.contain("987");
+                expect(details?.textContent).not.to.contain("654");
             });
     });
 });

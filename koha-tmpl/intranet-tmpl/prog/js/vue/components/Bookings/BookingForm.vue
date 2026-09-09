@@ -696,4 +696,49 @@ onUnmounted(closeSession);
     color: hsl(var(--booking-warning-hue), 80%, 20%);
     background-color: hsl(var(--booking-warning-hue), 100%, 93%);
 }
+
+.booking-day-details {
+    padding: 0 0.75rem;
+    max-height: 0;
+    min-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    margin-top: 0;
+    margin-bottom: 0;
+    background-color: var(--booking-neutral-100);
+    border-radius: 0 0 var(--booking-border-radius-sm)
+        var(--booking-border-radius-sm);
+    font-size: var(--booking-text-sm);
+    transition:
+        max-height 100ms ease,
+        opacity 100ms ease,
+        padding 100ms ease,
+        margin-top 100ms ease;
+}
+
+.booking-day-details--visible {
+    padding: 0.5rem 0.75rem;
+    margin-top: 0.25rem;
+    min-height: 1.25rem;
+    max-height: 10em;
+    opacity: 1;
+}
+
+.booking-day-details-row {
+    display: flex;
+    align-items: center;
+    gap: var(--booking-space-xs);
+    line-height: 1.6;
+}
+
+.booking-day-details-row:not(:last-child) {
+    margin-bottom: calc(var(--booking-space-xs) / 2);
+}
+
+.booking-day-details .booking-marker-dot {
+    flex-shrink: 0;
+    width: calc(var(--booking-marker-size) * 1.25);
+    height: calc(var(--booking-marker-size) * 1.25);
+    border: var(--booking-border-width) solid hsla(0, 0%, 0%, 0.15);
+}
 </style>

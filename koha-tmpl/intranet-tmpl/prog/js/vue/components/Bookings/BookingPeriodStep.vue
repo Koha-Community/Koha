@@ -77,41 +77,10 @@
             {{ errorMessage }}
         </div>
     </fieldset>
-    <Teleport to="body">
-        <div
-            v-if="tooltip.visible"
-            :id="tooltipId"
-            class="booking-tooltip"
-            :style="{
-                position: 'absolute',
-                zIndex: 2147483647,
-                whiteSpace: 'nowrap',
-                top: `${tooltip.y}px`,
-                left: `${tooltip.x}px`,
-                transform: 'translateY(-50%)',
-            }"
-            role="tooltip"
-            aria-live="polite"
-            aria-atomic="true"
-        >
-            <div
-                v-for="marker in tooltip.markers"
-                :key="marker.type + ':' + (marker.barcode || marker.item)"
-            >
-                <span
-                    :class="[
-                        'booking-marker-dot',
-                        `booking-marker-dot--${marker.type}`,
-                    ]"
-                />
-                {{ getMarkerDescription(marker) }}
-            </div>
-        </div>
-    </Teleport>
 </template>
 
 <script setup lang="ts">
-import { computed, inject, onBeforeUnmount, reactive, ref, useId } from "vue";
+import { computed, inject, onBeforeUnmount, ref, useId } from "vue";
 import Alert from "../Alert.vue";
 import BookingCalendar from "./BookingCalendar.vue";
 import type { useBookingStore } from "../../stores/bookings";
@@ -124,13 +93,6 @@ import {
     getMarkerDescription,
 } from "../../lib/booking/markers.js";
 import type { CalendarMarker } from "../../lib/booking/types/bookings.d.ts";
-
-interface TooltipState {
-    markers: CalendarMarker[];
-    visible: boolean;
-    x: number;
-    y: number;
-}
 
 withDefaults(
     defineProps<{
@@ -152,7 +114,7 @@ const CLASS_BOOKING_DAY_HOVER_LEAD = "booking-day--hover-lead";
 const CLASS_BOOKING_DAY_HOVER_TRAIL = "booking-day--hover-trail";
 
 const componentId = useId();
-const tooltipId = `booking-tooltip-${componentId}`;
+const dayDetailsId = `booking-day-details-${componentId}`;
 const feedbackId = `booking-feedback-${componentId}`;
 
 type BookingStore = ReturnType<typeof useBookingStore>;
@@ -228,13 +190,6 @@ const composedDisabled = computed(() => {
     };
 });
 
-const tooltip = reactive<TooltipState>({
-    markers: [],
-    visible: false,
-    x: 0,
-    y: 0,
-});
-
 // Track the last hovered cell so we can strip lead/trail hover classes
 // when the hover moves to a new cell. Mirrors the per-cell mouseout
 // behavior the legacy `events.mjs` adapter implemented.
@@ -257,7 +212,7 @@ function setDayDescriptions(
     }
     if (!element) return;
 
-    const managedIds = new Set([tooltipId, feedbackId]);
+    const managedIds = new Set([dayDetailsId, feedbackId]);
     const existing = (element.getAttribute("aria-describedby") || "")
         .split(/\s+/)
         .filter(id => id && !managedIds.has(id));
@@ -289,8 +244,8 @@ function clearHoverClasses(el: HTMLElement | null): void {
  *
  * @returns {void}
  */
-function hideTooltip(): void {
-    tooltip.visible = false;
+function hideDayDetails(): void {
+    if (dayDetailsPanel) updateDayDetailsPanel(dayDetailsPanel, []);
     clearHoverClasses(lastHoverElement);
     setDayDescriptions(lastDescribedElement);
     lastHoverElement = null;
@@ -303,6 +258,7 @@ function hideTooltip(): void {
 // between adjacent days doesn't flicker.
 let feedbackBar: HTMLDivElement | null = null;
 let feedbackHideTimer: number | null = null;
+let dayDetailsPanel: HTMLDivElement | null = null;
 let calendarContainer: HTMLElement | null = null;
 
 type FeedbackVariant = "info" | "warning" | "danger";
@@ -326,6 +282,60 @@ function ensureFeedbackBar(container: HTMLElement): HTMLDivElement {
         container.appendChild(bar);
     }
     return bar;
+}
+
+/**
+ * Return the calendar day-details panel, creating it when necessary.
+ *
+ * Sits directly below the hover-feedback bar and lists every marker
+ * (booked/lead/trail/checked-out, with barcode) for the hovered or
+ * focused day - the data the old floating tooltip used to show, but
+ * anchored in the calendar's own layout so it never overlaps the day
+ * cells it describes.
+ *
+ * @param {HTMLElement} container Flatpickr calendar container.
+ * @returns {HTMLDivElement} Calendar-owned day-details element.
+ */
+function ensureDayDetailsPanel(container: HTMLElement): HTMLDivElement {
+    let panel = container.querySelector<HTMLDivElement>(".booking-day-details");
+    if (!panel) {
+        panel = document.createElement("div");
+        panel.className = "booking-day-details";
+        panel.id = dayDetailsId;
+        panel.setAttribute("role", "status");
+        panel.setAttribute("aria-live", "polite");
+        container.appendChild(panel);
+    }
+    return panel;
+}
+
+/**
+ * Render the marker list for a day into the day-details panel, or
+ * collapse the panel when there is nothing to show.
+ *
+ * @param {HTMLDivElement} panel Calendar day-details element.
+ * @param {CalendarMarker[]} markers Markers to describe.
+ * @returns {void}
+ */
+function updateDayDetailsPanel(
+    panel: HTMLDivElement,
+    markers: CalendarMarker[]
+): void {
+    panel.replaceChildren();
+    if (markers.length === 0) {
+        panel.classList.remove("booking-day-details--visible");
+        return;
+    }
+    for (const marker of markers) {
+        const row = document.createElement("div");
+        row.className = "booking-day-details-row";
+        const dot = document.createElement("span");
+        dot.className = `booking-marker-dot booking-marker-dot--${marker.type}`;
+        row.appendChild(dot);
+        row.appendChild(document.createTextNode(getMarkerDescription(marker)));
+        panel.appendChild(row);
+    }
+    panel.classList.add("booking-day-details--visible");
 }
 
 /**
@@ -376,6 +386,7 @@ function updateFeedbackBar(
  */
 function onCalendarLeave(): void {
     if (feedbackBar) updateFeedbackBar(feedbackBar, null);
+    if (dayDetailsPanel) updateDayDetailsPanel(dayDetailsPanel, []);
 }
 
 /**
@@ -388,6 +399,7 @@ function onPickerReady(instance: { calendarContainer?: HTMLElement }): void {
     if (!instance.calendarContainer) return;
     calendarContainer = instance.calendarContainer;
     feedbackBar = ensureFeedbackBar(calendarContainer);
+    dayDetailsPanel = ensureDayDetailsPanel(calendarContainer);
     calendarContainer.addEventListener("mouseleave", onCalendarLeave);
 }
 
@@ -401,6 +413,7 @@ onBeforeUnmount(() => {
         calendarContainer = null;
     }
     feedbackBar = null;
+    dayDetailsPanel = null;
 });
 
 /**
@@ -462,8 +475,9 @@ function onDayHover(payload: {
         }
     }
 
+    if (dayDetailsPanel) updateDayDetailsPanel(dayDetailsPanel, markers);
+
     if (!payload.element || markers.length === 0) {
-        tooltip.visible = false;
         if (payload.trigger === "focus" && payload.element) {
             setDayDescriptions(
                 payload.element,
@@ -472,26 +486,21 @@ function onDayHover(payload: {
         }
         return;
     }
-    const rect = payload.element.getBoundingClientRect();
-    tooltip.markers = markers;
-    tooltip.x = rect.right + 8 + window.scrollX;
-    tooltip.y = rect.top + rect.height / 2 + window.scrollY;
-    tooltip.visible = true;
     if (payload.trigger === "focus") {
         setDayDescriptions(payload.element, [
             ...(hasFeedback ? [feedbackId] : []),
-            tooltipId,
+            dayDetailsId,
         ]);
     }
 }
 
 /**
- * Clear tooltip and feedback state after leaving a calendar day.
+ * Clear day-details and feedback state after leaving a calendar day.
  *
  * @returns {void}
  */
 function onDayLeave(): void {
-    hideTooltip();
+    hideDayDetails();
     if (feedbackBar) updateFeedbackBar(feedbackBar, null);
 }
 
@@ -529,7 +538,7 @@ function onSelectAttemptBlocked(p: { date: Date; reason: string }): void {
 const clearDateRange = (): void => {
     pickerRef.value?.clear();
     store.setSelectedDates(null);
-    hideTooltip();
+    hideDayDetails();
     emit("clear-dates");
 };
 </script>
@@ -587,27 +596,5 @@ const clearDateRange = (): void => {
     color: hsl(var(--booking-danger-hue), 80%, 20%);
     background-color: hsl(var(--booking-danger-hue), 40%, 90%);
     border-color: hsl(var(--booking-danger-hue), 40%, 70%);
-}
-
-.booking-tooltip {
-    background: hsl(var(--booking-warning-hue), 100%, 95%);
-    color: hsl(var(--booking-neutral-hue), 20%, 20%);
-    border: var(--booking-border-width) solid
-        hsl(var(--booking-neutral-hue), 15%, 75%);
-    border-radius: var(--booking-border-radius-md);
-    box-shadow: 0 0.125rem 0.5rem
-        hsla(var(--booking-neutral-hue), 10%, 0%, 0.08);
-    padding: calc(var(--booking-space-xs) * 3) calc(var(--booking-space-xs) * 5);
-    font-size: var(--booking-text-lg);
-    pointer-events: none;
-}
-
-.booking-tooltip .booking-marker-dot {
-    display: inline-block;
-    width: calc(var(--booking-marker-size) * 1.25);
-    height: calc(var(--booking-marker-size) * 1.25);
-    border-radius: var(--booking-border-radius-full);
-    margin: 0 var(--booking-space-xs) 0 0;
-    vertical-align: middle;
 }
 </style>
