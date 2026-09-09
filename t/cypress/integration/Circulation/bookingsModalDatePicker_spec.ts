@@ -806,6 +806,19 @@ describe("Booking Modal Date Picker Tests", () => {
             return cy.get("@fp").getFlatpickrDate(date);
         };
 
+        // June 27 is a Saturday: its outward band half is the 2.5px to the
+        // grid edge, not the 5px that bridges to a neighbouring cell.
+        getDateByISO("2026-06-26").should($day => {
+            expect(getComputedStyle($day[0]).boxShadow).to.match(
+                /-5px 0px 0px 0px, .* 5px 0px 0px 0px$/
+            );
+        });
+        getDateByISO("2026-06-27").should($day => {
+            expect(getComputedStyle($day[0]).boxShadow).to.match(
+                /-5px 0px 0px 0px, .* 2\.5px 0px 0px 0px$/
+            );
+        });
+
         // ========================================================================
         // PHASE 1: Lead Period - Hover shows lead markers
         // ========================================================================

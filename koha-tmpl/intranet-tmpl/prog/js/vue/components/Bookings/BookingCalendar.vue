@@ -1117,6 +1117,13 @@ watch(
     order: 3;
     align-self: center;
 }
+/* Embedded like the closed-days calendar (calendar.scss): no popup drop
+   shadow, a plain border in the modal's neutral instead. */
+.booking-flatpickr-wrapper > .flatpickr-calendar {
+    box-shadow: none;
+    border: var(--booking-border-width) solid var(--booking-neutral-300);
+    border-radius: var(--booking-border-radius-sm);
+}
 /* The clear button lives in BookingPeriodStep.vue (clearing dates has
    store-level side effects beyond the picker's own state) but renders
    here, overlaid on the input rather than beside it, so the input's own

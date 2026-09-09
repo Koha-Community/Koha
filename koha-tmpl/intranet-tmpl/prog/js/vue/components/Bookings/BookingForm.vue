@@ -582,9 +582,7 @@ onUnmounted(closeSession);
 .flatpickr-calendar .flatpickr-day.today.inRange {
     background: var(--booking-selected-bg);
     border-color: var(--booking-selected-bg);
-    box-shadow:
-        -5px 0 0 var(--booking-selected-bg),
-        5px 0 0 var(--booking-selected-bg);
+    --booking-band: var(--booking-selected-bg);
 }
 
 .flatpickr-calendar .flatpickr-day.booking-constrained-range-marker {
@@ -621,18 +619,14 @@ onUnmounted(closeSession);
     border-color: var(--booking-unavailable-bg);
     color: var(--booking-unavailable-text);
     border-radius: 0;
-    box-shadow:
-        -5px 0 0 var(--booking-unavailable-bg),
-        5px 0 0 var(--booking-unavailable-bg);
+    --booking-band: var(--booking-unavailable-bg);
 }
 
 .flatpickr-calendar .flatpickr-day.booking-day--booked:hover,
 .flatpickr-calendar .flatpickr-day.booking-day--checked-out:hover {
     background-color: var(--booking-unavailable-bg-hover);
     border-color: var(--booking-unavailable-bg-hover);
-    box-shadow:
-        -5px 0 0 var(--booking-unavailable-bg-hover),
-        5px 0 0 var(--booking-unavailable-bg-hover);
+    --booking-band: var(--booking-unavailable-bg-hover);
 }
 
 .flatpickr-calendar .flatpickr-day.booking-day--holiday {
@@ -694,18 +688,14 @@ onUnmounted(closeSession);
     background-color: var(--booking-lead-bg) !important;
     border-color: var(--booking-lead-bg) !important;
     color: var(--booking-lead-text) !important;
-    box-shadow:
-        -5px 0 0 var(--booking-lead-bg),
-        5px 0 0 var(--booking-lead-bg) !important;
+    --booking-band: var(--booking-lead-bg) !important;
 }
 
 .flatpickr-calendar .flatpickr-day.booking-day--existing-lead-adjacent:hover,
 .flatpickr-calendar .flatpickr-day.booking-day--my-lead-buffer:hover {
     background-color: var(--booking-lead-bg-hover) !important;
     border-color: var(--booking-lead-bg-hover) !important;
-    box-shadow:
-        -5px 0 0 var(--booking-lead-bg-hover),
-        5px 0 0 var(--booking-lead-bg-hover) !important;
+    --booking-band: var(--booking-lead-bg-hover) !important;
 }
 
 .flatpickr-calendar .flatpickr-day.booking-day--existing-trail-adjacent,
@@ -713,18 +703,14 @@ onUnmounted(closeSession);
     background-color: var(--booking-trail-bg) !important;
     border-color: var(--booking-trail-bg) !important;
     color: var(--booking-trail-text) !important;
-    box-shadow:
-        -5px 0 0 var(--booking-trail-bg),
-        5px 0 0 var(--booking-trail-bg) !important;
+    --booking-band: var(--booking-trail-bg) !important;
 }
 
 .flatpickr-calendar .flatpickr-day.booking-day--existing-trail-adjacent:hover,
 .flatpickr-calendar .flatpickr-day.booking-day--my-trail-buffer:hover {
     background-color: var(--booking-trail-bg-hover) !important;
     border-color: var(--booking-trail-bg-hover) !important;
-    box-shadow:
-        -5px 0 0 var(--booking-trail-bg-hover),
-        5px 0 0 var(--booking-trail-bg-hover) !important;
+    --booking-band: var(--booking-trail-bg-hover) !important;
 }
 
 /* Clash: my buffer overlaps an adjacent existing booking's buffer -
@@ -742,18 +728,14 @@ onUnmounted(closeSession);
     background-color: var(--booking-clash-trail-lead-bg) !important;
     border-color: var(--booking-clash-trail-lead-bg) !important;
     color: var(--booking-clash-trail-lead-text) !important;
-    box-shadow:
-        -5px 0 0 var(--booking-clash-trail-lead-bg),
-        5px 0 0 var(--booking-clash-trail-lead-bg) !important;
+    --booking-band: var(--booking-clash-trail-lead-bg) !important;
 }
 
 .flatpickr-calendar
     .flatpickr-day.booking-day--existing-lead-adjacent.booking-day--my-trail-buffer.booking-day--my-trail-real-conflict:hover {
     background-color: var(--booking-clash-trail-lead-bg-hover) !important;
     border-color: var(--booking-clash-trail-lead-bg-hover) !important;
-    box-shadow:
-        -5px 0 0 var(--booking-clash-trail-lead-bg-hover),
-        5px 0 0 var(--booking-clash-trail-lead-bg-hover) !important;
+    --booking-band: var(--booking-clash-trail-lead-bg-hover) !important;
 }
 
 .flatpickr-calendar
@@ -761,18 +743,41 @@ onUnmounted(closeSession);
     background-color: var(--booking-clash-lead-trail-bg) !important;
     border-color: var(--booking-clash-lead-trail-bg) !important;
     color: var(--booking-clash-lead-trail-text) !important;
-    box-shadow:
-        -5px 0 0 var(--booking-clash-lead-trail-bg),
-        5px 0 0 var(--booking-clash-lead-trail-bg) !important;
+    --booking-band: var(--booking-clash-lead-trail-bg) !important;
 }
 
 .flatpickr-calendar
     .flatpickr-day.booking-day--existing-trail-adjacent.booking-day--my-lead-buffer.booking-day--my-lead-real-conflict:hover {
     background-color: var(--booking-clash-lead-trail-bg-hover) !important;
     border-color: var(--booking-clash-lead-trail-bg-hover) !important;
+    --booking-band: var(--booking-clash-lead-trail-bg-hover) !important;
+}
+
+/* Bands bridge the gaps between cells with a box-shadow in the state's
+   colour (--booking-band, set per state with that state's precedence).
+   .dayContainer's space-around leaves ~2.5px beside every cell: the 5px
+   halves meet between two cells; at a row's ends only 2.5px reach the
+   grid edge, so a wrapping run continues border to border instead of
+   spilling past the grid or into the next month. */
+.flatpickr-calendar .flatpickr-day.inRange,
+.flatpickr-calendar .flatpickr-day[class*="booking-day--"] {
     box-shadow:
-        -5px 0 0 var(--booking-clash-lead-trail-bg-hover),
-        5px 0 0 var(--booking-clash-lead-trail-bg-hover) !important;
+        -5px 0 0 var(--booking-band),
+        5px 0 0 var(--booking-band) !important;
+}
+
+.flatpickr-calendar .flatpickr-day.inRange:nth-child(7n + 1),
+.flatpickr-calendar .flatpickr-day[class*="booking-day--"]:nth-child(7n + 1) {
+    box-shadow:
+        -2.5px 0 0 var(--booking-band),
+        5px 0 0 var(--booking-band) !important;
+}
+
+.flatpickr-calendar .flatpickr-day.inRange:nth-child(7n + 7),
+.flatpickr-calendar .flatpickr-day[class*="booking-day--"]:nth-child(7n + 7) {
+    box-shadow:
+        -5px 0 0 var(--booking-band),
+        2.5px 0 0 var(--booking-band) !important;
 }
 
 .flatpickr-calendar .flatpickr-day.booking-day--run-start {

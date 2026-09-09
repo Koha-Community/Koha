@@ -564,7 +564,10 @@ function observeCalendarWidth(container: HTMLElement): void {
         // Written on the next frame: the write re-renders and resizes the
         // alerts while ResizeObserver is still delivering (BookingCalendar
         // observes an ancestor), which the browser reports as a loop error.
-        const width = entry.contentRect.width;
+        // Border-box width, so legend and panels line up with the border.
+        const width =
+            entry.borderBoxSize?.[0]?.inlineSize ??
+            entry.target.getBoundingClientRect().width;
         requestAnimationFrame(() => {
             calendarRenderWidth.value = width;
         });
