@@ -32,7 +32,7 @@ export const CONFLICT_REASONS = Object.freeze([
 ]);
 
 /** Reasons that block an item outright for a whole booking period */
-const HARD_CONFLICT_REASONS = Object.freeze(["booking", "checkout"]);
+export const HARD_CONFLICT_REASONS = Object.freeze(["booking", "checkout"]);
 
 /**
  * Translate the raw endpoint payload into the client map shape.
@@ -71,7 +71,7 @@ export function serverMapToUnavailableByDate(availability) {
  * @param {readonly string[]} reasons
  * @returns {boolean}
  */
-function setHasAny(reasonSet, reasons) {
+export function setHasAny(reasonSet, reasons) {
     if (!reasonSet) return false;
     return reasons.some(r => reasonSet.has(r));
 }
@@ -132,6 +132,15 @@ export function rangeHasConflict(
 ) {
     const start = toDay(startDate);
     const end = toDay(endDate);
+    if (!start || !end) {
+        // toDay() only returns null for a null/undefined input; anything
+        // unparsable already throws there. Treating a missing boundary as
+        // "no conflict" would fail open on a booking-conflict check - see
+        // addDays/addMonths in dates.js for the same loud-failure contract.
+        throw new Error(
+            `rangeHasConflict: invalid date range: ${startDate} - ${endDate}`
+        );
+    }
     if (end.isBefore(start, "day")) return false;
 
     if (selectedItem) {

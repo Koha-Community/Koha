@@ -14,6 +14,7 @@ import {
     datePart,
     addDays,
     formatYMD,
+    today,
 } from "@koha-vue/lib/booking/dates.js";
 
 describe("Library-timezone day-boundary contract helpers", () => {
@@ -54,6 +55,17 @@ describe("Library-timezone day-boundary contract helpers", () => {
     it("returns empty strings for invalid input", () => {
         expect(toStartOfDayISO(null)).to.eq("");
         expect(datePart("not-a-date")).to.eq("");
+    });
+
+    // today() feeds the past-date disable and lead-time floor, so it must
+    // follow the same library-timezone contract as every other boundary
+    // here, not the browser/test-runner's own local timezone.
+    it("anchors today() to the library timezone, not the browser's local time", () => {
+        // 2026-08-09T20:00:00Z is already 2026-08-10 06:00 in UTC+10.
+        cy.clock(new Date("2026-08-09T20:00:00Z").getTime(), ["Date"]);
+        cy.then(() => {
+            expect(formatYMD(today())).to.eq("2026-08-10");
+        });
     });
 });
 

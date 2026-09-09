@@ -17,7 +17,7 @@ export function toDay(input) {
 
 /** @returns {import("dayjs").Dayjs} */
 export function today() {
-    return dayjs().startOf("day");
+    return dayjs().tz(window.$timezone()).startOf("day");
 }
 
 /**
@@ -54,23 +54,31 @@ export function toISO(input) {
 /**
  * Add whole calendar days to a date-like value.
  *
- * @param {import("dayjs").ConfigType|null|undefined} input
+ * @param {import("dayjs").ConfigType} input
  * @param {number} days
  * @returns {import("dayjs").Dayjs}
+ * @throws {Error} When input is null/undefined - callers that need a
+ *   "days from now" result should pass today() explicitly, rather than
+ *   relying on a silent fallback here that would mask an upstream bug.
  */
 export function addDays(input, days) {
-    return toDay(input)?.add(days, "day") ?? dayjs();
+    const day = toDay(input);
+    if (!day) throw new Error(`addDays: invalid date input: ${input}`);
+    return day.add(days, "day");
 }
 
 /**
  * Add whole calendar months to a date-like value.
  *
- * @param {import("dayjs").ConfigType|null|undefined} input
+ * @param {import("dayjs").ConfigType} input
  * @param {number} months
  * @returns {import("dayjs").Dayjs}
+ * @throws {Error} When input is null/undefined - see addDays.
  */
 export function addMonths(input, months) {
-    return toDay(input)?.add(months, "month") ?? dayjs();
+    const day = toDay(input);
+    if (!day) throw new Error(`addMonths: invalid date input: ${input}`);
+    return day.add(months, "month");
 }
 
 /**
