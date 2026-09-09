@@ -853,6 +853,9 @@ sub CheckReserves {
         my $LocalHoldsPriorityItemControl   = C4::Context->preference('LocalHoldsPriorityItemControl');
         my $priority                        = 10000000;
 
+        # We need to track if there's an earlier group match during LibraryAndGroup checks
+        my $local_hold_group_matched;
+
         foreach my $res (@reserves) {
             if ( $res->{'found'} && $res->{'found'} eq 'W' ) {
                 return ( "Waiting", $res, \@reserves );    # Found it, it is waiting
@@ -898,7 +901,7 @@ sub CheckReserves {
                 # See if this item is more important than what we've got so far
                 if (   ( $res->{'priority'} && $res->{'priority'} < $priority )
                     || $local_hold_match
-                    || $local_hold_group_match )
+                    || ( $local_hold_group_match && !$local_hold_group_matched ) )
                 {
                     next
                         if $res->{item_group_id}
@@ -926,8 +929,9 @@ sub CheckReserves {
                         if ( ( $hold_fulfillment_policy eq 'holdingbranch' )
                         && ( $res->{branchcode} ne $item->$hold_fulfillment_policy ) );
                     next unless $item->can_be_transferred( { to => Koha::Libraries->find( $res->{branchcode} ) } );
-                    $priority = $res->{'priority'};
-                    $highest  = $res;
+                    $priority                 = $res->{'priority'};
+                    $highest                  = $res;
+                    $local_hold_group_matched = 1 if $local_hold_group_match;
                     last
                         if $local_hold_match
                         || ( ( $LocalHoldsPriority eq 'GiveLibraryGroup' ) && $local_hold_group_match );

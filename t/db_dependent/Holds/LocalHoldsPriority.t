@@ -6,7 +6,7 @@ use t::lib::Mocks;
 use C4::Context;
 
 use Test::NoWarnings;
-use Test::More tests => 7;
+use Test::More tests => 8;
 use MARC::Record;
 
 use Koha::Patrons;
@@ -387,6 +387,110 @@ subtest "exclude from local holds" => sub {
     is(
         $reserve->{borrowernumber}, $patron_nex_l2->borrowernumber,
         "Patron from other library is next checkout because item is excluded"
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'LocalHoldsPriority, GiveLibraryAndGroup - group fallback picks the first match, not the last' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    # Regression coverage for the "GiveLibraryAndGroup" branch of CheckReserves()
+    # (C4::Reserves):
+    #
+    #     if ( !$local_hold_match && $LocalHoldsPriority eq ('GiveLibraryAndGroup') )
+    #
+    # When no reserve's library matches the item's library exactly
+    # ($local_hold_match), CheckReserves falls back to checking whether a
+    # reserve's library is a *sibling* of the item's library in a local hold
+    # group ($local_hold_group_match).
+    #
+    # @reserves is already ordered by queue priority (best/earliest first;
+    # see the "ORDER BY priority" in _Findgroupreserve). But the loop that
+    # walks it only ever calls `last` on an *exact* library match - a group
+    # match just falls through to the next iteration. Because $highest is
+    # reassigned unconditionally whenever $local_hold_group_match is true
+    # (with no check that this candidate is better than the best group match
+    # already found), every later reserve that is also a group match
+    # clobbers $highest. The practical effect: instead of honouring the
+    # first (best-priority) matching hold in the group, CheckReserves hands
+    # the item to whichever group match happens to be *last* in the queue.
+    #
+    # This test sets up two record-level holds for the same item, both of
+    # which are only group matches (never an exact library match): one
+    # placed first (better queue priority), one placed second (worse queue
+    # priority). The first hold should win.
+
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              'GiveLibraryAndGroup' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl',   'homebranch' );
+
+    my $item_library  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $sibling_first = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $sibling_last  = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $group =
+        Koha::Library::Group->new( { title => "GiveLibraryAndGroup fallback order", ft_local_hold_group => 1 } )->store;
+    Koha::Library::Group->new( { parent_id => $group->id, branchcode => $item_library->branchcode } )->store;
+    Koha::Library::Group->new( { parent_id => $group->id, branchcode => $sibling_first->branchcode } )->store;
+    Koha::Library::Group->new( { parent_id => $group->id, branchcode => $sibling_last->branchcode } )->store;
+
+    my $category = $builder->build_object(
+        { class => 'Koha::Patron::Categories', value => { exclude_from_local_holds_priority => 0 } } );
+
+    my $item = $builder->build_sample_item(
+        {
+            homebranch                        => $item_library->branchcode,
+            holdingbranch                     => $item_library->branchcode,
+            exclude_from_local_holds_priority => 0,
+        }
+    );
+
+    my $patron_first = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $sibling_first->branchcode, categorycode => $category->categorycode }
+        }
+    );
+    my $patron_last = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $sibling_last->branchcode, categorycode => $category->categorycode }
+        }
+    );
+
+    # Pickup library (checked because LocalHoldsPriorityPatronControl is
+    # PickupLibrary) is a hold-group sibling of the item's home library in
+    # both cases, but never the item's own library, so $local_hold_match is
+    # false for both reserves - only the group fallback can select a winner.
+    AddReserve(
+        {
+            branchcode     => $sibling_first->branchcode,
+            borrowernumber => $patron_first->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            priority       => 1,
+        }
+    );
+    AddReserve(
+        {
+            branchcode     => $sibling_last->branchcode,
+            borrowernumber => $patron_last->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            priority       => 2,
+        }
+    );
+
+    my ( $status, $reserve, $all_reserves ) = CheckReserves($item);
+
+    is(
+        $reserve->{borrowernumber}, $patron_first->borrowernumber,
+        "GiveLibraryAndGroup fallback assigns the hold to the first (best queue priority) library group match"
+    );
+    isnt(
+        $reserve->{borrowernumber}, $patron_last->borrowernumber,
+        "...not to the last group match encountered while walking the queue"
     );
 
     $schema->storage->txn_rollback;
