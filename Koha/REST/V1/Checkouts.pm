@@ -388,8 +388,13 @@ sub renew {
         unless $checkout;
 
     return try {
-        my $body     = $c->req->json;
-        my $due_date = $body && $body->{due_date} ? dt_from_string( $body->{due_date}, 'rfc3339' ) : undef;
+        my $body = $c->req->json;
+        my $due_date;
+        if ( $body && $body->{due_date} ) {
+            $due_date = eval { dt_from_string( $body->{due_date}, 'rfc3339' ) };
+            return $c->render_invalid_parameter_value( { path => '/body/due_date' } )
+                unless $due_date;
+        }
 
         my $overrides = $c->stash('koha.overrides');
         my $override_limit =

@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 114;
+use Test::More tests => 115;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::Mocks;
@@ -955,6 +955,54 @@ subtest 'renew() with requested due_date and bookings' => sub {
         dt_from_string( $booking->end_date )->compare($plural_renewal_due), 0,
         'Booking end_date synced by a renewal through the plural endpoint'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'renew() with a malformed requested due_date' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2 }     # circulate
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item    = $builder->build_sample_item( { library => $library->branchcode } );
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => $library->branchcode,
+            categorycode => $patron->categorycode,
+            itemtype     => $item->effective_itemtype,
+            rules        => {
+                renewalsallowed => 1,
+                renewalperiod   => 7,
+                issuelength     => 7,
+            }
+        }
+    );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
+    my $checkout     = AddIssue( $patron, $item->barcode );
+    my $checkout_id  = $checkout->issue_id;
+    my $original_due = $checkout->date_due;
+
+    $t->post_ok(
+        "//$userid:$password@/api/v1/checkouts/$checkout_id/renewal" => json => { due_date => '2026-03-15T10:00:00' }
+        )    # Missing the mandatory RFC3339 offset/Z
+        ->status_is(400)->json_is( '/error_code' => 'invalid_parameter_value' );
+
+    $checkout->discard_changes;
+    is( $checkout->date_due, $original_due, 'Checkout due date unchanged after a rejected due_date' );
 
     $schema->storage->txn_rollback;
 };
