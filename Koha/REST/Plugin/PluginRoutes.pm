@@ -30,6 +30,18 @@ use Try::Tiny qw( catch try );
 
 Koha::REST::Plugin::PluginRoutes
 
+=head1 DESCRIPTION
+
+Injects the routes plugins define in their C<api_routes> method into the
+main OpenAPI spec under C</contrib/{api_namespace}>, and mounts their
+C<static_routes> under C</contrib/{api_namespace}/static>.
+
+Request bodies sent as C<application/xml> are converted to JSON before the
+controller runs, and JSON responses with an C<application/xml> content type
+are converted to XML. An operation that consumes or produces XML directly can
+set C<x-koha-raw-payload> to true to skip both conversions. Its body parameter,
+if any, must then be declared with type C<string>.
+
 =head1 API
 
 =head2 Helper methods
