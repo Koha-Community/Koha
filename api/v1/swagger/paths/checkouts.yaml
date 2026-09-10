@@ -246,11 +246,34 @@
         schema:
           $ref: "../swagger.yaml#/definitions/checkout"
       "400":
-        description: Bad request
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+          * `invalid_parameter_value`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "403":
-        description: Cannot renew checkout
+        description: |
+          Cannot renew checkout. Possible `error_code` attribute values:
+
+          * `no_item`
+          * `no_checkout`
+          * `onsite_checkout`
+          * `item_issued_to_other_patron`
+          * `item_denied_renewal`
+          * `auto_too_soon`
+          * `auto_account_expired`
+          * `auto_too_late`
+          * `auto_too_much_owing`
+          * `too_many`
+          * `too_unseen`
+          * `restriction`
+          * `overdue`
+          * `too_much_owing`
+          * `recalled`
+          * `on_reserve`
+          * `booked`
+          * `too_soon`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "404":
@@ -324,11 +347,34 @@
         schema:
           $ref: "../swagger.yaml#/definitions/checkout"
       "400":
-        description: Bad request
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+          * `invalid_parameter_value`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "403":
-        description: Cannot renew checkout
+        description: |
+          Cannot renew checkout. Possible `error_code` attribute values:
+
+          * `no_item`
+          * `no_checkout`
+          * `onsite_checkout`
+          * `item_issued_to_other_patron`
+          * `item_denied_renewal`
+          * `auto_too_soon`
+          * `auto_account_expired`
+          * `auto_too_late`
+          * `auto_too_much_owing`
+          * `too_many`
+          * `too_unseen`
+          * `restriction`
+          * `overdue`
+          * `too_much_owing`
+          * `recalled`
+          * `on_reserve`
+          * `booked`
+          * `too_soon`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "404":
