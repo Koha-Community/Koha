@@ -158,7 +158,10 @@
                     "x-koha-override": "renewal_limit",
                 },
             }
-        ).catch(() => null);
+        ).catch(err => {
+            console.error(err);
+            return null;
+        });
 
         if (!response || !response.ok) {
             const errorMessages = {
@@ -180,16 +183,25 @@
             return;
         }
 
-        const checkout = await response.json();
+        const checkout = await response.json().catch(err => {
+            console.error(err);
+            return null;
+        });
 
+        // The extension succeeded server-side even if we can't read the
+        // response body; reload from the table so the UI stays correct
         bookings_table?.api().ajax.reload();
-        try {
-            timeline?.itemsData.update({
-                id: Number(document.getElementById("extend_booking_id").value),
-                end: checkout.due_date,
-            });
-        } catch {
-            console.info("Timeline component not found. Skipping...");
+        if (checkout) {
+            try {
+                timeline?.itemsData.update({
+                    id: Number(
+                        document.getElementById("extend_booking_id").value
+                    ),
+                    end: checkout.due_date,
+                });
+            } catch {
+                console.info("Timeline component not found. Skipping...");
+            }
         }
 
         $("#extendBookingModal").modal("hide");
