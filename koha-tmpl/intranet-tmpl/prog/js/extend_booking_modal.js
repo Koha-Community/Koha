@@ -52,11 +52,20 @@
             "me.status": { "-in": ["new", "issued"] },
             "me.booking_id": { "!=": bookingId },
         };
+        document
+            .querySelector("#extendBookingForm .approve")
+            ?.removeAttribute("disabled");
+
         fetch(
             "/api/v1/bookings?_per_page=-1&q=" +
                 encodeURIComponent(JSON.stringify(query))
         )
-            .then(response => (response.ok ? response.json() : []))
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Booking conflict check failed");
+                }
+                return response.json();
+            })
             .then(bookings => {
                 const disable = bookings.map(booking => ({
                     from: $toDisplayDate(
@@ -91,6 +100,17 @@
                         : {}),
                     disable,
                 });
+            })
+            .catch(err => {
+                console.error(err);
+                showError(
+                    __(
+                        "Unable to check for conflicting bookings. Please close this dialog and try again."
+                    )
+                );
+                document
+                    .querySelector("#extendBookingForm .approve")
+                    ?.setAttribute("disabled", "disabled");
             });
     }
 
@@ -99,6 +119,9 @@
         extendPicker = null;
         document.getElementById("extend_booking_result").innerHTML = "";
         document.getElementById("extendBookingForm").reset();
+        document
+            .querySelector("#extendBookingForm .approve")
+            ?.removeAttribute("disabled");
     }
 
     function showError(message) {
