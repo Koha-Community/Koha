@@ -1115,7 +1115,7 @@ subtest "LinkBibHeadingsToAuthorities record generation tests" => sub {
 };
 
 subtest "LinkBibHeadingsToAuthorities codes new authorities with the source thesaurus (bug 31925)" => sub {
-    plan tests => 11;
+    plan tests => 13;
 
     my $biblio_mod = Test::MockModule->new('C4::Linker::Default');
     $biblio_mod->mock(
@@ -1125,8 +1125,9 @@ subtest "LinkBibHeadingsToAuthorities codes new authorities with the source thes
         }
     );
 
-    t::lib::Mocks::mock_preference( 'marcflavour',           'MARC21' );
-    t::lib::Mocks::mock_preference( 'AutoCreateAuthorities', '1' );
+    t::lib::Mocks::mock_preference( 'marcflavour',             'MARC21' );
+    t::lib::Mocks::mock_preference( 'AutoCreateAuthorities',   '1' );
+    t::lib::Mocks::mock_preference( 'LinkerConsiderThesaurus', '1' );
 
     my $linker = C4::Linker::Default->new();
 
@@ -1200,6 +1201,29 @@ subtest "LinkBibHeadingsToAuthorities codes new authorities with the source thes
         'ind2=4 (source not specified) respects a customised syspref default 008/11=n, not forced to |'
     );
     is( $authority->subfield( '040', 'f' ), undef, 'ind2=4 (source not specified) gets no 040$f' );
+
+    # Case 7: LinkerConsiderThesaurus off (the default) - a FAST heading must NOT get
+    # thesaurus-aware coding on the new authority (bug 31925 comment 45). With thesaurus
+    # matching disabled, any other heading spelled the same can link to this same
+    # auto-created authority regardless of its own thesaurus, so coding it FAST here would
+    # let that thesaurus silently propagate onto unrelated bibs the next time the authority
+    # is saved. Only sites that opted into LinkerConsiderThesaurus should get this coding.
+    t::lib::Mocks::mock_preference( 'MARCAuthorityControlField008', '' );
+    t::lib::Mocks::mock_preference( 'LinkerConsiderThesaurus',      '0' );
+    $biblio = $builder->build_sample_biblio();
+    $record = $biblio->metadata->record;
+    $field  = MARC::Field->new( '650', '', '7', 'a' => 'Miracles', '2' => 'fast' );
+    $record->append_fields($field);
+    LinkBibHeadingsToAuthorities( $linker, $record, "", undef, 650 );
+    $authority = GetAuthority( $record->subfield( '650', '9' ) );
+    is(
+        substr( $authority->field('008')->data(), 11, 1 ), 'a',
+        'FAST heading (ind2=7, $2=fast) is coded with the syspref default, not z, when LinkerConsiderThesaurus is off'
+    );
+    is(
+        $authority->subfield( '040', 'f' ), undef,
+        'FAST heading gets no 040$f when LinkerConsiderThesaurus is off'
+    );
 };
 
 subtest 'autoControlNumber tests' => sub {

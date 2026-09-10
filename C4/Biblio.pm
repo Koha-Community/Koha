@@ -827,8 +827,17 @@ sub LinkBibHeadingsToAuthorities {
                         # to AddAuthority() itself is needed. Skip this when the heading's
                         # thesaurus couldn't actually be identified (bug 31925 comment 30) - in
                         # that case the site's own MARCAuthorityControlField008 default should
-                        # apply, the same as it always has, rather than being overridden.
-                        if ( Koha::Authority->has_known_thesaurus( $heading->{thesaurus} ) ) {
+                        # apply, the same as it always has, rather than being overridden. Also
+                        # skip it entirely when LinkerConsiderThesaurus is off (bug 31925 comment
+                        # 45): with thesaurus-aware matching disabled, headings from any thesaurus
+                        # can link to the same auto-created authority by text alone, so coding
+                        # that authority for whichever heading happened to create it would let its
+                        # thesaurus silently propagate onto unrelated bibs the next time the
+                        # authority is saved - only sites that opted into thesaurus-aware linking
+                        # (and so already search by thesaurus) should get thesaurus-aware creation.
+                        if (   C4::Context->preference('LinkerConsiderThesaurus')
+                            && Koha::Authority->has_known_thesaurus( $heading->{thesaurus} ) )
+                        {
                             my $date = POSIX::strftime( '%y%m%d', localtime );
                             $marcrecordauth->insert_fields_ordered(
                                 MARC::Field->new(
