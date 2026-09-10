@@ -125,9 +125,11 @@
     }
 
     function showError(message) {
-        document.getElementById("extend_booking_result").innerHTML = `
-            <div class="alert alert-danger">${message}</div>
-        `;
+        const container = document.getElementById("extend_booking_result");
+        const alert = document.createElement("div");
+        alert.className = "alert alert-danger";
+        alert.textContent = message;
+        container.replaceChildren(alert);
     }
 
     async function handleSubmit(e) {
