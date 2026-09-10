@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Exception;
 
 use C4::Calendar;
@@ -498,6 +498,92 @@ subtest 'check() with circulation rules explicitly set to 0' => sub {
     is(
         $map->{ $day->(13)->ymd }->{ $item->itemnumber }, undef,
         "No trail window when bookings_trail_period is explicitly 0"
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'check() excludes cancelled and completed bookings' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    Koha::CirculationRules->search( { rule_name => { '-in' => [ 'bookings_lead_period', 'bookings_trail_period' ] } } )
+        ->delete;
+
+    my $branch      = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $itemtype    = $builder->build_object( { class => 'Koha::ItemTypes' } );
+    my $biblio      = $builder->build_sample_biblio();
+    my $active_item = $builder->build_sample_item(
+        { biblionumber => $biblio->biblionumber, bookable => 1, itype => $itemtype->itemtype } );
+    my $cancelled_item = $builder->build_sample_item(
+        { biblionumber => $biblio->biblionumber, bookable => 1, itype => $itemtype->itemtype } );
+    my $completed_item = $builder->build_sample_item(
+        { biblionumber => $biblio->biblionumber, bookable => 1, itype => $itemtype->itemtype } );
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => $branch->branchcode,
+            itemtype   => $itemtype->itemtype,
+            rules      => {
+                bookings_lead_period  => 0,
+                bookings_trail_period => 0,
+            },
+        }
+    );
+
+    my $today = dt_from_string->truncate( to => 'day' );
+    my $day   = sub { $today->clone->add( days => $_[0] ) };
+
+    for my $spec (
+        [ $active_item,    'new' ],
+        [ $cancelled_item, 'cancelled' ],
+        [ $completed_item, 'completed' ],
+        )
+    {
+        my ( $item, $status ) = @$spec;
+        $builder->build_object(
+            {
+                class => 'Koha::Bookings',
+                value => {
+                    biblio_id  => $biblio->biblionumber,
+                    item_id    => $item->itemnumber,
+                    start_date => $day->(10)->add( hours => 12 ),
+                    end_date   => $day->(12)->add( hours => 12 ),
+                    status     => $status,
+                }
+            }
+        );
+    }
+
+    my $availability = Koha::Biblio::Availability::Booking->check(
+        {
+            biblio            => $biblio,
+            from              => $today,
+            to                => $day->(20),
+            pickup_library_id => $branch->branchcode,
+            item_type_id      => $itemtype->itemtype,
+        }
+    );
+    my $map = $availability->{availability};
+
+    is_deeply(
+        $map->{ $day->(11)->ymd }->{ $active_item->itemnumber }->{blockers},
+        { booking => 1 },
+        "An active ('new') booking still blocks its item"
+    );
+    is(
+        $map->{ $day->(11)->ymd }->{ $cancelled_item->itemnumber }, undef,
+        "A cancelled booking does not block its item"
+    );
+    is(
+        $map->{ $day->(11)->ymd }->{ $completed_item->itemnumber }, undef,
+        "A completed booking does not block its item"
+    );
+    is_deeply(
+        [ sort { $a <=> $b } @{ $availability->{item_ids} } ],
+        [ sort { $a <=> $b } ( $active_item->itemnumber, $cancelled_item->itemnumber, $completed_item->itemnumber ) ],
+        "All three bookable items are still considered, regardless of their bookings' status"
     );
 
     $schema->storage->txn_rollback;
