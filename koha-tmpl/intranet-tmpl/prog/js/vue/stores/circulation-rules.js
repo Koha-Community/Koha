@@ -726,13 +726,13 @@ export const useCircRulesStore = defineStore("circRules", () => {
             });
         },
         async fetchRawRuleSets(params = {}) {
-            return APIClient.circRule.circ_rules.getAll(
+            return APIClient.circulation_rules.circ_rules.getAll(
                 {},
                 { effective: false, ...params }
             );
         },
         async getConfigurationOptions() {
-            const client = APIClient.circRule;
+            const client = APIClient.circulation_rules;
             const { permissions } = await client.config.getAll();
             this.userPermissions = permissions;
         },
@@ -789,7 +789,7 @@ export const useCircRulesStore = defineStore("circRules", () => {
                 existingRuleSet[`overdue_${triggerNumber}_restrict`];
             circRuleSet[`overdue_${triggerNumber}_mtt`] =
                 existingRuleSet[`overdue_${triggerNumber}_mtt`];
-            const client = APIClient.circRule;
+            const client = APIClient.circulation_rules;
             await client.circ_rules.update(circRuleSet);
         },
         ...permissionsActions(store),

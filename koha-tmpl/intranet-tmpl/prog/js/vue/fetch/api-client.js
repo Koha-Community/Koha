@@ -40,7 +40,6 @@ export const APIClient = {
     sip2: new SIP2APIClient(HttpClient),
     preservation: new PreservationAPIClient(HttpClient),
     record_sources: new RecordSourcesAPIClient(HttpClient),
-    circRule: new CircRuleAPIClient(HttpClient),
     item_lists: new ItemListsAPIClient(HttpClient),
     item_types: new ItemTypesAPIClient(HttpClient),
 };
