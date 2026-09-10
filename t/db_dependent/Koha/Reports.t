@@ -20,7 +20,7 @@ use Modern::Perl;
 use Test::Exception;
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 16;
+use Test::More tests => 17;
 
 use Koha::Report;
 use Koha::Reports;
@@ -61,6 +61,8 @@ is( Koha::Reports->search->count, $nb_of_reports + 1, 'Delete should have delete
 
 subtest 'prep_report' => sub {
     plan tests => 4;
+
+    t::lib::Mocks::mock_config( 'total_running_reports_per_instance_limit', 0 );
 
     my $report = Koha::Report->new(
         {
@@ -176,6 +178,51 @@ subtest 'prep_report throws when total-running limit is exceeded' => sub {
         'total limit reached -> TotalRunning exception'
     );
     is( $exception->limit, 1, 'exception carries the configured total limit' );
+};
+
+subtest 'prep_report() total_running_reports_per_instance_limit' => sub {
+
+    plan tests => 3;
+
+    my $report = Koha::Report->new( { report_name => 'total_running_test', savedsql => 'SELECT 1' } )->store;
+
+    # the 2 other reports
+    my $other_1 = $builder->build_object( { class => 'Koha::Reports' } );
+    my $other_2 = $builder->build_object( { class => 'Koha::Reports' } );
+
+    # Pretend two reports belonging to other users are in flight whenever
+    # running() is called without any filter
+    my $reports_mock = Test::MockModule->new('Koha::Reports');
+    $reports_mock->mock(
+        'running',
+        sub {
+            my ( $class, $params ) = @_;
+            return $class->search( { id => undef } )
+                if $params && ( $params->{report_id} || $params->{user_id} );
+            return $class->search( { id => [ $other_1->id, $other_2->id ] } );
+        }
+    );
+
+    # Turn the other 2 off
+    t::lib::Mocks::mock_config( 'duplicate_running_reports_per_user_limit', 0 );
+    t::lib::Mocks::mock_config( 'total_running_reports_per_user_limit',     0 );
+
+    # Test no limit
+    t::lib::Mocks::mock_config( 'total_running_reports_per_instance_limit', 0 );
+    lives_ok { $report->prep_report( [], [] ) }
+    'no limit enforced when total_running_reports_per_instance_limit is disabled, AKA 0';
+
+    # Test running while staying under the limit
+    t::lib::Mocks::mock_config( 'total_running_reports_per_instance_limit', 5 );
+    lives_ok { $report->prep_report( [], [] ) }
+    'report runs while under the total_running_reports_per_instance_limit';
+
+    # Test going over the limit
+    t::lib::Mocks::mock_config( 'total_running_reports_per_instance_limit', 2 );
+    throws_ok { $report->prep_report( [], [] ) }
+    'Koha::Exceptions::Report::InstanceTotalRunning',
+        'exception thrown if total_running_reports_per_instance_limit is reached';
+
 };
 
 subtest 'is_sql_valid' => sub {
