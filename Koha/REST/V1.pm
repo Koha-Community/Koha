@@ -241,14 +241,14 @@ sub startup {
 
 Returns true if the matched route's own spec sets C<x-koha-raw-payload>,
 meaning it wants to send/receive its declared content type as-is and should be left
-alone by the generic XML<->JSON conversion hooks.
+alone by the generic XML/JSON conversion hooks.
 
 =cut
 
 sub _route_wants_raw_payload {
     my ($c) = @_;
 
-    my $op_spec = $c->openapi->spec || $c->match->endpoint->pattern->defaults->{'openapi.op_spec'};
+    my $op_spec = $c->openapi->spec;
     return 0 unless $op_spec;
 
     return $op_spec->{'x-koha-raw-payload'} ? 1 : 0;
