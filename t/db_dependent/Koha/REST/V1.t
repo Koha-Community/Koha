@@ -20,10 +20,8 @@ use Modern::Perl;
 use Test::NoWarnings;
 use Test::More tests => 3;
 use Test::Mojo;
-use Test::MockModule;
 use Test::Warn;
 
-use Carp qw( carp );
 use File::Basename;
 use t::lib::Mocks;
 
@@ -35,15 +33,6 @@ BEGIN {
 
 use Koha::Database;
 use Koha::Plugins;
-
-my $logger = Test::MockModule->new('Koha::Logger');
-$logger->mock(
-    'error',
-    sub {
-        shift;
-        carp @_;
-    }
-);
 
 my $schema = Koha::Database->new->schema;
 
@@ -68,7 +57,7 @@ subtest 'Type definition tests' => sub {
     is( $types->type('marc'),    'application/marc',         'application/marc is defined' );
 };
 
-subtest '_route_wants_raw_payload' => sub {
+subtest 'x-koha-raw-payload tests' => sub {
 
     plan tests => 7;
 
@@ -77,17 +66,10 @@ subtest '_route_wants_raw_payload' => sub {
     t::lib::Mocks::mock_config( 'enable_plugins', 1 );
     Koha::Plugins::Methods->search->delete;
     my $plugins = Koha::Plugins->new;
-    $plugins->InstallPlugins;
+    $plugins->InstallPlugins( { include => ['Koha::Plugin::Test'] } );
     $_->enable for $plugins->GetPlugins( { all => 1 } );
 
-    my $t;
-    warning_like { $t = Test::Mojo->new('Koha::REST::V1'); }
-    [
-        qr{Could not load REST API spec bundle: /paths/~0001contrib~0001badass},
-        qr{bother_wrong/put/parameters/0: /oneOf/1 Properties not allowed:},
-        qr{Plugin Koha::Plugin::BadAPIRoute route injection failed: The resulting spec is invalid. Skipping Bad API Route Plugin},
-    ],
-        'Bad plugins raise warning';
+    my $t = Test::Mojo->new('Koha::REST::V1');
 
     # Attributes and ordering are exactly the kind of thing the default XML<->JSON
     # conversion cannot round-trip; parse_xml() never reads node attributes at all.
@@ -100,15 +82,16 @@ subtest '_route_wants_raw_payload' => sub {
         . '</NCIPMessage>';
 
     $t->post_ok(
-        '/api/v1/contrib/testplugin/public/patrons/echo_raw',
+        '/api/v1/contrib/testplugin/patrons/echo_raw',
         { 'Content-Type' => 'application/xml' },
         $xml
         )
         ->status_is(200)
+        ->header_is( 'Content-Type' => 'application/xml' )
         ->content_is( $xml, 'x-koha-raw-payload leaves the request/response body byte-for-byte untouched' );
 
     $t->post_ok(
-        '/api/v1/contrib/testplugin/public/patrons/echo_converted',
+        '/api/v1/contrib/testplugin/patrons/echo_converted',
         { 'Content-Type' => 'application/xml' },
         $xml
     )->status_is(200)->json_is(

@@ -344,7 +344,7 @@ sub api_routes {
       }
     }
   },
-  "/public/patrons/echo_raw": {
+  "/patrons/echo_raw": {
     "post": {
       "x-mojo-to": "Test::Controller#echo_raw",
       "operationId": "EchoRawPayload",
@@ -357,7 +357,7 @@ sub api_routes {
           "name": "body",
           "in": "body",
           "required": true,
-          "schema": { "type": "object", "additionalProperties": true }
+          "schema": { "type": "string" }
         }
       ],
       "responses": {
@@ -367,7 +367,7 @@ sub api_routes {
       }
     }
   },
-  "/public/patrons/echo_converted": {
+  "/patrons/echo_converted": {
     "post": {
       "x-mojo-to": "Test::Controller#echo_converted",
       "operationId": "EchoConvertedPayload",
