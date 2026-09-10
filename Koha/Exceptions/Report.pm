@@ -14,6 +14,11 @@ use Exception::Class (
         description => "The configured per-user limit on total simultaneous report runs has been reached",
         fields      => [ 'user_id', 'limit' ],
     },
+    'Koha::Exceptions::Report::InstanceTotalRunning' => {
+        isa         => 'Koha::Exceptions::Report',
+        description => "The configured instance-wide limit on total simultaneous report runs has been reached",
+        fields      => ['limit'],
+    }
 );
 
 1;

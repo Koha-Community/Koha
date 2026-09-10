@@ -104,7 +104,7 @@ sub running {
     }
 
     my $rs = $class->search( { id => { -in => [ keys %report_ids ] } } );
-    return wantarray ? $rs->as_list : $rs;
+    return $class->search( { id => { -in => [ keys %report_ids ] } } );
 }
 
 =head3 _processlist_rows
