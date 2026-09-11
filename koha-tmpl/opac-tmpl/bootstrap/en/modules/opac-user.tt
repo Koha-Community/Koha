@@ -1097,6 +1097,8 @@
                 delSingleRecord('[% success | html %]');
             [% END %]
         [% END %]
+    </script>
+    <script nonce="[% Koha.CSPNonce | $raw %]">
         var AR_CAPTION_COUNT = _("(%s total)");
 
         function tableInit(tableId) {

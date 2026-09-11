@@ -1623,6 +1623,15 @@
     [% Asset.js("js/holds.js") | $raw %]
     [% Asset.js("js/hold-group.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
+        $(document).ready( function() {
+            [% IF successful_biblionumbers && Koha.Preference('AutoDeleteFromCartWhenHoldPlaced').grep('staff').size %]
+                [% FOREACH success IN successful_biblionumbers.split('\|') %]
+                    delSingleRecord('[% success | html %]');
+                [% END %]
+            [% END %]
+        });
+    </script>
+    <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
             $("#patron_holds_table").kohaTable(
                 {
@@ -2039,12 +2048,6 @@
             if (!localStorage.selectedHolds || document.referrer.replace(/\?.*/, "") !== document.location.origin + document.location.pathname) {
                 localStorage.selectedHolds = [];
             }
-            [% IF successful_biblionumbers && Koha.Preference('AutoDeleteFromCartWhenHoldPlaced').grep('staff').size %]
-                [% FOREACH success IN successful_biblionumbers.split('\|') %]
-                    delSingleRecord('[% success | html %]');
-                [% END %]
-            [% END %]
-
         });
     </script>
     [% UNLESS patron %]
