@@ -457,6 +457,7 @@ sub core_types_to_classes {
         import_from_kbart_file              => 'Koha::BackgroundJob::ImportKBARTFile',
         patron_import                       => 'Koha::BackgroundJob::PatronImport',
         file_transport_test                 => 'Koha::BackgroundJob::TestTransport',
+        batch_patron_deletion               => 'Koha::BackgroundJob::BatchDeletePatron',
     };
 }
 
