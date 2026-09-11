@@ -5,7 +5,7 @@ function _ifDocumentAvailable(callback) {
 }
 
 class Dialog {
-    constructor(options = {}) {}
+    constructor() {}
 
     _appendMessage(type, message) {
         _ifDocumentAvailable(() => {
@@ -51,17 +51,28 @@ class HttpClient {
         return token !== null ? token : options.csrfToken || null;
     }
 
+    /**
+     * @param {Object} [config] - Per-request behaviour switches
+     * @param {boolean} [config.suppressDefaultErrorDialog] - Skip the
+     *     page-level error dialog; for callers that present errors
+     *     themselves. The error is still logged and thrown, with the
+     *     response status and Koha error_code attached.
+     * @param {AbortSignal} [config.signal] - Cancels the underlying fetch.
+     */
     async _fetchJSON(
         endpoint,
         headers = {},
         options = {},
         return_response = false,
-        mark_submitting = false
+        mark_submitting = false,
+        config = {}
     ) {
         let res, error;
+        void mark_submitting;
         //if (mark_submitting) submitting();
         await fetch(this._baseURL + endpoint, {
             ...options,
+            ...(config.signal ? { signal: config.signal } : {}),
             headers: { ...this._headers, ...headers },
         })
             .then(response => {
@@ -76,34 +87,61 @@ class HttpClient {
                 if (!response.ok) {
                     return response.text().then(text => {
                         let message;
+                        let code;
                         if (text && is_json) {
-                            let json = JSON.parse(text);
-                            message =
-                                json.error ||
-                                json.errors?.map(e => e.message).join("\n") ||
-                                json.message ||
-                                json;
+                            try {
+                                const json = JSON.parse(text);
+                                message =
+                                    json.error ||
+                                    json.errors
+                                        ?.map(e => e.message)
+                                        .join("\n") ||
+                                    json.message ||
+                                    json;
+                                code = json.error_code;
+                            } catch {
+                                // Content-type claimed JSON but the body
+                                // wasn't (truncated response, proxy error
+                                // page, session-expired redirect, ...).
+                                // Fall back to the real HTTP failure rather
+                                // than surfacing the parse error.
+                                message = response.statusText;
+                            }
                         } else {
                             message = response.statusText;
                         }
-                        throw new Error(message);
+                        const err = new Error(message);
+                        err.status = response.status;
+                        err.code = code;
+                        throw err;
                     });
                 }
-                return response.json();
+                return response.json().catch(() => {
+                    const err = new Error(
+                        "Invalid response from server: could not parse JSON"
+                    );
+                    err.status = response.status;
+                    throw err;
+                });
             })
             .then(result => {
                 res = result;
             })
             .catch(err => {
                 error = err;
-                new Dialog().setError(err);
-                console.error(err);
+                if (
+                    err?.name !== "AbortError" &&
+                    !config.suppressDefaultErrorDialog
+                ) {
+                    new Dialog().setError(err);
+                }
+                if (err?.name !== "AbortError") console.error(err);
             })
             .then(() => {
                 //if (mark_submitting) submitted();
             });
 
-        if (error) throw Error(error);
+        if (error) throw error;
 
         return res;
     }
@@ -117,7 +155,8 @@ class HttpClient {
                 method: "GET",
             },
             params.return_response ?? false,
-            params.mark_submitting ?? false
+            params.mark_submitting ?? false,
+            params.config ?? {}
         );
     }
 
@@ -138,7 +177,8 @@ class HttpClient {
                 method: "GET",
             },
             params.return_response ?? false,
-            params.mark_submitting ?? false
+            params.mark_submitting ?? false,
+            params.config ?? {}
         );
     }
 
@@ -159,7 +199,8 @@ class HttpClient {
                 method: "POST",
             },
             params.return_response ?? false,
-            params.mark_submitting ?? true
+            params.mark_submitting ?? true,
+            params.config ?? {}
         );
     }
 
@@ -180,7 +221,8 @@ class HttpClient {
                 method: "PUT",
             },
             params.return_response ?? false,
-            params.mark_submitting ?? true
+            params.mark_submitting ?? true,
+            params.config ?? {}
         );
     }
 
@@ -201,7 +243,8 @@ class HttpClient {
                 method: "PATCH",
             },
             params.return_response ?? false,
-            params.mark_submitting ?? true
+            params.mark_submitting ?? true,
+            params.config ?? {}
         );
     }
 
@@ -217,7 +260,8 @@ class HttpClient {
                 method: "DELETE",
             },
             params.return_response ?? true,
-            params.mark_submitting ?? true
+            params.mark_submitting ?? true,
+            params.config ?? {}
         );
     }
 }

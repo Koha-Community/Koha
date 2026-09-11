@@ -26,49 +26,86 @@ class HttpClient {
         return token !== null ? token : options.csrfToken || null;
     }
 
+    /**
+     * @param {Object} [config] - Per-request behaviour switches
+     * @param {boolean} [config.suppressDefaultErrorDialog] - Skip the
+     *     page-level error message; for callers that present errors
+     *     themselves. The error is still thrown, with the response status
+     *     and Koha error_code attached.
+     * @param {AbortSignal} [config.signal] - Cancels the underlying fetch.
+     */
     async _fetchJSON(
         endpoint,
         headers = {},
         options = {},
         return_response = false,
-        mark_submitting = false
+        mark_submitting = false,
+        config = {}
     ) {
         let res, error;
         if (mark_submitting) submitting();
         await fetch(this._baseURL + endpoint, {
             ...options,
+            ...(config.signal ? { signal: config.signal } : {}),
             headers: { ...this._headers, ...headers },
         })
             .then(response => {
                 if (!response.ok) {
                     return response.text().then(text => {
-                        let message;
+                        let message = response.statusText;
+                        let code;
                         if (text) {
-                            let json = JSON.parse(text);
-                            message =
-                                json.error ||
-                                json.errors.map(e => e.message).join("\n") ||
-                                json;
-                        } else {
-                            message = response.statusText;
+                            try {
+                                const json = JSON.parse(text);
+                                message =
+                                    json.error ||
+                                    json.errors
+                                        ?.map(e => e.message)
+                                        .join("\n") ||
+                                    json.message ||
+                                    json;
+                                code = json.error_code;
+                            } catch {
+                                // Content-type claimed JSON but the body
+                                // wasn't (truncated response, proxy error
+                                // page, session-expired redirect, ...).
+                                // Fall back to the real HTTP failure rather
+                                // than surfacing the parse error.
+                                message = response.statusText;
+                            }
                         }
-                        throw new Error(message);
+                        const err = new Error(message);
+                        err.status = response.status;
+                        err.code = code;
+                        throw err;
                     });
                 }
-                return return_response ? response : response.json();
+                if (return_response) return response;
+                return response.json().catch(() => {
+                    const err = new Error(
+                        "Invalid response from server: could not parse JSON"
+                    );
+                    err.status = response.status;
+                    throw err;
+                });
             })
             .then(result => {
                 res = result;
             })
             .catch(err => {
                 error = err;
-                setError(err);
+                if (
+                    err?.name !== "AbortError" &&
+                    !config.suppressDefaultErrorDialog
+                ) {
+                    setError(err);
+                }
             })
             .then(() => {
                 if (mark_submitting) submitted();
             });
 
-        if (error) throw Error(error);
+        if (error) throw error;
 
         return res;
     }
@@ -82,7 +119,8 @@ class HttpClient {
                 method: "GET",
             },
             params.return_response ?? false,
-            params.mark_submitting ?? false
+            params.mark_submitting ?? false,
+            params.config ?? {}
         );
     }
 
@@ -103,7 +141,8 @@ class HttpClient {
                 method: "GET",
             },
             params.return_response ?? false,
-            params.mark_submitting ?? false
+            params.mark_submitting ?? false,
+            params.config ?? {}
         );
     }
 
@@ -124,7 +163,8 @@ class HttpClient {
                 method: "POST",
             },
             params.return_response ?? false,
-            params.mark_submitting ?? true
+            params.mark_submitting ?? true,
+            params.config ?? {}
         );
     }
 
@@ -145,7 +185,8 @@ class HttpClient {
                 method: "PUT",
             },
             params.return_response ?? false,
-            params.mark_submitting ?? true
+            params.mark_submitting ?? true,
+            params.config ?? {}
         );
     }
 
@@ -167,7 +208,8 @@ class HttpClient {
                 method: "DELETE",
             },
             params.return_response ?? true,
-            params.mark_submitting ?? true
+            params.mark_submitting ?? true,
+            params.config ?? {}
         );
     }
 
@@ -178,7 +220,8 @@ class HttpClient {
             params.headers,
             {},
             params.return_response ?? true,
-            params.mark_submitting ?? false
+            params.mark_submitting ?? false,
+            params.config ?? {}
         ).then(
             response => {
                 if (response) {
@@ -195,11 +238,18 @@ class HttpClient {
                 ? params.body
                 : JSON.stringify(params.body)
             : undefined;
-        return this._fetchJSON(params.endpoint, params.headers, {
-            ...params.options,
-            body,
-            method: "PATCH",
-        });
+        return this._fetchJSON(
+            params.endpoint,
+            params.headers,
+            {
+                ...params.options,
+                body,
+                method: "PATCH",
+            },
+            params.return_response ?? false,
+            params.mark_submitting ?? false,
+            params.config ?? {}
+        );
     }
 }
 
