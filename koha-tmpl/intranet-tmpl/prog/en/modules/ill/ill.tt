@@ -27,7 +27,7 @@
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         const supplying_ill_table_settings = [% TablesSettings.GetTableSettings( 'illrequests', 'ill-supply', 'ill-supply', 'json' ) | $raw %];
         const userenv = [% To.json(userenv) | $raw %];
     </script>
