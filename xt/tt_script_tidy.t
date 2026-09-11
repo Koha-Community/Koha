@@ -34,19 +34,24 @@ my @multiple_tt_allowed = qw(
     koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt
 );
 
-plan tests => scalar(@tt_files) * 3 + 1;
+plan tests => scalar(@tt_files) * 4 + 1;
 
 for my $file (@tt_files) {
 
     my @lines                         = read_file($file);
     my $fails_has_tt_tags             = 0;
     my $fails_has_tt_allowed          = 0;
+    my $fails_exception_not_module    = 0;
     my $script_tags_with_tags_allowed = 0;
     my ( $in_script, $has_tt_tags, $tt_tags_allowed );
     for my $line (@lines) {
 
         if ( $line =~ m{<script} ) {
-            if ( $line =~ m{data-tt-allowed="true"} ) {
+            if ( $line =~ m{data-tt-allowed-exception="true"} ) {
+                $tt_tags_allowed = 1;
+                $fails_exception_not_module++
+                    unless $line =~ m{type="module"} || $line =~ m{type="importmap"};
+            } elsif ( $line =~ m{data-tt-allowed="true"} ) {
                 $tt_tags_allowed = 1;
                 $script_tags_with_tags_allowed++;
             }
@@ -73,7 +78,11 @@ for my $file (@tt_files) {
     is( $fails_has_tt_tags, 0, qq{$file has a <script> tag with Template::Toolkit tags.} );
     is(
         $fails_has_tt_allowed, 0,
-        qq{$file has a <script> tag with data-tt-allowed="true" but without Template::Toolkit tags.}
+        qq{$file has a <script> tag with data-tt-allowed="true" or data-tt-allowed-exception="true" but without Template::Toolkit tags.}
+    );
+    is(
+        $fails_exception_not_module, 0,
+        qq{$file has a <script> tag with data-tt-allowed-exception="true" that is not type="module" or type="importmap".}
     );
     if ( grep { $file eq $_ } @multiple_tt_allowed ) {
         pass(qq{$file is allowed to have more than one <script> tag with data-tt-allowed="true"});
