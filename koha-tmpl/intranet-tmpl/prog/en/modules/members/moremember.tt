@@ -892,6 +892,7 @@
 
         var amountlimit = "[% Koha.Preference('FineNoRenewals') | html %]";
         var fines = "[% fines | $Price %]";
+        var EnablePatronAccountLinking = [% ( Koha.Preference('EnablePatronAccountLinking') && CAN_user_borrowers_edit_borrowers ) ? 1 : 0 | html %];
     </script>
     [% Asset.js("js/pages/circulation.js") | $raw %]
     [% IF Koha.Preference('ClaimReturnedLostValue') || Koha.Preference('BundleLostValue') %]
@@ -964,72 +965,71 @@
                 context: "modal",
             });
 
-            [% IF Koha.Preference('EnablePatronAccountLinking') && CAN_user_borrowers_edit_borrowers %]
-            // Linked accounts management - leave entire linked group
-            $("#leave-linked-accounts").on("click", function(e) {
-                e.preventDefault();
-                var patron_borrowernumber = [% patron.borrowernumber | html %];
+            if (EnablePatronAccountLinking) {
+                // Linked accounts management - leave entire linked group
+                $("#leave-linked-accounts").on("click", function (e) {
+                    e.preventDefault();
 
-                if (confirm(_("Are you sure you want to remove this patron from all linked accounts?"))) {
-                    // Get the link_id for the current patron
-                    $.ajax({
-                        url: "/api/v1/patrons/" + patron_borrowernumber + "/account_links",
-                        type: "GET",
-                        headers: { "Accept": "application/json" },
-                        success: function(links) {
-                            // Find the CURRENT patron's link record
-                            var link = links.find(function(l) { return l.patron_id == patron_borrowernumber; });
-                            if (link) {
-                                // Delete the current patron's link (removes them from the group)
-                                $.ajax({
-                                    url: "/api/v1/patrons/" + patron_borrowernumber + "/account_links/" + link.account_link_id,
-                                    type: "DELETE",
-                                    success: function() {
-                                        // Reload page to show updated state
-                                        location.reload();
-                                    },
-                                    error: function(xhr) {
-                                        alert(_("Error leaving linked group: ") + xhr.responseJSON.error);
-                                    }
+                    if (confirm(_("Are you sure you want to remove this patron from all linked accounts?"))) {
+                        // Get the link_id for the current patron
+                        $.ajax({
+                            url: "/api/v1/patrons/" + patron_borrowernumber + "/account_links",
+                            type: "GET",
+                            headers: { Accept: "application/json" },
+                            success: function (links) {
+                                // Find the CURRENT patron's link record
+                                var link = links.find(function (l) {
+                                    return l.patron_id == patron_borrowernumber;
                                 });
-                            }
-                        },
-                        error: function(xhr) {
-                            alert(_("Error fetching linked accounts: ") + xhr.responseJSON.error);
-                        }
-                    });
-                }
-            });
-            [% END %]
+                                if (link) {
+                                    // Delete the current patron's link (removes them from the group)
+                                    $.ajax({
+                                        url: "/api/v1/patrons/" + patron_borrowernumber + "/account_links/" + link.account_link_id,
+                                        type: "DELETE",
+                                        success: function () {
+                                            // Reload page to show updated state
+                                            location.reload();
+                                        },
+                                        error: function (xhr) {
+                                            alert(_("Error leaving linked group: ") + xhr.responseJSON.error);
+                                        },
+                                    });
+                                }
+                            },
+                            error: function (xhr) {
+                                alert(_("Error fetching linked accounts: ") + xhr.responseJSON.error);
+                            },
+                        });
+                    }
+                });
+            }
         });
 
-        [% IF Koha.Preference('EnablePatronAccountLinking') && CAN_user_borrowers_edit_borrowers %]
-        function link_patron(borrowernumber, borrower) {
-            var patron_borrowernumber = [% patron.borrowernumber | html %];
-
-            if (borrowernumber == patron_borrowernumber) {
-                alert(_("Cannot link a patron to themselves."));
-                return;
-            }
-
-            $.ajax({
-                url: "/api/v1/patrons/" + patron_borrowernumber + "/account_links",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({ linked_patron_id: borrowernumber }),
-                success: function(response) {
-                    // Reload the page to show the new linked account
-                    location.reload();
-                },
-                error: function(xhr) {
-                    var error_msg = xhr.responseJSON ? xhr.responseJSON.error : _("Unknown error");
-                    alert(_("Error linking account: ") + error_msg);
+        if (EnablePatronAccountLinking) {
+            function link_patron(borrowernumber, borrower) {
+                if (borrowernumber == patron_borrowernumber) {
+                    alert(_("Cannot link a patron to themselves."));
+                    return;
                 }
-            });
 
-            $("#patron_search_modal_linked").modal("hide");
+                $.ajax({
+                    url: "/api/v1/patrons/" + patron_borrowernumber + "/account_links",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ linked_patron_id: borrowernumber }),
+                    success: function (response) {
+                        // Reload the page to show the new linked account
+                        location.reload();
+                    },
+                    error: function (xhr) {
+                        var error_msg = xhr.responseJSON ? xhr.responseJSON.error : _("Unknown error");
+                        alert(_("Error linking account: ") + error_msg);
+                    },
+                });
+
+                $("#patron_search_modal_linked").modal("hide");
+            }
         }
-        [% END %]
     </script>
     [% Asset.js("js/checkouts.js") | $raw %]
 
