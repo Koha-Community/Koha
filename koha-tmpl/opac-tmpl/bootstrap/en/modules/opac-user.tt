@@ -1090,8 +1090,6 @@
             var overdrive_error = "[% overdrive_error.dquote | html %]";
             var overdrive_tab = [% overdrive_tab ? 1 : 0 | html %];
         [% END %]
-    </script>
-    <script nonce="[% Koha.CSPNonce | $raw %]">
         [% IF successful_biblionumbers && Koha.Preference('AutoDeleteFromCartWhenHoldPlaced').grep('opac').size %]
             [% FOREACH success IN successful_biblionumbers.split('\|') %]
                 delSingleRecord('[% success | html %]');
