@@ -3,6 +3,9 @@ import * as bookingApi from "@bookingApi";
 import { $__ } from "@koha-vue/i18n";
 import { addDays, addMonths, formatYMD } from "../../lib/booking/dates.js";
 import { idsEqual } from "../../utils/functions.js";
+import { patronToOption } from "../../utils/patron-options.js";
+
+const PATRON_OPTION_CONFIG = { invertName: true, displayCardnumber: true };
 
 const HOLIDAY_PREFETCH_THRESHOLD_DAYS = 60;
 const HOLIDAY_PREFETCH_MONTHS = 6;
@@ -17,47 +20,6 @@ const HOLIDAY_PREFETCH_MONTHS = 6;
 /** @typedef {{patron_category_id: Id|null, item_type_id: Id|null, library_id: string|null}} RulesContext */
 
 /**
- * Add booking-search display metadata to a patron API response.
- *
- * @param {Object|null|undefined} patron Raw patron API response.
- * @returns {PatronOption|null} Adapted patron option.
- */
-function transformPatronData(patron) {
-    if (!patron) return null;
-
-    let age = null;
-    if (patron.date_of_birth) {
-        const dateOfBirth = new Date(patron.date_of_birth);
-        if (!isNaN(dateOfBirth.getTime())) {
-            const today = new Date();
-            age = today.getFullYear() - dateOfBirth.getFullYear();
-            const monthDifference = today.getMonth() - dateOfBirth.getMonth();
-            if (
-                monthDifference < 0 ||
-                (monthDifference === 0 &&
-                    today.getDate() < dateOfBirth.getDate())
-            ) {
-                age--;
-            }
-        }
-    }
-
-    return {
-        ...patron,
-        label: [
-            patron.surname,
-            patron.firstname,
-            patron.cardnumber ? `(${patron.cardnumber})` : "",
-        ]
-            .filter(Boolean)
-            .join(" ")
-            .trim(),
-        _age: age,
-        _libraryName: patron.library?.name || null,
-    };
-}
-
-/**
  * Normalize a patron search response for the booking selector.
  *
  * @param {Array<Object>|{results?: Array<Object>}|null|undefined} data Patron search response.
@@ -65,7 +27,7 @@ function transformPatronData(patron) {
  */
 function transformPatronsData(data) {
     const patrons = Array.isArray(data) ? data : data?.results || [];
-    return patrons.map(transformPatronData);
+    return patrons.map(patron => patronToOption(patron, PATRON_OPTION_CONFIG));
 }
 
 /**
@@ -369,8 +331,9 @@ export function useDataSection({ status }) {
         const generation = beginRequest("bookingPatron");
         try {
             const result = await bookingApi.fetchPatron(patronId, options);
-            return transformPatronData(
-                Array.isArray(result) ? result[0] : result
+            return patronToOption(
+                Array.isArray(result) ? result[0] : result,
+                PATRON_OPTION_CONFIG
             );
         } catch (error) {
             if (!isCurrentRequest("bookingPatron", generation)) return null;
