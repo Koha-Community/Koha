@@ -233,7 +233,7 @@ subtest 'cancel() - UseRecalls integration' => sub {
 
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_preference( 'UseRecalls', 1 );
+    t::lib::Mocks::mock_preference( 'UseRecalls', 'opac' );
 
     my $librarian = $builder->build_object(
         {
