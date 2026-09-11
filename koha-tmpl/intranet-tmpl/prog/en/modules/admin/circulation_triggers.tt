@@ -30,11 +30,12 @@
         <!-- FIXME: this shouldn't be needed -->
         [% INCLUDE 'datatables.inc' %]
         [% INCLUDE 'js-date-format.inc' %]
+        <div id="letters-data" style="display:none" aria-hidden="true" data-letters="[% To.json(letters) | html %]"></div>
         <script nonce="[% Koha.CSPNonce | $raw %]">
-            const letters = [% To.json(letters) | $raw %];
+            const letters = JSON.parse(document.getElementById("letters-data").dataset.letters);
             const default_view = "[%- IF Koha.Preference('DefaultToLoggedInLibraryOverdueTriggers') -%][% Branches.GetLoggedInBranchcode | html %][%- ELSE -%]*[%- END -%]";
             const from_branch = "[% Koha.Preference('OverdueNoticeFrom') | html %]";
-            const logged_in_library_id = "[% Branches.GetLoggedInBranchcode | html %]";
+            const user_library_id = "[% logged_in_user.branchcode | html %]";
         </script>
         [% Asset.js("js/vue/dist/admin/circulation_triggers.js") | $raw %]
     [% END %]

@@ -25,9 +25,7 @@
                             canManageAnyLibrary
                                 ? libraries
                                 : libraries.filter(
-                                      lib =>
-                                          lib.library_id ===
-                                          logged_in_library_id
+                                      lib => lib.library_id === user_library_id
                                   )
                         "
                         :disabled="!isConfirming || !canManageAnyLibrary"
@@ -127,7 +125,7 @@ export default {
         editMode: { type: [String, Boolean], required: true },
         canManageAnyLibrary: { type: Boolean, required: true },
         libraries: { type: Array, required: true },
-        logged_in_library_id: { type: [String, null], default: null },
+        user_library_id: { type: [String, null], default: null },
         patronCategories: { type: Array, required: true },
         itemTypes: { type: Array, required: true },
     },

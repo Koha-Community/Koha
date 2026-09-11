@@ -1,8 +1,8 @@
 <template>
     <CirculationTriggersForm
         :submitAction="resetCircRules"
-        formTitle="Confirm circulation rule set reset"
-        buttonText="Confirm reset"
+        :formTitle="$__('Confirm circulation rule set reset')"
+        :buttonText="$__('Confirm reset')"
         :disabled="resetWouldLeaveRuleSetWithoutDelay"
     >
         <TriggersTable
@@ -196,98 +196,6 @@ form ol li {
 
 .page-section ul li {
     float: none;
-}
-
-.numeric-input-wrapper {
-    position: relative;
-    display: inline-block;
-    width: 30%;
-}
-
-.input-with-clear {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
-
-.numeric-input {
-    padding-right: 40px; /* Adjust to leave space for clear button */
-    padding-left: 0.25em;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    width: 100%;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    box-sizing: border-box;
-    transition: border-color 0.2s ease;
-}
-
-.clear-btn {
-    position: absolute;
-    right: 22px; /* Adjust positioning */
-    fill: var(--vs-controls-color);
-    background-color: transparent;
-    border: 0;
-    font-size: 1.2em;
-    color: #333;
-    cursor: pointer;
-    z-index: 2; /* Ensure it is above the input */
-}
-
-.button:active:hover,
-.clear-btn:active:hover {
-    background-color: #d4d4d4;
-    border-color: #8c8c8c;
-}
-
-/* Chevron buttons container */
-.chevron-buttons {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    right: 0px;
-    top: 0;
-    bottom: 0;
-    width: 16px;
-    padding: 0px 5px 0px 2px;
-    justify-content: center;
-    z-index: 2;
-}
-
-/* Chevron button styles */
-.increment-btn,
-.decrement-btn {
-    background-color: transparent;
-    border: 0px solid #ccc;
-    font-size: 10px;
-    padding: 0px;
-    cursor: pointer;
-    color: rgba(60, 60, 60, 0.5);
-    border-radius: 2px;
-}
-
-.increment-btn:hover,
-.decrement-btn:hover {
-    background-color: #ddd;
-}
-
-/* Hide the native increment/decrement buttons */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type="number"] {
-    -moz-appearance: textfield; /* For Firefox */
-}
-
-.numeric-input:focus,
-.numeric-input:hover {
-    border-color: #007bff; /* Match focus color of v-select */
-    outline: none;
 }
 
 .dialog.alert

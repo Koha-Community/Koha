@@ -25,11 +25,12 @@ import Help from "../../Help.vue";
 import Dialog from "../../Dialog.vue";
 import "vue-select/dist/vue-select.css";
 import { inject } from "vue";
+import { $__ } from "@koha-vue/i18n";
 
 export default {
     setup() {
         const circRulesStore = inject("circRulesStore");
-        circRulesStore.init(default_view, logged_in_library_id).catch(() => {});
+        circRulesStore.init(default_view, user_library_id).catch(() => {});
 
         // format letters for display as "name (notice code)" in drop downs.
         letters
@@ -40,7 +41,7 @@ export default {
             });
 
         letters.unshift({
-            name: "No letter",
+            name: $__("No letter"),
             code: "",
             branchcode: "",
             value: "",
@@ -64,20 +65,8 @@ export default {
     background-color: #daecfb !important;
 }
 
+/* overrides the 30% width set in css/vue.css */
 form .v-select {
-    display: inline-block;
-    background-color: white;
     width: 50%;
-}
-
-.v-select,
-input:not([type="submit"]):not([type="search"]):not([type="button"]):not(
-        [type="checkbox"]
-    ):not([type="radio"]),
-textarea {
-    border-color: rgba(60, 60, 60, 0.26);
-    border-width: 1px;
-    border-radius: 4px;
-    min-width: 30%;
 }
 </style>

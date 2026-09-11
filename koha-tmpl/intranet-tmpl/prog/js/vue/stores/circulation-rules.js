@@ -28,13 +28,13 @@ export const useCircRulesStore = defineStore("circRules", () => {
         libraries: [],
         patronCategories: [],
         userPermissions: null,
-        logged_in_library_id: null,
+        user_library_id: null,
         letters: [],
         ruleSuffixes: ["delay", "notice", "mtt", "restrict"],
         transportTypes: [
-            { code: "email", name: "Email" },
-            { code: "sms", name: "SMS" },
-            { code: "print", name: "Print" },
+            { code: "email", name: $__("Email") },
+            { code: "sms", name: $__("SMS") },
+            { code: "print", name: $__("Print") },
         ],
         // rule sets
         allDefaultLibraryRawRuleSets: [], // source of truth for default library
@@ -90,15 +90,15 @@ export const useCircRulesStore = defineStore("circRules", () => {
 
     const actions = {
         // controllers
-        async init(defaultLibraryId = "*", loggedInLibraryId = null) {
-            store.logged_in_library_id = loggedInLibraryId;
+        async init(defaultLibraryId = "*", userLibraryId = null) {
+            store.user_library_id = userLibraryId;
             await this.loadUserPermissions();
             await this.getItemTypes();
             await this.getLibraries();
             await this.getPatronCategories();
             // If user can only manage their own library, override the default view
-            if (!canManageAnyLibrary.value && store.logged_in_library_id) {
-                this.currentLibraryId = store.logged_in_library_id;
+            if (!canManageAnyLibrary.value && store.user_library_id) {
+                this.currentLibraryId = store.user_library_id;
             } else {
                 this.currentLibraryId = defaultLibraryId;
             }

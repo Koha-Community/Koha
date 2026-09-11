@@ -135,8 +135,10 @@
         </div>
         <div class="page-section" v-if="filtersInitialized">
             <legend>
-                Filter by
-                <span style="color: blue; font-weight: bold">context</span>
+                {{ $__("Filter by") }}
+                <span style="color: blue; font-weight: bold">{{
+                    $__("context")
+                }}</span>
             </legend>
             <p v-if="!canManageAnyLibrary" class="alert alert-info">
                 {{
@@ -167,7 +169,7 @@
                                         : libraries.filter(
                                               lib =>
                                                   lib.library_id ===
-                                                  logged_in_library_id
+                                                  user_library_id
                                           )
                                 "
                                 @update:modelValue="
@@ -175,7 +177,9 @@
                                 "
                                 :clearable="false"
                                 :disabled="!canManageAnyLibrary"
-                                placeholder="Default rules for all libraries"
+                                :placeholder="
+                                    $__('Default rules for all libraries')
+                                "
                             >
                                 <template #search="{ attributes, events }">
                                     <input
@@ -197,7 +201,7 @@
                                 @update:modelValue="
                                     filterRuleSetsbySearchParam()
                                 "
-                                placeholder="any"
+                                :placeholder="$__('any')"
                             >
                                 <template #search="{ attributes, events }">
                                     <input
@@ -219,7 +223,7 @@
                                 @update:modelValue="
                                     filterRuleSetsbySearchParam()
                                 "
-                                placeholder="any"
+                                :placeholder="$__('any')"
                             >
                                 <template #search="{ attributes, events }">
                                     <input
@@ -277,7 +281,7 @@
                         "
                         @click="changeTabContent"
                         :data-content="`Notice ${number}`"
-                        >{{ $__("Trigger") + " " + number }}
+                        >{{ $__x("Trigger {number}", { number }) }}
                     </a>
                 </li>
             </ul>
@@ -385,7 +389,7 @@ export default {
             storeInitialized,
             metaInitialized,
             canManageAnyLibrary,
-            logged_in_library_id,
+            user_library_id,
         } = storeToRefs(circRulesStore);
 
         return {
@@ -412,7 +416,7 @@ export default {
             metaInitialized,
             from_branch,
             canManageAnyLibrary,
-            logged_in_library_id,
+            user_library_id,
             scrollToElementById,
         };
     },

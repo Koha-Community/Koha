@@ -33,6 +33,7 @@ const router = createRouter({
     routes,
 });
 
+import "../../../../css/vue.css";
 import App from "../../components/Admin/CirculationTriggers/Main.vue";
 import i18n from "../../i18n";
 

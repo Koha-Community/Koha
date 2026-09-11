@@ -34,7 +34,7 @@
                     :editMode="editMode"
                     :canManageAnyLibrary="canManageAnyLibrary"
                     :libraries="libraries"
-                    :logged_in_library_id="logged_in_library_id"
+                    :user_library_id="user_library_id"
                     :patronCategories="patronCategories"
                     :itemTypes="itemTypes"
                 />
@@ -147,7 +147,7 @@ export default {
             lastEditedTriggerNumber,
             storeInitialized,
             canManageAnyLibrary,
-            logged_in_library_id,
+            user_library_id,
         } = storeToRefs(circRulesStore);
 
         return {
@@ -166,7 +166,7 @@ export default {
             lastEditedTriggerNumber,
             storeInitialized,
             canManageAnyLibrary,
-            logged_in_library_id,
+            user_library_id,
             compareByProperty,
             scrollToElementById,
         };
@@ -332,8 +332,9 @@ export default {
                         this.triggerNumber
                     )
                 ) {
-                    this.alertMessage =
-                        "Your changes could not be saved as this circulation trigger was updated elsewhere. Please see the updated trigger below.";
+                    this.alertMessage = this.$__(
+                        "Your changes could not be saved as this circulation trigger was updated elsewhere. Please see the updated trigger below."
+                    );
                     this.$router.push({
                         path: "/cgi-bin/koha/admin/circulation_triggers/edit",
                         query: {
@@ -380,8 +381,8 @@ export default {
             this.ruleSetInitialized = true;
         },
         setContext(query) {
-            if (!this.canManageAnyLibrary && this.logged_in_library_id) {
-                this.context.library_id = this.logged_in_library_id;
+            if (!this.canManageAnyLibrary && this.user_library_id) {
+                this.context.library_id = this.user_library_id;
             } else {
                 this.context.library_id = query.library_id ?? "*";
             }

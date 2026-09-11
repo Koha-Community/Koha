@@ -299,7 +299,7 @@ subtest 'list_rules() tests' => sub {
 };
 
 subtest 'set_rules() tests' => sub {
-    plan tests => 34;
+    plan tests => 40;
 
     $schema->storage->txn_begin;
 
@@ -358,6 +358,26 @@ subtest 'set_rules() tests' => sub {
                 borrowernumber => $restricted_patron->borrowernumber,
                 module_bit     => 3,
                 code           => 'manage_circ_rules',
+            }
+        }
+    );
+
+    # Triggers patron: can only edit circulation triggers, and only for their own library
+    my $triggers_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0, branchcode => $own_branch }
+        }
+    );
+    $triggers_patron->set_password( { password => $password, skip_validation => 1 } );
+    my $triggers_userid = $triggers_patron->userid;
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $triggers_patron->borrowernumber,
+                module_bit     => 3,
+                code           => 'manage_circ_triggers',
             }
         }
     );
@@ -472,6 +492,26 @@ subtest 'set_rules() tests' => sub {
     $restricted_rules->{context}->{library_id} = $own_branch;
     $t->put_ok( "//$restricted_userid:$password@/api/v1/circulation_rules" => json => $restricted_rules )
         ->status_is( 200, "Restricted user can set rules for their own library" );
+
+    # manage_circ_rules / manage_circ_triggers separation tests
+    note("Testing manage_circ_rules and manage_circ_triggers separation");
+    my $trigger_rules = {
+        context => {
+            library_id         => $own_branch,
+            patron_category_id => '*',
+            item_type_id       => '*',
+        },
+        overdue_1_delay => 5,
+    };
+
+    $t->put_ok( "//$restricted_userid:$password@/api/v1/circulation_rules" => json => $trigger_rules )
+        ->status_is( 403, "manage_circ_rules alone cannot set trigger rules" );
+
+    $t->put_ok( "//$triggers_userid:$password@/api/v1/circulation_rules" => json => $trigger_rules )
+        ->status_is( 200, "manage_circ_triggers can set trigger rules" );
+
+    $t->put_ok( "//$triggers_userid:$password@/api/v1/circulation_rules" => json => $restricted_rules )
+        ->status_is( 403, "manage_circ_triggers alone cannot set non-trigger rules" );
 
     $schema->storage->txn_rollback;
 };

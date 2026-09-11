@@ -121,7 +121,7 @@ sub list_rules {
                     {
                         path   => '/query/rules',
                         values => {
-                            uri   => '/api/v1/kinds',
+                            uri   => '/api/v1/circulation_rules/kinds',
                             field => 'rule_name'
                         }
                     }
