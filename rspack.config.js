@@ -6,7 +6,7 @@ const rspack = require("@rspack/core");
 // NOTE: Every output.path under koha-tmpl/ that ships must also be handled in
 // Makefile.PL: the 'NONE' entries in the target-directory map and the cp -r
 // lines in the compile step. A new dist dir added here without both changes is
-// silently omitted from packaged builds (see Bug 43401).
+// silently omitted from builds from source (see Bug 43401).
 
 const islandsExport = application => {
     const vueDir =
