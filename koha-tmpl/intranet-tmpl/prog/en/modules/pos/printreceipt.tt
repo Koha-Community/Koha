@@ -49,29 +49,30 @@
         <button id="close-window" class="btn btn-default close_window"> [% t("Close") | html %] </button>
     </div>
 [% END %]
-
 [% MACRO jsinclude BLOCK %]
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+    [% IF ( Koha.Preference('IntranetSlipPrinterJS') ) %]
+        [% Koha.Preference('IntranetSlipPrinterJS') | $raw %]
+    [% END %]
+    let autoprint = [% autoprint ? 1 : 0 | html %];
+</script>
+[% UNLESS Koha.Preference('IntranetSlipPrinterJS') %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
-        [% IF ( Koha.Preference('IntranetSlipPrinterJS') ) %]
-            [% Koha.Preference('IntranetSlipPrinterJS') | $raw %]
-        [% ELSE %]
-            function doPrint() {
-                window.print();
+        function doPrint() {
+            window.print();
+        }
+
+        window.onafterprint = () => {
+            window.close();
+        };
+
+        window.addEventListener("load", () => {
+            if (autoprint) {
+                doPrint();
             }
+        });
 
-            window.onafterprint = () => {
-                window.close();
-            };
-
-            window.addEventListener('load', () => {
-                if ( [% autoprint | html %] == 1 ) {
-                    doPrint();
-                }
-            });
-
-            document.getElementById('print-receipt')
-                .addEventListener('click', doPrint);
-        [% END %]
+        document.getElementById("print-receipt").addEventListener("click", doPrint);
     </script>
 [% END %]
 
