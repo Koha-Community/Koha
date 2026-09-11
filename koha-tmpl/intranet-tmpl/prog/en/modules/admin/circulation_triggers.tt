@@ -31,7 +31,7 @@
         [% INCLUDE 'datatables.inc' %]
         [% INCLUDE 'js-date-format.inc' %]
         <div id="letters-data" style="display:none" aria-hidden="true" data-letters="[% To.json(letters) | html %]"></div>
-        <script nonce="[% Koha.CSPNonce | $raw %]">
+        <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
             const letters = JSON.parse(document.getElementById("letters-data").dataset.letters);
             const default_view = "[%- IF Koha.Preference('DefaultToLoggedInLibraryOverdueTriggers') -%][% Branches.GetLoggedInBranchcode | html %][%- ELSE -%]*[%- END -%]";
             const from_branch = "[% Koha.Preference('OverdueNoticeFrom') | html %]";
