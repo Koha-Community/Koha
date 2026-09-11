@@ -1,6 +1,47 @@
 {
   "compilerOptions": {
-      "resolveJsonModule": true
+      "resolveJsonModule": true,
+      // Match the language level rspack/swc emit against; without
+      // this, tsc defaults to ES3/ES5 lib and rejects Map/Set/Promise.
+      "target": "ES2020",
+      "module": "ES2020",
+      "lib": ["ES2020", "DOM", "DOM.Iterable"],
+      "moduleResolution": "node",
+      // Lets JSDoc types in `.js` files (within `include`) flow into
+      // TS-side consumers such as `<script setup lang="ts">` SFCs.
+      "allowJs": true,
+      "skipLibCheck": true,
+      // tsc is type-check-only here; rspack/swc handle emission.
+      // Without this, `allowJs` + JS inputs trigger TS5055
+      // ("would overwrite input file") because the default output
+      // path is the input path.
+      "noEmit": true,
+      // Disable implicit inclusion of every `node_modules/@types/*`.
+      // We don't depend on any of them directly (libraries ship their
+      // own types); leaving this unset trips TS2688 on deprecated
+      // stub packages like `@types/minimatch`.
+      "types": [],
+      // Mirror new aliases under `resolve.alias` in `rspack.config.js`.
+      "paths": {
+          "@fetch/*": ["./koha-tmpl/intranet-tmpl/prog/js/fetch/*"],
+          "@koha-vue/*": ["./koha-tmpl/intranet-tmpl/prog/js/vue/*"],
+          "@bookingApi": [
+              "./koha-tmpl/intranet-tmpl/prog/js/vue/lib/booking/adapters/api/staff-interface.js"
+          ]
+      }
   },
+  // Scope `include` narrowly, one entry per feature that opts into
+  // TS. Avoid `vue/**/*`: it pulls the rest of the JS+JSDoc Vue tree
+  // into TS analysis and floods the editor with diagnostics.
+  "include": [
+      // Ambient shims (CSS, vue-select, bootstrap, `*.vue`).
+      "koha-tmpl/intranet-tmpl/prog/js/vue/ambient.d.ts",
+      "koha-tmpl/intranet-tmpl/prog/js/vue/vue-shims.d.ts",
+      // Bug 41129 — Booking modal. TS SFCs + JSDoc-typed JS store
+      // sections; both halves are included so JSDoc types resolve.
+      "koha-tmpl/intranet-tmpl/prog/js/vue/components/Bookings/**/*",
+      "koha-tmpl/intranet-tmpl/prog/js/vue/lib/booking/**/*",
+      "koha-tmpl/intranet-tmpl/prog/js/vue/stores/bookings/**/*"
+  ],
   "exclude": ["./t/cypress"]
 }

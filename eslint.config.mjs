@@ -20,6 +20,14 @@ export default [
     ...compat.extends("eslint:recommended", "eslint-config-prettier"),
     ...ts.configs.recommended,
     ...pluginVue.configs["flat/recommended"],
+    {
+        files: ["**/*.vue"],
+        languageOptions: {
+            parserOptions: {
+                parser: ts.parser,
+            },
+        },
+    },
     eslintConfigPrettier,
     {
         plugins: {
