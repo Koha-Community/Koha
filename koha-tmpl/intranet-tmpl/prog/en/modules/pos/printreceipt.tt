@@ -50,30 +50,31 @@
     </div>
 [% END %]
 [% MACRO jsinclude BLOCK %]
-<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
-    [% IF ( Koha.Preference('IntranetSlipPrinterJS') ) %]
-        [% Koha.Preference('IntranetSlipPrinterJS') | $raw %]
-    [% END %]
-    let autoprint = [% autoprint ? 1 : 0 | html %];
-</script>
-[% UNLESS Koha.Preference('IntranetSlipPrinterJS') %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
-        function doPrint() {
-            window.print();
-        }
-
-        window.onafterprint = () => {
-            window.close();
-        };
-
-        window.addEventListener("load", () => {
-            if (autoprint) {
-                doPrint();
-            }
-        });
-
-        document.getElementById("print-receipt").addEventListener("click", doPrint);
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+        [% IF ( Koha.Preference('IntranetSlipPrinterJS') ) %]
+            [% Koha.Preference('IntranetSlipPrinterJS') | $raw %]
+        [% END %]
+        let autoprint = [% autoprint ? 1 : 0 | html %];
     </script>
+    [% UNLESS Koha.Preference('IntranetSlipPrinterJS') %]
+        <script nonce="[% Koha.CSPNonce | $raw %]">
+            function doPrint() {
+                window.print();
+            }
+
+            window.onafterprint = () => {
+                window.close();
+            };
+
+            window.addEventListener("load", () => {
+                if (autoprint) {
+                    doPrint();
+                }
+            });
+
+            document.getElementById("print-receipt").addEventListener("click", doPrint);
+        </script>
+    [% END %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
