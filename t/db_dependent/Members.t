@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 53;
+use Test::More tests => 54;
 use Test::MockModule;
 use Test::Exception;
 
@@ -541,6 +541,49 @@ subtest 'Koha::Patron->store (invalid categorycode) tests' => sub {
     throws_ok { Koha::Patron->new($patron_data)->store; }
     'Koha::Exceptions::Object::FKConstraint',
         'AddMember raises an exception on invalid categorycode';
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'GetBorrowersToExpunge: exclude_nonzero_balance' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $category = $builder->build_object(
+        {
+            class => 'Koha::Patron::Categories',
+            value => { category_type => 'A' },
+        }
+    );
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                categorycode => $category->categorycode,
+                flags        => 0,
+                protected    => 0,
+            },
+        }
+    );
+
+    my $params = {
+        category_code           => $category->categorycode,
+        exclude_nonzero_balance => 1,
+    };
+
+    is(
+        scalar @{ GetBorrowersToExpunge($params) }, 1,
+        'Patron with no accountlines is added to the list to be deleted '
+    );
+
+    #add a charge
+    my $debit = $patron->account->add_debit( { amount => 10, type => 'MANUAL', interface => 'test' } );
+
+    is(
+        scalar @{ GetBorrowersToExpunge($params) }, 0,
+        'Patron with nonzero balance is not added to list to be deleted'
+    );
 
     $schema->storage->txn_rollback;
 };
