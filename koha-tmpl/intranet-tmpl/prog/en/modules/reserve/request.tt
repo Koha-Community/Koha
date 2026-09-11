@@ -1569,9 +1569,6 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'select2.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
-        hold_table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holds', 'patron_holds_table', 'json' ) | $raw %];
-    </script>
     [% Asset.js("js/holds.js") | $raw %]
     [% Asset.js("js/hold-group.js") | $raw %]
     [% Asset.js("js/basket.js") | $raw %]
