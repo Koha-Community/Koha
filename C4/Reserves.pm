@@ -1257,7 +1257,7 @@ sub ModReserve {
                     {
                         patron         => $patron,
                         biblio         => $biblio,
-                        branchcode     => $branchcode,
+                        branchcode     => $hold->branchcode,
                         expirationdate => $date,
                         interface      => 'intranet',
                         item           => $hold->item,
@@ -1271,7 +1271,7 @@ sub ModReserve {
                     {
                         patron         => $patron,
                         biblio         => $biblio,
-                        branchcode     => $branchcode,
+                        branchcode     => $hold->branchcode,
                         expirationdate => $date,
                         interface      => 'intranet',
                     }
