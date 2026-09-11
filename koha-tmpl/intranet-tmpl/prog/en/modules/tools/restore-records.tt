@@ -171,7 +171,7 @@
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var libraries_where_can_edit = [% libraries_where_can_edit_json | $raw %];
     </script>
     [% Asset.js("js/pages/restore_records.js") | $raw %]
