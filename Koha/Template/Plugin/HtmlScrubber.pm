@@ -16,6 +16,7 @@ package Koha::Template::Plugin::HtmlScrubber;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use Scalar::Util qw( weaken );
 use base 'Template::Plugin::Filter';
 
 use C4::Scrubber;
@@ -26,6 +27,11 @@ sub init {
     $self->{_DYNAMIC} = 1;
     $self->install_filter($name);
     $self->{cached_filters} = {};
+
+    # install_filter stores a closure over this object in the context's filter
+    # provider and this object holds the context, so without breaking that
+    # cycle the whole template context survives every request that uses the filter
+    weaken $self->{_CONTEXT};
     return $self;
 }
 
