@@ -44,6 +44,9 @@ use Koha::Patron::Categories;
 use Koha::Patrons;
 use Koha::List::Patron qw( GetPatronLists );
 
+use Try::Tiny qw( catch try );
+use Koha::BackgroundJob::BatchDeletePatron;
+
 my $cgi = CGI->new;
 my $op  = $cgi->param('op') // q{};
 
@@ -77,6 +80,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $branch = $params->{branch} || '*';
 $template->param( current_branch => $branch );
 $template->param( OnlyMine       => C4::Context->only_my_library );
+my @messages;
 
 if ( $step == 2 ) {
 
@@ -130,17 +134,36 @@ if ( $step == 2 ) {
 
         $totalDel = scalar(@$patrons_to_delete);
         $radio    = $params->{'radio'};
-        for ( my $i = 0 ; $i < $totalDel ; $i++ ) {
-            $radio eq 'testrun' && last;
-            my $borrowernumber = $patrons_to_delete->[$i]->{'borrowernumber'};
-            my $patron         = Koha::Patrons->find($borrowernumber);
-            $radio eq 'trash' && $patron->move_to_deleted;
-            $patron->delete;
+
+        if ( $radio eq 'testrun' ) {
+
+            # Nothing is deleted, so there is no job to enqueue
+            $template->param(
+                do_delete => '1',
+                TotalDel  => $totalDel,
+            );
+        } else {
+            try {
+                my $job_id = Koha::BackgroundJob::BatchDeletePatron->new->enqueue(
+                    {
+                        record_ids      => [ map { $_->{borrowernumber} } @$patrons_to_delete ],
+                        move_to_deleted => ( $radio eq 'trash' ) ? 1 : 0,
+                    }
+                );
+
+                $template->param(
+                    do_delete => '1',
+                    TotalDel  => $totalDel,
+                    job_id    => $job_id,
+                );
+            } catch {
+                push @messages, {
+                    type  => 'error',
+                    code  => 'cannot_enqueue_job',
+                    error => "$_",
+                };
+            };
         }
-        $template->param(
-            do_delete => '1',
-            TotalDel  => $totalDel
-        );
     }
 
     # Anonymising all members
@@ -179,6 +202,7 @@ $template->param(
     last_issue_date        => $last_issue_date,
     borrower_categorycodes => $patron_categories,
     borrower_categorycode  => $borrower_categorycode,
+    messages               => \@messages,
 );
 
 #writing the template

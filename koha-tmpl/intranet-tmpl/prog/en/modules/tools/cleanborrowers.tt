@@ -51,6 +51,7 @@
         [% END %]
 
         [% IF step == 3 %]
+
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Finished</span>
             [% END %]
@@ -237,17 +238,24 @@
 
     [% IF step == 3 %]
         <!-- Step 3 START -->
-
         <div id="step3">
+            [% FOR m IN messages %]
+                <div class="alert alert-warning"> [% m.code | html %]1 </div>
+            [% END %]
             [% IF ( testrun ) %]
                 <h4>[% TotalDel | html %] patrons would have been removed (if it wasn't a test run)</h4>
                 <h4>No patron records have been actually removed</h4>
             [% ELSE %]
                 [% IF ( do_delete ) %]
-                    [% IF ( trash ) %]
-                        <h4>[% TotalDel | html %] patrons have been successfully moved to trash</h4>
-                    [% ELSE %]
-                        <h4>[% TotalDel | html %] patrons have been successfully deleted</h4>
+                    [% IF job_id %]
+                        [% IF ( trash ) %]
+                            <h4>[% TotalDel | html %] patrons have been scheduled to be moved to trash</h4>
+                        [% ELSE %]
+                            <h4>[% TotalDel | html %] patrons have been scheduled for deletion</h4>
+                        [% END %]
+                        <p>
+                            <a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&amp;id=[% job_id | uri %]">Track the progress of this job</a>
+                        </p>
                     [% END %]
                 [% ELSE %]
                     <h4>No patron records have been removed</h4>
@@ -262,7 +270,6 @@
         <!-- Step 3 END -->
     [% END %]
 [% END %]
-
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% Asset.js("js/throttledButton.js") | $raw %]
