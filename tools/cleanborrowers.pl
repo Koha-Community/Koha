@@ -95,7 +95,6 @@ if ( $step == 2 ) {
             )
         );
     }
-    _skip_borrowers_with_nonzero_balance($patrons_to_delete);
 
     my $patrons_to_anonymize =
           $checkboxes{issue}
@@ -128,7 +127,6 @@ if ( $step == 2 ) {
                 $branch
             )
         );
-        _skip_borrowers_with_nonzero_balance($patrons_to_delete);
 
         $totalDel = scalar(@$patrons_to_delete);
         $radio    = $params->{'radio'};
@@ -186,16 +184,6 @@ $template->param(
 #writing the template
 output_html_with_http_headers $cgi, $cookie, $template->output;
 
-sub _skip_borrowers_with_nonzero_balance {
-    my $borrowers = shift;
-    my $balance;
-    @$borrowers = map {
-        my $patron  = Koha::Patrons->find( $_->{borrowernumber} );
-        my $balance = $patron->account->balance;
-        ( defined $balance && $balance != 0 ) ? () : ($_);
-    } @$borrowers;
-}
-
 sub _get_selection_params {
     my (
         $not_borrowed_since,    $borrower_dateexpiry, $borrower_lastseen,
@@ -203,11 +191,12 @@ sub _get_selection_params {
     ) = @_;
 
     my $params = {};
-    $params->{not_borrowed_since} = $not_borrowed_since;
-    $params->{expired_before}     = $borrower_dateexpiry;
-    $params->{last_seen}          = $borrower_lastseen;
-    $params->{category_code}      = $borrower_categorycode if $borrower_categorycode;
-    $params->{patron_list_id}     = $patron_list_id        if $patron_list_id;
+    $params->{not_borrowed_since}      = $not_borrowed_since;
+    $params->{expired_before}          = $borrower_dateexpiry;
+    $params->{last_seen}               = $borrower_lastseen;
+    $params->{category_code}           = $borrower_categorycode if $borrower_categorycode;
+    $params->{patron_list_id}          = $patron_list_id        if $patron_list_id;
+    $params->{exclude_nonzero_balance} = 1;
 
     if ( defined $branch and $branch ne '*' ) {
         $params->{branchcode} = $branch;
