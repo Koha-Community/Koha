@@ -232,6 +232,7 @@ sub GetBorrowersToExpunge {
         );
     my $filterpatronlist          = $params->{'patron_list_id'};
     my $without_restriction_types = $params->{'without_restriction_types'};
+    my $exclude_nonzero_balance   = $params->{'exclude_nonzero_balance'};
 
     my $dbh   = C4::Context->dbh;
     my $query = q|
@@ -303,6 +304,17 @@ sub GetBorrowersToExpunge {
                     AND borrower_debarments.type IN (|
             . join( ',', ('?') x @$without_restriction_types ) . "))";
         push @query_params, @$without_restriction_types;
+    }
+
+    if ($exclude_nonzero_balance) {
+        $query .= q|
+            AND NOT EXISTS (
+                SELECT 1
+                FROM accountlines
+                WHERE accountlines.borrowernumber = xxx.borrowernumber
+                GROUP BY accountlines.borrowernumber
+                HAVING SUM(accountlines.amountoutstanding) <> 0
+            )|;
     }
 
     if ( my $anonymous_patron = C4::Context->preference("AnonymousPatron") ) {
