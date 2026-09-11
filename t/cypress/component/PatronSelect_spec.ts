@@ -100,4 +100,82 @@ describe("PatronSelect", () => {
 
         cy.get(".vs__search").should("have.attr", "aria-required", "true");
     });
+
+    it("displays an Expired badge for an expired patron", () => {
+        cy.mount(PatronSelect, {
+            props: {
+                modelValue: null,
+                options: [{ label: "Jane Doe", patron_id: 1, _expired: true }],
+                label: "Patron",
+            },
+        });
+
+        cy.get(".vs__search").click();
+        cy.contains(".vs__dropdown-option", "Jane Doe").within(() => {
+            cy.contains(".patron-expired", "Expired").should("exist");
+        });
+    });
+
+    it("displays a Restricted badge for a restricted patron", () => {
+        cy.mount(PatronSelect, {
+            props: {
+                modelValue: null,
+                options: [
+                    { label: "Jane Doe", patron_id: 1, _restricted: true },
+                ],
+                label: "Patron",
+            },
+        });
+
+        cy.get(".vs__search").click();
+        cy.contains(".vs__dropdown-option", "Jane Doe").within(() => {
+            cy.contains(".patron-restricted", "Restricted").should("exist");
+        });
+    });
+
+    it("indicates when a patron belongs to the current library", () => {
+        cy.mount(PatronSelect, {
+            props: {
+                modelValue: null,
+                options: [
+                    {
+                        label: "Jane Doe",
+                        patron_id: 1,
+                        _isCurrentLibrary: true,
+                    },
+                ],
+                label: "Patron",
+            },
+        });
+
+        cy.get(".vs__search").click();
+        cy.contains(".vs__dropdown-option", "Jane Doe").within(() => {
+            cy.get(".patron-current-library").should("exist");
+        });
+    });
+
+    it("displays a city/country summary alongside matching options", () => {
+        cy.mount(PatronSelect, {
+            props: {
+                modelValue: null,
+                options: [
+                    {
+                        label: "Jane Doe",
+                        patron_id: 1,
+                        _city: "Springfield",
+                        _country: "USA",
+                    },
+                ],
+                label: "Patron",
+            },
+        });
+
+        cy.get(".vs__search").click();
+        cy.contains(".vs__dropdown-option", "Jane Doe").within(() => {
+            cy.get(".patron-address").should(
+                "contain.text",
+                "Springfield, USA"
+            );
+        });
+    });
 });

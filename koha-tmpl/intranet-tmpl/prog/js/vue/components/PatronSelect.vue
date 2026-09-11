@@ -28,7 +28,7 @@
                 <slot name="option" v-bind="option">
                     <span>{{ option.label }}</span>
                     <small
-                        v-if="option._age != null || option._libraryName"
+                        v-if="hasOptionMeta(option)"
                         class="patron-option-meta"
                     >
                         <span v-if="option._age != null" class="age_years">
@@ -36,6 +36,30 @@
                         </span>
                         <span v-if="option._libraryName" class="ac-library">
                             {{ option._libraryName }}
+                        </span>
+                        <span
+                            v-if="option._city || option._country"
+                            class="patron-address"
+                        >
+                            {{ formatAddress(option) }}
+                        </span>
+                        <span
+                            v-if="option._isCurrentLibrary"
+                            class="patron-current-library badge"
+                        >
+                            {{ $__("Current library") }}
+                        </span>
+                        <span
+                            v-if="option._expired"
+                            class="patron-expired badge text-bg-warning"
+                        >
+                            {{ $__("Expired") }}
+                        </span>
+                        <span
+                            v-if="option._restricted"
+                            class="patron-restricted badge text-bg-danger"
+                        >
+                            {{ $__("Restricted") }}
                         </span>
                     </small>
                 </slot>
@@ -64,6 +88,11 @@ type PatronSelectOption = {
     label: string;
     _age?: number | null;
     _libraryName?: string | null;
+    _city?: string | null;
+    _country?: string | null;
+    _expired?: boolean;
+    _restricted?: boolean;
+    _isCurrentLibrary?: boolean;
     [key: string]: unknown;
 };
 
@@ -109,6 +138,22 @@ function formatAge(age: number): string {
     return $__nx("{count} year", "{count} years", age, { count: age });
 }
 
+function formatAddress(option: PatronSelectOption): string {
+    return [option._city, option._country].filter(Boolean).join(", ");
+}
+
+function hasOptionMeta(option: PatronSelectOption): boolean {
+    return !!(
+        option._age != null ||
+        option._libraryName ||
+        option._city ||
+        option._country ||
+        option._isCurrentLibrary ||
+        option._expired ||
+        option._restricted
+    );
+}
+
 const onSearch = (search: string): void => {
     if (!search || search.length < props.minSearchLength) {
         hasSearched.value = false;
@@ -139,5 +184,15 @@ const debouncedSearch = debounce(onSearch, props.debounceMs);
     padding: 0.125rem 0.5rem;
     border-radius: 0.25rem;
     background-color: hsl(210deg 15% 92%);
+}
+
+.patron-option-meta .patron-address {
+    margin-left: 0.25rem;
+}
+
+.patron-option-meta .patron-current-library {
+    margin-left: 0.25rem;
+    background-color: hsl(210deg 15% 92%);
+    color: inherit;
 }
 </style>
