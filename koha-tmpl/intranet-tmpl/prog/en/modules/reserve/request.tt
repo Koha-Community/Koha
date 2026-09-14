@@ -1391,7 +1391,7 @@
                             </ul>
                         </div>
                     [% END %]
-                    [% IF Koha.Preference('UseRecalls').match('staff') %]
+                    [% IF Koha.Preference('UseRecalls').match('staff') && CAN_user_recalls %]
                         <div class="btn-group">
                             <button class="btn convert_selected_holds" data-bulk="true"></button>
                         </div>
@@ -1605,7 +1605,6 @@
             return e;
         });
         var CAN_user_reserveforothers_modify_holds_priority = [%CAN_user_reserveforothers_modify_holds_priority ? 1 : 0 | html %];
-        var CAN_user_recalls = [%CAN_user_recalls ? 1 : 0 | html %];
         var borrowernumber = "[% patron.borrowernumber | $raw %]";
         var patron_homebranch = "[% To.json( Branches.GetName( patron.branchcode ) ) | $raw %]";
         var override_items = {[% FOREACH biblio_info IN biblioloop %][% FOREACH itemloo IN biblio_info.itemloop %][% IF ( itemloo.override ) %]

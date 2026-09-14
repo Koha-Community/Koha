@@ -1983,11 +1983,9 @@ async function load_patron_holds_table(biblio_id, split_data) {
             $("#convert_hold_alert").html(
                 MSG_CONVERT_ALERT.format(selectedCount, selectedCount)
             );
-            if (CAN_user_recalls) {
-                $(".convert_selected_holds").html(
-                    MSG_RECALL_SELECTED.format(selectedCount)
-                );
-            }
+            $(".convert_selected_holds").html(
+                MSG_RECALL_SELECTED.format(selectedCount)
+            );
             if (selectedCount > 0) {
                 $("#cancel_hold_alert").show();
                 $("#convert_hold_alert").show();
