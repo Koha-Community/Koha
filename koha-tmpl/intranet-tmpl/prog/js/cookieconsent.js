@@ -11,7 +11,8 @@
 
     // The consent bar may not be in the DOM if it is not being used
     const consentBar = $("#cookieConsentBar");
-    if (!consentBar) {
+    const cookieConsentModalEl = document.getElementById("cookieConsentModal");
+    if (!consentBar || !cookieConsentModalEl) {
         return;
     }
 
@@ -34,7 +35,7 @@
 
     // When the modal is opened, populate our state based on currently
     // selected values
-    const cookieConsentModalEl = document.getElementById("cookieConsentModal");
+
     cookieConsentModalEl.addEventListener("shown.bs.modal", () => {
         initialiseSelected();
     });
