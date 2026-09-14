@@ -1,3 +1,5 @@
+/* global __ */
+
 function _ifDocumentAvailable(callback) {
     if (typeof document !== "undefined" && document.getElementById) {
         callback();
@@ -118,7 +120,7 @@ class HttpClient {
                 }
                 return response.json().catch(() => {
                     const err = new Error(
-                        "Invalid response from server: could not parse JSON"
+                        __("Invalid response from server: could not parse JSON")
                     );
                     err.status = response.status;
                     throw err;
