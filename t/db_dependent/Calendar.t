@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Time::Fake;
 
 use t::lib::Mocks;
@@ -26,6 +26,7 @@ use t::lib::TestBuilder;
 
 use DateTime;
 use DateTime::Duration;
+use C4::Calendar;
 use Koha::Caches;
 use Koha::Library::Calendar;
 use Koha::Database;
@@ -791,6 +792,61 @@ subtest 'get_push_amt' => sub {
             $closure->weekday($dow)->store;
         }
     };
+};
+
+subtest 'insert_single_holiday/insert_exception_holiday update the in-memory cache' => sub {
+
+    # Migrated from t/db_dependent/Holidays.t (C4::Calendar in-memory cache sync)
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $calendar   = C4::Calendar->new( branchcode => $branchcode );
+
+    my $single_day = dt_from_string()->add( days => 10 );
+    $calendar->insert_single_holiday(
+        day         => $single_day->day,
+        month       => $single_day->month,
+        year        => $single_day->year,
+        title       => 'Single',
+        description => '',
+    );
+    is(
+        $calendar->isHoliday( $single_day->day, $single_day->month, $single_day->year ), 1,
+        'isHoliday sees a single holiday just inserted on the same C4::Calendar object'
+    );
+
+    # Close every weekday so exception_day is a holiday until the exception is added.
+    foreach my $weekday ( 0 .. 6 ) {
+        $calendar->insert_week_day_holiday( weekday => $weekday, title => '', description => '' );
+    }
+
+    # insert_exception_holiday called with 'date' rather than day/month/year,
+    # exercising the date-string derivation path.
+    my $exception_day = dt_from_string()->add( days => 20 );
+    $calendar->insert_exception_holiday(
+        date        => $exception_day->ymd,
+        title       => 'Exception',
+        description => '',
+    );
+    is(
+        $calendar->isHoliday( $exception_day->day, $exception_day->month, $exception_day->year ), 0,
+        'isHoliday sees an exception holiday just inserted on the same C4::Calendar object, overriding the weekday closure'
+    );
+
+    # A second, freshly instantiated C4::Calendar object should agree.
+    my $reloaded = C4::Calendar->new( branchcode => $branchcode );
+    is(
+        $reloaded->isHoliday( $single_day->day, $single_day->month, $single_day->year ), 1,
+        'A freshly instantiated C4::Calendar also sees the single holiday'
+    );
+    is(
+        $reloaded->isHoliday( $exception_day->day, $exception_day->month, $exception_day->year ), 0,
+        'A freshly instantiated C4::Calendar also sees the exception holiday'
+    );
+
+    $schema->storage->txn_rollback;
 };
 
 $schema->storage->txn_rollback();
