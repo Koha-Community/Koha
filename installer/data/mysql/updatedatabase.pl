@@ -17811,7 +17811,6 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = '16.12.00.032';
 if ( CheckVersion($DBversion) ) {
-    require Koha::Library::Calendar;
 
     $dbh->do(
         q{
@@ -17835,6 +17834,77 @@ if ( CheckVersion($DBversion) ) {
     |
     );
     my $max_pickup_delay = C4::Context->preference("ReservesMaxPickUpDelay");
+
+    # Self-contained holiday lookup (avoid depending on Koha::* calendar
+    # classes, which have been renamed/removed in later versions). Reads the
+    # legacy repeatable_holidays / special_holidays tables that exist at this
+    # point in the upgrade path.
+    my %holiday_cache;
+    my $is_closed = sub {
+        my ( $branchcode, $dt ) = @_;
+        my $cache = $holiday_cache{$branchcode} ||= do {
+            my $weekly = $dbh->selectcol_arrayref(
+                q|SELECT weekday FROM repeatable_holidays WHERE branchcode = ? AND weekday IS NOT NULL|,
+                {}, $branchcode
+            );
+            my $day_month = $dbh->selectall_arrayref(
+                q|SELECT day, month FROM repeatable_holidays WHERE branchcode = ? AND weekday IS NULL|,
+                { Slice => {} }, $branchcode
+            );
+            my $singles = $dbh->selectall_arrayref(
+                q|SELECT day, month, year, isexception FROM special_holidays WHERE branchcode = ?|,
+                { Slice => {} }, $branchcode
+            );
+            my %single_closed;
+            my %exceptions;
+            for my $s (@$singles) {
+                my $key = sprintf( '%04d-%02d-%02d', $s->{year}, $s->{month}, $s->{day} );
+                if   ( $s->{isexception} ) { $exceptions{$key}    = 1; }
+                else                       { $single_closed{$key} = 1; }
+            }
+            {
+                weekly        => { map { $_                                             => 1 } @$weekly },
+                day_month     => { map { sprintf( '%02d-%02d', $_->{month}, $_->{day} ) => 1 } @$day_month },
+                single_closed => \%single_closed,
+                exceptions    => \%exceptions,
+            };
+        };
+
+        my $ymd = $dt->ymd;
+
+        # An exception (open override) always makes the day open
+        return 0 if $cache->{exceptions}{$ymd};
+
+        # DateTime day_of_week: 1=Monday..7=Sunday; legacy weekday: 0=Sunday..6=Saturday
+        my $weekday = $dt->day_of_week % 7;
+        return 1 if $cache->{weekly}{$weekday};
+        return 1 if $cache->{day_month}{ sprintf( '%02d-%02d', $dt->month, $dt->day ) };
+        return 1 if $cache->{single_closed}{$ymd};
+        return 0;
+    };
+
+    # Self-contained equivalent of Koha::Library::Calendar->get_push_amt: the
+    # number of days to jump when skipping a closed day. Under the 'Dayweek'
+    # useDaysMode we jump a whole week (7) so we land on the same weekday,
+    # unless that weekday is itself permanently closed (in which case a 7-day
+    # jump would land on another closed day), where we fall back to 1. Any
+    # other useDaysMode advances 1 day at a time. This keeps the upgrade in
+    # step with the live calendar logic without depending on Koha::* classes.
+    my $days_mode = C4::Context->preference('useDaysMode') // '';
+    my $push_amt  = sub {
+        my ( $branchcode, $dt ) = @_;
+
+        # Ensure the branch cache is populated.
+        $is_closed->( $branchcode, $dt ) unless $holiday_cache{$branchcode};
+
+        # DateTime day_of_week: 1=Monday..7=Sunday; legacy weekday: 0=Sunday..6=Saturday
+        my $weekday = $dt->day_of_week % 7;
+
+        return ( $days_mode eq 'Dayweek' && !$holiday_cache{$branchcode}{weekly}{$weekday} )
+            ? 7
+            : 1;
+    };
+
     for my $hold (@$waiting_holds) {
 
         my $requested_expiration;
@@ -17844,11 +17914,21 @@ if ( CheckVersion($DBversion) ) {
 
         my $expirationdate = dt_from_string( $hold->{waitingdate} );
         if ( C4::Context->preference("ExcludeHolidaysFromMaxPickUpDelay") ) {
-            my $calendar = Koha::Library::Calendar->new(
-                branchcode => $hold->{branchcode},
-                days_mode  => C4::Context->preference('useDaysMode')
-            );
-            $expirationdate = $calendar->days_forward( $expirationdate, $max_pickup_delay );
+
+            # Advance $max_pickup_delay *open* days, skipping closed days.
+            # Bound the closure-skipping search (matching the live
+            # Koha::Library::Calendar OPEN_DAYS_SEARCH_MAX_ITERATIONS guard) so
+            # a library that is closed every day cannot loop forever.
+            my $max_iterations = 5000;
+            my $remaining      = $max_pickup_delay;
+            while ( $remaining-- > 0 ) {
+                $expirationdate->add( days => 1 );
+                my $i = 0;
+                while ( $is_closed->( $hold->{branchcode}, $expirationdate ) && $i < $max_iterations ) {
+                    $expirationdate->add( days => $push_amt->( $hold->{branchcode}, $expirationdate ) );
+                    $i++;
+                }
+            }
         } else {
             $expirationdate->add( days => $max_pickup_delay );
         }
