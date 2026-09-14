@@ -424,7 +424,7 @@
                                                                     [% IF ( canrenew ) %]
                                                                         <label>
                                                                             <span class="visually-hidden">Select item to renew</span>
-                                                                        <input type="checkbox" name="issue" value="[% ISSUE.issue_id | uri %]" />
+                                                                            <input type="checkbox" name="issue" value="[% ISSUE.issue_id | uri %]" />
                                                                         </label>
                                                                         <a class="submit-form-link" href="#" data-method="post" data-action="/cgi-bin/koha/opac-renew.pl" data-issue="[% ISSUE.issue_id | html %]" data-op="cud-renew">Renew</a>
                                                                     [% END %]

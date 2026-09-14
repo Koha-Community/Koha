@@ -7855,7 +7855,7 @@ subtest 'Bug 9762: AddIssue override JSON logging' => sub {
         { order_by => { -desc => 'timestamp' } }
     );
     is( $logs->count, 1, 'One log entry created for normal checkout' );
-    my $log = $logs->next;
+    my $log      = $logs->next;
     my $log_data = eval { from_json( $log->info ) };
     ok( !$@, 'Normal checkout log info is valid JSON' );
     is( $log_data->{itemnumber}, $item->itemnumber, 'JSON contains correct itemnumber' );

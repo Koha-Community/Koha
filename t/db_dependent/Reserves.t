@@ -2124,7 +2124,7 @@ subtest 'Bug 40866: AddReserve override JSON logging' => sub {
         { order_by => { -desc => 'timestamp' } }
     );
     is( $logs->count, 1, 'One log entry created for normal hold' );
-    my $log = $logs->next;
+    my $log      = $logs->next;
     my $log_data = eval { from_json( $log->info ) };
     ok( !$@, 'Normal hold log info is valid JSON' );
     is( $log_data->{hold}, $hold_id, 'JSON contains correct hold ID' );

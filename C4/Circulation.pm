@@ -1951,15 +1951,15 @@ sub AddIssue {
             # Log the checkout
             if ( C4::Context->preference('IssueLog') ) {
                 my $info = to_json(
-                        {
-                            issue         => $issue->issue_id,
-                            branchcode    => $issue->branchcode,
-                            itemnumber    => $item_object->itemnumber,
+                    {
+                        issue         => $issue->issue_id,
+                        branchcode    => $issue->branchcode,
+                        itemnumber    => $item_object->itemnumber,
                         confirmations => $confirmations || [],
                         forced        => $forced        || []
-                        },
-                        { pretty => 1, canonical => 1 }
-                    );
+                    },
+                    { pretty => 1, canonical => 1 }
+                );
                 logaction(
                     "CIRCULATION", "ISSUE",
                     $patron->borrowernumber,
