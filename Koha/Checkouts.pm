@@ -113,7 +113,7 @@ sub automatic_checkin {
     }
 }
 
-=head3 type
+=head3 _type
 
 =cut
 
