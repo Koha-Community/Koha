@@ -66,11 +66,13 @@ class HttpClient {
         headers = {},
         options = {},
         return_response = false,
+        // No page-level submitting indicator outside Vue yet; kept for
+        // parity with vue/fetch/http-client.js.
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         mark_submitting = false,
         config = {}
     ) {
         let res, error;
-        void mark_submitting;
         //if (mark_submitting) submitting();
         await fetch(this._baseURL + endpoint, {
             ...options,
