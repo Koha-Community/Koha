@@ -174,7 +174,7 @@ subtest 'Authorized Values Tests' => sub {
 };
 
 subtest 'GetAuthorisedValues no_limit and cache key tests (bug 32748)' => sub {
-    plan tests => 6;
+    plan tests => 7;
 
     Koha::AuthorisedValueCategory->new( { category_name => 'BUG32748' } )->store;
 
@@ -202,6 +202,28 @@ subtest 'GetAuthorisedValues no_limit and cache key tests (bug 32748)' => sub {
         }
     );
 
+    # An AV limited to several libraries at once, one of them being the current
+    # library: it must be listed only once, and not flagged as restricted.
+    my $av_multi = Koha::AuthorisedValue->new(
+        {
+            category         => 'BUG32748',
+            authorised_value => 'MULTI',
+            lib              => 'Multi',
+        }
+    )->store;
+    $schema->resultset('AuthorisedValuesBranch')->create(
+        {
+            av_id      => $av_multi->id,
+            branchcode => $branch1->{branchcode},
+        }
+    );
+    $schema->resultset('AuthorisedValuesBranch')->create(
+        {
+            av_id      => $av_multi->id,
+            branchcode => $branch2->{branchcode},
+        }
+    );
+
     t::lib::Mocks::mock_userenv( { branchcode => $branch1->{branchcode} } );
 
     my $cache = Koha::Caches->get_instance;
@@ -209,17 +231,22 @@ subtest 'GetAuthorisedValues no_limit and cache key tests (bug 32748)' => sub {
     $cache->clear_from_cache("AuthorisedValues-BUG32748-0-$branch1->{branchcode}-1");
 
     my $limited = GetAuthorisedValues('BUG32748');
-    is( scalar @$limited, 1, 'Branch-limited call returns only the unrestricted value' );
-    is(
-        $limited->[0]{authorised_value}, 'UNRESTRICTED',
-        'Branch-limited call excludes the value restricted to another library'
+    is( scalar @$limited, 2, 'Branch-limited call returns the unrestricted value and the multi-library one' );
+    is_deeply(
+        [ sort map { $_->{authorised_value} } @$limited ],
+        [ 'MULTI', 'UNRESTRICTED' ],
+        'Branch-limited call excludes the value restricted to another library only'
     );
 
     my $unlimited = GetAuthorisedValues( 'BUG32748', undef, { no_limit => 1 } );
-    is( scalar @$unlimited, 2, 'no_limit call returns both values' );
+    is( scalar @$unlimited, 3, 'no_limit call returns each value once, including the multi-library one' );
     my %restricted_by_av = map { $_->{authorised_value} => $_->{restricted} } @$unlimited;
     is( $restricted_by_av{UNRESTRICTED}, 0, 'Unrestricted value is flagged as not restricted' );
     is( $restricted_by_av{RESTRICTED},   1, 'Value tied to another library is flagged as restricted' );
+    is(
+        $restricted_by_av{MULTI}, 0,
+        'Value tied to the current library and another one is not flagged as restricted (bug 32748)'
+    );
 
     # Regression test for the cache key bug reported on bug 32748: a plain call must
     # not be served the cached result of a no_limit call (or vice versa), since the
@@ -227,7 +254,7 @@ subtest 'GetAuthorisedValues no_limit and cache key tests (bug 32748)' => sub {
     my $limited_again = GetAuthorisedValues('BUG32748');
     is_deeply(
         [ sort map { $_->{authorised_value} } @$limited_again ],
-        ['UNRESTRICTED'],
+        [ 'MULTI', 'UNRESTRICTED' ],
         'Branch-limited call is not polluted by a previous no_limit call sharing category/opac/branch'
     );
 };

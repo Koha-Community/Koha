@@ -523,7 +523,7 @@ sub GetAuthorisedValues {
     my $select_clause = 'SELECT av.*';
     my @where_args;
     if ( $branch_limit && $no_limit ) {
-        $select_clause .= ', IF (branchcode = ? OR branchcode IS NULL, 0, 1) as restricted';
+        $select_clause .= ', MIN(IF (branchcode = ? OR branchcode IS NULL, 0, 1)) as restricted';
         push @where_args, $branch_limit;
     }
 
@@ -548,6 +548,8 @@ sub GetAuthorisedValues {
     if ( @where_strings > 0 ) {
         $query .= " WHERE " . join( " AND ", @where_strings );
     }
+    $query .= ' GROUP BY av.id, av.category, av.authorised_value, av.lib, av.lib_opac, av.imageurl'
+        if $branch_limit && $no_limit;
     $query .= ' ORDER BY category, '
         . (
         $opac
