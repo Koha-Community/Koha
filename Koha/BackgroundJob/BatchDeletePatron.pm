@@ -125,7 +125,9 @@ sub enqueue {
     my ( $self, $args ) = @_;
 
     # TODO Raise exception instead
-    return unless exists $args->{record_ids};
+    return
+        unless exists $args->{record_ids}
+        && @{ $args->{record_ids} };
 
     my @record_ids      = @{ $args->{record_ids} };
     my $move_to_deleted = $args->{move_to_deleted} || 0;
