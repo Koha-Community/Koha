@@ -7,6 +7,7 @@ return {
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
+
         try {
             $dbh->do(q{UPDATE systempreferences SET value = "off" WHERE variable = "UseRecalls" AND value = "0"});
             $dbh->do(q{UPDATE systempreferences SET value = "opac" WHERE variable = "UseRecalls" AND value = "1"});
@@ -14,5 +15,11 @@ return {
         } catch {
             say_failure( $out, "Database modification failed with errors: $_" );
         };
+
+        $dbh->do(
+            q{INSERT IGNORE INTO authorised_values (category, authorised_value, lib) VALUES ('HOLD_CANCELLATION','RECALLED','Hold was converted to a recall')}
+        );
+
+        say_success( $out, "Add new RECALLED value to HOLD_CANCELLATION authorised value category" );
     },
 };
