@@ -18,6 +18,10 @@ const islandsExport = application => {
         resolve: {
             extensions: [".ts", "..."],
             alias: {
+                "@js": path.resolve(
+                    __dirname,
+                    "koha-tmpl/intranet-tmpl/prog/js"
+                ),
                 "@fetch": path.resolve(
                     __dirname,
                     "koha-tmpl/intranet-tmpl/prog/js/fetch"
@@ -104,6 +108,10 @@ module.exports = [
         resolve: {
             extensions: [".ts", "..."],
             alias: {
+                "@js": path.resolve(
+                    __dirname,
+                    "koha-tmpl/intranet-tmpl/prog/js"
+                ),
                 "@fetch": path.resolve(
                     __dirname,
                     "koha-tmpl/intranet-tmpl/prog/js/fetch"

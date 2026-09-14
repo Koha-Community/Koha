@@ -53,20 +53,10 @@ if (typeof window["$timezone"] !== "function") {
     window["$timezone"] = () => "UTC";
 }
 
-// staff-global.js installs String.prototype.format on every Koha intranet
-// page; component bundles don't pull it in, so any component using the
-// $__("...").format(arg) idiom blows up at render time without this shim.
-if (typeof String.prototype.format !== "function") {
-    // Minimal subset of staff-global.js's formatstr — %s positional and
-    // %% literal — sufficient for $__ template strings.
-    String.prototype.format = function () {
-        const args = arguments;
-        let i = 0;
-        return String(this).replace(/%%|%s/g, m =>
-            m === "%%" ? "%" : (args[i++] ?? "")
-        );
-    };
-}
+// Staff pages install String.prototype.format via js_includes.inc; the
+// component bundle does not, so load the same definition here for the
+// $__("...").format(arg) idiom.
+import "@js/str-format.js";
 
 // Apply the same console.warn/error/log hooks as e2e tests so component
 // tests catch the same class of init-time issues at the cheaper-to-debug
