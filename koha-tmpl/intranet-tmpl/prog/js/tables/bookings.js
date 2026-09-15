@@ -1,6 +1,10 @@
 // Bookings
 var bookings_table;
 $(document).ready(function () {
+    if (!$("#bookings_table").length) {
+        return;
+    }
+
     const af = AdditionalFilters.init([
         "filter-completed",
         "filter-cancelled",
