@@ -1220,7 +1220,7 @@
                     [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers || batch_borrowernumbers || batch_reserve_ids ) || ( unlimited_total > 10 && limit <= 1000 ) %]
                         <div id="toolbar" class="btn-toolbar">
                             [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers || batch_borrowernumbers || batch_reserve_ids ) %]
-                                <div class="btn-group">
+                                <div class="btn-group" id="batch_mod_menu_wrapper" [% IF open_in_dt %]style="display:none"[% END %]>
                                     <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="batch_mod_menu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                         [% SET batch_op_count = unlimited_total >= limit ? results.size : unlimited_total %]
                                         [% SET batch_op_count_html = '<span id="batch_op_count">' _ batch_op_count _ '</span>' %]
@@ -2674,6 +2674,9 @@
 
                 var has_batchable_values = itemnumbers.length || biblionumbers.length || borrowernumbers.length || cardnumbers.length || reserveIds.length;
                 $("#batch_mod_menu").prop("disabled", !has_batchable_values);
+
+                // Prevent flashing the number of visible records in #batch_mod_menu
+                $("#batch_mod_menu_wrapper").show();
             }
 
             $("#batch_add_to_list").on("submit", function (e) {
