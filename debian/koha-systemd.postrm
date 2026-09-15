@@ -1,0 +1,21 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    purge)
+        # Drop the enablement symlinks created by koha-create, koha-* --enable
+        # and the postinst migration.
+        rm -rf /etc/systemd/system/koha.target.wants
+        rm -rf /etc/systemd/system/koha@*.target.wants
+        rm -f /etc/systemd/system/multi-user.target.wants/koha.target
+        rm -f /etc/systemd/system/multi-user.target.wants/koha-common.service
+        ;;
+esac
+
+if [ -d /run/systemd/system ]; then
+    systemctl daemon-reload >/dev/null 2>&1 || true
+fi
+
+#DEBHELPER#
+
+exit 0

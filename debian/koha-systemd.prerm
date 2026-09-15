@@ -3,8 +3,11 @@ set -e
 
 case "$1" in
     remove|deconfigure)
+        # Stop everything while the unit files are still present. Otherwise
+        # the daemons keep running with no unit left to manage them, and a
+        # swap to koha-sysv would start a second copy of each.
         if [ -d /run/systemd/system ]; then
-            systemctl --system daemon-reload >/dev/null || true
+            deb-systemd-invoke stop koha-common.service koha.target >/dev/null || true
         fi
         ;;
 esac
