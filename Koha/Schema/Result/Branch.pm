@@ -1081,8 +1081,8 @@ Composing rels: L</z3950servers_branches> -> server
 __PACKAGE__->many_to_many("servers", "z3950servers_branches", "server");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-07-28 12:08:20
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zldxQFMCaqzHTVla/0ZdWQ
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-09-15 15:48:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VumHFb+eVtXjM537JoaWqg
 
 __PACKAGE__->has_many(
     "additional_field_values",
