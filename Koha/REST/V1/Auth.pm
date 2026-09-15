@@ -214,20 +214,10 @@ sub authenticate_api_request {
             } else {
                 Koha::Exceptions::Authentication::Required->throw( error => 'Authentication failure.' );
             }
-        } elsif ( $c->req->url->to_abs->path eq '/api/v1/auth/two-factor/registration'
-            || $c->req->url->to_abs->path eq '/api/v1/auth/two-factor/registration/verification' )
-        {
+        } elsif ( _is_two_factor_setup_route($c) ) {
 
-            if ( $status eq 'setup-additional-auth-needed' ) {
+            if ( $status eq 'setup-additional-auth-needed' || $status eq 'ok' ) {
                 $user        = Koha::Patrons->find( $session->param('number') );
-                $cookie_auth = 1;
-            } elsif ( $status eq 'ok' ) {
-                $user = Koha::Patrons->find( $session->param('number') );
-                if ( $user->auth_method ne 'password' ) {
-
-                    # If the user already enabled 2FA they don't need to register again
-                    Koha::Exceptions::Authentication->throw( error => 'Cannot request this route.' );
-                }
                 $cookie_auth = 1;
             } else {
                 Koha::Exceptions::Authentication::Required->throw( error => 'Authentication failure.' );
@@ -252,13 +242,8 @@ sub authenticate_api_request {
         }
     }
 
-    if (
-        $user
-        && (   $c->req->url->to_abs->path eq '/api/v1/auth/two-factor/registration'
-            || $c->req->url->to_abs->path eq '/api/v1/auth/two-factor/registration/verification' )
-        && $user->auth_method eq 'two-factor'
-        )
-    {
+    if ( $user && _is_two_factor_setup_route($c) && $user->auth_method eq 'two-factor' ) {
+
         # If the user already enabled 2FA they don't need to register again.
         # The password alone must not be enough to overwrite an existing 2FA secret
         Koha::Exceptions::Authentication->throw( error => 'Cannot request this route.' );
@@ -307,6 +292,21 @@ sub authenticate_api_request {
         error                => "Authorization failure. Missing required permission(s).",
         required_permissions => $permissions,
     );
+}
+
+=head3 _is_two_factor_setup_route
+
+Returns true if the current request targets one of the two-factor
+registration endpoints (secret generation or verification).
+
+=cut
+
+sub _is_two_factor_setup_route {
+    my ($c) = @_;
+
+    my $path = $c->req->url->to_abs->path;
+    return $path eq '/api/v1/auth/two-factor/registration'
+        || $path eq '/api/v1/auth/two-factor/registration/verification';
 }
 
 =head3 validate_query_parameters
