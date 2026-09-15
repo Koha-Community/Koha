@@ -17,8 +17,11 @@ Environment=PERL5LIB=/usr/share/koha/lib
 PIDFile=/run/koha/%i/z3950-responder.pid
 ExecStartPre=+/usr/sbin/koha-generate-env z3950 %i
 EnvironmentFile=-/run/koha/%i/z3950.env
-ExecStart=/usr/share/koha/bin/z3950_responder.pl \
-    ${Z3950_ADDITIONAL_OPTS} \
+# $Z3950_ADDITIONAL_OPTS is deliberately unbraced: systemd splits "$VAR" into
+# separate arguments (and into none when empty) whereas "${VAR}" is always
+# exactly one argument.
+ExecStart=/usr/bin/perl /usr/share/koha/bin/z3950_responder.pl \
+    $Z3950_ADDITIONAL_OPTS \
     --config-dir ${Z3950_CONFIGDIR} \
     -u %i-koha \
     -p /run/koha/%i/z3950-responder.pid \

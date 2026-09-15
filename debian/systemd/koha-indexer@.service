@@ -16,7 +16,10 @@ Environment=KOHA_HOME=/usr/share/koha
 Environment=PERL5LIB=/usr/share/koha/lib
 ExecStartPre=+/usr/sbin/koha-generate-env indexer %i
 EnvironmentFile=-/run/koha/%i/indexer.env
-ExecStart=/usr/share/koha/bin/migration_tools/rebuild_zebra.pl -daemon -sleep ${INDEXER_TIMEOUT}
+# INDEXER_DAEMON honours ALTERNATE_INDEXER_DAEMON and INDEXER_PARAMS from
+# /etc/default/koha-common, resolved by koha-generate-env like koha-indexer
+# does. $INDEXER_PARAMS is unbraced on purpose so it is split into arguments.
+ExecStart=/usr/bin/env ${INDEXER_DAEMON} $INDEXER_PARAMS
 ProtectSystem=full
 ProtectHome=yes
 PrivateTmp=yes
