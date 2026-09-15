@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 75;
+use Test::More tests => 76;
 use Test::NoWarnings;
 use Test::Exception;
 
@@ -2243,6 +2243,104 @@ subtest 'ModReserve to convert a hold to a recall' => sub {
 
     ok( !defined $hold, 'Hold was cancelled' );
     is( $after_recalls, $before_recalls + 1, 'Recall count increased by 1 as hold was converted to a recall' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'ModReserve to convert a title-level hold to a recall' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $category = $builder->build( { source => 'Category' } );
+    my $branch   = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $biblio   = $builder->build_sample_biblio( { itemtype => 'DUMMY' } );
+    my $itype    = $builder->build( { source => 'Itemtype' } );
+    my $item     = $builder->build_sample_item(
+        { library => $branch, biblionumber => $biblio->biblionumber, itype => $itype->{itemtype} } );
+
+    my $patron = Koha::Patron->new(
+        {
+            firstname    => 'my firstname',
+            surname      => 'whatever surname',
+            categorycode => $category->{categorycode},
+            branchcode   => $branch,
+            email        => 'name@email.com',
+        }
+    )->store;
+    my $borrowernumber = $patron->borrowernumber;
+
+    my $patron2 = Koha::Patron->new(
+        {
+            firstname    => 'my firstname',
+            surname      => 'whatever surname',
+            categorycode => $category->{categorycode},
+            branchcode   => $branch,
+            email        => 'name2@email.com',
+        }
+    )->store;
+
+    t::lib::Mocks::mock_preference( "UseRecalls", 'opac_and_staff' );
+    t::lib::Mocks::mock_userenv( { branchcode => $branch } );
+
+    C4::Circulation::AddIssue( $patron2, $item->barcode );
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+            rules        => {
+                recalls_allowed    => 5,
+                recalls_per_record => 1,
+                on_shelf_recalls   => 'any',
+            },
+        }
+    );
+
+    my $notice = Koha::Notice::Template->new(
+        {
+            name                   => 'Hold cancellation',
+            module                 => 'reserves',
+            code                   => 'HOLD_CANCELLATION',
+            title                  => 'Hold cancelled',
+            content                => 'Your hold was cancelled.',
+            message_transport_type => 'email',
+            branchcode             => q{},
+        }
+    )->store();
+
+    # Title-level hold: no itemnumber supplied
+    my $reserve_id = AddReserve(
+        {
+            branchcode     => $branch,
+            borrowernumber => $borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => C4::Reserves::CalculatePriority( $biblio->biblionumber ),
+        }
+    );
+
+    my $hold = Koha::Holds->find($reserve_id);
+    ok( !$hold->item_level_hold, 'Hold is title-level, as a control on the rest of the test' );
+
+    my $before_recalls = Koha::Recalls->search->filter_by_current->count;
+
+    ModReserve(
+        {
+            reserve_id     => $hold->id,
+            expirationdate => '1981-06-10',
+            priority       => 99,
+            rank           => "recall",
+        }
+    );
+
+    my $after_recalls = Koha::Recalls->search->filter_by_current->count;
+    $hold = Koha::Holds->find($reserve_id);
+
+    ok(
+        !defined($hold) && $after_recalls == $before_recalls + 1,
+        'Title-level hold was cancelled and converted to a recall'
+    );
 
     $schema->storage->txn_rollback;
 };

@@ -21,7 +21,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 42;
+use Test::More tests => 43;
 use Test::Exception;
 use Test::MockModule;
 use Test::Warn;
@@ -3207,6 +3207,62 @@ subtest 'Recalls tests' => sub {
     is( $check_recall->patron_id, $patron1->borrowernumber, "Only remaining recall is returned" );
 
     $recall2->set_cancelled;
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'can_be_recalled() hold_convert param tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $item1      = $builder->build_sample_item;
+    my $biblio     = $item1->biblio;
+    my $branchcode = $item1->holdingbranch;
+    my $patron1    = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $branchcode } } );
+    my $patron2    = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $branchcode } } );
+
+    t::lib::Mocks::mock_userenv( { patron => $patron1 } );
+    t::lib::Mocks::mock_preference( 'UseRecalls', 'opac' );
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => $branchcode,
+            categorycode => $patron1->categorycode,
+            itemtype     => $item1->effective_itemtype,
+            rules        => {
+                recalls_allowed    => 1,
+                recalls_per_record => 1,
+                on_shelf_recalls   => 'any',
+            },
+        }
+    );
+
+    C4::Circulation::AddIssue( $patron2, $item1->barcode );
+
+    my $reserve_id = C4::Reserves::AddReserve(
+        {
+            branchcode   => $branchcode,          borrowernumber => $patron1->borrowernumber,
+            biblionumber => $item1->biblionumber, itemnumber     => $item1->itemnumber
+        }
+    );
+
+    is(
+        $item1->can_be_recalled( { patron => $patron1 } ), 0,
+        "Can't recall item if patron has already reserved it"
+    );
+    is(
+        $item1->can_be_recalled( { patron => $patron1, hold_convert => 1 } ), 1,
+        "Can recall item if patron has already reserved it, when converting that hold to a recall"
+    );
+
+    C4::Reserves::ModReserve(
+        {
+            rank => 'del', reserve_id => $reserve_id, branchcode => $branchcode, itemnumber => $item1->itemnumber,
+            borrowernumber => $patron1->borrowernumber, biblionumber => $item1->biblionumber
+        }
+    );
 
     $schema->storage->txn_rollback;
 };
