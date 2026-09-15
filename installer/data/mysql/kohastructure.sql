@@ -5770,7 +5770,7 @@ CREATE TABLE `record_sources` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `repeatable_holidays`
+-- Table structure for table `library_repeating_closures`
 --
 
 DROP TABLE IF EXISTS `library_repeating_closures`;

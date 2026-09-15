@@ -48,6 +48,8 @@ use Koha::BackgroundJobs;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Item::Transfers;
+use Koha::Library::Calendar::Exceptions;
+use Koha::Library::Calendar::SingleClosures;
 use Koha::Old::Biblioitems;
 use Koha::Old::Biblios;
 use Koha::Old::Checkouts;
@@ -1015,13 +1017,13 @@ sub PurgeCreatorBatches {
 sub DeleteSpecialHolidays {
     my ($days) = @_;
 
-    my $sth = $dbh->prepare(
-        q{
-        DELETE FROM special_holidays
-        WHERE DATE( CONCAT( year, '-', month, '-', day ) ) < DATE_SUB( CAST(NOW() AS DATE), INTERVAL ? DAY );
-    }
-    );
-    my $count = $sth->execute($days) + 0;
+    my $dtf    = Koha::Database->new->schema->storage->datetime_parser;
+    my $cutoff = $dtf->format_date( dt_from_string->subtract( days => $days ) );
+
+    my $count = 0;
+    $count += Koha::Library::Calendar::SingleClosures->search( { date => { '<' => $cutoff } } )->delete + 0;
+    $count += Koha::Library::Calendar::Exceptions->search( { date => { '<' => $cutoff } } )->delete + 0;
+
     print "Removed $count unique holidays\n" if $verbose;
 }
 
