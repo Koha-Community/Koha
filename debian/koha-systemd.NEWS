@@ -15,12 +15,11 @@ koha (26.06.00~1) unstable; urgency=medium
     "systemctl restart koha-common" still restarts everything, and the
     koha-plack/koha-zebra/koha-worker/... helpers work as before.
 
-  * Daemon stdout/stderr goes to the journal, not to
-    /var/log/koha/INSTANCE/NAME-output.log and NAME-error.log. Use
-    "journalctl -u koha-zebra@INSTANCE" (or -t INSTANCE-koha-zebra).
-    Logs written by Koha itself (plack.log, plack-error.log, the log4perl
-    files such as plack-opac-error.log, sip-output.log, z3950.log) are
-    unchanged.
+  * Log files are unchanged: each daemon's stdout/stderr still lands in
+    /var/log/koha/INSTANCE/NAME-output.log and NAME-error.log, and the
+    files Koha writes itself (plack.log, the log4perl files, z3950.log)
+    are untouched. The journal holds systemd's own messages about each
+    unit ("journalctl -u koha-zebra@INSTANCE" shows why one failed).
 
   * The units are sandboxed (PrivateTmp, ProtectSystem=full, ProtectHome,
     NoNewPrivileges). Instances whose koha-conf.xml has an empty

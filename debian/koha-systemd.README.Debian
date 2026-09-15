@@ -88,29 +88,14 @@ unit after changing them.
 
 ## Logging
 
-This is the one visible difference from the init script. With koha-sysv the
-daemon(1) wrapper captured each daemon's standard output and error to
-/var/log/koha/INSTANCE/NAME-output.log and NAME-error.log. With systemd
-that output goes to the journal instead:
-
-    journalctl -u koha-zebra@library.service
-    journalctl -t library-koha-worker         # by SyslogIdentifier
-    journalctl -u 'koha-*@library.service'    # everything for one instance
-
-So on a koha-systemd host these files are no longer written:
-
-    zebra-output.log, zebra-error.log
-    indexer-output.log, indexer-error.log
-    es-indexer-output.log, es-indexer-error.log
-    worker-output.log, worker-error.log (the worker's log4perl appender
-                                         writes to stderr, so its messages
-                                         are in the journal too)
-    sip-error.log                       (SIP's own log4perl output still
-                                         goes to sip-output.log)
-
-Everything the application writes itself is unchanged, because it is
-configured in /etc/koha/sites/INSTANCE/log4perl.conf or passed on the
-command line, not captured from stdout:
+Log locations are the same with either init package. With koha-sysv the
+daemon(1) wrapper captures each daemon's standard output and error to
+/var/log/koha/INSTANCE/NAME-output.log and NAME-error.log; the systemd
+units do the same through StandardOutput=append: and StandardError=append:,
+so zebra-*.log, indexer-*.log, es-indexer-*.log, worker-*.log and
+sip-*.log keep being written where they always were and the shipped
+logrotate configuration keeps rotating them. Everything Koha writes itself
+is unaffected either way:
 
     plack.log, plack-error.log          (Starman --access-log/--error-log)
     plack-opac-error.log, plack-intranet-error.log, plack-api-error.log,
@@ -120,8 +105,20 @@ command line, not captured from stdout:
     opac-error.log, intranet-error.log, opac-access.log, ...
                                         (Apache, per vhost)
 
-Existing NAME-output.log/NAME-error.log files are left in place; logrotate
-keeps rotating whatever is there.
+The journal therefore only holds what systemd itself records about a unit
+(starts, stops, failures, restart-limit hits), which is where to look when
+a unit refuses to start:
+
+    journalctl -u koha-zebra@library.service
+    journalctl -u 'koha-*@library.service'    # everything for one instance
+
+If you would rather have a daemon's output in the journal, override the two
+directives with a drop-in:
+
+    systemctl edit koha-worker@library.service
+    [Service]
+    StandardOutput=journal
+    StandardError=journal
 
 ## Sandboxing
 

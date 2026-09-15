@@ -15,6 +15,10 @@ Type=simple
 User=%i-koha
 Group=%i-koha
 SyslogIdentifier=%i-koha-sip
+# Capture stdout/stderr to the same files the daemon(1) wrapper used under
+# SysV, so log locations are identical whichever init package is installed.
+StandardOutput=append:/var/log/koha/%i/sip-output.log
+StandardError=append:/var/log/koha/%i/sip-error.log
 WorkingDirectory=/var/lib/koha/%i
 Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
 Environment=KOHA_HOME=/usr/share/koha
