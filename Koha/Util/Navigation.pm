@@ -20,6 +20,24 @@ package Koha::Util::Navigation;
 use Modern::Perl;
 use C4::Context;
 
+# Recognized local script paths. Besides /cgi-bin/koha/ scripts, this
+# also accepts Koha's own core-shipped short URLs and search alias (see
+# apache-shared-opac.conf / apache-shared-intranet.conf):
+#   /bib/<biblionumber>     - single record, rewritten internally ([PT])
+#   /isbn/<isbn>, /issn/<issn> - rewritten internally to /search?q=...
+#   /search                 - ScriptAlias'd straight to opac-search.pl /
+#                             catalogue/search.pl
+# None of these ever appear as /cgi-bin/koha/... in the browser's
+# Referer header, since the rewrites are internal ([PT]) or the alias
+# target lives outside /cgi-bin/koha/ altogether.
+our $LOCAL_PATH_RE = qr{
+    (?: /cgi-bin/koha/
+      | /bib/\d+
+      | /(?:isbn|issn)/[\w-]+
+      | /search(?:[?/]|$)
+    )
+}x;
+
 =head1 NAME
 
 Koha::Util
@@ -60,7 +78,7 @@ sub local_referer {
     # Try ..BaseURL first, otherwise use CGI::url
     if ($base) {
         if (   $referer =~ m|^\Q$base\E|i
-            && $referer =~ /\/cgi-bin\/koha\// )
+            && $referer =~ $LOCAL_PATH_RE )
         {
             $rv = substr( $referer, length($base) );
             $rv =~ s/^\///;
@@ -69,7 +87,7 @@ sub local_referer {
     } else {
         my $cgibase = $cgi->url( -base => 1 );
         $cgibase =~ s/^https?://;
-        if ( $referer =~ /$cgibase(\/cgi-bin\/koha\/.*)$/ ) {
+        if ( $referer =~ /$cgibase($LOCAL_PATH_RE.*)$/ ) {
             $rv = $1;
         }
     }
