@@ -162,6 +162,55 @@ function get_DT_defaults(tableFeatures = ["full"]) {
     };
 }
 
+// Options no longer accepted by kohaTable
+// 'dom' and 'pagingType' were replaced by 'layout' and 'tableFeatures'
+// The others are DataTables' own legacy (Hungarian-notation), removed in DataTables 2
+// (see https://datatables.net/upgrade/2)
+var _dt_deprecated_options = [
+    "dom",
+    "pagingType",
+    "aaData",
+    "aaSorting",
+    "aaSortingFixed",
+    "aLengthMenu",
+    "aoColumns",
+    "aoColumnDefs",
+    "aoSearchCols",
+    "asStripeClasses",
+    "bAutoWidth",
+    "bDeferRender",
+    "bDestroy",
+    "bFilter",
+    "bInfo",
+    "bLengthChange",
+    "bPaginate",
+    "bProcessing",
+    "bRetrieve",
+    "bScrollCollapse",
+    "bServerSide",
+    "bSort",
+    "bSortCellsTop",
+    "bSortClasses",
+    "bStateSave",
+    "iCookieDuration",
+    "iDeferLoading",
+    "iDisplayLength",
+    "iDisplayStart",
+    "iTabIndex",
+    "oLanguage",
+    "oSearch",
+    "paginate",
+    "sAjaxDataProp",
+    "sAjaxSource",
+    "sCookiePrefix",
+    "sDom",
+    "sPaginationType",
+    "sScrollX",
+    "sScrollXInner",
+    "sScrollY",
+    "sServerMethod",
+];
+
 var dataTablesDefaults = get_DT_defaults();
 
 DataTable.defaults.column.orderSequence = ["asc", "desc"];
@@ -1611,11 +1660,17 @@ function update_search_description(
             };
         }
 
-        if (options?.pagingType) {
-            console.log(
-                "pagingType is not longer accepted as a kohaTable options, ignoring it."
+        if (options) {
+            let used_deprecated_options = _dt_deprecated_options.filter(o =>
+                options.hasOwnProperty(o)
             );
-            delete options.pagingType;
+            if (used_deprecated_options.length) {
+                throw new Error(
+                    "kohaTable: deprecated option(s) passed: %s".format(
+                        used_deprecated_options.join(", ")
+                    )
+                );
+            }
         }
 
         var settings = $.extend(
