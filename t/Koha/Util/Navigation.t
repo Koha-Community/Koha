@@ -8,7 +8,7 @@ use t::lib::Mocks;
 use Koha::Util::Navigation;
 
 subtest 'Tests for local_referer' => sub {
-    plan tests => 11;
+    plan tests => 16;
 
     my ( $referer, $base );
     my $cgi = Test::MockObject->new;
@@ -26,6 +26,26 @@ subtest 'Tests for local_referer' => sub {
 
     $referer = 'https://koha.nl/custom/stuff';
     is( Koha::Util::Navigation::local_referer($cgi), '/', 'custom url' );
+
+    # Koha's own core-shipped /bib/<biblionumber> short URL rewrite (see
+    # apache-shared-opac.conf) resolves internally, so it never appears as
+    # /cgi-bin/koha/... in the Referer header - it must still be recognized
+    # as local, or the language switcher bounces the user to the homepage
+    $referer = 'https://koha.nl/bib/8783258';
+    is( Koha::Util::Navigation::local_referer($cgi), '/bib/8783258', 'opac /bib/ short url' );
+
+    # Same story for the /isbn/ and /issn/ short urls (rewritten
+    # internally to /search?q=isbn:... or /search?q=issn:...) and for
+    # /search itself, which is ScriptAlias'd straight to opac-search.pl,
+    # outside /cgi-bin/koha/
+    $referer = 'https://koha.nl/isbn/978-0-141-03614-4';
+    is( Koha::Util::Navigation::local_referer($cgi), '/isbn/978-0-141-03614-4', 'opac /isbn/ short url' );
+
+    $referer = 'https://koha.nl/issn/0028-0836';
+    is( Koha::Util::Navigation::local_referer($cgi), '/issn/0028-0836', 'opac /issn/ short url' );
+
+    $referer = 'https://koha.nl/search?q=perl';
+    is( Koha::Util::Navigation::local_referer($cgi), '/search?q=perl', 'opac /search alias' );
 
     t::lib::Mocks::mock_preference( 'OPACBaseURL', 'http://kohadev.myDNSname.org:8080' );
     $referer = "http://kohadev.mydnsname.org:8080$search";
@@ -50,6 +70,13 @@ subtest 'Tests for local_referer' => sub {
     is( Koha::Util::Navigation::local_referer($cgi), $search, 'no opacbaseurl, opac-search' );
     $base = 'http://koha.nl';
     is( Koha::Util::Navigation::local_referer($cgi), $search, 'no opacbaseurl, opac-search, protocol diff' );
+
+    $referer = 'https://koha.nl/bib/8783258';
+    $base    = 'https://koha.nl';
+    is(
+        Koha::Util::Navigation::local_referer($cgi), '/bib/8783258',
+        'no opacbaseurl, /bib/ short url'
+    );
 
     # base contains https, referer http (this should be very unusual)
     # test parameters remove_language. staff
