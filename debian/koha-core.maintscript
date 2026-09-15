@@ -1,0 +1,5 @@
+# The experimental pre-split koha-core shipped its own init script and
+# defaults file. The defaults now live under the koha-common name shared with
+# every other install; the init script is provided by koha-sysv/koha-systemd.
+mv_conffile /etc/default/koha-core /etc/default/koha-common 26.06~
+rm_conffile /etc/init.d/koha-core 26.06~

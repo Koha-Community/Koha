@@ -13,6 +13,12 @@ if [ -r $CONFIG ]; then
     . $CONFIG
 fi
 
+# The pre-split koha-core shipped /etc/init.d/koha-core; the file itself is
+# removed by koha-core.maintscript, drop its rc.d links as well.
+if [ "$1" = "configure" ] && dpkg --compare-versions "$2" lt-nl 26.06~; then
+    update-rc.d koha-core remove >/dev/null 2>&1 || true
+fi
+
 conf=/etc/mysql/koha-common.cnf
 if [ ! -e "$conf" ] && [ ! -L "$conf" ]; then
     ln -s debian.cnf "$conf"
