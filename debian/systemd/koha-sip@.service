@@ -1,8 +1,10 @@
 [Unit]
 Description=Koha SIP server for %i
+Documentation=man:koha-sip(8)
 PartOf=koha@%i.target
 Requires=koha-create-dirs@%i.service
-After=koha@%i.target koha-create-dirs@%i.service
+Before=koha@%i.target
+After=koha-create-dirs@%i.service
 AssertPathExists=/etc/koha/sites/%i/SIPconfig.xml
 
 StartLimitIntervalSec=60
@@ -12,6 +14,7 @@ StartLimitBurst=3
 Type=simple
 User=%i-koha
 Group=%i-koha
+SyslogIdentifier=%i-koha-sip
 WorkingDirectory=/var/lib/koha/%i
 Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
 Environment=KOHA_HOME=/usr/share/koha

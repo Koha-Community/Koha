@@ -1,8 +1,10 @@
 [Unit]
 Description=Koha Zebra indexing server for %i
+Documentation=man:koha-zebra(8)
 PartOf=koha@%i.target
 Requires=koha-create-dirs@%i.service
-After=koha@%i.target koha-create-dirs@%i.service
+Before=koha@%i.target
+After=koha-create-dirs@%i.service
 StartLimitIntervalSec=60
 StartLimitBurst=3
 
@@ -10,13 +12,14 @@ StartLimitBurst=3
 Type=forking
 User=%i-koha
 Group=%i-koha
+SyslogIdentifier=%i-koha-zebra
 WorkingDirectory=/var/lib/koha/%i
 Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
 Environment=KOHA_HOME=/usr/share/koha
 PIDFile=/run/koha/%i/zebra.pid
 ExecStartPre=+/usr/sbin/koha-generate-env zebra %i
 # Clean up leftover Zebra socket files so Zebra can rebind on startup.
-ExecStartPre=+/bin/rm -f /run/koha/%i/bibliosocket /run/koha/%i/authoritysocket
+ExecStartPre=+/bin/sh -c 'rm -f /run/koha/%i/*socket'
 EnvironmentFile=-/run/koha/%i/zebra.env
 ExecStart=/usr/bin/zebrasrv \
     -v ${ZEBRA_LOGLEVELS} \

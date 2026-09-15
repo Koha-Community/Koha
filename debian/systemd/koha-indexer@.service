@@ -1,8 +1,10 @@
 [Unit]
 Description=Koha Zebra indexer daemon for %i
+Documentation=man:koha-indexer(8)
 PartOf=koha@%i.target
 Requires=koha-create-dirs@%i.service
-After=koha@%i.target koha-zebra@%i.service koha-create-dirs@%i.service
+Before=koha@%i.target
+After=koha-zebra@%i.service koha-create-dirs@%i.service
 StartLimitIntervalSec=60
 StartLimitBurst=3
 
@@ -10,6 +12,7 @@ StartLimitBurst=3
 Type=simple
 User=%i-koha
 Group=%i-koha
+SyslogIdentifier=%i-koha-indexer
 WorkingDirectory=/var/lib/koha/%i
 Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
 Environment=KOHA_HOME=/usr/share/koha

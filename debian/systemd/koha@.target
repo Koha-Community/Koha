@@ -2,6 +2,7 @@
 Description=Koha ILS instance %i
 After=network.target memcached.service mysql.service
 PartOf=koha.target
+Before=koha.target
 
 [Install]
 WantedBy=koha.target

@@ -1,8 +1,10 @@
 [Unit]
 Description=Koha background worker (default queue) for %i
+Documentation=man:koha-worker(8)
 PartOf=koha@%i.target
 Requires=koha-create-dirs@%i.service
-After=koha@%i.target koha-create-dirs@%i.service
+Before=koha@%i.target
+After=koha-create-dirs@%i.service
 StartLimitIntervalSec=60
 StartLimitBurst=3
 
@@ -10,6 +12,7 @@ StartLimitBurst=3
 Type=simple
 User=%i-koha
 Group=%i-koha
+SyslogIdentifier=%i-koha-worker
 WorkingDirectory=/var/lib/koha/%i
 Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
 Environment=KOHA_HOME=/usr/share/koha
@@ -19,6 +22,10 @@ ProtectSystem=full
 ProtectHome=yes
 PrivateTmp=yes
 NoNewPrivileges=yes
+# The worker forks a child per job: signal only the parent and give running
+# jobs a chance to finish before the remaining processes are killed.
+KillMode=mixed
+TimeoutStopSec=120s
 Restart=on-failure
 RestartSec=5s
 

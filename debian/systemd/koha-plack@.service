@@ -1,8 +1,10 @@
 [Unit]
 Description=Koha Plack server for %i
+Documentation=man:koha-plack(8)
 PartOf=koha@%i.target
 Requires=koha-create-dirs@%i.service
-After=koha@%i.target koha-create-dirs@%i.service
+Before=koha@%i.target
+After=koha-create-dirs@%i.service
 StartLimitIntervalSec=60
 StartLimitBurst=3
 
@@ -10,6 +12,7 @@ StartLimitBurst=3
 Type=forking
 User=%i-koha
 Group=%i-koha
+SyslogIdentifier=%i-koha-plack
 WorkingDirectory=/var/lib/koha/%i
 Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
 Environment=KOHA_HOME=/usr/share/koha
@@ -21,7 +24,6 @@ ExecStart=/usr/bin/starman \
     -M FindBin \
     --max-requests ${PLACK_MAX_REQUESTS} \
     --workers ${PLACK_WORKERS} \
-    --user %i-koha --group %i-koha \
     --pid /run/koha/%i/plack.pid \
     --daemonize \
     --access-log /var/log/koha/%i/plack.log \
@@ -30,6 +32,10 @@ ExecStart=/usr/bin/starman \
     --listen /run/koha/%i/plack.sock \
     ${PLACK_PSGIFILE}
 ExecReload=/bin/kill -HUP $MAINPID
+# Starman shuts down gracefully on QUIT (TERM is immediate); matches the
+# QUIT/30/KILL/5 retry schedule the SysV path used.
+KillSignal=SIGQUIT
+TimeoutStopSec=30s
 ProtectSystem=full
 ProtectHome=yes
 PrivateTmp=yes
