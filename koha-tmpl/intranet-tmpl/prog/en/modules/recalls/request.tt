@@ -280,12 +280,7 @@
             if (apply_patron_autocomplete) {
                 patron_autocomplete($(".search_patron_filter"), { "link-to": "recall", "url-params": url_biblio_params });
             }
-            $("#items").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    paginate: false,
-                    dom: '<"top pager"ilf>t',
-                })
-            );
+            $("#items").kohaTable();
 
             //Override fieldset styling for dataTables search box
             $("div.top.pager").css("margin-left", "1em");
