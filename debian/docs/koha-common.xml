@@ -25,6 +25,25 @@
     <para>koha-common provides a number of scripts for creating and administering Koha instances. It is meant for sites that provide Koha hosting, and serves several sites from the same host.</para>
   </refsect1>
 
+  <refsect1><title>Service management</title>
+    <para>Each Koha instance runs several daemons: Plack (the web application), Zebra (search) and its indexer or the Elasticsearch indexer, two background job workers, and optionally the SIP2 and Z39.50/SRU servers. koha-common is a metapackage; the daemons are supervised by whichever of these two packages it pulled in:</para>
+    <variablelist>
+      <varlistentry>
+        <term><option>koha-systemd</option></term>
+        <listitem>
+          <para>The default on systemd hosts. Every daemon of every instance is its own unit: <literal>koha-plack@INSTANCE.service</literal>, <literal>koha-zebra@INSTANCE.service</literal>, <literal>koha-indexer@INSTANCE.service</literal>, <literal>koha-es-indexer@INSTANCE.service</literal>, <literal>koha-worker@INSTANCE.service</literal>, <literal>koha-worker-long_tasks@INSTANCE.service</literal>, <literal>koha-sip@INSTANCE.service</literal> and <literal>koha-z3950@INSTANCE.service</literal>, grouped by <literal>koha@INSTANCE.target</literal> per instance and <literal>koha.target</literal> for the whole host. <literal>systemctl restart koha-common</literal> still restarts everything. The daemons' standard output and error go to the journal (<literal>journalctl -u koha-zebra@INSTANCE</literal>); see <filename>/usr/share/doc/koha-systemd/README.Debian</filename>.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><option>koha-sysv</option></term>
+        <listitem>
+          <para>The traditional <filename>/etc/init.d/koha-common</filename> script, which starts all daemons of all enabled instances through the daemon(1) wrapper. Used where systemd is not PID 1, for example in containers. Each daemon's standard output and error are captured to <filename>/var/log/koha/INSTANCE/NAME-output.log</filename> and <filename>NAME-error.log</filename>.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    <para>The koha-* commands below (koha-plack, koha-zebra, koha-worker, ...) work the same way with either package. <filename>/etc/default/koha-common</filename> holds host-wide settings such as USE_INDEXER_DAEMON and is read by both.</para>
+  </refsect1>
+
   <refsect1><title>Commands</title>
     <para>The following commands are available after when koha-common has been installed. See individual manual pages for each command for optios and other details related to their usage.</para>
 

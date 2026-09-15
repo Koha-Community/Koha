@@ -1,88 +1,159 @@
-# Koha systemd Units
+# Koha systemd units
 
-This package provides native systemd service units for Koha ILS.
+This package supervises every Koha daemon with native systemd units. It is
+one of the two providers of the `koha-init` virtual package that koha-common
+depends on; the other is koha-sysv (the traditional /etc/init.d/koha-common
+script). The two conflict with each other and installing one replaces the
+other. koha-common prefers koha-systemd wherever systemd is installable, so
+containers that want the init script must install koha-sysv explicitly.
 
-## Architecture
+## Units
 
-Each Koha service type runs as a separate systemd unit using instance templates:
+Per instance (`INSTANCE` is the koha-create name, e.g. `library`):
 
-- `koha-plack@.service` - Plack/Starman web application server
-- `koha-zebra@.service` - Zebra search indexing server
-- `koha-sip@.service` - SIP2 circulation protocol server
-- `koha-z3950@.service` - Z39.50/SRU server
-- `koha-worker@.service` - Background job worker (default queue)
-- `koha-worker-long@.service` - Background job worker (long_tasks queue)
-- `koha-indexer@.service` - Zebra indexing daemon
-- `koha-es-indexer@.service` - Elasticsearch indexing daemon
+- `koha-plack@INSTANCE.service`             Plack/Starman web application
+- `koha-zebra@INSTANCE.service`             Zebra search server
+- `koha-indexer@INSTANCE.service`           Zebra indexing daemon
+- `koha-es-indexer@INSTANCE.service`        Elasticsearch indexing daemon
+- `koha-worker@INSTANCE.service`            background jobs, `default` queue
+- `koha-worker-long_tasks@INSTANCE.service` background jobs, `long_tasks` queue
+- `koha-sip@INSTANCE.service`               SIP2 server
+- `koha-z3950@INSTANCE.service`             Z39.50/SRU server
+- `koha-create-dirs@INSTANCE.service`       oneshot that creates the run,
+                                            lock and cache directories the
+                                            others depend on
+- `koha@INSTANCE.target`                    groups the instance's units
 
-Instance grouping:
-- `koha@.target` - Groups all services for a single instance
-- `koha.target` - Groups all Koha instances
+Host wide:
 
-## Usage
+- `koha.target`          groups every `koha@INSTANCE.target`; enabled at boot
+- `koha-common.service`  compatibility shim so that
+                         `systemctl start|stop|restart koha-common` (the old
+                         `service koha-common ...`) keeps working. It has no
+                         state of its own: `systemctl status koha.target`, or
+                         `koha-systemd-ctl status INSTANCE`, is the real
+                         health check.
 
-### Managing a complete instance
+## Day-to-day use
 
-```bash
-# Start all services for instance "library"
-systemctl start koha@library.target
+The koha-* helpers work as before and drive systemd underneath:
 
-# Enable at boot
-systemctl enable koha@library.target
+    koha-plack --restart library         # systemctl restart koha-plack@library
+    koha-zebra --stop library
+    koha-worker --all-queues --status library
 
-# Check status
-systemctl status koha@library.target
-```
+Each helper also has `--enable` and `--disable`, which control whether the
+unit is started at boot (with koha-sysv these are no-ops). Or use systemctl
+directly:
 
-### Managing individual services
+    systemctl restart koha@library.target       # one instance, all daemons
+    systemctl restart koha-common               # every instance
+    systemctl status koha-plack@library.service
+    koha-systemd-ctl status library             # all units of one instance
 
-```bash
-# Start only Plack for instance "library"
-systemctl start koha-plack@library.service
+koha-create enables and starts the units of a new instance. koha-disable
+stops an instance and disables its `koha@INSTANCE.target`, koha-enable
+turns it back on and starts it, and koha-remove disables everything it
+created.
 
-# Restart SIP server
-systemctl restart koha-sip@library.service
+Which units are enabled follows the instance's configuration:
 
-# Check worker status
-systemctl status koha-worker@library.service
-systemctl status koha-worker-long@library.service
-```
+- Plack: `koha-plack --enable INSTANCE` (also edits the Apache vhost)
+- SIP: `koha-sip --enable INSTANCE`. The SysV-era flag file
+  /var/lib/koha/INSTANCE/sip.enabled is not consulted on systemd hosts;
+  `systemctl is-enabled koha-sip@INSTANCE` is the source of truth.
+- Z39.50/SRU: `koha-z3950-responder --enable INSTANCE`
+- Zebra indexer: enabled when USE_INDEXER_DAEMON=yes in
+  /etc/default/koha-common (the default)
+- Elasticsearch indexer: `koha-es-indexer --enable INSTANCE`. Switching the
+  SearchEngine system preference does not enable anything by itself;
+  `systemctl restart koha-common` (or `koha-systemd-ctl sync-es-indexers`)
+  discovers instances that now use Elasticsearch and enables their indexer,
+  like the init script did on every start.
 
-### Logs
+## Configuration
 
-```bash
-# View logs for all services of an instance
-journalctl -u 'koha-*@library.service'
+The units read the same settings as the init script:
 
-# View Plack logs
-journalctl -u koha-plack@library.service -f
+- /etc/koha/sites/INSTANCE/koha-conf.xml: plack_workers,
+  plack_max_requests, debug_mode, zebra_loglevels, zebra_max_record_size,
+  es_indexer_batch_size, and z3950_responder_options in the Z39.50
+  config.xml
+- /etc/default/koha-common: INDEXER_TIMEOUT, ALTERNATE_INDEXER_DAEMON,
+  INDEXER_PARAMS, Z3950_ADDITIONAL_OPTS
 
-# View all Koha logs
-journalctl -u 'koha-*.service'
-```
+They are re-read on every start by koha-generate-env, which writes them to
+/run/koha/INSTANCE/SERVICE.env for the unit's EnvironmentFile=. Restart the
+unit after changing them.
 
-## Service Enablement
+## Logging
 
-Some services are conditionally enabled based on configuration files:
+This is the one visible difference from the init script. With koha-sysv the
+daemon(1) wrapper captured each daemon's standard output and error to
+/var/log/koha/INSTANCE/NAME-output.log and NAME-error.log. With systemd
+that output goes to the journal instead:
 
-- **SIP**: Requires `/var/lib/koha/{instance}/sip.enabled` and `/etc/koha/sites/{instance}/SIPconfig.xml`
-- **Z3950**: Requires `/etc/koha/sites/{instance}/z3950/config.xml`
+    journalctl -u koha-zebra@library.service
+    journalctl -t library-koha-worker         # by SyslogIdentifier
+    journalctl -u 'koha-*@library.service'    # everything for one instance
 
-## Migration from init scripts
+So on a koha-systemd host these files are no longer written:
 
-The koha-systemd package is designed to coexist with koha-common but provides
-an alternative service management approach. To migrate:
+    zebra-output.log, zebra-error.log
+    indexer-output.log, indexer-error.log
+    es-indexer-output.log, es-indexer-error.log
+    worker-output.log, worker-error.log (the worker's log4perl appender
+                                         writes to stderr, so its messages
+                                         are in the journal too)
+    sip-error.log                       (SIP's own log4perl output still
+                                         goes to sip-output.log)
 
-1. Stop services via init script: `service koha-common stop`
-2. Install koha-systemd package
-3. Enable instance target: `systemctl enable koha@{instance}.target`
-4. Start services: `systemctl start koha@{instance}.target`
+Everything the application writes itself is unchanged, because it is
+configured in /etc/koha/sites/INSTANCE/log4perl.conf or passed on the
+command line, not captured from stdout:
 
-## Advantages
+    plack.log, plack-error.log          (Starman --access-log/--error-log)
+    plack-opac-error.log, plack-intranet-error.log, plack-api-error.log,
+    api-error.log, sip-output.log, z3950-error.log, editrace.log
+                                        (log4perl)
+    z3950.log                            (z3950_responder.pl -l)
+    opac-error.log, intranet-error.log, opac-access.log, ...
+                                        (Apache, per vhost)
 
-- **Granular control**: Start/stop individual services per instance
-- **Resource limits**: Apply CPU/memory limits via systemd
-- **Dependency management**: Proper service ordering and failure handling
-- **Logging**: Centralized logging via journald
-- **Security**: Modern sandboxing options available
-- **Monitoring**: Native systemd health checks and status reporting
+Existing NAME-output.log/NAME-error.log files are left in place; logrotate
+keeps rotating whatever is there.
+
+## Sandboxing
+
+The daemon units run with ProtectSystem=full, ProtectHome=yes,
+PrivateTmp=yes and NoNewPrivileges=yes. This is fine for instances created
+by koha-create, which keep everything under /var/lib/koha/INSTANCE,
+/var/cache/koha/INSTANCE and /var/log/koha/INSTANCE. It matters if:
+
+- koha-conf.xml has an empty <tmp_path> (instances created before that
+  option existed): Koha then falls back to /tmp, which is private to each
+  unit, so file-based sessions do not survive a Plack restart and are not
+  shared with CGI, and uploads staged by Plack are invisible to the worker.
+  Set <tmp_path>/var/lib/koha/INSTANCE/tmp</tmp_path> (and create it) as
+  koha-create does today.
+- --upload-path, --tmp-path or a plugin directory point under /home
+  (ProtectHome) or anywhere outside the instance directories (ProtectSystem
+  makes /usr, /boot and /etc read-only).
+- a plugin shells out to a setuid helper such as sudo (NoNewPrivileges).
+
+Relax a setting for one unit with a drop-in rather than editing the
+packaged file:
+
+    systemctl edit koha-plack@library.service
+    [Service]
+    PrivateTmp=no
+    ReadWritePaths=/srv/koha-uploads
+
+## Migration from koha-sysv / the old koha-common
+
+Installing koha-systemd (which happens automatically when upgrading
+koha-common from a pre-split release on a systemd host) stops the daemons
+the init script started, enables the units matching each enabled
+instance's configuration, and starts koha.target. No manual step is
+needed. To go back, `apt install koha-sysv`: koha-systemd is removed, its
+prerm stops the units, and the init script takes over on the next start.

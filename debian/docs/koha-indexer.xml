@@ -24,7 +24,7 @@
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>koha-indexer</command>
-      <arg choice="req"><option>--start</option>|<option>--stop</option>|<option>--restart</option>|<option>--status</option>|<option>--help</option>|<option>-h</option>|<option>--quiet</option>|<option>-q</option></arg>
+      <arg choice="req"><option>--start</option>|<option>--stop</option>|<option>--restart</option>|<option>--enable</option>|<option>--disable</option>|<option>--status</option>|<option>--help</option>|<option>-h</option>|<option>--quiet</option>|<option>-q</option></arg>
       <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
@@ -58,6 +58,18 @@
       <term><option>--status</option></term>
       <listitem>
         <para>Show the status of the indexer for the specified instances.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>--enable</option></term>
+      <listitem>
+        <para>Enable the indexer daemon for named Koha instances so it is started at boot. Only meaningful with the koha-systemd package, where it enables the corresponding systemd unit; with koha-sysv it is a no-op because the init script starts every enabled instance's daemons.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>--disable</option></term>
+      <listitem>
+        <para>Disable the indexer daemon for named Koha instances so it is no longer started at boot. As with <option>--enable</option>, this only has an effect with the koha-systemd package.</para>
       </listitem>
     </varlistentry>
 

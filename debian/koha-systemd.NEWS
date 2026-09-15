@@ -1,0 +1,35 @@
+koha (26.06.00~1) unstable; urgency=medium
+
+  koha-common is now a metapackage. Its daemons are supervised either by
+  this package (native systemd units, the default on systemd hosts) or by
+  koha-sysv (the traditional /etc/init.d/koha-common script). Upgrading a
+  systemd host from the monolithic koha-common installs koha-systemd,
+  stops the init-script-started daemons, enables a unit for every daemon
+  of every enabled instance and starts them; no manual action is needed.
+
+  What changes for administrators on a koha-systemd host:
+
+  * Each daemon is its own unit (koha-plack@INSTANCE.service,
+    koha-zebra@INSTANCE.service, koha-worker@INSTANCE.service, ...),
+    grouped by koha@INSTANCE.target and koha.target.
+    "systemctl restart koha-common" still restarts everything, and the
+    koha-plack/koha-zebra/koha-worker/... helpers work as before.
+
+  * Daemon stdout/stderr goes to the journal, not to
+    /var/log/koha/INSTANCE/NAME-output.log and NAME-error.log. Use
+    "journalctl -u koha-zebra@INSTANCE" (or -t INSTANCE-koha-zebra).
+    Logs written by Koha itself (plack.log, plack-error.log, the log4perl
+    files such as plack-opac-error.log, sip-output.log, z3950.log) are
+    unchanged.
+
+  * The units are sandboxed (PrivateTmp, ProtectSystem=full, ProtectHome,
+    NoNewPrivileges). Instances whose koha-conf.xml has an empty
+    <tmp_path> should set it to /var/lib/koha/INSTANCE/tmp; see
+    /usr/share/doc/koha-systemd/README.Debian for details and how to
+    relax a setting with a drop-in.
+
+  * SIP is enabled per instance with "koha-sip --enable"; the
+    /var/lib/koha/INSTANCE/sip.enabled flag file is no longer read on
+    systemd hosts.
+
+ -- Koha Development Team <koha-devel@lists.koha-community.org>  Tue, 15 Sep 2026 12:00:00 +0000

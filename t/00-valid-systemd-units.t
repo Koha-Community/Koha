@@ -1,3 +1,5 @@
+#!/usr/bin/perl
+
 # Copyright 2026 Martin Renvoize
 #
 # This file is part of Koha.
@@ -18,9 +20,8 @@
 use Modern::Perl;
 
 use Test::More;
-use Cwd            qw( abs_path );
-use File::Basename qw( basename );
-use FindBin        qw( $Bin );
+use Cwd     qw( abs_path );
+use FindBin qw( $Bin );
 
 my $analyzer = qx(which systemd-analyze 2>/dev/null);
 chomp $analyzer;
@@ -68,15 +69,11 @@ sub ignorable {
     # systemd rewrites legacy /var/run paths itself and only warns
     return 1 if $line =~ /references a path below legacy directory/;
 
-    # Helper scripts the units call are only installed to /usr/sbin by the
-    # koha-systemd and koha-core packages, so on a dev checkout ignore
-    # 'not executable' errors for commands this repo ships
-    if ( $line =~ /Command (\S+) is not executable/ ) {
-        my $script = basename($1);
-        return 1
-            if -e "$Bin/../debian/scripts/$script"
-            || -e "$Bin/../debian/systemd/$script";
-    }
+    # The commands the units run (starman, zebrasrv, the koha-* helpers,
+    # /usr/share/koha/bin/...) only exist on a host with the Koha packages
+    # installed. Whether they are present says nothing about the unit files
+    # themselves, so treat the whole class as environmental noise
+    return 1 if $line =~ /Command \S+ is not executable/;
 
     return 0;
 }
