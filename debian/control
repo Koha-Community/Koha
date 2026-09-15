@@ -3,7 +3,6 @@ Maintainer: Mason James <mtj@kohaaloha.com>
 Section: web
 Priority: optional
 Standards-Version: 3.8.4
-# koha-systemd package provides systemd units only
 # WARNING: The "control" file is automatically generated from the "control.in" file.
 # Do not manually edit "control" or your changes will be clobbered when you
 # run update-control
@@ -441,6 +440,7 @@ Description: integrated (physical) library management system
  .
  Most users should install koha-common instead, which will automatically
  select the appropriate init system.
+Recommends: koha-systemd | koha-sysv
 Depends: ${misc:Depends}, ${koha:Depends},
  at,
  cron-daemon,

@@ -27,7 +27,6 @@ override_dh_installlogrotate:
 	dh_installlogrotate --remaining-packages
 
 override_dh_gencontrol:
-	debian/bd-to-depends >> debian/koha-common.substvars
 	debian/bd-to-depends >> debian/koha-core.substvars
 	dh_gencontrol
 
