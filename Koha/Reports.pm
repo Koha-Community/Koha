@@ -103,7 +103,6 @@ sub running {
         $report_ids{$1} = 1 if $row->{info} =~ /saved_sql\.id:\s*(\d+)/;
     }
 
-    my $rs = $class->search( { id => { -in => [ keys %report_ids ] } } );
     return $class->search( { id => { -in => [ keys %report_ids ] } } );
 }
 
