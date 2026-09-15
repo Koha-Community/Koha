@@ -140,9 +140,12 @@
     [% IF job.status != 'finished' AND job.status != 'cancelled' AND job.status != 'failed' %]
         [% INCLUDE 'str/job_progress.inc' job_id=job.id %]
         [% Asset.js("js/job_progress.js") | $raw %]
+        <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+            const job_id = [% job.id | html %];
+        </script>
         <script nonce="[% Koha.CSPNonce | $raw %]">
             $(document).ready(function () {
-                updateProgress([% job.id | html %], {
+                updateProgress(job_id, {
                     finish_callback: function () {
                         window.location.reload();
                     },
