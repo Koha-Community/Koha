@@ -1253,7 +1253,7 @@ sub ModReserve {
         my $patron = Koha::Patrons->find($borrowernumber);
         if ( $hold->item_level_hold ) {
             if ( $hold->item->can_be_recalled( { patron => $patron, hold_convert => 1 } ) ) {
-                my ( $recall, $due_interval, $due_date ) = Koha::Recalls->add_recall(
+                Koha::Recalls->add_recall(
                     {
                         patron         => $patron,
                         biblio         => $biblio,
@@ -1267,7 +1267,7 @@ sub ModReserve {
             }
         } else {
             if ( $biblio->can_be_recalled( { patron => $patron, hold_convert => 1 } ) ) {
-                my ( $recall, $due_interval, $due_date ) = Koha::Recalls->add_recall(
+                Koha::Recalls->add_recall(
                     {
                         patron         => $patron,
                         biblio         => $biblio,
