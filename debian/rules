@@ -8,6 +8,13 @@ export PERL_MM_USE_DEFAULT=1
 %:
 	dh $@ --fail-missing --with bash-completion
 
+# koha-sysv ships the SysV init script under its historical name so that
+# dpkg hands /etc/init.d/koha-common over from the old monolithic koha-common
+# package and debhelper generates the matching update-rc.d/invoke-rc.d code.
+override_dh_installinit:
+	dh_installinit -pkoha-sysv --name=koha-common
+	dh_installinit --remaining-packages
+
 override_dh_gencontrol:
 	debian/bd-to-depends >> debian/koha-common.substvars
 	debian/bd-to-depends >> debian/koha-core.substvars
