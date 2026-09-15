@@ -2671,6 +2671,9 @@
 
                 var reserveIds = visibleValues("reserve_id");
                 setTextarea("#reserve_ids_list", reserveIds);
+
+                var has_batchable_values = itemnumbers.length || biblionumbers.length || borrowernumbers.length || cardnumbers.length || reserveIds.length;
+                $("#batch_mod_menu").prop("disabled", !has_batchable_values);
             }
 
             $("#batch_add_to_list").on("submit", function (e) {
