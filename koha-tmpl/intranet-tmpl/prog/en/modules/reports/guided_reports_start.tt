@@ -1222,7 +1222,9 @@
                             [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers || batch_borrowernumbers || batch_reserve_ids ) %]
                                 <div class="btn-group">
                                     <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="batch_mod_menu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        Batch operations with [% IF unlimited_total >= limit %][% results.size | html %][% ELSE %][% unlimited_total | html %][% END %] visible records
+                                        [% SET batch_op_count = unlimited_total >= limit ? results.size : unlimited_total %]
+                                        [% SET batch_op_count_html = '<span id="batch_op_count">' _ batch_op_count _ '</span>' %]
+                                        [% tnx( "Batch operations with {count} visible record", "Batch operations with {count} visible records", batch_op_count, { count = batch_op_count_html } ) | $raw %]
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="batch_mod_menu">
@@ -1482,6 +1484,8 @@
                                                 </ul>
                                             </div>
                                         </td>
+                                    [% ELSIF header_row.$place.cell == 'reserve_id' || header_types.item(header_row.$place.cell) == 'reserve_id' %]
+                                        <td class="batch-op reserve_id" data-number="reserve_id">[% cells.cell | $raw %]</td>
                                     [% ELSE %]
                                         <td> [% cells.cell | $raw %] </td>
                                     [% END %]
@@ -1887,6 +1891,7 @@
 
         const open_in_dt = [% open_in_dt ? 1 : 0 | html %];
         const execute = [% execute ? 1 : 0 | html %];
+        let report_results_dt;
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         //  if the report param form has multiselects override default form submission
@@ -2326,7 +2331,9 @@
                     });
                 });
                 let report_table_settings = { columns };
-                $("#report_results").kohaTable({}, report_table_settings);
+                report_results_dt = $("#report_results").kohaTable({}, report_table_settings).DataTable();
+                syncBatchFormsWithVisibleResults();
+                report_results_dt.on("draw length page search", syncBatchFormsWithVisibleResults);
             }
             if (saved1) {
                 var rtable = $("#table_reports").kohaTable(
@@ -2605,6 +2612,66 @@
                 var target_form = $(this).data("submit");
                 $("#" + target_form).submit();
             });
+
+            function syncBatchFormsWithVisibleResults() {
+                if (!report_results_dt) return;
+
+                var visible_rows = $(report_results_dt.rows({ page: "current" }).nodes());
+                $("#batch_op_count").text(visible_rows.length);
+
+                function visibleValues(type) {
+                    return visible_rows
+                        .find("td.batch-op[data-number='" + type + "']")
+                        .map(function () {
+                            var plain = $(this).find(".data-plain");
+                            return (plain.length ? plain.text() : $(this).text()).trim();
+                        })
+                        .get()
+                        .filter(function (v) {
+                            return v.length;
+                        });
+                }
+
+                function setTextarea(selector, values) {
+                    $(selector).val(values.join("\n"));
+                }
+
+                function setHiddenInputs(form_selector, name, cls, values) {
+                    var form = $(form_selector);
+                    form.find("input[name='" + name + "']").remove();
+                    values.forEach(function (v) {
+                        $("<input>", {
+                            type: "hidden",
+                            name: name,
+                            class: cls,
+                            value: v,
+                        }).appendTo(form);
+                    });
+                }
+
+                var itemnumbers = visibleValues("itemnumber");
+                setHiddenInputs("#batch_item_modification", "itemnumber", "", itemnumbers);
+                setHiddenInputs("#batch_item_deletion", "itemnumber", "", itemnumbers);
+
+                var biblionumbers = visibleValues("biblionumber");
+                setTextarea("#batch_record_modification textarea[name='recordnumber_list']", biblionumbers);
+                setTextarea("#batch_record_deletion textarea[name='recordnumber_list']", biblionumbers);
+                setHiddenInputs("#batch_add_to_list", "biblionumber", "bib_to_list", biblionumbers);
+
+                var borrowernumbers = visibleValues("borrowernumber");
+                var cardnumbers = visibleValues("cardnumber");
+
+                setTextarea("#bor_num_list", borrowernumbers);
+                if (borrowernumbers.length) {
+                    setTextarea("#borrowernumberlist", borrowernumbers);
+                    setTextarea("#cardnumberlist", []);
+                } else {
+                    setTextarea("#cardnumberlist", cardnumbers);
+                }
+
+                var reserveIds = visibleValues("reserve_id");
+                setTextarea("#reserve_ids_list", reserveIds);
+            }
 
             $("#batch_add_to_list").on("submit", function (e) {
                 e.preventDefault();
