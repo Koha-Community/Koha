@@ -1,16 +1,21 @@
 [Unit]
-Description=Koha ILS - All instances (compat)
+Description=Koha ILS - All instances (compat wrapper around koha.target)
 Documentation=man:koha-common(8)
-BindsTo=koha.target
-After=koha.target
+# This unit exists so that "systemctl start|stop|restart koha-common" (the
+# old "service koha-common ..." habit) keeps working. It deliberately has NO
+# dependency on koha.target: with BindsTo=/After= its own stop job would be
+# ordered against the koha.target stop job that ExecStop= waits for, and the
+# stop would hang until TimeoutStopSec. It is a command shim only; manage
+# koha.target or the per-instance units for anything else.
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
+SyslogIdentifier=koha-common
 # Instances can switch to Elasticsearch after their units were enabled, so
 # re-discover ES indexers on every start, like the SysV init script did.
 ExecStartPre=-/usr/sbin/koha-systemd-ctl sync-es-indexers
-ExecStart=/bin/true
+ExecStart=/bin/systemctl start koha.target
 ExecStop=/bin/systemctl stop koha.target
 
 [Install]

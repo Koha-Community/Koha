@@ -2,8 +2,11 @@
 # koha-generate-env -- Generate EnvironmentFile for systemd units
 # Usage: koha-generate-env <service> <instance>
 #
-# Reads koha-conf.xml and writes /run/koha/<instance>/<service>.env
-# with the parameters that the corresponding systemd unit needs.
+# Reads koha-conf.xml and /etc/default/koha-common and writes
+# /run/koha/<instance>/<service>.env with the parameters the matching
+# systemd unit needs. The units run it as root (ExecStartPre=+) so it can
+# read the instance's koha-conf.xml, then pick the file up through
+# EnvironmentFile= before ExecStart runs.
 
 set -e
 
@@ -18,6 +21,8 @@ fi
 CONF="/etc/koha/sites/${INSTANCE}/koha-conf.xml"
 ENVDIR="/run/koha/${INSTANCE}"
 ENVFILE="${ENVDIR}/${SERVICE}.env"
+DEFAULTS="/etc/default/koha-common"
+KOHA_HOME="/usr/share/koha"
 
 if [ ! -f "$CONF" ]; then
     echo "Error: $CONF not found" >&2
@@ -29,12 +34,31 @@ xml_val() {
     xmlstarlet sel -t -v "yazgfs/config/$1" "$CONF" 2>/dev/null || true
 }
 
-mkdir -p "$ENVDIR"
+# systemd parses the env file line by line and the units pass most values
+# as a single argument, so a value must fit on one line and must not
+# contain the quote characters used below.
+clean() {
+    printf '%s' "$1" | tr -d '\n\r"\\'
+}
+
+# number_or <value> <default>: keep <value> only if it is a plain integer
+number_or() {
+    case "$1" in
+        '' | *[!0-9]*) printf '%s' "$2" ;;
+        *) printf '%s' "$1" ;;
+    esac
+}
+
+# koha-create-dirs normally creates this; make sure it exists with the
+# ownership the instance user expects if we got here first.
+if [ ! -d "$ENVDIR" ]; then
+    install -d -o "${INSTANCE}-koha" -g "${INSTANCE}-koha" "$ENVDIR"
+fi
 
 case "$SERVICE" in
     plack)
-        WORKERS=$(xml_val plack_workers)
-        MAX_REQUESTS=$(xml_val plack_max_requests)
+        WORKERS=$(number_or "$(xml_val plack_workers)" 2)
+        MAX_REQUESTS=$(number_or "$(xml_val plack_max_requests)" 50)
         DEBUG_MODE=$(xml_val debug_mode)
 
         PSGIFILE="/etc/koha/plack.psgi"
@@ -42,68 +66,98 @@ case "$SERVICE" in
             PSGIFILE="/etc/koha/sites/${INSTANCE}/plack.psgi"
         fi
 
-        if [ "$DEBUG_MODE" = "1" ] || [ "$DEBUG_MODE" = "true" ]; then
+        # Same rule as is_debug_mode in koha-functions.sh: anything set
+        # and not "0" means development.
+        if [ -n "$DEBUG_MODE" ] && [ "$DEBUG_MODE" != "0" ]; then
             ENVIRONMENT="development"
         else
             ENVIRONMENT="deployment"
         fi
 
-        cat > "$ENVFILE" <<EOF
-PLACK_WORKERS=${WORKERS:-2}
-PLACK_MAX_REQUESTS=${MAX_REQUESTS:-50}
+        cat >"$ENVFILE" <<EOF
+PLACK_WORKERS=${WORKERS}
+PLACK_MAX_REQUESTS=${MAX_REQUESTS}
 PLACK_ENVIRONMENT=${ENVIRONMENT}
-PLACK_PSGIFILE="${PSGIFILE}"
+PLACK_PSGIFILE="$(clean "$PSGIFILE")"
 EOF
         ;;
 
     zebra)
-        LOGLEVELS=$(xml_val zebra_loglevels)
-        MAX_RECORD_SIZE=$(xml_val zebra_max_record_size)
+        LOGLEVELS=$(clean "$(xml_val zebra_loglevels)")
+        MAX_RECORD_SIZE=$(number_or "$(xml_val zebra_max_record_size)" 1024)
 
-        cat > "$ENVFILE" <<EOF
+        cat >"$ENVFILE" <<EOF
 ZEBRA_LOGLEVELS=${LOGLEVELS:-none,fatal,warn}
-ZEBRA_MAX_RECORD_SIZE=${MAX_RECORD_SIZE:-1024}
+ZEBRA_MAX_RECORD_SIZE=${MAX_RECORD_SIZE}
 EOF
         ;;
 
     es-indexer)
-        BATCH_SIZE=$(xml_val es_indexer_batch_size)
+        BATCH_SIZE=$(number_or "$(xml_val es_indexer_batch_size)" 10)
 
-        cat > "$ENVFILE" <<EOF
-ES_BATCH_SIZE=${BATCH_SIZE:-10}
+        cat >"$ENVFILE" <<EOF
+ES_BATCH_SIZE=${BATCH_SIZE}
 EOF
         ;;
 
     indexer)
-        # /etc/default/koha-common is the defaults file shared by every
-        # koha-* helper (shipped by koha-core under its historical name).
+        # Resolve the daemon and its parameters exactly like koha-indexer
+        # does for the SysV path: /etc/default/koha-common may set
+        # INDEXER_TIMEOUT, ALTERNATE_INDEXER_DAEMON and INDEXER_PARAMS.
         INDEXER_TIMEOUT=5
-        if [ -f /etc/default/koha-common ]; then
-            . /etc/default/koha-common
+        INDEXER_DAEMON="${KOHA_HOME}/bin/migration_tools/rebuild_zebra.pl"
+        INDEXER_PARAMS=""
+        ALTERNATE_INDEXER_DAEMON=""
+        if [ -f "$DEFAULTS" ]; then
+            . "$DEFAULTS"
+        fi
+        if [ -n "$ALTERNATE_INDEXER_DAEMON" ]; then
+            INDEXER_DAEMON="$ALTERNATE_INDEXER_DAEMON"
+        fi
+        INDEXER_TIMEOUT=$(number_or "$INDEXER_TIMEOUT" 5)
+        if [ "$INDEXER_TIMEOUT" -lt 1 ]; then
+            INDEXER_TIMEOUT=5
+        fi
+        if [ -z "$INDEXER_PARAMS" ]; then
+            INDEXER_PARAMS="-daemon -sleep $INDEXER_TIMEOUT"
         fi
 
-        cat > "$ENVFILE" <<EOF
-INDEXER_TIMEOUT=${INDEXER_TIMEOUT:-5}
+        cat >"$ENVFILE" <<EOF
+INDEXER_TIMEOUT=${INDEXER_TIMEOUT}
+INDEXER_DAEMON="$(clean "$INDEXER_DAEMON")"
+INDEXER_PARAMS="$(clean "$INDEXER_PARAMS")"
 EOF
         ;;
 
     z3950)
-        # Determine config dir: per-instance or global
+        # Per-instance config dir when it has a config.xml (the same test
+        # is_z3950_enabled uses), otherwise the global one.
         CONFIGDIR="/etc/koha/z3950"
-        if [ -d "/etc/koha/sites/${INSTANCE}/z3950" ]; then
+        if [ -e "/etc/koha/sites/${INSTANCE}/z3950/config.xml" ]; then
             CONFIGDIR="/etc/koha/sites/${INSTANCE}/z3950"
         fi
 
-        # Read additional options from config
-        Z3950_OPTS=""
-        if [ -f "${CONFIGDIR}/config.xml" ]; then
-            Z3950_OPTS=$(xmlstarlet sel -t -v "//z3950_responder_options" "${CONFIGDIR}/config.xml" 2>/dev/null || true)
+        # Additional options: /etc/default/koha-common wins, then the
+        # z3950_responder_options element of the responder's config.xml,
+        # as in the SysV path.
+        Z3950_ADDITIONAL_OPTS=""
+        if [ -f "$DEFAULTS" ]; then
+            . "$DEFAULTS"
+        fi
+        if [ -z "$Z3950_ADDITIONAL_OPTS" ] && [ -f "${CONFIGDIR}/config.xml" ]; then
+            Z3950_ADDITIONAL_OPTS=$(xmlstarlet sel -t -v 'yazgfs/config/z3950_responder_options' "${CONFIGDIR}/config.xml" 2>/dev/null || true)
         fi
 
-        cat > "$ENVFILE" <<EOF
-Z3950_CONFIGDIR="${CONFIGDIR}"
-Z3950_ADDITIONAL_OPTS="${Z3950_OPTS}"
+        cat >"$ENVFILE" <<EOF
+Z3950_CONFIGDIR="$(clean "$CONFIGDIR")"
+Z3950_ADDITIONAL_OPTS="$(clean "$Z3950_ADDITIONAL_OPTS")"
 EOF
+        ;;
+
+    *)
+        # Nothing to configure for this service; leave an empty file so the
+        # unit's EnvironmentFile= still resolves.
+        : >"$ENVFILE"
         ;;
 esac
 
