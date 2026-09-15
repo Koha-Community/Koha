@@ -60,7 +60,10 @@ else
 fi
 
 case "$CMD" in
-    enable|disable|start|stop|restart|status)
+    status)
+        systemctl --no-pager "$CMD" "$UNIT"
+        ;;
+    enable|disable|start|stop|restart)
         systemctl "$CMD" "$UNIT"
         ;;
     *)

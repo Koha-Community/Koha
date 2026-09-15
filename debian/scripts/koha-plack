@@ -124,10 +124,6 @@ enable_plack()
     local instancename=$1
     local instancefile=$(get_apache_config_for "$instancename")
 
-    if [ "$(koha_init_backend)" = "systemd" ]; then
-        koha_service_ctl enable plack "$instancename"
-    fi
-
     alreadyopac=0
     alreadyintra=0
     failopac=0
@@ -159,6 +155,14 @@ enable_plack()
         alreadyintra=1
     fi
 
+    # Under systemd the unit has to be enabled as well, whatever the Apache
+    # side looked like. Done after the config edits so a systemctl failure
+    # cannot leave them half-applied under set -e.
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl enable plack "$instancename" || \
+            warn "Could not enable koha-plack@${instancename}.service"
+    fi
+
     # Fail if it was already plack enabled.
     if [ $alreadyopac -eq 1 ] && [ $alreadyintra -eq 1 ] ; then
         return 1
@@ -178,10 +182,6 @@ disable_plack()
 {
     local instancename=$1
     local instancefile=$(get_apache_config_for "$instancename")
-
-    if [ "$(koha_init_backend)" = "systemd" ]; then
-        koha_service_ctl disable plack "$instancename"
-    fi
 
     alreadyopac=0
     alreadyintra=0
@@ -212,6 +212,13 @@ disable_plack()
     else
         [ "${quiet}" != "yes" ] && warn "Plack already disabled for ${instancename} Intranet"
         alreadyintra=1
+    fi
+
+    # Under systemd the unit has to be disabled as well; done after the
+    # Apache edits for the same reason as in enable_plack.
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl disable plack "$instancename" || \
+            warn "Could not disable koha-plack@${instancename}.service"
     fi
 
     # Fail if it was already plack disabled.

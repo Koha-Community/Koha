@@ -170,19 +170,21 @@ is_sitemap_enabled()
 # --- Service management abstraction ---
 # Systemd is the primary path. Legacy daemon/start-stop-daemon is the fallback.
 
-_KOHA_INIT_BACKEND=""
-
+# Prints "systemd" when systemd is PID 1 *and* the koha-systemd package's
+# units are installed, "sysv" otherwise. A systemd host running koha-sysv
+# must take the SysV path, so the presence of the unit files is what
+# decides, not the init system alone. Callers use $(koha_init_backend), so
+# keep this cheap: plain file tests, no systemctl round trip.
 koha_init_backend()
 {
-    if [ -z "$_KOHA_INIT_BACKEND" ]; then
-        if [ -d /run/systemd/system ] && \
-           systemctl list-unit-files koha-plack@.service >/dev/null 2>&1; then
-            _KOHA_INIT_BACKEND="systemd"
-        else
-            _KOHA_INIT_BACKEND="sysv"
-        fi
+    if [ -d /run/systemd/system ] && \
+       { [ -f /lib/systemd/system/koha-plack@.service ] || \
+         [ -f /usr/lib/systemd/system/koha-plack@.service ] || \
+         [ -f /etc/systemd/system/koha-plack@.service ]; }; then
+        echo "systemd"
+    else
+        echo "sysv"
     fi
-    echo "$_KOHA_INIT_BACKEND"
 }
 
 # Map service + queue to systemd unit name
@@ -210,7 +212,7 @@ koha_service_ctl()
         reload)
             systemctl reload-or-restart "$unit" ;;
         status)
-            systemctl status "$unit" ;;
+            systemctl --no-pager status "$unit" ;;
     esac
 }
 
@@ -787,8 +789,11 @@ _sysv_restart_zebra()
     else
         if [ "$verbose" != "no" ]; then
             log_warning_msg "Zebra not running for ${name}."
+            _sysv_start_zebra ${name}
+        else
+            _sysv_start_zebra ${name}
+            return 0
         fi
-        _sysv_start_zebra ${name}
     fi
 }
 
@@ -838,11 +843,11 @@ _sysv_start_worker()
 
             echo "Starting Koha worker daemon for ${name} (${queue})"
             if ! daemon $DAEMONOPTS -- "$worker_DAEMON" --queue "$queue"; then
-                ((error_count++))
+                error_count=$((error_count+1))
             fi
         else
             echo "Error: worker already running for ${name} (${queue})"
-            ((error_count++))
+            error_count=$((error_count+1))
         fi
     done
     log_end_msg $error_count
@@ -868,11 +873,11 @@ _sysv_stop_worker()
 
             echo "Stopping Koha worker daemon for ${name} (${queue})"
             if ! daemon $DAEMONOPTS --stop -- "$worker_DAEMON" --queue "$queue"; then
-                ((error_count++))
+                error_count=$((error_count+1))
             fi
         else
             echo "Error: worker not running for ${name} (${queue})"
-            ((error_count++))
+            error_count=$((error_count+1))
         fi
     done
     log_end_msg $error_count
@@ -898,7 +903,7 @@ _sysv_restart_worker()
 
             echo "Restarting Koha worker daemon for ${name} (${queue})"
             if ! daemon $DAEMONOPTS --restart -- "$worker_DAEMON" --queue "$queue"; then
-                ((error_count++))
+                error_count=$((error_count+1))
             fi
         else
             echo "Worker not running for ${name} (${queue})."
@@ -1199,8 +1204,11 @@ _sysv_restart_sip()
     else
         if [ "$verbose" != "no" ]; then
             log_warning_msg "Warning: SIP server not running for ${name}."
+            _sysv_start_sip ${name}
+        else
+            _sysv_start_sip ${name}
+            return 0
         fi
-        _sysv_start_sip ${name}
     fi
 }
 
@@ -1264,7 +1272,7 @@ _sysv_start_z3950()
     if ! is_z3950_running ${instancename}; then
         export KOHA_CONF="/etc/koha/sites/${instancename}/koha-conf.xml"
 
-        if [[ ! $Z3950_ADDITIONAL_OPTS ]]; then
+        if [ -z "$Z3950_ADDITIONAL_OPTS" ]; then
             Z3950_ADDITIONAL_OPTS="$( xmlstarlet sel -t -v 'yazgfs/config/z3950_responder_options' "$CONFIGDIR/config.xml" || true )"
         fi
 
