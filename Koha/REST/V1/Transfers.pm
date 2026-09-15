@@ -97,7 +97,7 @@ sub cancel {
         # Koha::Checkin->cancel_transfer. It really belongs one level down,
         # in Koha::Item::Transfer->cancel, so that *every* transfer
         # cancellation reverts an in-transit recall regardless of the caller.
-        if ( C4::Context->preference('UseRecalls') ) {
+        if ( C4::Context->preference('UseRecalls') ne "off" ) {
             my $recall = Koha::Recalls->find( { item_id => $transfer->itemnumber, status => 'in_transit' } );
             $recall->revert_transfer if $recall;
         }

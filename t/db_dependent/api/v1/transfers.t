@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -274,6 +274,60 @@ subtest 'cancel() - UseRecalls integration' => sub {
 
     $recall->discard_changes;
     is( $recall->status, 'requested', 'The in-transit recall was reverted when the transfer was cancelled' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'cancel() - UseRecalls disabled' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'UseRecalls', 'off' );
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**1 }    # circulate flag = 1
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $item     = $builder->build_sample_item;
+    my $transfer = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber    => $item->itemnumber,
+                datesent      => \'NOW()',
+                datearrived   => undef,
+                datecancelled => undef,
+            }
+        }
+    );
+
+    my $recall = $builder->build_object(
+        {
+            class => 'Koha::Recalls',
+            value => {
+                item_id => $item->itemnumber,
+                status  => 'in_transit',
+            }
+        }
+    );
+
+    $t->post_ok( "//$userid:$password@/api/v1/transfers/"
+            . $transfer->id
+            . "/cancellation" => json => { cancellation_reason => 'Manual' } )->status_is(200);
+
+    $recall->discard_changes;
+    is(
+        $recall->status, 'in_transit',
+        'The in-transit recall was left untouched when UseRecalls is off'
+    );
 
     $schema->storage->txn_rollback;
 };
