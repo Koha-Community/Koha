@@ -4,4 +4,19 @@ set -e
 
 #DEBHELPER#
 
+if [ "$1" = "configure" ]; then
+    # koha-common is the package that pulls in RabbitMQ and memcached, so
+    # it keeps the service-level steps the monolithic package used to run.
+
+    # Koha's background jobs reach RabbitMQ over STOMP: make sure the plugin
+    # is enabled and the broker has picked it up.
+    if command -v rabbitmq-plugins >/dev/null 2>&1; then
+        rabbitmq-plugins enable rabbitmq_stomp
+        service rabbitmq-server restart || true
+    fi
+
+    # Bug 35242: Force memcache restart after koha install/upgrade
+    service memcached restart || true
+fi
+
 exit 0
