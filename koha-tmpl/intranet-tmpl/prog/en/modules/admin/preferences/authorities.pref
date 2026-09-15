@@ -155,7 +155,7 @@ Authorities:
               choices:
                   1: Do
                   0: "Don't"
-            - compare the source for 6XX headings to the thesaurus source for authority records when linking. Enabling this preference may require a reindex, and may generate new authority records if AutoCreateAuthorities is enabled.
+            - compare the source for 6XX headings to the thesaurus source for authority records when linking. Enabling this preference may require a reindex, and may generate new authority records if AutoCreateAuthorities is enabled. Matching relies on the search index being up to date, so headings imported in quick succession may generate extra authority records until indexing (Zebra's indexing daemon, or Elasticsearch) catches up.
         -
             - pref: LinkerConsiderDiacritics
               default: no
