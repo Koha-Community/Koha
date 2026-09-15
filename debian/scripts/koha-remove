@@ -73,34 +73,31 @@ FLUSH PRIVILEGES;
 eof
     fi #`
 
-    # Stop the Zebra server if needed
+    # Stop the instance's daemons if needed, and disable them regardless:
+    # under systemd a stopped-but-enabled unit would otherwise leave its
+    # symlink behind in koha@<instance>.target.wants/.
     if is_zebra_running $name; then
         koha-zebra --stop $name || /bin/true
-        koha-zebra --disable $name || /bin/true
     fi
-    # Stop the indexer daemon if needed
+    koha-zebra --disable $name || /bin/true
     if is_indexer_running $name; then
         koha-indexer --stop $name || /bin/true
-        koha-indexer --disable $name || /bin/true
     fi
-    # Stop the worker daemons if needed
+    koha-indexer --disable $name || /bin/true
     koha-worker --all-queues --stop $name || /bin/true
     koha-worker --all-queues --disable $name || /bin/true
-    # Stop the Plack server if needed
     if is_plack_running $name; then
         koha-plack --stop $name || /bin/true
-        koha-plack --disable $name || /bin/true
     fi
-    # Stop the SIP server if needed
+    koha-plack --disable $name || /bin/true
     if is_sip_running $name; then
         koha-sip --stop $name || /bin/true
-        koha-sip --disable $name || /bin/true
     fi
-    # Stop the ES indexing daemon if needed
+    koha-sip --disable $name || /bin/true
     if is_es_indexer_running $name; then
         koha-es-indexer --stop $name || /bin/true
-        koha-es-indexer --disable $name || /bin/true
     fi
+    koha-es-indexer --disable $name || /bin/true
 
     # Under systemd, disable the per-instance target and create-dirs
     # oneshot so we don't leave dangling symlinks under

@@ -62,6 +62,14 @@ do
     if is_instance $name ; then
         if enable_instance $name; then
             restart_apache="yes"
+            # Under systemd, re-enable the per-instance target that
+            # koha-disable turned off and start the instance's units. (On
+            # SysV the daemons come back with the next koha-common restart,
+            # as before.)
+            if [ "$(koha_init_backend)" = "systemd" ]; then
+                systemctl enable "koha@${name}.target" 2>/dev/null || true
+                systemctl start "koha@${name}.target" 2>/dev/null || true
+            fi
         else
             warn "Instance $name already enabled."
         fi

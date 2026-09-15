@@ -63,28 +63,34 @@ do
         RET=$(disable_instance $name)
         if [ "$RET" = 0 ]; then
             restart_apache="yes"
+            # Stop the instance's daemons. Their configuration (SIP flag
+            # file, Plack in the Apache vhost, unit enablement) is left
+            # alone so that koha-enable brings back exactly what was
+            # running before.
             if is_sip_enabled $name; then
                 koha-sip --stop $name
-                koha-sip --disable $name
             fi
             if is_plack_running $name; then
                 koha-plack --stop $name
             fi
-            koha-plack --disable $name || true
             if is_zebra_running $name; then
                 koha-zebra --stop $name
             fi
-            koha-zebra --disable $name || true
             if is_indexer_running $name; then
                 koha-indexer --stop $name
             fi
-            koha-indexer --disable $name || true
             if is_es_indexer_running $name; then
                 koha-es-indexer --stop $name
             fi
-            koha-es-indexer --disable $name || true
             koha-worker --all-queues --stop $name || /bin/true
-            koha-worker --all-queues --disable $name || /bin/true
+
+            # Under systemd, keep the instance from coming back at boot:
+            # only the per-instance target is disabled, the individual
+            # units keep their enablement.
+            if [ "$(koha_init_backend)" = "systemd" ]; then
+                systemctl stop "koha@${name}.target" 2>/dev/null || true
+                systemctl disable "koha@${name}.target" 2>/dev/null || true
+            fi
         elif [ "$RET" = 2 ]; then
             warn "Error: Apache configuration file not present for instance $name."
         else

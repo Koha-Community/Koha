@@ -908,26 +908,29 @@ then
     fi
     service apache2 restart
 
-    # Enable & start Zebra.
-    koha-zebra --enable "$name"
+    # Enable & start Zebra. The --enable calls are systemd-only no-ops on
+    # SysV and must not abort instance creation (the database and vhost
+    # already exist at this point), hence the || true.
+    koha-zebra --enable "$name" || true
     koha-zebra --start "$name"
 
     # Start workers
-    koha-worker --all-queues --enable "$name"
+    koha-worker --all-queues --enable "$name" || true
     koha-worker --all-queues --start "$name"
 
     if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
         # Start Indexer daemon
-        koha-indexer --enable "$name"
+        koha-indexer --enable "$name" || true
         koha-indexer --start "$name"
     fi
 
-    # systemd-only: enable the per-instance target and the
-    # create-dirs oneshot so the instance comes back up on reboot.
+    # systemd-only: enable the per-instance target and the create-dirs
+    # oneshot so the instance comes back up on reboot, and start the
+    # target so the instance is fully up now.
     if [ "$(koha_init_backend)" = "systemd" ]; then
-        systemctl enable koha-create-dirs@${name}.service 2>/dev/null || true
-        systemctl enable koha@${name}.target               2>/dev/null || true
-        systemctl start  koha.target                       2>/dev/null || true
+        systemctl enable "koha-create-dirs@${name}.service" 2>/dev/null || true
+        systemctl enable "koha@${name}.target" 2>/dev/null || true
+        systemctl start "koha@${name}.target" 2>/dev/null || true
     fi
 
     if [ "$CLO_LETSENCRYPT" = "yes" ]; then
