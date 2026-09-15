@@ -812,10 +812,16 @@ sub _copy_move_field {
         $new_field->set_indicator( 1, $to_ind1 ) if defined $to_ind1;
         $new_field->set_indicator( 2, $to_ind2 ) if defined $to_ind2;
         if ( $regex and $regex->{search} ) {
-            for my $subfield ( $new_field->subfields ) {
-                my $value = $subfield->[1];
+            if ( $new_field->is_control_field ) {
+                my $value = $new_field->data;
                 ($value) = _modify_values( { values => [$value], regex => $regex } );
-                $new_field->update( $subfield->[0], $value );
+                $new_field->update($value);
+            } else {
+                for my $subfield ( $new_field->subfields ) {
+                    my $value = $subfield->[1];
+                    ($value) = _modify_values( { values => [$value], regex => $regex } );
+                    $new_field->update( $subfield->[0], $value );
+                }
             }
         }
         if ( $action eq 'move' ) {

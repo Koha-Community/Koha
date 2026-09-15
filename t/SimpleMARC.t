@@ -945,7 +945,7 @@ subtest 'copy_field' => sub {
     };
 
     subtest 'copy field' => sub {
-        plan tests => 14;
+        plan tests => 16;
         my $record = new_record;
         $record->append_fields(
             MARC::Field->new(
@@ -1073,6 +1073,27 @@ subtest 'copy_field' => sub {
             [ read_field( { record => $record, field => '650', field_numbers => [1] } ) ],
             [ 'The art of computer programming', 'Donald E. Knuth.' ],
             'Copy a field to existent fields should create a new field, the original one should not have been updated'
+        );
+
+        #- copy a control field and apply a regex (bug 39909)
+        $record = new_record;
+        copy_field(
+            {
+                record     => $record,
+                from_field => '008',
+                to_field   => '009',
+                regex      => { search => '120829', replace => '999999' }
+            }
+        );
+        is_deeply(
+            [ read_field( { record => $record, field => '008' } ) ],
+            ['120829t20132012nyu bk 001 0ceng'],
+            'copy control field with regex: original control field still exists'
+        );
+        is_deeply(
+            [ read_field( { record => $record, field => '009' } ) ],
+            ['999999t20132012nyu bk 001 0ceng'],
+            'copy control field with regex: regex has been applied to the new control field'
         );
     };
     subtest 'copy field destination indicators' => sub {
