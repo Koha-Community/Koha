@@ -634,10 +634,16 @@ sub _copy_move_field {
         my $new_field = $from_field->clone;
         $new_field->{_tag} = $toFieldName;    # Should be replaced by set_tag, introduced by MARC::Field 2.0.4
         if ( $regex and $regex->{search} ) {
-            for my $subfield ( $new_field->subfields ) {
-                my $value = $subfield->[1];
+            if ( $new_field->is_control_field ) {
+                my $value = $new_field->data;
                 ($value) = _modify_values( { values => [$value], regex => $regex } );
-                $new_field->update( $subfield->[0], $value );
+                $new_field->update($value);
+            } else {
+                for my $subfield ( $new_field->subfields ) {
+                    my $value = $subfield->[1];
+                    ($value) = _modify_values( { values => [$value], regex => $regex } );
+                    $new_field->update( $subfield->[0], $value );
+                }
             }
         }
         if ( $action eq 'move' ) {
