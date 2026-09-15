@@ -146,13 +146,19 @@
                     },
                 ],
             });
-            $("body").on("click", ".edit_filter", function (e) {
-                e.preventDefault();
-                edit_filter($(this));
+            document.addEventListener("click", event => {
+                const link = event.target.closest(".edit_filter");
+                if (link) {
+                    event.preventDefault();
+                    edit_filter(link);
+                }
             });
-            $("body").on("click", ".delete_filter", function (e) {
-                e.preventDefault();
-                delete_filter($(this));
+            document.addEventListener("click", event => {
+                const link = event.target.closest(".delete_filter");
+                if (link) {
+                    event.preventDefault();
+                    delete_filter(link);
+                }
             });
         });
 
@@ -165,19 +171,16 @@
         });
 
         function edit_filter(element) {
-            let filter_id = element.data("filter_id");
-            let filter_name = element.data("filter_name");
-            let filter_opac = element.data("filter_opac");
-            let filter_staff_client = element.data("filter_staff_client");
+            const { filter_id, filter_name, filter_opac, filter_staff_client } = element.dataset;
             $("#filter_edit_name").val(filter_name);
             $("#filter_edit_id").val(filter_id);
-            $("#filter_edit_opac").prop("checked", filter_opac);
-            $("#filter_edit_staff_client").prop("checked", filter_staff_client);
+            $("#filter_edit_opac").prop("checked", filter_opac === "true");
+            $("#filter_edit_staff_client").prop("checked", filter_staff_client === "true");
             $("#edit_search_filter_modal").modal("show");
         }
 
         function delete_filter(element) {
-            let filter_id = element.data("filter_id");
+            const { filter_id } = element.dataset;
             let options = {
                 url: "/api/v1/search_filters/" + filter_id,
                 method: "DELETE",
