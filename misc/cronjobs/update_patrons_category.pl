@@ -18,8 +18,6 @@
 use Modern::Perl;
 
 use C4::Context;
-use Getopt::Long qw( GetOptions );
-use Pod::Usage   qw( pod2usage );
 use Koha::Logger;
 use Koha::Patrons;
 use Koha::Patron::Categories;
@@ -149,52 +147,50 @@ C<update_patron_categories.pl> -f=<categorycode> -t=<categorycode> -v  - Process
 
 =cut
 
-# These variables are set by command line options.
-# They are initially set to default values.
+my $opt = Koha::Script->describe_options(
+    'Update patrons from one category to another, based on optional filtering criteria. Options are cumulative.
 
-my $help    = 0;
-my $man     = 0;
-my $verbose = 0;
-my $doit    = 0;
-my $ageunder;
-my $ageover;
-my $remove_guarantors = 0;
-my $fine_min;
-my $fine_max;
-my $fromcat;
-my $tocat;
-my $reg_bef;
-my $reg_aft;
-my $branch_lim;
-my %fields;
-my @where;
-GetOptions(
-    'help|?'          => \$help,
-    'man'             => \$man,
-    'v|verbose'       => \$verbose,
-    'c|confirm'       => \$doit,
-    'f|from=s'        => \$fromcat,
-    't|to=s'          => \$tocat,
-    'too_old'         => \$ageover,
-    'too_young'       => \$ageunder,
-    'fo|finesover=s'  => \$fine_min,
-    'fu|finesunder=s' => \$fine_max,
-    'rb|regbefore=s'  => \$reg_bef,
-    'ra|regafter=s'   => \$reg_aft,
-    'b|branch=s'      => \$branch_lim,
-    'd|field=s'       => \%fields,
-    'where=s'         => \@where,
+%c %o',
+    [ 'from|f=s',        'change patron category from this category (categories.categorycode)', { required => 1 } ],
+    [ 'to|t=s',          'change patron category to this category (categories.categorycode)',   { required => 1 } ],
+    [ 'branch|b=s',      'only deal with patrons from this library/branch' ],
+    [ 'too_old',         'update patron only if above the maximum age range for the "from" category' ],
+    [ 'too_young',       'update patron only if below the minimum age range for the "from" category' ],
+    [ 'finesover|fo=s',  'only update patrons with fines over this amount' ],
+    [ 'finesunder|fu=s', 'only update patrons with fines under this amount' ],
+    [ 'regbefore|rb=s',  'only update patrons registered before this date (YYYY-MM-DD)' ],
+    [ 'regafter|ra=s',   'only update patrons registered after this date (YYYY-MM-DD)' ],
+    [
+        'field|d=s%',
+        'update patrons where this borrowers column equals this value (repeatable); "null" checks for an unset field'
+    ],
+    [ 'where=s@',  'a raw WHERE condition, built from borrowers columns, to add to the query (repeatable)' ],
+    [ 'verbose|v', 'verbose output' ],
+    [ 'confirm|c', 'commit changes to the database; without this, changes are reported but not made' ],
+    {
+              epilog => "Examples:\n"
+            . "  %c --from CATCODE1 --to CATCODE2 --branch BRANCHCODE --confirm\n"
+            . "    Update patrons at BRANCHCODE from CATCODE1 to CATCODE2.\n\n"
+            . "  %c --from CATCODE1 --to CATCODE2 --too_old --confirm\n"
+            . "    Update patrons over CATCODE1's maximum age from CATCODE1 to CATCODE2.\n\n"
+            . "  %c --from CATCODE1 --to CATCODE2 --verbose\n"
+            . "    Report (without updating) which patrons would move from CATCODE1 to CATCODE2.\n",
+    },
 );
 
-pod2usage(1) if $help;
-
-pod2usage( -verbose => 2 ) if $man;
-
-if ( not $fromcat && $tocat ) {    #make sure we've specified the info we need.
-    print "Must supply category from and to (-f & -t) please specify -help for usage tips.\n";
-    pod2usage(1);
-    exit;
-}
+my $verbose    = $opt->verbose;
+my $doit       = $opt->confirm;
+my $ageunder   = $opt->too_young;
+my $ageover    = $opt->too_old;
+my $fine_min   = $opt->finesover;
+my $fine_max   = $opt->finesunder;
+my $fromcat    = $opt->from;
+my $tocat      = $opt->to;
+my $reg_bef    = $opt->regbefore;
+my $reg_aft    = $opt->regafter;
+my $branch_lim = $opt->branch;
+my %fields     = %{ $opt->field // {} };
+my @where      = @{ $opt->where // [] };
 
 ( $verbose && !$doit ) and print "No actions will be taken (test mode)\n";
 
