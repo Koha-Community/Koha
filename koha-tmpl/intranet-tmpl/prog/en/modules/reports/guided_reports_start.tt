@@ -495,12 +495,14 @@
                                                                 <i class="fa-solid fa-eye" aria-hidden="true"></i> Preview SQL
                                                             </a>
                                                         </li>
-                                                        [% IF ( CAN_user_reports_create_reports ) %]
+                                                        [% IF ( CAN_user_reports_create_reports && ( CAN_user_reports_edit_all_reports || savedreport.borrowernumber == loggedinusernumber ) ) %]
                                                             <li
                                                                 ><a class="dropdown-item" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | uri %]&amp;op=edit_form"
                                                                     ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a
                                                                 ></li
                                                             >
+                                                        [% END %]
+                                                        [% IF ( CAN_user_reports_create_reports ) %]
                                                             <li
                                                                 ><a class="dropdown-item" title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?op=duplicate&amp;id=[% savedreport.id | uri %]"
                                                                     ><i class="fa fa-copy" aria-hidden="true"></i> Duplicate</a
