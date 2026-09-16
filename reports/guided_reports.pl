@@ -298,7 +298,7 @@ if ( !$op ) {
             } else {
 
                 # No params problem found or asked to save anyway
-                update_sql(
+                $report = update_sql(
                     $id,
                     {
                         sql          => $sql,
