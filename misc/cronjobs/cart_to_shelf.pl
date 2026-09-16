@@ -21,7 +21,7 @@
 =head1 NAME
 
 cart_to_shelf.pl  cron script to set items with location of CART to original shelving location after X hours.
-                  Execute without options for help.
+                  Execute with --help for usage.
 
 =cut
 
@@ -32,33 +32,24 @@ use Koha::Script -cron;
 use C4::Items qw( CartToShelf );
 
 use C4::Context;
-use Getopt::Long qw( GetOptions );
 
-my $hours = 0;
-GetOptions( 'h|hours=s' => \$hours, );
+my $opt = Koha::Script->describe_options(
+    'Set any item with a location of CART back to its original shelving location once the given number of hours have passed.
 
-my $usage = <<'ENDUSAGE';
-cart_to_shelf.pl: This cron script will set any item of the location CART ( Shelving Cart ) to it's original shelving location
-                 after the given number of hours has passed.
-
-This script takes the following parameters :
-
-    --hours | -h         The number of hours that need to pass before the location is updated.
-
-  examples :
-  {Koha script directory}/cronjobs/cart_to_shelf.pl --hours 24
-    Would make any item that has a location of CART for more than 24 hours change to it's original shelving location.
-
-ENDUSAGE
-
-unless ($hours) {
-    print $usage;
-    die "ERROR: No --hours (-h) option defined";
-}
+%c %o',
+    [
+        'hours|h=i', 'hours that need to pass before an item is returned to its original shelving location',
+        { required => 1 }
+    ],
+    {
+        epilog =>
+            "Examples:\n  %c --hours 24\n    Move any item that has been on the cart for more than 24 hours back to its original shelving location.\n",
+    },
+);
 
 my $query = "SELECT itemnumber FROM items WHERE location = 'CART' AND TIMESTAMPDIFF(HOUR, items.timestamp, NOW() ) > ?";
 my $sth   = C4::Context->dbh->prepare($query);
-$sth->execute($hours);
+$sth->execute( $opt->hours );
 while ( my ($itemnumber) = $sth->fetchrow_array ) {
     CartToShelf($itemnumber);
 }

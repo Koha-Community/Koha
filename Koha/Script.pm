@@ -35,8 +35,9 @@ This class should be used in all scripts. It sets the interface and userenv appr
 
 =cut
 
-use File::Basename qw( fileparse );
-use Fcntl          qw( LOCK_EX LOCK_NB );
+use File::Basename            qw( fileparse );
+use Fcntl                     qw( LOCK_EX LOCK_NB );
+use Getopt::Long::Descriptive ();
 
 use C4::Context;
 use C4::Log qw( cronlogaction logscriptaction );
@@ -227,6 +228,69 @@ sub lock_exec {
     $self->{lock_handle} = $lock_handle;
     flock( $lock_handle, $lock_params )
         or Koha::Exception->throw( "Unable to acquire the lock " . $self->{lock_file} . ": $!" );
+}
+
+=head3 describe_options
+
+    my $opt = Koha::Script->describe_options(
+        'Move cart items back to their original shelving location.
+
+%c %o',
+        [ 'hours|h=i', 'hours since item was placed on the cart', { required => 1 } ],
+        { epilog => "Examples:\n  %c --hours 24\n" },
+    );
+
+Thin wrapper around L<Getopt::Long::Descriptive>'s C<describe_options>, and
+the recommended way for scripts to declare and parse their command-line
+options. Options can be declared C<required>, which is enforced before
+control returns to the caller: a missing required option makes the script
+die with a clear, consistent error and the generated usage text, before any
+script logic runs.
+
+The C<$format> string is passed straight through to
+L<Getopt::Long::Descriptive>. C<%c> expands to the program name and C<%o> to
+a short flags summary; anything else in C<$format> is free-form and always
+rendered I<before> the per-option description list, so it is the place for a
+short description of what the script does, not for examples (see below).
+
+An optional trailing hashref may include an C<epilog>, which is printed
+I<after> the per-option description list -- the natural place for
+"Examples:" text, since C<$format> is always rendered first regardless of
+where C<%o> appears within it. Unlike C<$format>, C<epilog> is not passed
+to Getopt::Long::Descriptive itself, but C<%c> and C<%%> are still expanded
+in it for consistency, so example invocations can use the program name.
+
+A C<--help> option is added automatically. When passed, the usage text
+(and epilog, if any) is printed and the script exits cleanly (status 0)
+without returning to the caller.
+
+Returns the C<$opt> object; read parsed values off it, e.g. C<< $opt->hours >>.
+
+=cut
+
+sub describe_options {
+    my ( $class, $format, @opt_specs ) = @_;
+
+    my $epilog = ( ref $opt_specs[-1] eq 'HASH' ) ? pop(@opt_specs)->{epilog} : undef;
+
+    my ( $opt, $usage ) = Getopt::Long::Descriptive::describe_options(
+        $format,
+        @opt_specs,
+        [ 'help|?', 'print this usage message and exit', { shortcircuit => 1 } ],
+    );
+
+    if ( $opt->help ) {
+        print $usage->text;
+        if ( defined $epilog ) {
+            my $prog_name = Getopt::Long::Descriptive::prog_name();
+            ( my $text = $epilog ) =~ s/%c/$prog_name/g;
+            $text =~ s/%%/%/g;
+            print "\n$text";
+        }
+        exit 0;
+    }
+
+    return $opt;
 }
 
 =head2 Internal methods

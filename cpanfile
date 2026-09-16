@@ -49,6 +49,7 @@ requires 'GD', '2.39';
 requires 'GD::Barcode::QRcode', '2.01';
 requires 'GD::Barcode::UPCE', '1.1';
 requires 'Getopt::Long', '2.35';
+requires 'Getopt::Long::Descriptive', '0.116';
 requires 'Getopt::Std', '1.05';
 requires 'HTML::Entities', '3.69';
 requires 'HTML::FormatText', '1.23';
