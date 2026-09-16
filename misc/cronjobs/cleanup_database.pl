@@ -17,6 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
+=head1 NAME
+
+cleanup_database.pl - Purge or clean up expired and stale entries from the Koha database.
+
+=cut
+
 use Modern::Perl;
 
 use constant DEFAULT_ZEBRAQ_PURGEDAYS             => 30;
@@ -34,7 +40,6 @@ use constant DEFAULT_JOBS_UNFINISHED_PURGETYPES   => qw{ update_elastic_index };
 use constant DEFAULT_EDIFACT_MSG_PURGEDAYS        => 365;
 use constant DEFAULT_ILLREQUESTS_PURGEDAYS        => 30;
 
-use Getopt::Long qw( GetOptions );
 use Try::Tiny;
 
 use Koha::Script -cron;
@@ -63,192 +68,178 @@ use Koha::PseudonymizedTransactions;
 use Koha::Statistics;
 use Koha::UploadedFiles;
 
-sub usage {
-    print STDERR <<USAGE;
-Usage: $0
-
-   -h --help          prints this help message, and exits, ignoring all
-                      other options
-   --confirm          Confirmation flag, the script will be running in dry-run mode is not set.
-   --sessions         purge the sessions table.  If you use this while users
-                      are logged into Koha, they will have to reconnect.
-   --sessdays DAYS    purge only sessions older than DAYS days.
-   -v --verbose       will cause the script to give you a bit more information
-                      about the run.
-   --zebraqueue DAYS  purge completed zebraqueue entries older than DAYS days.
-                      Defaults to 30 days if no days specified.
-   -m --mail DAYS     purge items from the mail queue that are older than DAYS days.
-                      Defaults to 30 days if no days specified.
-   --merged           purged completed entries from need_merge_authorities.
-   --messages DAYS    purge entries from messages table older than DAYS days.
-                      Defaults to 365 days if no days specified.
-   --import DAYS      purge records from import tables older than DAYS days.
-                      Defaults to 60 days if no days specified.
-   --z3950            purge records from import tables that are the result
-                      of Z39.50 searches
-   --fees DAYS        purge entries accountlines older than DAYS days, where
-                      amountoutstanding is 0 or NULL.
-                      In the case of --fees, DAYS must be greater than
-                      or equal to 1.
-   --log-module       Specify which action log modules to trim. Repeatable.
-   --preserve-log     Specify which action logs to exclude. Repeatable.
-   --log-action       Specify which action log action entries to trim. Repeatable.
-   --logs DAYS        purge entries from action_logs older than DAYS days.
-                      Defaults to 180 days if no days specified.
-   --searchhistory DAYS  purge entries from search_history older than DAYS days.
-                         Defaults to 30 days if no days specified
-   --list-invites  DAYS  purge (unaccepted) list share invites older than DAYS days.
-                         This parameter is prioritised over the
-                         PurgeListShareInvitesOlderThan system preference.
-                         Defaults to 14 days if no days specified for this parameter and
-                         the PurgeListShareInvitesOlderThan system preference is empty.
-   --restrictions DAYS   purge patrons restrictions expired since more than DAYS days.
-                         Defaults to 30 days if no days specified.
-   --all-restrictions   purge all expired patrons restrictions.
-   --del-exp-selfreg  Delete expired self-registration accounts
-   --del-unv-selfreg  DAYS  Delete unverified self-registrations older than DAYS
-   --unique-holidays DAYS  Delete all unique holidays older than DAYS
-   --temp-uploads     Delete temporary uploads.
-   --temp-uploads-days DAYS Override the corresponding preference value.
-   --uploads-missing FLAG Delete upload records for missing files when FLAG is true, count them otherwise
-   --oauth-tokens     Delete expired OAuth2 tokens
-   --statistics DAYS       Purge statistics entries more than DAYS days old.
-                           This table is used to build reports, make sure you are aware of the consequences of this before using it!
-   --statistics-type TYPES  What type of statistics to purge. Will purge all types if parameter is omitted. Repeatable.
-   --statistics-type-pseudo Purges statistic types of "@Koha::Statistic::pseudonymization_types", unless more types are defined
-                            with --statistics-type.
-   --deleted-catalog  DAYS Purge catalog records deleted more then DAYS days ago
-                           (from tables deleteditems, deletedbiblioitems, deletedbiblio_metadata and deletedbiblio).
-   --deleted-patrons DAYS  Purge patrons deleted more than DAYS days ago.
-   --old-issues DAYS       Purge checkouts (old_issues) returned more than DAYS days ago.
-   --old-reserves DAYS     Purge reserves (old_reserves) more than DAYS old.
-   --transfers DAYS        Purge transfers completed more than DAYS day ago.
-   --pseudo-transactions DAYS   Purge the pseudonymized transactions that have been originally created more than DAYS days ago
-                                DAYS is optional and can be replaced by:
-                                    --pseudo-transactions-from YYYY-MM-DD and/or --pseudo-transactions-to YYYY-MM-DD
-   --labels DAYS           Purge item label batches last added to more than DAYS days ago.
-   --cards DAY             Purge card creator batches last added to more than DAYS days ago.
-   --return-claims         Purge all resolved return claims older than the number of days specified in
-                           the system preference CleanUpDatabaseReturnClaims.
-   --jobs-unfinished-days DAYS        Purge all unfinished background jobs this many days old. Defaults to 365 if no DAYS provided.
-   --jobs-unfinished-type TYPES       What type of unfinished background jobs to purge. Defaults to "update_elastic_index" if omitted
-                           Specifying "all" will purge all types. Repeatable.
-   --jobs-days DAYS        Purge all finished background jobs this many days old. Defaults to 1 if no DAYS provided.
-   --jobs-type TYPES       What type of background job to purge. Defaults to "update_elastic_index" if omitted
-                           Specifying "all" will purge all types. Repeatable.
-   --reports DAYS          Purge reports data saved more than DAYS days ago. The data is created by running runreport.pl with the --store-results option.
-   --edifact-messages DAYS   Purge process and failed EDIFACT messages handled more than DAYS days.
-                             Defaults to 365 days if no days specified.
-   --illrequests-status STATUS Specify which ILL request statuses to remove. Repeatable.
-   --illrequests-days DAYS   Purge ILL requests older than DAYS days.
-                             Defaults to 30 days if omitted. Requires at least one --illrequests-status.
-USAGE
-    exit $_[0];
-}
-
-my $help;
-my $confirm;
-my $sessions;
-my $sess_days;
-my $verbose;
-my $zebraqueue_days;
-my $mail;
-my $purge_merged;
-my $pImport;
-my $pLogs;
-my $pSearchhistory;
-my $pZ3950;
-my $pListShareInvites;
-my $pDebarments;
-my $allDebarments;
-my $return_claims;
-my $pExpSelfReg;
-my $pUnvSelfReg;
-my $fees_days;
-my $special_holidays_days;
-my $temp_uploads;
-my $temp_uploads_days;
-my $uploads_missing;
-my $oauth_tokens;
-my $pStatistics;
-my @statistics_types;
-my $statistics_type_pseudo;
-my $pDeletedCatalog;
-my $pDeletedPatrons;
-my $pOldIssues;
-my $pOldReserves;
-my $pTransfers;
-my ( $pPseudoTransactions, $pPseudoTransactionsFrom, $pPseudoTransactionsTo );
-my $pMessages;
 my $lock_days = C4::Context->preference('LockExpiredDelay');
-my $labels;
-my $cards;
-my @log_modules;
-my @preserve_logs;
-my @log_actions;
-my $jobs_unfinished_days;
-my @jobs_unfinished_types;
-my $jobs_days;
-my @jobs_types;
-my $reports;
-my $edifact_msg_days;
-my $illrequests_days;
-my @illrequests_statuses;
 
 my $command_line_options = join( " ", @ARGV );
 cronlogaction( { info => $command_line_options } );
 
-GetOptions(
-    'h|help'                     => \$help,
-    'confirm'                    => \$confirm,
-    'sessions'                   => \$sessions,
-    'sessdays:i'                 => \$sess_days,
-    'v|verbose'                  => \$verbose,
-    'm|mail:i'                   => \$mail,
-    'zebraqueue:i'               => \$zebraqueue_days,
-    'merged'                     => \$purge_merged,
-    'import:i'                   => \$pImport,
-    'z3950'                      => \$pZ3950,
-    'logs:i'                     => \$pLogs,
-    'log-module:s'               => \@log_modules,
-    'preserve-log:s'             => \@preserve_logs,
-    'log-action:s'               => \@log_actions,
-    'messages:i'                 => \$pMessages,
-    'fees:i'                     => \$fees_days,
-    'searchhistory:i'            => \$pSearchhistory,
-    'list-invites:i'             => \$pListShareInvites,
-    'restrictions:i'             => \$pDebarments,
-    'all-restrictions'           => \$allDebarments,
-    'del-exp-selfreg'            => \$pExpSelfReg,
-    'del-unv-selfreg:i'          => \$pUnvSelfReg,
-    'unique-holidays:i'          => \$special_holidays_days,
-    'temp-uploads'               => \$temp_uploads,
-    'temp-uploads-days:i'        => \$temp_uploads_days,
-    'uploads-missing:i'          => \$uploads_missing,
-    'oauth-tokens'               => \$oauth_tokens,
-    'statistics:i'               => \$pStatistics,
-    'statistics-type:s'          => \@statistics_types,
-    'statistics-type-pseudo:i'   => \$statistics_type_pseudo,
-    'deleted-catalog:i'          => \$pDeletedCatalog,
-    'deleted-patrons:i'          => \$pDeletedPatrons,
-    'old-issues:i'               => \$pOldIssues,
-    'old-reserves:i'             => \$pOldReserves,
-    'transfers:i'                => \$pTransfers,
-    'pseudo-transactions:i'      => \$pPseudoTransactions,
-    'pseudo-transactions-from:s' => \$pPseudoTransactionsFrom,
-    'pseudo-transactions-to:s'   => \$pPseudoTransactionsTo,
-    'labels:i'                   => \$labels,
-    'cards:i'                    => \$cards,
-    'return-claims'              => \$return_claims,
-    'jobs-unfinished-type:s'     => \@jobs_unfinished_types,
-    'jobs-unfinished-days:i'     => \$jobs_unfinished_days,
-    'jobs-type:s'                => \@jobs_types,
-    'jobs-days:i'                => \$jobs_days,
-    'reports:i'                  => \$reports,
-    'edifact-messages:i'         => \$edifact_msg_days,
-    'illrequests-days:i'         => \$illrequests_days,
-    'illrequests-status:s'       => \@illrequests_statuses,
-) || usage(1);
+my ( $opt, $usage ) = Koha::Script->describe_options(
+    'Purge or clean up expired and stale entries from the Koha database. Runs in dry-run mode unless --confirm is given.
+
+%c %o',
+    [ 'confirm',   'commit changes to the database; without this, changes are reported but not made' ],
+    [ 'verbose|v', 'give more information about what the script did/would do' ],
+
+    [ 'sessions',   'purge the sessions table; logged-in users will have to reconnect' ],
+    [ 'sessdays:i', 'purge only sessions older than this many days' ],
+
+    [
+        'zebraqueue:i',
+        'purge completed zebraqueue entries older than this many days (default: ' . DEFAULT_ZEBRAQ_PURGEDAYS . ')'
+    ],
+    [ 'mail|m:i', 'purge mail queue entries older than this many days (default: ' . DEFAULT_MAIL_PURGEDAYS . ')' ],
+    [ 'merged',   'purge completed entries from need_merge_authorities' ],
+    [
+        'import:i',
+        'purge records from import tables older than this many days (default: ' . DEFAULT_IMPORT_PURGEDAYS . ')'
+    ],
+    [ 'z3950', 'purge import table records that are the result of Z39.50 searches' ],
+
+    [ 'log-module:s@',   'action log module to trim (repeatable)' ],
+    [ 'preserve-log:s@', 'action log module to exclude from trimming (repeatable)' ],
+    [ 'log-action:s@',   'action log action entry to trim (repeatable)' ],
+    [ 'logs:i', 'purge action_logs entries older than this many days (default: ' . DEFAULT_LOGS_PURGEDAYS . ')' ],
+
+    [
+        'messages:i',
+        'purge messages table entries older than this many days (default: ' . DEFAULT_MESSAGES_PURGEDAYS . ')'
+    ],
+    [ 'fees:i', 'purge accountlines entries with a zero/null balance older than this many days (must be >= 1)' ],
+    [
+        'searchhistory:i',
+        'purge search_history entries older than this many days (default: ' . DEFAULT_SEARCHHISTORY_PURGEDAYS . ')'
+    ],
+    [
+        'list-invites:i',
+        'purge unaccepted list share invites older than this many days; overrides the PurgeListShareInvitesOlderThan system preference'
+    ],
+    [
+        'restrictions:i',
+        'purge expired patron restrictions older than this many days (default: ' . DEFAULT_DEBARMENTS_PURGEDAYS . ')'
+    ],
+    [ 'all-restrictions',    'purge all expired patron restrictions' ],
+    [ 'del-exp-selfreg',     'delete expired self-registration accounts' ],
+    [ 'del-unv-selfreg:i',   'delete unverified self-registrations older than this many days' ],
+    [ 'unique-holidays:i',   'delete unique holidays older than this many days' ],
+    [ 'temp-uploads',        'delete temporary uploads' ],
+    [ 'temp-uploads-days:i', 'override the corresponding system preference value' ],
+    [ 'uploads-missing:i',   'delete upload records for missing files (1) or just count them (0)' ],
+    [ 'oauth-tokens',        'delete expired OAuth2 tokens' ],
+    [
+        'statistics:i',
+        'purge statistics entries older than this many days -- this table is used to build reports, be aware of the consequences before using it'
+    ],
+    [ 'statistics-type:s@', 'type of statistics to purge (repeatable); purges all types if omitted' ],
+    [
+        'statistics-type-pseudo:i',
+        'purge pseudonymization statistic types (@Koha::Statistic::pseudonymization_types), unless more types are given with --statistics-type'
+    ],
+    [
+        'deleted-catalog:i',
+        'purge catalog records deleted more than this many days ago (deleteditems, deletedbiblioitems, deletedbiblio_metadata, deletedbiblio)'
+    ],
+    [ 'deleted-patrons:i', 'purge patrons deleted more than this many days ago' ],
+    [ 'old-issues:i',      'purge checkouts (old_issues) returned more than this many days ago' ],
+    [ 'old-reserves:i',    'purge reserves (old_reserves) more than this many days old' ],
+    [ 'transfers:i',       'purge transfers completed more than this many days ago' ],
+    [
+        'pseudo-transactions:i',
+        'purge pseudonymized transactions created more than this many days ago; may be replaced by --pseudo-transactions-from/-to'
+    ],
+    [ 'pseudo-transactions-from=s', 'purge pseudonymized transactions from this date (YYYY-MM-DD)' ],
+    [ 'pseudo-transactions-to=s',   'purge pseudonymized transactions to this date (YYYY-MM-DD)' ],
+    [ 'labels:i',                   'purge item label batches last added to more than this many days ago' ],
+    [ 'cards:i',                    'purge card creator batches last added to more than this many days ago' ],
+    [
+        'return-claims',
+        'purge all resolved return claims older than the number of days in the CleanUpDatabaseReturnClaims system preference'
+    ],
+    [
+        'jobs-unfinished-type:s@',
+        'type of unfinished background job to purge (repeatable, default: update_elastic_index); "all" purges all types'
+    ],
+    [
+        'jobs-unfinished-days:i',
+        'purge unfinished background jobs older than this many days (default: '
+            . DEFAULT_JOBS_UNFINISHED_PURGEDAYS . ')'
+    ],
+    [
+        'jobs-type:s@',
+        'type of finished background job to purge (repeatable, default: update_elastic_index); "all" purges all types'
+    ],
+    [
+        'jobs-days:i',
+        'purge finished background jobs older than this many days (default: ' . DEFAULT_JOBS_PURGEDAYS . ')'
+    ],
+    [ 'reports:i', 'purge saved report data (from running runreport.pl --store-results) older than this many days' ],
+    [
+        'edifact-messages:i',
+        'purge processed/failed EDIFACT messages older than this many days (default: '
+            . DEFAULT_EDIFACT_MSG_PURGEDAYS . ')'
+    ],
+    [ 'illrequests-status:s@', 'ILL request status to remove (repeatable); requires --illrequests-days' ],
+    [
+        'illrequests-days:i',
+        'purge ILL requests with the given status(es) older than this many days (default: '
+            . DEFAULT_ILLREQUESTS_PURGEDAYS . ')'
+    ],
+    {
+              epilog => "Examples:\n"
+            . "  %c --sessions --verbose\n    Report (without deleting) how many sessions would be purged.\n\n"
+            . "  %c --sessions --confirm\n    Purge the sessions table.\n\n"
+            . "  %c --old-issues 730 --old-reserves 730 --confirm\n"
+            . "    Purge old checkouts and reserves more than 2 years old.\n",
+    },
+);
+
+my $confirm                 = $opt->confirm;
+my $sessions                = $opt->sessions;
+my $sess_days               = $opt->sessdays;
+my $verbose                 = $opt->verbose;
+my $zebraqueue_days         = $opt->zebraqueue;
+my $mail                    = $opt->mail;
+my $purge_merged            = $opt->merged;
+my $pImport                 = $opt->import;
+my $pZ3950                  = $opt->z3950;
+my $pLogs                   = $opt->logs;
+my @log_modules             = @{ $opt->log_module   // [] };
+my @preserve_logs           = @{ $opt->preserve_log // [] };
+my @log_actions             = @{ $opt->log_action   // [] };
+my $pMessages               = $opt->messages;
+my $fees_days               = $opt->fees;
+my $pSearchhistory          = $opt->searchhistory;
+my $pListShareInvites       = $opt->list_invites;
+my $pDebarments             = $opt->restrictions;
+my $allDebarments           = $opt->all_restrictions;
+my $pExpSelfReg             = $opt->del_exp_selfreg;
+my $pUnvSelfReg             = $opt->del_unv_selfreg;
+my $special_holidays_days   = $opt->unique_holidays;
+my $temp_uploads            = $opt->temp_uploads;
+my $temp_uploads_days       = $opt->temp_uploads_days;
+my $uploads_missing         = $opt->uploads_missing;
+my $oauth_tokens            = $opt->oauth_tokens;
+my $pStatistics             = $opt->statistics;
+my @statistics_types        = @{ $opt->statistics_type // [] };
+my $statistics_type_pseudo  = $opt->statistics_type_pseudo;
+my $pDeletedCatalog         = $opt->deleted_catalog;
+my $pDeletedPatrons         = $opt->deleted_patrons;
+my $pOldIssues              = $opt->old_issues;
+my $pOldReserves            = $opt->old_reserves;
+my $pTransfers              = $opt->transfers;
+my $pPseudoTransactions     = $opt->pseudo_transactions;
+my $pPseudoTransactionsFrom = $opt->pseudo_transactions_from;
+my $pPseudoTransactionsTo   = $opt->pseudo_transactions_to;
+my $labels                  = $opt->labels;
+my $cards                   = $opt->cards;
+my $return_claims           = $opt->return_claims;
+my @jobs_unfinished_types   = @{ $opt->jobs_unfinished_type // [] };
+my $jobs_unfinished_days    = $opt->jobs_unfinished_days;
+my @jobs_types              = @{ $opt->jobs_type // [] };
+my $jobs_days               = $opt->jobs_days;
+my $reports                 = $opt->reports;
+my $edifact_msg_days        = $opt->edifact_messages;
+my $illrequests_days        = $opt->illrequests_days;
+my @illrequests_statuses    = @{ $opt->illrequests_status // [] };
 
 # Use default values
 $sessions             = 1                               if $sess_days                && $sess_days > 0;
@@ -280,10 +271,6 @@ if ( !defined($pListShareInvites) ) {
     }
 } elsif ( defined($pListShareInvites) && $pListShareInvites == 0 ) {
     $pListShareInvites = DEFAULT_SHARE_INVITATION_EXPIRY_DAYS;
-}
-
-if ($help) {
-    usage(0);
 }
 
 unless ( $sessions
@@ -325,13 +312,11 @@ unless ( $sessions
     || $illrequests_days
     || @illrequests_statuses )
 {
-    print "You did not specify any cleanup work for the script to do.\n\n";
-    usage(1);
+    $usage->die( { pre_text => "You did not specify any cleanup work for the script to do.\n\n" } );
 }
 
 if ( $pDebarments && $allDebarments ) {
-    print "You can not specify both --restrictions and --all-restrictions.\n\n";
-    usage(1);
+    $usage->die( { pre_text => "You can not specify both --restrictions and --all-restrictions.\n\n" } );
 }
 
 if ( @illrequests_statuses && !$illrequests_days ) {
@@ -339,8 +324,8 @@ if ( @illrequests_statuses && !$illrequests_days ) {
 }
 
 if ( $illrequests_days && !@illrequests_statuses ) {
-    print "You must specify at least one --illrequests-status when using --illrequests-days.\n\n";
-    usage(1);
+    $usage->die(
+        { pre_text => "You must specify at least one --illrequests-status when using --illrequests-days.\n\n" } );
 }
 
 say "Confirm flag not passed, running in dry-run mode..." unless $confirm;
