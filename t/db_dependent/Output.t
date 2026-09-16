@@ -63,6 +63,8 @@ subtest 'redirect_if_opac_suppressed() tests' => sub {
 
         plan tests => 1;
 
+        t::lib::Mocks::mock_preference( 'OpacSuppression', 1 );
+
         open STDOUT, '>', \$stdout;
         $opac_suppressed = 0;
 
@@ -81,6 +83,7 @@ subtest 'redirect_if_opac_suppressed() tests' => sub {
 
         {
             open STDOUT, '>', \$stdout;
+            t::lib::Mocks::mock_preference( 'OpacSuppression',          1 );
             t::lib::Mocks::mock_preference( 'OpacSuppressionByIPRange', undef );
             t::lib::Mocks::mock_preference( 'OpacSuppressionRedirect',  1 );
 
@@ -100,6 +103,7 @@ subtest 'redirect_if_opac_suppressed() tests' => sub {
 
         {
             open STDOUT, '>', \$stdout;
+            t::lib::Mocks::mock_preference( 'OpacSuppression',          1 );
             t::lib::Mocks::mock_preference( 'OpacSuppressionByIPRange', undef );
             t::lib::Mocks::mock_preference( 'OpacSuppressionRedirect',  0 );
 
@@ -121,6 +125,7 @@ subtest 'redirect_if_opac_suppressed() tests' => sub {
         {
             open STDOUT, '>', \$stdout;
 
+            t::lib::Mocks::mock_preference( 'OpacSuppression',          1 );
             t::lib::Mocks::mock_preference( 'OpacSuppressionByIPRange', '192.168' );
             t::lib::Mocks::mock_preference( 'OpacSuppressionRedirect',  0 );
 
@@ -143,6 +148,7 @@ subtest 'redirect_if_opac_suppressed() tests' => sub {
         {
             open STDOUT, '>', \$stdout;
 
+            t::lib::Mocks::mock_preference( 'OpacSuppression',          1 );
             t::lib::Mocks::mock_preference( 'OpacSuppressionByIPRange', '192.168' );
             t::lib::Mocks::mock_preference( 'OpacSuppressionRedirect',  0 );
 
