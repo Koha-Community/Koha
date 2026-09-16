@@ -38,6 +38,7 @@ This class should be used in all scripts. It sets the interface and userenv appr
 use File::Basename            qw( fileparse );
 use Fcntl                     qw( LOCK_EX LOCK_NB );
 use Getopt::Long::Descriptive ();
+use Pod::Usage                ();
 
 use C4::Context;
 use C4::Log qw( cronlogaction logscriptaction );
@@ -240,6 +241,16 @@ sub lock_exec {
         { epilog => "Examples:\n  %c --hours 24\n" },
     );
 
+    # a required positional argument (e.g. one or more report IDs):
+    my $opt = Koha::Script->describe_options(
+        '%c %o reportID [ reportID ... ]',
+        [ 'verbose|v', 'verbose output' ],
+        { args => { min => 1, name => 'reportID', variadic => 1 } },
+    );
+
+    # or, when a post-parse check describe_options can't express needs $usage too:
+    my ( $opt, $usage ) = Koha::Script->describe_options( ... );
+
 Thin wrapper around L<Getopt::Long::Descriptive>'s C<describe_options>, and
 the recommended way for scripts to declare and parse their command-line
 options. Options can be declared C<required>, which is enforced before
@@ -260,24 +271,66 @@ where C<%o> appears within it. Unlike C<$format>, C<epilog> is not passed
 to Getopt::Long::Descriptive itself, but C<%c> and C<%%> are still expanded
 in it for consistency, so example invocations can use the program name.
 
-A C<--help> option is added automatically. When passed, the usage text
-(and epilog, if any) is printed and the script exits cleanly (status 0)
-without returning to the caller.
+The same trailing hashref may also include C<args>, declaring a minimum
+number of positional (non-option) arguments -- something
+L<Getopt::Long::Descriptive> has no way to express as an option, but which
+scripts commonly require (e.g. one or more record IDs on the command
+line). C<< args => { min => 1, name => 'reportID' } >> makes this exactly as
+declarative and enforced-for-you as C<< { required => 1 } >> is for a named
+option: if C<@ARGV> has fewer than C<min> elements after parsing, the
+script dies with a clear, consistent error and the usage text, the same as
+a missing required option would. C<name> is used in that error message.
+C<variadic> is accepted as documentation only (whether more than C<min>
+arguments are meaningful); it is not itself enforced. Note that
+C<$format> is not updated automatically to mention the positional
+argument(s) -- describe them there yourself, as in the SYNOPSIS above.
 
-Returns the C<$opt> object; read parsed values off it, e.g. C<< $opt->hours >>.
+Two options are added automatically to every script using this convention:
+
+=over
+
+=item C<--help>
+
+Prints the usage text (and epilog, if any) and exits cleanly (status 0).
+
+=item C<--man>
+
+Prints the calling script's own POD as a full manual page (via
+L<Pod::Usage>'s C<< -verbose => 2 >>) and exits cleanly (status 0). This is
+for scripts whose POD is thorough enough to be worth showing in full;
+C<$format>/C<epilog> above remain the place for a short overview.
+
+=back
+
+Neither returns control to the caller; some options being declared
+C<required> does not stop C<--help> or C<--man> from working, as both
+shortcircuit that check.
+
+Returns the C<$opt> object in scalar context. In list context, also
+returns the C<$usage> object, useful for scripts that need to enforce
+something L<Getopt::Long::Descriptive> can't express as an option (e.g. a
+required positional argument) with a consistent error, via
+C<< $usage->die({ pre_text => "..." }) >>.
 
 =cut
 
 sub describe_options {
     my ( $class, $format, @opt_specs ) = @_;
 
-    my $epilog = ( ref $opt_specs[-1] eq 'HASH' ) ? pop(@opt_specs)->{epilog} : undef;
+    my $meta   = ( ref $opt_specs[-1] eq 'HASH' ) ? pop(@opt_specs) : {};
+    my $epilog = $meta->{epilog};
+    my $args   = $meta->{args};
 
     my ( $opt, $usage ) = Getopt::Long::Descriptive::describe_options(
         $format,
         @opt_specs,
-        [ 'help|?', 'print this usage message and exit', { shortcircuit => 1 } ],
+        [ 'help|?', 'print this usage message and exit',   { shortcircuit => 1 } ],
+        [ 'man',    'print the full manual page and exit', { shortcircuit => 1 } ],
     );
+
+    if ( $opt->man ) {
+        Pod::Usage::pod2usage( { -verbose => 2, -exitval => 0 } );
+    }
 
     if ( $opt->help ) {
         print $usage->text;
@@ -290,7 +343,17 @@ sub describe_options {
         exit 0;
     }
 
-    return $opt;
+    if ($args) {
+        my $min   = $args->{min} // 0;
+        my $count = scalar @ARGV;
+        if ( $count < $min ) {
+            my $name = $args->{name} // 'argument';
+            my $noun = $min == 1 ? 'argument' : 'arguments';
+            $usage->die( { pre_text => "ERROR: At least $min $name $noun required (got $count)\n\n" } );
+        }
+    }
+
+    return wantarray ? ( $opt, $usage ) : $opt;
 }
 
 =head2 Internal methods
