@@ -46,7 +46,7 @@ export default {
         const { setConfirmationDialog, setMessage } = inject("mainStore");
 
         const ItemListsStore = inject("ItemListsStore");
-        const { config } = storeToRefs(ItemListsStore);
+        const { config, itemTypes } = storeToRefs(ItemListsStore);
 
         const route = useRoute();
         const item_list_id = route.params.id;
@@ -232,18 +232,23 @@ export default {
                     avCat: "av_locations",
                 },
                 {
-                    name: "me.item_type_id",
+                    name: "item_type_id",
                     required: true,
                     type: "text",
                     label: $__("Item Type"),
                     hideIn: ["Form"],
                     tableColumnDefinition: {
                         title: $__("Item Type"),
-                        data: "me.item_type_id",
+                        data: "item_type_id",
+                        searchable: true,
+                        orderable: true,
                         render: function (data, type, row, meta) {
-                            return escape_str(row.item_type.description);
+                            return escape_str(
+                                itemTypes.value.find(
+                                    x => x.item_type_id === data
+                                )?.description ?? ""
+                            );
                         },
-                        searchable: false,
                     },
                 },
                 {
@@ -418,6 +423,11 @@ export default {
                 collection_code: () =>
                     baseResource.map_av_dt_filter("av_collection_codes"),
                 location: () => baseResource.map_av_dt_filter("av_locations"),
+                item_type_id: () =>
+                    itemTypes.value.map(x => ({
+                        _id: x.item_type_id,
+                        _str: x.description,
+                    })),
             },
             url: baseResource.getResourceTableUrl(),
             actions: resource => ({

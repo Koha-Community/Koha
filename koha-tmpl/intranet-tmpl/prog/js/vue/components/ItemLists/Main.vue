@@ -24,7 +24,8 @@ export default {
         const { loading, loaded, setError } = mainStore;
 
         const ItemListsStore = inject("ItemListsStore");
-        const { config, authorisedValues } = storeToRefs(ItemListsStore);
+        const { config, authorisedValues, itemTypes } =
+            storeToRefs(ItemListsStore);
         const { loadAuthorisedValues } = ItemListsStore;
 
         const initialized = ref(false);
@@ -33,10 +34,14 @@ export default {
             let loading_promises = [];
             loading();
 
-            const client = APIClient.item_lists;
             loading_promises.push(
-                client.config.get().then(result => {
+                APIClient.item_lists.config.get().then(result => {
                     config.value = result;
+                })
+            );
+            loading_promises.push(
+                APIClient.item_types.types.getAll().then(result => {
+                    itemTypes.value = result;
                 })
             );
             loading_promises.push(

@@ -19,6 +19,7 @@ import SIP2APIClient from "@fetch/sip2-api-client";
 import PreservationAPIClient from "@fetch/preservation-api-client";
 import CircRuleAPIClient from "@fetch/circulation-rules-api-client";
 import ItemListsAPIClient from "@fetch/item-lists-api-client";
+import ItemTypesAPIClient from "@fetch/item-types-api-client";
 
 export const APIClient = {
     booking: new BookingAPIClient(HttpClient),
@@ -40,6 +41,7 @@ export const APIClient = {
     record_sources: new RecordSourcesAPIClient(HttpClient),
     circRule: new CircRuleAPIClient(HttpClient),
     item_lists: new ItemListsAPIClient(HttpClient),
+    item_types: new ItemTypesAPIClient(HttpClient),
 };
 
 export default APIClient;

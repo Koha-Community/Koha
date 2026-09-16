@@ -9,6 +9,7 @@ export const useItemListsStore = defineStore("item_lists", () => {
             av_collection_codes: "CCODE",
             av_locations: "LOC",
         },
+        itemTypes: [],
     });
     const sharedActions = withAuthorisedValueActions(store);
 
