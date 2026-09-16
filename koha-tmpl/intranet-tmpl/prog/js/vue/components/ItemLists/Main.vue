@@ -24,18 +24,28 @@ export default {
         const { loading, loaded, setError } = mainStore;
 
         const ItemListsStore = inject("ItemListsStore");
-        const { config } = storeToRefs(ItemListsStore);
+        const { config, authorisedValues } = storeToRefs(ItemListsStore);
+        const { loadAuthorisedValues } = ItemListsStore;
 
         const initialized = ref(false);
 
         onBeforeMount(() => {
+            let loading_promises = [];
             loading();
 
             const client = APIClient.item_lists;
-            client.config.get().then(result => {
-                config.value = result;
-                initialized.value = true;
+            loading_promises.push(
+                client.config.get().then(result => {
+                    config.value = result;
+                })
+            );
+            loading_promises.push(
+                loadAuthorisedValues(authorisedValues.value, ItemListsStore)
+            );
+
+            Promise.all(loading_promises).then(() => {
                 loaded();
+                initialized.value = true;
             });
         });
 

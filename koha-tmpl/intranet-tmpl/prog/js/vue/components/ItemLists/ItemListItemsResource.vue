@@ -148,6 +148,7 @@ export default {
                 };
             },
             props,
+            moduleStore: "ItemListsStore",
             navigationOnFormSave: "ItemListItemsList",
             resourceAttrs: [
                 {
@@ -201,19 +202,12 @@ export default {
                     hideIn: ["Form"],
                 },
                 {
-                    name: "me.collection_code",
+                    name: "collection_code",
                     required: true,
-                    type: "text",
+                    type: "select",
                     label: $__("Collection"),
                     hideIn: ["Form"],
-                    tableColumnDefinition: {
-                        title: $__("Collection"),
-                        data: "me.collection_code",
-                        render: function (data, type, row, meta) {
-                            return escape_str(row._strings.collection_code.str);
-                        },
-                        searchable: false,
-                    },
+                    avCat: "av_collection_codes",
                 },
                 {
                     name: "holding_library.name",
@@ -230,19 +224,12 @@ export default {
                     hideIn: ["Form"],
                 },
                 {
-                    name: "me.location",
+                    name: "location",
                     required: true,
-                    type: "text",
+                    type: "select",
                     label: $__("Location"),
                     hideIn: ["Form"],
-                    tableColumnDefinition: {
-                        title: $__("Location"),
-                        data: "me.location",
-                        render: function (data, type, row, meta) {
-                            return escape_str(row._strings.location.str);
-                        },
-                        searchable: false,
-                    },
+                    avCat: "av_locations",
                 },
                 {
                     name: "me.item_type_id",
@@ -427,6 +414,11 @@ export default {
             },
             select: true,
             add_filters: true,
+            filters_options: {
+                collection_code: () =>
+                    baseResource.map_av_dt_filter("av_collection_codes"),
+                location: () => baseResource.map_av_dt_filter("av_locations"),
+            },
             url: baseResource.getResourceTableUrl(),
             actions: resource => ({
                 "-1": resource?.can_manage ? ["remove"] : [],
