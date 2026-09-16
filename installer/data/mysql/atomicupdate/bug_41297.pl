@@ -121,7 +121,7 @@ return {
             $ok = $dbh->do(
                 q{
                     ALTER TABLE aqcontacts
-                    ADD COLUMN edi_error_notification TINYINT(1) NOT NULL DEFAULT 0
+                    ADD COLUMN edi_error_notification TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'is the edi error notification contact'
                     AFTER serialsprimary
                 }
             );

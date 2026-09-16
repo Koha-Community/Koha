@@ -248,8 +248,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-11-26 00:00:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:original_schema_bug_41297
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-09-16 07:02:11
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ig3XHN0I9kHyYP/FmytNog
 
 __PACKAGE__->add_columns(
     '+auto_orders'       => { is_boolean => 1 },

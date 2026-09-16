@@ -132,7 +132,7 @@ is this the primary contact for serials messages
   default_value: 0
   is_nullable: 0
 
-should this contact receive EDI error notifications (e.g. duplicate invoices)
+is the edi error notification contact
 
 =head2 booksellerid
 
@@ -205,8 +205,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IefjqDsoXPLWKSfhYGne1A
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-09-16 07:02:11
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+wycmihPaDfdXfCqdJFfXA
 
 __PACKAGE__->add_columns(
     '+orderacquisition'       => { is_boolean => 1 },
