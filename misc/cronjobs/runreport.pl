@@ -29,8 +29,6 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::File::Transports;
 use Koha::SMTP::Servers;
 
-use Getopt::Long qw( GetOptions );
-use Pod::Usage   qw( pod2usage );
 use Text::CSV::Encoded;
 use CGI       qw ( -utf8 );
 use Carp      qw( carp );
@@ -181,75 +179,73 @@ Reports - Guided Reports
 
 binmode STDOUT, ":encoding(UTF-8)";
 
-# These variables can be set by command line options,
-# initially set to default values.
+my $opt = Koha::Script->describe_options(
+    'Run one or more saved reports, optionally emailing or uploading the output.
 
-my $help          = 0;
-my $man           = 0;
-my $verbose       = 0;
-my $send_email    = 0;
-my $send_empty    = 0;
-my $sftp_dest_id  = 0;
-my $attachment    = 0;
-my $format        = "text";
-my $to            = "";
-my $from          = "";
-my $subject       = "";
-my @params        = ();
+%c %o reportID [ reportID ... ]',
+    [ 'verbose|v',      'verbose output' ],
+    [ 'format=s',       'output format: text, html, csv, or tsv', { default => 'text' } ],
+    [ 'separator=s',    'separator character for csv output (default: comma)' ],
+    [ 'quote=s',        'quote character for csv output; empty string allowed (default: double quote)' ],
+    [ 'to=s',           'email address to send the report to (defaults to KohaAdminEmailAddress)' ],
+    [ 'from=s',         'email address to send the report from (defaults to KohaAdminEmailAddress)' ],
+    [ 'subject=s',      'subject for the email (defaults to the report name, or "Koha Saved Report")' ],
+    [ 'param=s@',       'parameter for the report; repeat for multiple parameters', { default => [] } ],
+    [ 'email|e',        'send the report by email (implied by --to or --from)' ],
+    [ 'send_empty',     'send an email even when the report has no results' ],
+    [ 'sftp-dest-id=i', 'ID of the target FTP/SFTP server to upload the report to' ],
+    [ 'attachment|a',   'additionally attach the report as a file; cannot be used with html format' ],
+    [ 'filename|n:s',   '(ftp/sftp only) name to use when uploading the file' ],
+    [ 'username:s',     'username to pass to the SMTP server for authentication' ],
+    [ 'password:s',     'password to pass to the SMTP server for authentication' ],
+    [ 'method:s', 'authentication method to pass to the SMTP server, e.g. LOGIN, DIGEST-MD5', { default => 'LOGIN' } ],
+    [ 'store-results', 'store the result of the report in the saved_reports table' ],
+    [ 'csv-header',    'add column names as the first line of csv output' ],
+    {
+        args   => { min => 1, name => 'reportID', variadic => 1 },
+        epilog => "Arguments:\n"
+            . "  reportID  report ID from saved_sql.id; multiple IDs may be given\n\n"
+            . "Examples:\n"
+            . "  %c 16\n    Run report #16, outputting the results to STDOUT.\n\n"
+            . "  %c 16 17\n    Run reports #16 and #17.\n",
+    },
+);
+
+my $verbose       = $opt->verbose;
+my $format        = $opt->format;
+my $to            = $opt->to      // '';
+my $from          = $opt->from    // '';
+my $subject       = $opt->subject // '';
+my @params        = @{ $opt->param };
+my $send_email    = $opt->email;
+my $send_empty    = $opt->send_empty;
+my $sftp_dest_id  = $opt->sftp_dest_id // 0;
+my $attachment    = $opt->attachment;
+my $filename      = $opt->filename;
+my $username      = $opt->username;
+my $password      = $opt->password;
+my $method        = $opt->method;
+my $store_results = $opt->store_results;
+my $csv_header    = $opt->csv_header;
 my $separator     = ',';
 my $quote         = '"';
-my $store_results = 0;
-my $csv_header    = 0;
-my $csv_separator = "";
-my $csv_quote     = "";
-
-my $filename = undef;
-my $username = undef;
-my $password = undef;
-my $method   = 'LOGIN';
-GetOptions(
-    'help|?'         => \$help,
-    'man'            => \$man,
-    'verbose'        => \$verbose,
-    'format=s'       => \$format,
-    'separator=s'    => \$csv_separator,
-    'quote=s'        => \$csv_quote,
-    'to=s'           => \$to,
-    'from=s'         => \$from,
-    'subject=s'      => \$subject,
-    'param=s'        => \@params,
-    'email'          => \$send_email,
-    'send_empty'     => \$send_empty,
-    'sftp-dest-id=i' => \$sftp_dest_id,
-    'a|attachment'   => \$attachment,
-    'n|filename:s'   => \$filename,
-    'username:s'     => \$username,
-    'password:s'     => \$password,
-    'method:s'       => \$method,
-    'store-results'  => \$store_results,
-    'csv-header'     => \$csv_header,
-
-) or pod2usage(2);
-pod2usage( -verbose => 2 ) if ($man);
-pod2usage( -verbose => 2 ) if ( $help and $verbose );
-pod2usage(1) if $help;
 
 unless ($format) {
     $verbose and print STDERR "No format specified, assuming 'text'\n";
     $format = 'text';
 }
 
-if ($csv_separator) {
+if ( $opt->separator ) {
     if ( $format eq 'csv' ) {
-        $separator = "$csv_separator";
+        $separator = $opt->separator;
     } else {
         print STDERR "Cannot specify separator if not using CSV format\n";
     }
 }
 
-if ($csv_quote) {
+if ( $opt->quote ) {
     if ( $format eq 'csv' ) {
-        $quote = "$csv_quote";
+        $quote = $opt->quote;
     } else {
         print STDERR "Cannot specify quote if not using CSV format\n";
     }
@@ -266,10 +262,6 @@ if ( $to or $from or $send_email ) {
     $to   or $to   = C4::Context->preference('KohaAdminEmailAddress');
 }
 
-unless ( scalar(@ARGV) ) {
-    print STDERR "ERROR: No reportID(s) specified\n";
-    pod2usage(1);
-}
 ($verbose) and print scalar(@ARGV), " argument(s) after options: " . join( " ", @ARGV ) . "\n";
 
 my $today = dt_from_string();
