@@ -783,7 +783,7 @@ sub calculate {
 
 sub report_field {
     my ( $value, $default, $allowed_fields, $allowed_attribute_codes ) = @_;
-    return $value if defined $value && exists $allowed_fields->{$value};
+    return $value if defined $value       && exists $allowed_fields->{$value};
     return $default unless defined $value && index( $value, 'borrower_attributes.' ) == 0;
 
     my $code = substr( $value, length('borrower_attributes.') );
