@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::MockModule;
 use Test::NoWarnings;
 
@@ -352,6 +352,93 @@ subtest '_get_data_and_patron() userinfo_url with extra Content-Type params (bug
 
     is( $mapped_data->{email}, 'graph@example.com', 'Email mapped from MS Graph response with OData Content-Type' );
     is( $found_patron->id,     $patron->id,         'Patron found despite extra Content-Type parameters' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest '_get_data_and_patron() userinfo_url falls back to form-encoded body (bug 43375)' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $client = Koha::Auth::Client::OAuth->new;
+
+    # Create test patron
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { email => 'formuser@example.com' }
+        }
+    );
+
+    # Create provider with email matchpoint
+    my $provider = $builder->build_object(
+        {
+            class => 'Koha::Auth::Identity::Providers',
+            value => {
+                matchpoint => 'email',
+                mapping    => encode_json(
+                    {
+                        email     => 'mail',
+                        firstname => 'given_name',
+                    }
+                )
+            }
+        }
+    );
+
+    # Mock UserAgent - simulate a provider that returns a genuine
+    # url-encoded body, so res->json fails to decode (returns undef)
+    # and _get_data_and_patron must fall back to Mojo::Parameters
+    my $ua_mock      = Test::MockModule->new('Mojo::UserAgent');
+    my $tx_mock      = Test::MockModule->new('Mojo::Transaction::HTTP');
+    my $res_mock     = Test::MockModule->new('Mojo::Message::Response');
+    my $headers_mock = Test::MockModule->new('Mojo::Headers');
+
+    $headers_mock->mock( 'content_type', sub { 'application/x-www-form-urlencoded' } );
+    $res_mock->mock( 'code', sub { '200' } );
+    $res_mock->mock( 'json', sub { undef } );
+    $res_mock->mock( 'body', sub { 'mail=formuser%40example.com&given_name=Form' } );
+    $res_mock->mock(
+        'headers',
+        sub {
+            my $headers = {};
+            bless $headers, 'Mojo::Headers';
+            return $headers;
+        }
+    );
+
+    $tx_mock->mock(
+        'res',
+        sub {
+            my $res = {};
+            bless $res, 'Mojo::Message::Response';
+            return $res;
+        }
+    );
+
+    $ua_mock->mock(
+        'get',
+        sub {
+            my $tx = {};
+            bless $tx, 'Mojo::Transaction::HTTP';
+            return $tx;
+        }
+    );
+
+    my $data   = { access_token => 'form_token' };
+    my $config = { userinfo_url => 'https://provider.example.com/userinfo' };
+
+    my ( $mapped_data, $found_patron ) = $client->_get_data_and_patron(
+        {
+            provider => $provider,
+            data     => $data,
+            config   => $config
+        }
+    );
+
+    is( $mapped_data->{email}, 'formuser@example.com', 'Email mapped from url-encoded fallback body' );
+    is( $found_patron->id,     $patron->id,            'Patron found via form-data fallback parsing' );
 
     $schema->storage->txn_rollback;
 };
