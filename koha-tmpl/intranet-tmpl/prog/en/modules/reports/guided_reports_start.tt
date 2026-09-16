@@ -482,6 +482,10 @@
                                                             [% IF ( CAN_user_reports_delete_all_reports || (CAN_user_reports_delete_own_reports && savedreport.borrowernumber == loggedinusernumber) ) %]
                                                                 [% can_delete_this_report = 1 %]
                                                             [% END %]
+                                                            [% SET can_edit_this_report = 0 %]
+                                                            [% IF ( CAN_user_reports_create_reports && ( CAN_user_reports_edit_all_reports || ( savedreport.borrowernumber && savedreport.borrowernumber == loggedinusernumber ) ) ) %]
+                                                                [% can_edit_this_report = 1 %]
+                                                            [% END %]
                                                             <a
                                                                 [% # tags below to remove extra whitespace added for readability %]
                                                                 [%- " "|$raw -%]href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | uri %]&op=show"
@@ -490,12 +494,13 @@
                                                                 [%- " "|$raw -%]data-create="[% CAN_user_reports_create_reports || 0 | html %]"
                                                                 [%- " "|$raw -%]data-delete="[% can_delete_this_report | html %]"
                                                                 [%- " "|$raw -%]data-run="[% CAN_user_reports_execute_reports || 0 | html %]"
+                                                                [%- " "|$raw -%]data-edit="[% can_edit_this_report | html %]"
                                                                 [%- ""|$raw -%]
                                                             >
                                                                 <i class="fa-solid fa-eye" aria-hidden="true"></i> Preview SQL
                                                             </a>
                                                         </li>
-                                                        [% IF ( CAN_user_reports_create_reports && ( CAN_user_reports_edit_all_reports || savedreport.borrowernumber == loggedinusernumber ) ) %]
+                                                        [% IF ( can_edit_this_report ) %]
                                                             <li
                                                                 ><a class="dropdown-item" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | uri %]&amp;op=edit_form"
                                                                     ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a
