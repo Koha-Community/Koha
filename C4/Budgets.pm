@@ -135,6 +135,14 @@ sub GetCols {
 
 }
 
+=head2 AddBudgetPeriod
+
+Create a BudgetPeriod period with given parameters
+
+    my $rs = AddBudgetPeriod({ budget_period_startdate => $start_date, budget_period_enddate => $budget_period_enddate });
+
+=cut
+
 sub AddBudgetPeriod {
     my ($budgetperiod) = @_;
     return unless ( $budgetperiod->{budget_period_startdate} && $budgetperiod->{budget_period_enddate} );
