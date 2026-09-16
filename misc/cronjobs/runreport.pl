@@ -183,12 +183,12 @@ my $opt = Koha::Script->describe_options(
     'Run one or more saved reports, optionally emailing or uploading the output.
 
 %c %o reportID [ reportID ... ]',
-    [ 'verbose|v',      'verbose output' ],
-    [ 'format=s',       'output format: text, html, csv, or tsv', { default => 'text' } ],
-    [ 'separator=s',    'separator character for csv output (default: comma)' ],
-    [ 'quote=s',        'quote character for csv output; empty string allowed (default: double quote)' ],
-    [ 'to=s',           'email address to send the report to (defaults to KohaAdminEmailAddress)' ],
-    [ 'from=s',         'email address to send the report from (defaults to KohaAdminEmailAddress)' ],
+    [ 'verbose|v',   'verbose output' ],
+    [ 'format=s',    'output format: text, html, csv, or tsv', { default => 'text' } ],
+    [ 'separator=s', 'separator character for csv output (default: comma)' ],
+    [ 'quote=s',     'quote character for csv output; empty string allowed (default: double quote)' ],
+    [ 'to=s',   'email address to send the report to (defaults to KohaAdminEmailAddress)',   { implies => 'email' } ],
+    [ 'from=s', 'email address to send the report from (defaults to KohaAdminEmailAddress)', { implies => 'email' } ],
     [ 'subject=s',      'subject for the email (defaults to the report name, or "Koha Saved Report")' ],
     [ 'param=s@',       'parameter for the report; repeat for multiple parameters', { default => [] } ],
     [ 'email|e',        'send the report by email (implied by --to or --from)' ],
@@ -211,6 +211,8 @@ my $opt = Koha::Script->describe_options(
     },
 );
 
+my @report_ids = @ARGV;
+
 my $verbose       = $opt->verbose;
 my $format        = $opt->format;
 my $to            = $opt->to      // '';
@@ -227,47 +229,31 @@ my $password      = $opt->password;
 my $method        = $opt->method;
 my $store_results = $opt->store_results;
 my $csv_header    = $opt->csv_header;
-my $separator     = ',';
-my $quote         = '"';
 
-unless ($format) {
-    $verbose and print STDERR "No format specified, assuming 'text'\n";
-    $format = 'text';
+if ( $format ne 'csv' ) {
+    print STDERR "Cannot specify separator if not using CSV format\n" if $opt->separator;
+    print STDERR "Cannot specify quote if not using CSV format\n"     if $opt->quote;
 }
 
-if ( $opt->separator ) {
-    if ( $format eq 'csv' ) {
-        $separator = $opt->separator;
-    } else {
-        print STDERR "Cannot specify separator if not using CSV format\n";
-    }
-}
-
-if ( $opt->quote ) {
-    if ( $format eq 'csv' ) {
-        $quote = $opt->quote;
-    } else {
-        print STDERR "Cannot specify quote if not using CSV format\n";
-    }
-}
+my $separator = ( $format eq 'csv' && $opt->separator ) ? $opt->separator : ',';
+my $quote     = ( $format eq 'csv' && $opt->quote )     ? $opt->quote     : '"';
 
 if ( $format eq 'tsv' || $format eq 'text' ) {
     $format    = 'csv';
     $separator = "\t";
 }
 
-if ( $to or $from or $send_email ) {
-    $send_email = 1;
-    $from or $from = C4::Context->preference('KohaAdminEmailAddress');
-    $to   or $to   = C4::Context->preference('KohaAdminEmailAddress');
+if ($send_email) {
+    $from ||= C4::Context->preference('KohaAdminEmailAddress');
+    $to   ||= C4::Context->preference('KohaAdminEmailAddress');
 }
 
-($verbose) and print scalar(@ARGV), " argument(s) after options: " . join( " ", @ARGV ) . "\n";
+($verbose) and print scalar(@report_ids), " argument(s) after options: " . join( " ", @report_ids ) . "\n";
 
 my $today = dt_from_string();
 my $date  = $today->ymd();
 
-foreach my $report_id (@ARGV) {
+foreach my $report_id (@report_ids) {
     my $report = Koha::Reports->find($report_id);
     unless ($report) {
         warn "ERROR: No saved report $report_id found";
