@@ -389,6 +389,46 @@ sub api_routes {
         }
       }
     }
+  },
+  "/patrons/echo_authorized": {
+    "post": {
+      "x-mojo-to": "Test::Controller#echo_converted",
+      "operationId": "EchoAuthorizedPayload",
+      "tags": ["patrons"],
+      "consumes": ["application/xml"],
+      "produces": ["application/json"],
+      "parameters": [
+        {
+          "name": "body",
+          "in": "body",
+          "required": true,
+          "schema": { "type": "object", "additionalProperties": true }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "The request body, as seen by the controller",
+          "schema": { "type": "object", "additionalProperties": true }
+        },
+        "401": {
+          "description": "An error occurred",
+          "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "description": "An explanation for the error",
+                  "type": "string"
+                }
+              }
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "borrowers": "1"
+        }
+      }
+    }
   }
 }
     };
