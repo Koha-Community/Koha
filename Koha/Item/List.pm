@@ -19,6 +19,8 @@ use Modern::Perl;
 
 use Koha::Database;
 
+use C4::Log qw(logaction);
+
 use Koha::Exceptions::Item::List;
 use Koha::Items;
 use Koha::Item::ListContents;
@@ -52,7 +54,34 @@ sub store {
     );
     Koha::Exceptions::Item::List::DuplicateObject->throw if $duplicates->count;
 
-    return $self->SUPER::store($self);
+    my $original = Koha::Item::Lists->find( $self->id );
+    my $is_mod   = $self->in_storage;
+    my $result   = $self->SUPER::store($self);
+    $self->discard_changes;
+
+    if ($is_mod) {
+        logaction( 'ITEM_LISTS', 'MODIFY', $self->id, $self, undef, $original );
+    } else {
+        logaction( 'ITEM_LISTS', 'CREATE', $self->id, 'item_list', undef, $self );
+    }
+
+    return $result;
+}
+
+=head3 delete
+
+Delete the object from the database
+
+=cut
+
+sub delete {
+    my ($self) = @_;
+
+    my $result = $self->SUPER::delete();
+
+    logaction( 'ITEM_LISTS', 'DELETE', $self->id, 'item_list', undef, $self );
+
+    return $result;
 }
 
 =head3 items

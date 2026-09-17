@@ -18,11 +18,12 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
+use Koha::ActionLogs;
 use Koha::Items;
 use Koha::Item::Lists;
 use Koha::Item::ListContent;
@@ -116,6 +117,62 @@ subtest 'managing shares' => sub {
     is( $list->item_list_shares->count, 0 );
     ok( !$list->is_shared_with( { borrowernumber => $patron1->borrowernumber } ) );
     ok( !$list->is_shared_with( { borrowernumber => $patron2->borrowernumber } ) );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'action logs' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    Koha::ActionLogs->new->delete();
+
+    my $patron1 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron2 = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my $list = Koha::Item::List->new(
+        {
+            name       => 'Test list',
+            visibility => 'public',
+            owner      => $patron1->borrowernumber
+        }
+    )->store();
+    $list->discard_changes;
+
+    my $logs = Koha::ActionLogs->search(
+        {
+            module => 'ITEM_LISTS',
+            action => 'CREATE',
+            object => $list->id
+        }
+    );
+    is( $logs->count, 1, 'item list creation logged' );
+
+    $list->name('New test list');
+    $list->visibility('private');
+    $list->owner( $patron2->borrowernumber );
+    $list->store;
+
+    $logs = Koha::ActionLogs->search(
+        {
+            module => 'ITEM_LISTS',
+            action => 'MODIFY',
+            object => $list->id
+        }
+    );
+    is( $logs->count, 1, 'item list modification logged' );
+
+    $list->delete();
+
+    $logs = Koha::ActionLogs->search(
+        {
+            module => 'ITEM_LISTS',
+            action => 'DELETE',
+            object => $list->id
+        }
+    );
+    is( $logs->count, 1, 'item list deletion logged' );
 
     $schema->storage->txn_rollback;
 };
