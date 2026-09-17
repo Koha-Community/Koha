@@ -71,38 +71,23 @@ sub startup {
             Koha::Caches->flush_L1_caches();
             Koha::Cache::Memory::Lite->flush();
 
-            # Convert XML payload to JSON and validate against schema.
-            # Only do so for the endpoint action, this hook also fires for the
-            # authentication bridge
+            # Convert XML payload to JSON. Only do so for the endpoint action,
+            # this hook also fires for the authentication bridge
             if (   $last
                 && $c->req->headers->content_type
                 && $c->req->headers->content_type =~ /application\/xml/
                 && !_route_wants_raw_payload($c) )
             {
-                try {
-                    my $xml = $c->req->body;
-
-                    my $parser    = XML::LibXML->new();
-                    my $doc       = $parser->parse_string($xml);
-                    my $root      = $doc->documentElement();
+                # A body that isn't XML is left alone for the route to reject
+                my $doc = try { XML::LibXML->new()->parse_string( $c->req->body ) };
+                if ($doc) {
                     my $spec_file = $self->home->rel_file("api/v1/swagger/swagger_bundle.json");
                     if ( !-f $spec_file ) {
                         $spec_file = $self->home->rel_file("api/v1/swagger/swagger.yaml");
                     }
-                    my $json = parse_xml( $root, $spec_file );
+                    my $json = parse_xml( $doc->documentElement(), $spec_file );
 
                     $c->req->body( JSON::encode_json($json) );
-
-                    unless ( $self->validate_json_payload( $c, $json ) ) {
-                        return $c->render( status => 400, json => { error => 'Invalid JSON payload' } );
-                    }
-                } catch {
-
-                    # If the request body is already JSON, don't try to parse it as XML
-                    my $json = $c->req->body;
-                    unless ( $self->validate_json_payload( $c, $json ) ) {
-                        return $c->render( status => 400, json => { error => 'Invalid JSON payload' } );
-                    }
                 }
             }
 
@@ -319,45 +304,6 @@ sub _json_to_xml {
         $elem->appendText($json);
         $parent->appendChild($elem);
     }
-}
-
-=head3 validate_json_payload
-
-    my $is_valid = $self->validate_json_payload( $c, $payload );
-
-Validates a JSON payload against the REST API OpenAPI/Swagger schema.
-Returns C<1> if valid, C<0> if there are errors.
-
-=cut
-
-sub validate_json_payload {
-    my ( $self, $c, $payload ) = @_;
-
-    # Load the OpenAPI schema
-    my $spec_file = $self->home->rel_file("api/v1/swagger/swagger_bundle.json");
-    if ( !-f $spec_file ) {
-        $spec_file = $self->home->rel_file("api/v1/swagger/swagger.yaml");
-    }
-
-    my $schema = JSON::Validator::Schema::OpenAPIv2->new;
-    $schema->resolve($spec_file);
-
-    my $spec = $schema->bundle->data;
-
-    # Validate the JSON payload against the schema
-    my $validator = JSON::Validator->new;
-    $validator->schema($spec);
-
-    my $errors = $validator->validate($payload);
-
-    # Print the validation errors
-    if ($errors) {
-
-        #TODO: Do something here?
-    }
-
-    # Return 1 if the payload is valid, 0 otherwise
-    return $errors ? 0 : 1;
 }
 
 =head3 parse_xml
