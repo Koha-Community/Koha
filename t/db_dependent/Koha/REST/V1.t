@@ -18,8 +18,9 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Mojo;
+use Test::MockModule;
 use Test::Warn;
 
 use File::Basename;
@@ -105,6 +106,73 @@ subtest 'x-koha-raw-payload tests' => sub {
         },
         'Without the flag, the default conversion silently drops all XML attributes (version/type/priority/scheme)'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'XML payload conversion tests' => sub {
+
+    plan tests => 12;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_config( 'enable_plugins', 1 );
+    Koha::Plugins::Methods->search->delete;
+    my $plugins = Koha::Plugins->new;
+    $plugins->InstallPlugins( { include => ['Koha::Plugin::Test'] } );
+    $_->enable for $plugins->GetPlugins( { all => 1 } );
+
+    my $t = Test::Mojo->new('Koha::REST::V1');
+
+    my $conversions = 0;
+    my $rest        = Test::MockModule->new('Koha::REST::V1');
+    $rest->mock(
+        'parse_xml',
+        sub {
+            $conversions++;
+            return $rest->original('parse_xml')->(@_);
+        }
+    );
+
+    my $xml = '<NCIPMessage version="1.0"><Request/></NCIPMessage>';
+
+    $t->post_ok(
+        '/api/v1/contrib/testplugin/patrons/echo_converted',
+        { 'Content-Type' => 'application/xml' },
+        $xml
+    )->status_is(200);
+
+    is( $conversions, 1, 'Well-formed XML is converted to JSON' );
+
+    # A body that isn't XML is left alone for the route to validate itself
+    $t->post_ok(
+        '/api/v1/contrib/testplugin/patrons/echo_converted',
+        { 'Content-Type' => 'application/xml' },
+        '{"already":"json"}'
+        )
+        ->status_is(200)
+        ->json_is( '/received' => { already => 'json' }, 'A JSON body sent as application/xml reaches the controller' );
+
+    $t->post_ok(
+        '/api/v1/contrib/testplugin/patrons/echo_converted',
+        { 'Content-Type' => 'application/xml' },
+        '<NCIPMessage><unclosed>'
+    )->status_is(400)->json_is(
+        '/errors/0/message' => 'Expected object - got string.',
+        'Malformed XML is rejected by the route validation'
+    );
+
+    # around_action fires for the authentication bridge too. A request the
+    # bridge rejects must not have paid for the conversion
+    $conversions = 0;
+
+    $t->post_ok(
+        '/api/v1/contrib/testplugin/patrons/echo_authorized',
+        { 'Content-Type' => 'application/xml' },
+        $xml
+    )->status_is(401);
+
+    is( $conversions, 0, 'The payload is not converted for a request the authentication bridge rejects' );
 
     $schema->storage->txn_rollback;
 };
