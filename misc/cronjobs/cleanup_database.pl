@@ -115,9 +115,11 @@ my ( $opt, $usage ) = Koha::Script->describe_options(
     ],
     [
         'restrictions:i',
-        'purge expired patron restrictions older than this many days (default: ' . DEFAULT_DEBARMENTS_PURGEDAYS . ')'
+        'purge expired patron restrictions older than this many days (default: '
+            . DEFAULT_DEBARMENTS_PURGEDAYS
+            . '); may not be used with --all-restrictions'
     ],
-    [ 'all-restrictions',    'purge all expired patron restrictions' ],
+    [ 'all-restrictions',    'purge all expired patron restrictions; may not be used with --restrictions' ],
     [ 'del-exp-selfreg',     'delete expired self-registration accounts' ],
     [ 'del-unv-selfreg:i',   'delete unverified self-registrations older than this many days' ],
     [ 'unique-holidays:i',   'delete unique holidays older than this many days' ],
@@ -189,6 +191,7 @@ my ( $opt, $usage ) = Koha::Script->describe_options(
             . "  %c --sessions --confirm\n    Purge the sessions table.\n\n"
             . "  %c --old-issues 730 --old-reserves 730 --confirm\n"
             . "    Purge old checkouts and reserves more than 2 years old.\n",
+        exclusive => [ [qw(restrictions all-restrictions)] ],
     },
 );
 
@@ -313,10 +316,6 @@ unless ( $sessions
     || @illrequests_statuses )
 {
     $usage->die( { pre_text => "You did not specify any cleanup work for the script to do.\n\n" } );
-}
-
-if ( $pDebarments && $allDebarments ) {
-    $usage->die( { pre_text => "You can not specify both --restrictions and --all-restrictions.\n\n" } );
 }
 
 if ( @illrequests_statuses && !$illrequests_days ) {
