@@ -8,73 +8,60 @@ use C4::Context;
 use C4::Letters qw( GetPrintMessages );
 use C4::Templates;
 use File::Spec;
-use Pod::Usage   qw( pod2usage );
-use Getopt::Long qw( GetOptions );
 
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Email;
 use Koha::Util::OpenDocument qw( generate_ods );
 use Koha::SMTP::Servers;
 
-my (
-    $help,
-    $split,
-    $html,
-    $csv,
-    $ods,
-    $delimiter,
-    @letter_codes,
-    $send,
-    @emails,
-);
-$send = 1;
-GetOptions(
-    'h|help'        => \$help,
-    's|split'       => \$split,
-    'html'          => \$html,
-    'csv'           => \$csv,
-    'ods'           => \$ods,
-    'd|delimiter:s' => \$delimiter,
-    'letter_code:s' => \@letter_codes,
-    'send!'         => \$send,
-    'e|email:s'     => \@emails,
-) || pod2usage(1);
+my ( $opt, $usage ) = Koha::Script->describe_options(
+    'Print all waiting print notices to output_directory.
 
-pod2usage(0) if $help;
+The generated filename will be notices-TODAY.[csv|html|ods], or
+notices-TODAY-BRANCHCODE.[csv|html|ods] if --split is given.
+
+%c %o output_directory',
+    [ 'split|s',        'split messages into separate files by borrower home library' ],
+    [ 'html',           'generate the print notices in a html file (default, if --csv and --ods are not given)' ],
+    [ 'csv',            'generate the print notices in a csv file; must be combined with exactly one --letter_code' ],
+    [ 'ods',            'generate the print notices in a ods file; must be combined with exactly one --letter_code' ],
+    [ 'delimiter|d:s',  'delimiter used when parsing content for --ods (default: comma)' ],
+    [ 'letter_code:s@', 'filter print messages by letter_code, repeatable' ],
+    [
+        'send!', 'change message status from pending to sent after generating files (default: on; --nosend to disable)',
+        { default => 1 }
+    ],
+    [ 'email|e:s@', 'email address to send the generated files to, repeatable' ],
+    { args => { min => 1, name => 'output_directory' } },
+);
 
 my $output_directory = $ARGV[0];
 
 if ( !$output_directory || !-d $output_directory || !-w $output_directory ) {
-    pod2usage(
-        {
-            -exitval => 1,
-            -msg     => qq{\nError: You must specify a valid and writeable directory to dump the print notices in.\n},
-        }
-    );
+    $usage->die(
+        { pre_text => "Error: You must specify a valid and writeable directory to dump the print notices in.\n\n" } );
 }
 
+my $split        = $opt->split;
+my $csv          = $opt->csv;
+my $ods          = $opt->ods;
+my @letter_codes = @{ $opt->letter_code // [] };
+my $send         = $opt->send;
+my @emails       = @{ $opt->email // [] };
+
 # Default value is html
+my $html = $opt->html;
 $html = 1 if not $html and not $csv and not $ods;
 
 if ( $csv and @letter_codes != 1 ) {
-    pod2usage(
-        {
-            -exitval => 1,
-            -msg     => qq{\nIt is not consistent to use --csv without one (and only one) letter_code\n},
-        }
-    );
+    $usage->die( { pre_text => "It is not consistent to use --csv without one (and only one) letter_code\n\n" } );
 }
 
 if ( $ods and @letter_codes != 1 ) {
-    pod2usage(
-        {
-            -exitval => 1,
-            -msg     => qq{\nIt is not consistent to use --ods without one (and only one) letter_code\n},
-        }
-    );
+    $usage->die( { pre_text => "It is not consistent to use --ods without one (and only one) letter_code\n\n" } );
 }
 
-$delimiter ||= q|,|;
+my $delimiter = $opt->delimiter || q|,|;
 
 my $today_iso     = output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } );
 my $today_syspref = output_pref( { dt => dt_from_string, dateonly => 1 } );
@@ -345,7 +332,7 @@ gather_print_notices - Print waiting print notices
 
 =head1 SYNOPSIS
 
-gather_print_notices output_directory [-s|--split] [--html] [--csv] [--ods] [--letter_code=LETTER_CODE] [-e|--email=your_email@example.org] [-h|--help]
+gather_print_notices output_directory [-s|--split] [--html] [--csv] [--ods] [--letter_code=LETTER_CODE] [-e|--email=your_email@example.org] [--help]
 
 Will print all waiting print notices to the output_directory.
 
@@ -401,7 +388,7 @@ Several letter_code parameters can be given.
 Repeatable.
 E-mail address to send generated files to.
 
-=item B<-h|--help>
+=item B<--help>
 
 Print a brief help message
 
