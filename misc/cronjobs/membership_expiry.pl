@@ -162,8 +162,6 @@ any field from the branches table
 =cut
 
 use Modern::Perl;
-use Getopt::Long qw( GetOptions );
-use Pod::Usage   qw( pod2usage );
 
 use Koha::Script -cron;
 use C4::Context;
@@ -171,68 +169,67 @@ use C4::Letters;
 
 use Koha::Patrons;
 
-# These are defaults for command line options.
-my $confirm;        # -c: Confirm that the user has read and configured this script.
-my $nomail;         # -n: No mail. Will not send any emails.
-my $forceprint;     # -p: Force print notices, even if email is found
-my $verbose = 0;    # -v: verbose
-my $help    = 0;
-my $man     = 0;
-my $before  = 0;
-my $after   = 0;
-my $branch;
-my @where;
-my $active;
-my $inactive;
-my $renew;
-my $letter_expiry;
-my $letter_renew;
-GetOptions(
-    'help|?'         => \$help,
-    'man'            => \$man,
-    'c'              => \$confirm,
-    'n'              => \$nomail,
-    'p'              => \$forceprint,
-    'v'              => \$verbose,
-    'branch:s'       => \$branch,
-    'before:i'       => \$before,
-    'after:i'        => \$after,
-    'letter:s'       => \$letter_expiry,
-    'letter_renew:s' => \$letter_renew,
-    'where=s'        => \@where,
-    'active:i'       => \$active,
-    'inactive:i'     => \$inactive,
-    'renew'          => \$renew,
-) or pod2usage(2);
-$letter_expiry = 'MEMBERSHIP_EXPIRY'  if !$letter_expiry;
-$letter_renew  = 'MEMBERSHIP_RENEWED' if !$letter_renew;
-
-pod2usage( -verbose => 2 ) if $man;
-pod2usage(1)               if $help || !$confirm;
-
-# Check active/inactive. Note that passing no value or zero is a no-op.
-if ( !C4::Context->preference('TrackLastPatronActivityTriggers')
-    && ( $active || $inactive ) )
-{
-    pod2usage(
-        -verbose => 1,
-        -msg     =>
-            q{Exiting membership_expiry.pl: Using --active or --inactive needs use of TrackLastPatronActivityTriggers over specified period},
-        -exitval => 1
-    );
-} elsif ( $active && $inactive ) {
-    pod2usage(
-        -verbose => 1,
-        -msg     => q{The --active and --inactive flags are mutually exclusive},
-        -exitval => 1
-    );
-} elsif ( ( defined $active && !$active ) || ( defined $inactive && !$inactive ) ) {
-    pod2usage(
-        -verbose => 1,
-        -msg     => q{Options --active and --inactive need a number of months},
-        -exitval => 1
-    );
+sub _positive_months {
+    my $flag = shift;
+    return sub {
+        my $v = shift;
+        return 1 if $v > 0;
+        die "--$flag needs a positive number of months\n";
+    };
 }
+
+my $opt = Koha::Script->describe_options(
+    'This script sends membership expiry reminder notices to patrons, by email and sms.
+
+%c %o',
+    [
+        'c', 'confirm that the script has been read and configured; without it, only usage is printed',
+        { required => 1 }
+    ],
+    [ 'n', 'do not send any email; notices that would have been sent are printed to standard out' ],
+    [
+        'p',
+        'force the generation of print notices, even if the borrower has an email address '
+            . '(cannot be combined with -n)'
+    ],
+    [ 'v',        'verbose; without this flag only fatal errors are reported' ],
+    [ 'branch:s', 'restrict the cronjob to this branchcode' ],
+    [
+        'before:i', 'extend the selection with a number of days before the date set by the preference',
+        { default => 0 }
+    ],
+    [
+        'after:i', 'extend the selection with a number of days after the date set by the preference',
+        { default => 0 }
+    ],
+    [ 'letter:s', 'expiry notice to use instead of the default MEMBERSHIP_EXPIRY', { default => 'MEMBERSHIP_EXPIRY' } ],
+    [
+        'letter_renew:s', 'renewal notice to use instead of the default MEMBERSHIP_RENEWED',
+        { default => 'MEMBERSHIP_RENEWED' }
+    ],
+    [ 'where=s@', 'a condition built with columns from the borrowers table, repeatable' ],
+    [
+              'active:i', 'include active patrons only (active within the given number of months); '
+            . 'needs TrackLastPatronActivityTriggers',
+        { callbacks => { 'a positive number of months' => _positive_months('active') } }
+    ],
+    [
+              'inactive:i', 'include inactive patrons only (inactive within the given number of months); '
+            . 'needs TrackLastPatronActivityTriggers',
+        { callbacks => { 'a positive number of months' => _positive_months('inactive') } }
+    ],
+    [ 'renew', 'automatically renew patrons instead of sending them an expiry notice' ],
+    { exclusive => [ [qw(active inactive)] ] },
+);
+
+if ( !C4::Context->preference('TrackLastPatronActivityTriggers')
+    && ( $opt->active || $opt->inactive ) )
+{
+    die "Exiting membership_expiry.pl: Using --active or --inactive needs use of "
+        . "TrackLastPatronActivityTriggers over specified period\n";
+}
+
+my $verbose = $opt->v;
 
 my $expdays = C4::Context->preference('MembershipExpiryDaysNotice');
 if ( !$expdays ) {
@@ -246,14 +243,15 @@ if ( !$expdays ) {
 warn 'getting upcoming membership expires' if $verbose;
 my $upcoming_mem_expires = Koha::Patrons->search_upcoming_membership_expires(
     {
-        ( $branch ? ( 'me.branchcode' => $branch ) : () ),
-        before => $before,
-        after  => $after,
+        ( $opt->branch ? ( 'me.branchcode' => $opt->branch ) : () ),
+        before => $opt->before,
+        after  => $opt->after,
     }
 );
 my @mandatory_expiry_notice_categories =
     map { $_->categorycode } Koha::Patron::Categories->search( { 'me.enforce_expiry_notice' => 1 } )->as_list;
 
+my @where         = @{ $opt->where // [] };
 my $where_literal = join ' AND ', @where;
 $upcoming_mem_expires = $upcoming_mem_expires->search( \$where_literal ) if @where;
 
@@ -263,27 +261,27 @@ warn 'found ' . $upcoming_mem_expires->count . ' soon expiring members'
 # main loop
 my ( $count_skipped, $count_renewed, $count_enqueued ) = ( 0, 0, 0 );
 while ( my $expiring_patron = $upcoming_mem_expires->next ) {
-    if ( $active && !$expiring_patron->is_active( { months => $active } ) ) {
+    if ( $opt->active && !$expiring_patron->is_active( { months => $opt->active } ) ) {
         $count_skipped++;
         next;
-    } elsif ( $inactive && $expiring_patron->is_active( { months => $inactive } ) ) {
+    } elsif ( $opt->inactive && $expiring_patron->is_active( { months => $opt->inactive } ) ) {
         $count_skipped++;
         next;
     }
 
     my $which_notice;
-    if ($renew) {
+    if ( $opt->renew ) {
         $expiring_patron->renew_account;
-        $which_notice = $letter_renew;
+        $which_notice = $opt->letter_renew;
         $count_renewed++;
     } else {
-        $which_notice = $letter_expiry;
+        $which_notice = $opt->letter;
     }
 
     my $categorycode        = $expiring_patron->categorycode;
     my $is_notice_mandatory = grep( /^$categorycode$/, @mandatory_expiry_notice_categories );
     my $letter_params       = $expiring_patron->create_expiry_notice_parameters(
-        { letter_code => $which_notice, forceprint => $forceprint, is_notice_mandatory => $is_notice_mandatory } );
+        { letter_code => $which_notice, forceprint => $opt->p, is_notice_mandatory => $is_notice_mandatory } );
 
     my $result = $expiring_patron->queue_notice($letter_params);
     $count_enqueued++ if $result->{sent};
@@ -292,7 +290,7 @@ while ( my $expiring_patron = $upcoming_mem_expires->next ) {
 if ($verbose) {
     print "Membership renewed for $count_renewed patrons\n" if $count_renewed;
     print "Enqueued notices for $count_enqueued patrons\n";
-    print "Skipped $count_skipped inactive patrons\n" if $active;
-    print "Skipped $count_skipped active patrons\n"   if $inactive;
+    print "Skipped $count_skipped inactive patrons\n" if $opt->active;
+    print "Skipped $count_skipped active patrons\n"   if $opt->inactive;
 }
 
