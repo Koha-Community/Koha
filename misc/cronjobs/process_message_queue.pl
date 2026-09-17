@@ -21,68 +21,49 @@ use strict;
 use warnings;
 
 use Koha::Script -cron;
-use C4::Letters  qw( SendQueuedMessages );
-use C4::Log      qw( cronlogaction );
-use Getopt::Long qw( GetOptions );
-use Try::Tiny    qw( catch try );
+use C4::Letters qw( SendQueuedMessages );
+use C4::Log     qw( cronlogaction );
+use Try::Tiny   qw( catch try );
 
-my $username = undef;
-my $password = undef;
-my $limit    = undef;
-my $method   = 'LOGIN';
-my $help     = 0;
-my $verbose  = 0;
-my $where;
-my @type;
-my @letter_code;
-my @exclude_letter_code;
-my $exit_on_plugin_failure = 0;
-
-GetOptions(
-    'u|username:s'             => \$username,
-    'p|password:s'             => \$password,
-    'l|limit:s'                => \$limit,
-    'm|method:s'               => \$method,
-    'h|help|?'                 => \$help,
-    'v|verbose'                => \$verbose,
-    't|type:s'                 => \@type,
-    'c|code:s'                 => \@letter_code,
-    'x|exclude-code:s'         => \@exclude_letter_code,
-    'w|where:s'                => \$where,
-    'e|exit-on-plugin-failure' => \$exit_on_plugin_failure,
-);
-my $usage = <<'ENDUSAGE';
-
-This script processes the message queue in the message_queue database
+my ( $opt, $usage ) = Koha::Script->describe_options(
+    'This script processes the message queue in the message_queue database
 table. It sends out the messages in that queue and marks them
 appropriately to indicate success or failure. It is recommended that
 you run this regularly from cron, especially if you are using the
 advance_notices.pl script.
 
-This script has the following parameters :
-    -u --username: username of mail account
-    -p --password: password of mail account
-    -t --type: If supplied, only processes this type of message ( email, sms ), repeatable
-    -c --code: If supplied, only processes messages with this letter code, repeatable
-    -x --exclude-code: If supplied, processes all messages except those with this letter code, repeatable
-    -l --limit: The maximum number of messages to process for this run
-    -m --method: authentication method required by SMTP server (See perldoc Sendmail.pm for supported authentication types.)
-    -h --help: this message
-    -v --verbose: provides verbose output to STDOUT
-    -w --where: filter messages to send with additional conditions in the where clause
-    -e --exit-on-plugin-failure: if enabled, script will exit prematurely if any plugin before_send_messages hook fails
-ENDUSAGE
+%c %o',
+    [ 'username|u:s', 'username of mail account' ],
+    [ 'password|p:s', 'password of mail account' ],
+    [ 'type|t:s@',    'if supplied, only processes this type of message (email, sms), repeatable' ],
+    [ 'code|c:s@',    'if supplied, only processes messages with this letter code, repeatable' ],
+    [
+        'exclude-code|x:s@',
+        'if supplied, processes all messages except those with this letter code, repeatable'
+    ],
+    [ 'limit|l:s', 'the maximum number of messages to process for this run' ],
+    [
+        'method|m:s',
+        'authentication method required by SMTP server (see perldoc Sendmail.pm for supported authentication types)',
+        { default => 'LOGIN' }
+    ],
+    [ 'verbose|v', 'provides verbose output to STDOUT' ],
+    [ 'where|w:s', 'filter messages to send with additional conditions in the where clause' ],
+    [
+        'exit-on-plugin-failure|e',
+        'if enabled, script will exit prematurely if any plugin before_send_messages hook fails'
+    ],
+);
 
-die $usage if $help;
-
-# Remove empty elements, see bug 37075. -c/-x take an optional value ('c|code:s'), so a bare
+# Remove empty elements, see bug 37075. -c/-x take an optional value ('code|c:s@'), so a bare
 # flag with no value still leaves an empty string in the array; strip those before the
 # mutual-exclusivity check below, otherwise a bare -c would falsely trigger it (bug 40934).
-@letter_code         = grep { $_ ne q{} } @letter_code;
-@exclude_letter_code = grep { $_ ne q{} } @exclude_letter_code;
+my @letter_code         = grep { $_ ne q{} } @{ $opt->code         // [] };
+my @exclude_letter_code = grep { $_ ne q{} } @{ $opt->exclude_code // [] };
 
 if ( @letter_code && @exclude_letter_code ) {
-    die "The options --code and --exclude-code are mutually exclusive.\nUse one or the other.\n" . $usage;
+    $usage->die(
+        { pre_text => "The options --code and --exclude-code are mutually exclusive.\nUse one or the other.\n\n" } );
 }
 
 my $script_handler = Koha::Script->new( { script => $0 } );
@@ -92,23 +73,23 @@ try {
 } catch {
     my $message = "Skipping execution of $0 ($_)";
     print STDERR "$message\n"
-        if $verbose;
+        if $opt->verbose;
     cronlogaction( { info => $message } );
     exit;
 };
 
 C4::Letters::SendQueuedMessages(
     {
-        verbose                => $verbose,
-        username               => $username,
-        password               => $password,
-        method                 => $method,
-        limit                  => $limit,
-        type                   => \@type,
+        verbose                => $opt->verbose,
+        username               => $opt->username,
+        password               => $opt->password,
+        method                 => $opt->method,
+        limit                  => $opt->limit,
+        type                   => $opt->type // [],
         letter_code            => \@letter_code,
         exclude_letter_code    => \@exclude_letter_code,
-        where                  => $where,
-        exit_on_plugin_failure => $exit_on_plugin_failure,
+        where                  => $opt->where,
+        exit_on_plugin_failure => $opt->exit_on_plugin_failure,
     }
 );
 
