@@ -252,6 +252,14 @@ sub lock_exec {
     # or, when a post-parse check describe_options can't express needs $usage too:
     my ( $opt, $usage ) = Koha::Script->describe_options( ... );
 
+    # options that must not be combined (e.g. --code and --exclude-code):
+    my $opt = Koha::Script->describe_options(
+        '%c %o',
+        [ 'code|c:s@',         'letter code to process, repeatable' ],
+        [ 'exclude-code|x:s@', 'letter code to exclude, repeatable' ],
+        { exclusive => [ [qw(code exclude-code)] ] },
+    );
+
 Thin wrapper around L<Getopt::Long::Descriptive>'s C<describe_options>, and
 the recommended way for scripts to declare and parse their command-line
 options. Options can be declared C<required>, which is enforced before
@@ -285,6 +293,22 @@ C<variadic> is accepted as documentation only (whether more than C<min>
 arguments are meaningful); it is not itself enforced. Note that
 C<$format> is not updated automatically to mention the positional
 argument(s) -- describe them there yourself, as in the SYNOPSIS above.
+
+The same trailing hashref may also include C<exclusive>, declaring one or
+more groups of options that must not be given together, e.g. C<< [qw(code
+exclude-code)] >> for a script whose C<--code> and C<--exclude-code>
+options are alternatives. C<< exclusive => [ \@group1, \@group2, ... ] >>
+takes a list of such groups (most scripts need only one); each group is a
+list of option names I<as first declared in their spec string>, hyphens
+and all (e.g. C<exclude-code>, not the accessor's C<exclude_code> --
+L<Getopt::Long::Descriptive>'s introspection needs the former). If more
+than one option in the same group is actually given a value, the script
+dies with a clear, consistent error naming the conflicting options (as
+C<--flags>) and the usage text, the same as a missing required option
+would. An option is considered "given" if it was specified on the command
+line I<and> resolved to a non-empty value -- a bare flag with no value
+left over from L<Getopt::Long>'s optional-value (C<:s>) types (see bug
+37075) does not by itself trigger the conflict.
 
 Two options are added automatically to every script using this convention:
 
@@ -322,9 +346,10 @@ or a C<< $usage->die >> call by the script), the script exits with status
 sub describe_options {
     my ( $class, $format, @opt_specs ) = @_;
 
-    my $meta   = ( ref $opt_specs[-1] eq 'HASH' ) ? pop(@opt_specs) : {};
-    my $epilog = $meta->{epilog};
-    my $args   = $meta->{args};
+    my $meta      = ( ref $opt_specs[-1] eq 'HASH' ) ? pop(@opt_specs) : {};
+    my $epilog    = $meta->{epilog};
+    my $args      = $meta->{args};
+    my $exclusive = $meta->{exclusive};
 
     my ( $opt, $usage ) = eval {
         Getopt::Long::Descriptive::describe_options(
@@ -368,7 +393,48 @@ sub describe_options {
         }
     }
 
+    for my $group ( @{ $exclusive || [] } ) {
+        my @given = grep { _opt_is_given( $opt, $_ ) } @$group;
+        if ( @given > 1 ) {
+            my @flags = map { "--$_" } @given;
+            my $message =
+                @flags == 2
+                ? "The options $flags[0] and $flags[-1] are mutually exclusive.\nUse one or the other.\n\n"
+                : "The options " . join( ', ', @flags ) . " are mutually exclusive.\nUse only one of them.\n\n";
+            $usage->die( { pre_text => $message } );
+        }
+    }
+
     return wantarray ? ( $opt, $usage ) : $opt;
+}
+
+=head3 _opt_is_given
+
+    my $bool = Koha::Script::_opt_is_given( $opt, 'exclude-code' );
+
+Returns true if the option first declared as C<$name> (hyphens and all --
+see C<exclusive> in L</describe_options>) was both specified on the
+command line and resolved to a non-empty value: a scalar option with a
+defined, non-empty-string value, or an array option with at least one
+non-empty element. A bare optional-value (C<:s>) flag left over as an
+empty string (bug 37075) is not mistaken for a real conflicting value.
+
+=cut
+
+sub _opt_is_given {
+    my ( $opt, $name ) = @_;
+
+    return 0 unless $opt->_specified($name);
+
+    my $accessor = $name =~ tr/-/_/r;
+    my $value    = $opt->$accessor;
+    return
+          ref $value eq 'ARRAY'
+        ? ( grep { defined($_) && $_ ne q{} } @$value )
+            ? 1
+            : 0
+        : ( defined($value) && $value ne q{} ) ? 1
+        :                                        0;
 }
 
 =head2 Internal methods

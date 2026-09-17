@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Exception;
 
 BEGIN { use_ok('Koha::Script') }
@@ -108,6 +108,52 @@ subtest 'describe_options() exit status tests' => sub {
         $run->("\@ARGV = qw(--foo bar); $describe \$usage->die( { pre_text => qq{Wrong\\n} } );"), 1,
         '$usage->die exits with status 1'
     );
+};
+
+subtest 'describe_options() exclusive tests' => sub {
+
+    plan tests => 7;
+
+    my $describe = sub {
+        local @ARGV = @_;
+        return Koha::Script->describe_options(
+            '%c %o',
+            [ 'code|c:s@',         'letter code, repeatable' ],
+            [ 'exclude-code|x:s@', 'exclude letter code, repeatable' ],
+            [ 'active',            'active' ],
+            [ 'inactive',          'inactive' ],
+            {
+                exclusive => [
+                    [qw(code exclude-code)],
+                    [qw(active inactive)],
+                ]
+            },
+        );
+    };
+
+    my $opt = $describe->();
+    ok( $opt, 'No options given: does not die' );
+
+    $opt = $describe->( '--code', 'FOO' );
+    is_deeply( $opt->code, ['FOO'], 'One side of a group given on its own: does not die' );
+
+    throws_ok { $describe->( '--code', 'FOO', '--exclude-code', 'BAR' ) }
+    qr/The options --code and --exclude-code are mutually exclusive/,
+        'Both sides of a group given: dies with a clear message';
+
+    throws_ok { $describe->( '--active', '--inactive' ) }
+    qr/The options --active and --inactive are mutually exclusive/,
+        'Both sides of a different group given: dies with a clear message';
+
+    lives_ok { $describe->( '-c', '--exclude-code', 'BAR' ) }
+    'A bare optional-value flag with no value (bug 37075) is not mistaken for a real value';
+
+    throws_ok { $describe->( '--code', 'FOO', '--active', '--inactive' ) }
+    qr/The options --active and --inactive are mutually exclusive/,
+        'Only the violated group is reported when multiple groups are declared';
+
+    $opt = $describe->( '--exclude-code', 'BAR' );
+    is_deeply( $opt->exclude_code, ['BAR'], 'The other side of a group given on its own: does not die' );
 };
 
 1;
