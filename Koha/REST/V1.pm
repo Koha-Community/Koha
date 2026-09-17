@@ -71,8 +71,11 @@ sub startup {
             Koha::Caches->flush_L1_caches();
             Koha::Cache::Memory::Lite->flush();
 
-            # Convert XML payload to JSON and validate against schema
-            if (   $c->req->headers->content_type
+            # Convert XML payload to JSON and validate against schema.
+            # Only do so for the endpoint action, this hook also fires for the
+            # authentication bridge
+            if (   $last
+                && $c->req->headers->content_type
                 && $c->req->headers->content_type =~ /application\/xml/
                 && !_route_wants_raw_payload($c) )
             {
