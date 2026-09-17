@@ -17,8 +17,6 @@
 
 use Modern::Perl;
 
-use Getopt::Long qw( GetOptions );
-use Pod::Usage   qw( pod2usage );
 use DateTime;
 use DateTime::Duration;
 
@@ -38,35 +36,35 @@ holds_reminder.pl - prepare reminder messages to be sent to patrons with waiting
 =head1 SYNOPSIS
 
 holds_reminder.pl
-  -lettercode <notice to send>
-  [ -c ][ -v ][ -library <branchcode> ][ -library <branchcode> ... ]
-  [ -days <number of days> ][ -mtt <transport type> ... ][ -holidays ]
-  [ -date <YYYY-MM-DD> ]
+  --lettercode <notice to send>
+  [ -c ][ -v ][ --library <branchcode> ][ --library <branchcode> ... ]
+  [ --days <number of days> ][ --mtt <transport type> ... ][ --holidays ]
+  [ --date <YYYY-MM-DD> ]
 
  Options:
-   -help                          brief help message
-   -man                           full documentation
+   --help                         brief help message
+   --man                          full documentation
    -v                             verbose
    -c --confirm                   confirm, if not set no email will be sent
-   -days          <days>          days waiting to deal with
+   --days         <days>          days waiting to deal with
    -t --triggered                 include only holds <days> days waiting, and not longer
-   -lettercode   <lettercode>     predefined notice to use, default is HOLD_REMINDER
-   -library      <branchname>     only deal with holds from this library (repeatable : several libraries can be given)
-   -holidays                      use the calendar to not count holidays as waiting days
-   -mtt          <message_transport_type> type of messages to send, default is to use patrons messaging preferences for Hold reminder
+   --lettercode  <lettercode>     predefined notice to use, default is HOLD_REMINDER
+   --library     <branchname>     only deal with holds from this library (repeatable : several libraries can be given)
+   --holidays                     use the calendar to not count holidays as waiting days
+   --mtt         <message_transport_type> type of messages to send, default is to use patrons messaging preferences for Hold reminder
                                   populating this will force send even if patron has not chosen to receive hold notices
                                   email and sms will fallback to print if borrower does not have an address/phone
-   -date                          Send notices as would have been sent on a specific date
+   --date                         Send notices as would have been sent on a specific date
 
 =head1 OPTIONS
 
 =over 8
 
-=item B<-help>
+=item B<--help>
 
 Print a brief help message and exits.
 
-=item B<-man>
+=item B<--man>
 
 Prints the manual page and exits.
 
@@ -76,11 +74,11 @@ Verbose. Without this flag set, only fatal errors are reported.
 
 =item B<--confirm | -c>
 
-Confirm. Unless set this script does not send any email (test-mode). 
+Confirm. Unless set this script does not send any email (test-mode).
 If verbose and not confirm a list of notices that would have been sent to
 the patrons are printed to standard out.
 
-=item B<-days>
+=item B<--days>
 
 Optional parameter, number of days an items has been 'waiting' on hold
 to send a message for. If not included a notice will be sent to all
@@ -93,26 +91,27 @@ If not included a notice will be sent to all patrons with waiting holds
 equal to OR greater than <days>. This option is useful if the cron is
 being run daily to avoid spamming the patrons.
 
-=item B<-lettercode>
+=item B<--lettercode>
 
 Optional parameter, choose a notice to use. Default is 'HOLD_REMINDER'.
 
-=item B<-library>
+=item B<--library>
 
 select notices for one specific library. Use the value in the
 branches.branchcode table. This option can be repeated in order
 to select notices for a group of libraries.
 
-=item B<-holidays>
+=item B<--holidays>
 
 This option determines whether library holidays are used when calculating how
 long an item has been waiting. If enabled the count will skip closed days.
 
-=item B<-date>
+=item B<--date>
 
 use it in order to send notices on a specific date and not Now. Format: YYYY-MM-DD.
+Must be a valid date in YYYY-MM-DD format.
 
-=item B<-mtt>
+=item B<--mtt>
 
 send a notices via a specific transport, this can be repeated to send various notices.
 If omitted the patron's messaging preferences for Hold notices will be used.
@@ -150,51 +149,62 @@ C<holds_reminder.pl -n -csv /tmp/holds_reminder.csv> - sends no email and
 populates F</tmp/holds_reminder.csv> with information about all waiting holds
 items.
 
-C<holds_reminder.pl -library MAIN -days 14> - prepare notices of
+C<holds_reminder.pl --library MAIN --days 14> - prepare notices of
 holds waiting for 2 weeks for the MAIN library.
 
-C<holds_reminder.pl -lettercode LATE_HOLDS -library MAIN -days 14> - prepare notices of
+C<holds_reminder.pl --lettercode LATE_HOLDS --library MAIN --days 14> - prepare notices of
 holds waiting for 2 weeks for the MAIN library. Use lettercode 'LATE_HOLDS'
 
 =cut
 
 # These variables are set by command line options.
 # They are initially set to default values.
-my $dbh     = C4::Context->dbh();
-my $help    = 0;
-my $man     = 0;
-my $verbose = 0;
-my $confirm = 0;
-my $days;
-my $triggered = 0;
-my $lettercode;
-my @branchcodes;    # Branch(es) passed as parameter
-my $use_calendar = 0;
-my $date_input;
-my $opt_out = 0;
-my @mtts;
-GetOptions(
-    'help|?'       => \$help,
-    'man'          => \$man,
-    'v'            => \$verbose,
-    'c|confirm'    => \$confirm,
-    'days=s'       => \$days,
-    't|triggered'  => \$triggered,
-    'lettercode=s' => \$lettercode,
-    'library=s'    => \@branchcodes,
-    'date=s'       => \$date_input,
-    'holidays'     => \$use_calendar,
-    'mtt=s'        => \@mtts
+my $dbh = C4::Context->dbh();
+
+my $opt = Koha::Script->describe_options(
+    'Prepare reminder messages to be sent to patrons with waiting holds.
+
+%c %o',
+    [ 'v',         'verbose; without this flag only fatal errors are reported' ],
+    [ 'confirm|c', 'confirm; unless set this script does not send any email (test mode)' ],
+    [
+        'days=s', "number of days an item has been 'waiting' on hold to send a message for (default: all waiting holds)"
+    ],
+    [
+        'triggered|t',
+        'only send notices for holds exactly --days waiting, instead of --days or longer'
+    ],
+    [ 'lettercode=s', 'notice to use', { default => 'HOLD_REMINDER' } ],
+    [ 'library=s@',   'only deal with holds from this library, repeatable (default: all libraries)' ],
+    [
+        'date=s',
+        'send notices as if run on this date instead of today (YYYY-MM-DD)',
+        {
+            callbacks => {
+                'a valid date (YYYY-MM-DD)' => sub {
+                    my $v = shift;
+                    return 1 if eval { dt_from_string( $v, 'iso' ) };
+                    die "--date must be a valid date in YYYY-MM-DD format (got '$v')\n";
+                },
+            },
+        }
+    ],
+    [ 'holidays', 'use the calendar so holidays do not count as waiting days' ],
+    [
+        'mtt=s@',
+        'message transport type to force send, repeatable (default: the patron messaging preferences for Hold reminder)'
+    ],
 );
-pod2usage(1)               if $help;
-pod2usage( -verbose => 2 ) if $man;
 
-$lettercode ||= 'HOLD_REMINDER';
+my $verbose      = $opt->v;
+my $confirm      = $opt->confirm;
+my $days         = $opt->days // 0;
+my $triggered    = $opt->triggered;
+my $lettercode   = $opt->lettercode;
+my $use_calendar = $opt->holidays;
+my @mtts         = @{ $opt->mtt // [] };
 
-# Unless a delay is specified by the user we target all waiting holds
-unless ( defined $days ) {
-    $days = 0;
-}
+my @branchcodes = @{ $opt->library // [] };
 
 # Unless one or more branchcodes are passed we use all the branches
 if ( scalar @branchcodes > 0 ) {
@@ -205,14 +215,7 @@ if ( scalar @branchcodes > 0 ) {
 }
 
 # If provided we run the report as if it had run on a specified date
-my $date_to_run;
-if ($date_input) {
-    eval { $date_to_run = dt_from_string( $date_input, 'iso' ); };
-    die "$date_input is not a valid date, aborting! Use a date in format YYYY-MM-DD."
-        if $@ or not $date_to_run;
-} else {
-    $date_to_run = dt_from_string();
-}
+my $date_to_run = $opt->date ? dt_from_string( $opt->date, 'iso' ) : dt_from_string();
 
 my $waiting_date_static = $date_to_run->clone->subtract( days => $days );
 
