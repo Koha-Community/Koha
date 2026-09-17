@@ -25,7 +25,7 @@ use C4::Letters qw( SendQueuedMessages );
 use C4::Log     qw( cronlogaction );
 use Try::Tiny   qw( catch try );
 
-my ( $opt, $usage ) = Koha::Script->describe_options(
+my $opt = Koha::Script->describe_options(
     'This script processes the message queue in the message_queue database
 table. It sends out the messages in that queue and marks them
 appropriately to indicate success or failure. It is recommended that
@@ -53,18 +53,13 @@ advance_notices.pl script.
         'exit-on-plugin-failure|e',
         'if enabled, script will exit prematurely if any plugin before_send_messages hook fails'
     ],
+    { exclusive => [ [qw(code exclude-code)] ] },
 );
 
 # Remove empty elements, see bug 37075. -c/-x take an optional value ('code|c:s@'), so a bare
-# flag with no value still leaves an empty string in the array; strip those before the
-# mutual-exclusivity check below, otherwise a bare -c would falsely trigger it (bug 40934).
+# flag with no value still leaves an empty string in the array.
 my @letter_code         = grep { $_ ne q{} } @{ $opt->code         // [] };
 my @exclude_letter_code = grep { $_ ne q{} } @{ $opt->exclude_code // [] };
-
-if ( @letter_code && @exclude_letter_code ) {
-    $usage->die(
-        { pre_text => "The options --code and --exclude-code are mutually exclusive.\nUse one or the other.\n\n" } );
-}
 
 my $script_handler = Koha::Script->new( { script => $0 } );
 
