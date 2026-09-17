@@ -1032,6 +1032,7 @@ sub EnqueueLetter {
         message_id => $id,
         borrowernumber => $who_letter_is_for,
         letter_code => $letter_code, # can be scalar or arrayref
+        exclude_letter_code => $exclude_letter_code, # can be scalar or arrayref
         type => $type, # can be scalar or arrayref
         limit => 50,
         verbose => 1,
@@ -1043,6 +1044,10 @@ Sends 'pending' messages from the queue, based on parameters.
 The (optional) message_id, borrowernumber, letter_code, type and where
 parameter are used to select which pending messages will be processed. The
 limit parameter determines the volume of results, i.e. sent messages.
+
+The optional exclude_letter_code parameter processes all pending messages
+except those with the given letter code(s). It cannot be combined with
+letter_code; passing both raises a Koha::Exceptions::BadParameter exception.
 
 The optional verbose parameter can be used to generate debugging output.
 
@@ -1057,6 +1062,18 @@ sub SendQueuedMessages {
 
     Koha::Exceptions::BadParameter->throw("Parameter message_id cannot be empty if passed.")
         if ( exists( $params->{message_id} ) && !$params->{message_id} );
+
+    my $has_letter_code =
+        ref( $params->{letter_code} ) ? scalar @{ $params->{letter_code} } : $params->{letter_code};
+    my $has_exclude_letter_code =
+        ref( $params->{exclude_letter_code} )
+        ? scalar @{ $params->{exclude_letter_code} }
+        : $params->{exclude_letter_code};
+
+    # letter_code and exclude_letter_code build the same search key ('letter_code'); passing both
+    # would let one silently clobber the other in the hash literal built below.
+    Koha::Exceptions::BadParameter->throw("Parameters letter_code and exclude_letter_code are mutually exclusive.")
+        if ( $has_letter_code && $has_exclude_letter_code );
 
     if ( C4::Context->config("enable_plugins") ) {
         my @plugins = Koha::Plugins->new->GetPlugins(
@@ -1084,16 +1101,16 @@ sub SendQueuedMessages {
             $params->{message_id}     ? ( message_id     => $params->{message_id} )     : (),
             $params->{borrowernumber} ? ( borrowernumber => $params->{borrowernumber} ) : (),
 
-            # Check for scalar or array in letter_code and type
-            ref( $params->{letter_code} )
-                && @{ $params->{letter_code} } ? ( letter_code => $params->{letter_code} ) : (),
-            !ref( $params->{letter_code} ) && $params->{letter_code} ? ( letter_code => $params->{letter_code} ) : (),
-
-            # Check for scalar or array in exclude_letter_code
-            ref( $params->{exclude_letter_code} )
-                && @{ $params->{exclude_letter_code} } ? ( letter_code => { '-not_in' => $params->{exclude_letter_code} } ) : (),
-            !ref( $params->{exclude_letter_code} )
-                && $params->{exclude_letter_code} ? ( letter_code => { '!=' => $params->{exclude_letter_code} } ) : (),
+            # letter_code and exclude_letter_code can each be scalar or arrayref; guaranteed
+            # mutually exclusive above, so they never both contribute a letter_code key here.
+            $has_letter_code ? ( letter_code => $params->{letter_code} ) : (),
+            $has_exclude_letter_code
+            ? (
+                letter_code => ref( $params->{exclude_letter_code} )
+                ? { '-not_in' => $params->{exclude_letter_code} }
+                : { '!='      => $params->{exclude_letter_code} }
+                )
+            : (),
 
             ref( $params->{type} )
                 && @{ $params->{type} }

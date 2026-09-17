@@ -1826,7 +1826,7 @@ subtest 'Virtual method ->strftime in notices' => sub {
 };
 
 subtest 'Test exclude_letter_code parameter for SendQueuedMessages' => sub {
-    plan tests => 10;
+    plan tests => 12;
 
     my $dbh = C4::Context->dbh;
 
@@ -1947,6 +1947,34 @@ subtest 'Test exclude_letter_code parameter for SendQueuedMessages' => sub {
 
     is( Koha::Notice::Messages->find( $id[2] )->status, 'sent',    'ACQ_NOTIF message processed' );
     is( Koha::Notice::Messages->find( $id[3] )->status, 'pending', 'TEST_MESSAGE message excluded, still pending' );
+
+    # Reset messages to pending
+    Koha::Notice::Messages->find( $id[2] )->update( { status => 'pending' } );
+    Koha::Notice::Messages->find( $id[3] )->update( { status => 'pending' } );
+
+    throws_ok {
+        C4::Letters::SendQueuedMessages(
+            {
+                letter_code         => ['ACQ_NOTIF'],
+                exclude_letter_code => ['DUEDGST'],
+                type                => 'sms',
+            }
+        );
+    }
+    'Koha::Exceptions::BadParameter',
+        'SendQueuedMessages dies when letter_code and exclude_letter_code are both passed';
+
+    throws_ok {
+        C4::Letters::SendQueuedMessages(
+            {
+                letter_code         => 'ACQ_NOTIF',
+                exclude_letter_code => 'DUEDGST',
+                type                => 'sms',
+            }
+        );
+    }
+    'Koha::Exceptions::BadParameter',
+        'SendQueuedMessages dies when scalar letter_code and exclude_letter_code are both passed';
 };
 
 $schema->storage->txn_rollback;

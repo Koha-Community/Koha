@@ -75,6 +75,12 @@ ENDUSAGE
 
 die $usage if $help;
 
+# Remove empty elements, see bug 37075. -c/-x take an optional value ('c|code:s'), so a bare
+# flag with no value still leaves an empty string in the array; strip those before the
+# mutual-exclusivity check below, otherwise a bare -c would falsely trigger it (bug 40934).
+@letter_code         = grep { $_ ne q{} } @letter_code;
+@exclude_letter_code = grep { $_ ne q{} } @exclude_letter_code;
+
 if ( @letter_code && @exclude_letter_code ) {
     die "The options --code and --exclude-code are mutually exclusive.\nUse one or the other.\n" . $usage;
 }
@@ -90,10 +96,6 @@ try {
     cronlogaction( { info => $message } );
     exit;
 };
-
-# Remove empty elements, see bug 37075
-@letter_code         = grep { $_ ne q{} } @letter_code;
-@exclude_letter_code = grep { $_ ne q{} } @exclude_letter_code;
 
 C4::Letters::SendQueuedMessages(
     {
