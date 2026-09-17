@@ -349,23 +349,21 @@ subtest "set_waiting() tests" => sub {
         my $branch  = $library->branchcode;
 
         # Sundays weekly closed, single holiday on Mon 4 May 2026.
-        $schema->resultset('RepeatableHoliday')->create(
+        $builder->build_object(
             {
-                branchcode  => $branch,
-                weekday     => 0,
-                description => q{Sunday},
-                title       => q{Sunday},
+                class => 'Koha::Library::Calendar::WeeklyClosures',
+                value => { library_id => $branch, weekday => 0, title => q{Sunday}, description => q{Sunday} }
             }
         );
-        $schema->resultset('SpecialHoliday')->create(
+        $builder->build_object(
             {
-                branchcode  => $branch,
-                day         => 4,
-                month       => 5,
-                year        => 2026,
-                isexception => 0,
-                title       => q{May Bank Holiday},
-                description => q{May Bank Holiday},
+                class => 'Koha::Library::Calendar::SingleClosures',
+                value => {
+                    library_id  => $branch,
+                    date        => '2026-05-04',
+                    title       => q{May Bank Holiday},
+                    description => q{May Bank Holiday},
+                }
             }
         );
         Koha::Caches->get_instance->clear_from_cache( $branch . '_holidays' );

@@ -457,27 +457,25 @@ subtest 'days_forward' => sub {
     my $dayweek_branch  = $dayweek_library->branchcode;
 
     # Sundays are the only weekly closure.
-    $schema->resultset('RepeatableHoliday')->create(
+    $builder->build_object(
         {
-            branchcode  => $dayweek_branch,
-            weekday     => 0,
-            description => q{Sunday},
-            title       => q{Sunday},
+            class => 'Koha::Library::Calendar::WeeklyClosures',
+            value => { library_id => $dayweek_branch, weekday => 0, title => q{Sunday}, description => q{Sunday} }
         }
     );
 
     # Single (one-off) holiday on a Monday 2 weeks out from a known Tuesday.
     my $tuesday = dt_from_string('2026-04-28');    # Tuesday
     my $bh      = dt_from_string('2026-05-04');    # Monday Bank Holiday
-    $schema->resultset('SpecialHoliday')->create(
+    $builder->build_object(
         {
-            branchcode  => $dayweek_branch,
-            day         => $bh->day,
-            month       => $bh->month,
-            year        => $bh->year,
-            isexception => 0,
-            title       => q{May Bank Holiday},
-            description => q{May Bank Holiday},
+            class => 'Koha::Library::Calendar::SingleClosures',
+            value => {
+                library_id  => $dayweek_branch,
+                date        => $bh->ymd,
+                title       => q{May Bank Holiday},
+                description => q{May Bank Holiday},
+            }
         }
     );
 
@@ -485,7 +483,7 @@ subtest 'days_forward' => sub {
     $cache->clear_from_cache( $dayweek_branch . '_holidays' );
 
     for my $mode (qw(Calendar Datedue Dayweek Days)) {
-        my $dw_cal = Koha::Calendar->new(
+        my $dw_cal = Koha::Library::Calendar->new(
             branchcode => $dayweek_branch,
             days_mode  => $mode,
         );
@@ -502,7 +500,7 @@ subtest 'days_forward' => sub {
     # Confirm same behaviour over the BH from Monday (final day lands past
     # the closures): Mon 27 Apr + 6 open days = Tue 5 May.
     my $monday = dt_from_string('2026-04-27');
-    my $dw_cal = Koha::Calendar->new( branchcode => $dayweek_branch, days_mode => 'Dayweek' );
+    my $dw_cal = Koha::Library::Calendar->new( branchcode => $dayweek_branch, days_mode => 'Dayweek' );
     is(
         $dw_cal->days_forward( $monday, 6 )->ymd, '2026-05-05',
         'days_forward(+6) from Mon over Sun + Mon BH lands on Tue (no week-jump in Dayweek)'
