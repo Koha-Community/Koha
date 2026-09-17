@@ -21,6 +21,9 @@ export default {
     setup(props) {
         const router = useRouter();
 
+        const navigationStore = inject("navigationStore");
+        const { breadcrumbMetadata } = storeToRefs(navigationStore);
+
         const ItemListsStore = inject("ItemListsStore");
         const { config } = storeToRefs(ItemListsStore);
 
@@ -207,12 +210,24 @@ export default {
             },
             additionalEvents: {
                 add_items: resource => {
-                    window.location.href =
-                        "/cgi-bin/koha/lists/items/" + resource.id;
+                    // Needed as we are bypassing the typical intermediate "show" that would preload the breadcrumbs
+                    breadcrumbMetadata.value = resource;
+                    router.push({
+                        name: "ItemListItemsAdd",
+                        params: {
+                            id: resource.id,
+                        },
+                    });
                 },
                 add_shares: resource => {
-                    window.location.href =
-                        "/cgi-bin/koha/lists/items/" + resource.id + "/shares";
+                    // Needed as we are bypassing the typical intermediate "show" that would preload the breadcrumbs
+                    breadcrumbMetadata.value = resource;
+                    router.push({
+                        name: "ItemListSharesAdd",
+                        params: {
+                            id: resource.id,
+                        },
+                    });
                 },
             },
         };
