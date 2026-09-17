@@ -28,9 +28,6 @@ longoverdue.pl  cron script to set lost statuses on overdue materials.
 use strict;
 use warnings;
 
-use Getopt::Long qw( GetOptions );
-use Pod::Usage   qw( pod2usage );
-
 use C4::Circulation qw( LostItem MarkIssueReturned );
 use C4::Context;
 use Koha::Checkout;
@@ -41,100 +38,73 @@ use Koha::Patron::Categories;
 use Koha::Patrons;
 use Koha::Script -cron;
 
-my $lost;    #  key=lost value,  value=num days.
-my ( $charge, $verbose, $confirm, $quiet );
-my $endrange = 366;
-my $mark_returned;
-my $borrower_category      = [];
-my $skip_borrower_category = [];
-my @branches;
-my @skip_branches;
-my $itemtype        = [];
-my $skip_itemtype   = [];
-my $help            = 0;
-my $man             = 0;
-my $list_categories = 0;
-my $list_itemtypes  = 0;
-my @skip_lost_values;
-GetOptions(
-    'l|lost=s%'         => \$lost,
-    'c|charge=s'        => \$charge,
-    'confirm'           => \$confirm,
-    'v|verbose'         => \$verbose,
-    'quiet'             => \$quiet,
-    'maxdays=s'         => \$endrange,
-    'mark-returned'     => \$mark_returned,
-    'h|help'            => \$help,
-    'man|manual'        => \$man,
-    'category=s'        => $borrower_category,
-    'skip-category=s'   => $skip_borrower_category,
-    'list-categories'   => \$list_categories,
-    'library=s'         => \@branches,
-    'skip-library=s'    => \@skip_branches,
-    'itemtype=s'        => $itemtype,
-    'skip-itemtype=s'   => $skip_itemtype,
-    'list-itemtypes'    => \$list_itemtypes,
-    'skip-lost-value=s' => \@skip_lost_values,
+my $opt = Koha::Script->describe_options(
+    'Set lost statuses on overdue materials, and optionally charge the patron for them.
+
+%c %o',
+    [ 'lost|l=s%',  'DAYS=LOST_CODE mapping of days overdue to lost value to set, repeatable (see --man)' ],
+    [ 'charge|c:s', 'lost value that triggers a charge to the patron account' ],
+    [ 'confirm',    'apply changes (without this, the script reports affected item counts without modifying records)' ],
+    [ 'verbose|v',  'verbose' ],
+    [ 'quiet',      'suppress summary output' ],
+    [ 'maxdays:s',  'end of the range of overdue days to deal with', { default => 366 } ],
+    [
+        'mark-returned',
+        "when an item is marked lost, remove it from the borrower's issued items "
+            . '(defaults to the MarkLostItemsAsReturned preference)'
+    ],
+    [
+        'category=s@',
+        'act on this borrower category code, repeatable (defaults to DefaultLongOverduePatronCategories); '
+            . 'may not be used with --skip-category'
+    ],
+    [
+        'skip-category=s@',
+        'act on all borrower category codes except this one, repeatable '
+            . '(defaults to DefaultLongOverdueSkipPatronCategories); may not be used with --category'
+    ],
+    [ 'list-categories', 'list available borrower category codes and exit' ],
+    [ 'library=s@',      'act on this library code, repeatable; may not be used with --skip-library' ],
+    [
+        'skip-library=s@',
+        'act on all library codes except this one, repeatable; may not be used with --library'
+    ],
+    [ 'itemtype=s@', 'act on this itemtype code, repeatable; may not be used with --skip-itemtype' ],
+    [
+        'skip-itemtype=s@',
+        'act on all itemtype codes except this one, repeatable; may not be used with --itemtype'
+    ],
+    [ 'list-itemtypes', 'list available itemtypes and exit' ],
+    [
+        'skip-lost-value=s@',
+        'exclude this lost value, repeatable (defaults to DefaultLongOverdueSkipLostStatuses)'
+    ],
+    {
+        exclusive => [
+            [qw(category skip-category)],
+            [qw(library skip-library)],
+            [qw(itemtype skip-itemtype)],
+        ]
+    },
 );
-
-if ($man) {
-    pod2usage( -verbose => 2 -exitval => 0 );
-}
-
-if ($help) {
-    pod2usage(
-        -verbose => 1,
-        -exitval => 0
-    );
-}
-
-if ( scalar @$borrower_category && scalar @$skip_borrower_category ) {
-    pod2usage(
-        -verbose => 1,
-        -message => "The options --category and --skip-category are mutually exclusive.\n" . "Use one or the other.",
-        -exitval => 1
-    );
-}
-
-if ( scalar @branches && scalar @skip_branches ) {
-    pod2usage(
-        -verbose => 1,
-        -message => "The options --library and --skip-library are mutually exclusive.\n" . "Use one or the other.",
-        -exitval => 1
-    );
-}
 
 my $lost_control_pref = C4::Context->preference('LostChargesControl');
 my $home_holding_pref = C4::Context->preference('HomeOrHoldingBranch');
-if (   ( scalar @branches || scalar @skip_branches )
+if (   ( scalar @{ $opt->library // [] } || scalar @{ $opt->skip_library // [] } )
     && $lost_control_pref eq 'PickupLibrary'
     && !( C4::Context->userenv->{'branch'} ) )
 {
-    pod2usage(
-        -verbose => 0,
-        -message =>
-            "There is no branch set for the cron user, LostChargesControl is set to 'library you are logged in at'.\n"
-            . "No branches will satisfy this requirement - exiting.",
-        -exitval => 1
-    );
+    die "There is no branch set for the cron user, LostChargesControl is set to 'library you are logged in at'.\n"
+        . "No branches will satisfy this requirement - exiting.\n";
 }
 
-if ( scalar @$itemtype && scalar @$skip_itemtype ) {
-    pod2usage(
-        -verbose => 1,
-        -message => "The options --itemtype and --skip-itemtype are mutually exclusive.\n" . "Use one or the other.",
-        -exitval => 1
-    );
-}
-
-if ($list_categories) {
-
+if ( $opt->list_categories ) {
     my @categories = Koha::Patron::Categories->search()->get_column('categorycode');
     print "\nBorrower Categories: " . join( " ", @categories ) . "\n\n";
     exit 0;
 }
 
-if ($list_itemtypes) {
+if ( $opt->list_itemtypes ) {
     my @itemtypes = Koha::ItemTypes->search()->get_column('itemtype');
     print "\nItemtypes: " . join( " ", @itemtypes ) . "\n\n";
     exit 0;
@@ -142,7 +112,7 @@ if ($list_itemtypes) {
 
 =head1 SYNOPSIS
 
-   longoverdue.pl [ --help | -h | --man | --list-categories ]
+   longoverdue.pl [ --help | --man | --list-categories | --list-itemtypes ]
    longoverdue.pl --lost | -l DAYS=LOST_CODE [ --charge | -c CHARGE_CODE ] [ --verbose | -v ] [ --quiet ]
                   [ --maxdays MAX_DAYS ] [ --mark-returned ] [ --category BORROWER_CATEGORY ] ...
                   [ --skip-category BORROWER_CATEGORY ] ...
@@ -245,11 +215,11 @@ This may be specified multiple times, to exclude multiple lost values.
 List itemtypes available for use by B<--itemtype> or
 B<--skip-itemtype>, and exit.
 
-=item B<--help | -h>
+=item B<--help>
 
 Display short help message an exit.
 
-=item B<--man | --manual >
+=item B<--man>
 
 Display entire manual and exit.
 
@@ -289,7 +259,17 @@ near-term release, so this script is not intended to have a long lifetime.
 # FIXME: do checks on --lost ranges to make sure don't go past endrange.
 #
 
-unless ( scalar @skip_lost_values ) {
+my $lost                   = $opt->lost;
+my $charge                 = $opt->charge;
+my $verbose                = $opt->verbose;
+my $endrange               = $opt->maxdays;
+my $borrower_category      = $opt->category      // [];
+my $skip_borrower_category = $opt->skip_category // [];
+my $itemtype               = $opt->itemtype      // [];
+my $skip_itemtype          = $opt->skip_itemtype // [];
+my @skip_lost_values       = @{ $opt->skip_lost_value // [] };
+
+unless (@skip_lost_values) {
     my $preference = C4::Context->preference('DefaultLongOverdueSkipLostStatuses');
     @skip_lost_values = split( ',', $preference );
 }
@@ -305,13 +285,8 @@ if ( !defined($lost) ) {
     {
         $lost->{$longoverdue_days} = $longoverdue_value;
     } else {
-        pod2usage(
-            {
-                -exitval => 1,
-                -msg     =>
-                    q|ERROR: No --lost (-l) option or system preferences DefaultLongOverdueLostValue/DefaultLongOverdueDays defined|,
-            }
-        );
+        die "ERROR: No --lost (-l) option or system preferences "
+            . "DefaultLongOverdueLostValue/DefaultLongOverdueDays defined\n";
     }
 }
 if ( !defined($charge) ) {
@@ -335,7 +310,7 @@ if ( scalar @$skip_borrower_category == 0 ) {
     }
 }
 
-unless ($confirm) {
+unless ( $opt->confirm ) {
     $verbose = 1;    # If you're not running it for real, then the whole point is the print output.
     print "### TEST MODE -- NO ACTIONS TAKEN ###\n";
 }
@@ -380,20 +355,14 @@ $skip_borrower_category = [ map { uc $_ } @$skip_borrower_category ];
 my %category_to_process;
 for my $cat (@$borrower_category) {
     unless ( grep { $_ eq $cat } @available_categories ) {
-        pod2usage(
-            '-exitval' => 1,
-            '-message' => "The category $cat does not exist in the database",
-        );
+        die "The category $cat does not exist in the database\n";
     }
     $category_to_process{$cat} = 1;
 }
 if (@$skip_borrower_category) {
     for my $cat (@$skip_borrower_category) {
         unless ( grep { $_ eq $cat } @available_categories ) {
-            pod2usage(
-                '-exitval' => 1,
-                '-message' => "The category $cat does not exist in the database",
-            );
+            die "The category $cat does not exist in the database\n";
         }
     }
     %category_to_process = map { $_ => 1 } @available_categories;
@@ -402,16 +371,15 @@ if (@$skip_borrower_category) {
 
 my $filter_borrower_categories = ( scalar @$borrower_category || scalar @$skip_borrower_category );
 
+my @branches           = @{ $opt->library      // [] };
+my @skip_branches      = @{ $opt->skip_library // [] };
 my @available_branches = Koha::Libraries->search()->get_column('branchcode');
 my %branches_to_process;
 
 # If --library was used, validate any branchcode passed in and mark them as branches to use
 for my $lib (@branches) {
     unless ( grep { $_ eq $lib } @available_branches ) {
-        pod2usage(
-            '-exitval' => 1,
-            '-message' => "The library $lib does not exist in the database",
-        );
+        die "The library $lib does not exist in the database\n";
     }
     $branches_to_process{$lib} = 1;
 }
@@ -420,10 +388,7 @@ for my $lib (@branches) {
 if (@skip_branches) {
     for my $lib (@skip_branches) {
         unless ( grep { $_ eq $lib } @available_branches ) {
-            pod2usage(
-                '-exitval' => 1,
-                '-message' => "The library $lib does not exist in the database",
-            );
+            die "The library $lib does not exist in the database\n";
         }
     }
     %branches_to_process = map { $_ => 1 } @available_branches;
@@ -441,20 +406,14 @@ $skip_itemtype = [ map { uc $_ } @$skip_itemtype ];
 my %itemtype_to_process;
 for my $it (@$itemtype) {
     unless ( grep { $_ eq $it } @available_itemtypes ) {
-        pod2usage(
-            '-exitval' => 1,
-            '-message' => "The itemtype $it does not exist in the database",
-        );
+        die "The itemtype $it does not exist in the database\n";
     }
     $itemtype_to_process{$it} = 1;
 }
 if (@$skip_itemtype) {
     for my $it (@$skip_itemtype) {
         unless ( grep { $_ eq $it } @available_itemtypes ) {
-            pod2usage(
-                '-exitval' => 1,
-                '-message' => "The itemtype $it does not exist in the database",
-            );
+            die "The itemtype $it does not exist in the database\n";
         }
     }
     %itemtype_to_process = map { $_ => 1 } @available_itemtypes;
@@ -517,7 +476,7 @@ foreach my $startrange ( sort keys %$lost ) {
                 "Due %s: item %5s from borrower %5s to lost: %s\n", $row->{date_due}, $row->{itemnumber},
                 $row->{borrowernumber}, $lostvalue
             ) if ($verbose);
-            if ($confirm) {
+            if ( $opt->confirm ) {
                 Koha::Items->find( $row->{itemnumber} )->itemlost($lostvalue)->store;
                 if ( $charge && $charge eq $lostvalue ) {
                     my $patron = Koha::Patrons->find( $row->{borrowernumber} );
@@ -536,8 +495,8 @@ foreach my $startrange ( sort keys %$lost ) {
                         issue    => $issue,
                     );
 
-                    LostItem( $row->{itemnumber}, 'cronjob', $mark_returned, { library_id => $rule_branch } );
-                } elsif ($mark_returned) {
+                    LostItem( $row->{itemnumber}, 'cronjob', $opt->mark_returned, { library_id => $rule_branch } );
+                } elsif ( $opt->mark_returned ) {
                     $patron ||= Koha::Patrons->find( $row->{borrowernumber} );
                     MarkIssueReturned( $row->{borrowernumber}, $row->{itemnumber}, undef, $patron->privacy );
                 }
@@ -570,7 +529,7 @@ sub summarize {
     }
 }
 
-if ( !$quiet ) {
+if ( !$opt->quiet ) {
     print "\n### LONGOVERDUE SUMMARY ###";
     summarize( \@report, 1 );
     print "\nTOTAL: $total items\n";
