@@ -39,7 +39,16 @@ my $opt = Koha::Script->describe_options(
 %c %o',
     [
         'hours|h=i', 'hours that need to pass before an item is returned to its original shelving location',
-        { required => 1 }
+        {
+            required  => 1,
+            callbacks => {
+                'a positive integer' => sub {
+                    my $v = shift;
+                    return 1 if $v > 0;
+                    die "--hours must be a positive integer (got $v)\n";
+                },
+            },
+        }
     ],
     {
         epilog =>
