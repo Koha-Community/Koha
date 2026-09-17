@@ -119,8 +119,8 @@ if ( $op eq 'cud-placerequest' && $patron ) {
                                 found                  => undef,
                                 itemtype               => $itemtype,
                                 non_priority           => $non_priority,
-                                supplyill        => $supplyill,
-                                iso18626_payload => \%iso18626_payload,
+                                supplyill              => $supplyill,
+                                iso18626_payload       => \%iso18626_payload,
                             }
                         );
                         push @successful_biblionumbers, $biblionumber;
@@ -181,8 +181,8 @@ if ( $op eq 'cud-placerequest' && $patron ) {
                             itemtype               => $itemtype,
                             non_priority           => $non_priority,
                             item_group_id          => $item_group_id,
-                            supplyill        => $supplyill,
-                            iso18626_payload => \%iso18626_payload,
+                            supplyill              => $supplyill,
+                            iso18626_payload       => \%iso18626_payload,
                         }
                     );
                     push @successful_hold_ids,      $reserve_id;
