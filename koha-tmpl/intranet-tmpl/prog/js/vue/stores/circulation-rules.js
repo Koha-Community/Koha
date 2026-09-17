@@ -227,11 +227,11 @@ export const useCircRulesStore = defineStore("circRules", () => {
             }
             element.scrollIntoView({ behavior: "smooth" });
         },
-        isSameContext(contextA, contextB) {
+        isSameContext(a, b) {
             return (
-                contextA.library_id === contextB.library_id &&
-                contextA.patron_category_id === contextB.patron_category_id &&
-                contextA.item_type_id === contextB.item_type_id
+                a.library_id === b.library_id &&
+                a.patron_category_id === b.patron_category_id &&
+                a.item_type_id === b.item_type_id
             );
         },
         containsMatchingContext(contextList, context) {

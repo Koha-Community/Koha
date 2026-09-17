@@ -56,7 +56,7 @@ subtest 'list() tests' => sub {
     my $librarian = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { flags => 2**3, categorycode => 'TEST', branchcode => $library->branchcode } # parameters flag = 3
+            value => { flags => 2**2, categorycode => 'TEST', branchcode => $library->branchcode }  # catalogue flag = 2
         }
     );
 
@@ -87,7 +87,7 @@ subtest 'list() tests' => sub {
         {
             class => 'Koha::Patrons',
             value =>
-                { flags => 2**3, categorycode => 'CANT', branchcode => $library_2->branchcode }    # parameters flag = 3
+                { flags => 2**2, categorycode => 'CANT', branchcode => $library_2->branchcode }    # catalogue flag = 2
         }
     );
     my $off_limits_password = 'thePassword123';

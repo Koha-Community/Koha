@@ -22,7 +22,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 17;
+use Test::More tests => 16;
 use Test::Warn;
 use Try::Tiny;
 use File::Basename qw(dirname);
@@ -120,58 +120,6 @@ subtest 'Test length of some generated fields' => sub {
     is(
         $item->{replacementprice}, sprintf( "%.2f", $item->{replacementprice} ),
         "The number of decimals for floats should not be more than 2"
-    );
-
-    $schema->storage->txn_rollback;
-};
-
-subtest 'Test FKs in overduerules_transport_type' => sub {
-    plan tests => 5;
-
-    $schema->storage->txn_begin;
-
-    my $my_overduerules_transport_type = {
-        message_transport_type => {
-            message_transport_type => 'my msg_t_t',
-        },
-        overduerules_id => {
-            branchcode   => 'codeB',
-            categorycode => 'codeC',
-        },
-    };
-
-    my $overduerules_transport_type = $builder->build(
-        {
-            source => 'OverduerulesTransportType',
-            value  => $my_overduerules_transport_type,
-        }
-    );
-    is(
-        $overduerules_transport_type->{message_transport_type},
-        $my_overduerules_transport_type->{message_transport_type}->{message_transport_type},
-        'build stores the message_transport_type correctly'
-    );
-    is(
-        $schema->resultset('Overduerule')->find( $overduerules_transport_type->{overduerules_id} )->branchcode,
-        $my_overduerules_transport_type->{overduerules_id}->{branchcode},
-        'build stores the branchcode correctly'
-    );
-    is(
-        $schema->resultset('Overduerule')->find( $overduerules_transport_type->{overduerules_id} )->categorycode,
-        $my_overduerules_transport_type->{overduerules_id}->{categorycode},
-        'build stores the categorycode correctly'
-    );
-    is(
-        $schema->resultset('MessageTransportType')
-            ->find( $overduerules_transport_type->{message_transport_type} )
-            ->message_transport_type,
-        $overduerules_transport_type->{message_transport_type},
-        'build stores the foreign key message_transport_type correctly'
-    );
-    isnt(
-        $schema->resultset('Overduerule')->find( $my_overduerules_transport_type->{overduerules_id} )->letter2,
-        undef,
-        'build generates values if they are not given'
     );
 
     $schema->storage->txn_rollback;

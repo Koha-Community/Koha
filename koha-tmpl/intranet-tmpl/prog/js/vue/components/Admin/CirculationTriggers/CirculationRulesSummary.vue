@@ -6,27 +6,29 @@
         <div class="page-section bg-info">
             <table>
                 <thead>
-                    <th>
-                        {{ $__("Loan period") }}
-                    </th>
-                    <th>
-                        {{ $__("Unit") }}
-                    </th>
-                    <th>
-                        {{ $__("Decreased loan period for high holds") }}
-                    </th>
-                    <th>
-                        {{ $__("Fine amount") }}
-                    </th>
-                    <th>
-                        {{ $__("Fine charging interval") }}
-                    </th>
-                    <th>
-                        {{ $__("Renewals allowed") }}
-                    </th>
-                    <th>
-                        {{ $__("Automatic renewal") }}
-                    </th>
+                    <tr>
+                        <th>
+                            {{ $__("Loan period") }}
+                        </th>
+                        <th>
+                            {{ $__("Unit") }}
+                        </th>
+                        <th>
+                            {{ $__("Decreased loan period for high holds") }}
+                        </th>
+                        <th>
+                            {{ $__("Fine amount") }}
+                        </th>
+                        <th>
+                            {{ $__("Fine charging interval") }}
+                        </th>
+                        <th>
+                            {{ $__("Renewals allowed") }}
+                        </th>
+                        <th>
+                            {{ $__("Automatic renewal") }}
+                        </th>
+                    </tr>
                 </thead>
                 <tbody>
                     <tr>

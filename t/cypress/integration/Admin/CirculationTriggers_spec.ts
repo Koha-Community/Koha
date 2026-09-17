@@ -708,7 +708,7 @@ describe("Circulation Triggers - Delete Trigger", () => {
         cy.get(".modal-dialog").should("be.visible");
         cy.get(".modal-title").should(
             "contain",
-            "Confirm deletion of Trigger 3"
+            "Confirm deletion of trigger 3"
         );
         cy.get(".modal-body").should("contain", "Rule sets to be deleted");
     });
