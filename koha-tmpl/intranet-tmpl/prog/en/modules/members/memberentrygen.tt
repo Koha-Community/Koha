@@ -3,6 +3,7 @@
 [% USE To %]
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE HtmlScrubber %]
 [% USE Branches %]
 [% PROCESS 'member-main-address-style.inc' %]
 [% PROCESS 'member-alt-address-style.inc' %]
@@ -1379,9 +1380,9 @@
                                             <td>[% PROCESS restriction_type_description restriction_type=restriction.type %]</td>
                                             <td>
                                                 [% IF restriction.comment.search('OVERDUES_PROCESS') %]
-                                                    Restriction added by overdues process [% restriction.comment.remove('OVERDUES_PROCESS ') | $raw %]
+                                                    Restriction added by overdues process [% restriction.comment.remove('OVERDUES_PROCESS ') | scrub_html type => 'comment' | $raw %]
                                                 [% ELSE %]
-                                                    [% restriction.comment | $raw %]
+                                                    [% restriction.comment | scrub_html type => 'comment' | $raw %]
                                                 [% END %]
                                             </td>
                                             <td>
@@ -1552,7 +1553,6 @@
         [% END %]
     [% END # /UNLESS ( no_add ) %]
 [% END %]
-<!-- Expiration date modal-->
 <div id="categoryChangeModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="categoryChangeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -1562,14 +1562,30 @@
             </div>
             <div class="modal-body">
                 <p>Would you like to apply the defaults for the new category?</p>
-                <div class="form-check">
-                    <input type="checkbox" id="categoryChangeUpdateMessaging" />
-                    <label class="form-check-label" for="categoryChangeUpdateMessaging"> Reset messaging preferences to category defaults </label>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" id="categoryChangeUpdateExpiry" />
-                    <label class="form-check-label" for="categoryChangeUpdateExpiry"> Reset expiration date to category default </label>
-                </div>
+                [% IF Koha.Preference('UpdateMessagingPrefsOnCategoryChange') == 'softyes' %]
+                    <div class="form-check">
+                        <input type="checkbox" id="categoryChangeUpdateMessaging" checked />
+                        <label class="form-check-label" for="categoryChangeUpdateMessaging"> Reset messaging preferences to category defaults </label>
+                    </div>
+                [% ELSIF Koha.Preference('UpdateMessagingPrefsOnCategoryChange') == 'softno' %]
+                    <div class="form-check">
+                        <input type="checkbox" id="categoryChangeUpdateMessaging" />
+                        <label class="form-check-label" for="categoryChangeUpdateMessaging"> Reset messaging preferences to category defaults </label>
+                    </div>
+                [% END %]
+                [% IF Koha.Preference('UpdateExpiryDateOnCategoryChange') == 'softno' || Koha.Preference('UpdateExpiryDateOnCategoryChange') == 'softyes' %]
+                    [% IF Koha.Preference('UpdateExpiryDateOnCategoryChange') == 'softyes' %]
+                        <div class="form-check">
+                            <input type="checkbox" id="categoryChangeUpdateExpiry" checked />
+                            <label class="form-check-label" for="categoryChangeUpdateExpiry"> Reset expiration date to category default </label>
+                        </div>
+                    [% ELSIF Koha.Preference('UpdateExpiryDateOnCategoryChange') == 'softno' %]
+                        <div class="form-check">
+                            <input type="checkbox" id="categoryChangeUpdateExpiry" />
+                            <label class="form-check-label" for="categoryChangeUpdateExpiry"> Reset expiration date to category default </label>
+                        </div>
+                    [% END %]
+                [% END %]
             </div>
             <div class="modal-footer">
                 <button id="categoryChangeConfirmBtn" class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Confirm</button>
@@ -1874,6 +1890,9 @@
 
         var TalkingTechItivaPhoneNotification = [% Koha.Preference('TalkingTechItivaPhoneNotification') || 0 | html %];
         var PhoneNotification = [% Koha.Preference('PhoneNotification') || 0 | html %];
+
+        var UpdateExpiryDateOnCategoryChange =  "[% Koha.Preference('UpdateExpiryDateOnCategoryChange') | html %]";
+        var UpdateMessagingPrefsOnCategoryChange =  "[% Koha.Preference('UpdateMessagingPrefsOnCategoryChange') | html %]";
     </script>
     [% Asset.js("js/messaging-preference-form.js") | $raw %]
     [% Asset.js("js/members.js") | $raw %]
