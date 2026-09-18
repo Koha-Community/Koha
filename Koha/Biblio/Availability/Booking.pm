@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use DateTime;
 
-use Koha::Calendar;
+use Koha::Library::Calendar;
 use Koha::CirculationRules;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
@@ -305,7 +305,7 @@ sub _mark_holidays {
 
     return unless $self->{pickup_library_id};
 
-    my $calendar = Koha::Calendar->new( branchcode => $self->{pickup_library_id} );
+    my $calendar = Koha::Library::Calendar->new( branchcode => $self->{pickup_library_id} );
     for ( my $day = $self->{from}->clone ; DateTime->compare( $day, $self->{to} ) <= 0 ; $day->add( days => 1 ) ) {
         next unless $calendar->is_holiday($day);
         $self->_mark( { item_id => $_, reason => 'holiday', start => $day, end => $day } )
