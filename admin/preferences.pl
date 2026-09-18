@@ -29,6 +29,7 @@ use C4::Output      qw( output_html_with_http_headers output_and_exit_if_error )
 use C4::Templates;
 use Koha::Acquisition::Currencies;
 use Koha::AuthorisedValues;
+use Koha::Config::SysPrefs;
 use Koha::Database::Columns;
 use Koha::ILL::Request::Config;
 use IO::File;
@@ -467,6 +468,12 @@ if ( $op eq 'search' ) {
         $tab = '';    # No need to load a particular tab, as we found results
         $template->param( search_jumped => 1 ) if ( $TABS[0]->{'search_jumped'} );
     } else {
+        my $local_use = Koha::Config::SysPrefs->search( { variable => { like => "%$searchfield%" } } )->count;
+        if ($local_use) {
+            print $input->redirect("/cgi-bin/koha/admin/systempreferences.pl");
+            exit;
+        }
+
         $template->param(
             search_not_found => 1,
         );
