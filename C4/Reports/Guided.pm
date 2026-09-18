@@ -951,6 +951,9 @@ sub _attach_limits {
         } elsif ( $pref eq 'library_group' ) {
             my $groups = $report_obj->library_group_limits;
             $report->{library_group_limits} = [ map { { id => $_->id, title => $_->title } } @$groups ];
+            my $ungrouped = $report_obj->ungrouped_library_limits;
+            $report->{ungrouped_library_limits} =
+                [ map { { branchcode => $_->branchcode, branchname => $_->branchname } } @$ungrouped ];
         }
     }
 }

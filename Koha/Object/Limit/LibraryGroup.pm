@@ -55,10 +55,7 @@ are defined.
 sub library_group_limits {
     my ($self) = @_;
 
-    my @branchcodes =
-        $self->_library_group_limit_rs->search( { $self->_library_group_limits->{id} => $self->id } )
-        ->get_column( $self->_library_group_limits->{library} )
-        ->all();
+    my @branchcodes = @{ $self->_library_group_limit_branchcodes };
 
     return [] unless @branchcodes;
 
@@ -78,6 +75,86 @@ sub library_group_limits {
     } @parents;
 
     return \@parents;
+}
+
+=head3 ungrouped_library_limits
+
+my $libraries = $object->ungrouped_library_limits();
+
+Returns an array reference of Koha::Library objects for the library limits
+that are not members of any group returned by C<library_group_limits>. Each
+of these libraries is enforced as a group of one. Returns an empty array
+reference if there are none.
+
+=cut
+
+sub ungrouped_library_limits {
+    my ($self) = @_;
+
+    my @branchcodes = @{ $self->_library_group_limit_branchcodes };
+
+    return [] unless @branchcodes;
+
+    my %grouped =
+        map { $_->branchcode => 1 }
+        map { $_->all_libraries } @{ $self->library_group_limits };
+
+    my @ungrouped = grep { !$grouped{$_} } @branchcodes;
+
+    return [] unless @ungrouped;
+
+    require Koha::Libraries;
+
+    return [
+        Koha::Libraries->search(
+            { branchcode => { '-in' => \@ungrouped } },
+            { order_by   => 'branchname' }
+        )->as_list
+    ];
+}
+
+=head3 library_group_limit_branchcodes
+
+my $branchcodes = $object->library_group_limit_branchcodes();
+
+Returns an array reference of every branchcode the library group limits
+resolve to: the branchcodes stored as limits plus every library in the
+groups returned by C<library_group_limits>. Returns an empty array reference
+if no limits are defined. Use this for access checks.
+
+=cut
+
+sub library_group_limit_branchcodes {
+    my ($self) = @_;
+
+    my @branchcodes = @{ $self->_library_group_limit_branchcodes };
+
+    return [] unless @branchcodes;
+
+    my %seen;
+    my @all =
+        grep { !$seen{$_}++ }
+        ( @branchcodes, map { $_->branchcode } map { $_->all_libraries } @{ $self->library_group_limits } );
+
+    return \@all;
+}
+
+=head3 _library_group_limit_branchcodes
+
+Returns an array reference of the branchcodes stored in the limitation table
+for this object.
+
+=cut
+
+sub _library_group_limit_branchcodes {
+    my ($self) = @_;
+
+    my @branchcodes =
+        $self->_library_group_limit_rs->search( { $self->_library_group_limits->{id} => $self->id } )
+        ->get_column( $self->_library_group_limits->{library} )
+        ->all();
+
+    return \@branchcodes;
 }
 
 =head3 _library_group_limit_rs

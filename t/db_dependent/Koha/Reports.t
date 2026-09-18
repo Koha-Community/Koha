@@ -20,7 +20,7 @@ use Modern::Perl;
 use Test::Exception;
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 19;
+use Test::More tests => 21;
 
 use C4::Context;
 use Koha::Library::Group;
@@ -501,10 +501,11 @@ subtest 'library limits enforcement on save and update' => sub {
 };
 
 subtest 'library_group_limits' => sub {
-    plan tests => 6;
+    plan tests => 20;
 
     my $library_a = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library_b = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_c = $builder->build_object( { class => 'Koha::Libraries' } );
 
     my $root_group = Koha::Library::Group->new( { title     => 'test root group', ft_reports => 1 } )->store;
     my $group_a    = Koha::Library::Group->new( { parent_id => $root_group->id, title => 'test group a' } )->store;
@@ -538,6 +539,98 @@ subtest 'library_group_limits' => sub {
     $root_group->ft_reports(1)->store;
     $limits = $report_library_a->library_group_limits;
     is( scalar @$limits, 1, 'returns group again after ft_reports re-enabled on root' );
+
+    # No limit - helper methods return empty arrayrefs
+    is( scalar @{ $report_no_limit->ungrouped_library_limits },        0, 'no limits: no ungrouped libraries' );
+    is( scalar @{ $report_no_limit->library_group_limit_branchcodes }, 0, 'no limits: no resolved branchcodes' );
+
+    # Limited to library_a (grouped) and library_c (not in any group)
+    my $report_a_c = $builder->build_object( { class => 'Koha::Reports' } );
+    $report_a_c->replace_library_limits( [ $library_a->branchcode, $library_c->branchcode ] );
+
+    $limits = $report_a_c->library_group_limits;
+    is( scalar @$limits,  1,            'grouped + ungrouped: only the qualifying group is returned' );
+    is( $limits->[0]->id, $group_a->id, 'grouped + ungrouped: returned group is group_a' );
+
+    my $ungrouped = $report_a_c->ungrouped_library_limits;
+    is( scalar @$ungrouped,          1,                      'grouped + ungrouped: one ungrouped library' );
+    is( $ungrouped->[0]->branchcode, $library_c->branchcode, 'grouped + ungrouped: ungrouped library is library_c' );
+
+    my $branchcodes = $report_a_c->library_group_limit_branchcodes;
+    is( scalar @$branchcodes, 3, 'grouped + ungrouped: resolves to all group members plus the ungrouped library' );
+    is_deeply(
+        [ sort @$branchcodes ],
+        [ sort ( $library_a->branchcode, $library_b->branchcode, $library_c->branchcode ) ],
+        'grouped + ungrouped: resolved branchcodes are a, b and c'
+    );
+
+    # Limited to library_c only - enforced as a group of one
+    my $report_c = $builder->build_object( { class => 'Koha::Reports' } );
+    $report_c->replace_library_limits( [ $library_c->branchcode ] );
+
+    is( scalar @{ $report_c->library_group_limits }, 0, 'ungrouped only: no groups returned' );
+    $ungrouped = $report_c->ungrouped_library_limits;
+    is( scalar @$ungrouped,          1,                      'ungrouped only: one ungrouped library' );
+    is( $ungrouped->[0]->branchcode, $library_c->branchcode, 'ungrouped only: ungrouped library is library_c' );
+    is_deeply(
+        $report_c->library_group_limit_branchcodes, [ $library_c->branchcode ],
+        'ungrouped only: resolves to library_c alone'
+    );
+
+    # ft_reports disabled on root - grouped libraries become ungrouped
+    $root_group->ft_reports(0)->store;
+    $ungrouped = $report_a_c->ungrouped_library_limits;
+    is( scalar @$ungrouped, 2, 'ft_reports disabled: both limited libraries are ungrouped' );
+    is_deeply(
+        [ sort @{ $report_a_c->library_group_limit_branchcodes } ],
+        [ sort ( $library_a->branchcode, $library_c->branchcode ) ],
+        'ft_reports disabled: resolves to the stored branchcodes only'
+    );
+};
+
+subtest 'can_access with library_group' => sub {
+    plan tests => 9;
+
+    my $library_a = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_b = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_c = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $root_group = Koha::Library::Group->new( { title => 'can_access root', ft_reports => 1 } )->store;
+    my $group_ab = Koha::Library::Group->new( { parent_id => $root_group->id, title => 'can_access group ab' } )->store;
+    Koha::Library::Group->new( { parent_id => $group_ab->id, branchcode => $library_a->branchcode } )->store;
+    Koha::Library::Group->new( { parent_id => $group_ab->id, branchcode => $library_b->branchcode } )->store;
+
+    my $basic_patron = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+    my $super_patron = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1 } } );
+
+    my $report_no_limit = $builder->build_object( { class => 'Koha::Reports' } );
+    my $report_a        = $builder->build_object( { class => 'Koha::Reports' } );
+    my $report_c        = $builder->build_object( { class => 'Koha::Reports' } );
+    $report_a->replace_library_limits( [ $library_a->branchcode ] );
+    $report_c->replace_library_limits( [ $library_c->branchcode ] );
+
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'library_group' );
+
+    # User at library_a (grouped with library_b)
+    t::lib::Mocks::mock_userenv( { branchcode => $library_a->branchcode } );
+    ok( $report_no_limit->can_access($basic_patron), 'branch a: report with no limits accessible' );
+    ok( $report_a->can_access($basic_patron),        'branch a: report limited to own branch accessible' );
+    ok( !$report_c->can_access($basic_patron),       'branch a: report limited to ungrouped branch c denied' );
+
+    # User at library_b (sibling of library_a)
+    t::lib::Mocks::mock_userenv( { branchcode => $library_b->branchcode } );
+    ok( $report_a->can_access($basic_patron),  'branch b: report limited to group sibling accessible' );
+    ok( !$report_c->can_access($basic_patron), 'branch b: report limited to ungrouped branch c denied' );
+
+    # User at library_c (not in any group) - own branch is a group of one
+    t::lib::Mocks::mock_userenv( { branchcode => $library_c->branchcode } );
+    ok( $report_c->can_access($basic_patron),  'branch c: report limited to own ungrouped branch accessible' );
+    ok( !$report_a->can_access($basic_patron), 'branch c: report limited to another group denied' );
+    ok( $report_c->can_access($super_patron),  'branch c: superlibrarian bypasses limits' );
+
+    # No logged-in branch
+    C4::Context->unset_userenv;
+    ok( !$report_c->can_access($basic_patron), 'no user branch: limited report denied' );
 };
 
 subtest 'search_with_library_group_limits' => sub {

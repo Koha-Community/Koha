@@ -484,15 +484,11 @@ sub can_access {
     }
 
     if ( $pref eq 'library_group' ) {
-        my $groups = $self->library_group_limits;
-        return 1 unless @$groups;
+        my $branchcodes = $self->library_group_limit_branchcodes;
+        return 1 unless @$branchcodes;
         my $user_branch = C4::Context::mybranch();
         return 0 unless $user_branch;
-        for my $group (@$groups) {
-            my @members = map { $_->branchcode } $group->all_libraries;
-            return 1 if grep { $_ eq $user_branch } @members;
-        }
-        return 0;
+        return ( grep { $_ eq $user_branch } @$branchcodes ) ? 1 : 0;
     }
 
     return 1;

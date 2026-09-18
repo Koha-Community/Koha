@@ -478,8 +478,15 @@
                                                             <span>No limitation</span>
                                                         [% END %]
                                                     [% ELSIF Koha.Preference('LimitReportsBy') == 'library_group' %]
-                                                        [% IF savedreport.library_group_limits && savedreport.library_group_limits.size > 0 %]
-                                                            <span class="library_limitation"> [% FOREACH g IN savedreport.library_group_limits %][% g.title | html %][% UNLESS loop.last %],[% END %][% END %] </span>
+                                                        [% limit_labels = [] %]
+                                                        [% FOREACH g IN savedreport.library_group_limits %]
+                                                            [% limit_labels.push( g.title ) %]
+                                                        [% END %]
+                                                        [% FOREACH library IN savedreport.ungrouped_library_limits %]
+                                                            [% limit_labels.push( library.branchname _ " (" _ library.branchcode _ ")" ) %]
+                                                        [% END %]
+                                                        [% IF limit_labels.size > 0 %]
+                                                            <span class="library_limitation">[% limit_labels.join(", ") | html %]</span>
                                                         [% ELSE %]
                                                             <span>No limitation</span>
                                                         [% END %]
