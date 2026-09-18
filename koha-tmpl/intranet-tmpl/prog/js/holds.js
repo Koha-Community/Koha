@@ -675,7 +675,10 @@ $(document).ready(function () {
                         $("#suspend-modal-until").flatpickr().clear(); // clean the input
                     }
                     $("#suspend-modal").modal("hide");
-                    $(".select_hold_all").click();
+                    $(".select_hold_all").prop("checked", false);
+                    $(".holds_table .select_hold").prop("checked", false);
+                    localStorage.selectedHolds = "[]";
+                    updateSelectedHoldsButtonCounters();
                 });
         } catch (error) {
             if (error.status === 404) {
