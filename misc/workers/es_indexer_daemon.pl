@@ -216,8 +216,8 @@ while (1) {
             $pm->start and next;
             srand();    # ensure each child process begins with a new seed
             commit( @{$commit_jobs} );
-            $pm->finish;
             sleep 10;
+            $pm->finish;
         }
 
     } else {
@@ -234,8 +234,8 @@ while (1) {
         $pm->start and next;
         srand();    # ensure each child process begins with a new seed
         commit( @{$commit_jobs} );
-        $pm->finish;
         sleep 10;
+        $pm->finish;
     }
     $pm->reap_finished_children;
 
