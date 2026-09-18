@@ -218,14 +218,14 @@ sub get_columns {
     return $columns;
 }
 
-=head2 _get_columns
+=head2 _get_columns($table_name)
 
-    my $columns = _get_columns($table_name);
+    my $columns = _get_columns('items');
 
-Internal function used by get_columns. Returns an arrayref of hashrefs with
-the name (tablename.columnname) and description of each column of
-$table_name. Columns that reports are not allowed to use are left out.
-Dies if $table_name is not a known table.
+Returns an arrayref of hashrefs with the keys C<name> (C<table.column>)
+and C<description> for every column of the given table. Columns that
+match a forbidden name (see L<Koha::Report/check_columns>) are omitted.
+Dies if the table name is not a known Koha table.
 
 =cut
 
@@ -297,14 +297,16 @@ sub build_query {
     return ($sql);
 }
 
-=head2 _build_query
+=head2 _build_query($tables, $columns, $criteria, $keys, $orderby, $totals, $definition)
 
     my $sql = _build_query( $tables, $columns, $criteria, $keys, $orderby, $totals, $definition );
 
-Internal function used by build_query. Builds the SELECT statement of a
-guided report: $tables are joined with the join conditions in $keys, then
-$criteria, the saved SQL of the dictionary definitions in $definition, a
-GROUP BY for $totals and $orderby are appended.
+Assembles the SQL for a guided report. C<$tables> and C<$columns> are
+arrayrefs; the first table is the FROM table and each further table is
+LEFT JOINed using the matching join condition from C<$keys>. C<$criteria>
+is appended as the WHERE clause, C<$definition> adds dictionary
+conditions, C<$totals> adds aggregate columns and a GROUP BY, and
+C<$orderby> is appended as given. Returns the SQL string.
 
 =cut
 
@@ -1278,13 +1280,14 @@ sub EmailReport {
 
 }
 
-=head2 _get_display_value
+=head2 _get_display_value($original_value, $column)
 
-    my $display_value = _get_display_value( $original_value, $column );
+    my $display = _get_display_value( $value, $column );
 
-Internal function used by get_criteria. Returns the value to display for
-$original_value. For the periodicity column this is the description of the
-subscription frequency, otherwise $original_value is returned unchanged.
+Returns the value to display for a criteria option. For the
+C<periodicity> column the value is looked up in
+C<subscription_frequencies> and the description is returned. For every
+other column the original value is returned unchanged.
 
 =cut
 
