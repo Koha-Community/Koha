@@ -1584,7 +1584,9 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'select2.inc' %]
-
+    [% Asset.js("js/holds.js") | $raw %]
+    [% Asset.js("js/hold-group.js") | $raw %]
+    [% Asset.js("js/basket.js") | $raw %]
     [% SET url_biblio_params = (supplyill ? "supplyill=" _ supplyill _ "&amp;" : "") _ "biblionumber=" _ biblionumbers.join("&amp;biblionumber=") %]
     [% IF multi_hold %]
         [% SET url_biblio_params = url_biblio_params _ "&amp;multi_hold=1" %]
@@ -1629,11 +1631,7 @@
 
         hold_table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holds', 'patron_holds_table', 'json' ) | $raw %];
         table_settings = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %];
-    </script>
-    [% Asset.js("js/holds.js") | $raw %]
-    [% Asset.js("js/hold-group.js") | $raw %]
-    [% Asset.js("js/basket.js") | $raw %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+
         $(document).ready( function() {
             [% IF successful_biblionumbers && Koha.Preference('AutoDeleteFromCartWhenHoldPlaced').grep('staff').size %]
                 [% FOREACH success IN successful_biblionumbers.split('\|') %]
