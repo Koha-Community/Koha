@@ -29,30 +29,7 @@ import "./select2";
 import "./flatpickr.js";
 
 // Error on JS warnings
-function safeToString(arg) {
-    try {
-        return JSON.stringify(arg);
-    } catch (e) {
-        return `[object ${arg.constructor?.name || typeof arg}]`;
-    }
-}
-
-function stringifyArgs(args) {
-    return args.map(safeToString).join(" ");
-}
-Cypress.on("window:before:load", win => {
-    win.console.warn = (...args) => {
-        console.log(args);
-        const message = stringifyArgs(args);
-        throw new Error(`JS Warning detected: ${message}`);
-    };
-    win.console.log = (...args) => {
-        const message = stringifyArgs(args);
-        if (message.match(/DataTables warning: /)) {
-            throw new Error(`DataTables warning detected in log: ${message}`);
-        }
-    };
-});
+import "./console-hooks";
 
 // Handle common application errors gracefully in booking modal tests
 // This prevents test failures from known JS errors that don't affect functionality
