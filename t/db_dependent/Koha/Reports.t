@@ -738,7 +738,7 @@ subtest 'search_with_library_group_limits' => sub {
 };
 
 subtest '_confirm_branch_param_allowed' => sub {
-    plan tests => 7;
+    plan tests => 9;
 
     my $library_a = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library_b = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -787,6 +787,14 @@ subtest '_confirm_branch_param_allowed' => sub {
     # pref = library_group: branchcode outside the report group throws
     throws_ok { $report_ab->_confirm_branch_param_allowed( $library_c->branchcode ) }
     'Koha::Exception', 'pref library_group: branchcode outside report group throws';
+
+    # pref = library_group: report limited to an ungrouped library is enforced as a group of one
+    my $report_c = $builder->build_object( { class => 'Koha::Reports' } );
+    $report_c->replace_library_limits( [ $library_c->branchcode ] );
+    lives_ok { $report_c->_confirm_branch_param_allowed( $library_c->branchcode ) }
+    'pref library_group: ungrouped limit passes its own branchcode';
+    throws_ok { $report_c->_confirm_branch_param_allowed( $library_a->branchcode ) }
+    'Koha::Exception', 'pref library_group: ungrouped limit throws for another branchcode';
 };
 
 subtest 'running' => sub {

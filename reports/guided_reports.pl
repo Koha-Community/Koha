@@ -972,9 +972,8 @@ if ( $op eq 'run' ) {
                             $library_search_params = { branchcode => C4::Context::mybranch };
                         }
                         if ( $limit_reports_by eq 'library_group' ) {
-                            my $report_groups = $report->library_group_limits;
-                            my @branchcodes   = map { $_->branchcode } map { $_->all_libraries } @$report_groups;
-                            $library_search_params = { branchcode => { '-in' => \@branchcodes } };
+                            my $branchcodes = $report->library_group_limit_branchcodes;
+                            $library_search_params = { branchcode => { '-in' => $branchcodes } } if @$branchcodes;
                         }
                         my $libraries =
                             Koha::Libraries->search( $library_search_params, { order_by => ['branchname'] } );

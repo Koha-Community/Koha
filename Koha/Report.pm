@@ -447,14 +447,10 @@ sub _confirm_branch_param_allowed {
     }
 
     if ( $pref eq 'library_group' ) {
-        my $groups = $self->library_group_limits;
-        return unless @$groups;
-        my $allowed = {
-            map { $_->branchcode => 1 }
-            map { $_->all_libraries } @$groups
-        };
+        my $branchcodes = $self->library_group_limit_branchcodes;
+        return unless @$branchcodes;
         Koha::Exception->throw( message => 'Unauthorized branch parameter' )
-            unless $allowed->{$branchcode};
+            unless grep { $_ eq $branchcode } @$branchcodes;
     }
 }
 
