@@ -244,6 +244,26 @@
                             <label for="filter_keyword">Keyword:</label>
                             <input type="text" id="filter_keyword" name="filter_keyword" value="[% filters.keyword | html %]" size="16" />
                         </li>
+                        <li>
+                            [% IF Koha.Preference('LimitReportsByLibrary') %]
+                                [% IF ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) %]
+                                    <label for="filter_show_all_reports">Show reports:</label>
+                                    <select name="filter_show_all_reports" id="filter_show_all_reports">
+                                        [% IF filters.show_all_reports == "1" %]
+                                            <option value="1" selected="selected">Show all reports</option>
+                                        [% ELSE %]
+                                            <option value="1">Show all reports</option>
+                                        [% END %]
+
+                                        [% IF filters.show_all_reports == 0 %]
+                                            <option value="0" selected="selected">Show my library reports</option>
+                                        [% ELSE %]
+                                            <option value="0">Show my library reports</option>
+                                        [% END %]
+                                    </select>
+                                [% END %]
+                            [% END %]
+                        </li>
                     </ol>
                 </fieldset>
                 <!-- /.brief -->
