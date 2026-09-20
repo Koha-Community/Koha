@@ -172,96 +172,120 @@
     </div>
     <!-- /.patronifo -->
 
-    <div id="circ-menu" class="sidebar_menu">
+    <div id="circ-menu" class="sidebar_menu icon-collapse">
         <ul>
             [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
                 <li [% IF circview %]class="active"[% END %]>
-                    <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% patron.borrowernumber | uri %]">Check out</a>
+                    <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% patron.borrowernumber | uri %]" title="Check out"
+                        ><i class="fa-solid fa-right-from-bracket fa-fw" aria-hidden="true"></i> <span class="menu-label">Check out</span></a
+                    >
                 </li>
                 [% IF Koha.Preference('BatchCheckouts') && Koha.Preference('BatchCheckoutsValidCategories').split(',').grep('^' _ patron.categorycode _ '$').size > 0 %]
                     <li [% IF batch_checkout_view %]class="active"[% END %]>
-                        <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;batch=1">Batch check out</a>
+                        <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;batch=1" title="Batch check out"
+                            ><i class="fa-solid fa-layer-group fa-fw" aria-hidden="true"></i> <span class="menu-label">Batch check out</span></a
+                        >
                     </li>
                 [% END %]
             [% END # /IF CAN_user_circulate_circulate_remaining_permissions %]
             [% IF CAN_user_borrowers_edit_borrowers %]
                 <li [% IF detailview %]class="active"[% END %]>
-                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">Details</a>
+                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]" title="Details"><i class="fa-solid fa-id-card fa-fw" aria-hidden="true"></i> <span class="menu-label">Details</span></a>
                 </li>
             [% END %]
             [% IF ( CAN_user_updatecharges_remaining_permissions ) %]
                 <li [% IF finesview %]class="active"[% END %]>
-                    <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]">Accounting</a>
+                    <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" title="Accounting"><i class="fa-solid fa-coins fa-fw" aria-hidden="true"></i> <span class="menu-label">Accounting</span></a>
                 </li>
             [% END %]
             [% IF ( CAN_user_circulate_circulate_remaining_permissions  ) %]
                 [% IF Koha.Preference("RoutingSerials") %]
                     <li [% IF routinglistview %]class="active"[% END %]>
-                        <a href="/cgi-bin/koha/members/routing-lists.pl?borrowernumber=[% patron.borrowernumber | uri %]">Routing lists</a>
+                        <a href="/cgi-bin/koha/members/routing-lists.pl?borrowernumber=[% patron.borrowernumber | uri %]" title="Routing lists"
+                            ><i class="fa-solid fa-route fa-fw" aria-hidden="true"></i> <span class="menu-label">Routing lists</span></a
+                        >
                     </li>
                 [% END %]
             [% END %]
             [% IF (CAN_user_borrowers_view_checkout_history && Koha.Preference('intranetreadinghistory')) %]
                 <li [% IF readingrecordview %]class="active"[% END %]>
-                    <a href="/cgi-bin/koha/members/readingrec.pl?borrowernumber=[% patron.borrowernumber | uri %]">Circulation history</a>
+                    <a href="/cgi-bin/koha/members/readingrec.pl?borrowernumber=[% patron.borrowernumber | uri %]" title="Circulation history"
+                        ><i class="fa-solid fa-clock-rotate-left fa-fw" aria-hidden="true"></i> <span class="menu-label">Circulation history</span></a
+                    >
                 </li>
             [% END %]
             [% IF (CAN_user_borrowers_view_holds_history && Koha.Preference('IntranetReadingHistoryHolds')) %]
                 <li [% IF holdshistoryview %]class="active"[% END %]>
-                    <a href="/cgi-bin/koha/members/holdshistory.pl?borrowernumber=[% patron.borrowernumber | uri %]">Holds history</a>
+                    <a href="/cgi-bin/koha/members/holdshistory.pl?borrowernumber=[% patron.borrowernumber | uri %]" title="Holds history"
+                        ><i class="fa-solid fa-bookmark fa-fw" aria-hidden="true"></i> <span class="menu-label">Holds history</span></a
+                    >
                 </li>
             [% END %]
             [% IF ( CAN_user_tools_view_system_logs ) %]
                 <li [% IF logview %]class="active"[% END %]>
-                    <a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&amp;modules=MEMBERS&amp;modules=CIRCULATION&amp;modules=APIKEYS&amp;object=[% patron.borrowernumber | uri %]&amp;src=circ">Modification log</a>
+                    <a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&amp;modules=MEMBERS&amp;modules=CIRCULATION&amp;modules=APIKEYS&amp;object=[% patron.borrowernumber | uri %]&amp;src=circ" title="Modification log"
+                        ><i class="fa-solid fa-clipboard-list fa-fw" aria-hidden="true"></i> <span class="menu-label">Modification log</span></a
+                    >
                 </li>
             [% END %]
             [% IF CAN_user_borrowers_edit_borrowers %]
                 <li [% IF sentnotices %]class="active"[% END %]>
-                    <a href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% patron.borrowernumber | uri %]">Notices</a>
+                    <a href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% patron.borrowernumber | uri %]" title="Notices"><i class="fa-solid fa-envelope fa-fw" aria-hidden="true"></i> <span class="menu-label">Notices</span></a>
                 </li>
             [% END %]
             [% IF CAN_user_borrowers_edit_borrowers %]
                 <li [% IF statisticsview %]class="active"[% END %]>
-                    <a href="/cgi-bin/koha/members/statistics.pl?borrowernumber=[% patron.borrowernumber | uri %]">Statistics</a>
+                    <a href="/cgi-bin/koha/members/statistics.pl?borrowernumber=[% patron.borrowernumber | uri %]" title="Statistics"
+                        ><i class="fa-solid fa-chart-column fa-fw" aria-hidden="true"></i> <span class="menu-label">Statistics</span></a
+                    >
                 </li>
             [% END %]
             [% IF CAN_user_borrowers_edit_borrowers %]
                 [% IF ( EnableBorrowerFiles ) %]
                     <li [% IF borrower_files %]class="active"[% END %]>
-                        <a href="/cgi-bin/koha/members/files.pl?borrowernumber=[% patron.borrowernumber | uri %]">Files</a>
+                        <a href="/cgi-bin/koha/members/files.pl?borrowernumber=[% patron.borrowernumber | uri %]" title="Files"><i class="fa-solid fa-folder-open fa-fw" aria-hidden="true"></i> <span class="menu-label">Files</span></a>
                     </li>
                 [% END %]
             [% END %]
 
             [% IF CAN_user_suggestions_suggestions_create || CAN_user_suggestions_suggestions_manage || CAN_user_suggestions_suggestions_delete %]
                 <li [% IF suggestionsview %]class="active"[% END %]>
-                    <a href="/cgi-bin/koha/members/purchase-suggestions.pl?borrowernumber=[% patron.borrowernumber | uri %]">Purchase suggestions</a>
+                    <a href="/cgi-bin/koha/members/purchase-suggestions.pl?borrowernumber=[% patron.borrowernumber | uri %]" title="Purchase suggestions"
+                        ><i class="fa-solid fa-lightbulb fa-fw" aria-hidden="true"></i> <span class="menu-label">Purchase suggestions</span></a
+                    >
                 </li>
             [% END %]
             [% IF CAN_user_borrowers_edit_borrowers && useDischarge %]
                 <li [% IF dischargeview %]class="active"[% END %]>
-                    <a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% patron.borrowernumber | uri %]">Discharges</a>
+                    <a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% patron.borrowernumber | uri %]" title="Discharges"
+                        ><i class="fa-solid fa-file-circle-check fa-fw" aria-hidden="true"></i> <span class="menu-label">Discharges</span></a
+                    >
                 </li>
             [% END %]
             [% IF Koha.Preference('HouseboundModule') %]
                 <li [% IF houseboundview %]class="active"[% END %]>
-                    <a href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% patron.borrowernumber | uri %]">Housebound</a>
+                    <a href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% patron.borrowernumber | uri %]" title="Housebound"><i class="fa-solid fa-house fa-fw" aria-hidden="true"></i> <span class="menu-label">Housebound</span></a>
                 </li>
             [% END %]
             [% IF Koha.Preference('ILLModule') && CAN_user_ill %]
                 <li [% IF illview %]class="active"[% END %]>
-                    <a href="/cgi-bin/koha/members/ill-requests.pl?borrowernumber=[% patron.borrowernumber | uri %]">ILL requests history</a>
+                    <a href="/cgi-bin/koha/members/ill-requests.pl?borrowernumber=[% patron.borrowernumber | uri %]" title="ILL requests history"
+                        ><i class="fa-solid fa-people-arrows fa-fw" aria-hidden="true"></i> <span class="menu-label">ILL requests history</span></a
+                    >
                 </li>
             [% END %]
             [% IF Koha.Preference('UseRecalls') != "off" && CAN_user_recalls %]
                 <li [% IF recallsview %]class="active"[% END %]>
-                    <a href="/cgi-bin/koha/members/recallshistory.pl?borrowernumber=[% patron.borrowernumber | uri %]">Recalls history</a>
+                    <a href="/cgi-bin/koha/members/recallshistory.pl?borrowernumber=[% patron.borrowernumber | uri %]" title="Recalls history"
+                        ><i class="fa-solid fa-rotate-left fa-fw" aria-hidden="true"></i> <span class="menu-label">Recalls history</span></a
+                    >
                 </li>
             [% END %]
             [% IF ( CAN_user_serials && patron.alert_subscriptions.count ) %]
                 <li [% IF alertsview %]class="active"[% END %]>
-                    <a href="/cgi-bin/koha/members/alert-subscriptions.pl?borrowernumber=[% patron.borrowernumber | uri %]">Alert subscriptions ([% patron.alert_subscriptions.count | html %])</a>
+                    <a href="/cgi-bin/koha/members/alert-subscriptions.pl?borrowernumber=[% patron.borrowernumber | uri %]" title="Alert subscriptions"
+                        ><i class="fa-solid fa-bell fa-fw" aria-hidden="true"></i> <span class="menu-label">Alert subscriptions ([% patron.alert_subscriptions.count | html %])</span></a
+                    >
                 </li>
             [% END %]
         </ul>
