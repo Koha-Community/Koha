@@ -4859,13 +4859,16 @@ div .suggestion_note {
                     display: none;
                 }
 
-                ul,
-                li,
-                a {
+                ul {
                     display: block;
                 }
 
-                a {
+                ul li {
+                    display: block;
+                }
+
+                ul li > a {
+                    display: block;
                     padding: .7em 0;
                     text-align: center;
 
@@ -4877,6 +4880,11 @@ div .suggestion_note {
                 }
 
                 .menu-label {
+                    display: none;
+                }
+
+                .pref-subtabs,
+                #items_submenu {
                     display: none;
                 }
             }
