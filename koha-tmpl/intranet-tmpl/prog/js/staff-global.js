@@ -475,6 +475,10 @@ $(document).ready(function () {
     $("#toggle-sidebar").on("click", function () {
         $toggle_sidebar();
     });
+
+    if (typeof $restore_sidebar_state === "function") {
+        $restore_sidebar_state();
+    }
 });
 
 function removeLastBorrower() {

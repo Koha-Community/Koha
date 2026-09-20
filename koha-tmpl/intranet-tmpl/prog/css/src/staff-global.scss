@@ -4854,18 +4854,37 @@ div .suggestion_note {
                 }
             }
 
-            #toggle-sidebar {
-                border-color: #E6E6E6;
-                border-bottom-color: #B9B9B9;
-                border-radius: 0;
-                box-shadow: 2px 2px 3px 0 rgba( 0, 0, 0, .15 );
+            .sidebar_menu.icon-collapse {
+                h5 {
+                    display: none;
+                }
+
+                ul,
+                li,
+                a {
+                    display: block;
+                }
+
+                a {
+                    padding: .7em 0;
+                    text-align: center;
+
+                    i {
+                        display: inline-block;
+                        font-size: 1.2em;
+                        margin: 0;
+                    }
+                }
+
+                .menu-label {
+                    display: none;
+                }
             }
         }
 
         .sidebar-toggle {
-            display: block;
-            position: absolute;
-            right: 0;
+            display: flex;
+            justify-content: flex-end;
         }
     }
 }
@@ -4996,18 +5015,17 @@ div .suggestion_note {
 }
 
 .sidebar-toggle {
+    background-color: #E6E6E6;
     display: none;
+    padding: .3em .3em 0;
 }
 
 #toggle-sidebar {
-    background-color: #FFF;
-    border-color: #E6E6E6;
+    background-color: transparent;
+    border: 0;
     border-radius: 0;
-    border-width: 1px;
-    box-shadow: -2px 2px 3px 0 rgba( 0, 0, 0, .15 );
 
     &:hover {
-        background-color: #FFF;
-        border-color: #666;
+        background-color: rgba( 0, 0, 0, .07 );
     }
 }
