@@ -8,7 +8,9 @@
                 <template v-if="item.icon">
                     <i :class="`${item.icon}`"></i>&nbsp;
                 </template>
-                <span v-if="item.title">{{ $__(item.title) }}</span>
+                <span class="menu-label" v-if="item.title">{{
+                    $__(item.title)
+                }}</span>
                 <template v-if="item.is_external">
                     &nbsp;<i
                         class="fa fa-external-link"
@@ -24,7 +26,9 @@
                 <template v-if="item.icon">
                     <i :class="`${item.icon}`"></i>&nbsp;
                 </template>
-                <span v-if="item.title">{{ $__(item.title) }}</span>
+                <span class="menu-label" v-if="item.title">{{
+                    $__(item.title)
+                }}</span>
             </router-link>
             <router-link
                 v-else-if="item.path && !item.disabled"
@@ -33,13 +37,17 @@
                 <template v-if="item.icon">
                     <i :class="`${item.icon}`"></i>&nbsp;
                 </template>
-                <span v-if="item.title">{{ $__(item.title) }}</span>
+                <span class="menu-label" v-if="item.title">{{
+                    $__(item.title)
+                }}</span>
             </router-link>
             <a v-else-if="item.href && !item.disabled" :href="item.href">
                 <template v-if="item.icon">
                     <i :class="`${item.icon}`"></i>&nbsp;
                 </template>
-                <span v-if="item.title">{{ $__(item.title) }}</span>
+                <span class="menu-label" v-if="item.title">{{
+                    $__(item.title)
+                }}</span>
             </a>
             <a
                 v-else
@@ -50,7 +58,9 @@
                 <template v-if="item.icon">
                     <i :class="`${item.icon}`"></i>&nbsp;
                 </template>
-                <span class="" v-if="item.title">{{ $__(item.title) }}</span>
+                <span class="menu-label" v-if="item.title">{{
+                    $__(item.title)
+                }}</span>
             </a>
         </span>
         <ul v-if="item.children && item.children.length">

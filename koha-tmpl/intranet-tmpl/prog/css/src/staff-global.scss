@@ -4904,10 +4904,19 @@ div .suggestion_note {
                     display: block;
                 }
 
-                ul li > a {
+                ul li > span {
+                    display: block;
+                }
+
+                ul li a {
                     display: block;
                     padding: .7em 0;
                     text-align: center;
+
+                    &.router-link-active {
+                        background-color: #F3F4F4;
+                        border-left: solid 5px $background-color-primary;
+                    }
 
                     i {
                         display: inline-block;

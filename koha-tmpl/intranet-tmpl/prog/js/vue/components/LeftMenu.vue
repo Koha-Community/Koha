@@ -19,7 +19,7 @@
             <AcquisitionsMenu
                 v-else-if="navigationTree === 'AcquisitionsMenu'"
             />
-            <div v-else class="sidebar_menu">
+            <div v-else class="sidebar_menu icon-collapse">
                 <h5>{{ $__(title) }}</h5>
                 <ul>
                     <NavigationItem
