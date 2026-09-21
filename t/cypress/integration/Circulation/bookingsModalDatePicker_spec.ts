@@ -90,7 +90,7 @@ describe("Booking Modal Date Picker Tests", () => {
         cy.vueSelect(
             "booking_patron",
             testData.patron.cardnumber,
-            `${testData.patron.surname} ${testData.patron.firstname}`
+            `${testData.patron.surname}, ${testData.patron.preferred_name}`
         );
         cy.wait("@getPickupLocations");
 
@@ -1258,7 +1258,7 @@ describe("Booking Modal Date Picker Tests", () => {
                 cy.vueSelect(
                     "booking_patron",
                     testPatron.cardnumber,
-                    `${testPatron.surname} ${testPatron.firstname}`
+                    `${testPatron.surname}, ${testPatron.preferred_name}`
                 );
                 cy.wait("@getPickupLocations");
 
@@ -1485,7 +1485,7 @@ describe("Booking Modal Date Picker Tests", () => {
                 cy.vueSelect(
                     "booking_patron",
                     testPatron.cardnumber,
-                    `${testPatron.surname} ${testPatron.firstname}`
+                    `${testPatron.surname}, ${testPatron.preferred_name}`
                 );
                 cy.wait("@getPickupLocations");
 
@@ -1623,7 +1623,7 @@ describe("Booking Modal Date Picker Tests", () => {
                     cy.vueSelect(
                         "booking_patron",
                         testPatron.cardnumber,
-                        `${testPatron.surname} ${testPatron.firstname}`
+                        `${testPatron.surname}, ${testPatron.preferred_name}`
                     );
                     cy.wait("@getPickupLocations");
 

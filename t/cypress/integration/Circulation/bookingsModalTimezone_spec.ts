@@ -109,7 +109,7 @@ describe("Booking Modal Timezone Tests", () => {
         cy.vueSelect(
             "booking_patron",
             testData.patron.cardnumber,
-            `${testData.patron.surname} ${testData.patron.firstname}`
+            `${testData.patron.surname}, ${testData.patron.preferred_name}`
         );
         cy.wait("@getPickupLocations");
 

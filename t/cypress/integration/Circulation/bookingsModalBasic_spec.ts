@@ -140,7 +140,7 @@ describe("Booking Modal Basic Tests", () => {
         cy.vueSelect(
             "booking_patron",
             testData.patron.cardnumber,
-            `${testData.patron.surname} ${testData.patron.firstname}`
+            `${testData.patron.surname}, ${testData.patron.preferred_name}`
         );
 
         // Wait for pickup locations API call to complete
@@ -202,7 +202,7 @@ describe("Booking Modal Basic Tests", () => {
         cy.vueSelect(
             "booking_patron",
             testData.patron.cardnumber,
-            `${testData.patron.surname} ${testData.patron.firstname}`
+            `${testData.patron.surname}, ${testData.patron.preferred_name}`
         );
         cy.wait("@getPickupLocations");
 
@@ -299,7 +299,7 @@ describe("Booking Modal Basic Tests", () => {
         cy.vueSelect(
             "booking_patron",
             testData.patron.cardnumber,
-            `${testData.patron.surname} ${testData.patron.firstname}`
+            `${testData.patron.surname}, ${testData.patron.preferred_name}`
         );
 
         // Step 2: Select pickup location
@@ -366,7 +366,7 @@ describe("Booking Modal Basic Tests", () => {
         cy.vueSelect(
             "booking_patron",
             testData.patron.cardnumber,
-            `${testData.patron.surname} ${testData.patron.firstname}`
+            `${testData.patron.surname}, ${testData.patron.preferred_name}`
         );
 
         // Step 2: Keep the patron-library pickup default selected. Choosing
@@ -472,7 +472,7 @@ describe("Booking Modal Basic Tests", () => {
         cy.vueSelect(
             "booking_patron",
             testData.patron.cardnumber,
-            `${testData.patron.surname} ${testData.patron.firstname}`
+            `${testData.patron.surname}, ${testData.patron.preferred_name}`
         );
 
         // Step 2: Select pickup location
@@ -527,7 +527,7 @@ describe("Booking Modal Basic Tests", () => {
         cy.vueSelect(
             "booking_patron",
             testData.patron.cardnumber,
-            `${testData.patron.surname} ${testData.patron.firstname}`
+            `${testData.patron.surname}, ${testData.patron.preferred_name}`
         );
         cy.wait("@getPickupLocations");
 
@@ -863,7 +863,7 @@ describe("Booking Modal Basic Tests", () => {
         cy.vueSelect(
             "booking_patron",
             testData.patron.cardnumber,
-            `${testData.patron.surname} ${testData.patron.firstname}`
+            `${testData.patron.surname}, ${testData.patron.preferred_name}`
         );
         cy.wait("@getPickupLocations");
 
@@ -946,7 +946,7 @@ describe("Booking Modal Basic Tests", () => {
         cy.vueSelect(
             "booking_patron",
             testData.patron.cardnumber,
-            `${testData.patron.surname} ${testData.patron.firstname}`
+            `${testData.patron.surname}, ${testData.patron.preferred_name}`
         );
         cy.vueSelectShouldBeEnabled("pickup_library_id");
         cy.vueSelectByIndex("pickup_library_id", 0);
@@ -1008,7 +1008,7 @@ describe("Booking Modal Basic Tests", () => {
         cy.vueSelect(
             "booking_patron",
             testData.patron.cardnumber,
-            `${testData.patron.surname} ${testData.patron.firstname}`
+            `${testData.patron.surname}, ${testData.patron.preferred_name}`
         );
         cy.wait("@getPickupLocations");
 
@@ -1055,7 +1055,7 @@ describe("Booking Modal Basic Tests", () => {
         cy.vueSelect(
             "booking_patron",
             testData.patron.cardnumber,
-            `${testData.patron.surname} ${testData.patron.firstname}`
+            `${testData.patron.surname}, ${testData.patron.preferred_name}`
         );
         cy.wait("@getPickupLocations");
 
@@ -1106,7 +1106,7 @@ describe("Booking Modal Basic Tests", () => {
         cy.vueSelect(
             "booking_patron",
             testData.patron.cardnumber,
-            `${testData.patron.surname} ${testData.patron.firstname}`
+            `${testData.patron.surname}, ${testData.patron.preferred_name}`
         );
         cy.wait("@getPickupLocations");
 
