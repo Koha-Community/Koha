@@ -744,8 +744,11 @@ main {
 }
 
 body {
+    display: flex;
+    flex-direction: column;
     font-size: 13px;
     line-height: 1.22;
+    min-height: 100vh;
     padding: 0;
     text-align: left;
 
@@ -762,6 +765,38 @@ body {
     &.value_builder {
         padding-left: 1em;
         padding-right: 1em;
+    }
+}
+
+// Vue SPA modules that own their whole page layout (their own
+// main-container-equivalent markup lives inside this mount point,
+// rather than main-container.inc being a direct child of body).
+#sip2,
+#erm,
+#ill,
+#preservation,
+#vendors {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+
+    // Each app's root component renders a single wrapping <div> (its
+    // Vue template root) around #sub-header + .main.container-fluid;
+    // that wrapper needs to be in the flex chain too.
+    > div {
+        display: flex;
+        flex: 1 0 auto;
+        flex-direction: column;
+    }
+}
+
+.main.container-fluid {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+
+    > .row {
+        flex: 1 0 auto;
     }
 }
 
