@@ -1,19 +1,30 @@
 <template>
-    <div id="acquisitions-menu" class="sidebar_menu">
+    <div id="acquisitions-menu" class="sidebar_menu icon-collapse">
         <h5>{{ $__("Acquisitions") }}</h5>
         <ul>
             <li>
                 <a
                     :ref="el => templateRefs.push(el)"
                     href="/cgi-bin/koha/acqui/acqui-home.pl"
-                    >{{ $__("Acquisitions home") }}</a
+                    :title="$__('Acquisitions home')"
+                    ><i class="fa-solid fa-house fa-fw" aria-hidden="true"></i>
+                    <span class="menu-label">{{
+                        $__("Acquisitions home")
+                    }}</span></a
                 >
             </li>
             <li>
                 <a
                     :ref="el => templateRefs.push(el)"
                     href="/cgi-bin/koha/acqui/histsearch.pl"
-                    >{{ $__("Advanced search") }}</a
+                    :title="$__('Advanced search')"
+                    ><i
+                        class="fa-solid fa-magnifying-glass fa-fw"
+                        aria-hidden="true"
+                    ></i>
+                    <span class="menu-label">{{
+                        $__("Advanced search")
+                    }}</span></a
                 >
             </li>
             <li
@@ -25,7 +36,9 @@
                 <a
                     :ref="el => templateRefs.push(el)"
                     href="/cgi-bin/koha/acqui/lateorders.pl"
-                    >{{ $__("Late orders") }}</a
+                    :title="$__('Late orders')"
+                    ><i class="fa-solid fa-clock fa-fw" aria-hidden="true"></i>
+                    <span class="menu-label">{{ $__("Late orders") }}</span></a
                 >
             </li>
             <li
@@ -45,14 +58,24 @@
                 <a
                     :ref="el => templateRefs.push(el)"
                     href="/cgi-bin/koha/suggestion/suggestion.pl"
-                    >{{ $__("Suggestions") }}</a
+                    :title="$__('Suggestions')"
+                    ><i
+                        class="fa-solid fa-lightbulb fa-fw"
+                        aria-hidden="true"
+                    ></i>
+                    <span class="menu-label">{{ $__("Suggestions") }}</span></a
                 >
             </li>
             <li>
                 <a
                     :ref="el => templateRefs.push(el)"
                     href="/cgi-bin/koha/acqui/invoices.pl"
-                    >{{ $__("Invoices") }}</a
+                    :title="$__('Invoices')"
+                    ><i
+                        class="fa-solid fa-file-invoice-dollar fa-fw"
+                        aria-hidden="true"
+                    ></i>
+                    <span class="menu-label">{{ $__("Invoices") }}</span></a
                 >
             </li>
             <li
@@ -65,7 +88,14 @@
                 <a
                     :ref="el => templateRefs.push(el)"
                     href="/cgi-bin/koha/acqui/edifactmsgs.pl"
-                    >{{ $__("EDIFACT messages") }}</a
+                    :title="$__('EDIFACT messages')"
+                    ><i
+                        class="fa-solid fa-envelope fa-fw"
+                        aria-hidden="true"
+                    ></i>
+                    <span class="menu-label">{{
+                        $__("EDIFACT messages")
+                    }}</span></a
                 >
             </li>
         </ul>
@@ -86,14 +116,28 @@
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/reports/acquisitions_stats.pl"
-                            >{{ $__("Acquisitions statistics wizard") }}</a
+                            :title="$__('Acquisitions statistics wizard')"
+                            ><i
+                                class="fa-solid fa-chart-column fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("Acquisitions statistics wizard")
+                            }}</span></a
                         >
                     </li>
                     <li>
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/reports/orders_by_fund.pl"
-                            >{{ $__("Orders by fund") }}</a
+                            :title="$__('Orders by fund')"
+                            ><i
+                                class="fa-solid fa-money-bill-wave fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("Orders by fund")
+                            }}</span></a
                         >
                     </li>
                 </template>
@@ -108,7 +152,14 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/circ/reserveratios.pl"
-                        >{{ $__("Hold ratios") }}</a
+                        :title="$__('Hold ratios')"
+                        ><i
+                            class="fa-solid fa-scale-balanced fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Hold ratios")
+                        }}</span></a
                     >
                 </li>
             </ul>
@@ -144,7 +195,12 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/aqbudgetperiods.pl"
-                        >{{ $__("Budgets") }}</a
+                        :title="$__('Budgets')"
+                        ><i
+                            class="fa-solid fa-coins fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{ $__("Budgets") }}</span></a
                     >
                 </li>
                 <li
@@ -156,7 +212,12 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/aqbudgets.pl"
-                        >{{ $__("Funds") }}</a
+                        :title="$__('Funds')"
+                        ><i
+                            class="fa-solid fa-sack-dollar fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{ $__("Funds") }}</span></a
                     >
                 </li>
                 <li
@@ -170,7 +231,14 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/currency.pl"
-                        >{{ $__("Currencies") }}</a
+                        :title="$__('Currencies')"
+                        ><i
+                            class="fa-solid fa-money-bill-1 fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Currencies")
+                        }}</span></a
                     >
                 </li>
                 <template
@@ -184,14 +252,28 @@
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/edi_accounts.pl"
-                            >{{ $__("EDI accounts") }}</a
+                            :title="$__('EDI accounts')"
+                            ><i
+                                class="fa-solid fa-network-wired fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("EDI accounts")
+                            }}</span></a
                         >
                     </li>
                     <li>
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/edi_ean_accounts.pl"
-                            >{{ $__("Library EANs") }}</a
+                            :title="$__('Library EANs')"
+                            ><i
+                                class="fa-solid fa-barcode fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("Library EANs")
+                            }}</span></a
                         >
                     </li>
                 </template>
@@ -208,7 +290,14 @@
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/marc_order_accounts.pl"
-                            >{{ $__("MARC order accounts") }}</a
+                            :title="$__('MARC order accounts')"
+                            ><i
+                                class="fa-solid fa-code fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("MARC order accounts")
+                            }}</span></a
                         >
                     </li>
                 </template>
@@ -225,7 +314,14 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/additional-fields.pl?tablename=aqinvoices"
-                        >{{ $__("Manage invoice fields") }}</a
+                        :title="$__('Manage invoice fields')"
+                        ><i
+                            class="fa-solid fa-list-check fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Manage invoice fields")
+                        }}</span></a
                     >
                 </li>
                 <template
@@ -244,14 +340,28 @@
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/additional-fields.pl?tablename=aqbasket"
-                            >{{ $__("Manage order basket fields") }}</a
+                            :title="$__('Manage order basket fields')"
+                            ><i
+                                class="fa-solid fa-list-check fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("Manage order basket fields")
+                            }}</span></a
                         >
                     </li>
                     <li>
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/additional-fields.pl?tablename=aqorders"
-                            >{{ $__("Manage order line fields") }}</a
+                            :title="$__('Manage order line fields')"
+                            ><i
+                                class="fa-solid fa-list-check fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("Manage order line fields")
+                            }}</span></a
                         >
                     </li>
                 </template>
