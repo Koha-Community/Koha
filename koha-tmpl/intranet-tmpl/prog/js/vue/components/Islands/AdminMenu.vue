@@ -1,5 +1,5 @@
 <template>
-    <div id="admin-menu" class="sidebar_menu">
+    <div id="admin-menu" class="sidebar_menu icon-collapse">
         <template v-if="can_user_parameters_manage_sysprefs">
             <h5>{{ $__("System preferences") }}</h5>
             <ul>
@@ -7,7 +7,14 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/preferences.pl"
-                        >{{ $__("System preferences") }}</a
+                        :title="$__('System preferences')"
+                        ><i
+                            class="fa-solid fa-sliders fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("System preferences")
+                        }}</span></a
                     >
                 </li>
             </ul>
@@ -27,14 +34,28 @@
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/branches.pl"
-                            >{{ $__("Libraries") }}</a
+                            :title="$__('Libraries')"
+                            ><i
+                                class="fa-solid fa-building fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("Libraries")
+                            }}</span></a
                         >
                     </li>
                     <li>
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/library_groups.pl"
-                            >{{ $__("Library groups") }}</a
+                            :title="$__('Library groups')"
+                            ><i
+                                class="fa-solid fa-sitemap fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("Library groups")
+                            }}</span></a
                         >
                     </li>
                 </template>
@@ -42,14 +63,28 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/itemtypes.pl"
-                        >{{ $__("Item types") }}</a
+                        :title="$__('Item types')"
+                        ><i
+                            class="fa-solid fa-shapes fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Item types")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="can_user_parameters_manage_auth_values">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/authorised_values.pl"
-                        >{{ $__("Authorized values") }}</a
+                        :title="$__('Authorized values')"
+                        ><i
+                            class="fa-solid fa-list-check fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Authorized values")
+                        }}</span></a
                     >
                 </li>
             </ul>
@@ -73,21 +108,42 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/categories.pl"
-                        >{{ $__("Patron categories") }}</a
+                        :title="$__('Patron categories')"
+                        ><i
+                            class="fa-solid fa-id-badge fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Patron categories")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="can_user_parameters_manage_circ_rules">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/smart-rules.pl"
-                        >{{ $__("Circulation and fine rules") }}</a
+                        :title="$__('Circulation and fine rules')"
+                        ><i
+                            class="fa-solid fa-gavel fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Circulation and fine rules")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="can_user_parameters_manage_patron_attributes">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/patron-attr-types.pl"
-                        >{{ $__("Patron attribute types") }}</a
+                        :title="$__('Patron attribute types')"
+                        ><i
+                            class="fa-solid fa-tags fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Patron attribute types")
+                        }}</span></a
                     >
                 </li>
                 <template v-if="can_user_parameters_manage_transfers">
@@ -95,21 +151,42 @@
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/branch_transfer_limits.pl"
-                            >{{ $__("Library transfer limits") }}</a
+                            :title="$__('Library transfer limits')"
+                            ><i
+                                class="fa-solid fa-truck fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("Library transfer limits")
+                            }}</span></a
                         >
                     </li>
                     <li>
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/transport-cost-matrix.pl"
-                            >{{ $__("Transport cost matrix") }}</a
+                            :title="$__('Transport cost matrix')"
+                            ><i
+                                class="fa-solid fa-route fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("Transport cost matrix")
+                            }}</span></a
                         >
                     </li>
                     <li>
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/float_limits.pl"
-                            >{{ $__("Library float limits") }}</a
+                            :title="$__('Library float limits')"
+                            ><i
+                                class="fa-solid fa-water fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("Library float limits")
+                            }}</span></a
                         >
                     </li>
                 </template>
@@ -117,7 +194,14 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/sip2/sip2.pl"
-                        >{{ $__("Self-service circulation (SIP2)") }}</a
+                        :title="$__('Self-service circulation (SIP2)')"
+                        ><i
+                            class="fa-solid fa-satellite-dish fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Self-service circulation (SIP2)")
+                        }}</span></a
                     >
                 </li>
                 <li
@@ -129,14 +213,28 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/shibboleth/shibboleth.pl"
-                        >{{ $__("Shibboleth configuration") }}</a
+                        :title="$__('Shibboleth configuration')"
+                        ><i
+                            class="fa-solid fa-key fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Shibboleth configuration")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="can_user_parameters_manage_item_circ_alerts">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/item_circulation_alerts.pl"
-                        >{{ $__("Item circulation alerts") }}</a
+                        :title="$__('Item circulation alerts')"
+                        ><i
+                            class="fa-solid fa-bell fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Item circulation alerts")
+                        }}</span></a
                     >
                 </li>
                 <li
@@ -148,28 +246,54 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/desks.pl"
-                        >{{ $__("Desks") }}</a
+                        :title="$__('Desks')"
+                        ><i
+                            class="fa-solid fa-desktop fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{ $__("Desks") }}</span></a
                     >
                 </li>
                 <li v-if="can_user_parameters_manage_cities">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/cities.pl"
-                        >{{ $__("Cities and towns") }}</a
+                        :title="$__('Cities and towns')"
+                        ><i
+                            class="fa-solid fa-city fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Cities and towns")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="can_user_parameters_manage_curbside_pickups">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/curbside_pickup.pl"
-                        >{{ $__("Curbside pickup") }}</a
+                        :title="$__('Curbside pickup')"
+                        ><i
+                            class="fa-solid fa-car fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Curbside pickup")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="can_user_parameters_manage_patron_restrictions">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/restrictions.pl"
-                        >{{ $__("Patron restriction types") }}</a
+                        :title="$__('Patron restriction types')"
+                        ><i
+                            class="fa-solid fa-ban fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Patron restriction types")
+                        }}</span></a
                     >
                 </li>
             </ul>
@@ -188,14 +312,28 @@
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/debit_types.pl"
-                            >{{ $__("Debit types") }}</a
+                            :title="$__('Debit types')"
+                            ><i
+                                class="fa-solid fa-arrow-down fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("Debit types")
+                            }}</span></a
                         >
                     </li>
                     <li>
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/credit_types.pl"
-                            >{{ $__("Credit types") }}</a
+                            :title="$__('Credit types')"
+                            ><i
+                                class="fa-solid fa-arrow-up fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("Credit types")
+                            }}</span></a
                         >
                     </li>
                 </template>
@@ -208,7 +346,14 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/cash_registers.pl"
-                        >{{ $__("Cash registers") }}</a
+                        :title="$__('Cash registers')"
+                        ><i
+                            class="fa-solid fa-cash-register fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Cash registers")
+                        }}</span></a
                     >
                 </li>
             </ul>
@@ -221,7 +366,12 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/plugins/plugins-home.pl"
-                        >{{ $__("Plugins") }}</a
+                        :title="$__('Plugins')"
+                        ><i
+                            class="fa-solid fa-puzzle-piece fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{ $__("Plugins") }}</span></a
                     >
                 </li>
             </ul>
@@ -234,7 +384,12 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/background_jobs.pl"
-                        >{{ $__("Jobs") }}</a
+                        :title="$__('Jobs')"
+                        ><i
+                            class="fa-solid fa-gears fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{ $__("Jobs") }}</span></a
                     >
                 </li>
             </ul>
@@ -260,28 +415,56 @@
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/biblio_framework.pl"
-                            >{{ $__("MARC bibliographic framework") }}</a
+                            :title="$__('MARC bibliographic framework')"
+                            ><i
+                                class="fa-solid fa-diagram-project fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("MARC bibliographic framework")
+                            }}</span></a
                         >
                     </li>
                     <li>
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/koha2marclinks.pl"
-                            >{{ $__("Koha to MARC mapping") }}</a
+                            :title="$__('Koha to MARC mapping')"
+                            ><i
+                                class="fa-solid fa-right-left fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("Koha to MARC mapping")
+                            }}</span></a
                         >
                     </li>
                     <li>
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/checkmarc.pl"
-                            >{{ $__("MARC bibliographic framework test") }}</a
+                            :title="$__('MARC bibliographic framework test')"
+                            ><i
+                                class="fa-solid fa-vial fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("MARC bibliographic framework test")
+                            }}</span></a
                         >
                     </li>
                     <li>
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/authtypes.pl"
-                            >{{ $__("Authority types") }}</a
+                            :title="$__('Authority types')"
+                            ><i
+                                class="fa-solid fa-address-book fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("Authority types")
+                            }}</span></a
                         >
                     </li>
                 </template>
@@ -289,42 +472,84 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/classsources.pl"
-                        >{{ $__("Classification configuration") }}</a
+                        :title="$__('Classification configuration')"
+                        ><i
+                            class="fa-solid fa-layer-group fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Classification configuration")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="can_user_parameters_manage_matching_rules">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/matching-rules.pl"
-                        >{{ $__("Record matching rules") }}</a
+                        :title="$__('Record matching rules')"
+                        ><i
+                            class="fa-solid fa-code-compare fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Record matching rules")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="can_user_parameters_manage_record_sources">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/record_sources"
-                        >{{ $__("Record sources") }}</a
+                        :title="$__('Record sources')"
+                        ><i
+                            class="fa-solid fa-database fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Record sources")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="can_user_parameters_manage_marc_overlay_rules">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/marc-overlay-rules.pl"
-                        >{{ $__("Record overlay rules") }}</a
+                        :title="$__('Record overlay rules')"
+                        ><i
+                            class="fa-solid fa-clone fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Record overlay rules")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="can_user_parameters_manage_oai_sets">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/oai_sets.pl"
-                        >{{ $__("OAI sets configuration") }}</a
+                        :title="$__('OAI sets configuration')"
+                        ><i
+                            class="fa-solid fa-boxes-packing fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("OAI sets configuration")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="can_user_parameters_manage_item_search_fields">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/items_search_fields.pl"
-                        >{{ $__("Item search fields") }}</a
+                        :title="$__('Item search fields')"
+                        ><i
+                            class="fa-solid fa-magnifying-glass fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Item search fields")
+                        }}</span></a
                     >
                 </li>
                 <li
@@ -336,16 +561,30 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/search_filters.pl"
-                        >{{ $__("Search filters") }}</a
+                        :title="$__('Search filters')"
+                        ><i
+                            class="fa-solid fa-filter fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Search filters")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="can_user_parameters_manage_search_engine_config">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/searchengine/elasticsearch/mappings.pl"
-                        >{{
+                        :title="
+                            $__('Search engine configuration (Elasticsearch)')
+                        "
+                        ><i
+                            class="fa-solid fa-server fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
                             $__("Search engine configuration (Elasticsearch)")
-                        }}</a
+                        }}</span></a
                     >
                 </li>
             </ul>
@@ -367,21 +606,38 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/currency.pl"
-                        >{{ $__("Currencies and exchange rates") }}</a
+                        :title="$__('Currencies and exchange rates')"
+                        ><i
+                            class="fa-solid fa-money-bill-transfer fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Currencies and exchange rates")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="can_user_acquisition_period_manage">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/aqbudgetperiods.pl"
-                        >{{ $__("Budgets") }}</a
+                        :title="$__('Budgets')"
+                        ><i
+                            class="fa-solid fa-coins fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{ $__("Budgets") }}</span></a
                     >
                 </li>
                 <li v-if="can_user_acquisition_budget_manage">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/aqbudgets.pl"
-                        >{{ $__("Funds") }}</a
+                        :title="$__('Funds')"
+                        ><i
+                            class="fa-solid fa-sack-dollar fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{ $__("Funds") }}</span></a
                     >
                 </li>
                 <template v-if="edifact && can_user_acquisition_edi_manage">
@@ -389,14 +645,28 @@
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/edi_accounts.pl"
-                            >{{ $__("EDI accounts") }}</a
+                            :title="$__('EDI accounts')"
+                            ><i
+                                class="fa-solid fa-network-wired fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("EDI accounts")
+                            }}</span></a
                         >
                     </li>
                     <li>
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/edi_ean_accounts.pl"
-                            >{{ $__("Library EANs") }}</a
+                            :title="$__('Library EANs')"
+                            ><i
+                                class="fa-solid fa-barcode fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("Library EANs")
+                            }}</span></a
                         >
                     </li>
                 </template>
@@ -409,7 +679,14 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/marc_order_accounts.pl"
-                        >{{ $__("MARC ordering accounts") }}</a
+                        :title="$__('MARC ordering accounts')"
+                        ><i
+                            class="fa-solid fa-code fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("MARC ordering accounts")
+                        }}</span></a
                     >
                 </li>
             </ul>
@@ -438,7 +715,14 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/identity_providers.pl"
-                        >{{ $__("Identity providers") }}</a
+                        :title="$__('Identity providers')"
+                        ><i
+                            class="fa-solid fa-fingerprint fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Identity providers")
+                        }}</span></a
                     >
                 </li>
                 <template v-if="can_user_parameters_manage_search_targets">
@@ -446,14 +730,28 @@
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/z3950servers.pl"
-                            >{{ $__("Z39.50/SRU servers") }}</a
+                            :title="$__('Z39.50/SRU servers')"
+                            ><i
+                                class="fa-solid fa-satellite fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("Z39.50/SRU servers")
+                            }}</span></a
                         >
                     </li>
                     <li>
                         <a
                             :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/oai_servers.pl"
-                            >{{ $__("OAI repositories") }}</a
+                            :title="$__('OAI repositories')"
+                            ><i
+                                class="fa-solid fa-cloud-arrow-down fa-fw"
+                                aria-hidden="true"
+                            ></i>
+                            <span class="menu-label">{{
+                                $__("OAI repositories")
+                            }}</span></a
                         >
                     </li>
                 </template>
@@ -461,35 +759,70 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/smtp_servers.pl"
-                        >{{ $__("SMTP servers") }}</a
+                        :title="$__('SMTP servers')"
+                        ><i
+                            class="fa-solid fa-envelope fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("SMTP servers")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="can_user_parameters_manage_file_transports">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/file_transports.pl"
-                        >{{ $__("File transports") }}</a
+                        :title="$__('File transports')"
+                        ><i
+                            class="fa-solid fa-file-export fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("File transports")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="can_user_parameters_manage_didyoumean">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/didyoumean.pl"
-                        >{{ $__("Did you mean?") }}</a
+                        :title="$__('Did you mean?')"
+                        ><i
+                            class="fa-solid fa-circle-question fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Did you mean?")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="can_user_parameters_manage_column_config">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/columns_settings.pl"
-                        >{{ $__("Table settings") }}</a
+                        :title="$__('Table settings')"
+                        ><i
+                            class="fa-solid fa-table-cells fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Table settings")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="can_user_parameters_manage_audio_alerts">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/audio_alerts.pl"
-                        >{{ $__("Audio alerts") }}</a
+                        :title="$__('Audio alerts')"
+                        ><i
+                            class="fa-solid fa-volume-high fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Audio alerts")
+                        }}</span></a
                     >
                 </li>
                 <li
@@ -501,28 +834,56 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/sms_providers.pl"
-                        >{{ $__("SMS cellular providers") }}</a
+                        :title="$__('SMS cellular providers')"
+                        ><i
+                            class="fa-solid fa-comment-sms fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("SMS cellular providers")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="can_user_parameters_manage_usage_stats">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/usage_statistics.pl"
-                        >{{ $__("Share usage statistics") }}</a
+                        :title="$__('Share usage statistics')"
+                        ><i
+                            class="fa-solid fa-chart-line fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Share usage statistics")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="can_user_parameters_manage_mana">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/share_content.pl"
-                        >{{ $__("Share content with Mana KB") }}</a
+                        :title="$__('Share content with Mana KB')"
+                        ><i
+                            class="fa-solid fa-share-nodes fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Share content with Mana KB")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="can_user_parameters_manage_additional_fields">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/additional-fields.pl"
-                        >{{ $__("Additional fields") }}</a
+                        :title="$__('Additional fields')"
+                        ><i
+                            class="fa-solid fa-list-ul fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Additional fields")
+                        }}</span></a
                     >
                 </li>
                 <li
@@ -534,14 +895,28 @@
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/adveditorshortcuts.pl"
-                        >{{ $__("Keyboard shortcuts") }}</a
+                        :title="$__('Keyboard shortcuts')"
+                        ><i
+                            class="fa-solid fa-keyboard fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Keyboard shortcuts")
+                        }}</span></a
                     >
                 </li>
                 <li v-if="illmodule && can_user_ill">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/ill_batch_statuses.pl"
-                        >{{ $__("Interlibrary loan batch statuses") }}</a
+                        :title="$__('Interlibrary loan batch statuses')"
+                        ><i
+                            class="fa-solid fa-people-arrows fa-fw"
+                            aria-hidden="true"
+                        ></i>
+                        <span class="menu-label">{{
+                            $__("Interlibrary loan batch statuses")
+                        }}</span></a
                     >
                 </li>
             </ul>
