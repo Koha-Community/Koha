@@ -1,5 +1,5 @@
 <template>
-    <div id="vendor-menu" class="sidebar_menu" v-if="vendorId">
+    <div id="vendor-menu" class="sidebar_menu icon-collapse" v-if="vendorId">
         <ul>
             <li
                 v-if="
@@ -10,7 +10,12 @@
                 <a
                     :ref="el => templateRefs.push(el)"
                     :href="`/cgi-bin/koha/acqui/booksellers.pl?booksellerid=${vendorId}`"
-                    >{{ $__("Baskets") }}</a
+                    :title="$__('Baskets')"
+                    ><i
+                        class="fa-solid fa-basket-shopping fa-fw"
+                        aria-hidden="true"
+                    ></i>
+                    <span class="menu-label">{{ $__("Baskets") }}</span></a
                 >
             </li>
             <li
@@ -22,7 +27,14 @@
                 <a
                     :ref="el => templateRefs.push(el)"
                     :href="`/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=${vendorId}`"
-                    >{{ $__("Basket groups") }}</a
+                    :title="$__('Basket groups')"
+                    ><i
+                        class="fa-solid fa-layer-group fa-fw"
+                        aria-hidden="true"
+                    ></i>
+                    <span class="menu-label">{{
+                        $__("Basket groups")
+                    }}</span></a
                 >
             </li>
             <li
@@ -34,7 +46,12 @@
                 <a
                     :ref="el => templateRefs.push(el)"
                     :href="`/cgi-bin/koha/admin/aqcontract.pl?booksellerid=${vendorId}`"
-                    >{{ $__("Contracts") }}</a
+                    :title="$__('Contracts')"
+                    ><i
+                        class="fa-solid fa-file-signature fa-fw"
+                        aria-hidden="true"
+                    ></i>
+                    <span class="menu-label">{{ $__("Contracts") }}</span></a
                 >
             </li>
             <li
@@ -46,14 +63,26 @@
                 <a
                     :ref="el => templateRefs.push(el)"
                     :href="`/cgi-bin/koha/acqui/vendor_issues.pl?booksellerid=${vendorId}`"
-                    >{{ $__("Vendor issues") }}</a
+                    :title="$__('Vendor issues')"
+                    ><i
+                        class="fa-solid fa-triangle-exclamation fa-fw"
+                        aria-hidden="true"
+                    ></i>
+                    <span class="menu-label">{{
+                        $__("Vendor issues")
+                    }}</span></a
                 >
             </li>
             <li>
                 <a
                     :ref="el => templateRefs.push(el)"
                     :href="`/cgi-bin/koha/acqui/invoices.pl?supplierid=${vendorId}`"
-                    >{{ $__("Invoices") }}</a
+                    :title="$__('Invoices')"
+                    ><i
+                        class="fa-solid fa-file-invoice-dollar fa-fw"
+                        aria-hidden="true"
+                    ></i>
+                    <span class="menu-label">{{ $__("Invoices") }}</span></a
                 >
             </li>
             <li
@@ -66,25 +95,52 @@
                     v-if="basketno"
                     :ref="el => templateRefs.push(el)"
                     :href="`/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=${vendorId}&amp;basketno=${basketno}&amp;owner=1`"
-                    >{{ $__("Uncertain prices") }}</a
+                    :title="$__('Uncertain prices')"
+                    ><i
+                        class="fa-solid fa-question fa-fw"
+                        aria-hidden="true"
+                    ></i>
+                    <span class="menu-label">{{
+                        $__("Uncertain prices")
+                    }}</span></a
                 >
                 <a
                     v-else
                     :ref="el => templateRefs.push(el)"
                     :href="`/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=${vendorId}&amp;owner=1`"
-                    >{{ $__("Uncertain prices") }}</a
+                    :title="$__('Uncertain prices')"
+                    ><i
+                        class="fa-solid fa-question fa-fw"
+                        aria-hidden="true"
+                    ></i>
+                    <span class="menu-label">{{
+                        $__("Uncertain prices")
+                    }}</span></a
                 >
             </li>
             <li v-if="ermModule && (erm || isUserPermitted('CAN_user_erm'))">
                 <a
                     :href="`/cgi-bin/koha/erm/agreements?vendor_id=${vendorId}`"
-                    >{{ $__("ERM agreements") }}</a
+                    :title="$__('ERM agreements')"
+                    ><i
+                        class="fa-solid fa-file-contract fa-fw"
+                        aria-hidden="true"
+                    ></i>
+                    <span class="menu-label">{{
+                        $__("ERM agreements")
+                    }}</span></a
                 >
             </li>
             <li v-if="ermModule && (erm || isUserPermitted('CAN_user_erm'))">
-                <a :href="`/cgi-bin/koha/erm/licenses?vendor_id=${vendorId}`">{{
-                    $__("ERM licenses")
-                }}</a>
+                <a
+                    :href="`/cgi-bin/koha/erm/licenses?vendor_id=${vendorId}`"
+                    :title="$__('ERM licenses')"
+                    ><i
+                        class="fa-solid fa-file-shield fa-fw"
+                        aria-hidden="true"
+                    ></i>
+                    <span class="menu-label">{{ $__("ERM licenses") }}</span></a
+                >
             </li>
         </ul>
     </div>
