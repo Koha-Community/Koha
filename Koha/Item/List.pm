@@ -60,9 +60,11 @@ sub store {
     $self->discard_changes;
 
     if ($is_mod) {
-        logaction( 'ITEM_LISTS', 'MODIFY', $self->id, $self, undef, $original );
+        logaction( 'ITEM_LISTS', 'MODIFY', $self->id, $self, undef, $original )
+            if C4::Context->preference("ItemListsLog");
     } else {
-        logaction( 'ITEM_LISTS', 'CREATE', $self->id, 'item_list', undef, $self );
+        logaction( 'ITEM_LISTS', 'CREATE', $self->id, 'item_list', undef, $self )
+            if C4::Context->preference("ItemListsLog");
     }
 
     return $result;
@@ -79,7 +81,8 @@ sub delete {
 
     my $result = $self->SUPER::delete();
 
-    logaction( 'ITEM_LISTS', 'DELETE', $self->id, 'item_list', undef, $self );
+    logaction( 'ITEM_LISTS', 'DELETE', $self->id, 'item_list', undef, $self )
+        if C4::Context->preference("ItemListsLog");
 
     return $result;
 }

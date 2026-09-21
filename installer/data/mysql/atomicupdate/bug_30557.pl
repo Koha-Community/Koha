@@ -79,5 +79,9 @@ return {
             }
         );
         say_success( $out, 'Added item list permissions' );
+
+        $dbh->do(q{INSERT IGNORE INTO systempreferences (variable,value) VALUES ('ItemListsLog', '0')});
+
+        say_success( $out, "Added new system preference 'ItemListsLog'" );
     },
 };

@@ -26,6 +26,7 @@
         RECALLS: _("Recalls"),
         SUGGESTION: _("Suggestions"),
         TRANSFERS: _("Transfers"),
+        ITEM_LISTS: _("Item lists"),
     };
 
     var action_labels = {

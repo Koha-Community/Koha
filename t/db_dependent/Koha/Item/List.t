@@ -122,7 +122,7 @@ subtest 'managing shares' => sub {
 };
 
 subtest 'action logs' => sub {
-    plan tests => 3;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -131,48 +131,53 @@ subtest 'action logs' => sub {
     my $patron1 = $builder->build_object( { class => 'Koha::Patrons' } );
     my $patron2 = $builder->build_object( { class => 'Koha::Patrons' } );
 
-    my $list = Koha::Item::List->new(
-        {
-            name       => 'Test list',
-            visibility => 'public',
-            owner      => $patron1->borrowernumber
-        }
-    )->store();
-    $list->discard_changes;
+    foreach my $log ( 0, 1 ) {
+        my $log_text = $log ? 'enabled' : 'disabled';
+        t::lib::Mocks::mock_preference( 'ItemListsLog', $log );
 
-    my $logs = Koha::ActionLogs->search(
-        {
-            module => 'ITEM_LISTS',
-            action => 'CREATE',
-            object => $list->id
-        }
-    );
-    is( $logs->count, 1, 'item list creation logged' );
+        my $list = Koha::Item::List->new(
+            {
+                name       => 'Test list',
+                visibility => 'public',
+                owner      => $patron1->borrowernumber
+            }
+        )->store();
+        $list->discard_changes;
 
-    $list->name('New test list');
-    $list->visibility('private');
-    $list->owner( $patron2->borrowernumber );
-    $list->store;
+        my $logs = Koha::ActionLogs->search(
+            {
+                module => 'ITEM_LISTS',
+                action => 'CREATE',
+                object => $list->id
+            }
+        );
+        is( $logs->count, $log, 'item list creation with logging ' . $log_text );
 
-    $logs = Koha::ActionLogs->search(
-        {
-            module => 'ITEM_LISTS',
-            action => 'MODIFY',
-            object => $list->id
-        }
-    );
-    is( $logs->count, 1, 'item list modification logged' );
+        $list->name('New test list');
+        $list->visibility('private');
+        $list->owner( $patron2->borrowernumber );
+        $list->store;
 
-    $list->delete();
+        $logs = Koha::ActionLogs->search(
+            {
+                module => 'ITEM_LISTS',
+                action => 'MODIFY',
+                object => $list->id
+            }
+        );
+        is( $logs->count, $log, 'item list modification with logging ' . $log_text );
 
-    $logs = Koha::ActionLogs->search(
-        {
-            module => 'ITEM_LISTS',
-            action => 'DELETE',
-            object => $list->id
-        }
-    );
-    is( $logs->count, 1, 'item list deletion logged' );
+        $list->delete();
+
+        $logs = Koha::ActionLogs->search(
+            {
+                module => 'ITEM_LISTS',
+                action => 'DELETE',
+                object => $list->id
+            }
+        );
+        is( $logs->count, $log, 'item list deletion with logging ' . $log_text );
+    }
 
     $schema->storage->txn_rollback;
 };
