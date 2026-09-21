@@ -4896,6 +4896,15 @@ div .suggestion_note {
                     display: none;
                 }
 
+                // A hidden h5 no longer separates one group of icons
+                // from the next, so mark that boundary with a divider
+                // instead (skipped for a menu's very first group).
+                h5:not(:first-child) + ul {
+                    border-top: 1px solid #B9B9B9;
+                    margin-top: .5em;
+                    padding-top: .5em;
+                }
+
                 ul {
                     display: block;
                 }
