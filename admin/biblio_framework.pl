@@ -64,7 +64,7 @@ if ( $op eq 'add_form' ) {
     $template->param( framework                     => $framework );
     $template->param( biblio_framework_marc_matcher => $biblio_framework_marc_matcher );
 
-    my @matchers = C4::Matcher::GetMatcherList();
+    my @matchers = C4::Matcher::GetMatcherList( { record_type => 'biblio' } );
     $template->param( 'marc_matchers' => \@matchers );
 } elsif ( $op eq 'cud-add_validate' ) {
     my $frameworkcode             = $input->param('frameworkcode');
