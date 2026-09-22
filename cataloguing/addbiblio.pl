@@ -709,7 +709,6 @@ if ( $op eq "cud-addbiblio" ) {
     $record = TransformHtmlToMarc( $input, 1 );
 
     # check for a duplicate
-    my ( $duplicatebiblionumber, $duplicatetitle );
     my ($duplicate) = C4::Search::FindDuplicateWithMatchingRules(
         $record,
         $frameworkcode,
@@ -842,9 +841,6 @@ if ( $op eq "cud-addbiblio" ) {
         $template->param(
             biblionumber            => $biblionumber,
             biblioitemnumber        => $biblioitemnumber,
-            duplicatebiblionumber   => $duplicatebiblionumber,
-            duplicatebibid          => $duplicatebiblionumber,
-            duplicatetitle          => $duplicatetitle,
             duplicateadditionalinfo => $duplicate_additional_info,
             duplicate               => $duplicate,
         );
