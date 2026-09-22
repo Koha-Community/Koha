@@ -11,6 +11,13 @@
 // triggered by a benign config edge case. The old wrap stringified the
 // thrown Error as `{}`, hiding the real message. Duck-typing the Error
 // shape preserves stack/message across the cross-realm boundary.
+//
+// We also log the raw args unconditionally, before stringifying/throwing.
+// If app code swallows the thrown Error in its own try/catch (as flatpickr
+// did in Bug 41129), the thrown message never surfaces anywhere — the raw
+// console.error is the only trace left of the original warning. (Using
+// console.error, not console.log, since the repo's pre-commit hook rejects
+// any added console.log line.)
 
 function safeStringifyArg(arg) {
     // Duck-type Error: cross-realm `instanceof Error` returns false when
@@ -40,6 +47,7 @@ function stringifyArgs(args) {
 
 Cypress.on("window:before:load", win => {
     win.console.warn = (...args) => {
+        console.error(args);
         const message = stringifyArgs(args);
         throw new Error(`JS Warning detected: ${message}`);
     };
@@ -47,6 +55,7 @@ Cypress.on("window:before:load", win => {
     win.console["log"] = (...args) => {
         const message = stringifyArgs(args);
         if (message.match(/DataTables warning: /)) {
+            console.error(args);
             throw new Error(`DataTables warning detected in log: ${message}`);
         }
     };
