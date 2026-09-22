@@ -18,7 +18,7 @@ function get_requesting_agency() {
     };
 }
 
-describe("Requesting Agencies CRUD operations", () => {
+describe("Requesting agencies CRUD operations", () => {
     beforeEach(() => {
         cy.login();
         cy.title().should("eq", "Koha staff interface");
@@ -31,7 +31,7 @@ describe("Requesting Agencies CRUD operations", () => {
             statusCode: 500,
         });
         cy.visit("/cgi-bin/koha/ill/ill.pl");
-        cy.get(".sidebar_menu").contains("Requesting Agencies").click();
+        cy.get(".sidebar_menu").contains("Requesting agencies").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong"
         );
