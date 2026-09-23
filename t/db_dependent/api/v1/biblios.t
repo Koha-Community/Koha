@@ -2371,7 +2371,7 @@ subtest 'put() malformed body tests' => sub {
 
 subtest 'list() tests' => sub {
 
-    plan tests => 20;
+    plan tests => 21;
 
     $schema->storage->txn_begin;
 
@@ -2451,6 +2451,41 @@ subtest 'list() tests' => sub {
         ->status_is(200)
         ->json_is( '/0/timestamp' =>
             output_pref( { dt => $fixed_date, dateformat => 'rfc3339' }, 'biblio table timestamp takes precedence' ) );
+
+    subtest 'x-koha-embed: items tests' => sub {
+
+        plan tests => 8;
+
+        my $biblio_with_items = $builder->build_sample_biblio;
+        $builder->build_sample_item( { biblionumber => $biblio_with_items->biblionumber } );
+        $builder->build_sample_item( { biblionumber => $biblio_with_items->biblionumber } );
+
+        my $items_count = $biblio_with_items->items->count;
+
+        my $embed_query = encode_json( { biblio_id => $biblio_with_items->biblionumber } );
+
+        # Without the header: no item (952) fields embedded
+        my $no_embed =
+            $t->get_ok(
+            "//$userid:$password@/api/v1/biblios?q=$embed_query" => { Accept => 'application/marcxml+xml' } )
+            ->status_is(200)
+            ->tx->res->body;
+
+        my $no_embed_count = () = $no_embed =~ m{tag="952"}g;
+        is( $no_embed_count, 0, 'No 952 fields embedded when x-koha-embed is not sent' );
+
+        # With x-koha-embed: items -> one 952 field per item
+        my $embedded =
+            $t->get_ok( "//$userid:$password@/api/v1/biblios?q=$embed_query" =>
+                { Accept => 'application/marcxml+xml', 'x-koha-embed' => 'items' } )->status_is(200)->tx->res->body;
+
+        my $embedded_count = () = $embedded =~ m{tag="952"}g;
+        is( $embedded_count, $items_count, 'One 952 field embedded per item when x-koha-embed: items is sent' );
+
+        # An undeclared embed value is rejected
+        $t->get_ok( "//$userid:$password@/api/v1/biblios?q=$embed_query" =>
+                { Accept => 'application/marcxml+xml', 'x-koha-embed' => 'unknown_relation' } )->status_is(400);
+    };
 
     $schema->storage->txn_rollback;
 };

@@ -948,6 +948,9 @@ Controller function that handles retrieving a list of biblio objects
 sub list {
     my $c = shift->openapi->valid_input or return;
 
+    my $embed       = $c->stash('koha.embed') // {};
+    my $embed_items = exists $embed->{items} ? 1 : 0;
+
     my @prefetch = qw(biblioitem);
     push @prefetch, 'metadata'    # don't prefetch metadata if not needed
         unless $c->req->headers->accept =~ m/application\/json/;
@@ -966,24 +969,48 @@ sub list {
             $c->res->headers->add( 'Content-Type', 'application/marcxml+xml' );
             return $c->render(
                 status => 200,
-                text   => $biblios->print_collection( { format => 'marcxml' } )
+                text   => $biblios->print_collection(
+                    {
+                        format      => 'marcxml',
+                        embed_items => $embed_items,
+                        interface   => 'intranet',
+                    }
+                )
             );
         } elsif ( $c->req->headers->accept =~ m/application\/marc-in-json(;.*)?$/ ) {
             $c->res->headers->add( 'Content-Type', 'application/marc-in-json' );
             return $c->render(
                 status => 200,
-                data   => $biblios->print_collection( { format => 'mij' } )
+                data   => $biblios->print_collection(
+                    {
+                        format      => 'mij',
+                        embed_items => $embed_items,
+                        interface   => 'intranet',
+                    }
+                )
             );
         } elsif ( $c->req->headers->accept =~ m/application\/marc(;.*)?$/ ) {
             $c->res->headers->add( 'Content-Type', 'application/marc' );
             return $c->render(
                 status => 200,
-                text   => $biblios->print_collection( { format => 'marc' } )
+                text   => $biblios->print_collection(
+                    {
+                        format      => 'marc',
+                        embed_items => $embed_items,
+                        interface   => 'intranet',
+                    }
+                )
             );
         } elsif ( $c->req->headers->accept =~ m/text\/plain(;.*)?$/ ) {
             return $c->render(
                 status => 200,
-                text   => $biblios->print_collection( { format => 'txt' } )
+                text   => $biblios->print_collection(
+                    {
+                        format      => 'txt',
+                        embed_items => $embed_items,
+                        interface   => 'intranet',
+                    }
+                )
             );
         } else {
             return $c->render(

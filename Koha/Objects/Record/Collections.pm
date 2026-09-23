@@ -48,17 +48,34 @@ This class must always be subclassed.
 
 =head3 print_collection
 
-    my $collection_text = $result_set->print_collection( { format => $format } );
+    my $collection_text = $result_set->print_collection(
+        {
+            format        => $format,
+          [ embed_items   => 1,
+            interface     => 'opac' | 'intranet',
+            patron        => $patron ]
+        }
+    );
 
 Return a text representation of a collection (group of records) in the specified format.
 Allowed formats are marcxml, mij, marc and txt. Defaults to marcxml.
+
+When I<embed_items> is set, each element's record is obtained through
+C<< $element->metadata_record({ embed_items => 1, interface => ..., patron => ... }) >>
+so item data (952 fields) is embedded. The I<interface> ('opac' or 'intranet')
+and I<patron> parameters are forwarded so item visibility is scoped
+accordingly (e.g. OpacHiddenItems rules for the 'opac' interface). Elements that
+do not implement I<metadata_record> fall back to their raw record.
 
 =cut
 
 sub print_collection {
     my ( $self, $params ) = @_;
 
-    my $format = $params->{format};
+    my $format      = $params->{format};
+    my $embed_items = $params->{embed_items};
+    my $interface   = $params->{interface};
+    my $patron      = $params->{patron};
 
     my ( $start, $glue, $end, @parts );
 
@@ -90,7 +107,17 @@ sub print_collection {
         MARC::File::XML->default_record_format($schema)
             if $format eq 'marcxml';
 
-        push @parts, $serializers{$format}->( $element->record );
+        my $record = ( $embed_items and $element->can('metadata_record') )
+            ? $element->metadata_record(
+            {
+                embed_items => 1,
+                interface   => $interface,
+                patron      => $patron,
+            }
+            )
+            : $element->record;
+
+        push @parts, $serializers{$format}->($record);
     }
     return ( defined $start ? $start : '' ) . join( $glue, @parts ) . ( defined $end ? $end : '' );
 }
