@@ -72,10 +72,17 @@ sub filter {
 
     my $items = $self->{params}->{options}->{items};
 
+    return $record unless $items and @{$items};
+
+    # metadata_record passes frameworkcode in options — use it to avoid
+    # materializing the biblio object from the item's relation.
+    my $frameworkcode = $self->{params}->{options}->{frameworkcode} // '';
+    my $tagslib       = C4::Biblio::GetMarcStructure( 1, $frameworkcode, { unsafe => 1 } );
+
     my @item_fields;
 
     foreach my $item ( @{$items} ) {
-        push @item_fields, $item->as_marc_field;
+        push @item_fields, $item->as_marc_field( { tagslib => $tagslib } );
     }
 
     $record->append_fields(@item_fields);

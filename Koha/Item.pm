@@ -1506,17 +1506,27 @@ sub has_pending_recall {
 
     my $field = $item->as_marc_field;
 
+    my $field = $item->as_marc_field( { tagslib => $tagslib } );
+
 This method returns a MARC::Field object representing the Koha::Item object
 with the current mappings configuration.
+
+The optional I<tagslib> parameter accepts a MARC structure as returned by
+C<C4::Biblio::GetMarcStructure>. When passed, it is used instead of resolving
+the structure internally. This lets callers that embed many items (e.g. the
+C<EmbedItems> filter) resolve the structure once per record and avoid the
+repeated (albeit cached) lookups and the per-item C<< ->biblio->frameworkcode >>
+access.
 
 =cut
 
 sub as_marc_field {
-    my ($self) = @_;
+    my ( $self, $params ) = @_;
 
     my ( $itemtag, $itemtagsubfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber");
 
-    my $tagslib = C4::Biblio::GetMarcStructure( 1, $self->biblio->frameworkcode, { unsafe => 1 } );
+    my $tagslib = $params->{tagslib}
+        // C4::Biblio::GetMarcStructure( 1, $self->biblio->frameworkcode, { unsafe => 1 } );
 
     my @subfields;
 

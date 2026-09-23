@@ -691,7 +691,7 @@ subtest "as_marc_field() tests" => sub {
     my @schema_columns = $schema->resultset('Item')->result_source->columns;
     my @mapped_columns = grep { exists $mss->{ 'items.' . $_ } } @schema_columns;
 
-    plan tests => scalar @mapped_columns + 5;
+    plan tests => scalar @mapped_columns + 6;
 
     $schema->storage->txn_begin;
 
@@ -756,6 +756,27 @@ subtest "as_marc_field() tests" => sub {
         'more_subfield_xml is considered when kohafield is NULL'
     );
     is( scalar $marc_field->subfield('Y'), 'Something else', 'more_subfield_xml is considered when kohafield = ""' );
+
+    subtest 'tagslib parameter tests' => sub {
+        plan tests => 2;
+
+        my $item2 = $builder->build_sample_item;
+
+        my $default    = $item2->as_marc_field;
+        my $tagslib    = C4::Biblio::GetMarcStructure( 1, $item2->biblio->frameworkcode, { unsafe => 1 } );
+        my $with_param = $item2->as_marc_field( { tagslib => $tagslib } );
+
+        is_deeply(
+            [ $with_param->subfields ],
+            [ $default->subfields ],
+            'Passing tagslib produces the same field as resolving it internally'
+        );
+
+        # A tagslib that lacks the item tag yields no subfields (proving the
+        # passed structure is actually used instead of an internal lookup)
+        my $empty = $item2->as_marc_field( { tagslib => {} } );
+        is( $empty, undef, 'Passed tagslib is used (empty structure yields no field)' );
+    };
 
     $schema->storage->txn_rollback;
     Koha::Caches->get_instance->clear_from_cache("MarcStructure-1-");
