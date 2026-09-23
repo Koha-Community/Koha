@@ -31,7 +31,7 @@ Koha::Objects::Record::Collections - Generic records collection handling class
 =head1 SYNOPSIS
 
     use base qw(Koha::Objects Koha::Objects::Record::Collections);
-    my $collections = Koha::Objects->print_collection($format);
+    my $collections = Koha::Objects->print_collection( { format => $format } );
 
 =head1 DESCRIPTION
 
@@ -48,7 +48,7 @@ This class must always be subclassed.
 
 =head3 print_collection
 
-    my $collection_text = $result_set->print_collection($format)
+    my $collection_text = $result_set->print_collection( { format => $format } );
 
 Return a text representation of a collection (group of records) in the specified format.
 Allowed formats are marcxml, mij, marc and txt. Defaults to marcxml.
@@ -56,7 +56,9 @@ Allowed formats are marcxml, mij, marc and txt. Defaults to marcxml.
 =cut
 
 sub print_collection {
-    my ( $self, $format ) = @_;
+    my ( $self, $params ) = @_;
+
+    my $format = $params->{format};
 
     my ( $start, $glue, $end, @parts );
 
@@ -87,6 +89,7 @@ sub print_collection {
         }
         MARC::File::XML->default_record_format($schema)
             if $format eq 'marcxml';
+
         push @parts, $serializers{$format}->( $element->record );
     }
     return ( defined $start ? $start : '' ) . join( $glue, @parts ) . ( defined $end ? $end : '' );

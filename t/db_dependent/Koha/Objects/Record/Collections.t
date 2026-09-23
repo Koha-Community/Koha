@@ -29,26 +29,26 @@ subtest 'print_collection() tests' => sub {
             { biblionumber => $biblio_2->biblionumber }
         ]
     );
-    my $collection = $result_set->print_collection('marcxml');
+    my $collection = $result_set->print_collection( { format => 'marcxml' } );
 
     like( $collection, qr/<(\s*\w*:)?collection[^>]*>/, 'Has collection tag' );
 
     $result_set->reset;
-    $collection = $result_set->print_collection('mij');
+    $collection = $result_set->print_collection( { format => 'mij' } );
 
     my $count = scalar( @{ decode_json($collection) } );
 
     is( $count, 2, 'Has 2 elements' );
 
     $result_set->reset;
-    $collection = $result_set->print_collection('marc');
+    $collection = $result_set->print_collection( { format => 'marc' } );
 
     $count = $collection =~ tr/[\x1D]//;
 
     is( $count, 2, 'Has 2 USMARC end of record' );
 
     $result_set->reset;
-    $collection = $result_set->print_collection('txt');
+    $collection = $result_set->print_collection( { format => 'txt' } );
 
     $count = scalar( split( /\n\n/, $collection ) );
 

@@ -941,7 +941,7 @@ sub update {
 
 =head3 list
 
-Controller function that handles retrieving a single biblio object
+Controller function that handles retrieving a list of biblio objects
 
 =cut
 
@@ -966,24 +966,24 @@ sub list {
             $c->res->headers->add( 'Content-Type', 'application/marcxml+xml' );
             return $c->render(
                 status => 200,
-                text   => $biblios->print_collection('marcxml')
+                text   => $biblios->print_collection( { format => 'marcxml' } )
             );
         } elsif ( $c->req->headers->accept =~ m/application\/marc-in-json(;.*)?$/ ) {
             $c->res->headers->add( 'Content-Type', 'application/marc-in-json' );
             return $c->render(
                 status => 200,
-                data   => $biblios->print_collection('mij')
+                data   => $biblios->print_collection( { format => 'mij' } )
             );
         } elsif ( $c->req->headers->accept =~ m/application\/marc(;.*)?$/ ) {
             $c->res->headers->add( 'Content-Type', 'application/marc' );
             return $c->render(
                 status => 200,
-                text   => $biblios->print_collection('marc')
+                text   => $biblios->print_collection( { format => 'marc' } )
             );
         } elsif ( $c->req->headers->accept =~ m/text\/plain(;.*)?$/ ) {
             return $c->render(
                 status => 200,
-                text   => $biblios->print_collection('txt')
+                text   => $biblios->print_collection( { format => 'txt' } )
             );
         } else {
             return $c->render(
