@@ -373,6 +373,7 @@ sub safe_to_delete {
     $error //= "not_same_branch"
         if defined C4::Context->userenv
         and defined C4::Context->userenv->{number}
+        and Koha::Patrons->find( C4::Context->userenv->{number} )
         and !Koha::Patrons->find( C4::Context->userenv->{number} )->can_edit_items_from( $self->homebranch );
 
     # check it doesn't have a waiting reserve

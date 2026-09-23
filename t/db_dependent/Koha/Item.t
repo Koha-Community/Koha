@@ -1282,7 +1282,7 @@ subtest 'store check barcodes' => sub {
 };
 
 subtest 'deletion' => sub {
-    plan tests => 18;
+    plan tests => 19;
 
     $schema->storage->txn_begin;
 
@@ -1362,6 +1362,14 @@ subtest 'deletion' => sub {
         'not_same_branch',
         'IndependentBranches prevents deletion at another branch',
     );
+
+    # not_same_branch: userenv->{number} does not match a real patron (e.g. misc/commit_file.pl's dummy batch user)
+    C4::Context->set_userenv( 0, 'batch', 0, 'batch', 'batch', 'batch', 'batch' );
+    lives_ok {
+        $item_2->safe_to_delete;
+    }
+    'Koha::Item->safe_to_delete does not crash when userenv->{number} does not match a real patron';
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode, borrowernumber => $patron->id } );
 
     # item_has_holds
     my $item_level_hold = $builder->build_object(
