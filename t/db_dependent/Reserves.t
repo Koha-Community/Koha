@@ -1668,7 +1668,7 @@ subtest 'AddReserve() tests' => sub {
 
 subtest 'ModReserve() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -1710,6 +1710,18 @@ subtest 'ModReserve() tests' => sub {
 
     $hold = Koha::Holds->find($reserve_id);
     is( $hold->patron_expiration_date, '2040-04-02', 'Successfully updated patron expiration date' );
+
+    ModReserve(
+        {
+            reserve_id             => $reserve_id,
+            rank                   => $hold->priority,
+            patron_expiration_date => undef,
+            branchcode             => $hold->branchcode,
+        }
+    );
+
+    $hold = Koha::Holds->find($reserve_id);
+    is( $hold->patron_expiration_date, undef, 'Successfully cleared patron expiration date' );
 
     $schema->storage->txn_rollback;
 };

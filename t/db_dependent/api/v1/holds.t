@@ -1239,7 +1239,7 @@ subtest 'pickup_locations() tests' => sub {
 
 subtest 'edit() tests' => sub {
 
-    plan tests => 77;
+    plan tests => 93;
 
     $schema->storage->txn_begin;
 
@@ -1380,6 +1380,27 @@ subtest 'edit() tests' => sub {
     is( $biblio_hold->expirationdate,         '2022-07-02', 'Expiration date changed correctly' );
     is( $biblio_hold->patron_expiration_date, '2022-09-02', 'Patron expiration date changed correctly' );
 
+    $biblio_hold_data = { expiration_date => '2022-11-02' };
+
+    $t->patch_ok( "//$userid:$password@/api/v1/holds/" . $biblio_hold->id => json => $biblio_hold_data )
+        ->status_is(200);
+
+    $biblio_hold->discard_changes;
+    is( $biblio_hold->expirationdate,         '2022-11-02', 'Expiration date changed correctly' );
+    is( $biblio_hold->patron_expiration_date, '2022-09-02', 'Patron expiration date unchanged when not passed' );
+
+    $biblio_hold_data = {
+        expiration_date        => undef,
+        patron_expiration_date => undef,
+    };
+
+    $t->patch_ok( "//$userid:$password@/api/v1/holds/" . $biblio_hold->id => json => $biblio_hold_data )
+        ->status_is(200);
+
+    $biblio_hold->discard_changes;
+    is( $biblio_hold->expirationdate,         undef, 'Expiration date cleared correctly' );
+    is( $biblio_hold->patron_expiration_date, undef, 'Patron expiration date cleared correctly' );
+
     # Test item-level holds
     my $item_hold = $builder->build_object(
         {
@@ -1464,6 +1485,25 @@ subtest 'edit() tests' => sub {
     $item_hold->discard_changes;
     is( $item_hold->expirationdate,         '2022-07-02', 'Expiration date changed correctly' );
     is( $item_hold->patron_expiration_date, '2022-09-02', 'Patron expiration date changed correctly' );
+
+    $item_hold_data = { expiration_date => '2022-11-02' };
+
+    $t->patch_ok( "//$userid:$password@/api/v1/holds/" . $item_hold->id => json => $item_hold_data )->status_is(200);
+
+    $item_hold->discard_changes;
+    is( $item_hold->expirationdate,         '2022-11-02', 'Expiration date changed correctly' );
+    is( $item_hold->patron_expiration_date, '2022-09-02', 'Patron expiration date unchanged when not passed' );
+
+    $item_hold_data = {
+        expiration_date        => undef,
+        patron_expiration_date => undef,
+    };
+
+    $t->patch_ok( "//$userid:$password@/api/v1/holds/" . $item_hold->id => json => $item_hold_data )->status_is(200);
+
+    $item_hold->discard_changes;
+    is( $item_hold->expirationdate,         undef, 'Expiration date cleared correctly' );
+    is( $item_hold->patron_expiration_date, undef, 'Patron expiration date cleared correctly' );
 
     # Test item_level and item_id parameters
     my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
