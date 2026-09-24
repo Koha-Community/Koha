@@ -116,6 +116,10 @@ my $logged_in_user           = Koha::Patrons->find($borrowernumber);
 my $limit_reports_active     = C4::Context->preference('LimitReportsBy') ne 'none';
 my $can_manage_report_limits = $logged_in_user && Koha::Report->can_manage_limits($logged_in_user);
 
+#based on permission and the ReportsRunInBackground, check what the logged in user is allowed to do
+my $can_run_report = $logged_in_user ? Koha::Report->can_run_foreground_background($logged_in_user) : {};
+$template->param( can_run_report => $can_run_report );
+
 $template->param( templates => Koha::Notice::Templates->search( { module => 'report' } ) );
 
 # Editing a report owned by another librarian, or an ownerless report,
@@ -761,6 +765,9 @@ if ( !$op ) {
 
 } elsif ( $op eq 'export' ) {
 
+    output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
+        unless $can_run_report->{foreground};
+
     # export results to tab separated text or CSV
     if ($report) {
         my $sql         = $report->savedsql;
@@ -962,18 +969,12 @@ if ( $op eq 'run' ) {
     my $want_full_chart = $input->param('want_full_chart') || 0;
 
     # Decide whether to run as a background job
-    my $run_in_background_pref   = C4::Context->preference('ReportsRunInBackground') || 'user_choice';
     my $run_in_background_chosen = defined $input->param('run_in_background_chosen');
-    my $run_in_background;
-    if ( $run_in_background_pref eq 'always' ) {
-        $run_in_background = 1;
-    } elsif ( $run_in_background_pref eq 'never' ) {
-        $run_in_background = 0;
-    } else {
+    my $run_in_background        = $can_run_report->{background}
+        && ( !$can_run_report->{foreground} || $input->param('run_in_background') ) ? 1 : 0;
 
-        # user_choice, honor any selection on this request
-        $run_in_background = $input->param('run_in_background') ? 1 : 0;
-    }
+    output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
+        unless $can_run_report->{ $run_in_background ? 'background' : 'foreground' };
 
     my $limit_check = C4::Context->userenv
         ? Koha::Reports->check_limits(
@@ -991,11 +992,9 @@ if ( $op eq 'run' ) {
     }
 
     $template->param(
-        limit                  => $limit,
-        id                     => $report_id,
-        open_in_dt             => scalar $input->param('open_in_dt'),
-        run_in_background_pref => $run_in_background_pref,
-        run_in_background      => $run_in_background,
+        limit      => $limit,
+        id         => $report_id,
+        open_in_dt => scalar $input->param('open_in_dt'),
     );
 
     my ( $sql, $original_sql, $type, $name, $notes );
@@ -1181,17 +1180,16 @@ if ( $op eq 'run' ) {
                 'id'              => $report_id,
                 'template_id'     => $template_id,
             );
-        } elsif ( $run_in_background_pref eq 'user_choice' && !$run_in_background_chosen ) {
+        } elsif ( $can_run_report->{foreground} && $can_run_report->{background} && !$run_in_background_chosen ) {
 
             # User needs to pick foreground vs background for this run.
             $template->param(
-                'name'                   => $name,
-                'notes'                  => $notes,
-                'id'                     => $report_id,
-                'sql_params'             => \@sql_params,
-                'param_names'            => \@param_names,
-                'choose_run_mode'        => 1,
-                'run_in_background_pref' => $run_in_background_pref,
+                'name'            => $name,
+                'notes'           => $notes,
+                'id'              => $report_id,
+                'sql_params'      => \@sql_params,
+                'param_names'     => \@param_names,
+                'choose_run_mode' => 1,
             );
         } elsif ( $limit_check->{any_exceeded} ) {
             $template->param(

@@ -445,7 +445,7 @@
                                             <td> [% savedreport.cache_expiry | html %] </td>
                                             <td>
                                                 [% FOR result IN savedreport.results %]
-                                                                <a href="/cgi-bin/koha/reports/guided_reports.pl?op=view_stored_results&amp;id=[% result.id | uri %]">[% result.date_run | html %]</a>
+                                                    <a href="/cgi-bin/koha/reports/guided_reports.pl?op=view_stored_results&amp;id=[% result.id | uri %]">[% result.date_run | html %]</a>
                                                     <br />
                                                 [% END %]
                                             </td>
@@ -478,7 +478,7 @@
                                             <td>
                                                 <div class="btn-group dropup">
                                                     [%# There should be no space between these two buttons, it would render badly %]
-                                                    [%- IF ( CAN_user_reports_execute_reports_foreground || CAN_user_reports_execute_reports_background ) -%]
+                                                    [%- IF ( can_run_report.foreground || can_run_report.background ) -%]
                                                         [% INCLUDE 'throttled-button.inc' element_type='link' href='/cgi-bin/koha/reports/guided_reports.pl?id=' _ savedreport.id _ '&op=run' classes='btn btn-default btn-xs' label=t('Run') attrs={ role => 'button' } %]
                                                     [%- ELSE -%]
                                                         <a class="btn btn-default btn-xs" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | uri %]&amp;op=show"> <i class="fa fa-search" aria-hidden="true"></i> View </a>
@@ -504,7 +504,7 @@
                                                                 [%- " "|$raw -%]data-reportid="[% savedreport.id | html %]"
                                                                 [%- " "|$raw -%]data-create="[% CAN_user_reports_create_reports || 0 | html %]"
                                                                 [%- " "|$raw -%]data-delete="[% can_delete_this_report | html %]"
-                                                                [%- " "|$raw -%]data-run="[% ( CAN_user_reports_execute_reports_foreground || CAN_user_reports_execute_reports_background ) || 0 | html %]"
+                                                                [%- " "|$raw -%]data-run="[% ( can_run_report.foreground || can_run_report.background ) ? 1 : 0 | html %]"
                                                                 [%- " "|$raw -%]data-edit="[% can_edit_this_report | html %]"
                                                                 [%- ""|$raw -%]
                                                             >
@@ -1050,79 +1050,78 @@
                 <!-- /.rows -->
                 <fieldset class="action">
                     <input type="hidden" name="op" value="run" />
-                    <input type="hidden" name="op" value="run" />
                     <input type="hidden" name="run_in_background_chosen" value="1" />
                     [% IF ( template_id ) %]
                         <input type="hidden" name="template" value="[% template_id | html %]" />
                     [% END %]
-                                [% IF run_in_background_pref == 'user_choice' %]
-                                    <button type="submit" name="run_in_background" value="0" class="btn btn-primary"><i class="fa-solid fa-play" aria-hidden="true"></i> Run now</button>
-                                    <button type="submit" name="run_in_background" value="1" class="btn btn-default"><i class="fa-solid fa-clock" aria-hidden="true"></i> Queue as background job</button>
-                                [% ELSE %]
-                                    [% INCLUDE 'throttled-button.inc' element_type='button' classes='btn btn-primary' label=t('Run the report') %]
-                                [% END %]
+                    [% IF can_run_report.foreground && can_run_report.background %]
+                        <button type="submit" name="run_in_background" value="0" class="btn btn-primary"><i class="fa-solid fa-play" aria-hidden="true"></i> Run now</button>
+                        <button type="submit" name="run_in_background" value="1" class="btn btn-default"><i class="fa-solid fa-clock" aria-hidden="true"></i> Queue as background job</button>
+                    [% ELSE %]
+                        [% INCLUDE 'throttled-button.inc' element_type='button' classes='btn btn-primary' label=t('Run the report') %]
+                    [% END %]
                 </fieldset>
             </form>
         [% END # / IF ( auth_val_error ) %]
     [% END # /IF ( enter_params ) %]
 
-                [% IF choose_run_mode %]
-                    <h1
-                        >[% name | html %] <span class="report_heading_id"><span class="report_label">Report ID:</span> <span class="report_number">[% id | html %]</span></span></h1
-                    >
-                    <div class="page-section">
-                        [% IF ( notes ) %]
-                            <p><span class="label">Notes:</span> [% notes | scrub_html type => 'note' | $raw %]</p>
-                        [% END %]
-                        <form method="get" action="/cgi-bin/koha/reports/guided_reports.pl">
-                            <input type="hidden" name="op" value="run" />
-                            <input type="hidden" name="id" value="[% id | html %]" />
-                            <input type="hidden" name="run_in_background_chosen" value="1" />
-                            [% FOREACH p IN sql_params %]
-                                <input type="hidden" name="sql_params" value="[% p | html %]" />
-                            [% END %]
-                            [% FOREACH n IN param_names %]
-                                <input type="hidden" name="param_name" value="[% n | html %]" />
-                            [% END %]
-                            <p>How would you like to run this report?</p>
-                            <fieldset class="action">
-                                <button type="submit" name="run_in_background" value="0" class="btn btn-primary"><i class="fa-solid fa-play" aria-hidden="true"></i> Run now</button>
-                                <button type="submit" name="run_in_background" value="1" class="btn btn-default"><i class="fa-solid fa-clock" aria-hidden="true"></i> Queue as background job</button>
-                                <a class="cancel" href="/cgi-bin/koha/reports/guided_reports.pl?op=list">Cancel</a>
-                            </fieldset>
-                        </form>
-                    </div>
-                [% END # /IF choose_run_mode %]
+    [% IF choose_run_mode %]
+        <h1
+            >[% name | html %] <span class="report_heading_id"><span class="report_label">Report ID:</span> <span class="report_number">[% id | html %]</span></span></h1
+        >
+        <div class="page-section">
+            [% IF ( notes ) %]
+                <p><span class="label">Notes:</span> [% notes | scrub_html type => 'note' | $raw %]</p>
+            [% END %]
+            <form method="get" action="/cgi-bin/koha/reports/guided_reports.pl">
+                <input type="hidden" name="op" value="run" />
+                <input type="hidden" name="id" value="[% id | html %]" />
+                <input type="hidden" name="run_in_background_chosen" value="1" />
+                [% FOREACH p IN sql_params %]
+                    <input type="hidden" name="sql_params" value="[% p | html %]" />
+                [% END %]
+                [% FOREACH n IN param_names %]
+                    <input type="hidden" name="param_name" value="[% n | html %]" />
+                [% END %]
+                <p>How would you like to run this report?</p>
+                <fieldset class="action">
+                    <button type="submit" name="run_in_background" value="0" class="btn btn-primary"><i class="fa-solid fa-play" aria-hidden="true"></i> Run now</button>
+                    <button type="submit" name="run_in_background" value="1" class="btn btn-default"><i class="fa-solid fa-clock" aria-hidden="true"></i> Queue as background job</button>
+                    <a class="cancel" href="/cgi-bin/koha/reports/guided_reports.pl?op=list">Cancel</a>
+                </fieldset>
+            </form>
+        </div>
+    [% END # /IF choose_run_mode %]
 
-                [% IF processed_notice %]
-                    [% processed_notice | $raw %]
-                [% ELSIF ( execute ) %]
-                    <h1
-                        >[% name | html %] <span class="report_heading_id"><span class="report_label">Report ID:</span> <span class="report_number">[% id | html %]</span></span></h1
-                    >
-                    <div class="page-section">
-                        [% IF ( notes ) %]
-                            <p><span class="label">Notes:</span> [% notes | scrub_html type => 'note' | $raw %]</p>
-                        [% END %]
-                        [% IF viewing_stored_results %]
-                            <p><span class="label">Date run:</span> [% date_run | html %]</p>
-                        [% END %]
+    [% IF processed_notice %]
+        [% processed_notice | $raw %]
+    [% ELSIF ( execute ) %]
+        <h1
+            >[% name | html %] <span class="report_heading_id"><span class="report_label">Report ID:</span> <span class="report_number">[% id | html %]</span></span></h1
+        >
+        <div class="page-section">
+            [% IF ( notes ) %]
+                <p><span class="label">Notes:</span> [% notes | scrub_html type => 'note' | $raw %]</p>
+            [% END %]
+            [% IF viewing_stored_results %]
+                <p><span class="label">Date run:</span> [% date_run | html %]</p>
+            [% END %]
             [% IF ( unlimited_total ) %]
                 <p>
                     <span class="label">Total number of results:</span>
                     [% unlimited_total | html %]
-                                [% IF !viewing_stored_results && unlimited_total >= limit %]
+                    [% IF !viewing_stored_results && unlimited_total >= limit %]
                         ([% results.size | html %] shown)
                     [% END %]
                 </p>
             [% END %]
 
-                        [% IF sql %]
-                            <div id="sql_output" style="display:none;">
-                                <span class="label">Report SQL:</span>
-                                <textarea id="sql" readonly="readonly">[% sql | html %]</textarea>
-                            </div>
-                        [% END %]
+            [% IF sql %]
+                <div id="sql_output" style="display:none;">
+                    <span class="label">Report SQL:</span>
+                    <textarea id="sql" readonly="readonly">[% sql | html %]</textarea>
+                </div>
+            [% END %]
 
             <div>
                 <a href="#" id="toggle_chart_settings_hid" class="toggle_chart_settings" style="display:none"><i class="fa-solid fa-eye-slash" aria-hidden="true"></i> Hide chart</a>
@@ -1265,6 +1264,8 @@
                                 <input type="hidden" name="param_name" value="[% n | html %]" />
                             [% END %]
                             <input type="hidden" name="limit" id="limit" value="20" />
+                            <input type="hidden" name="run_in_background_chosen" value="1" />
+                            <input type="hidden" name="run_in_background" value="0" />
                         </form>
                         <!-- /#limitselect -->
                     [% END %]
@@ -1400,33 +1401,33 @@
                                 <!-- /.dropdown -->
                             [% END # /IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers || batch_reserve_ids ) %]
 
-                                        [% UNLESS viewing_stored_results %]
-                                            [% IF ( unlimited_total > 10 && limit <= 1000 ) %]
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        [% IF ( limit ) %]
-                                                            Rows per page: <strong>[% limit | html %]</strong>
+                            [% UNLESS viewing_stored_results %]
+                                [% IF ( unlimited_total > 10 && limit <= 1000 ) %]
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            [% IF ( limit ) %]
+                                                Rows per page: <strong>[% limit | html %]</strong>
                                             [% ELSE %]
-                                                            Rows per page
+                                                Rows per page
                                             [% END %]
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        [% limits = [ 10, 20, 50, 100, 200, 300, 400, 500, 1000 ] %]
-                                                        [% FOREACH l IN limits %]
-                                                            [% IF l == limit %]
-                                                                <li>
-                                                                    <a class="dropdown-item limitselect" data-limit="[% l | html %]" href="#"><i class="fa fa-fw fa-check" aria-hidden="true"></i> [% l | html %]</a>
-                                                                </li>
-                                                            [% ELSE %]
-                                                                <li>
-                                                                    <a class="dropdown-item limitselect" data-limit="[% l | html %]" href="#"><i class="fa fa-fw" aria-hidden="true"></i> [% l | html %]</a>
-                                                                </li>
-                                                            [% END %]
-                                                        [% END %]
-                                                    </ul>
-                                                </div>
-                                            [% END # /IF ( unlimited_total > 10 && limit <= 1000 ) %]
-                                        [% END # UNLESS viewing_stored_results %]
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            [% limits = [ 10, 20, 50, 100, 200, 300, 400, 500, 1000 ] %]
+                                            [% FOREACH l IN limits %]
+                                                [% IF l == limit %]
+                                                    <li>
+                                                        <a class="dropdown-item limitselect" data-limit="[% l | html %]" href="#"><i class="fa fa-fw fa-check" aria-hidden="true"></i> [% l | html %]</a>
+                                                    </li>
+                                                [% ELSE %]
+                                                    <li>
+                                                        <a class="dropdown-item limitselect" data-limit="[% l | html %]" href="#"><i class="fa fa-fw" aria-hidden="true"></i> [% l | html %]</a>
+                                                    </li>
+                                                [% END %]
+                                            [% END %]
+                                        </ul>
+                                    </div>
+                                [% END # /IF ( unlimited_total > 10 && limit <= 1000 ) %]
+                            [% END # UNLESS viewing_stored_results %]
 
                             [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers || batch_reserve_ids || batch_borrowernumbers ) %]
                                 <a href="#" class="btn btn-link" id="toggle_auto_links">
@@ -1769,7 +1770,7 @@
 
             <fieldset class="action">
                 <button class="btn btn-primary" type="submit" name="op" value="cud-update_sql">Update SQL</button>
-                [% IF ( CAN_user_reports_create_reports && ( CAN_user_reports_execute_reports_foreground || CAN_user_reports_execute_reports_background ) ) %]
+                [% IF ( CAN_user_reports_create_reports && ( can_run_report.foreground || can_run_report.background ) ) %]
                     [% INCLUDE 'throttled-button.inc' element_type='button' classes='btn btn-default' label=t('Update and run SQL') attrs={ name => 'op', value => 'cud-update_and_run_sql' } %]
                 [% END %]
                 <a href="/cgi-bin/koha/reports/guided_reports.pl?op=list" class="cancel">Cancel</a>

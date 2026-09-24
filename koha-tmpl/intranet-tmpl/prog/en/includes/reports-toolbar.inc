@@ -66,31 +66,35 @@
 
     [% IF ( showsql || execute || editsql || save_successful ) %]
         [% UNLESS ( errors ) # Unless there are errors saving a report %]
-            <div class="btn-group"> [% INCLUDE 'throttled-button.inc' element_type='link' id='runreport' href='/cgi-bin/koha/reports/guided_reports.pl?id=' _ id _ '&op=run' classes='btn btn-default' label=t('Run report') %] </div>
-            [% IF templates.count %]
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-code"></i> Run with template </button>
-                    <ul class="dropdown-menu">
-                        [% FOREACH tmpl IN templates %]
-                            <li>
-                                <a class="dropdown-item" id="runreport_[% tmpl.id | html %]" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% id | html %]&amp;op=run&amp;template=[% tmpl.id | html %][% PROCESS params %]">
-                                    [% tmpl.name | html %]
-                                    [% IF ( tmpl.message_transport_type == 'email' ) %]
-                                        (email)
-                                    [% ELSIF ( tmpl.message_transport_type == 'print' ) %]
-                                        (print)
-                                    [% ELSIF ( tmpl.message_transport_type == 'feed' ) %]
-                                        (feed)
-                                    [% ELSIF ( tmpl.message_transport_type == 'sms' ) %]
-                                        (sms)
-                                    [% ELSE %]
-                                        ([% tmpl.message_transport_type | html %])
-                                    [% END %]
-                                </a>
-                            </li>
-                        [% END %]
-                    </ul>
-                </div>
+
+            [% IF can_run_report.foreground || can_run_report.background %]
+                <div class="btn-group"> [% INCLUDE 'throttled-button.inc' element_type='link' id='runreport' href='/cgi-bin/koha/reports/guided_reports.pl?id=' _ id _ '&op=run' classes='btn btn-default' label=t('Run report') %] </div>
+                [% IF templates.count %]
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-code"></i> Run with template </button>
+                        <ul class="dropdown-menu">
+                            [% FOREACH tmpl IN templates %]
+                                <li>
+                                    <a class="dropdown-item" id="runreport_[% tmpl.id | html %]" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% id | html %]&amp;op=run&amp;template=[% tmpl.id | html %][% PROCESS params %]">
+                                        [% tmpl.name | html %]
+                                        [% IF ( tmpl.message_transport_type == 'email' ) %]
+                                            (email)
+                                        [% ELSIF ( tmpl.message_transport_type == 'print' ) %]
+                                            (print)
+                                        [% ELSIF ( tmpl.message_transport_type == 'feed' ) %]
+                                            (feed)
+                                        [% ELSIF ( tmpl.message_transport_type == 'sms' ) %]
+                                            (sms)
+                                        [% ELSE %]
+                                            ([% tmpl.message_transport_type | html %])
+                                        [% END %]
+                                    </a>
+                                </li>
+                            [% END %]
+                        </ul>
+                    </div>
+                [% END %]
+
             [% END %]
             <div class="btn-group">
                 <a class="btn btn-default" href="/cgi-bin/koha/tools/scheduler.pl?id=[% id | html %]"> <i class="fa-solid fa-clock"></i> Schedule </a>

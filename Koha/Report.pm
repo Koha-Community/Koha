@@ -537,4 +537,34 @@ sub can_access {
     return 1;
 }
 
+=head3 can_run_foreground_background
+
+    my $can_run = Koha::Report->can_run_foreground_background($patron);
+
+Returns all the ways a patron can run a report  based on permissions and the ReportsRunInBackground system preferences.
+
+=cut
+
+sub can_run_foreground_background {
+    my ( $self, $patron ) = @_;
+
+    my $can_run = { foreground => 0, background => 0 };
+
+    my $pref = C4::Context->preference('ReportsRunInBackground');
+
+    my $can_foreground = $patron->has_permission( { reports => 'execute_reports_foreground' } ) ? 1 : 0;
+    my $can_background = $patron->has_permission( { reports => 'execute_reports_background' } ) ? 1 : 0;
+
+    if ( $pref eq 'user_choice' ) {
+        $can_run->{foreground} = $can_foreground;
+        $can_run->{background} = $can_background;
+    } elsif ( $pref eq 'always' ) {
+        $can_run->{background} = $can_background;
+    } elsif ( $pref eq 'never' ) {
+        $can_run->{foreground} = $can_foreground;
+    }
+
+    return $can_run;
+}
+
 1;
