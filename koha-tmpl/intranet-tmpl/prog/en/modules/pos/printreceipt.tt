@@ -51,7 +51,7 @@
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script>
         [% IF ( Koha.Preference('IntranetSlipPrinterJS') ) %]
             [% Koha.Preference('IntranetSlipPrinterJS') | $raw %]
         [% ELSE %]
