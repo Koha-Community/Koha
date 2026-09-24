@@ -20,7 +20,7 @@ use Modern::Perl;
 use Test::Exception;
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 22;
+use Test::More tests => 23;
 
 use C4::Context;
 use Koha::BackgroundJob;
@@ -1086,6 +1086,132 @@ subtest 'check_limits() per-run-type override tests' => sub {
         'duplicate_running_reports_per_user_limit_exceeded',
         'override hits emit the canonical (un-prefixed) error key'
     );
+};
+
+subtest 'can_run_foreground_background' => sub {
+    plan tests => 15;
+
+    $schema->storage->txn_begin;
+
+    #build some patrons to test with
+    my $superlibrarian             = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1 } } );
+    my $foreground_dude            = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+    my $background_dude            = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+    my $foreground_background_dude = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+    my $you_get_nothing_dude       = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+
+    #foreground_dude gets execute_reports_foreground permission
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $foreground_dude->borrowernumber, module_bit => 16,
+                code           => 'execute_reports_foreground'
+            }
+        }
+    );
+
+    #background dude gets execute_reports_background
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $background_dude->borrowernumber, module_bit => 16,
+                code           => 'execute_reports_background'
+            }
+        }
+    );
+
+    #foreground_background_dude gets both execute_reports_foreground and execute_reports_background
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $foreground_background_dude->borrowernumber, module_bit => 16,
+                code           => 'execute_reports_foreground'
+            }
+        }
+    );
+
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $foreground_background_dude->borrowernumber, module_bit => 16,
+                code           => 'execute_reports_background'
+            }
+        }
+    );
+
+    # ReportsRunInBackground set to user_choice
+    t::lib::Mocks::mock_preference( 'ReportsRunInBackground', 'user_choice' );
+    is_deeply(
+        Koha::Report->can_run_foreground_background($superlibrarian),
+        { foreground => 1, background => 1 }, 'superlibrarian can run foreground and background'
+    );
+    is_deeply(
+        Koha::Report->can_run_foreground_background($foreground_dude),
+        { foreground => 1, background => 0 }, 'foreground permission can run foreground only'
+    );
+    is_deeply(
+        Koha::Report->can_run_foreground_background($background_dude),
+        { foreground => 0, background => 1 }, 'background permission can run background only'
+    );
+    is_deeply(
+        Koha::Report->can_run_foreground_background($foreground_background_dude),
+        { foreground => 1, background => 1 }, 'both permissions can run foreground and background'
+    );
+    is_deeply(
+        Koha::Report->can_run_foreground_background($you_get_nothing_dude),
+        { foreground => 0, background => 0 }, 'no permissions cannot run either'
+    );
+
+    # ReportsRunInBackground set to only run in background
+    t::lib::Mocks::mock_preference( 'ReportsRunInBackground', 'always' );
+    is_deeply(
+        Koha::Report->can_run_foreground_background($superlibrarian),
+        { foreground => 0, background => 1 }, 'superlibrarian can run background'
+    );
+    is_deeply(
+        Koha::Report->can_run_foreground_background($foreground_dude),
+        { foreground => 0, background => 0 }, 'foreground permission cannot run report in background'
+    );
+    is_deeply(
+        Koha::Report->can_run_foreground_background($background_dude),
+        { foreground => 0, background => 1 }, 'background permission can run background'
+    );
+    is_deeply(
+        Koha::Report->can_run_foreground_background($foreground_background_dude),
+        { foreground => 0, background => 1 }, 'both permissions can run background'
+    );
+    is_deeply(
+        Koha::Report->can_run_foreground_background($you_get_nothing_dude),
+        { foreground => 0, background => 0 }, 'no permissions cannot run'
+    );
+
+    # ReportsRunInBackground set to only run in foreground
+    t::lib::Mocks::mock_preference( 'ReportsRunInBackground', 'never' );
+    is_deeply(
+        Koha::Report->can_run_foreground_background($superlibrarian),
+        { foreground => 1, background => 0 }, 'superlibrarian can run foreground'
+    );
+    is_deeply(
+        Koha::Report->can_run_foreground_background($foreground_dude),
+        { foreground => 1, background => 0 }, 'foreground permission can run foreground'
+    );
+    is_deeply(
+        Koha::Report->can_run_foreground_background($background_dude),
+        { foreground => 0, background => 0 }, 'background permission cannot foreground'
+    );
+    is_deeply(
+        Koha::Report->can_run_foreground_background($foreground_background_dude),
+        { foreground => 1, background => 0 }, 'both permissions can run foreground'
+    );
+    is_deeply(
+        Koha::Report->can_run_foreground_background($you_get_nothing_dude),
+        { foreground => 0, background => 0 }, 'no permissions cannot run'
+    );
+
 };
 
 $schema->storage->txn_rollback;
