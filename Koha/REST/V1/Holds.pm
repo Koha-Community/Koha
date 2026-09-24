@@ -283,11 +283,12 @@ sub edit {
         }
 
         $pickup_library_id //= $hold->branchcode;
-        my $priority               = $body->{priority} // $hold->priority;
-        my $hold_date              = exists $body->{hold_date}       ? $body->{hold_date}       : $hold->reservedate;
-        my $expiration_date        = exists $body->{expiration_date} ? $body->{expiration_date} : $hold->expirationdate;
-        my $patron_expiration_date = $body->{patron_expiration_date} // $hold->patron_expiration_date;
-        my $item_id                = exists $body->{item_id} ? $body->{item_id} : $hold->itemnumber;
+        my $priority        = $body->{priority} // $hold->priority;
+        my $hold_date       = exists $body->{hold_date}       ? $body->{hold_date}       : $hold->reservedate;
+        my $expiration_date = exists $body->{expiration_date} ? $body->{expiration_date} : $hold->expirationdate;
+        my $patron_expiration_date =
+            exists $body->{patron_expiration_date} ? $body->{patron_expiration_date} : $hold->patron_expiration_date;
+        my $item_id = exists $body->{item_id} ? $body->{item_id} : $hold->itemnumber;
         my $item_level =
             exists $body->{item_level}
             ? ( $body->{item_level} ? 1 : 0 )

@@ -143,21 +143,21 @@ This modules provides some functions to deal with reservations.
 
     AddReserve(
         {
-            branchcode          => $branchcode,
-            borrowernumber      => $borrowernumber,
-            biblionumber        => $biblionumber,
-            priority            => $priority,
-            reservation_date    => $reservation_date,
-            expiration_date     => $expiration_date,
-            patron_expiration_date, => $patron_expiration_date,
-            notes               => $notes,
-            title               => $title,
-            itemnumber          => $itemnumber,
-            found               => $found,
-            itemtype            => $itemtype,
-            item_group_id       => $item_group_id,
-            supplyill           => $iso18626_request_id;
-            iso18626_payload    => $payload_hash;
+            branchcode             => $branchcode,
+            borrowernumber         => $borrowernumber,
+            biblionumber           => $biblionumber,
+            priority               => $priority,
+            reservation_date       => $reservation_date,
+            expiration_date        => $expiration_date,
+            patron_expiration_date => $patron_expiration_date,
+            notes                  => $notes,
+            title                  => $title,
+            itemnumber             => $itemnumber,
+            found                  => $found,
+            itemtype               => $itemtype,
+            item_group_id          => $item_group_id,
+            supplyill              => $iso18626_request_id,
+            iso18626_payload       => $payload_hash,
         }
     );
 
@@ -1165,17 +1165,16 @@ itemnumber and supplying itemnumber.
 sub ModReserve {
     my ($params) = @_;
 
-    my $rank                   = $params->{'rank'};
-    my $reserve_id             = $params->{'reserve_id'};
-    my $branchcode             = $params->{'branchcode'};
-    my $itemnumber             = $params->{'itemnumber'};
-    my $suspend_until          = $params->{'suspend_until'};
-    my $borrowernumber         = $params->{'borrowernumber'};
-    my $biblionumber           = $params->{'biblionumber'};
-    my $cancellation_reason    = $params->{'cancellation_reason'};
-    my $date                   = $params->{expirationdate};
-    my $patron_expiration_date = $params->{patron_expiration_date};
-    my $skip_fixup_priority    = $params->{skip_fixup_priority};
+    my $rank                = $params->{'rank'};
+    my $reserve_id          = $params->{'reserve_id'};
+    my $branchcode          = $params->{'branchcode'};
+    my $itemnumber          = $params->{'itemnumber'};
+    my $suspend_until       = $params->{'suspend_until'};
+    my $borrowernumber      = $params->{'borrowernumber'};
+    my $biblionumber        = $params->{'biblionumber'};
+    my $cancellation_reason = $params->{'cancellation_reason'};
+    my $date                = $params->{expirationdate};
+    my $skip_fixup_priority = $params->{skip_fixup_priority};
 
     return if defined $rank && $rank eq "n";
 
