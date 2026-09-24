@@ -392,9 +392,7 @@
                                         <th data-colname="cache_expiry" class="report_cache_expiry">Cache expiry (seconds)</th>
                                         <th data-colname="saved_results" class="report_saved_results">Saved results</th>
                                         <th data-colname="update" class="report_update">Update</th>
-                                        [% IF ( (Koha.Preference('LimitReportsBy') == 'library' || Koha.Preference('LimitReportsBy') == 'library_group') && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
-                                            <th data-colname="library_limits" class="report_library_limits">Library limits</th>
-                                        [% END %]
+                                        <th data-colname="library_limits" class="report_library_limits">Library limits</th>
                                         <th data-colname="actions" class="no-sort no-export">Actions</th>
                                     </tr>
                                 </thead>
@@ -455,44 +453,24 @@
                                                     >
                                                 [% END %]
                                             </td>
-                                            [% IF ( (Koha.Preference('LimitReportsBy') == 'library' || Koha.Preference('LimitReportsBy') == 'library_group') && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
-                                                <td>
+                                            <td>
+                                                [% IF ( (Koha.Preference('LimitReportsBy') == 'library' || Koha.Preference('LimitReportsBy') == 'library_group') && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
+                                                    [% limit_labels = [] %]
                                                     [% IF Koha.Preference('LimitReportsBy') == 'library' %]
-                                                        [% IF savedreport.library_limits && savedreport.library_limits.size > 0 %]
-                                                            [% library_str = "" %]
-                                                            [% FOREACH library IN savedreport.library_limits %]
-                                                                [%- IF loop.first -%]
-                                                                    [% library_str = library.branchname _ " (" _ library.branchcode _ ")" %]
-                                                                [% ELSE %]
-                                                                    [% library_str = library_str _ "\n" _ library.branchname _ " (" _ library.branchcode _ ")" %]
-                                                                [% END %]
-                                                            [% END %]
-                                                            <span class="library_limitation" data-bs-toggle="tooltip" title="[% library_str | html %]">
-                                                                [% IF savedreport.library_limits.size > 1 %]
-                                                                    <span>[% savedreport.library_limits.size | html %] library limitations</span>
-                                                                [% ELSE %]
-                                                                    <span>[% savedreport.library_limits.size | html %] library limitation</span>
-                                                                [% END %]
-                                                            </span>
-                                                        [% ELSE %]
-                                                            <span>No limitation</span>
+                                                        [% FOREACH library IN savedreport.library_limits %]
+                                                            [% limit_labels.push( library.branchname _ " (" _ library.branchcode _ ")" ) %]
                                                         [% END %]
-                                                    [% ELSIF Koha.Preference('LimitReportsBy') == 'library_group' %]
-                                                        [% limit_labels = [] %]
+                                                    [% ELSE %]
                                                         [% FOREACH g IN savedreport.library_group_limits %]
                                                             [% limit_labels.push( g.title ) %]
                                                         [% END %]
                                                         [% FOREACH library IN savedreport.ungrouped_library_limits %]
                                                             [% limit_labels.push( library.branchname _ " (" _ library.branchcode _ ")" ) %]
                                                         [% END %]
-                                                        [% IF limit_labels.size > 0 %]
-                                                            <span class="library_limitation">[% limit_labels.join(", ") | html %]</span>
-                                                        [% ELSE %]
-                                                            <span>No limitation</span>
-                                                        [% END %]
                                                     [% END %]
-                                                </td>
-                                            [% END %]
+                                                    [% PROCESS library_limits_cell labels => limit_labels %]
+                                                [% END %]
+                                            </td>
                                             <td>
                                                 <div class="btn-group dropup">
                                                     [%# There should be no space between these two buttons, it would render badly %]
@@ -1912,8 +1890,7 @@
         update_column.visibility_condition = [% has_obsolete_reports ? 'true' : 'false' | html %];
 
         let library_limits_column = table_settings.columns.find(c => c.columnname == 'library_limits');
-        let library_limits_col_index = table_settings.columns.map(c => c.columnname).indexOf('library_limits');
-        const can_limit_reports_by_library = [% ( Koha.Preference('LimitReportsBy') == 'library' && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) ? 1 : 0 | html %];
+        const can_limit_reports_by_library = [% ( ( Koha.Preference('LimitReportsBy') == 'library' || Koha.Preference('LimitReportsBy') == 'library_group' ) && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) ? 1 : 0 | html %];
         library_limits_column.is_hidden = !can_limit_reports_by_library;
         library_limits_column.cannot_be_toggled = !can_limit_reports_by_library;
         library_limits_column.visibility_condition = !!can_limit_reports_by_library;
@@ -2366,7 +2343,7 @@
                 syncBatchFormsWithVisibleResults();
                 report_results_dt.on("draw length page search", syncBatchFormsWithVisibleResults);
             }
-            if(saved1) {
+            if (saved1) {
                 var rtable = $("#table_reports").kohaTable(
                     {
                         autoWidth: false,
@@ -2375,10 +2352,7 @@
                         language: {
                             zeroRecords: _("No matching reports found"),
                         },
-                        [% IF ( Koha.Preference('LimitReportsBy') == 'library' && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ) %]
-                            columnDefs: library_limits_col_index !== -1 ? [{ visible: false, targets: [library_limits_col_index] }] : [],
-                        [% END %]
-                        bKohaColumnsUseNames: true
+                        bKohaColumnsUseNames: true,
                     },
                     table_settings
                 );
@@ -2971,6 +2945,21 @@
 </template>
 
 [% INCLUDE 'intranet-bottom.inc' %]
+
+[% BLOCK library_limits_cell %]
+    [%# labels: list of strings, one per limit (library or library group) %]
+    [% IF labels.size > 0 %]
+        <span class="library_limitation" data-bs-toggle="tooltip" title="[% labels.join("\n") | html %]">
+            [% IF labels.size > 1 %]
+                <span>[% labels.size | html %] library limitations</span>
+            [% ELSE %]
+                <span>[% labels.size | html %] library limitation</span>
+            [% END %]
+        </span>
+    [% ELSE %]
+        <span>No limitation</span>
+    [% END %]
+[% END %]
 
 [% BLOCK group_and_subgroup_selection %]
     <li id="group">
