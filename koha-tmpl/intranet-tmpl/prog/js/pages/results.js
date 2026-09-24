@@ -131,31 +131,32 @@ function verify_cover_images() {
 }
 
 if (PREF_IntranetCoce && PREF_CoceProviders) {
+    const COCE_WAIT_PERIOD_MS = 100;
+    const COCE_MAX_WAIT_MS = 5000;
+    const COCE_MAX_WAIT_ATTEMPTS = COCE_MAX_WAIT_MS / COCE_WAIT_PERIOD_MS;
     let counter_wait = 0;
-    function wait_for_images(cb){
-
+    function wait_for_images(cb) {
         var loaded = 1;
         counter_wait++;
 
-        if ( loaded ) {
+        if (loaded) {
             loaded = KOHA.coce.done;
         }
 
-        if (!loaded && counter_wait < 50) {// Do not wait more than 5 seconds
-            window.setTimeout(function(){wait_for_images(cb);}, 100);
+        if (!loaded && counter_wait < COCE_MAX_WAIT_ATTEMPTS) {
+            window.setTimeout(function () {
+                wait_for_images(cb);
+            }, COCE_WAIT_PERIOD_MS);
         } else {
-            if (counter_wait >= 50 ) {
-                console.log("Could not retrieve the images")
-            }
             cb();
         }
     }
 
-    $(window).load(function() {
+    $(window).load(function () {
         wait_for_images(verify_cover_images);
     });
 } else {
-    $(window).load(function() {
+    $(window).load(function () {
         verify_cover_images();
     });
 }
