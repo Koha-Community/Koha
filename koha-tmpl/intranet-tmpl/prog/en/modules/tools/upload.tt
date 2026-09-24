@@ -8,6 +8,7 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
+[% USE JSON.Escape %]
 <title
     >[% FILTER collapse %]
         [% IF op == 'new' %]
@@ -413,14 +414,18 @@
             }
         }
         function ShowAlerts(err) {
-            var str = '';
-            for( var file in err ) {
-                str= str + '<p>' + file + ': ' +
-                    errMESSAGES( err[file].code ) + '</p>';
+            let alerts = document.createElement("span");
+            for (var file in err) {
+                let alert_el = document.createElement("p");
+                alert_el.textContent = file + ": " + errMESSAGES(err[file].code);
+                alerts.appendChild(alert_el);
             }
-            if( str ) {
-                $('#myalerts').html(str);
-                $('#myalerts').show();
+            if (alerts.childNodes) {
+                let myalerts = document.querySelector("#myalerts");
+                if (myalerts) {
+                    myalerts.replaceChildren(...alerts.childNodes);
+                    myalerts.style.display = "block";
+                }
             }
         }
         function errMESSAGES(code) {
@@ -495,7 +500,7 @@
             $("#uploadresults").kohaTable({}, table_settings);
 
             [% IF msg %]
-                ShowAlerts( [% msg | html %] );
+                ShowAlerts( [% msg.json | json #Using JSON.Escape %] );
             [% END %]
             $("#fileuploadcancel").hide();
             $("#public_cb").click(function() {
