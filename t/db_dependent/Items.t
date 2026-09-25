@@ -669,7 +669,7 @@ subtest 'SearchItems test' => sub {
 };
 
 subtest 'SearchItems security tests' => sub {
-    plan tests => 6;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -707,6 +707,42 @@ subtest 'SearchItems security tests' => sub {
 
     ($items) = SearchItems( { field => 'homebranch', operator => 'is', query => 'not Null' } );
     ok( defined $items, "'is not Null' query still works (case-insensitive)" );
+
+    subtest 'conjunction' => sub {
+        plan tests => 6;
+
+        my $item_1 = $builder->build_sample_item;
+        my $item_2 = $builder->build_sample_item;
+
+        my $build_filter = sub {
+            my ($conjunction) = @_;
+            return {
+                conjunction => $conjunction,
+                filters     => [
+                    { field => 'itemnumber', query => $item_1->itemnumber, operator => '=' },
+                    { field => 'itemnumber', query => $item_2->itemnumber, operator => '=' },
+                ],
+            };
+        };
+
+        ( undef, $total ) = SearchItems( $build_filter->('AND') );
+        is( $total, 0, "AND is applied" );
+
+        ( undef, $total ) = SearchItems( $build_filter->('OR') );
+        is( $total, 2, "OR is applied" );
+
+        ( undef, $total ) = SearchItems( $build_filter->('or') );
+        is( $total, 2, "or is applied" );
+
+        ( undef, $total ) = SearchItems( $build_filter->(undef) );
+        is( $total, 0, "defaults to AND" );
+
+        ( undef, $total ) = SearchItems( $build_filter->('OR 1=1 OR') );
+        is( $total, 0, "No SQL injection - defaults to 'AND'" );
+
+        ( undef, $total ) = SearchItems( $build_filter->('OR (SELECT SLEEP(5)) OR') );
+        is( $total, 0, "No SQL injection with SLEEP - defaults to 'AND'" );
+    };
 
     $schema->storage->txn_rollback;
 };
