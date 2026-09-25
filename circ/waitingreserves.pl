@@ -42,7 +42,6 @@ my $fbr            = $input->param('fbr')         || '';
 my $tbr            = $input->param('tbr')         || '';
 my $all_branches   = $input->param('allbranches') || '';
 my $tab            = $input->param('tab');
-my $cancelBulk     = $input->param('cancelBulk');
 
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {
@@ -74,7 +73,7 @@ if ( C4::Context->preference('IndependentBranches') ) {
 }
 $template->param( all_branches => 1 ) if $all_branches;
 
-if ($cancelBulk) {
+if ( $op eq 'cud-cancelBulk' ) {
     my $reason   = $input->param("cancellation-reason");
     my @hold_ids = split( ',', scalar $input->param("ids") );
     my $params   = {
