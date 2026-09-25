@@ -2,6 +2,10 @@ package t::lib::QA::TemplateFilters;
 
 use Modern::Perl;
 
+=head1 Methods
+
+=cut
+
 our @tt_directives = (
     qr{^\s*INCLUDE},
     qr{^\s*USE},
@@ -42,6 +46,10 @@ sub missing_filters {
     return @{_process_tt_content( @_ )->{errors}};
 
 }
+
+=head2 _process_tt_content
+
+=cut
 
 sub _process_tt_content {
     my ($content) = @_;
@@ -157,6 +165,9 @@ sub process_tt_block {
 
         # Already has url or uri filter
         or $tt_block =~ m{\|\s?ur(l|i)}
+
+        # Already has json filter
+        or $tt_block =~ m{\|\s?json}
 
         # Already has trim filter
         or $tt_block =~ m{\|\s?trim}

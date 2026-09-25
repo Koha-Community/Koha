@@ -20,6 +20,7 @@
 use Modern::Perl;
 use CGI qw/-utf8/;
 use JSON;
+use Try::Tiny;
 
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
@@ -52,6 +53,14 @@ $template->param(
     plugin     => $plugin,
     uploadcategories => Koha::UploadedFiles->getCategories,
 );
+
+if ($msg) {
+    try {
+        $msg = JSON::decode_json($msg);
+    } catch {
+        $msg = undef;
+    };
+}
 
 if ( $op eq 'new' ) {
     $template->param(
@@ -107,11 +116,10 @@ if ( $op eq 'new' ) {
     my $fn = $rec ? $rec->filename : '';
     my $delete = $rec ? $rec->delete : undef;
     #TODO Improve error handling
-    my $msg = $delete
-        ? JSON::to_json({ $fn => { code => ALERT_DELETED }})
-        : $id
-        ? JSON::to_json({ $fn || $id, { code => ERR_NOT_DELETED }})
-        : '';
+    my $msg =
+          $delete ? { $fn => { code => ALERT_DELETED } }
+        : $id     ? { ( $fn || $id ) => { code => ERR_NOT_DELETED } }
+        :           undef;
     $template->param(
         op               => 'new',
         msg              => $msg,
@@ -125,7 +133,7 @@ if ( $op eq 'new' ) {
     if ( !$rec || !$fh ) {
         $template->param(
             op               => 'new',
-            msg              => JSON::to_json({ $id => { code => ERR_READING }}),
+            msg =>           { $id => { code => ERR_READING } },
         );
         output_html_with_http_headers $input, $cookie, $template->output;
     } else {
