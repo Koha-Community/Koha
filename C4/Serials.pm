@@ -1214,20 +1214,27 @@ sub ModSerialStatus {
     return;
 }
 
+=head2 _handle_seqno
+
+    $recievedlist = _handle_seqno( $serialseq, $op );
+
+    $op should be one of ADD | REMOVE | CHECK (default: ADD)
+    Adds or removes seqno from list when needed; returns list
+    Or checks and returns true when present
+
+=cut
+
 sub _handle_seqno {
 
-    # Adds or removes seqno from list when needed; returns list
-    # Or checks and returns true when present
-
-    my ( $seq, $list, $op ) = @_;    # op = ADD | REMOVE | CHECK (default: ADD)
+    my ( $seq, $list, $op ) = @_;
     my $seq_r = $seq;
-    $seq_r =~ s/([(){}])/\\$1/g;     # Adjust disturbing parentheses for regex, maybe extend in future
+    $seq_r =~ s/([(){}])/\\$1/g;    # Adjust disturbing parentheses for regex, maybe extend in future
 
     if ( !$op or $op eq 'ADD' ) {
         $list .= "; $seq" if $list !~ /(^|;)\s*$seq_r(?=;|$)/;
     } elsif ( $op eq 'REMOVE' ) {
         $list =~ s/(^|;)\s*(not issued )?$seq_r(?=;|$)//g;
-    } else {                         # CHECK
+    } else {                        # CHECK
         return $list =~ /(^|;)\s*$seq_r(?=;|$)/ ? 1 : q{};
     }
     return $list;
@@ -2349,6 +2356,16 @@ sub GetFictiveIssueNumber {
     return $issueno;
 }
 
+=head2 _delta_units
+
+    my $delta = _delta_units( $date1, $date2, $unit );
+
+    date1 and date2 are array refs in the form [ yy, mm, dd ], e.g.:
+    my $delta = _delta_units( [ $first_acq_year, $first_acq_month, $first_acq_day ], [ $published_year, $published_month, $published_day ], $unit );
+
+    unit can be 'week', 'day', 'month', 'year'
+=cut
+
 sub _delta_units {
     my ( $date1, $date2, $unit ) = @_;
 
@@ -2381,6 +2398,15 @@ sub _delta_units {
     return $unit eq 'month' ? $delta[0] * 12 + $delta[1] : $delta[0];
 }
 
+=head2 _get_next_date_day
+
+    ( $year, $month, $day ) = _get_next_date_day(
+        $subscription,
+        $freqdata, $year, $month, $day
+    );
+
+=cut
+
 sub _get_next_date_day {
     my ( $subscription, $freqdata, $year, $month, $day ) = @_;
 
@@ -2405,6 +2431,15 @@ sub _get_next_date_day {
     }
     return @newissue;
 }
+
+=head2 _get_next_date_week
+
+    ( $year, $month, $day ) = _get_next_date_week(
+        $subscription,
+        $freqdata, $year, $month, $day
+    );
+
+=cut
 
 sub _get_next_date_week {
     my ( $subscription, $freqdata, $year, $month, $day ) = @_;
@@ -2435,6 +2470,15 @@ sub _get_next_date_week {
     return @newissue;
 }
 
+=head2 _get_next_date_month
+
+    ( $year, $month, $day ) = _get_next_date_month(
+        $subscription,
+        $freqdata, $year, $month, $day
+    );
+
+=cut
+
 sub _get_next_date_month {
     my ( $subscription, $freqdata, $year, $month, $day ) = @_;
 
@@ -2463,6 +2507,15 @@ sub _get_next_date_month {
     }
     return @newissue;
 }
+
+=head2 _get_next_date_year
+
+    ( $year, $month, $day ) = _get_next_date_year(
+        $subscription,
+        $freqdata, $year, $month, $day
+    );
+
+=cut
 
 sub _get_next_date_year {
     my ( $subscription, $freqdata, $year, $month, $day ) = @_;
@@ -2785,6 +2838,14 @@ sub can_show_subscription {
     my ( $subscription, $userid ) = @_;
     return _can_do_on_subscription( $subscription, $userid, '*' );
 }
+
+=head2 _can_do_on_subscription
+
+    $can = _can_do_on_subscription( $subscription, $userid, '*' );
+
+Helper function which checks a given serials permission for a user.
+
+=cut
 
 sub _can_do_on_subscription {
     my ( $subscription, $userid, $permission ) = @_;
