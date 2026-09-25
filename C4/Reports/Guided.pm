@@ -630,7 +630,7 @@ sub execute_query {
         $useroffset, ( defined($userlimit) ? $userlimit : 'UNDEF' )
     );
 
-    $offset += $useroffset;
+    # $offset is relative to the user supplied offset
     if ( defined($userlimit) ) {
         if ( $offset + $limit > $userlimit ) {
             $limit = $userlimit - $offset;
@@ -638,6 +638,7 @@ sub execute_query {
             $limit = $userlimit;
         }
     }
+    $offset += $useroffset;
     $sql .= " LIMIT ?, ?";
 
     my $dbh = C4::Context->dbh;

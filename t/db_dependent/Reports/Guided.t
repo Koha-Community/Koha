@@ -22,7 +22,7 @@ use Modern::Perl;
 
 use Test::NoWarnings;
 use Test::MockModule qw(strict);
-use Test::More tests => 15;
+use Test::More tests => 16;
 use Test::Warn;
 
 use t::lib::TestBuilder;
@@ -661,6 +661,42 @@ subtest 'Email report test' => sub {
 };
 
 $schema->storage->txn_rollback;
+
+subtest 'execute_query() with user supplied LIMIT' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my @itemnumbers = map { $builder->build_sample_item->itemnumber } 1 .. 10;
+    my $in          = join ',', @itemnumbers;
+    my $base_sql    = "SELECT itemnumber FROM items WHERE itemnumber IN ($in) ORDER BY itemnumber";
+
+    my $fetch = sub {
+        my ( $sql, $offset, $limit ) = @_;
+        my ($sth) = execute_query( { sql => $sql, offset => $offset, limit => $limit } );
+        return [ map { $_->[0] } @{ $sth->fetchall_arrayref } ];
+    };
+
+    is_deeply(
+        $fetch->( "$base_sql LIMIT 5, 3", 0, 20 ), [ @itemnumbers[ 5 .. 7 ] ],
+        'LIMIT offset, count with offset greater than count is supported'
+    );
+    is_deeply(
+        $fetch->( "$base_sql LIMIT 2, 6", 0, 4 ), [ @itemnumbers[ 2 .. 7 ] ],
+        'First page returns all the rows of the user supplied LIMIT'
+    );
+    is_deeply(
+        $fetch->( "$base_sql LIMIT 2, 6", 4, 4 ), [ @itemnumbers[ 6 .. 7 ] ],
+        'Second page stops at the user supplied LIMIT'
+    );
+    is_deeply(
+        $fetch->( "$base_sql LIMIT 3", 0, 20 ), [ @itemnumbers[ 0 .. 2 ] ],
+        'LIMIT count is supported'
+    );
+
+    $schema->storage->txn_rollback;
+};
 
 subtest 'nb_rows() tests' => sub {
 
