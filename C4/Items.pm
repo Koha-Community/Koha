@@ -1027,7 +1027,8 @@ sub _SearchItems_build_where_fragment {
         }
         my $where_str = '';
         if (@where_strs) {
-            $where_str = '(' . join (' ' . $filter->{conjunction} . ' ', @where_strs) . ')';
+            my $conjunction = uc( $filter->{conjunction} // q{} ) eq 'OR' ? 'OR' : 'AND';
+            $where_str      = sprintf '(%s)', join( " $conjunction ", @where_strs );
             $where_fragment = {
                 str => $where_str,
                 args => \@where_args,
