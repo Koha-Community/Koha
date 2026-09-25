@@ -523,7 +523,8 @@ Usage:
 Where:
   $sql is the query to modify
   $new_sql is the resulting query
-  $offset is the offset value, if the LIMIT was the two-argument form,
+  $offset is the offset value, if the LIMIT was the two-argument form
+      (LIMIT offset, count) or used OFFSET (LIMIT count OFFSET offset),
       0 if it wasn't otherwise given.
   $limit is the limit value
 
@@ -547,15 +548,19 @@ sub strip_limit {
     # Two options: if there's no WHERE clause in the SQL, we simply capture
     # any LIMIT that's there. If there is a WHERE, we make sure that we only
     # capture a LIMIT after the last one. This prevents stomping on subqueries.
+    # Supported forms: LIMIT count, LIMIT offset, count and LIMIT count OFFSET offset
+    my $limit_re = qr/\bLIMIT\b\s*(?<first>\d+)(?:\s*\,\s*(?<count>\d+)|\s+OFFSET\s+(?<offset>\d+))?\s*/i;
+    my $res      = $sql;
+    my %limit;
     if ( $sql !~ /\bWHERE\b/i ) {
-        ( my $res = $sql ) =~ s/\bLIMIT\b\s*(\d+)(\s*\,\s*(\d+))?\s*/ /ig;
-        return ( $res, ( defined $2 ? $1 : 0 ), ( defined $3 ? $3 : $1 ) );
+        $res =~ s/$limit_re/%limit = %+; ' '/ge;
     } else {
-        my $res = $sql;
         $res =~ m/.*\bWHERE\b/gsi;
-        $res =~ s/\G(.*)\bLIMIT\b\s*(\d+)(\s*\,\s*(\d+))?\s*/$1 /is;
-        return ( $res, ( defined $3 ? $2 : 0 ), ( defined $4 ? $4 : $2 ) );
+        $res =~ s/\G(.*)$limit_re/%limit = %+; "$1 "/se;
     }
+    return defined $limit{count}
+        ? ( $res, $limit{first}, $limit{count} )
+        : ( $res, $limit{offset} // 0, $limit{first} );
 }
 
 =head2 execute_query

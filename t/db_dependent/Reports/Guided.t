@@ -91,6 +91,13 @@ subtest 'strip_limit' => sub {
     is( $res_lim1,      13,   "Returns correct extracted offset" );
     is( $res_lim2,      242,  "Returns correct extracted LIMIT" );
 
+    $test_sql = $res_sql . " LIMIT 242 OFFSET 13";
+    ( $res_sql, $res_lim1, $res_lim2 ) = C4::Reports::Guided::strip_limit($test_sql);
+
+    is( trim($res_sql), $sql, "Correctly removes only final LIMIT (with OFFSET)" );
+    is( $res_lim1,      13,   "Returns correct extracted OFFSET" );
+    is( $res_lim2,      242,  "Returns correct extracted LIMIT" );
+
     # After here is the simpler case, where there isn't a WHERE clause to worry
     # about.
 
@@ -111,6 +118,12 @@ subtest 'strip_limit' => sub {
     ( $res_sql, $res_lim1, $res_lim2 ) = C4::Reports::Guided::strip_limit($test_sql);
     is( trim($res_sql), $sql, "Correctly removes LIMIT in simple case (with offset)" );
     is( $res_lim1,      13,   "Returns correct extracted offset" );
+    is( $res_lim2,      242,  "Returns correct extracted LIMIT" );
+
+    $test_sql = $sql . " LIMIT 242 OFFSET 13";
+    ( $res_sql, $res_lim1, $res_lim2 ) = C4::Reports::Guided::strip_limit($test_sql);
+    is( trim($res_sql), $sql, "Correctly removes LIMIT in simple case (with OFFSET)" );
+    is( $res_lim1,      13,   "Returns correct extracted OFFSET" );
     is( $res_lim2,      242,  "Returns correct extracted LIMIT" );
 };
 
@@ -664,7 +677,7 @@ $schema->storage->txn_rollback;
 
 subtest 'execute_query() with user supplied LIMIT' => sub {
 
-    plan tests => 4;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -679,6 +692,10 @@ subtest 'execute_query() with user supplied LIMIT' => sub {
     };
 
     is_deeply(
+        $fetch->( "$base_sql LIMIT 3 OFFSET 5", 0, 20 ), [ @itemnumbers[ 5 .. 7 ] ],
+        'LIMIT count OFFSET offset is supported'
+    );
+    is_deeply(
         $fetch->( "$base_sql LIMIT 5, 3", 0, 20 ), [ @itemnumbers[ 5 .. 7 ] ],
         'LIMIT offset, count with offset greater than count is supported'
     );
@@ -689,6 +706,10 @@ subtest 'execute_query() with user supplied LIMIT' => sub {
     is_deeply(
         $fetch->( "$base_sql LIMIT 2, 6", 4, 4 ), [ @itemnumbers[ 6 .. 7 ] ],
         'Second page stops at the user supplied LIMIT'
+    );
+    is_deeply(
+        $fetch->( "$base_sql LIMIT 6 OFFSET 2", 4, 4 ), [ @itemnumbers[ 6 .. 7 ] ],
+        'Second page stops at the user supplied LIMIT (OFFSET syntax)'
     );
     is_deeply(
         $fetch->( "$base_sql LIMIT 3", 0, 20 ), [ @itemnumbers[ 0 .. 2 ] ],
