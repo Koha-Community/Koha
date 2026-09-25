@@ -52,7 +52,7 @@ if ( $op eq 'add_form' ) {
         category                          => scalar $category,
         self_renewal_information_messages => scalar $category
         ? parse_renewal_info_message( $category->self_renewal_information_message )
-        : []
+        : [""]
     );
 
     if ( C4::Context->preference('EnhancedMessagingPreferences') ) {
