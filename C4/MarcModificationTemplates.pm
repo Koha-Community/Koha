@@ -128,28 +128,28 @@ sub AddModificationTemplate {
                 $template_id,
                 $action->{'action'},
                 $action->{'field_number'},
-                $action->{'use_indicators'},
                 $action->{'from_field'},
                 $action->{'from_subfield'},
-                $action->{'from_ind1'},
-                $action->{'from_ind2'},
                 $action->{'field_value'},
                 $action->{'to_field'},
                 $action->{'to_subfield'},
-                $action->{'to_ind1'},
-                $action->{'to_ind2'},
                 $action->{'to_regex_search'},
                 $action->{'to_regex_replace'},
                 $action->{'to_regex_modifiers'},
                 $action->{'conditional'},
                 $action->{'conditional_field'},
                 $action->{'conditional_subfield'},
-                $action->{'conditional_ind1'},
-                $action->{'conditional_ind2'},
                 $action->{'conditional_comparison'},
                 $action->{'conditional_value'},
                 $action->{'conditional_regex'},
                 $action->{'description'},
+                $action->{'use_indicators'},
+                $action->{'from_ind1'},
+                $action->{'from_ind2'},
+                $action->{'to_ind1'},
+                $action->{'to_ind2'},
+                $action->{'conditional_ind1'},
+                $action->{'conditional_ind2'},
             );
 
         }
@@ -214,14 +214,16 @@ sub GetModificationTemplateActions {
   AddModificationTemplateAction
 
   AddModificationTemplateAction(
-    $template_id, $action, $field_number, $use_indicators,
-    $from_field, $from_subfield, $from_ind1, $from_ind2, $field_value,
-    $to_field, $to_subfield, $to_ind1, $to_ind2,
+    $template_id, $action, $field_number,
+    $from_field, $from_subfield, $field_value,
+    $to_field, $to_subfield,
     $to_regex_search, $to_regex_replace, $to_regex_modifiers,
     $conditional, $conditional_field, $conditional_subfield,
-    $conditional_ind1, $conditional_ind2,
     $conditional_comparison, $conditional_value,
-    $conditional_regex, $description
+    $conditional_regex, $description,
+    $use_indicators, $from_ind1, $from_ind2,
+    $to_ind1, $to_ind2,
+    $conditional_ind1, $conditional_ind2
   );
 
   Adds a new action to the given modification template.
@@ -233,28 +235,28 @@ sub AddModificationTemplateAction {
         $template_id,
         $action,
         $field_number,
-        $use_indicators,
         $from_field,
         $from_subfield,
-        $from_ind1,
-        $from_ind2,
         $field_value,
         $to_field,
         $to_subfield,
-        $to_ind1,
-        $to_ind2,
         $to_regex_search,
         $to_regex_replace,
         $to_regex_modifiers,
         $conditional,
         $conditional_field,
         $conditional_subfield,
-        $conditional_ind1,
-        $conditional_ind2,
         $conditional_comparison,
         $conditional_value,
         $conditional_regex,
-        $description
+        $description,
+        $use_indicators,
+        $from_ind1,
+        $from_ind2,
+        $to_ind1,
+        $to_ind2,
+        $conditional_ind1,
+        $conditional_ind2
     ) = @_;
 
     $use_indicators         ||= 0;
@@ -341,14 +343,15 @@ sub AddModificationTemplateAction {
   ModModificationTemplateAction
 
   ModModificationTemplateAction(
-    $mmta_id, $action, $field_number, $from_field, $use_indicators,
-    $from_field, $from_subfield, $from_ind1, $from_ind2, $field_value,
-    $to_field, $to_subfield, $to_ind1, $to_ind2,
+    $mmta_id, $action, $field_number,
+    $from_field, $from_subfield, $field_value,
+    $to_field, $to_subfield,
     $to_regex_search, $to_regex_replace, $to_regex_modifiers,
     $conditional, $conditional_field, $conditional_subfield,
-    $conditional_ind1, $conditional_ind2,
-    $conditional_comparison, $conditional_value,
-    $conditional_regex, $description
+    $conditional_comparison, $conditional_value, $conditional_regex,
+    $description,
+    $use_indicators, $from_ind1, $from_ind2,
+    $to_ind1, $to_ind2, $conditional_ind1, $conditional_ind2
   );
 
   Modifies an existing action.
@@ -360,28 +363,28 @@ sub ModModificationTemplateAction {
         $mmta_id,
         $action,
         $field_number,
-        $use_indicators,
         $from_field,
         $from_subfield,
-        $from_ind1,
-        $from_ind2,
         $field_value,
         $to_field,
         $to_subfield,
-        $to_ind1,
-        $to_ind2,
         $to_regex_search,
         $to_regex_replace,
         $to_regex_modifiers,
         $conditional,
         $conditional_field,
         $conditional_subfield,
-        $conditional_ind1,
-        $conditional_ind2,
         $conditional_comparison,
         $conditional_value,
         $conditional_regex,
-        $description
+        $description,
+        $use_indicators,
+        $from_ind1,
+        $from_ind2,
+        $to_ind1,
+        $to_ind2,
+        $conditional_ind1,
+        $conditional_ind2
     ) = @_;
 
     my $dbh = C4::Context->dbh;
@@ -722,8 +725,6 @@ sub ModifyRecordWithTemplate {
             }
         }
 
-        my $create_if_no_match = 0;
-
         if ($do) {
 
             # field_number == 0 if all field need to be updated
@@ -773,13 +774,9 @@ sub ModifyRecordWithTemplate {
                         }
                     );
 
-                    if ( !@$field_numbers ) {
-                        if ( $action eq 'update_field' ) {
-                            $create_if_no_match = 1;
-                        } else {
-                            next;
-                        }
-                    } elsif ( $field_number == 1 ) {
+                    if ( !@$field_numbers && $action ne 'update_field' ) {
+                        next;
+                    } elsif ( @$field_numbers && $field_number == 1 ) {
                         $field_numbers = [ $field_numbers->[0] ];
                     }
                 } elsif ( $field_number == 1 ) {
@@ -831,21 +828,20 @@ sub ModifyRecordWithTemplate {
                         subfield      => $from_subfield,
                         values        => [$field_value],
                         field_numbers => $field_numbers,
-                        ind1          => $to_ind1,
-                        ind2          => $to_ind2,
+                        ind1          => $from_ind1,
+                        ind2          => $from_ind2,
                     }
                 );
             } elsif ( $action eq 'update_field' ) {
                 update_field(
                     {
-                        record             => $record,
-                        field              => $from_field,
-                        subfield           => $from_subfield,
-                        values             => [$field_value],
-                        field_numbers      => $field_numbers,
-                        ind1               => $from_ind1,
-                        ind2               => $from_ind2,
-                        create_if_no_match => $create_if_no_match,
+                        record        => $record,
+                        field         => $from_field,
+                        subfield      => $from_subfield,
+                        values        => [$field_value],
+                        field_numbers => $field_numbers,
+                        ind1          => $from_ind1,
+                        ind2          => $from_ind2,
                     }
                 );
             } elsif ( $action eq 'move_field' ) {
@@ -1051,28 +1047,28 @@ sub ImportModificationTemplates {
                 $template_id,
                 $action_data->{action},
                 $action_data->{field_number},
-                $action_data->{use_indicators},
                 $action_data->{from_field},
                 $action_data->{from_subfield},
-                $action_data->{from_ind1},
-                $action_data->{from_ind2},
                 $action_data->{field_value},
                 $action_data->{to_field},
                 $action_data->{to_subfield},
-                $action_data->{to_ind1},
-                $action_data->{to_ind2},
                 $action_data->{to_regex_search},
                 $action_data->{to_regex_replace},
                 $action_data->{to_regex_modifiers},
                 $action_data->{conditional},
                 $action_data->{conditional_field},
                 $action_data->{conditional_subfield},
-                $action_data->{conditional_ind1},
-                $action_data->{conditional_ind2},
                 $action_data->{conditional_comparison},
                 $action_data->{conditional_value},
                 $action_data->{conditional_regex},
                 $action_data->{description},
+                $action_data->{use_indicators},
+                $action_data->{from_ind1},
+                $action_data->{from_ind2},
+                $action_data->{to_ind1},
+                $action_data->{to_ind2},
+                $action_data->{conditional_ind1},
+                $action_data->{conditional_ind2},
             );
         }
 

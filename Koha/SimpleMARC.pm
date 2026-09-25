@@ -316,23 +316,20 @@ Updates the value of a subfield
 =cut
 
 sub _update_subfield {
-    my ($params)           = @_;
-    my $record             = $params->{record};
-    my $fieldName          = $params->{field};
-    my $subfieldName       = $params->{subfield};
-    my @values             = @{ $params->{values} };
-    my $dont_erase         = $params->{dont_erase};
-    my $field_numbers      = $params->{field_numbers} // [];
-    my $ind1               = $params->{ind1};
-    my $ind2               = $params->{ind2};
-    my $create_if_no_match = $params->{create_if_no_match};
-    my $i                  = 0;
+    my ($params)      = @_;
+    my $record        = $params->{record};
+    my $fieldName     = $params->{field};
+    my $subfieldName  = $params->{subfield};
+    my @values        = @{ $params->{values} };
+    my $dont_erase    = $params->{dont_erase};
+    my $field_numbers = $params->{field_numbers} // [];
+    my $ind1          = $params->{ind1};
+    my $ind2          = $params->{ind2};
+    my $i             = 0;
 
     my @fields = $record->field($fieldName);
 
-    if ($create_if_no_match) {
-        @fields = ();
-    } elsif (@$field_numbers) {
+    if (@$field_numbers) {
         @fields = map { $_ <= @fields ? $fields[ $_ - 1 ] : () } @$field_numbers;
     }
 
@@ -853,9 +850,28 @@ sub _copy_move_subfield {
     my $to_ind1          = $params->{to_ind1};
     my $to_ind2          = $params->{to_ind2};
 
-    my @values = read_field( { record => $record, field => $fromFieldName, subfield => $fromSubfieldName } );
+    my @values;
+
     if (@$field_numbers) {
-        @values = map { $_ <= @values ? $values[ $_ - 1 ] : () } @$field_numbers;
+        my @fields = $record->field($fromFieldName);
+
+        foreach my $field_number (@$field_numbers) {
+            next if $field_number > @fields;
+
+            my $field = $fields[ $field_number - 1 ];
+
+            push @values,
+                map { $_->[1] }
+                grep { $_->[0] eq $fromSubfieldName } $field->subfields;
+        }
+    } else {
+        @values = read_field(
+            {
+                record   => $record,
+                field    => $fromFieldName,
+                subfield => $fromSubfieldName
+            }
+        );
     }
     _modify_values( { values => \@values, regex => $regex } );
     my $dont_erase = $action eq 'copy' ? 1 : 0;
