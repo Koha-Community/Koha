@@ -77,7 +77,7 @@ if (\$('#' + id).val() == '' || force) {
         \$('#' + id).val(prefix + '-' + newNumberStr);
     }
     else if ( autobarcodetype == "EAN13" ) {
-        \$('#' + id).val(incrementEAN13($nextnum, offset));
+        \$('#' + id).val(incrementEAN13('$nextnum', offset));
     }
     else if ( incremental_barcode ) {
         \$('#' + id).val($nextnum + offset);
