@@ -4877,6 +4877,13 @@ div .suggestion_note {
     }
 
     #sidebar-container {
+        // Reserve room for the overlaid .sidebar-toggle button seated in
+        // this same box's top-right corner, instead of giving it its own
+        // row above the box (which left a mostly-empty grey band).
+        .sidebar_menu {
+            padding-top: 2.5em;
+        }
+
         &.collapsed {
             width: 3rem;
 
@@ -4951,8 +4958,11 @@ div .suggestion_note {
         }
 
         .sidebar-toggle {
-            display: flex;
-            justify-content: flex-end;
+            display: block;
+            position: absolute;
+            right: .5em;
+            top: .5em;
+            z-index: 1;
         }
     }
 }
@@ -5083,15 +5093,15 @@ div .suggestion_note {
 }
 
 .sidebar-toggle {
-    background-color: #E6E6E6;
     display: none;
-    padding: .3em .3em 0;
 }
 
 #toggle-sidebar {
     background-color: transparent;
     border: 0;
     border-radius: 0;
+    line-height: 1;
+    padding: .25em .5em;
 
     &:hover {
         background-color: rgba( 0, 0, 0, .07 );
