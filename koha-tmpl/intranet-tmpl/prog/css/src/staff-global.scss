@@ -496,6 +496,21 @@ aside {
                 display: block;
                 padding: .7em .3em .7em 1rem;
                 text-decoration: none;
+
+                // Muted so the label reads first; icons are only
+                // promoted back to full strength once they become the
+                // sole content of the link, in collapsed/icon-collapse
+                // mode below. margin-right doesn't rely on the
+                // whitespace between <i> and the label in markup, since
+                // Vue's template compiler strips that whitespace (it
+                // spans a newline) while the plain .inc templates keep
+                // it as a literal space - relying on the source
+                // whitespace gave inconsistent gaps between the two.
+                i {
+                    color: #767676;
+                    font-size: .95em;
+                    margin-right: .5em;
+                }
             }
 
             &.active > a,
@@ -4940,6 +4955,7 @@ div .suggestion_note {
                     }
 
                     i {
+                        color: inherit;
                         display: inline-block;
                         font-size: 1.2em;
                         margin: 0;
