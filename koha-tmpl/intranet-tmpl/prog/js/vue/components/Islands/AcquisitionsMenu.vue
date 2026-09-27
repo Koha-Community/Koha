@@ -316,7 +316,7 @@
                         href="/cgi-bin/koha/admin/additional-fields.pl?tablename=aqinvoices"
                         :title="$__('Manage invoice fields')"
                         ><i
-                            class="fa-solid fa-list-check fa-fw"
+                            class="fa-solid fa-receipt fa-fw"
                             aria-hidden="true"
                         ></i>
                         <span class="menu-label">{{
@@ -342,7 +342,7 @@
                             href="/cgi-bin/koha/admin/additional-fields.pl?tablename=aqbasket"
                             :title="$__('Manage order basket fields')"
                             ><i
-                                class="fa-solid fa-list-check fa-fw"
+                                class="fa-solid fa-basket-shopping fa-fw"
                                 aria-hidden="true"
                             ></i>
                             <span class="menu-label">{{
@@ -356,7 +356,7 @@
                             href="/cgi-bin/koha/admin/additional-fields.pl?tablename=aqorders"
                             :title="$__('Manage order line fields')"
                             ><i
-                                class="fa-solid fa-list-check fa-fw"
+                                class="fa-solid fa-list-ol fa-fw"
                                 aria-hidden="true"
                             ></i>
                             <span class="menu-label">{{

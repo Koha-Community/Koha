@@ -76,18 +76,18 @@
         <h5>Recalls</h5>
         <ul>
             <li>
-                <a href="/cgi-bin/koha/recalls/recalls_queue.pl" title="All active recalls"><i class="fa-solid fa-list-check fa-fw" aria-hidden="true"></i><span class="menu-label">Recalls queue</span></a>
+                <a href="/cgi-bin/koha/recalls/recalls_queue.pl" title="All active recalls"><i class="fa-solid fa-clipboard-list fa-fw" aria-hidden="true"></i><span class="menu-label">Recalls queue</span></a>
             </li>
             <li>
                 <a href="/cgi-bin/koha/recalls/recalls_to_pull.pl" title="Recalls that could be filled but have not been set waiting"
-                    ><i class="fa-solid fa-hand fa-fw" aria-hidden="true"></i><span class="menu-label">Recalls to pull</span></a
+                    ><i class="fa-solid fa-hand-holding fa-fw" aria-hidden="true"></i><span class="menu-label">Recalls to pull</span></a
                 >
             </li>
             <li>
                 <a href="/cgi-bin/koha/recalls/recalls_overdue.pl" title="Recalled items that are overdue to be returned"><i class="fa-solid fa-clock fa-fw" aria-hidden="true"></i><span class="menu-label">Overdue recalls</span></a>
             </li>
             <li>
-                <a href="/cgi-bin/koha/recalls/recalls_waiting.pl" title="Recalled items awaiting pickup"><i class="fa-solid fa-box-open fa-fw" aria-hidden="true"></i><span class="menu-label">Recalls awaiting pickup</span></a>
+                <a href="/cgi-bin/koha/recalls/recalls_waiting.pl" title="Recalled items awaiting pickup"><i class="fa-solid fa-box fa-fw" aria-hidden="true"></i><span class="menu-label">Recalls awaiting pickup</span></a>
             </li>
             <li>
                 <a href="/cgi-bin/koha/recalls/recalls_old_queue.pl" title="Inactive recalls"><i class="fa-solid fa-box-archive fa-fw" aria-hidden="true"></i><span class="menu-label">Old recalls</span></a>
