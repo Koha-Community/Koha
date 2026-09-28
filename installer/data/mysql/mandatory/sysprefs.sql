@@ -426,7 +426,7 @@ INSERT INTO systempreferences ( `variable`, `value` ) VALUES
 ('LocalHoldsPriority', 'None'),
 ('LocalHoldsPriorityItemControl', 'holdingbranch'),
 ('LocalHoldsPriorityPatronControl', 'PickupLibrary'),
-('LocalHoldsPriorityScope', 'checkin_and_queue'),
+('LocalHoldsPriorityScope', 'capture_and_queue'),
 ('LockExpiredDelay',''),
 ('LostChargesControl','ItemHomeLibrary'),
 ('makePreviousSerialAvailable','0'),

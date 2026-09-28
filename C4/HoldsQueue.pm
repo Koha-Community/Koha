@@ -763,7 +763,7 @@ sub MapItemsToHoldRequests {
 
     my $LocalHoldsPriority      = C4::Context->preference('LocalHoldsPriority');
     my $LocalHoldsPriorityScope = C4::Context->preference('LocalHoldsPriorityScope');
-    if ( $LocalHoldsPriority ne 'None' && $LocalHoldsPriorityScope eq 'checkin_and_queue' ) {
+    if ( $LocalHoldsPriority ne 'None' && $LocalHoldsPriorityScope eq 'capture_and_queue' ) {
         my $LocalHoldsPriorityPatronControl = C4::Context->preference('LocalHoldsPriorityPatronControl');
         my $LocalHoldsPriorityItemControl   = C4::Context->preference('LocalHoldsPriorityItemControl');
         foreach my $request (@$hold_requests) {

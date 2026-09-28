@@ -10,13 +10,10 @@ return {
 
         $dbh->do(
             q{
-                    INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
+                    INSERT IGNORE INTO systempreferences (variable, value)
                     VALUES (
                         'LocalHoldsPriorityScope',
-                        'checkin_and_queue',
-                        NULL,
-                        'Define whether these settings are used when building the holds queue or only when checking items in',
-                        'Choice'
+                        'capture_and_queue'
                         )
         }
         );
