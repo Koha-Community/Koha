@@ -48,8 +48,14 @@ if ( defined $format and $format eq 'json' ) {
     $cgi->param( 'sortby',    $columns[ $cgi->param('order[0][column]') ]->{name} );
     $cgi->param( 'sortorder', scalar $cgi->param('order[0][dir]') );
 
-    my @f = $cgi->multi_param('f');
-    my @q = $cgi->multi_param('q');
+    my %param_names = map { $_ => 1 } $cgi->multi_param;
+    my $f_brackets  = $param_names{'f[]'};
+    my $q_brackets  = $param_names{'q[]'};
+    my $op_brackets = $param_names{'op[]'};
+    my $c_brackets  = $param_names{'c[]'};
+
+    my @f = $f_brackets ? $cgi->multi_param('f[]') : $cgi->multi_param('f');
+    my @q = $q_brackets ? $cgi->multi_param('q[]') : $cgi->multi_param('q');
 
     # If index indicates the value is a barcode, we need to preprocess it before searching
     for ( my $i = 0 ; $i < @q ; $i++ ) {
@@ -57,8 +63,8 @@ if ( defined $format and $format eq 'json' ) {
     }
 
     push @q, '' if @q == 0;
-    my @op = $cgi->multi_param('op');
-    my @c  = $cgi->multi_param('c');
+    my @op = $op_brackets ? $cgi->multi_param('op[]') : $cgi->multi_param('op');
+    my @c  = $c_brackets  ? $cgi->multi_param('c[]')  : $cgi->multi_param('c');
     for my $column (@columns) {
         my $search      = $column->{search}->{value};
         my $column_name = $column->{name};
@@ -80,10 +86,10 @@ if ( defined $format and $format eq 'json' ) {
             }
         }
     }
-    $cgi->param( 'f',  @f );
-    $cgi->param( 'q',  @q );
-    $cgi->param( 'op', @op );
-    $cgi->param( 'c',  @c );
+    $cgi->param( $f_brackets  ? 'f[]'  : 'f',  @f );
+    $cgi->param( $q_brackets  ? 'q[]'  : 'q',  @q );
+    $cgi->param( $op_brackets ? 'op[]' : 'op', @op );
+    $cgi->param( $c_brackets  ? 'c[]'  : 'c',  @c );
 } elsif ( defined $format and $format eq 'csv' ) {
     $template_name = 'catalogue/itemsearch_csv.tt';
 
