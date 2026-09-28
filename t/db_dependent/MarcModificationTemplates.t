@@ -3,7 +3,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 155;
+use Test::More tests => 156;
 
 use Koha::Database;
 use Koha::SimpleMARC;
@@ -861,6 +861,72 @@ subtest 'Update field adds missing subfield without splitting field' => sub {
         $fields[0]->indicator(2),
         '0',
         'Requested indicator is applied to the existing field'
+    );
+};
+
+subtest 'Update field handles mixed existing and missing subfields' => sub {
+    plan tests => 5;
+
+    $dbh->do(q|DELETE FROM marc_modification_templates|);
+
+    my $template_id = AddModificationTemplate("indicator update mixed subfields");
+
+    AddModificationTemplateAction(
+        $template_id,
+        'update_field',
+        0,
+        '650',
+        'x',
+        'Test',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        'Update 650$x when some fields already contain the subfield',
+        1,
+        undef,
+        '0',
+        undef,
+        undef,
+        undef,
+        undef
+    );
+
+    my $record = MARC::Record->new;
+    $record->append_fields(
+        MARC::Field->new(
+            650, ' ', '0',
+            a => 'Revolutionaries',
+            x => 'Existing',
+        ),
+        MARC::Field->new(
+            650, ' ', '0',
+            a => 'Conspiracies',
+        ),
+    );
+
+    is(
+        ModifyRecordWithTemplate( $template_id, $record ),
+        undef,
+        'Template modification completed'
+    );
+
+    my @fields = $record->field('650');
+
+    is( scalar @fields,            2,      'Both 650 fields remain' );
+    is( $fields[0]->subfield('x'), 'Test', 'Existing 650$x is updated' );
+    is( $fields[1]->subfield('x'), 'Test', 'Missing 650$x is added' );
+    is_deeply(
+        [ map { $_->indicator(2) } @fields ],
+        [ '0', '0' ],
+        'Both updated fields have the requested indicator'
     );
 };
 

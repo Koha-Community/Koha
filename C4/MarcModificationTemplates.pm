@@ -768,7 +768,7 @@ sub ModifyRecordWithTemplate {
                         {
                             record   => $record,
                             field    => $from_field,
-                            subfield => $from_field < 10          ? undef : $from_subfield,
+                            subfield => $action eq 'update_field' ? undef : $from_field < 10 ? undef : $from_subfield,
                             ind1     => $action eq 'update_field' ? undef : $from_ind1,
                             ind2     => $action eq 'update_field' ? undef : $from_ind2,
                         }
