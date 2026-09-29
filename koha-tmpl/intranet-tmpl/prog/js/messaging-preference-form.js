@@ -129,8 +129,18 @@ $(document).ready(function () {
                                         );
                                     }
                                     if (item.takes_days == "1") {
-                                        $("[name=" + attrid + "-DAYS]").val(
-                                            "" + item.days_in_advance
+                                        const days_dropdown =
+                                            document.getElementById(
+                                                "days_attr_" + attrid
+                                            );
+                                        days_dropdown.value =
+                                            "" + item.days_in_advance;
+                                        const changeEvent = new Event(
+                                            "change",
+                                            { bubbles: true }
+                                        );
+                                        days_dropdown.dispatchEvent(
+                                            changeEvent
                                         );
                                     }
                                 }
