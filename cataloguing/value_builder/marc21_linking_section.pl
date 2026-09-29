@@ -189,49 +189,31 @@ my $launcher = sub {
         }
         $subfield_value_w ||= $biblionumber;
 
-        # escape the 's
-        $subfield_value_7 =~ s/'/\\'/g;
-        $subfield_value_9 =~ s/'/\\'/g;
-        $subfield_value_0 =~ s/'/\\'/g;
-        $subfield_value_a =~ s/'/\\'/g;
-        $subfield_value_b =~ s/'/\\'/g;
-        $subfield_value_c =~ s/'/\\'/g;
-        $subfield_value_d =~ s/'/\\'/g;
-        $subfield_value_e =~ s/'/\\'/g;
-        $subfield_value_h =~ s/'/\\'/g;
-        $subfield_value_i =~ s/'/\\'/g;
-        $subfield_value_k =~ s/'/\\'/g;
-        $subfield_value_p =~ s/'/\\'/g;
-        $subfield_value_t =~ s/'/\\'/g;
-        $subfield_value_u =~ s/'/\\'/g;
-        $subfield_value_v =~ s/'/\\'/g;
-        $subfield_value_w =~ s/'/\\'/g;
-        $subfield_value_x =~ s/'/\\'/g;
-        $subfield_value_y =~ s/'/\\'/g;
-        $subfield_value_z =~ s/'/\\'/g;
         $template->param(
-            fillinput        => 1,
-            index            => scalar $query->param('index') . "",
-            biblionumber     => $biblionumber ? $biblionumber : "",
-            subfield_value_7 => "$subfield_value_7",
-            subfield_value_9 => "$subfield_value_9",
-            subfield_value_0 => "$subfield_value_0",
-            subfield_value_a => "$subfield_value_a",
-            subfield_value_b => "$subfield_value_b",
-            subfield_value_c => "$subfield_value_c",
-            subfield_value_d => "$subfield_value_d",
-            subfield_value_e => "$subfield_value_e",
-            subfield_value_h => "$subfield_value_h",
-            subfield_value_i => "$subfield_value_i",
-            subfield_value_k => "$subfield_value_k",
-            subfield_value_p => "$subfield_value_p",
-            subfield_value_t => "$subfield_value_t",
-            subfield_value_u => "$subfield_value_u",
-            subfield_value_v => "$subfield_value_v",
-            subfield_value_w => "$subfield_value_w",
-            subfield_value_x => "$subfield_value_x",
-            subfield_value_y => "$subfield_value_y",
-            subfield_value_z => "$subfield_value_z",
+            fillinput       => 1,
+            index           => scalar $query->param('index') . "",
+            biblionumber    => $biblionumber ? $biblionumber : "",
+            subfield_values => {
+                7 => $subfield_value_7,
+                9 => $subfield_value_9,
+                0 => $subfield_value_0,
+                a => $subfield_value_a,
+                b => $subfield_value_b,
+                c => $subfield_value_c,
+                d => $subfield_value_d,
+                e => $subfield_value_e,
+                h => $subfield_value_h,
+                i => $subfield_value_i,
+                k => $subfield_value_k,
+                p => $subfield_value_p,
+                t => $subfield_value_t,
+                u => $subfield_value_u,
+                v => $subfield_value_v,
+                w => $subfield_value_w,
+                x => $subfield_value_x,
+                y => $subfield_value_y,
+                z => $subfield_value_z,
+            },
         );
 ###############################################################
     } elsif ( $op eq "do_search" ) {
