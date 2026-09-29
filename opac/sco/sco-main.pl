@@ -81,7 +81,7 @@ if ( defined C4::Context->preference('SCOAllowCheckin') ) {
 }
 
 my $issuerid = $loggedinuser;
-my ( $op, $patronlogin, $patronpw, $barcodestr, $confirmed, $newissues, $load_checkouts ) = (
+my ( $op, $patronlogin, $patronpw, $barcodestr, $confirmed, $newissues, $load_checkouts, $load_holds ) = (
     $query->param("op")             || '',
     $query->param("patronlogin")    || '',
     $query->param("patronpw")       || '',
@@ -89,6 +89,7 @@ my ( $op, $patronlogin, $patronpw, $barcodestr, $confirmed, $newissues, $load_ch
     $query->param("confirmed")      || '',
     $query->param("newissues")      || '',
     $query->param("load_checkouts") || '',
+    $query->param("load_holds")     || '',
 );
 
 my $jwt = $query->cookie('JWT');
@@ -427,6 +428,7 @@ if ($patron) {
         waiting_holds_count      => $waiting_holds_count,
         noitemlinks              => 1,
         load_checkouts           => $load_checkouts,
+        load_holds               => $load_holds,
         borrowernumber           => $patron->borrowernumber,
         SuspendHoldsOpac         => C4::Context->preference('SuspendHoldsOpac'),
         AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),

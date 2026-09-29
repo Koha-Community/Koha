@@ -751,6 +751,7 @@ INSERT INTO systempreferences ( `variable`, `value` ) VALUES
 ('SCOAllowCheckin','0'),
 ('SCOBatchCheckoutsValidCategories',''),
 ('SCOLoadCheckoutsByDefault','1'),
+('SCOLoadHoldsByDefault','1'),
 ('SCOUserCSS',''),
 ('SCOUserJS',''),
 ('ScriptLog','0'),
