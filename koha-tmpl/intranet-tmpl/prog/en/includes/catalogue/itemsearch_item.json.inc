@@ -11,8 +11,8 @@
     <input type="checkbox" name="itemnumber" value="[% item.itemnumber | html %]" />
 [%~ END %]",
 "[% FILTER escape_quotes ~%]
-    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]" title="Go to record detail page">[% INCLUDE 'biblio-title.inc' | trim | collapse %]</a
-    >[% IF ( Koha.Preference( 'marcflavour' ) == 'UNIMARC' && biblio.author ) %]by[% END %] [% biblio.author | html %]
+    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]" title="Go to record detail page">[% INCLUDE 'biblio-title.inc' | trim | collapse %]</a>
+    [% IF ( Koha.Preference( 'marcflavour' ) == 'UNIMARC' && biblio.author ) %]by[% END %] [% biblio.author | html %]
 [%~ END %]",
 "[% (biblioitem.publicationyear || biblio.copyrightdate) | html | $To %]", "[% biblioitem.publishercode | html | $To %]",
 "[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => item.ccode ) | html | $To %]",
