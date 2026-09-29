@@ -3381,38 +3381,42 @@ subtest 'queue_notice' => sub {
     # Test mandatory patron expiry notice fallbacks if patron does not have a messaging preference defined
 
     my $expiry_phone =
-        Koha::Notice::Templates->search( { code => 'MEMBERSHIP_RENEWED', message_transport_type => 'phone' } )->count;
+        Koha::Notice::Templates->search( { code => 'MEMBERSHIP_EXPIRY', message_transport_type => 'phone' } )->count;
     my $expiry_sms =
-        Koha::Notice::Templates->search( { code => 'MEMBERSHIP_RENEWED', message_transport_type => 'sms' } )->count;
+        Koha::Notice::Templates->search( { code => 'MEMBERSHIP_EXPIRY', message_transport_type => 'sms' } )->count;
 
-    $expiry_phone = $builder->build_object(
-        {
-            class => 'Koha::Notice::Templates',
-            value => {
-                code                   => 'MEMBERSHIP_RENEWED',
-                module                 => 'members',
-                branchcode             => $patron->branchcode,
-                message_transport_type => 'phone',
-                lang                   => 'default'
+    if ( !$expiry_phone ) {
+        $builder->build_object(
+            {
+                class => 'Koha::Notice::Templates',
+                value => {
+                    code                   => 'MEMBERSHIP_EXPIRY',
+                    module                 => 'members',
+                    branchcode             => $patron->branchcode,
+                    message_transport_type => 'phone',
+                    lang                   => 'default'
+                }
             }
-        }
-    )->store();
+        )->store();
+    }
 
-    $expiry_sms = $builder->build_object(
-        {
-            class => 'Koha::Notice::Templates',
-            value => {
-                code                   => 'MEMBERSHIP_RENEWED',
-                module                 => 'members',
-                branchcode             => $patron->branchcode,
-                message_transport_type => 'sms',
-                lang                   => 'default'
+    if ( !$expiry_sms ) {
+        $builder->build_object(
+            {
+                class => 'Koha::Notice::Templates',
+                value => {
+                    code                   => 'MEMBERSHIP_EXPIRY',
+                    module                 => 'members',
+                    branchcode             => $patron->branchcode,
+                    message_transport_type => 'sms',
+                    lang                   => 'default'
+                }
             }
-        }
-    )->store();
+        )->store();
+    }
 
     my $expiry_notice_params = $patron->create_expiry_notice_parameters(
-        { letter_code => 'MEMBERSHIP_RENEWED', forceprint => 0, is_notice_mandatory => 1 } );
+        { letter_code => 'MEMBERSHIP_EXPIRY', forceprint => 0, is_notice_mandatory => 1 } );
 
     $patron->phone('123-456-7890')->store;
     $patron->smsalertnumber('+11234567890')->store;
