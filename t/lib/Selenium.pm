@@ -17,6 +17,7 @@ package t::lib::Selenium;
 
 use Modern::Perl;
 use Carp qw( croak );
+use LWP::UserAgent;
 
 use C4::Context;
 
@@ -47,6 +48,7 @@ sub new {
     bless $self, $class;
     $self->add_error_handler;
     $self->driver->set_implicit_wait_timeout(10000);
+    $self->wait_for_server_ready( $self->{base_url} );
     return $self;
 }
 
@@ -297,6 +299,26 @@ sub click_when_visible {
     $elt->click unless $clicked;    # finally Raise the error
 }
 
+sub wait_for_server_ready {
+    my ( $self, $url ) = @_;
+
+    # CI restarts Apache/Plack right before running Selenium tests, but does not
+    # wait for the workers to finish warming up. Without this, the very first
+    # requests can hit a server that is not fully ready yet, causing pages to
+    # render incompletely.
+    my $ua          = LWP::UserAgent->new( timeout => 5 );
+    my $max_retries = $self->max_retries;
+    my ( $ready, $i );
+    until ($ready) {
+        my $response = eval { $ua->get( $url . 'mainpage.pl' ) };
+        $ready = $response && $response->is_success;
+        sleep 1 unless $ready;
+
+        die "Cannot wait more for the server to be ready ($url)"
+            if $max_retries <= ++$i;
+    }
+}
+
 sub max_retries { 10 }
 
 =head1 NAME
@@ -374,6 +396,14 @@ when we use automation test using Selenium
     $s->wait_for_element_hidden($xpath_selector)
 
     Wait 10s for an element to be hidden
+
+=head2 wait_for_server_ready
+
+    $s->wait_for_server_ready($url);
+
+    Poll $url (HTTP, outside of the webdriver session) until it responds
+    successfully, up to 10s. Called from the constructor so tests fail fast
+    with a clear error instead of racing a server that is still restarting.
 
 =head2 wait_for_ajax
 
