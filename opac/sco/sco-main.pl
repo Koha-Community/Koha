@@ -411,10 +411,9 @@ if ($patron) {
 
     my $holds               = $patron->holds;
     my $waiting_holds_count = 0;
+    my $waiting_holds       = $holds->search( { found => 'W' } );
 
-    while ( my $hold = $holds->next ) {
-        $waiting_holds_count++ if $hold->is_waiting;
-    }
+    $waiting_holds_count = $waiting_holds->count if ($waiting_holds);
 
     $template->param(
         validuser                => 1,
