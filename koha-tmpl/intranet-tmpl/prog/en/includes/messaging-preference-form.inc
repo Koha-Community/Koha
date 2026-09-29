@@ -78,7 +78,7 @@
                                 [% END %]
                             </select>
                         [% ELSE %]
-                            <select name="[% messaging_preference.message_attribute_id | html %]-DAYS">
+                            <select id="days_attr_[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]-DAYS">
                                 [% FOREACH select_day IN messaging_preference.select_days %]
                                     [% IF ( select_day.selected ) %]
                                         <option value="[% select_day.day | html %]" selected="selected">[% select_day.day | html %]</option>
