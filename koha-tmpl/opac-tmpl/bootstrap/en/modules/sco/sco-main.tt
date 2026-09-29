@@ -277,7 +277,7 @@
                                                             </tbody>
                                                         </table>
                                                     [% ELSE %]
-                                                        <a class="btn btn-secondary" href="?load_checkouts=1#scan_form"><i class="fa fa-book" aria-hidden="true"></i> Show your checkouts</a>
+                                                        <a class="btn btn-secondary" href="?load_checkouts=1&load_holds=[% load_holds | uri %]#scan_form"><i class="fa fa-book" aria-hidden="true"></i> Show your checkouts</a>
                                                     [% END # / IF ( Koha.preference('SCOLoadCheckoutsByDefault') || load_checkouts ) %]
                                                 [% ELSE %]
                                                     <h3>You currently have nothing checked out.</h3>
@@ -291,7 +291,7 @@
                                             [% IF ( Koha.Preference('SCOLoadHoldsByDefault') || load_holds ) %]
                                                 [% PROCESS 'holds-table.inc' HOLDS = HOLDS, SuspendHoldsOpac = SuspendHoldsOpac, showpriority = showpriority, AutoResumeSuspendedHolds = AutoResumeSuspendedHolds, onlyinfo = 'true' %]
                                             [% ELSE %]
-                                                <a class="btn btn-secondary" href="?load_holds=1#scan_form"><i class="fa fa-book" aria-hidden="true"></i> Show your holds</a>
+                                                <a class="btn btn-secondary" href="?load_holds=1&load_checkouts=[% load_checkouts | uri %]#holds-tab"><i class="fa fa-book" aria-hidden="true"></i> Show your holds</a>
                                             [% END %]
                                         [% ELSE %]
                                             <h3>You currently have no pending holds.</h3>
@@ -530,6 +530,10 @@
                 $('a[data-bs-toggle="tab"]').on("shown.bs.tab", function (event) {
                     dTables.DataTable().responsive.recalc();
                 });
+
+                if (window.location.hash === "#holds-tab") {
+                    new bootstrap.Tab($("#holds-tab")).show();
+                }
 
                 $("#logout_form").on("click", function (e) {
                     e.preventDefault(e);
