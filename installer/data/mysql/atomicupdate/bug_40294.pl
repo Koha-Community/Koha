@@ -47,7 +47,7 @@ Thank you,
 Dear [% borrower.title %] [% borrower.firstname %] [% borrower.surname %],
 
 Your library account has been renewed. The new expiry date is: [% borrower.dateexpiry %].
-[% IF borrower.category.enrolmentfee > 0 %]\nAn enrollment fee of [% borrower.category.enrolmentfee | $Price with_symbol => 1 %] has been applied.\n[% END %]
+[% IF borrower.category.enrolmentfee > 0 %]An enrollment fee of [% borrower.category.enrolmentfee | $Price with_symbol => 1 %] has been applied.[% END %]
 Thank you,
 
 Your library,
@@ -74,9 +74,9 @@ Your library,
         );
 
         if ( $result == 1 ) {
-            say_success( $out, "Added default print notice template for MEMBERSHIP_RENEWAL" );
+            say_success( $out, "Added default print notice template for MEMBERSHIP_RENEWED" );
         } else {
-            say_info( $out, "Print notice template MEMBERSHIP_RENEWAL already exists - no changes required" );
+            say_info( $out, "Print notice template MEMBERSHIP_RENEWED already exists - no changes required" );
         }
 
     },
