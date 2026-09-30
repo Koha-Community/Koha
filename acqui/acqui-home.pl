@@ -34,9 +34,10 @@ use C4::Output                    qw( output_html_with_http_headers );
 use C4::Budgets                   qw( GetBudgetHierarchy GetBudget CanUserUseBudget );
 use C4::Members                   ();
 use Koha::Acquisition::Currencies ();
-use Koha::Patrons                 ();
-use Koha::Suggestions             ();
-use Koha::DateUtils               qw( dt_from_string );
+use Koha::AdditionalFields;
+use Koha::Patrons     ();
+use Koha::Suggestions ();
+use Koha::DateUtils   qw( dt_from_string );
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
@@ -128,6 +129,20 @@ my $filters;
 $filters->{from_placed_on} = my $from_placed_on = dt_from_string;
 $filters->{to_placed_on}   = my $to_placed_on   = dt_from_string;
 $filters->{from_placed_on}->set_time_zone('floating')->subtract( years => 1 );
+
+my $additional_fields = Koha::AdditionalFields->search( { tablename => 'aqbasket', searchable => 1 } );
+$template->param( available_additional_fields => $additional_fields );
+my @additional_field_filters;
+while ( my $additional_field = $additional_fields->next ) {
+    my $value = $query->param( 'additional_field_' . $additional_field->id );
+    if ( defined $value and $value ne '' ) {
+        push @additional_field_filters, {
+            id    => $additional_field->id,
+            value => $value,
+        };
+    }
+}
+$filters->{additional_fields} = \@additional_field_filters;
 
 my $budgetperiods = C4::Budgets::GetBudgetPeriods;
 my $bp_loop       = $budgetperiods;
