@@ -53,6 +53,12 @@ The configured per-user limit on total simultaneous report runs has been reached
 
 Exception raised when the logged-in user may not edit a report.
 
+=head1 Class methods
+
+=head2 description
+
+Returns the description of the exception.
+
 =cut
 
 1;
