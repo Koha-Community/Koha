@@ -61,19 +61,21 @@ subtest 'list() tests' => sub {
     my $userid = $librarian->userid;
 
     my $requestXml = <<'XML';
-        <request xmlns="https://example.com/ill/request">
-        <header>
-          <requestingAgencyRequestId>XYZ</requestingAgencyRequestId>
-          <timestamp>2023-03-15 14:30:00</timestamp>
-          <requestingAgencyId>
-            <agencyIdType>ISIL</agencyIdType>
-            <agencyIdValue>req_agency_value</agencyIdValue>
-          </requestingAgencyId>
-        </header>
-        <bibliographicInfo>
-          <title>This is an optional title</title>
-        </bibliographicInfo>
-      </request>
+        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="1.2">
+          <request>
+            <header>
+              <requestingAgencyRequestId>XYZ</requestingAgencyRequestId>
+              <timestamp>2023-03-15 14:30:00</timestamp>
+              <requestingAgencyId>
+                <agencyIdType>ISIL</agencyIdType>
+                <agencyIdValue>req_agency_value</agencyIdValue>
+              </requestingAgencyId>
+            </header>
+            <bibliographicInfo>
+              <title>This is an optional title</title>
+            </bibliographicInfo>
+          </request>
+        </ISO18626Message>
 XML
 
     #FIXME: This error message should be something like "Expected content-type application/xml"
@@ -97,22 +99,24 @@ XML
     );
 
     my $bad_auth_requestXml = <<'XML';
-        <request xmlns="https://example.com/ill/request">
-        <header>
-          <requestingAgencyRequestId>XYZ</requestingAgencyRequestId>
-          <timestamp>2023-03-15 14:30:00</timestamp>
-          <requestingAgencyId>
-            <agencyIdType>ISIL</agencyIdType>
-            <agencyIdValue>req_agency_value</agencyIdValue>
-          </requestingAgencyId>
-        </header>
-        <bibliographicInfo>
-          <title>This is an optional title</title>
-        </bibliographicInfo>
-        <serviceInfo>
-          <serviceType>Copy</serviceType>
-        </serviceInfo>
-      </request>
+        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="1.2">
+          <request>
+            <header>
+              <requestingAgencyRequestId>XYZ</requestingAgencyRequestId>
+              <timestamp>2023-03-15 14:30:00</timestamp>
+              <requestingAgencyId>
+                <agencyIdType>ISIL</agencyIdType>
+                <agencyIdValue>req_agency_value</agencyIdValue>
+              </requestingAgencyId>
+            </header>
+            <bibliographicInfo>
+              <title>This is an optional title</title>
+            </bibliographicInfo>
+            <serviceInfo>
+              <serviceType>Copy</serviceType>
+            </serviceInfo>
+          </request>
+        </ISO18626Message>
 XML
 
     $t->post_ok(
@@ -127,11 +131,13 @@ XML
         'error value is authentication failed'
     );
     my $supplyingAgencyMessageConfirmationXml = <<'XML';
-        <supplyingAgencyMessageConfirmation xmlns="https://example.com/ill/request">
-          <confirmationHeader>
-            <timestamp>2023-01-01T00:00:00Z</timestamp>
-          </confirmationHeader>
-        </supplyingAgencyMessageConfirmation>
+        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="1.2">
+          <supplyingAgencyMessageConfirmation>
+            <confirmationHeader>
+              <timestamp>2023-01-01T00:00:00Z</timestamp>
+            </confirmationHeader>
+          </supplyingAgencyMessageConfirmation>
+        </ISO18626Message>
 XML
 
     my $mock_ua_response = Test::MockObject->new();
@@ -151,26 +157,28 @@ XML
     );
 
     my $authenticated_requestXml = <<'XML';
-        <request xmlns="https://example.com/ill/request">
-        <header>
-          <requestingAgencyAuthentication>
-            <accountId>asd</accountId>
-            <securityCode>asds</securityCode>
-          </requestingAgencyAuthentication>
-          <requestingAgencyRequestId>XYZ</requestingAgencyRequestId>
-          <timestamp>2023-03-15 14:30:00</timestamp>
-          <requestingAgencyId>
-            <agencyIdType>ISIL</agencyIdType>
-            <agencyIdValue>req_agency_value</agencyIdValue>
-          </requestingAgencyId>
-        </header>
-        <bibliographicInfo>
-          <title>This is an optional title</title>
-        </bibliographicInfo>
-        <serviceInfo>
-          <serviceType>Copy</serviceType>
-        </serviceInfo>
-      </request>
+        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="1.2">
+          <request>
+            <header>
+              <requestingAgencyAuthentication>
+                <accountId>asd</accountId>
+                <securityCode>asds</securityCode>
+              </requestingAgencyAuthentication>
+              <requestingAgencyRequestId>XYZ</requestingAgencyRequestId>
+              <timestamp>2023-03-15 14:30:00</timestamp>
+              <requestingAgencyId>
+                <agencyIdType>ISIL</agencyIdType>
+                <agencyIdValue>req_agency_value</agencyIdValue>
+              </requestingAgencyId>
+            </header>
+            <bibliographicInfo>
+              <title>This is an optional title</title>
+            </bibliographicInfo>
+            <serviceInfo>
+              <serviceType>Copy</serviceType>
+            </serviceInfo>
+          </request>
+        </ISO18626Message>
 XML
 
     $t->post_ok(
@@ -194,7 +202,8 @@ XML
             . $last_request->iso18626_request_id => json => { status => 'Loaned' } )->status_is(200);
 
     my $requestingAgencyMessagexml = '
-    <requestingAgencyMessage xmlns="https://example.com/ill/request">
+    <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="1.2">
+      <requestingAgencyMessage>
         <header>
           <requestingAgencyAuthentication>
             <accountId>asd</accountId>
@@ -213,7 +222,8 @@ XML
           </supplyingAgencyId>
         </header>
         <action>%s</action>
-      </requestingAgencyMessage>';
+      </requestingAgencyMessage>
+    </ISO18626Message>';
 
     my $invalid_action_requestingAgencyMessagexml =
         sprintf( $requestingAgencyMessagexml, $last_request->iso18626_request_id, 'InvalidAction' );
@@ -326,26 +336,28 @@ subtest 'send_message() tests' => sub {
     );
 
     my $request_no_callback_xml = <<'XML';
-        <request xmlns="https://example.com/ill/request">
-        <header>
-          <requestingAgencyAuthentication>
-            <accountId>no_callback_test</accountId>
-            <securityCode>test_secret_1</securityCode>
-          </requestingAgencyAuthentication>
-          <requestingAgencyRequestId>XYZ</requestingAgencyRequestId>
-          <timestamp>2023-03-15 14:30:00</timestamp>
-          <requestingAgencyId>
-            <agencyIdType>ISIL</agencyIdType>
-            <agencyIdValue>req_agency_value</agencyIdValue>
-          </requestingAgencyId>
-        </header>
-        <bibliographicInfo>
-          <title>Test request - no callback</title>
-        </bibliographicInfo>
-        <serviceInfo>
-          <serviceType>Copy</serviceType>
-        </serviceInfo>
-      </request>
+        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="1.2">
+          <request>
+            <header>
+              <requestingAgencyAuthentication>
+                <accountId>no_callback_test</accountId>
+                <securityCode>test_secret_1</securityCode>
+              </requestingAgencyAuthentication>
+              <requestingAgencyRequestId>XYZ</requestingAgencyRequestId>
+              <timestamp>2023-03-15 14:30:00</timestamp>
+              <requestingAgencyId>
+                <agencyIdType>ISIL</agencyIdType>
+                <agencyIdValue>req_agency_value</agencyIdValue>
+              </requestingAgencyId>
+            </header>
+            <bibliographicInfo>
+              <title>Test request - no callback</title>
+            </bibliographicInfo>
+            <serviceInfo>
+              <serviceType>Copy</serviceType>
+            </serviceInfo>
+          </request>
+        </ISO18626Message>
 XML
 
     $t->post_ok(
@@ -389,26 +401,28 @@ XML
     $mock_ua_fail->mock( 'post', sub { return $mock_fail_response; } );
 
     my $request_bad_endpoint_xml = <<'XML';
-        <request xmlns="https://example.com/ill/request">
-        <header>
-          <requestingAgencyAuthentication>
-            <accountId>bad_endpoint_test</accountId>
-            <securityCode>test_secret_2</securityCode>
-          </requestingAgencyAuthentication>
-          <requestingAgencyRequestId>XYZ</requestingAgencyRequestId>
-          <timestamp>2023-03-15 14:30:00</timestamp>
-          <requestingAgencyId>
-            <agencyIdType>ISIL</agencyIdType>
-            <agencyIdValue>req_agency_value</agencyIdValue>
-          </requestingAgencyId>
-        </header>
-        <bibliographicInfo>
-          <title>Test request - bad endpoint</title>
-        </bibliographicInfo>
-        <serviceInfo>
-          <serviceType>Copy</serviceType>
-        </serviceInfo>
-      </request>
+        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="1.2">
+          <request>
+            <header>
+              <requestingAgencyAuthentication>
+                <accountId>bad_endpoint_test</accountId>
+                <securityCode>test_secret_2</securityCode>
+              </requestingAgencyAuthentication>
+              <requestingAgencyRequestId>XYZ</requestingAgencyRequestId>
+              <timestamp>2023-03-15 14:30:00</timestamp>
+              <requestingAgencyId>
+                <agencyIdType>ISIL</agencyIdType>
+                <agencyIdValue>req_agency_value</agencyIdValue>
+              </requestingAgencyId>
+            </header>
+            <bibliographicInfo>
+              <title>Test request - bad endpoint</title>
+            </bibliographicInfo>
+            <serviceInfo>
+              <serviceType>Copy</serviceType>
+            </serviceInfo>
+          </request>
+        </ISO18626Message>
 XML
 
     $t->post_ok(
@@ -444,26 +458,28 @@ XML
     );
 
     my $request_invalid_url_xml = <<'XML';
-        <request xmlns="https://example.com/ill/request">
-        <header>
-          <requestingAgencyAuthentication>
-            <accountId>invalid_url_test</accountId>
-            <securityCode>test_secret_3</securityCode>
-          </requestingAgencyAuthentication>
-          <requestingAgencyRequestId>XYZ</requestingAgencyRequestId>
-          <timestamp>2023-03-15 14:30:00</timestamp>
-          <requestingAgencyId>
-            <agencyIdType>ISIL</agencyIdType>
-            <agencyIdValue>req_agency_value</agencyIdValue>
-          </requestingAgencyId>
-        </header>
-        <bibliographicInfo>
-          <title>Test request - invalid url</title>
-        </bibliographicInfo>
-        <serviceInfo>
-          <serviceType>Copy</serviceType>
-        </serviceInfo>
-      </request>
+        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="1.2">
+          <request>
+            <header>
+              <requestingAgencyAuthentication>
+                <accountId>invalid_url_test</accountId>
+                <securityCode>test_secret_3</securityCode>
+              </requestingAgencyAuthentication>
+              <requestingAgencyRequestId>XYZ</requestingAgencyRequestId>
+              <timestamp>2023-03-15 14:30:00</timestamp>
+              <requestingAgencyId>
+                <agencyIdType>ISIL</agencyIdType>
+                <agencyIdValue>req_agency_value</agencyIdValue>
+              </requestingAgencyId>
+            </header>
+            <bibliographicInfo>
+              <title>Test request - invalid url</title>
+            </bibliographicInfo>
+            <serviceInfo>
+              <serviceType>Copy</serviceType>
+            </serviceInfo>
+          </request>
+        </ISO18626Message>
 XML
 
     $t->post_ok(
