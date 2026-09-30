@@ -21,9 +21,14 @@ use Modern::Perl;
 
 use JSON           qw( encode_json decode_json );
 use File::Basename qw( dirname );
+use XML::LibXML;
 
 use Koha::ILL::ISO18626::RequestingAgencies;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::REST::V1;
+
+use constant ISO18626_NAMESPACE => 'http://illtransactions.org/2013/iso18626';
+use constant ISO18626_VERSION   => '1.2';
 
 =head1 NAME
 
@@ -263,6 +268,54 @@ sub message_types {
         'supplyingAgencyMessage',
         'supplyingAgencyMessageConfirmation'
     ];
+}
+
+=head3 xml_with_envelope
+
+    my $xml = Koha::ILL::ISO18626::xml_with_envelope($message);
+
+C<$message> is an ISO 18626 message, e.g. C<< { request => { ... } } >>.
+Returns it as an XML string wrapped in the C<ISO18626Message> envelope.
+
+=cut
+
+sub xml_with_envelope {
+    my ($message) = @_;
+
+    my $doc     = XML::LibXML->load_xml( string => Koha::REST::V1::to_xml($message) );
+    my $content = $doc->documentElement;
+
+    my $envelope = $doc->createElementNS( ISO18626_NAMESPACE, 'ISO18626Message' );
+    $envelope->setAttributeNS( ISO18626_NAMESPACE, 'ill:version', ISO18626_VERSION );
+    $doc->setDocumentElement($envelope);
+    $envelope->appendChild($content);
+
+    return $doc->toString;
+}
+
+=head3 message_without_envelope
+
+    my $message = Koha::ILL::ISO18626::message_without_envelope( $parsed_xml );
+
+Returns the message contained in an C<ISO18626Message> envelope, from the structure
+returned by C<Koha::REST::V1::parse_xml>. For backwards compatibility with Koha versions
+that did not use the envelope, an unwrapped message is returned as it is.
+
+=cut
+
+sub message_without_envelope {
+    my ($parsed_xml) = @_;
+
+    my $message;
+    if ( exists $parsed_xml->{ISO18626Message} ) {
+        $message = $parsed_xml->{ISO18626Message};
+    } else {
+
+        # Backwards compatibility: message sent without the ISO18626Message envelope
+        $message = $parsed_xml;
+    }
+
+    return $message;
 }
 
 =head3 supported_action_types

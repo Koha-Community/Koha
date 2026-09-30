@@ -19,6 +19,7 @@ package Koha::ILL::ISO18626::Request;
 
 use Modern::Perl;
 
+use Koha::ILL::ISO18626;
 use Koha::ILL::ISO18626::Messages;
 use Koha::REST::V1;
 use XML::LibXML;
@@ -130,7 +131,7 @@ sub send_message {
     }
 
     my $xml_payload;
-    eval { $xml_payload = Koha::REST::V1::to_xml($message); };
+    eval { $xml_payload = Koha::ILL::ISO18626::xml_with_envelope($message); };
     if ($@) {
         warn sprintf( "ISO18626: Failed to convert message to XML for request %s: %s", $self->iso18626_request_id, $@ );
         return 0;
@@ -170,7 +171,8 @@ sub send_message {
                     if ( !-f $spec_file ) {
                         $spec_file = dirname(__FILE__) . "/../../../api/v1/swagger/swagger.yaml";
                     }
-                    $parsed_json = Koha::REST::V1::parse_xml( $root, $spec_file );
+                    $parsed_json =
+                        Koha::ILL::ISO18626::message_without_envelope( Koha::REST::V1::parse_xml( $root, $spec_file ) );
                 };
 
                 if ($@) {

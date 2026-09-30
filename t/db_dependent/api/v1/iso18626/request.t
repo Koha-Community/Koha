@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use Test::MockModule;
 use Test::MockObject;
@@ -489,3 +489,132 @@ XML
     $schema->storage->txn_rollback;
 };
 
+subtest 'ISO18626Message envelope tests' => sub {
+
+    plan tests => 13;
+
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**22 }    # 22 => ill
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $wrapped_confirmationXml = <<'XML';
+<ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="1.2">
+  <supplyingAgencyMessageConfirmation>
+    <confirmationHeader>
+      <timestamp>2023-01-01T00:00:00Z</timestamp>
+    </confirmationHeader>
+  </supplyingAgencyMessageConfirmation>
+</ISO18626Message>
+XML
+
+    my $mock_ua_response = Test::MockObject->new();
+    $mock_ua_response->mock( 'is_success',      sub { return 1; } );
+    $mock_ua_response->mock( 'decoded_content', sub { return $wrapped_confirmationXml; } );
+    $mock_ua_response->mock( 'status_line',     sub { return '200 OK'; } );
+
+    my $sent_content;
+    my $mock_ua = Test::MockModule->new('LWP::UserAgent');
+    $mock_ua->mock(
+        'post',
+        sub {
+            my ( $self, $url, %args ) = @_;
+            $sent_content = $args{Content};
+            return $mock_ua_response;
+        }
+    );
+
+    $builder->build_object(
+        {
+            class => 'Koha::ILL::ISO18626::RequestingAgencies',
+            value =>
+                { account_id => 'env', securityCode => 'envs', callback_endpoint => 'https://localhost/ill/callback' }
+        }
+    );
+
+    my $wrapped_requestXml = <<'XML';
+<ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="1.2">
+  <request>
+    <header>
+      <requestingAgencyAuthentication>
+        <accountId>env</accountId>
+        <securityCode>envs</securityCode>
+      </requestingAgencyAuthentication>
+      <requestingAgencyRequestId>ENVELOPE</requestingAgencyRequestId>
+      <timestamp>2023-03-15 14:30:00</timestamp>
+      <requestingAgencyId>
+        <agencyIdType>ISIL</agencyIdType>
+        <agencyIdValue>req_agency_value</agencyIdValue>
+      </requestingAgencyId>
+    </header>
+    <bibliographicInfo>
+      <title>This is an optional title</title>
+    </bibliographicInfo>
+    <serviceInfo>
+      <serviceType>Copy</serviceType>
+    </serviceInfo>
+  </request>
+</ISO18626Message>
+XML
+
+    $t->post_ok(
+        "//$userid:$password@/api/v1/public/ill/iso18626",
+        { 'Content-Type' => 'application/xml' },
+        $wrapped_requestXml
+    )->status_is(201)->content_like(
+        qr{<messageStatus>OK</messageStatus>},
+        'Request wrapped in ISO18626Message is accepted'
+    )->content_like(
+        qr{^<\?xml[^>]*>\s*<ISO18626Message xmlns="http://illtransactions\.org/2013/iso18626"},
+        'Confirmation is wrapped in ISO18626Message'
+    )->content_like(
+        qr{<ISO18626Message[^>]*>\s*<requestConfirmation>},
+        'requestConfirmation is the child of ISO18626Message'
+    );
+
+    my $request = Koha::ILL::ISO18626::Requests->search(
+        {},
+        { order_by => { -desc => 'iso18626_request_id' }, rows => 1 }
+    )->single;
+    my ($stored_request) = grep { $_->type eq 'request' } $request->messages->as_list;
+    is_deeply(
+        [ keys %{ JSON::decode_json( $stored_request->content ) } ], ['request'],
+        'Stored message is not wrapped in ISO18626Message'
+    );
+
+    $t->patch_ok( "//$userid:$password@/api/v1/ill/iso18626_requests/"
+            . $request->iso18626_request_id => json => { status => 'Loaned' } )->status_is(200);
+    like(
+        $sent_content,
+        qr{^<\?xml[^>]*>\s*<ISO18626Message xmlns="http://illtransactions\.org/2013/iso18626"},
+        'Message sent to the requesting agency is wrapped in ISO18626Message'
+    );
+
+    my ($stored_confirmation) = grep { $_->type eq 'supplyingAgencyMessageConfirmation' } $request->messages->as_list;
+    is_deeply(
+        [ keys %{ JSON::decode_json( $stored_confirmation->content ) } ], ['supplyingAgencyMessageConfirmation'],
+        'Confirmation wrapped in ISO18626Message is unwrapped and stored'
+    );
+
+    ( my $unwrapped_requestXml = $wrapped_requestXml ) =~ s{</?ISO18626Message[^>]*>}{}g;
+    $unwrapped_requestXml =~ s{<request>}{<request xmlns="http://illtransactions.org/2013/iso18626">};
+    $unwrapped_requestXml =~ s{ENVELOPE}{NO_ENVELOPE};
+
+    $t->post_ok(
+        "//$userid:$password@/api/v1/public/ill/iso18626",
+        { 'Content-Type' => 'application/xml' },
+        $unwrapped_requestXml
+    )->status_is(201)->content_like(
+        qr{<messageStatus>OK</messageStatus>},
+        'Request without ISO18626Message envelope is still accepted'
+    );
+
+    $schema->storage->txn_rollback;
+};

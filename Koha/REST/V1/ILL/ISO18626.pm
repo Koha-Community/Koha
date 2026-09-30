@@ -32,14 +32,14 @@ use Try::Tiny qw( catch try );
 =head3 message
 
     XSD schema used:
-    https://illtransactions.org/schemas/ISO-18626-v1_1.xsd
+    https://illtransactions.org/schemas/ISO-18626-v1_2.xsd
 
 =cut
 
 sub message {
     my $c    = shift->openapi->valid_input or return;
-    my $body = $c->req->body;
-    my $json = JSON::decode_json($body);
+    my $json = Koha::ILL::ISO18626::message_without_envelope( JSON::decode_json( $c->req->body ) );
+    my $body = JSON::encode_json($json);
     my $response;
 
     return $c->render(
@@ -61,8 +61,8 @@ sub message {
             $messageType . 'Confirmation',
             $validation_errors
         );
-        $c->res->headers->add( 'Content-Type', 'application/xml' );
-        return $c->render( status => 400, openapi => $response );
+        $c->res->headers->content_type('application/xml; charset=UTF-8');
+        return $c->render( status => 400, data => Koha::ILL::ISO18626::xml_with_envelope($response) );
     }
 
     # 3) Handle authentication
@@ -72,8 +72,8 @@ sub message {
             $messageType . 'Confirmation',
             { errorValue => 'AuthenticationFailed', errorMessage => 'Invalid accountId or securityCode provided.' }
         );
-        $c->res->headers->add( 'Content-Type', 'application/xml' );
-        return $c->render( status => 400, openapi => $response );
+        $c->res->headers->content_type('application/xml; charset=UTF-8');
+        return $c->render( status => 400, data => Koha::ILL::ISO18626::xml_with_envelope($response) );
     }
 
     # 4) Handle confirmation response
@@ -81,8 +81,11 @@ sub message {
         Koha::Database->new->schema->txn_do(
             sub {
                 my $response = Koha::ILL::ISO18626::confirmation_response( $messageType, $body, $requesting_agency );
-                $c->res->headers->add( 'Content-Type', 'application/xml' );
-                return $c->render( status => $response->{status}, openapi => $response->{openapi} );
+                $c->res->headers->content_type('application/xml; charset=UTF-8');
+                return $c->render(
+                    status => $response->{status},
+                    data   => Koha::ILL::ISO18626::xml_with_envelope( $response->{openapi} )
+                );
             }
         );
     } catch {
