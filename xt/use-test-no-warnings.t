@@ -29,6 +29,9 @@ my @exceptions = (
     # Cannot be removed
     "t/00-testcritic.t",
 
+    # Loads Test::NoWarnings after the plan, so skip_all keeps working
+    "t/00-valid-systemd-units.t",
+
     # bug 40382
     "t/db_dependent/Koha/CoverImages.t",
 
