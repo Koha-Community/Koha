@@ -287,6 +287,7 @@ subtest 'superlibrarian tests' => sub {
         'CAN_user_tools_items_batchdel'                             => 1,
         'CAN_user_tools_items_batchmod_restricted'                  => 1,
         'CAN_user_tools_items_batchmod'                             => 1,
+        'CAN_user_tools_items_modification_by_age'                  => 1,
         'CAN_user_tools_label_creator'                              => 1,
         'CAN_user_tools_manage_csv_profiles'                        => 1,
         'CAN_user_tools_manage_patron_lists'                        => 1,
