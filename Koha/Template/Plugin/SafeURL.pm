@@ -16,7 +16,7 @@ package Koha::Template::Plugin::SafeURL;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Scalar::Util qw( weaken );
+use Scalar::Util qw( isweak weaken );
 use URI;
 use base 'Template::Plugin::Filter';
 
@@ -29,7 +29,8 @@ sub init {
     # install_filter stores a closure over this object in the context's filter
     # provider and this object holds the context, so without breaking that
     # cycle the whole template context survives every request that uses the filter
-    weaken $self->{_CONTEXT};
+    weaken $self->{_CONTEXT}
+        if ref $self->{_CONTEXT} && !isweak $self->{_CONTEXT};
     return $self;
 }
 
