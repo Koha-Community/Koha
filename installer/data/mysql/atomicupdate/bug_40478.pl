@@ -12,7 +12,7 @@ return {
             $dbh->do(
                 q{
                     ALTER TABLE creator_layouts
-                    ADD COLUMN barcode_justify CHAR(1) DEFAULT 'L'
+                    ADD COLUMN barcode_justify CHAR(1) NOT NULL DEFAULT 'L'
                     AFTER text_justify
                 }
             );

@@ -2443,6 +2443,7 @@ CREATE TABLE `creator_layouts` (
   `units` char(20) NOT NULL DEFAULT 'POINT',
   `callnum_split` int(1) DEFAULT 0,
   `text_justify` char(1) NOT NULL DEFAULT 'L',
+  `barcode_justify` char(1) NOT NULL DEFAULT 'L',
   `format_string` varchar(210) NOT NULL DEFAULT 'barcode',
   `layout_xml` mediumtext NOT NULL,
   `creator` char(15) NOT NULL DEFAULT 'Labels',
