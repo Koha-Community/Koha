@@ -32,7 +32,7 @@ use Try::Tiny qw( catch try );
 =head3 message
 
     XSD schema used:
-    https://illtransactions.org/schemas/ISO-18626-v1_2.xsd
+    https://illtransactions.org/schemas/ISO-18626-2021-3.xsd
 
 =cut
 

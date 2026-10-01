@@ -28,7 +28,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::REST::V1;
 
 use constant ISO18626_NAMESPACE => 'http://illtransactions.org/2013/iso18626';
-use constant ISO18626_VERSION   => '1.2';
+use constant ISO18626_VERSION   => '2021-3';
 
 =head1 NAME
 
