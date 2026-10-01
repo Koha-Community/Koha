@@ -61,7 +61,7 @@ subtest 'list() tests' => sub {
     my $userid = $librarian->userid;
 
     my $requestXml = <<'XML';
-        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="1.2">
+        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="2021-3">
           <request>
             <header>
               <requestingAgencyRequestId>XYZ</requestingAgencyRequestId>
@@ -99,7 +99,7 @@ XML
     );
 
     my $bad_auth_requestXml = <<'XML';
-        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="1.2">
+        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="2021-3">
           <request>
             <header>
               <requestingAgencyRequestId>XYZ</requestingAgencyRequestId>
@@ -131,7 +131,7 @@ XML
         'error value is authentication failed'
     );
     my $supplyingAgencyMessageConfirmationXml = <<'XML';
-        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="1.2">
+        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="2021-3">
           <supplyingAgencyMessageConfirmation>
             <confirmationHeader>
               <timestamp>2023-01-01T00:00:00Z</timestamp>
@@ -157,7 +157,7 @@ XML
     );
 
     my $authenticated_requestXml = <<'XML';
-        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="1.2">
+        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="2021-3">
           <request>
             <header>
               <requestingAgencyAuthentication>
@@ -202,7 +202,7 @@ XML
             . $last_request->iso18626_request_id => json => { status => 'Loaned' } )->status_is(200);
 
     my $requestingAgencyMessagexml = '
-    <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="1.2">
+    <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="2021-3">
       <requestingAgencyMessage>
         <header>
           <requestingAgencyAuthentication>
@@ -336,7 +336,7 @@ subtest 'send_message() tests' => sub {
     );
 
     my $request_no_callback_xml = <<'XML';
-        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="1.2">
+        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="2021-3">
           <request>
             <header>
               <requestingAgencyAuthentication>
@@ -401,7 +401,7 @@ XML
     $mock_ua_fail->mock( 'post', sub { return $mock_fail_response; } );
 
     my $request_bad_endpoint_xml = <<'XML';
-        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="1.2">
+        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="2021-3">
           <request>
             <header>
               <requestingAgencyAuthentication>
@@ -458,7 +458,7 @@ XML
     );
 
     my $request_invalid_url_xml = <<'XML';
-        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="1.2">
+        <ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="2021-3">
           <request>
             <header>
               <requestingAgencyAuthentication>
@@ -522,7 +522,7 @@ subtest 'ISO18626Message envelope tests' => sub {
     my $userid = $librarian->userid;
 
     my $wrapped_confirmationXml = <<'XML';
-<ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="1.2">
+<ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="2021-3">
   <supplyingAgencyMessageConfirmation>
     <confirmationHeader>
       <timestamp>2023-01-01T00:00:00Z</timestamp>
@@ -556,7 +556,7 @@ XML
     );
 
     my $wrapped_requestXml = <<'XML';
-<ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="1.2">
+<ISO18626Message xmlns="http://illtransactions.org/2013/iso18626" xmlns:ill="http://illtransactions.org/2013/iso18626" ill:version="2021-3">
   <request>
     <header>
       <requestingAgencyAuthentication>

@@ -38,7 +38,7 @@ subtest 'xml_with_envelope() tests' => sub {
     is( $root->localName,    'ISO18626Message',   'Message is wrapped in an ISO18626Message element' );
     is( $root->namespaceURI, $iso18626_namespace, 'ISO18626Message is in the ISO 18626 namespace' );
     is(
-        $root->getAttributeNS( $iso18626_namespace, 'version' ), '1.2',
+        $root->getAttributeNS( $iso18626_namespace, 'version' ), '2021-3',
         'version attribute is set and namespace-qualified'
     );
 
