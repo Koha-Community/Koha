@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use XML::LibXML;
 
@@ -49,6 +49,79 @@ subtest 'xml_with_envelope() tests' => sub {
     my ($status) = $root->getElementsByTagNameNS( $iso18626_namespace, 'messageStatus' );
     ok( $status, 'Nested elements are in the ISO 18626 namespace' );
     is( $status->textContent, 'OK', 'Nested element value is kept' );
+};
+
+subtest 'xml_with_envelope() element order tests' => sub {
+
+    plan tests => 6;
+
+    my $children = sub {
+        my ($element) = @_;
+        return [ map { $_->localName } $element->findnodes('./*') ];
+    };
+
+    my $xml = Koha::ILL::ISO18626::xml_with_envelope(
+        {
+            supplyingAgencyMessage => {
+                undefinedB   => 'b',
+                undefinedA   => 'a',
+                shippingInfo => { courierName      => 'DHL' },
+                statusInfo   => { lastChange       => '2026-09-30T00:00:00Z', status => 'Loaned' },
+                retryInfo    => { retryAfter       => '2026-10-30T00:00:00Z' },
+                messageInfo  => { reasonForMessage => 'StatusChange' },
+                header       => {
+                    supplyingAgencyRequestId  => '2',
+                    requestingAgencyRequestId => '1',
+                    timestamp                 => '2026-09-30T00:00:00Z',
+                    requestingAgencyId        => { agencyIdValue => 'Y', agencyIdType => 'ISIL' },
+                    supplyingAgencyId         => { agencyIdValue => 'X', agencyIdType => 'ISIL' },
+                },
+            }
+        }
+    );
+    my ($message) = XML::LibXML->load_xml( string => $xml )->documentElement->findnodes('./*');
+    my %element = map { $_->localName => $_ } $message->findnodes('./*');
+
+    is_deeply(
+        $children->($message), [qw( header messageInfo statusInfo retryInfo shippingInfo undefinedA undefinedB )],
+        'Message children follow the schema order, elements the schema does not define come last sorted by name'
+    );
+    is_deeply(
+        $children->( $element{header} ),
+        [qw( supplyingAgencyId requestingAgencyId timestamp requestingAgencyRequestId supplyingAgencyRequestId )],
+        'header children follow the schema order'
+    );
+    is_deeply(
+        $children->( ( $element{header}->findnodes('./*') )[0] ), [qw( agencyIdType agencyIdValue )],
+        'Nested children follow the schema order'
+    );
+
+    $xml = Koha::ILL::ISO18626::xml_with_envelope(
+        {
+            requestConfirmation => {
+                errorData => [
+                    { errorValue => 'first',  errorType => 'BadlyFormedMessage' },
+                    { errorValue => 'second', errorType => 'UnrecognizedDataValue' },
+                ],
+                confirmationHeader => { messageStatus => 'ERROR', timestamp => '2026-09-30T00:00:00Z' },
+            }
+        }
+    );
+    ($message) = XML::LibXML->load_xml( string => $xml )->documentElement->findnodes('./*');
+    my @error_data = grep { $_->localName eq 'errorData' } $message->findnodes('./*');
+
+    is_deeply(
+        $children->($message), [qw( confirmationHeader errorData errorData )],
+        'Repeated elements follow the schema order'
+    );
+    is_deeply(
+        [ map { $_->findvalue('./*[local-name()="errorValue"]') } @error_data ], [qw( first second )],
+        'Repeated elements keep their order'
+    );
+    is_deeply(
+        $children->( $error_data[0] ), [qw( errorType errorValue )],
+        'Repeated element children follow the schema order'
+    );
 };
 
 subtest 'message_without_envelope() tests' => sub {

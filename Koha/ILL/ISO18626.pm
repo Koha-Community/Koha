@@ -30,6 +30,86 @@ use Koha::REST::V1;
 use constant ISO18626_NAMESPACE => 'http://illtransactions.org/2013/iso18626';
 use constant ISO18626_VERSION   => '2021-3';
 
+# Child element order of each element's xs:sequence in ISO-18626-2021-3.xsd
+use constant ISO18626_ELEMENT_ORDER => {
+    address           => [qw( electronicAddress physicalAddress )],
+    bibliographicInfo => [
+        qw(
+            supplierUniqueRecordId title author authorId subtitle seriesTitle edition titleOfComponent
+            authorOfComponent volume issue pagesRequested estimatedNoPages bibliographicItemId sponsor
+            informationSource bibliographicRecordId
+        )
+    ],
+    bibliographicItemId   => [qw( bibliographicItemIdentifierCode bibliographicItemIdentifier )],
+    bibliographicRecordId => [qw( bibliographicRecordIdentifierCode bibliographicRecordIdentifier )],
+    billingInfo           => [qw( paymentMethod maximumCosts billingMethod billingName address )],
+    confirmationHeader    => [
+        qw( supplyingAgencyId requestingAgencyId timestamp requestingAgencyRequestId timestampReceived messageStatus )],
+    consortialId  => [qw( agencyIdType agencyIdValue )],
+    deliveryCosts => [qw( currencyCode monetaryValue )],
+    deliveryInfo  => [
+        qw(
+            dateSent itemId URL deliveryMethod address sentToPatron loanCondition itemFormat serviceType
+            deliveryCosts paymentMethod
+        )
+    ],
+    electronicAddress => [qw( electronicAddressType electronicAddressData )],
+    errorData         => [qw( errorType errorValue )],
+    header            => [
+        qw(
+            supplyingAgencyId requestingAgencyId consortialId multipleItemRequestId timestamp
+            requestingAgencyRequestId supplyingAgencyRequestId requestingAgencyAuthentication
+        )
+    ],
+    insuranceCosts                 => [qw( currencyCode monetaryValue )],
+    maximumCosts                   => [qw( currencyCode monetaryValue )],
+    messageInfo                    => [qw( reasonForMessage answerYesNo note reasonUnfilled reasonRetry )],
+    offeredCosts                   => [qw( currencyCode monetaryValue )],
+    patronInfo                     => [qw( patronId surname givenName patronType sendToPatron address )],
+    physicalAddress                => [qw( line1 line2 locality postalCode region country )],
+    publicationInfo                => [qw( publisher publisherId publicationType publicationDate placeOfPublication )],
+    requestConfirmation            => [qw( confirmationHeader errorData )],
+    requestedDeliveryInfo          => [qw( sortOrder address deliveryMethod courierName )],
+    requestingAgencyAuthentication => [qw( accountId securityCode )],
+    requestingAgencyId             => [qw( agencyIdType agencyIdValue )],
+    requestingAgencyInfo           => [qw( name contactName address )],
+    requestingAgencyMessageConfirmation => [qw( confirmationHeader action errorData )],
+    requestingAgencyMessage             => [qw( header action note )],
+    request                             => [
+        qw(
+            header bibliographicInfo publicationInfo serviceInfo supplierInfo requestedDeliveryInfo
+            requestingAgencyInfo patronInfo billingInfo
+        )
+    ],
+    retryInfo => [
+        qw(
+            loanCondition edition itemFormat volume serviceType serviceLevel deliveryMethod courierName
+            offeredCosts paymentMethod retryBefore retryAfter
+        )
+    ],
+    returnAgencyId => [qw( agencyIdType agencyIdValue )],
+    returnInfo     => [qw( returnAgencyId name physicalAddress )],
+    serviceInfo    => [
+        qw(
+            requestType requestSubType requestingAgencyPreviousRequestId serviceType serviceLevel itemFormat
+            needBeforeDate copyrightCompliance anyEdition preferredEdition loanCondition startDate endDate
+            note
+        )
+    ],
+    shippingInfo => [qw( courierName trackingId insurance insuranceThirdParty thirdPartyName insuranceCosts )],
+    statusInfo   => [qw( status expectedDeliveryDate dueDate lastChange )],
+    supplierCode => [qw( agencyIdType agencyIdValue )],
+    supplierInfo => [
+        qw(
+            sortOrder supplierCode supplierDescription bibliographicRecordId callNumber summaryHoldings
+            availabilityNote
+        )
+    ],
+    supplyingAgencyId                  => [qw( agencyIdType agencyIdValue )],
+    supplyingAgencyMessageConfirmation => [qw( confirmationHeader reasonForMessage errorData )],
+    supplyingAgencyMessage => [qw( header messageInfo statusInfo retryInfo deliveryInfo shippingInfo returnInfo )],
+};
+
 =head1 NAME
 
 Koha::ILL::ISO18626 - Koha ILL ISO18626 class
@@ -284,6 +364,7 @@ sub xml_with_envelope {
 
     my $doc     = XML::LibXML->load_xml( string => Koha::REST::V1::to_xml($message) );
     my $content = $doc->documentElement;
+    _order_elements($content);
 
     my $envelope = $doc->createElementNS( ISO18626_NAMESPACE, 'ISO18626Message' );
     $envelope->setAttributeNS( ISO18626_NAMESPACE, 'ill:version', ISO18626_VERSION );
@@ -291,6 +372,37 @@ sub xml_with_envelope {
     $envelope->appendChild($content);
 
     return $doc->toString;
+}
+
+=head3 _order_elements
+
+    _order_elements( $element );
+
+Internal recursive helper for C<xml_with_envelope>. Puts the children of C<$element> in the
+order the ISO 18626 schema defines. Children the schema does not define come last, sorted by name.
+
+=cut
+
+sub _order_elements {
+    my ($element) = @_;
+
+    my @children = $element->findnodes('./*');
+    return unless @children;
+
+    _order_elements($_) for @children;
+
+    my $order = ISO18626_ELEMENT_ORDER->{ $element->localName } // [];
+    my %position;
+    @position{@$order} = ( 0 .. $#$order );
+    my $unknown = scalar @$order;
+
+    my @ordered = sort {
+        ( $position{ $a->localName } // $unknown ) <=> ( $position{ $b->localName } // $unknown )
+            || $a->localName cmp $b->localName
+    } @children;
+    $element->appendChild($_) for @ordered;
+
+    return;
 }
 
 =head3 message_without_envelope
