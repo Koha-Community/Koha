@@ -23,7 +23,6 @@ use base 'Template::Plugin::Filter';
 sub init {
     my $self = shift;
     my $name = 'safe_url';
-    $self->{_DYNAMIC} = 1;
     $self->install_filter($name);
 
     # install_filter stores a closure over this object in the context's filter
@@ -35,7 +34,7 @@ sub init {
 }
 
 sub filter {
-    my ( $self, $text, $args, $config ) = @_;
+    my ( $self, $text ) = @_;
     my $uri = URI->new($text);
     if ($uri) {
         return $uri;
@@ -64,7 +63,7 @@ is stringified in a safe format.
 
 =head2 init
 
-This method installs the filter name and declares it as a dynamic filter
+This method installs the filter name
 
 =head2 filter
 
