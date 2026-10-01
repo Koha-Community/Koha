@@ -58,17 +58,7 @@ subtest 'password validation - account lock out' => sub {
     my $caller = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { flags => 0 }     # No top-level permissions
-        }
-    );
-    $builder->build(
-        {
-            source => 'UserPermission',
-            value  => {
-                borrowernumber => $caller->borrowernumber,
-                module_bit     => 4,
-                code           => 'api_validate_password',
-            },
+            value => { flags => 2**4 }    # borrowers flag = 4
         }
     );
     my $caller_password = 'thePassword123';
