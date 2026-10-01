@@ -18,9 +18,12 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::MockModule;
 use Test::MockObject;
+
+use DateTime::TimeZone;
+use JSON qw( decode_json );
 
 use C4::Circulation qw( AddIssue CanBookBeIssued );
 use Koha::CirculationRules;
@@ -415,6 +418,72 @@ subtest 'add_message() and messages()' => sub {
 
     $iso18626_request->add_message( { type => 'supplyingAgencyMessage', message => '{"status":"WillSupply"}' } );
     is( $iso18626_request->messages->count, 2, 'add_message with a string payload adds another message' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'progress_request() sends date-times as ISO 18626 UTC date-times' => sub {
+
+    plan tests => 7;
+
+    $schema->storage->txn_begin;
+
+    my $mock_context = Test::MockModule->new('C4::Context');
+    $mock_context->mock( 'tz', sub { return DateTime::TimeZone->new( name => 'Europe/London' ) } );
+
+    my $mock_ua = Test::MockModule->new('LWP::UserAgent');
+    $mock_ua->mock( 'post', sub { return $mock_ua_response; } );
+
+    my $sent_message = sub {
+        my ($request) = @_;
+        my ($message) = grep { $_->type eq 'supplyingAgencyMessage' } $request->messages->as_list;
+        return decode_json( $message->content )->{supplyingAgencyMessage};
+    };
+    my $utc_date_time = qr{^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$};
+
+    my $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => { issuedate => '2026-09-30 10:23:41', date_due => '2026-12-06 23:59:00' }
+        }
+    );
+    my $request = $builder->build_object(
+        {
+            class => 'Koha::ILL::ISO18626::Requests',
+            value => { status => 'WillSupply', issue_id => $checkout->issue_id }
+        }
+    );
+    $request->progress_request( 'supplyingAgency', { status => 'Loaned' } );
+    my $message = $sent_message->($request);
+
+    like( $message->{header}->{timestamp},      $utc_date_time, 'timestamp is an ISO 18626 UTC date-time' );
+    like( $message->{statusInfo}->{lastChange}, $utc_date_time, 'lastChange is an ISO 18626 UTC date-time' );
+    is( $message->{deliveryInfo}->{dateSent}, '2026-09-30T09:23:41Z', 'dateSent is converted from BST to UTC' );
+    is( $message->{statusInfo}->{dueDate},    '2026-12-06T23:59:00Z', 'dueDate is converted from GMT to UTC' );
+
+    $request = $builder->build_object(
+        { class => 'Koha::ILL::ISO18626::Requests', value => { status => 'RequestReceived' } } );
+    $request->progress_request(
+        'supplyingAgency',
+        { status => 'ExpectToSupply', expectedDeliveryDate => '2026-10-10 12:00:00' }
+    );
+    is(
+        $sent_message->($request)->{statusInfo}->{expectedDeliveryDate}, '2026-10-10T11:00:00Z',
+        'expectedDeliveryDate is converted to UTC'
+    );
+
+    $request = $builder->build_object(
+        { class => 'Koha::ILL::ISO18626::Requests', value => { status => 'RequestReceived' } } );
+    $request->progress_request(
+        'supplyingAgency',
+        {
+            status      => 'RetryPossible', reasonRetry => 'OnLoan', retryAfter => '2026-10-20',
+            retryBefore => '2026-11-01'
+        }
+    );
+    $message = $sent_message->($request);
+    is( $message->{retryInfo}->{retryAfter},  '2026-10-19T23:00:00Z', 'retryAfter is converted to UTC' );
+    is( $message->{retryInfo}->{retryBefore}, '2026-11-01T00:00:00Z', 'retryBefore is converted to UTC' );
 
     $schema->storage->txn_rollback;
 };

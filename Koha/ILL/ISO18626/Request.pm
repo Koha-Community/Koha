@@ -296,8 +296,14 @@ sub progress_request {
           $params->{paymentMethod} && $params->{reasonRetry} eq 'ReqPayMethodNotSupported'
         ? $params->{paymentMethod}
         : undef;
-    my $retryBefore  = $params->{retryBefore} && $new_status eq 'RetryPossible' ? $params->{retryBefore} : undef;
-    my $retryAfter   = $params->{retryAfter}  && $new_status eq 'RetryPossible' ? $params->{retryAfter}  : undef;
+    my $retryBefore =
+        $params->{retryBefore} && $new_status eq 'RetryPossible'
+        ? _format_iso_payload_date_param( $params->{retryBefore} )
+        : undef;
+    my $retryAfter =
+        $params->{retryAfter} && $new_status eq 'RetryPossible'
+        ? _format_iso_payload_date_param( $params->{retryAfter} )
+        : undef;
     my $serviceLevel = $params->{serviceLevel}
         && $params->{reasonRetry} eq 'ReqServLevelNotSupp' ? $params->{serviceLevel} : undef;
     my $serviceType =
@@ -370,9 +376,9 @@ sub progress_request {
             },
             statusInfo => {
                 status => $resulting_status,
-                $expectedDeliveryDate ? ( expectedDeliveryDate => $expectedDeliveryDate ) : (),
-                $check_out            ? ( dueDate              => $check_out->date_due )  : (),
-                lastChange => $self->updated_on,
+                $expectedDeliveryDate ? ( expectedDeliveryDate => $expectedDeliveryDate )                     : (),
+                $check_out            ? ( dueDate => _format_iso_payload_date_param( $check_out->date_due ) ) : (),
+                lastChange => _format_iso_payload_date_param( $self->updated_on ),
             },
             $resulting_status eq 'RetryPossible'
             ? (
@@ -401,7 +407,7 @@ sub progress_request {
             ( $resulting_status eq 'Loaned' && $check_out_item )
             ? (
                 deliveryInfo => {
-                    dateSent => $check_out->issuedate,
+                    dateSent => _format_iso_payload_date_param( $check_out->issuedate ),
                     itemId   => $check_out_item->barcode,
 
                     #itemFormat  => ['PaperCopy'],    # TODO: Implement: Must come from payload (only needed if specified by RA?)
@@ -449,7 +455,7 @@ sub progress_request {
 
 =head2 _format_iso_payload_date_param
 
-Normalizes a date string to C<YYYY-MM-DD HH:MM:SS>
+Normalizes a date string to an ISO 18626 UTC date-time, C<YYYY-MM-DDTHH:MM:SSZ>
 
 =cut
 
@@ -458,7 +464,7 @@ sub _format_iso_payload_date_param {
     return unless $date_str;
 
     my $dt = eval { $date_str eq 'now' ? dt_from_string() : dt_from_string($date_str) };
-    return $dt ? $dt->strftime('%Y-%m-%d %H:%M:%S') : $date_str;
+    return $dt ? $dt->set_time_zone('UTC')->strftime('%Y-%m-%dT%H:%M:%SZ') : $date_str;
 }
 
 =head3 _type
