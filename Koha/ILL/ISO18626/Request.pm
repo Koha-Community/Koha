@@ -29,7 +29,6 @@ use LWP::UserAgent;
 
 use Koha::Biblios;
 use Koha::ILL::ISO18626::RequestingAgency;
-use Koha::DateUtils qw( dt_from_string );
 
 use base qw(Koha::Object);
 
@@ -271,7 +270,7 @@ sub progress_request {
     my $reasonForMessage     = 'RequestResponse';
     my $messageInfoNote      = $params->{messageInfoNote} // undef;
     my $answerYesNo          = $params->{answerYesNo}     // undef;
-    my $expectedDeliveryDate = _format_iso_payload_date_param( $params->{expectedDeliveryDate} );
+    my $expectedDeliveryDate = Koha::ILL::ISO18626::format_date_time( $params->{expectedDeliveryDate} );
     my $reasonUnfilled       = $params->{reasonUnfilled} // undef;
     my $reasonRetry          = $params->{reasonRetry}    // undef;
 
@@ -298,11 +297,11 @@ sub progress_request {
         : undef;
     my $retryBefore =
         $params->{retryBefore} && $new_status eq 'RetryPossible'
-        ? _format_iso_payload_date_param( $params->{retryBefore} )
+        ? Koha::ILL::ISO18626::format_date_time( $params->{retryBefore} )
         : undef;
     my $retryAfter =
         $params->{retryAfter} && $new_status eq 'RetryPossible'
-        ? _format_iso_payload_date_param( $params->{retryAfter} )
+        ? Koha::ILL::ISO18626::format_date_time( $params->{retryAfter} )
         : undef;
     my $serviceLevel = $params->{serviceLevel}
         && $params->{reasonRetry} eq 'ReqServLevelNotSupp' ? $params->{serviceLevel} : undef;
@@ -361,7 +360,7 @@ sub progress_request {
                 },
                 requestingAgencyRequestId => $self->requestingAgencyRequestId,
                 supplyingAgencyRequestId  => $self->iso18626_request_id,
-                timestamp                 => _format_iso_payload_date_param('now'),
+                timestamp                 => Koha::ILL::ISO18626::format_date_time('now'),
                 requestingAgencyId        => {
                     agencyIdType  => 'ISIL',
                     agencyIdValue => 'req_agency_value',
@@ -376,9 +375,9 @@ sub progress_request {
             },
             statusInfo => {
                 status => $resulting_status,
-                $expectedDeliveryDate ? ( expectedDeliveryDate => $expectedDeliveryDate )                     : (),
-                $check_out            ? ( dueDate => _format_iso_payload_date_param( $check_out->date_due ) ) : (),
-                lastChange => _format_iso_payload_date_param( $self->updated_on ),
+                $expectedDeliveryDate ? ( expectedDeliveryDate => $expectedDeliveryDate )                 : (),
+                $check_out ? ( dueDate => Koha::ILL::ISO18626::format_date_time( $check_out->date_due ) ) : (),
+                lastChange => Koha::ILL::ISO18626::format_date_time( $self->updated_on ),
             },
             $resulting_status eq 'RetryPossible'
             ? (
@@ -407,7 +406,7 @@ sub progress_request {
             ( $resulting_status eq 'Loaned' && $check_out_item )
             ? (
                 deliveryInfo => {
-                    dateSent => _format_iso_payload_date_param( $check_out->issuedate ),
+                    dateSent => Koha::ILL::ISO18626::format_date_time( $check_out->issuedate ),
                     itemId   => $check_out_item->barcode,
 
                     #itemFormat  => ['PaperCopy'],    # TODO: Implement: Must come from payload (only needed if specified by RA?)
@@ -451,20 +450,6 @@ sub progress_request {
     $self->status($resulting_status)->store;
     $self->send_message( 'supplyingAgencyMessage', $json );
     return 1;
-}
-
-=head2 _format_iso_payload_date_param
-
-Normalizes a date string to an ISO 18626 UTC date-time, C<YYYY-MM-DDTHH:MM:SSZ>
-
-=cut
-
-sub _format_iso_payload_date_param {
-    my ($date_str) = @_;
-    return unless $date_str;
-
-    my $dt = eval { $date_str eq 'now' ? dt_from_string() : dt_from_string($date_str) };
-    return $dt ? $dt->set_time_zone('UTC')->strftime('%Y-%m-%dT%H:%M:%SZ') : $date_str;
 }
 
 =head3 _type

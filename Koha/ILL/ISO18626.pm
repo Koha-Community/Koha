@@ -210,8 +210,8 @@ sub confirmation_response {
         $response = {
             $confirmation_message_type => {
                 confirmationHeader => {
-                    timestamp         => _now_utc_str(),
-                    timestampReceived => _now_utc_str(),
+                    timestamp         => format_date_time('now'),
+                    timestampReceived => format_date_time('now'),
                     messageStatus     => 'OK',
                 }
             }
@@ -272,8 +272,8 @@ sub confirmation_response {
         $response = {
             $confirmation_message_type => {
                 confirmationHeader => {
-                    timestamp         => _now_utc_str(),
-                    timestampReceived => _now_utc_str(),
+                    timestamp         => format_date_time('now'),
+                    timestampReceived => format_date_time('now'),
                     messageStatus     => 'OK',
                 },
                 action => $json->{$message_type}->{action},
@@ -308,12 +308,21 @@ sub confirmation_response {
 
 }
 
-=head3 _now_utc_str
+=head3 format_date_time
+
+    my $date_time = Koha::ILL::ISO18626::format_date_time($date_str);
+
+Normalizes a date string, or the current time if it is C<now>, to an ISO 18626 UTC date-time,
+C<YYYY-MM-DDTHH:MM:SSZ>. A date string that cannot be parsed is returned as it is.
 
 =cut
 
-sub _now_utc_str {
-    return dt_from_string( undef, undef, 'UTC' )->strftime('%Y-%m-%dT%H:%M:%SZ');
+sub format_date_time {
+    my ($date_str) = @_;
+    return unless $date_str;
+
+    my $dt = eval { $date_str eq 'now' ? dt_from_string() : dt_from_string($date_str) };
+    return $dt ? $dt->set_time_zone('UTC')->strftime('%Y-%m-%dT%H:%M:%SZ') : $date_str;
 }
 
 =head3 error_response
@@ -326,8 +335,8 @@ sub error_response {
     return {
         $message_type => {
             confirmationHeader => {
-                timestamp         => _now_utc_str(),
-                timestampReceived => _now_utc_str(),
+                timestamp         => format_date_time('now'),
+                timestampReceived => format_date_time('now'),
                 messageStatus     => 'ERROR',
             },
             errorData => $error_data,
