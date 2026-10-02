@@ -257,7 +257,7 @@ subtest 'add() tests' => sub {
 
 subtest 'update() tests' => sub {
 
-    plan tests => 15;
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
@@ -350,6 +350,15 @@ subtest 'update() tests' => sub {
 
     $t->post_ok( "//$userid:$password@/api/v1/messages/$message_id" => json => $message_with_updated_field )
         ->status_is(404);
+
+    # Partual update on a PATCH
+    my $message_with_some_updates = {
+        message => "Young Fox jumped over Cheeseboy"
+    };
+
+    $t->patch_ok( "//$userid:$password@/api/v1/messages/$message_id" => json => $message_with_some_updates )
+        ->status_is(200)
+        ->json_is( '/message' => 'Young Fox jumped over Cheeseboy' );
 
     $schema->storage->txn_rollback;
 };
