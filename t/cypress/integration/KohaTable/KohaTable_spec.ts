@@ -588,4 +588,37 @@ describe("ERM ", () => {
             // and returns results accordingly (or not)
         });
     });
+
+    it("Prevent XSS in column filters", () => {
+        const xss_name = '<img src=x onerror="window.xss_triggered=true">';
+
+        let agreement = cy.get_agreement();
+        let vendors = cy.get_vendors_to_relate();
+        vendors[0].name = xss_name;
+        agreement.vendor = [vendors[0]];
+
+        cy.intercept("GET", "/api/v1/acquisitions/vendors*", {
+            statusCode: 200,
+            body: vendors,
+        });
+        cy.intercept("GET", "/api/v1/erm/agreements*", {
+            statusCode: 200,
+            body: [agreement],
+            headers: {
+                "X-Base-Total-Count": "1",
+                "X-Total-Count": "1",
+            },
+        });
+
+        cy.visit("/cgi-bin/koha/erm/agreements");
+        cy.get("#agreements_list").contains("Showing 1 to 1 of 1 entries");
+
+        cy.get("#agreements_list select.dt-select-filter option")
+            .contains(xss_name)
+            .should("exist");
+        cy.get("#agreements_list select.dt-select-filter option img").should(
+            "not.exist"
+        );
+        cy.window().its("xss_triggered").should("be.undefined");
+    });
 });
