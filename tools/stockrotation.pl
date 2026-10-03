@@ -285,7 +285,7 @@ if ( !defined $op ) {
     # stage and biblio objects
     my $sritems = Koha::StockRotationItems->search(
         { 'stage.rota_id' => $params{rota_id} },
-        { prefetch        => { stage => { 'stockrotationitems' => { 'itemnumber' => 'biblionumber' } } } }
+        { prefetch        => [ 'stage', { itemnumber => 'biblionumber' } ] }
     );
 
     $template->param(
