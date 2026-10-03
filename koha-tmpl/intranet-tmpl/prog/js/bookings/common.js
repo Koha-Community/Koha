@@ -20,7 +20,7 @@ window.BookingsTable = (function () {
                 [__("Cancelled"), escape_str(row.cancellation_reason)]
                     .filter(Boolean)
                     .join(": "),
-            issued: () => __("Issued"),
+            issued: () => __("Checked out"),
             completed: () => __("Completed"),
         };
 
