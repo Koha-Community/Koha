@@ -4790,11 +4790,18 @@ sub ProcessOfflineIssue {
                 $operation->{timestamp},
             );
         }
+
+        # A no block or offline checkout can't be refused, so put a hold found for another patron back in the queue
+        my $cancelreserve =
+            $item->holds->filter_by_found->search( { borrowernumber => { '!=' => $patron->borrowernumber } } )->count
+            ? 'revert'
+            : undef;
+
         my $checkout = AddIssue(
             $patron,
             $operation->{barcode},
             $operation->{due_date},
-            undef,
+            $cancelreserve,
             $operation->{timestamp},
             undef,
         );
