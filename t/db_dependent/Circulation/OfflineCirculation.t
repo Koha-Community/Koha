@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockModule;
 use Test::Warn;
 
@@ -237,6 +237,65 @@ subtest "Bug 32934: ProcessOfflineIssue returns checkout object for SIP no block
     isa_ok( $checkout, 'Koha::Checkout', "ProcessOfflineIssue returns checkout object" );
     is( $checkout->borrowernumber,                  $borrower->{borrowernumber}, "Checkout has correct borrower" );
     is( dt_from_string( $checkout->date_due )->ymd, $due_date, "Checkout respects specified due_date" );
+};
+
+subtest "ProcessOfflineIssue reverts holds found for another patron" => sub {
+    plan tests => 7;
+
+    $branch     = $builder->build( { source => 'Branch' } )->{branchcode};
+    $manager_id = $builder->build( { source => 'Borrower' } )->{borrowernumber};
+
+    my $patron       = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $branch } } );
+    my $other_patron = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $branch } } );
+
+    foreach my $set_found (qw( set_waiting set_transfer set_processing )) {
+        my $item       = $builder->build_sample_item( { library => $branch } );
+        my $reserve_id = AddReserve(
+            {
+                branchcode     => $branch,
+                borrowernumber => $other_patron->borrowernumber,
+                biblionumber   => $item->biblionumber,
+                itemnumber     => $item->itemnumber,
+                priority       => 1,
+            }
+        );
+        my $hold = Koha::Holds->find($reserve_id);
+        $hold->$set_found;
+
+        ProcessOfflineIssue(
+            {
+                cardnumber => $patron->cardnumber,
+                barcode    => $item->barcode,
+                timestamp  => dt_from_string
+            }
+        );
+
+        $hold->discard_changes;
+        is( $hold->found,    undef, "Hold for another patron is no longer found after $set_found" );
+        is( $hold->priority, 1,     "Hold for another patron is back in the queue after $set_found" );
+    }
+
+    my $item       = $builder->build_sample_item( { library => $branch } );
+    my $reserve_id = AddReserve(
+        {
+            branchcode     => $branch,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            itemnumber     => $item->itemnumber,
+            priority       => 1,
+        }
+    );
+    Koha::Holds->find($reserve_id)->set_waiting;
+
+    ProcessOfflineIssue(
+        {
+            cardnumber => $patron->cardnumber,
+            barcode    => $item->barcode,
+            timestamp  => dt_from_string
+        }
+    );
+
+    is( Koha::Holds->find($reserve_id), undef, "Waiting hold for the same patron is filled" );
 };
 
 $schema->storage->txn_rollback;
