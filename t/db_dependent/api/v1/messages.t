@@ -352,9 +352,7 @@ subtest 'update() tests' => sub {
         ->status_is(404);
 
     # Partual update on a PATCH
-    my $message_with_some_updates = {
-        message => "Young Fox jumped over Cheeseboy"
-    };
+    my $message_with_some_updates = { message => "Young Fox jumped over Cheeseboy" };
 
     $t->patch_ok( "//$userid:$password@/api/v1/messages/$message_id" => json => $message_with_some_updates )
         ->status_is(200)
