@@ -1,48 +1,48 @@
 ---
 type: object
 properties:
-  id:
+  library_group_id:
     type: integer
-    description: internally assigned library group identifier
+    description: Internal identifier for the library group
     readOnly: true
   title:
     type:
       - string
       - "null"
     description: Title of the library group
-  branchcode:
+  library_id:
     type:
       - string
       - "null"
-    description: Branchcode in the library group
+    description: Internal identifier of the member library
   description:
     type:
       - string
       - "null"
-    description: the description of the library
+    description: Longer description of the library group
   parent_id:
     type:
       - integer
       - "null"
-    description: identifier for the parent group
-  ft_hide_patron_info:
+    description: Internal identifier of the parent library group
+  hide_patron_info:
     type: boolean
-    description: ft_hide_patron_info
-  ft_limit_item_editing:
+    description: If patron information is hidden from staff outside the group
+  limit_item_editing:
     type: boolean
-    description: ft_limit_item_editing
-  ft_search_groups_opac:
+    description: If item editing is limited to staff within the group
+  is_opac_search_group:
     type: boolean
-    description: ft_search_groups_opac
-  ft_search_groups_staff:
+    description: If the group is used as an OPAC search group
+  is_staff_search_group:
     type: boolean
-    description: ft_search_groups_staff
-  ft_local_hold_group:
+    description: If the group is used as a staff interface search group
+  is_local_hold_group:
     type: boolean
-    description: ft_local_hold_group
-  ft_local_float_group:
+    description: If the group is used as a local hold group
+  is_local_float_group:
     type: boolean
-    description: ft_local_float_group
+    description: If the group is used as a local float group
   created_on:
     description: date of creation
     type:
@@ -55,10 +55,10 @@ properties:
       - "null"
 additionalProperties: false
 required:
-  - id
+  - library_group_id
   - title
-  - ft_limit_item_editing
-  - ft_search_groups_opac
-  - ft_search_groups_staff
-  - ft_local_hold_group
-  - ft_local_float_group
+  - limit_item_editing
+  - is_opac_search_group
+  - is_staff_search_group
+  - is_local_hold_group
+  - is_local_float_group

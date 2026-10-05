@@ -9,12 +9,12 @@
     parameters:
       - name: parent_id
         in: query
-        description: Identifier for the parent group
+        description: Internal identifier of the parent library group
         required: false
         type: integer
-      - name: branchcode
+      - name: library_id
         in: query
-        description: Branchcode included in the group
+        description: Internal identifier of the member library
         required: false
         type: string
       - name: title
@@ -27,34 +27,34 @@
         description: description of the library group
         required: false
         type: string
-      - name: ft_hide_patron_info
+      - name: hide_patron_info
         in: query
-        description: search on ft_hide_patron_info
+        description: If patron information is hidden from staff outside the group
         required: false
         type: integer
-      - name: ft_limit_item_editing
+      - name: limit_item_editing
         in: query
-        description: search on ft_limit_item_editing
+        description: If item editing is limited to staff within the group
         required: false
         type: integer
-      - name: ft_search_groups_opac
+      - name: is_opac_search_group
         in: query
-        description: search on ft_search_groups_opac
+        description: If the group is used as an OPAC search group
         required: false
         type: integer
-      - name: ft_search_groups_staff
+      - name: is_staff_search_group
         in: query
-        description: search on ft_search_groups_staff
+        description: If the group is used as a staff interface search group
         required: false
         type: integer
-      - name: ft_local_hold_group
+      - name: is_local_hold_group
         in: query
-        description: search on ft_local_hold_group
+        description: If the group is used as a local hold group
         required: false
         type: integer
-      - name: ft_local_float_group
+      - name: is_local_float_group
         in: query
-        description: search on ft_local_float_group
+        description: If the group is used as a local float group
         required: false
         type: integer
       - $ref: "../swagger.yaml#/parameters/match"
