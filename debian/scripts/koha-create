@@ -94,7 +94,7 @@ Options:
 
   --help,-h                 Show this help.
 
-Note: the instance name cannot be longer that 11 chars.
+Note: the instance name cannot be longer than 11 chars.
 
 EOF
 }
@@ -528,6 +528,7 @@ CLO_MESSAGE_BROKER_USER=""
 CLO_MESSAGE_BROKER_PASS=""
 CLO_MESSAGE_BROKER_VHOST=""
 
+op=create # the default
 while true ; do
     case "$1" in
         -c|--create-db)
