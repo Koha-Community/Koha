@@ -206,7 +206,7 @@
                     <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=serial">Serials (new issue)</a></li>
                     <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=suggestions">Suggestions</a></li>
                     <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=pos">Point of sale</a></li>
-                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=report">Reports</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=report">Reports (custom display)</a></li>
                     <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=bookings">Bookings</a></li>
                     <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=debit_description">Debit description (custom)</a></li>
                 </ul>
@@ -288,7 +288,7 @@
                                     [% CASE 'pos' %]
                                         <span>Point of sale</span>
                                     [% CASE 'report' %]
-                                        <span>Reports</span>
+                                        <span>Reports (custom display)</span>
                                     [% CASE 'bookings' %]
                                         <span>Bookings</span>
                                     [% CASE 'debit_description' %]
@@ -495,9 +495,9 @@
                                 <option value="pos">Point of sale</option>
                             [% END %]
                             [% IF ( module == "report" ) %]
-                                <option value="report" selected="selected">Reports</option>
+                                <option value="report" selected="selected">Reports (custom display)</option>
                             [% ELSE %]
-                                <option value="report">Reports</option>
+                                <option value="report">Reports (custom display)</option>
                             [% END %]
                             [% IF ( module == "bookings" ) %]
                                 <option value="bookings" selected="selected">Bookings</option>
