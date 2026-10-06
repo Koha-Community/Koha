@@ -75,6 +75,17 @@
                             <li>
                                 <a class="dropdown-item" id="runreport_[% tmpl.id | html %]" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% id | html %]&amp;op=run&amp;template=[% tmpl.id | html %][% PROCESS params %]">
                                     [% tmpl.name | html %]
+                                    [% IF ( tmpl.message_transport_type == 'email' ) %]
+                                        (email)
+                                    [% ELSIF ( tmpl.message_transport_type == 'print' ) %]
+                                        (print)
+                                    [% ELSIF ( tmpl.message_transport_type == 'feed' ) %]
+                                        (feed)
+                                    [% ELSIF ( tmpl.message_transport_type == 'sms' ) %]
+                                        (sms)
+                                    [% ELSE %]
+                                        ([% tmpl.message_transport_type | html %])
+                                    [% END %]
                                 </a>
                             </li>
                         [% END %]
