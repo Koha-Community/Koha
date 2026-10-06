@@ -119,7 +119,8 @@ subtest 'submit()' => sub {
             value => {
                 self_renewal_enabled         => 0, self_renewal_availability_start => 10, self_renewal_if_expired => 10,
                 self_renewal_fines_block     => 10, noissuescharge                 => 10,
-                self_renewal_failure_message => 'This is a failure message'
+                self_renewal_failure_message => 'This is a failure message',
+                enforce_expiry_notice        => 0
             }
         }
     );
