@@ -1315,7 +1315,8 @@ sub EmailReport {
         my $letter       = {%$letter};              # GetPreparedLetter mutates, so make a local copy beforehand
         push( @errors, { NOT_PARSE => $counter } ) unless my $rendered = GetPreparedLetter(
             letter  => $letter,
-            objects => $row
+            objects => $row,
+            tables  => { saved_sql => $report_id }
         );
         $counter++;
         next if scalar @errors > $err_count;        #If any problems, try next

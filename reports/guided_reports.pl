@@ -894,7 +894,8 @@ if ( !$op ) {
 
                     my $rendered = GetPreparedLetter(
                         letter  => $letter->unblessed,
-                        objects => { data => $data, report_id => $report_id, for_download => 1 }
+                        objects => { data      => $data, report_id => $report_id, for_download => 1 },
+                        tables  => { saved_sql => $report_id }
                     );
                     $content        = $rendered->{content};
                     $reportfilename = $rendered->{title};
@@ -1299,7 +1300,8 @@ if ( $op eq 'run' ) {
 
                     my $rendered = GetPreparedLetter(
                         letter  => $letter->unblessed,
-                        objects => { data => $data, report_id => $report_id }
+                        objects => { data      => $data, report_id => $report_id },
+                        tables  => { saved_sql => $report_id }
                     );
 
                     $template->param(

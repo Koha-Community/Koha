@@ -829,8 +829,9 @@ sub _parseletter_sth {
         : ( $table eq 'problem_reports' )        ? "SELECT * FROM $table WHERE reportid = ?"
         : ( $table eq 'additional_contents' || $table eq 'opac_news' )
         ? "SELECT * FROM additional_contents_localizations WHERE id = ?"
-        : ( $table eq 'recalls' ) ? "SELECT * FROM $table WHERE recall_id = ?"
-        :                           undef;
+        : ( $table eq 'recalls' )   ? "SELECT * FROM $table WHERE recall_id = ?"
+        : ( $table eq 'saved_sql' ) ? "SELECT * FROM $table WHERE id = ?"
+        :                             undef;
     unless ($query) {
         warn "ERROR: No _parseletter_sth query for table '$table'";
         return;    # nothing to get
@@ -2151,6 +2152,12 @@ sub _get_tt_params {
             singular => 'recall',
             plural   => 'recalls',
             pk       => 'recall_id'
+        },
+        saved_sql => {
+            module   => 'Koha::Reports',
+            singular => 'report',
+            plural   => 'reports',
+            pk       => 'id'
         },
     };
 
