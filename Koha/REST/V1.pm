@@ -105,10 +105,9 @@ sub startup {
                 && !_route_wants_raw_payload($c) )
             {
 
-                # Convert JSON to XML
-                my $xml = to_xml( decode_json( $c->res->body ) );
-
-                $c->res->body($xml);
+                # Convert JSON to XML, a body that is already XML is left alone
+                my $json = try { decode_json( $c->res->body ) };
+                $c->res->body( to_xml($json) ) if $json;
             }
 
             return;
