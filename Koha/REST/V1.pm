@@ -317,9 +317,11 @@ sub parse_xml {
     my ( $node, $spec_file ) = @_;
     my $hash = {};
 
-    my $schema = JSON::Validator::Schema::OpenAPIv2->new($spec_file);
+    # Resolving the spec is slow, do it once per process
+    state %definitions;
+    $definitions{$spec_file} //= JSON::Validator::Schema::OpenAPIv2->new($spec_file)->data->{definitions};
 
-    _parse_node( $node, $hash, 0, $schema->data->{definitions} );
+    _parse_node( $node, $hash, 0, $definitions{$spec_file} );
 
     return $hash;
 }
