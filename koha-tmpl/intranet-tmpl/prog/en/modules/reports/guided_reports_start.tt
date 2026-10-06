@@ -1059,8 +1059,8 @@
                 <!-- /.rows -->
                 <fieldset class="action">
                     <input type="hidden" name="op" value="run" />
-                    [% IF ( template_code ) %]
-                        <input type="hidden" name="template_code" value="[% template_code | html %]" />
+                    [% IF ( template_id ) %]
+                        <input type="hidden" name="template" value="[% template_id | html %]" />
                     [% END %]
                     [% INCLUDE 'throttled-button.inc' element_type='button' classes='btn btn-primary' label=t('Run the report') %]
                 </fieldset>
