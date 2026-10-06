@@ -58,4 +58,13 @@ sub echo_converted {
     );
 }
 
+=head3 xml_response
+
+=cut
+
+sub xml_response {
+    my $c = shift->openapi->valid_input or return;
+    return $c->render( status => 200, format => 'xml', text => '<Response><Say>Hello</Say></Response>' );
+}
+
 1;

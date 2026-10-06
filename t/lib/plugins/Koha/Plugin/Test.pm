@@ -428,6 +428,19 @@ sub api_routes {
         }
       }
     }
+  },
+  "/patrons/xml_response": {
+    "get": {
+      "x-mojo-to": "Test::Controller#xml_response",
+      "operationId": "XmlResponse",
+      "tags": ["patrons"],
+      "produces": ["application/xml"],
+      "responses": {
+        "200": {
+          "description": "An XML document the controller builds itself"
+        }
+      }
+    }
   }
 }
     };

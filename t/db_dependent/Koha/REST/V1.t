@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Mojo;
 use Test::MockModule;
 use Test::Warn;
@@ -173,6 +173,30 @@ subtest 'XML payload conversion tests' => sub {
     )->status_is(401);
 
     is( $conversions, 0, 'The payload is not converted for a request the authentication bridge rejects' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'XML response bodies tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_config( 'enable_plugins', 1 );
+    Koha::Plugins::Methods->search->delete;
+    my $plugins = Koha::Plugins->new;
+    $plugins->InstallPlugins( { include => ['Koha::Plugin::Test'] } );
+    $_->enable for $plugins->GetPlugins( { all => 1 } );
+
+    my $t = Test::Mojo->new('Koha::REST::V1');
+
+    # A route without the flag that renders its XML itself, the way TwiML
+    # responses are built
+    $t->get_ok('/api/v1/contrib/testplugin/patrons/xml_response')
+        ->status_is(200)
+        ->header_is( 'Content-Type' => 'application/xml' )
+        ->content_is( '<Response><Say>Hello</Say></Response>', 'A response body that is already XML is left alone' );
 
     $schema->storage->txn_rollback;
 };
