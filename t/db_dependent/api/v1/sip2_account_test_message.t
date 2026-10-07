@@ -86,26 +86,36 @@ sub build_test_account {
     return ( $account, $patron, $item );
 }
 
-# Builds a librarian at the given library with the permissions the endpoint
-# requires, sip2 plus list_borrowers.
+# Builds a librarian at the given library with list_borrowers, plus either the
+# whole sip2 module or only the given sip2 subpermission.
 sub build_librarian {
-    my ( $branchcode, $password ) = @_;
+    my ( $branchcode, $password, $sip2_permission ) = @_;
 
-    my $librarian =
-        $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $branchcode, flags => 2**31 } } );
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $branchcode, flags => $sip2_permission ? 0 : 2**31 },
+        }
+    );
     $builder->build(
         {
             source => 'UserPermission',
             value  => { borrowernumber => $librarian->borrowernumber, module_bit => 4, code => 'list_borrowers' },
         }
     );
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => { borrowernumber => $librarian->borrowernumber, module_bit => 31, code => $sip2_permission },
+        }
+    ) if $sip2_permission;
     $librarian->set_password( { password => $password, skip_validation => 1 } );
 
     return $librarian;
 }
 
 subtest 'test_message() authorization tests' => sub {
-    plan tests => 6;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -126,7 +136,13 @@ subtest 'test_message() authorization tests' => sub {
     $sip2_only->set_password( { password => $password, skip_validation => 1 } );
     my $sip2_only_userid = $sip2_only->userid;
 
-    my $url = "/api/v1/sip2/accounts/" . $account->sip_account_id . "/test_message";
+    # manage_sip2 can manage accounts but not test messages, test_sip2_messages
+    # can test messages but not manage accounts
+    my $manager_userid = build_librarian( $patron->branchcode, $password, 'manage_sip2' )->userid;
+    my $tester_userid  = build_librarian( $patron->branchcode, $password, 'test_sip2_messages' )->userid;
+
+    my $account_url = "/api/v1/sip2/accounts/" . $account->sip_account_id;
+    my $url         = "$account_url/test_message";
 
     $t->post_ok(
         "//$unauth_userid:$password\@$url" => json => { message => 'patron_status', patron_id => $patron->cardnumber } )
@@ -138,6 +154,18 @@ subtest 'test_message() authorization tests' => sub {
     $t->post_ok(
         "//$userid:$password\@$url" => json => { message => 'patron_status', patron_id => $patron->cardnumber } )
         ->status_is(200);
+
+    $t->post_ok(
+        "//$manager_userid:$password\@$url" => json => { message => 'patron_status', patron_id => $patron->cardnumber }
+    )->status_is(403);
+
+    $t->post_ok(
+        "//$tester_userid:$password\@$url" => json => { message => 'patron_status', patron_id => $patron->cardnumber } )
+        ->status_is(200);
+
+    $t->get_ok("//$manager_userid:$password\@$account_url")->status_is(200);
+
+    $t->get_ok("//$tester_userid:$password\@$account_url")->status_is(403);
 
     $schema->storage->txn_rollback;
 };

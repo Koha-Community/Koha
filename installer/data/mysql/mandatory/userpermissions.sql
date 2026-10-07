@@ -179,6 +179,8 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (25, 'takepayment', 'Access the point of sale page and take payments'),
    (26, 'manage_problem_reports', 'Manage OPAC problem reports'),
    (27, 'manage_recalls', 'Manage recalls for patrons'),
+   (31, 'manage_sip2', 'Manage SIP2 institutions, accounts and system preference overrides'),
+   (31, 'test_sip2_messages', 'Test the SIP2 messages a SIP2 account would return'),
    (33, 'create_item_lists', 'Create item lists'),
    (33, 'edit_item_lists', 'Edit item lists owned by others / public'),
    (33, 'delete_item_lists', 'Delete item lists owned by others / public'),

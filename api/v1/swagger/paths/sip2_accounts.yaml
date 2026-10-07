@@ -67,7 +67,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        sip2: 1
+        sip2: manage_sip2
   post:
     x-mojo-to: SIP2::Accounts#add
     operationId: addSip2Accounts
@@ -127,7 +127,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        sip2: 1
+        sip2: manage_sip2
 "/sip2/accounts/{sip_account_id}":
   get:
     x-mojo-to: SIP2::Accounts#get
@@ -190,7 +190,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        sip2: 1
+        sip2: manage_sip2
   put:
     x-mojo-to: SIP2::Accounts#update
     operationId: updateSip2Accounts
@@ -247,7 +247,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        sip2: 1
+        sip2: manage_sip2
   delete:
     x-mojo-to: SIP2::Accounts#delete
     operationId: deleteSip2Accounts
@@ -293,7 +293,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        sip2: 1
+        sip2: manage_sip2
 "/sip2/accounts/{sip_account_id}/test_message":
   post:
     x-mojo-to: SIP2::Accounts#test_message
@@ -399,5 +399,5 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        sip2: 1
+        sip2: test_sip2_messages
         borrowers: list_borrowers

@@ -904,20 +904,23 @@ export default {
             apiClient: APIClient.sip2.accounts,
             additionalToolbarButtons: resource => ({
                 list: [],
-                show: [
-                    {
-                        onClick: () =>
-                            router.push({
-                                name: "SIP2AccountsTest",
-                                params: {
-                                    sip_account_id: resource.sip_account_id,
-                                },
-                            }),
-                        icon: "flask",
-                        title: $__("Test SIP2 messages"),
-                        index: 2,
-                    },
-                ],
+                show: can_test_sip2_messages
+                    ? [
+                          {
+                              onClick: () =>
+                                  router.push({
+                                      name: "SIP2AccountsTest",
+                                      params: {
+                                          sip_account_id:
+                                              resource.sip_account_id,
+                                      },
+                                  }),
+                              icon: "flask",
+                              title: $__("Test SIP2 messages"),
+                              index: 2,
+                          },
+                      ]
+                    : [],
             }),
             i18n: {
                 deleteConfirmationMessage: $__(

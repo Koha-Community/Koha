@@ -23,6 +23,7 @@
         const accounts_table_settings = [% TablesSettings.GetTableSettings( 'sip2', 'accounts', 'accounts', 'json' ) | $raw %];
         const system_preference_overrides_table_settings = [% TablesSettings.GetTableSettings( 'sip2', 'system_preference_overrides', 'system_preference_overrides', 'json' ) | $raw %];
         const logged_in_user = [% To.json(logged_in_user.unblessed) | $raw %];
+        const can_test_sip2_messages = [% ( CAN_user_sip2_test_sip2_messages && CAN_user_borrowers_list_borrowers ) ? 1 : 0 | html %];
     </script>
     [% Asset.js("js/vue/dist/sip2.js") | $raw %]
 [% END %]

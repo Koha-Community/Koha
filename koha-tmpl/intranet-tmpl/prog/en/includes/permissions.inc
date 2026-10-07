@@ -655,6 +655,13 @@
     [%- CASE 'manage_record_sources' -%]
         <span class="sub_permission manage_record_sources_subpermission"> Manage record sources </span>
         <span class="permissioncode">([% name | html %])</span>
+        [%# sip2 %]
+    [%- CASE 'manage_sip2' -%]
+        <span class="sub_permission manage_sip2_subpermission"> Manage SIP2 institutions, accounts and system preference overrides </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'test_sip2_messages' -%]
+        <span class="sub_permission test_sip2_messages_subpermission"> Test the SIP2 messages a SIP2 account would return </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'create_item_lists' -%]
         <span class="sub_permission create_item_lists_subpermission"> Create item lists </span>
         <span class="permissioncode">([% name | html %])</span>

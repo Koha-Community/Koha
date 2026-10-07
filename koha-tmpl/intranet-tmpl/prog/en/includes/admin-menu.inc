@@ -12,7 +12,7 @@
     can_user_parameters_manage_cities="[% CAN_user_parameters_manage_cities | html %]"
     can_user_parameters_manage_curbside_pickups="[% CAN_user_parameters_manage_curbside_pickups | html %]"
     can_user_parameters_manage_patron_restrictions="[% CAN_user_parameters_manage_patron_restrictions | html %]"
-    can_user_sip2="[% CAN_user_sip2 | html %]"
+    can_user_sip2_manage_sip2="[% CAN_user_sip2_manage_sip2 | html %]"
     can_user_parameters_manage_identity_providers="[% CAN_user_parameters_manage_identity_providers | html %]"
     can_user_parameters_manage_accounts="[% CAN_user_parameters_manage_accounts | html %]"
     can_user_parameters_manage_cash_registers="[% CAN_user_parameters_manage_cash_registers | html %]"

@@ -113,7 +113,7 @@
                         >
                     </li>
                 </template>
-                <li v-if="can_user_sip2">
+                <li v-if="can_user_sip2_manage_sip2">
                     <a
                         :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/sip2/sip2.pl"
@@ -568,7 +568,7 @@ export default {
         can_user_parameters_manage_cities: Number,
         can_user_parameters_manage_curbside_pickups: Number,
         can_user_parameters_manage_patron_restrictions: Number,
-        can_user_sip2: Number,
+        can_user_sip2_manage_sip2: Number,
         can_user_parameters_manage_identity_providers: Number,
         can_user_parameters_manage_accounts: Number,
         can_user_parameters_manage_cash_registers: Number,
