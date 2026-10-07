@@ -33,7 +33,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name => "reports/convert_report.tt",
         query         => $query,
         type          => "intranet",
-        flagsrequired => { reports => 'execute_reports' },
+        flagsrequired => { reports => [ 'execute_reports_foreground', 'execute_reports_background' ] },
     }
 );
 
