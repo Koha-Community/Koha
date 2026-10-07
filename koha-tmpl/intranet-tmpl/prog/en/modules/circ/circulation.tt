@@ -869,7 +869,7 @@
 
                             [% IF (forceallow) %]<input type="hidden" name="forceallow" value="1" />[% END %]
 
-                            <label class="circ_barcode" for="barcode">Checking out to [% INCLUDE 'patron-title.inc' %]</label>
+                            <label class="circ_barcode" for="barcode">Checking out to [% INCLUDE 'patron-title.inc' no_html=1 %]</label>
 
                             [% IF NEEDSCONFIRMATION %]
                                 <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" disabled="disabled" />
