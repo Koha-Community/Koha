@@ -20,6 +20,8 @@ use Modern::Perl;
 use Try::Tiny qw( catch finally try );
 use UNIVERSAL::require;
 
+use C4::Circulation qw( barcodedecode );
+use C4::Context;
 use C4::SIP::Sip            qw( timestamp );
 use C4::SIP::Sip::Constants qw( :all );
 use C4::SIP::Sip::Configuration;
@@ -27,9 +29,16 @@ use C4::SIP::Sip::MsgType;
 
 use Koha::Database;
 use Koha::Exceptions;
+use Koha::Exceptions::Patron;
+use Koha::Items;
+use Koha::Patrons;
 
 # The language field sent in every request. '001' is English.
 use constant LANGUAGE => '001';
+
+# The request messages the tester will run, the same ones the staff interface
+# can build. Anything else ( a login, a hold, a fee paid, ... ) is refused.
+my %SUPPORTED_REQUESTS = map { $_ => 1 } ( PATRON_STATUS_REQ, PATRON_INFO, ITEM_INFORMATION, CHECKOUT, CHECKIN );
 
 # Number of characters at the start of each response that make up the
 # message code plus the fixed length fields, keyed by response code. The
@@ -110,6 +119,10 @@ from 'message' and the patron/item parameters. Valid messages are
 'patron_status', 'patron_information', 'item_information', 'checkout' and
 'checkin'.
 
+The logged in user's restrictions apply: a patron the user cannot see throws
+Koha::Exceptions::Patron::NotFound, and when IndependentBranches is enabled an
+item from another library throws Koha::Exceptions::NoPermission.
+
 =cut
 
 sub run {
@@ -144,6 +157,10 @@ sub run {
 
     $schema->txn_begin;
     try {
+        # Checked here rather than up front because parsing the patron and item
+        # information requests needs the protocol version set above.
+        $self->_check_request($request);
+
         # The handler prints the response to STDOUT and stashes it in
         # $last_response. Capture STDOUT so it doesn't leak into the worker's
         # output, and localize %ENV so the system preference overrides the
@@ -277,6 +294,44 @@ sub _build_request {
     }
 
     Koha::Exceptions::BadParameter->throw("Unsupported message '$message'");
+}
+
+=head3 _check_request
+
+Refuses a request the logged in user should not be able to run: a message the
+tester does not support, a patron the user cannot see, or when
+IndependentBranches is enabled, an item from another library.
+
+=cut
+
+sub _check_request {
+    my ( $self, $request ) = @_;
+
+    my $code = substr( $request, 0, 2 );
+    Koha::Exceptions::BadParameter->throw("Unsupported message '$code'")
+        unless $SUPPORTED_REQUESTS{$code};
+
+    # Parse the request the same way the handler does, so we check the same
+    # patron and item the handler will look up, even for a hand edited request.
+    my $fields = C4::SIP::Sip::MsgType->new( $request, 0 )->{fields};
+
+    my $patron_id = $fields->{ (FID_PATRON_ID) };
+    if ( defined $patron_id && length $patron_id ) {
+        my $patron = Koha::Patrons->find_by_identifier($patron_id);
+        Koha::Exceptions::Patron::NotFound->throw("Patron not found")
+            unless $patron && Koha::Patrons->search_limited->find( $patron->borrowernumber );
+    }
+
+    my $item_id = $fields->{ (FID_ITEM_ID) };
+    if (   defined $item_id
+        && length $item_id
+        && C4::Context->preference('IndependentBranches')
+        && !C4::Context->IsSuperLibrarian )
+    {
+        my $item = Koha::Items->find( { barcode => barcodedecode($item_id) } );
+        Koha::Exceptions::NoPermission->throw("Item belongs to another library")
+            if $item && $item->homebranch ne C4::Context->userenv->{branch};
+    }
 }
 
 =head3 _parse_response

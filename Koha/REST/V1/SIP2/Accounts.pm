@@ -22,7 +22,8 @@ use Mojo::Base 'Mojolicious::Controller';
 use Koha::SIP2::Accounts;
 use Koha::SIP2::MessageTester;
 
-use Try::Tiny qw( catch try );
+use Scalar::Util qw( blessed );
+use Try::Tiny    qw( catch try );
 
 =head1 API
 
@@ -241,6 +242,10 @@ sub test_message {
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::MissingParameter') || $_->isa('Koha::Exceptions::BadParameter') ) {
                 return $c->render( status => 400, openapi => { error => "$_" } );
+            } elsif ( $_->isa('Koha::Exceptions::Patron::NotFound') ) {
+                return $c->render_resource_not_found("Patron");
+            } elsif ( $_->isa('Koha::Exceptions::NoPermission') ) {
+                return $c->render( status => 403, openapi => { error => "$_" } );
             }
         }
 

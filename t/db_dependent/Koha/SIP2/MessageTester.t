@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::Exception;
 
 use t::lib::TestBuilder;
@@ -223,6 +223,69 @@ subtest 'run() error handling' => sub {
     throws_ok { $tester->run( { message => 'no_such_message' } ) }
     'Koha::Exceptions::BadParameter',
         'run() with an unsupported message throws';
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'run() access restrictions' => sub {
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    my ( $account, $patron, $item ) = build_test_account();
+    my $tester = Koha::SIP2::MessageTester->new( { account => $account } );
+
+    throws_ok { $tester->run( { request => '9300CN' . $patron->userid . '|COpassword|' } ) }
+    'Koha::Exceptions::BadParameter',
+        'run() refuses a raw request for a message the tester does not support';
+
+    # A librarian without view_borrower_infos_from_any_libraries, in a library
+    # with no library groups, can only see patrons from their own library.
+    my $librarian = $builder->build_object(
+        { class => 'Koha::Patrons', value => { branchcode => $patron->branchcode, flags => 0 } } );
+    t::lib::Mocks::mock_userenv( { patron => $librarian } );
+
+    my $other_library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $other_patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $other_library->branchcode } } );
+    my $other_item = $builder->build_sample_item( { homebranch => $other_library->branchcode } );
+
+    my $result = $tester->run( { message => 'patron_information', patron_id => $patron->cardnumber } );
+    is( substr( $result->{response}, 0, 2 ), '64', 'run() allows a patron from the librarian\'s library' );
+
+    throws_ok { $tester->run( { message => 'patron_information', patron_id => $other_patron->cardnumber } ) }
+    'Koha::Exceptions::Patron::NotFound',
+        'run() refuses a patron the librarian cannot see';
+
+    # Swap the patron in a request the librarian is allowed to run
+    my $request      = $result->{request};
+    my $other_number = $other_patron->cardnumber;
+    $request =~ s/\|AA[^|]*\|/|AA$other_number|/;
+    throws_ok { $tester->run( { request => $request } ) }
+    'Koha::Exceptions::Patron::NotFound',
+        'run() refuses a raw request for a patron the librarian cannot see';
+
+    throws_ok { $tester->run( { message => 'patron_information', patron_id => 'no_such_patron' } ) }
+    'Koha::Exceptions::Patron::NotFound',
+        'run() refuses an unknown patron';
+
+    t::lib::Mocks::mock_preference( 'IndependentBranches', 0 );
+    $result = $tester->run( { message => 'item_information', item_id => $other_item->barcode } );
+    is(
+        substr( $result->{response}, 0, 2 ), '18',
+        'run() allows an item from another library when IndependentBranches is disabled'
+    );
+
+    t::lib::Mocks::mock_preference( 'IndependentBranches', 1 );
+    throws_ok { $tester->run( { message => 'item_information', item_id => $other_item->barcode } ) }
+    'Koha::Exceptions::NoPermission',
+        'run() refuses an item from another library when IndependentBranches is enabled';
+
+    $result = $tester->run( { message => 'item_information', item_id => $item->barcode } );
+    is(
+        substr( $result->{response}, 0, 2 ), '18',
+        'run() allows an item from the librarian\'s library when IndependentBranches is enabled'
+    );
 
     $schema->storage->txn_rollback;
 };

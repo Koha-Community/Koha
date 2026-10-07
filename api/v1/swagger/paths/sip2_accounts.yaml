@@ -305,7 +305,9 @@
       Generates the SIP2 response a saved account would return for the given
       message, without going through a real SIP session and without needing the
       SIP account password. Everything runs in a transaction that is rolled
-      back, so no data is changed.
+      back, so no data is changed. Only patrons the logged in user can see may be
+      used, and when IndependentBranches is enabled, only items from the logged
+      in user's library.
     consumes:
       - application/json
     produces:
@@ -368,6 +370,7 @@
                   value:
                     type: string
                     description: The field value
+          additionalProperties: false
       400:
         description: Bad request
         schema:
@@ -397,3 +400,4 @@
     x-koha-authorization:
       permissions:
         sip2: 1
+        borrowers: list_borrowers
