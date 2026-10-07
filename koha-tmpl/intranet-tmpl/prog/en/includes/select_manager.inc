@@ -54,11 +54,7 @@
         $("#managedby_name").empty();
         $("#managedby").val("");
         var borrowername = `${manager.firstname} ${manager.surname}`;
-        var managerlink =
-            `<a href="/cgi-bin/koha/members/moremember.pl'
-            + '?borrowernumber=${manager.borrowernumber}">` +
-            borrowername +
-            "</a>";
+        var managerlink = `<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=${manager.borrowernumber}">${borrowername}</a>`;
         $("#managedby_name").html(managerlink);
         $("#managedby").val(manager.borrowernumber);
         $("#notify").prop("checked", false).prop("disabled", true);
