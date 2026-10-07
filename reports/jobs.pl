@@ -33,6 +33,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-$template->param( new_job_id => scalar $input->param('new_job_id') );
+my $new_job_id = scalar $input->param('new_job_id');
+
+$template->param( new_job_id => scalar $input->param('new_job_id') ) if defined $new_job_id && $new_job_id =~ /^\d+$/;
 
 output_html_with_http_headers $input, $cookie, $template->output;
