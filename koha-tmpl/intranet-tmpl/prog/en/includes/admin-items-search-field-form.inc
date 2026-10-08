@@ -14,7 +14,7 @@
             <label class="required" for="name">Name: </label>
         </div>
         <div class="fg-input">
-            <input type="text" name="name" id="name" class="required" required="required" />
+            <input type="text" name="name" id="name" class="required focus" required="required" />
         </div>
         <div class="required">Required</div>
     [% END %]
