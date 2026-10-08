@@ -20,19 +20,17 @@
 
 [% BLOCK detail %]
     [% FOR m IN job.messages %]
-        [% FOREACH d IN m.error.pairs %]
-            <div class="alert alert-danger">
-                [% IF d.key == 'sqlerr' %]
-                    <span><strong>Banned keyword.</strong> [% d.value | html %]</span>
-                [% END %]
-                [% IF d.key == 'queryerr' %]
-                    <span><strong>Query error.</strong> [% d.value | html %]</span>
-                [% END %]
-                [% IF d.key == 'passworderr' %]
-                    <span><strong>Password field error.</strong> [% d.value | html %]</span>
-                [% END %]
-            </div>
-        [% END %]
+        <div class="alert alert-danger">
+            [% IF m.code == 'report_not_found' %]
+                <span><strong>Report not found</strong> [% m.error | html %]</span>
+            [% END %]
+            [% IF m.code == 'execute_error' %]
+                <span><strong>Query error.</strong> [% m.error | html %]</span>
+            [% END %]
+            [% IF m.code == 'internal_error' %]
+                <span><strong>Unexcpeted error.</strong> [% m.error | html %]</span>
+            [% END %]
+        </div>
     [% END %]
 [% END %]
 
