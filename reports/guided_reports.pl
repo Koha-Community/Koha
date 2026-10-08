@@ -375,6 +375,9 @@ if ( !$op ) {
     my $result = format_results($id);
     my $report = $result->{report_id} ? Koha::Reports->find( $result->{report_id} ) : undef;
 
+    output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
+        unless $report->can_access($logged_in_user);
+
     my @header_row;
     if ( $result->{headers} ) {
         @header_row = map { { cell => $_ } } @{ $result->{headers} };

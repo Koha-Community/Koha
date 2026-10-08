@@ -80,7 +80,14 @@ sub list {
             while ( my $p = $rs->next ) { $patrons_by_id{ $p->borrowernumber } = $p; }
         }
 
-        my @rendered = map { _render_job( $_, \%reports_by_id, \%patrons_by_id ) } @jobs;
+        #only render reports that the logged in user is allowed to see
+        my $patron = $c->stash('koha.user');
+        my @rendered;
+        for my $job (@jobs) {
+            my $report = $job->report_id ? $reports_by_id{ $job->report_id } : undef;
+            next if !$report->can_access($patron);
+            push @rendered, _render_job( $job, \%reports_by_id, \%patrons_by_id );
+        }
 
         return $c->render( status => 200, openapi => \@rendered );
     } catch {
