@@ -1077,6 +1077,9 @@
                 <input type="hidden" name="op" value="run" />
                 <input type="hidden" name="id" value="[% id | html %]" />
                 <input type="hidden" name="run_in_background_chosen" value="1" />
+                [% IF ( template_code ) %]
+                    <input type="hidden" name="template_code" value="[% template_code | html %]" />
+                [% END %]
                 [% FOREACH p IN sql_params %]
                     <input type="hidden" name="sql_params" value="[% p | html %]" />
                 [% END %]
