@@ -801,21 +801,8 @@ if ( !$op ) {
             exit;
         }
 
-        eval {
-            ( $sql, undef ) =
-                $report->prep_report( \@param_names, \@sql_params, { export => 1, run_type => 'foreground' } );
-        };
-        if ( my $e = $@ ) {
-            if ( ref($e) eq 'Koha::Exceptions::Report::DuplicateRunning' ) {
-                print $input->header(
-                    -status => '429 Too Many Requests',
-                    -type   => 'text/plain; charset=UTF-8',
-                );
-                print "This report is already running. Please wait for it to finish before running it again.\n";
-                exit;
-            }
-            die $e;
-        }
+        ( $sql, undef ) =
+            $report->prep_report( \@param_names, \@sql_params, { export => 1, run_type => 'foreground' } );
         my ( $sth, $q_errors ) = execute_query( { sql => $sql, report_id => $report_id } );
 
         unless ( $q_errors and @$q_errors ) {
@@ -1227,34 +1214,12 @@ if ( $op eq 'run' ) {
                     $report->prep_report( \@param_names, \@sql_params, { run_type => 'foreground' } );
             };
             if ( my $e = $@ ) {
-                my $error_key;
-                if ( ref($e) eq 'Koha::Exceptions::Report::DuplicateRunning' ) {
-                    $error_key = 'duplicate_running_reports_per_user_limit_exceeded';
-                } elsif ( ref($e) eq 'Koha::Exceptions::Report::TotalRunning' ) {
-                    $error_key = 'total_running_reports_limit_exceeded';
-                } elsif ( ref($e) eq 'Koha::Exceptions::Report::InstanceTotalRunning' ) {
-                    $error_key = 'total_running_reports_per_instance_limit_exceeded';
-                } elsif ( ref($e) eq 'Koha::Exceptions::Report::UnauthorizedBranchParameter' ) {
+                if ( ref($e) eq 'Koha::Exceptions::Report::UnauthorizedBranchParameter' ) {
                     $template->param(
                         access_denied                 => 1,
                         denied_op                     => 'run',
                         id                            => $report_id,
                         unauthorised_branch_parameter => 1,
-                    );
-                    output_html_with_http_headers $input, $cookie, $template->output;
-                    exit;
-                }
-                if ($error_key) {
-                    $template->param(
-                        'sql'          => $original_sql,
-                        'original_sql' => $original_sql,
-                        'id'           => $report_id,
-                        'execute'      => 1,
-                        'name'         => $name,
-                        'notes'        => $notes,
-                        'errors'       => [ { $error_key => 1 } ],
-                        'sql_params'   => \@sql_params,
-                        'param_names'  => \@param_names,
                     );
                     output_html_with_http_headers $input, $cookie, $template->output;
                     exit;

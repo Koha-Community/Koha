@@ -85,25 +85,7 @@ unless ($json_text) {
         exit 0;
     }
 
-    my ( $sql, undef );
-    eval { ( $sql, undef ) = $report_rec->prep_report( \@param_names, \@sql_params, { run_type => 'foreground' } ); };
-    if ( my $e = $@ ) {
-        my $error_key;
-        if ( ref($e) eq 'Koha::Exceptions::Report::DuplicateRunning' ) {
-            $error_key = 'duplicate_running_reports_per_user_limit_exceeded';
-        } elsif ( ref($e) eq 'Koha::Exceptions::Report::TotalRunning' ) {
-            $error_key = 'total_running_reports_per_user_limit_exceeded';
-        }
-        if ($error_key) {
-            print $query->header(
-                -type   => 'application/json',
-                -status => '429 Too Many Requests',
-            );
-            print encode_json( { error => $error_key } );
-            exit 0;
-        }
-        die $e;
-    }
+    my ($sql) = $report_rec->prep_report( \@param_names, \@sql_params, { run_type => 'foreground' } );
 
     my ( $sth, $errors ) = execute_query(
         {
