@@ -24,13 +24,16 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use DateTime::TimeZone;
+use File::Basename qw( dirname );
+use File::Spec;
 use File::Slurp               qw( read_file );
 use IPC::Cmd                  qw(can_run);
 use List::MoreUtils           qw( any );
 use Module::Load::Conditional qw( can_load );
 use Config                    qw( %Config );
 use Search::Elasticsearch;
-use Try::Tiny qw( catch try );
+use Try::Tiny   qw( catch try );
+use XML::Simple qw( XMLin );
 use YAML::XS;
 use Encode;
 
@@ -191,6 +194,47 @@ if ( $tab eq 'about' ) {
 }
 
 if ( $tab eq 'sysinfo' ) {
+
+    # Display configured SIP2 listener ports
+    my @sip_ports;
+
+    if ( my $koha_conf = $ENV{KOHA_CONF} ) {
+        my $sip_config_file = File::Spec->catfile(
+            dirname($koha_conf),
+            'SIPconfig.xml'
+        );
+
+        if ( -r $sip_config_file ) {
+            try {
+                my $sip_config = XMLin(
+                    $sip_config_file,
+                    ForceArray => ['service'],
+                    KeyAttr    => [],
+                );
+
+                my $listeners = $sip_config->{listeners}->{service};
+
+                if ($listeners) {
+                    foreach my $listener (@$listeners) {
+                        my $configured_port = $listener->{port} // '';
+
+                        if ( $configured_port =~ /(?:^|:)(\d+)\/tcp(?:\/IPv[46])?$/i ) {
+                            push @sip_ports, {
+                                port      => $1,
+                                transport => $listener->{transport} // '',
+                            };
+                        }
+                    }
+                }
+            } catch {
+                Koha::Logger->get->warn("Unable to read SIP configuration: $_");
+            };
+        }
+    }
+
+    @sip_ports = sort { $a->{port} <=> $b->{port} } @sip_ports;
+
+    $template->param( sip_ports => \@sip_ports );
 
     # Additional system information for warnings
 

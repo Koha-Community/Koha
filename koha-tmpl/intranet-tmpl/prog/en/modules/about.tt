@@ -393,6 +393,28 @@
         [% SET warnMissingCompiledFiles = 1 %]
     [% END %]
     [% WRAPPER tab_panel tabname= "sysinfo" bt_active = 1 %]
+
+        [% IF sip_ports.size %]
+            <h2>SIP2 configuration</h2>
+            <table class="table table-striped">
+                <caption>Configured SIP2 listeners</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Port</th>
+                        <th scope="col">Transport</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    [% FOREACH listener IN sip_ports %]
+                        <tr>
+                            <td>[% listener.port | html %]</td>
+                            <td>[% listener.transport | html %]</td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        [% END %]
+
         [% IF weasyprint_missing || warnPrefRequireChoosingExistingAuthority || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || warnPrefPatronSelfRegistrationDefaultCategory || invalid_yesno.count || warnNoActiveCurrency || warnIsRootUser || xml_config_warnings.size || warnI18nMissing || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships || log4perl_errors || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnConnectBroker || elasticsearch_has_missing || warnMissingCompiledFiles || warnDbRowFormat || warnPassChangeNoticeMissing %]
             [% IF ( warnDbRowFormat ) %]
                 <h2>Database row format incorrect</h2>
