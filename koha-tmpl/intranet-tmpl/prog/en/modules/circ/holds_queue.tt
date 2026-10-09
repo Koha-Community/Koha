@@ -230,11 +230,28 @@
                             searchable: true,
                             render: function (data, type, row) {
                                 if (!row.biblio) return "";
-                                let parts = [];
-                                if (row.biblio.edition_statement) parts.push(row.biblio.edition_statement.escapeHtml());
-                                if (row.biblio.publisher) parts.push(row.biblio.publisher.escapeHtml());
-                                if (row.biblio.publication_year) parts.push(row.biblio.publication_year);
-                                return parts.join(", ");
+                                let html = "";
+                                if (row.biblio.edition_statement) {
+                                    html += '<div class="hq-editionstatement">' + row.biblio.edition_statement.escapeHtml() + "</div>";
+                                }
+                                if (row.biblio.publisher) {
+                                    html += row.biblio.publisher.escapeHtml();
+                                }
+                                if (row.biblio.publication_year) {
+                                    html += ", " + ("" + row.biblio.publication_year).escapeHtml();
+                                } else if (row.biblio.copyright_date) {
+                                    html += ", " + ("" + row.biblio.copyright_date).escapeHtml();
+                                }
+                                if (row.biblio.pages) {
+                                    html += ": " + row.biblio.pages.escapeHtml();
+                                }
+                                if (row.biblio.material_size) {
+                                    html += " " + row.biblio.material_size.escapeHtml();
+                                }
+                                if (row.biblio.isbn) {
+                                    html += ' <span>ISBN: ' + row.biblio.isbn.escapeHtml() + "</span>";
+                                }
+                                return html;
                             },
                         },
                         {
