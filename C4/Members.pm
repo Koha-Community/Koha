@@ -201,11 +201,12 @@ sub patronflags {
 =head2 GetBorrowersToExpunge
 
   $borrowers = &GetBorrowersToExpunge(
-      not_borrowed_since => $not_borrowed_since,
-      expired_before       => $expired_before,
-      category_code        => \@category_code,
-      patron_list_id       => $patron_list_id,
-      branchcode           => $branchcode
+      not_borrowed_since      => $not_borrowed_since,
+      expired_before          => $expired_before,
+      category_code           => \@category_code,
+      patron_list_id          => $patron_list_id,
+      branchcode              => $branchcode,
+      exclude_nonzero_balance => 1
   );
 
   This function get all borrowers based on the given criteria.
