@@ -80,6 +80,23 @@
         <!-- .dialog.message -->
     [% END %]
 
+    [% IF ( notfoundbarcodes.size ) %]
+        <div class="alert alert-warning">
+            <p>Warning, the following barcodes were not found or did not match the selected item types:</p>
+            <br />
+            <table style="margin:auto;">
+                <thead>
+                    <tr><th>Barcodes not found</th></tr>
+                </thead>
+                <tbody>
+                    [% FOREACH notfoundbarcode IN notfoundbarcodes %]
+                        <tr><td>[% notfoundbarcode | html %]</td></tr>
+                    [% END %]
+                </tbody>
+            </table>
+        </div>
+    [% END # /IF notfoundbarcodes.size %]
+
     [% IF view == 'form' %]
         <form method="post" action="/cgi-bin/koha/tools/batch_extend_due_dates.pl" id="extend_due_dates_form">
             [% INCLUDE 'csrf-token.inc' %]

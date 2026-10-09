@@ -104,6 +104,7 @@ if ( $op eq 'form' || $op eq 'cud-form' ) {
         my @notfoundbarcodes = grep { !exists $itemdata{ lc $_ } } @barcodelist;
 
         $search_params->{'itemnumber'} = { -in => \@itemnumbers };
+        $template->param( notfoundbarcodes => \@notfoundbarcodes );
     }
 
     if ( $from_due_date and $to_due_date ) {
