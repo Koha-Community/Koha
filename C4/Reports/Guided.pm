@@ -218,6 +218,17 @@ sub get_columns {
     return $columns;
 }
 
+=head2 _get_columns
+
+    my $columns = _get_columns($table_name);
+
+Internal function used by get_columns. Returns an arrayref of hashrefs with
+the name (tablename.columnname) and description of each column of
+$table_name. Columns that reports are not allowed to use are left out.
+Dies if $table_name is not a known table.
+
+=cut
+
 sub _get_columns {
     my ($table_name) = @_;
     my $dbh          = C4::Context->dbh();
@@ -285,6 +296,17 @@ sub build_query {
     my $sql = _build_query( $tables, $columns, $criteria, $keys, $orderby, $totals, $definition );
     return ($sql);
 }
+
+=head2 _build_query
+
+    my $sql = _build_query( $tables, $columns, $criteria, $keys, $orderby, $totals, $definition );
+
+Internal function used by build_query. Builds the SELECT statement of a
+guided report: $tables are joined with the join conditions in $keys, then
+$criteria, the saved SQL of the dictionary definitions in $definition, a
+GROUP BY for $totals and $orderby are appended.
+
+=cut
 
 sub _build_query {
     my ( $tables, $columns, $criteria, $keys, $orderby, $totals, $definition ) = @_;
@@ -1254,6 +1276,16 @@ sub EmailReport {
     return ( \@emails, \@errors );
 
 }
+
+=head2 _get_display_value
+
+    my $display_value = _get_display_value( $original_value, $column );
+
+Internal function used by get_criteria. Returns the value to display for
+$original_value. For the periodicity column this is the description of the
+subscription frequency, otherwise $original_value is returned unchanged.
+
+=cut
 
 sub _get_display_value {
     my ( $original_value, $column ) = @_;
