@@ -127,16 +127,17 @@ sub add {
 
         my $hold_id = C4::Reserves::AddReserve(
             {
-                branchcode      => $pickup_id,
-                borrowernumber  => $patron_id,
-                biblionumber    => $params->{biblio_id},
-                priority        => $priority,
-                expiration_date => $params->{expiration_date},
-                notes           => $params->{notes},
-                title           => $biblio->title,
-                itemnumber      => $params->{item_id},
-                found           => undef,                        # TODO: Why not?
-                itemtype        => $params->{item_type},
+                branchcode             => $pickup_id,
+                borrowernumber         => $patron_id,
+                biblionumber           => $params->{biblio_id},
+                priority               => $priority,
+                expiration_date        => $params->{expiration_date},
+                patron_expiration_date => $params->{expiration_date},
+                notes                  => $params->{notes},
+                title                  => $biblio->title,
+                itemnumber             => $params->{item_id},
+                found                  => undef,                        # TODO: Why not?
+                itemtype               => $params->{item_type},
             }
         );
         if ($hold_id) {

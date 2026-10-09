@@ -823,13 +823,14 @@ sub HoldTitle {
     my $priority = C4::Reserves::CalculatePriority($biblionumber);
     AddReserve(
         {
-            branchcode       => $branch,
-            borrowernumber   => $borrowernumber,
-            biblionumber     => $biblionumber,
-            priority         => $priority,
-            reservation_date => $resdate,
-            expiration_date  => $expdate,
-            title            => $title,
+            branchcode             => $branch,
+            borrowernumber         => $borrowernumber,
+            biblionumber           => $biblionumber,
+            priority               => $priority,
+            reservation_date       => $resdate,
+            expiration_date        => $expdate,
+            patron_expiration_date => $expdate,
+            title                  => $title,
         }
     );
 
@@ -916,14 +917,15 @@ sub HoldItem {
     my $priority = C4::Reserves::CalculatePriority($biblionumber);
     AddReserve(
         {
-            branchcode       => $branch,
-            borrowernumber   => $borrowernumber,
-            biblionumber     => $biblionumber,
-            priority         => $priority,
-            reservation_date => $resdate,
-            expiration_date  => $expdate,
-            title            => $title,
-            itemnumber       => $itemnumber,
+            branchcode             => $branch,
+            borrowernumber         => $borrowernumber,
+            biblionumber           => $biblionumber,
+            priority               => $priority,
+            reservation_date       => $resdate,
+            expiration_date        => $expdate,
+            patron_expiration_date => $expdate,
+            title                  => $title,
+            itemnumber             => $itemnumber,
         }
     );
 
