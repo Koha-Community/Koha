@@ -168,12 +168,6 @@ const debouncedSearch = debounce(onSearch, props.debounceMs);
 </script>
 
 <style scoped>
-/*
- * This is a shared component, not booking-specific, so its styling
- * must not depend on the --booking-* tokens BookingForm.vue defines -
- * used anywhere without BookingForm mounted, those would resolve to
- * nothing and the badges below would lose their spacing and rounding.
- */
 .patron-option-meta {
     margin-left: 0.5rem;
     opacity: 0.75;
