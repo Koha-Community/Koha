@@ -29,6 +29,11 @@ use Exception::Class (
         description => 'You do not have permission to edit this report',
         fields      => ['report_id'],
     },
+    'Koha::Exceptions::Report::UnauthorizedBranchParameter' => {
+        isa         => 'Koha::Exceptions::Report',
+        description => 'The selected library is not allowed for this report',
+        fields      => [ 'report_id', 'branchcode' ],
+    },
 );
 
 =head1 NAME
@@ -52,6 +57,11 @@ The configured per-user limit on total simultaneous report runs has been reached
 =head2 Koha::Exceptions::Report::EditPermission
 
 Exception raised when the logged-in user may not edit a report.
+
+=head2 Koha::Exceptions::Report::UnauthorizedBranchParameter
+
+Exception raised when a Library runtime parameter value is outside the
+branchcodes the report's library limits allow under LimitReportsBy.
 
 =head1 Class methods
 

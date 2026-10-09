@@ -19,7 +19,6 @@ use Modern::Perl;
 
 use C4::Context;
 use Koha::Database;
-use Koha::Exception;
 use Koha::Exceptions::Report;
 use Koha::Patrons;
 use Koha::Reports;
@@ -426,32 +425,64 @@ sub _type {
     return 'SavedSql';
 }
 
+=head3 library_parameter_branchcodes
+
+    my $branchcodes = $report->library_parameter_branchcodes;
+
+Returns an array reference of the branchcodes a Library runtime parameter
+may take under the LimitReportsBy preference. Returns undef when there is
+no restriction: the preference is 'none' or the report has no library
+limits.
+
+With LimitReportsBy set to 'library' the branchcodes are the report's
+library limits. With 'library_group' they are the library limits plus every
+library in a reports group with them, as resolved by
+C<library_group_limit_branchcodes>.
+
+=cut
+
+sub library_parameter_branchcodes {
+    my ($self) = @_;
+
+    my $pref = C4::Context->preference('LimitReportsBy');
+    return if $pref eq 'none';
+
+    if ( $pref eq 'library' ) {
+        my $limits = $self->get_library_limits;
+        return unless $limits;
+        return [ map { $_->branchcode } $limits->as_list ];
+    }
+
+    if ( $pref eq 'library_group' ) {
+        my $branchcodes = $self->library_group_limit_branchcodes;
+        return unless @$branchcodes;
+        return $branchcodes;
+    }
+
+    return;
+}
+
 =head3 _confirm_branch_param_allowed
 
-Throws Koha::Exception if a Library runtime parameter value is not accessible
-to the current user under the active LimitReportsBy preference.
+Throws Koha::Exceptions::Report::UnauthorizedBranchParameter if a Library
+runtime parameter value is not one of the branchcodes returned by
+C<library_parameter_branchcodes>. Returns without throwing when that method
+returns undef, which means the parameter is unrestricted.
 
 =cut
 
 sub _confirm_branch_param_allowed {
     my ( $self, $branchcode ) = @_;
 
-    my $pref = C4::Context->preference('LimitReportsBy');
-    return if $pref eq 'none';
+    my $allowed = $self->library_parameter_branchcodes;
+    return unless $allowed;
 
-    if ( $pref eq 'library' ) {
-        my $user_branch = C4::Context::mybranch();
-        Koha::Exception->throw( message => 'Unauthorized branch parameter' )
-            unless $user_branch && $branchcode eq $user_branch;
-        return;
-    }
+    Koha::Exceptions::Report::UnauthorizedBranchParameter->throw(
+        report_id  => $self->id,
+        branchcode => $branchcode,
+    ) unless grep { $_ eq $branchcode } @$allowed;
 
-    if ( $pref eq 'library_group' ) {
-        my $branchcodes = $self->library_group_limit_branchcodes;
-        return unless @$branchcodes;
-        Koha::Exception->throw( message => 'Unauthorized branch parameter' )
-            unless grep { $_ eq $branchcode } @$branchcodes;
-    }
+    return;
 }
 
 =head3 _library_limits

@@ -20,7 +20,7 @@ use Modern::Perl;
 use Test::Exception;
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 21;
+use Test::More tests => 23;
 
 use C4::Context;
 use Koha::Library::Group;
@@ -737,8 +737,56 @@ subtest 'search_with_library_group_limits' => sub {
     is( scalar @results, 2, 'ft_reports disabled on root limits access to own branch only' );
 };
 
+subtest 'library_parameter_branchcodes' => sub {
+    plan tests => 6;
+
+    my $library_a = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_b = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_c = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $root_group = Koha::Library::Group->new( { title => 'param branchcodes root', ft_reports => 1 } )->store;
+    my $group_ab =
+        Koha::Library::Group->new( { parent_id => $root_group->id, title => 'param branchcodes group ab' } )->store;
+    Koha::Library::Group->new( { parent_id => $group_ab->id, branchcode => $library_a->branchcode } )->store;
+    Koha::Library::Group->new( { parent_id => $group_ab->id, branchcode => $library_b->branchcode } )->store;
+
+    my $report_no_limit = $builder->build_object( { class => 'Koha::Reports' } );
+    my $report_ab       = $builder->build_object( { class => 'Koha::Reports' } );
+    my $report_a        = $builder->build_object( { class => 'Koha::Reports' } );
+    my $report_c        = $builder->build_object( { class => 'Koha::Reports' } );
+    $report_ab->replace_library_limits( [ $library_a->branchcode, $library_b->branchcode ] );
+    $report_a->replace_library_limits( [ $library_a->branchcode ] );
+    $report_c->replace_library_limits( [ $library_c->branchcode ] );
+
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'none' );
+    is( $report_ab->library_parameter_branchcodes, undef, 'pref none: unrestricted' );
+
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'library' );
+    is( $report_no_limit->library_parameter_branchcodes, undef, 'pref library: report with no limits is unrestricted' );
+    is_deeply(
+        [ sort @{ $report_ab->library_parameter_branchcodes } ],
+        [ sort ( $library_a->branchcode, $library_b->branchcode ) ],
+        'pref library: limited report resolves to its library limits only'
+    );
+
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'library_group' );
+    is(
+        $report_no_limit->library_parameter_branchcodes, undef,
+        'pref library_group: report with no limits is unrestricted'
+    );
+    is_deeply(
+        [ sort @{ $report_a->library_parameter_branchcodes } ],
+        [ sort ( $library_a->branchcode, $library_b->branchcode ) ],
+        'pref library_group: limited report resolves to the whole reports group'
+    );
+    is_deeply(
+        $report_c->library_parameter_branchcodes, [ $library_c->branchcode ],
+        'pref library_group: ungrouped limit resolves to itself only'
+    );
+};
+
 subtest '_confirm_branch_param_allowed' => sub {
-    plan tests => 9;
+    plan tests => 10;
 
     my $library_a = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library_b = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -752,49 +800,51 @@ subtest '_confirm_branch_param_allowed' => sub {
 
     my $report_no_limit = $builder->build_object( { class => 'Koha::Reports' } );
     my $report_ab       = $builder->build_object( { class => 'Koha::Reports' } );
+    my $report_c        = $builder->build_object( { class => 'Koha::Reports' } );
     $report_ab->replace_library_limits( [ $library_a->branchcode ] );
+    $report_c->replace_library_limits( [ $library_c->branchcode ] );
 
-    # pref = none: any branch allowed regardless of user branch or report limits
+    my $exception = 'Koha::Exceptions::Report::UnauthorizedBranchParameter';
+
+    # pref = none: any branch allowed regardless of report limits
     t::lib::Mocks::mock_preference( 'LimitReportsBy', 'none' );
     t::lib::Mocks::mock_userenv( { branchcode => $library_a->branchcode } );
     lives_ok { $report_ab->_confirm_branch_param_allowed( $library_c->branchcode ) }
     'pref none: any branchcode passes';
 
-    # pref = library: branch matching user branch passes
+    # pref = library: a report with no limits allows any branch
     t::lib::Mocks::mock_preference( 'LimitReportsBy', 'library' );
+    lives_ok { $report_no_limit->_confirm_branch_param_allowed( $library_c->branchcode ) }
+    'pref library: report with no limits passes any branchcode';
+
+    # pref = library: a limited report allows only its limited libraries
     lives_ok { $report_ab->_confirm_branch_param_allowed( $library_a->branchcode ) }
-    'pref library: matching branch passes';
-
-    # pref = library: branch not matching user branch throws
+    'pref library: branchcode within the report limits passes';
     throws_ok { $report_ab->_confirm_branch_param_allowed( $library_b->branchcode ) }
-    'Koha::Exception', 'pref library: non-matching branch throws';
+    $exception, 'pref library: branchcode outside the report limits throws';
 
-    # pref = library: no logged-in branch throws
+    # pref = library: the check does not depend on the logged-in branch
     C4::Context->unset_userenv;
-    throws_ok { $report_ab->_confirm_branch_param_allowed( $library_a->branchcode ) }
-    'Koha::Exception', 'pref library: no user branch throws';
+    lives_ok { $report_ab->_confirm_branch_param_allowed( $library_a->branchcode ) }
+    'pref library: no user branch still passes a branchcode within the report limits';
 
-    # pref = library_group: report with no group limits passes any branch
+    # pref = library_group: a report with no limits allows any branch
     t::lib::Mocks::mock_preference( 'LimitReportsBy', 'library_group' );
     t::lib::Mocks::mock_userenv( { branchcode => $library_a->branchcode } );
     lives_ok { $report_no_limit->_confirm_branch_param_allowed( $library_c->branchcode ) }
-    'pref library_group: report with no group limits passes any branchcode';
+    'pref library_group: report with no limits passes any branchcode';
 
-    # pref = library_group: branchcode within the report group passes
+    # pref = library_group: a limited report allows the whole reports group
     lives_ok { $report_ab->_confirm_branch_param_allowed( $library_b->branchcode ) }
-    'pref library_group: branchcode within report group passes';
-
-    # pref = library_group: branchcode outside the report group throws
+    'pref library_group: branchcode within the report group passes';
     throws_ok { $report_ab->_confirm_branch_param_allowed( $library_c->branchcode ) }
-    'Koha::Exception', 'pref library_group: branchcode outside report group throws';
+    $exception, 'pref library_group: branchcode outside the report group throws';
 
-    # pref = library_group: report limited to an ungrouped library is enforced as a group of one
-    my $report_c = $builder->build_object( { class => 'Koha::Reports' } );
-    $report_c->replace_library_limits( [ $library_c->branchcode ] );
+    # pref = library_group: a report limited to an ungrouped library is enforced as a group of one
     lives_ok { $report_c->_confirm_branch_param_allowed( $library_c->branchcode ) }
     'pref library_group: ungrouped limit passes its own branchcode';
     throws_ok { $report_c->_confirm_branch_param_allowed( $library_a->branchcode ) }
-    'Koha::Exception', 'pref library_group: ungrouped limit throws for another branchcode';
+    $exception, 'pref library_group: ungrouped limit throws for another branchcode';
 };
 
 subtest 'running' => sub {
