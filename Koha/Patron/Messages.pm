@@ -49,6 +49,30 @@ sub filter_by_unread {
     );
 }
 
+=head3 search_limited
+
+my $messages = Koha::Patron::Messages->search_limited( $params, $attributes );
+
+Returns all the messages the logged in user is allowed to see
+
+=cut
+
+sub search_limited {
+    my ( $self, $params, $attributes ) = @_;
+
+    my $userenv = C4::Context->userenv;
+    my @restricted_branchcodes;
+    if ( $userenv and $userenv->{number} ) {
+        my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
+        @restricted_branchcodes = $logged_in_user->libraries_where_can_see_patrons;
+    }
+    if (@restricted_branchcodes) {
+        my $patrons = Koha::Patrons->search( { branchcode => { -in => \@restricted_branchcodes } } );
+        $params->{'me.borrowernumber'} = { -in => $patrons->_resultset->get_column('borrowernumber')->as_query };
+    }
+    return $self->search( $params, $attributes );
+}
+
 =head3 _type
 
 =cut

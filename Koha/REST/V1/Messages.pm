@@ -43,7 +43,7 @@ sub list {
     return try {
         return $c->render(
             status  => 200,
-            openapi => $c->objects->search( Koha::Patron::Messages->new )
+            openapi => $c->objects->search( Koha::Patron::Messages->search_limited )
         );
     } catch {
         $c->unhandled_exception($_);
@@ -60,7 +60,7 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $message = $c->objects->find( Koha::Patron::Messages->new, $c->param('message_id') );
+        my $message = $c->objects->find( Koha::Patron::Messages->search_limited, $c->param('message_id') );
         return $c->render_resource_not_found("Message")
             unless $message;
 
@@ -83,6 +83,7 @@ sub add {
         my $message = Koha::Patron::Message->new_from_api( $c->req->json );
         my $user    = $c->stash('koha.user');
         $message->set( { manager_id => $user->borrowernumber } ) unless defined $message->manager_id;
+        $message->set( { branchcode => $user->branchcode } )     unless defined $message->branchcode;
         $message->store;
         $c->res->headers->location( $c->req->url->to_string . '/' . $message->message_id );
 
@@ -112,13 +113,33 @@ Controller function that handles updating a Koha::Patron::Message object
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $message = Koha::Patron::Messages->find( $c->param('message_id') );
+    my $filters = {
+        message_id => $c->param('message_id'),
+    };
+
+    if ( !C4::Context->preference('AllowAllMessageDeletion') ) {
+        $filters->{branchcode} = $c->stash('koha.user')->branchcode;
+    }
+
+    my $message = Koha::Patron::Messages->search_limited($filters)->next;
 
     return $c->render_resource_not_found("Message")
         unless $message;
 
     return try {
         my $params = $c->req->json;
+
+        for my $field (qw(patron_id message message_type library_id)) {
+            if ( exists $params->{$field} && ( !defined $params->{$field} || $params->{$field} eq '' ) ) {
+                return $c->render(
+                    status  => 400,
+                    openapi => {
+                        error => "$field cannot be empty",
+                    },
+                );
+            }
+        }
+
         $message->set_from_api($params);
         $message->store();
         return $c->render(
@@ -139,7 +160,15 @@ Controller function that handles deleting a Koha::Patron::Message object
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $message = Koha::Patron::Messages->find( $c->param('message_id') );
+    my $filters = {
+        message_id => $c->param('message_id'),
+    };
+
+    if ( !C4::Context->preference('AllowAllMessageDeletion') ) {
+        $filters->{branchcode} = $c->stash('koha.user')->branchcode;
+    }
+
+    my $message = Koha::Patron::Messages->search_limited($filters)->next;
 
     return $c->render_resource_not_found("Message")
         unless $message;

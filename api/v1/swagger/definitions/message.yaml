@@ -8,7 +8,9 @@ properties:
     type: integer
     description: Internal patron identifier
   library_id:
-    type: string
+    type:
+      - string
+      - "null"
     description: Internal library identifier
     maxLength: 10
     minLength: 1
@@ -23,10 +25,13 @@ properties:
     type:
       - string
       - "null"
+    readOnly: true
     description: Message date
     format: date-time
   manager_id:
-    type: integer
+    type:
+      - integer
+      - "null"
     description: Internal manager identifier
   patron_read_date:
     type:
