@@ -976,12 +976,12 @@ subtest 'set_waiting+patron_expiration_date' => sub {
         my $patron_expiration_date = dt_from_string->add( days => 3 )->ymd;
         my $reserve_id             = C4::Reserves::AddReserve(
             {
-                branchcode      => $library->branchcode,
-                borrowernumber  => $patron->borrowernumber,
-                biblionumber    => $item->biblionumber,
-                priority        => 1,
-                itemnumber      => $item->itemnumber,
-                expiration_date => $patron_expiration_date,
+                branchcode             => $library->branchcode,
+                borrowernumber         => $patron->borrowernumber,
+                biblionumber           => $item->biblionumber,
+                priority               => 1,
+                itemnumber             => $item->itemnumber,
+                patron_expiration_date => $patron_expiration_date,
             }
         );
 
@@ -1017,12 +1017,12 @@ subtest 'set_waiting+patron_expiration_date' => sub {
         my $patron_expiration_date = dt_from_string->add( days => 6 )->ymd;
         my $reserve_id             = C4::Reserves::AddReserve(
             {
-                branchcode      => $library->branchcode,
-                borrowernumber  => $patron->borrowernumber,
-                biblionumber    => $item->biblionumber,
-                priority        => 1,
-                itemnumber      => $item->itemnumber,
-                expiration_date => $patron_expiration_date,
+                branchcode             => $library->branchcode,
+                borrowernumber         => $patron->borrowernumber,
+                biblionumber           => $item->biblionumber,
+                priority               => 1,
+                itemnumber             => $item->itemnumber,
+                patron_expiration_date => $patron_expiration_date,
             }
         );
 
