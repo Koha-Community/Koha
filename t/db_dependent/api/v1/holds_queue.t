@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -289,6 +289,108 @@ subtest 'HidePatronName tests' => sub {
     $t->get_ok( "//$super_userid:$password\@/api/v1/holds/queue" => { 'x-koha-embed' => 'patron' } )
         ->status_is(200)
         ->json_hasnt('/0/patron/library_id');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'patron visibility across libraries tests' => sub {
+
+    plan tests => 9;
+
+    $schema->storage->txn_begin;
+
+    Koha::Hold::HoldsQueueItems->delete;
+
+    t::lib::Mocks::mock_preference( 'HidePatronName',      0 );
+    t::lib::Mocks::mock_preference( 'IndependentBranches', 0 );
+
+    my $library_staff  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_patron = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    # Staff user restricted to their own library: only 'circulate_remaining_permissions'
+    # (no 'view_borrower_infos_from_any_libraries')
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library_staff->branchcode,
+                flags      => 0,
+            }
+        }
+    );
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $librarian->borrowernumber,
+                module_bit     => 1,                                   # circulate
+                code           => 'circulate_remaining_permissions',
+            },
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    # A patron belonging to a *different* library
+    my $hold_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library_patron->branchcode,
+                surname    => 'Smith',
+                firstname  => 'John',
+            },
+        }
+    );
+
+    my $biblio = $builder->build_sample_biblio;
+    my $item   = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+
+    $builder->build_object(
+        {
+            class => 'Koha::Hold::HoldsQueueItems',
+            value => {
+                biblionumber   => $biblio->biblionumber,
+                itemnumber     => $item->itemnumber,
+                barcode        => $item->barcode,
+                surname        => $hold_patron->surname,
+                firstname      => $hold_patron->firstname,
+                borrowernumber => $hold_patron->borrowernumber,
+                cardnumber     => $hold_patron->cardnumber,
+                pickbranch     => $library_patron->branchcode,
+                holdingbranch  => $item->holdingbranch,
+                title          => $biblio->title,
+            },
+        }
+    );
+
+    # The staff user cannot see patrons from the patron's library: identifying
+    # fields are redacted, but library_id survives (unredact_list) so the UI can
+    # still render "A patron from library X".
+    $t->get_ok( "//$userid:$password\@/api/v1/holds/queue" => { 'x-koha-embed' => 'patron' } )
+        ->status_is(200)
+        ->json_is( '/0/patron/surname'    => undef, 'surname redacted for cross-library patron' )
+        ->json_is( '/0/patron/firstname'  => undef, 'firstname redacted for cross-library patron' )
+        ->json_is( '/0/patron/cardnumber' => undef, 'cardnumber redacted for cross-library patron' )
+        ->json_is(
+        '/0/patron/library_id' => $library_patron->branchcode,
+        'library_id kept so the UI can show "A patron from library X"'
+        );
+
+    # A superlibrarian sees everything
+    my $superlibrarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 }     # superlibrarian
+        }
+    );
+    $superlibrarian->set_password( { password => $password, skip_validation => 1 } );
+    my $super_userid = $superlibrarian->userid;
+
+    $t->get_ok( "//$super_userid:$password\@/api/v1/holds/queue" => { 'x-koha-embed' => 'patron' } )
+        ->status_is(200)
+        ->json_is( '/0/patron/surname' => 'Smith', 'superlibrarian sees the patron surname' );
 
     $schema->storage->txn_rollback;
 };
