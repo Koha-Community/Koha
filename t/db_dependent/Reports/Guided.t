@@ -677,7 +677,7 @@ $schema->storage->txn_rollback;
 
 subtest 'execute_query() with user supplied LIMIT' => sub {
 
-    plan tests => 6;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -700,8 +700,8 @@ subtest 'execute_query() with user supplied LIMIT' => sub {
         'LIMIT offset, count with offset greater than count is supported'
     );
     is_deeply(
-        $fetch->( "$base_sql LIMIT 2, 6", 0, 4 ), [ @itemnumbers[ 2 .. 7 ] ],
-        'First page returns all the rows of the user supplied LIMIT'
+        $fetch->( "$base_sql LIMIT 2, 6", 0, 4 ), [ @itemnumbers[ 2 .. 5 ] ],
+        'First page returns one page of the user supplied LIMIT'
     );
     is_deeply(
         $fetch->( "$base_sql LIMIT 2, 6", 4, 4 ), [ @itemnumbers[ 6 .. 7 ] ],
@@ -710,6 +710,18 @@ subtest 'execute_query() with user supplied LIMIT' => sub {
     is_deeply(
         $fetch->( "$base_sql LIMIT 6 OFFSET 2", 4, 4 ), [ @itemnumbers[ 6 .. 7 ] ],
         'Second page stops at the user supplied LIMIT (OFFSET syntax)'
+    );
+    is_deeply(
+        $fetch->( "$base_sql LIMIT 6 OFFSET 2", 0, 4 ), [ @itemnumbers[ 2 .. 5 ] ],
+        'First page returns one page of the user supplied LIMIT (OFFSET syntax)'
+    );
+    is_deeply(
+        $fetch->( "$base_sql LIMIT 6", 0, 4 ), [ @itemnumbers[ 0 .. 3 ] ],
+        'First page returns one page of the user supplied LIMIT count'
+    );
+    is_deeply(
+        $fetch->( "$base_sql LIMIT 6", 4, 4 ), [ @itemnumbers[ 4 .. 5 ] ],
+        'Second page stops at the user supplied LIMIT count'
     );
     is_deeply(
         $fetch->( "$base_sql LIMIT 3", 0, 20 ), [ @itemnumbers[ 0 .. 2 ] ],
