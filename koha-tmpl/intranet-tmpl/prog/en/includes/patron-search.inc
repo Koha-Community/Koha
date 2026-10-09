@@ -1121,7 +1121,7 @@
                     document.getElementById("selected_patron_id").value = borrowernumber;
                 } else {
                     if (callback) {
-                        callback(borrowernumber, data);
+                        window[callback](borrowernumber, data);
                     } else {
                         select_user(borrowernumber, data);
                     }
