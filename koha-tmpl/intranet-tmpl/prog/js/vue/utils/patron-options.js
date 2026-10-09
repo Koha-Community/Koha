@@ -5,7 +5,7 @@
  * patron_autocomplete() (staff-global.js, patron-format.js), but returns
  * plain data for native Vue rendering instead of pre-built HTML strings.
  */
-import { $__ } from "../i18n/index.js";
+import { $__ } from "@koha-vue/i18n";
 import { idsEqual } from "./functions.js";
 import { APIClient } from "../fetch/api-client.js";
 
