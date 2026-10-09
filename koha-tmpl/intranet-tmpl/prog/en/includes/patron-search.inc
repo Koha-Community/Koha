@@ -438,7 +438,7 @@
                 parent_block.find(".error").hide();
 
                 // Build the aLengthMenu
-                let aLengthMenu = [...new Set([Koha.prefs.PatronsPerPage, 10, 20, 50, 100, -1])];
+                let aLengthMenu = parseInt(Koha.prefs.PatronsPerPage) ? [...new Set([parseInt(Koha.prefs.PatronsPerPage), 10, 20, 50, 100, -1])] : [10, 20, 50, 100, -1];
                 aLengthMenu.sort(function (a, b) {
                     // Put "All" at the end
                     if (a == -1) {
