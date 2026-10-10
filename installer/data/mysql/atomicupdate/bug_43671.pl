@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Koha::Installer::Output qw(say_warning say_success say_info);
+use Koha::Installer::Output qw(say_success say_failure);
 
 return {
     bug_number  => "43671",
@@ -8,13 +8,19 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        # Do your stuff here
-        $dbh->do(
-            q{
-            INSERT IGNORE INTO systempreferences ( `variable`, `value` ) VALUES ('SCOLoadHoldsByDefault','1')
+        unless (
+            $dbh->selectrow_array(q{SELECT COUNT(*) FROM systempreferences WHERE variable = 'SCOLoadHoldsByDefault'}) )
+        {
+            my $ok = $dbh->do(
+                q{
+                INSERT IGNORE INTO systempreferences ( `variable`, `value` ) VALUES ('SCOLoadHoldsByDefault','1')
+            }
+            );
+            if ($ok) {
+                say_success( $out, "Added new system preference SCOLoadHoldsByDefault" );
+            } else {
+                say_failure( $out, "Failed to add system preference SCOLoadHoldsByDefault: " . $dbh->errstr );
+            }
         }
-        );
-
-        say_success( $out, "Added new system preference SCOLoadHoldsByDefault" );
     },
 };
