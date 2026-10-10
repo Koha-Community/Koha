@@ -410,10 +410,7 @@ if ($patron) {
     my $accountlines = $account->lines;
 
     my $holds               = $patron->holds;
-    my $waiting_holds_count = 0;
-    my $waiting_holds       = $holds->search( { found => 'W' } );
-
-    $waiting_holds_count = $waiting_holds->count if ($waiting_holds);
+    my $waiting_holds_count = $holds->waiting->count;
 
     $template->param(
         validuser                => 1,
