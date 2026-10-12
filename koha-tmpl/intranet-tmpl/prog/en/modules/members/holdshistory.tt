@@ -253,15 +253,14 @@
                                     }
                                 },
                             },
-                            ...(display_hold_group_id
-                                ? [
-                                      {
-                                          data: "hold_group_id",
-                                          searchable: true,
-                                          orderable: true,
-                                      },
-                                  ]
-                                : []),
+                            {
+                                data: "hold_group_id",
+                                searchable: !!display_hold_group_id,
+                                orderable: !!display_hold_group_id,
+                                render: function (data, type, row, meta) {
+                                    return display_hold_group_id && data ? data : "";
+                                },
+                            },
                             {
                                 data: "biblio.author",
                                 searchable: true,
