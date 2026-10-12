@@ -562,7 +562,7 @@
     <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var table_settings = [% TablesSettings.GetTableSettings( 'admin', 'itemtypes', 'table_item_type', 'json' ) | $raw %];
         let image_column = table_settings.columns.find(c => c.columnname == 'image');
-        image_column.visibility_condition = [% !(Koha.Preference('noItemTypeImages') && !Koha.Preference('OpacNoItemTypeImages')) ? 'true' : 'false' | html %]
+        image_column.visibility_condition = [% !(Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages')) ? 'true' : 'false' | html %];
     </script>
     [% Asset.js("js/pages/itemtypes.js") | $raw %]
 [% END %]
