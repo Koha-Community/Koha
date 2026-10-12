@@ -239,38 +239,43 @@
                                                                     <label for="fund_record_[% biblio.import_record_id | html %]">Fund: </label>
                                                                     <select id="fund_record_[% biblio.import_record_id | html %]" name="budget_id_[% biblio.import_record_id | html %]">
                                                                         <option value="">Select a fund (will use default if set)</option>
-                                                                        [% FOREACH budget IN budget_loop %]
-                                                                            [% IF ( budget.b_id == biblio.budget_id ) %]
-                                                                                [% IF budget.b_active %]
-                                                                                    <option
-                                                                                        value="[% budget.b_id | html %]"
-                                                                                        data-sort1-authcat="[% budget.b_sort1_authcat | html %]"
-                                                                                        data-sort2-authcat="[% budget.b_sort2_authcat | html %]"
-                                                                                        selected="selected"
-                                                                                        >[% budget.b_txt | html %]</option
-                                                                                    >
+                                                                        [% FILTER collapse %]
+                                                                            [% FOREACH budget IN budget_loop %]
+                                                                                [% IF ( budget.b_id == biblio.budget_id ) %]
+                                                                                    [% IF budget.b_active %]
+                                                                                        <option
+                                                                                            value="[% budget.b_id | html %]"
+                                                                                            data-sort1-authcat="[% budget.b_sort1_authcat | html %]"
+                                                                                            data-sort2-authcat="[% budget.b_sort2_authcat | html %]"
+                                                                                            selected="selected"
+                                                                                            >[% budget.b_txt | html %]</option
+                                                                                        >
+                                                                                    [% ELSE %]
+                                                                                        <option
+                                                                                            value="[% budget.b_id | html %]"
+                                                                                            data-sort1-authcat="[% budget.b_sort1_authcat | html %]"
+                                                                                            data-sort2-authcat="[% budget.b_sort2_authcat | html %]"
+                                                                                            selected="selected"
+                                                                                            >[% budget.b_txt | html %] (inactive)</option
+                                                                                        >
+                                                                                    [% END %]
                                                                                 [% ELSE %]
-                                                                                    <option
-                                                                                        value="[% budget.b_id | html %]"
-                                                                                        data-sort1-authcat="[% budget.b_sort1_authcat | html %]"
-                                                                                        data-sort2-authcat="[% budget.b_sort2_authcat | html %]"
-                                                                                        selected="selected"
-                                                                                        >[% budget.b_txt | html %] (inactive)</option
-                                                                                    >
-                                                                                [% END %]
-                                                                            [% ELSE %]
-                                                                                [% IF budget.b_active %]
-                                                                                    <option value="[% budget.b_id | html %]" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat | html %]"
-                                                                                        >[% budget.b_txt | html %]</option
-                                                                                    >
-                                                                                [% ELSE %]
-                                                                                    <option
-                                                                                        value="[% budget.b_id | html %]"
-                                                                                        class="b_inactive"
-                                                                                        data-sort1-authcat="[% budget.b_sort1_authcat | html %]"
-                                                                                        data-sort2-authcat="[% budget.b_sort2_authcat | html %]"
-                                                                                        >[% budget.b_txt | html %] (inactive)</option
-                                                                                    >
+                                                                                    [% IF budget.b_active %]
+                                                                                        <option
+                                                                                            value="[% budget.b_id | html %]"
+                                                                                            data-sort1-authcat="[% budget.b_sort1_authcat | html %]"
+                                                                                            data-sort2-authcat="[% budget.b_sort2_authcat | html %]"
+                                                                                            >[% budget.b_txt | html %]</option
+                                                                                        >
+                                                                                    [% ELSE %]
+                                                                                        <option
+                                                                                            value="[% budget.b_id | html %]"
+                                                                                            class="b_inactive"
+                                                                                            data-sort1-authcat="[% budget.b_sort1_authcat | html %]"
+                                                                                            data-sort2-authcat="[% budget.b_sort2_authcat | html %]"
+                                                                                            >[% budget.b_txt | html %] (inactive)</option
+                                                                                        >
+                                                                                    [% END %]
                                                                                 [% END %]
                                                                             [% END %]
                                                                         [% END %]
@@ -409,18 +414,22 @@
                                                                                     disabled="disabled"
                                                                                 >
                                                                                     <option value="">Select a fund (will use default if set)</option>
-                                                                                    [% FOREACH budget_loo IN budget_loop %]
-                                                                                        [% IF ( budget_loo.b_active ) %]
-                                                                                            [% IF ( budget_loo.b_id ) == ( item.budget_id ) %]
-                                                                                                <option value="[% budget_loo.b_id | html %]" selected="selected">[% budget_loo.b_txt | html %]</option>
+                                                                                    [% FILTER collapse %]
+                                                                                        [% FOREACH budget_loo IN budget_loop %]
+                                                                                            [% IF ( budget_loo.b_active ) %]
+                                                                                                [% IF ( budget_loo.b_id ) == ( item.budget_id ) %]
+                                                                                                    <option value="[% budget_loo.b_id | html %]" selected="selected">[% budget_loo.b_txt | html %]</option>
+                                                                                                [% ELSE %]
+                                                                                                    <option value="[% budget_loo.b_id | html %]">[% budget_loo.b_txt | html %]</option>
+                                                                                                [% END %]
                                                                                             [% ELSE %]
-                                                                                                <option value="[% budget_loo.b_id | html %]">[% budget_loo.b_txt | html %]</option>
-                                                                                            [% END %]
-                                                                                        [% ELSE %]
-                                                                                            [% IF ( budget_loo.b_id ) == ( item.budget_id ) %]
-                                                                                                <option value="[% budget_loo.b_id | html %]" class="buget_item_inactive" selected="selected">[% budget_loo.b_txt | html %] (inactive)</option>
-                                                                                            [% ELSE %]
-                                                                                                <option value="[% budget_loo.b_id | html %]" class="budget_item_inactive">[% budget_loo.b_txt | html %] (inactive)</option>
+                                                                                                [% IF ( budget_loo.b_id ) == ( item.budget_id ) %]
+                                                                                                    <option value="[% budget_loo.b_id | html %]" class="buget_item_inactive" selected="selected"
+                                                                                                        >[% budget_loo.b_txt | html %] (inactive)</option
+                                                                                                    >
+                                                                                                [% ELSE %]
+                                                                                                    <option value="[% budget_loo.b_id | html %]" class="budget_item_inactive">[% budget_loo.b_txt | html %] (inactive)</option>
+                                                                                                [% END %]
                                                                                             [% END %]
                                                                                         [% END %]
                                                                                     [% END %]
