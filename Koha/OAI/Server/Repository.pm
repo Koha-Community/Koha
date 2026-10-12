@@ -212,7 +212,8 @@ sub get_biblio_marcxml {
         my $exception = $@;
         $exception->rethrow unless ( $exception->isa('Koha::Exceptions::Metadata::Invalid') );
         $decoding_error = "INVALID_METADATA";
-        $record         = $biblio->metadata->record_strip_nonxml( { embed_items => $with_items, opac => 1 } );
+    } elsif ( @{ $biblio->metadata->object_messages } ) {
+        $decoding_error = "INVALID_METADATA";    # Recoverable: the record was repaired on read
     }
     if ($record) {
 

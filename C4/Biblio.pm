@@ -316,7 +316,7 @@ sub AddBiblio {
         _after_biblio_action_hooks( { action => 'create', biblio_id => $biblionumber } );
         if ( C4::Context->preference("CataloguingLog") ) {
             my $new_biblio   = Koha::Biblios->find($biblionumber);
-            my $marc_for_log = eval { $new_biblio->metadata->record_strip_nonxml };
+            my $marc_for_log = eval { $new_biblio->metadata->record };
             logaction(
                 "CATALOGUING", "ADD", $biblionumber, "biblio", undef,
                 {
@@ -424,7 +424,7 @@ sub ModBiblio {
     if ( C4::Context->preference("CataloguingLog") ) {
         my $pre_biblio = Koha::Biblios->find($biblionumber);
         $original      = $pre_biblio->_unblessed_for_log;
-        $original_marc = eval { $pre_biblio->metadata->record_strip_nonxml };
+        $original_marc = eval { $pre_biblio->metadata->record };
     }
 
     if ( !$options->{disable_autolink} && C4::Context->preference('AutoLinkBiblios') ) {
@@ -489,7 +489,7 @@ sub ModBiblio {
 
     if ( C4::Context->preference("CataloguingLog") ) {
         my $updated_biblio   = Koha::Biblios->find($biblionumber);
-        my $updated_marc_log = eval { $updated_biblio->metadata->record_strip_nonxml };
+        my $updated_marc_log = eval { $updated_biblio->metadata->record };
         logaction(
             "CATALOGUING", "MODIFY", $biblionumber,
             {
@@ -570,7 +570,7 @@ sub DelBiblio {
 
     my $biblio_marc =
         C4::Context->preference("CataloguingLog")
-        ? eval { $biblio->metadata->record_strip_nonxml }
+        ? eval { $biblio->metadata->record }
         : undef;
 
     # First make sure this biblio has no items attached
