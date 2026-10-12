@@ -19,7 +19,8 @@
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI       qw ( -utf8 );
+use CGI qw ( -utf8 );
+use MARC::Record;
 use Try::Tiny qw( catch try );
 
 use C4::Output qw( output_html_with_http_headers );
@@ -84,9 +85,7 @@ if ( $op eq 'cud-merge' ) {
         }
     }
 
-    # Rewriting the leader
     my $biblio = Koha::Biblios->find($ref_biblionumber);
-    $record->leader( $biblio->metadata->record->leader() );
 
     #Take new framework code
     my $frameworkcode = $input->param('frameworkcode');
@@ -95,6 +94,10 @@ if ( $op eq 'cud-merge' ) {
     my $invalid_metadata;
     my @merge_warnings;
     my $modded = try {
+
+        # Rewriting the leader
+        $record->leader( $biblio->metadata->record->leader() );
+
         ModBiblio( $record, $ref_biblionumber, $frameworkcode, { warnings => \@merge_warnings } );
         return 1;
     } catch {
@@ -112,8 +115,11 @@ if ( $op eq 'cud-merge' ) {
         foreach my $biblionumber ( $ref_biblionumber, @biblionumbers ) {
 
             # build report
-            my $biblio        = Koha::Biblios->find($biblionumber);
-            my $marcrecord    = $biblio->metadata->record;
+            my $biblio     = Koha::Biblios->find($biblionumber);
+            my $marcrecord = try { $biblio->metadata->record } catch {
+                die $_ unless ref($_) && $_->isa('Koha::Exceptions::Metadata::Invalid');
+                MARC::Record->new;    # Unreadable source record: report it with empty fields
+            };
             my %report_record = (
                 biblionumber => $biblionumber,
                 fields       => {},
@@ -186,9 +192,20 @@ if ( $op eq 'cud-merge' ) {
 
         # Creating a loop for display
         my @records;
+        my @metadata_warnings;
         foreach my $biblionumber (@biblionumbers) {
-            my $biblio        = Koha::Biblios->find($biblionumber);
-            my $marcrecord    = $biblio->metadata->record;
+            my $biblio     = Koha::Biblios->find($biblionumber);
+            my $metadata   = $biblio->metadata;
+            my $marcrecord = try { $metadata->record } catch {
+                die $_ unless ref($_) && $_->isa('Koha::Exceptions::Metadata::Invalid');
+                push @errors, { code => 'INVALID_METADATA_RECORD', biblionumber => $biblionumber, value => $_ };
+                return;
+            };
+            next unless $marcrecord;
+
+            # Already-corrupt metadata is repaired and the faults recorded when it is read; warn about them
+            my @repairs = $metadata->metadata_errors->as_list;
+            push @metadata_warnings, { biblionumber => $biblionumber, errors => \@repairs } if @repairs;
             my $frameworkcode = GetFrameworkCode($biblionumber);
             my $recordObj     = Koha::MetadataRecord->new( { 'record' => $marcrecord, schema => $marcflavour } );
             my $record        = {
@@ -206,17 +223,25 @@ if ( $op eq 'cud-merge' ) {
             }
         }
 
-        my ($biblionumbertag) = GetMarcFromKohaField('biblio.biblionumber');
+        if (@errors) {
 
-        # Parameters
-        $template->param(
-            ref_biblionumber  => $ref_biblionumber,
-            records           => \@records,
-            ref_record        => $records[0],
-            framework         => $framework,
-            biblionumbertag   => $biblionumbertag,
-            MergeReportFields => C4::Context->preference('MergeReportFields'),
-        );
+            # At least one record cannot be read, so the merge cannot proceed
+            $template->param( result => 1, ref_biblionumber => $ref_biblionumber );
+        } else {
+            $template->param( metadata_warnings => \@metadata_warnings ) if @metadata_warnings;
+
+            my ($biblionumbertag) = GetMarcFromKohaField('biblio.biblionumber');
+
+            # Parameters
+            $template->param(
+                ref_biblionumber  => $ref_biblionumber,
+                records           => \@records,
+                ref_record        => $records[0],
+                framework         => $framework,
+                biblionumbertag   => $biblionumbertag,
+                MergeReportFields => C4::Context->preference('MergeReportFields'),
+            );
+        }
     } else {
         my @records;
         foreach my $biblionumber (@biblionumbers) {

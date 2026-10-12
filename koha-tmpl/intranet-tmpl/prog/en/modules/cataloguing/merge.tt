@@ -61,6 +61,12 @@
                 <div class="alert alert-warning">
                     [% IF error.code == 'CANNOT_MOVE' %]
                         The following items could not be moved from the old record to the new one: [% error.value | html %]
+                    [% ELSIF error.code == 'INVALID_METADATA_RECORD' %]
+                        <p
+                            >Record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% error.biblionumber | uri %]">[% error.biblionumber | html %]</a> has metadata that cannot be read, so the records cannot be merged. Please repair
+                            the record first.</p
+                        >
+                        <pre class="problem">[% error.value | html %]</pre>
                     [% ELSIF error.code == 'INVALID_METADATA' %]
                         <p>The merged record could not be saved because it contains characters that are not valid XML. The merge has been aborted.</p>
                         <pre class="problem">[% error.value | html %]</pre>
@@ -128,6 +134,14 @@
             <!-- /.page-section -->
         [% END %]
     [% ELSE %]
+        [% FOREACH warning IN metadata_warnings %]
+            [% WRAPPER 'metadata_repairs.inc' errors=warning.errors heading="Record ${warning.biblionumber}" %]
+                <p>
+                    The metadata of record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% warning.biblionumber | uri %]">[% warning.biblionumber | html %]</a> had problems that were automatically repaired. If you continue, the
+                    merged record will contain the repaired data.
+                </p>
+            [% END %]
+        [% END %]
 
         [% IF ( choosereference ) %]
             <p>Please choose which record will be the reference for the merge. The record chosen as reference will be kept, and the other will be deleted.</p>
