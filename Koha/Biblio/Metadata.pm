@@ -148,7 +148,7 @@ sub store {
             {
                 message => $error_type,
                 type    => 'warning',
-                payload => ( join( "\n", map { $formatter->($_) } @$occurrences ) || 'details unavailable' ),
+                payload => join( "\n", map { $formatter->($_) } @$occurrences ) || 'details unavailable',
             }
         );
     }
@@ -275,6 +275,11 @@ override if necessary.
 
 =item If an unsupported format is found, it throws a I<Koha::Exceptions::Metadata> exception.
 
+=item If the stored MARCXML cannot be decoded but can be repaired (see L</repair_marcxml>), the
+repaired I<MARC::Record> is returned. The repair is saved with L</store>, which records each repaired
+fault as an error row and reports it through C<object_messages>, so later reads find clean metadata.
+If the repair cannot be saved the repaired record is still returned.
+
 =item If it fails to create the record object, it throws a I<Koha::Exceptions::Metadata::Invalid> exception.
 
 =back
@@ -300,6 +305,23 @@ sub record {
         $record ||= eval { MARC::Record::new_from_xml( $self->metadata, 'UTF-8', $self->schema ); };
         my $marcxml_error = $@;
         chomp $marcxml_error;
+
+        # Metadata that was already corrupt before store() started repairing it (or that arrived
+        # by some route that bypasses store) is repaired by store(), which also records the faults
+        # as error rows, so that later reads find clean metadata. If the write fails the repaired
+        # metadata is still held in memory and is used for this read.
+        unless ($record) {
+            eval { $self->store };
+            if ( my $store_error = $@ ) {
+                Koha::Logger->get->debug(
+                    sprintf(
+                        "Metadata for bibliographic record (biblionumber=%s) could not be repaired on read: %s",
+                        $self->biblionumber // 'N/A', $store_error
+                    )
+                );
+            }
+            $record = eval { MARC::Record::new_from_xml( $self->metadata, 'UTF-8', $self->schema ); };
+        }
         unless ($record) {
             warn $marcxml_error;
             Koha::Exceptions::Metadata::Invalid->throw(
@@ -325,42 +347,6 @@ sub record {
     }
 
     return $record;
-}
-
-=head3 record_strip_nonxml
-
-my $record = $metadata->record_strip_nonxml;
-
-This subroutine is intended for cases where we encounter a record that cannot be parsed, but want
-to make a good effort to present the record (for harvesting, deletion, editing) rather than throwing
-an exception
-
-Will return undef if the record cannot be built
-
-=cut
-
-sub record_strip_nonxml {
-
-    my ( $self, $params ) = @_;
-    $params //= {};
-
-    my $record;
-    my $marcxml_error;
-
-    eval {
-        $record = MARC::Record->new_from_xml(
-            StripNonXmlChars( $self->metadata ), 'UTF-8',
-            $self->schema
-        );
-    };
-    if ($@) {
-        $marcxml_error = $@;
-        chomp $marcxml_error;
-        warn $marcxml_error;
-        return;
-    }
-
-    return $self->record( { %$params, record => $record } );
 }
 
 =head3 source_allows_editing

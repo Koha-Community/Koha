@@ -20,7 +20,7 @@ package Koha::Biblio;
 use Modern::Perl;
 
 use List::MoreUtils qw( any );
-use Scalar::Util    qw( blessed );
+use Scalar::Util    qw( blessed refaddr );
 use URI;
 use URI::Escape qw( uri_escape_utf8 );
 use Try::Tiny;
@@ -101,7 +101,13 @@ sub metadata {
     my ($self) = @_;
 
     my $metadata = $self->_result->metadata;
-    return Koha::Biblio::Metadata->_new_from_dbic($metadata);
+
+    # Hand back the same wrapper for as long as it wraps the same row, so messages
+    # reported on it (e.g. repairs made by ->record) are still there on the next call
+    unless ( $self->{_metadata_object} && refaddr( $self->{_metadata_object}->_result ) == refaddr($metadata) ) {
+        $self->{_metadata_object} = Koha::Biblio::Metadata->_new_from_dbic($metadata);
+    }
+    return $self->{_metadata_object};
 }
 
 =head3 record
