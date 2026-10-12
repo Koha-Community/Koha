@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Exception;
 use Test::MockModule;
 use Test::Warn;
@@ -442,6 +442,85 @@ subtest 'record_strip_nonxml() tests' => sub {
     my @items = $record2->field($itemfield);
 
     is( scalar @items, 1, "We got back our item" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'record() persists the repair of recoverable faults' => sub {
+
+    plan tests => 16;
+
+    $schema->storage->txn_begin;
+
+    my $title = 'Oranges and Peaches';
+
+    # Corrupt a stored record directly, bypassing store()
+    my $corrupt = sub {
+        my $record = MARC::Record->new();
+        $record->append_fields( MARC::Field->new( '245', '', '', 'a' => $title ) );
+        my ($biblio_id) = C4::Biblio::AddBiblio( $record, '' );
+        my $metadata = Koha::Biblios->find($biblio_id)->metadata;
+        ( my $xml = $metadata->metadata ) =~ s/\Q$title\E/Oranges and\x{1F} Peaches/;
+        $metadata->_result->update( { metadata => $xml } );
+        return $metadata->discard_changes;
+    };
+
+    my $metadata = $corrupt->();
+    like( $metadata->metadata, qr/\x{1F}/, 'Sanity check: the stored metadata is corrupt' );
+
+    my $record = $metadata->record;
+    is( $record->field('245')->subfield('a'), $title, 'record() returns the repaired record' );
+
+    $metadata->discard_changes;
+    unlike( $metadata->metadata, qr/\x{1F}/, 'The repair is written back to the database' );
+
+    my $errors = $metadata->metadata_errors;
+    is( $errors->count, 1, 'The repaired fault is recorded as an error row' );
+    my $error = $errors->next;
+    is( $error && $error->error_type,           'nonxml_stripped', 'Error row names the repaired fault' );
+    is( scalar @{ $metadata->object_messages }, 1, 'The repair is still reported through object_messages' );
+
+    # A later read, on a fresh object, has nothing left to repair
+    my $repairs = 0;
+    my $module  = Test::MockModule->new('Koha::Biblio::Metadata');
+    $module->mock(
+        repair_marcxml => sub { $repairs++; return $module->original('repair_marcxml')->(@_) },
+    );
+    my $fresh = Koha::Biblio::Metadatas->find( $metadata->id );
+    is( $fresh->record->field('245')->subfield('a'), $title, 'Subsequent read returns the same record' );
+    is( $repairs,                                    0,      'Subsequent read does not run the repair again' );
+    is( scalar @{ $fresh->object_messages },         0,      'Subsequent read has no transient messages' );
+    is( $fresh->metadata_errors->count,              1,      'The persisted error row is still available' );
+    $module->unmock('repair_marcxml');
+
+    # Dismissing the error leaves a clean record
+    $fresh->metadata_errors->delete;
+    is( $fresh->metadata_errors->count, 0, 'Error rows can be dismissed' );
+    $fresh->record;
+    is( $fresh->metadata_errors->count, 0, 'Dismissed errors do not come back' );
+
+    # A failed write must not break the read
+    my $unwritable = $corrupt->();
+    my $object     = Test::MockModule->new('Koha::Object');
+    $object->mock( store => sub { die 'read-only database' } );
+    my $unwritable_record;
+    lives_ok { $unwritable_record = $unwritable->record } 'A failed write does not make record() die';
+    is( $unwritable_record->field('245')->subfield('a'), $title, 'The repaired record is still returned' );
+    $object->unmock('store');
+
+    # Unrecoverable metadata is not touched
+    my $bad_data = $builder->build_object(
+        {
+            class => 'Koha::Biblio::Metadatas',
+            value => { format => 'marcxml', schema => 'MARC21', metadata => 'this_is_not_marcxml' }
+        }
+    );
+    warnings_like {
+        eval { $bad_data->record }
+    }
+    [qr/./], 'Unrecoverable metadata still fails loudly';
+    $bad_data->discard_changes;
+    is( $bad_data->metadata, 'this_is_not_marcxml', 'Unrecoverable metadata is left as it was' );
 
     $schema->storage->txn_rollback;
 };
