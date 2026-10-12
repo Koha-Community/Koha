@@ -497,6 +497,7 @@ function _dt_default_ajax(params) {
                 var attributes = col.data.split(":");
 
                 let criteria = options.criteria;
+                const raw_value = value.replace(/^\^/, "").replace(/\$$/, "");
                 if (value.match(/^\^(.*)\$$/)) {
                     value = value.replace(/^\^/, "").replace(/\$$/, "");
                     criteria = "exact";
@@ -511,6 +512,7 @@ function _dt_default_ajax(params) {
                     let default_build = true;
 
                     let built_value;
+                    let coded_codes = [];
                     if (col.type == "date") {
                         let rfc3339 = $date_to_rfc3339(value);
                         if (rfc3339 != "Invalid Date") {
@@ -552,49 +554,44 @@ function _dt_default_ajax(params) {
                             coded_datatype &&
                             coded_datatype.length > 1
                         ) {
-                            if (global_search.length) {
-                                coded_datatype = coded_datatype[1];
-
-                                // Escape all regex metachars . * + ? ^ $ { } ( ) | [ ] \
-                                const regex = new RegExp(
-                                    "^" +
-                                        global_search.replace(
-                                            /[.*+?^${}()|[\]\\]/g,
-                                            "\\$&"
-                                        ),
-                                    "i"
-                                );
-                                if (
-                                    coded_values &&
-                                    coded_values.hasOwnProperty(coded_datatype)
-                                ) {
-                                    let codes = [
-                                        ...coded_values[
-                                            coded_datatype
-                                        ].entries(),
-                                    ]
-                                        .filter(([label]) => regex.test(label))
-                                        .map(([, code]) => code);
-
-                                    if (codes.length) {
-                                        part[
-                                            !attr.includes(".")
-                                                ? "me." + attr
-                                                : attr
-                                        ] = codes;
-                                    } else {
-                                        // Coded value not found using the description, fallback to code
-                                        default_build = true;
+                            coded_datatype = coded_datatype[1];
+                            // Search on the code by default
+                            default_build = true;
+                            // An exact match comes from a dropdown list filtere
+                            if (
+                                criteria !== "exact" &&
+                                typeof coded_values !== "undefined" &&
+                                coded_values.hasOwnProperty(coded_datatype)
+                            ) {
+                                const needle = raw_value.toLowerCase();
+                                const matches = label => {
+                                    label = label.toLowerCase();
+                                    switch (criteria) {
+                                        case "exact":
+                                            return label === needle;
+                                        case "starts_with":
+                                            return label.startsWith(needle);
+                                        case "ends_with":
+                                            return label.endsWith(needle);
+                                        default:
+                                            return label.includes(needle);
                                     }
-                                } else {
-                                    console.log(
-                                        "coded datatype %s not supported yet".format(
-                                            coded_datatype
-                                        )
-                                    );
+                                };
+                                coded_codes = [
+                                    ...coded_values[coded_datatype].entries(),
+                                ]
+                                    .filter(([label]) => matches(label))
+                                    .map(([, code]) => code);
+
+                                if (coded_codes.length) {
+                                    // Found using the description => no need to search on the code
+                                    default_build = false;
+                                    part[
+                                        !attr.includes(".")
+                                            ? "me." + attr
+                                            : attr
+                                    ] = coded_codes;
                                 }
-                            } else {
-                                default_build = true;
                             }
                         } else {
                             console.log(
