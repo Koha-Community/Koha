@@ -555,7 +555,8 @@ function _dt_default_ajax(params) {
                             coded_datatype.length > 1
                         ) {
                             coded_datatype = coded_datatype[1];
-                            // Search on the code by default
+                            // Search on the code by default, this is the
+                            // fallback if no description matches
                             default_build = true;
                             // An exact match comes from a dropdown list filtere
                             if (
@@ -567,8 +568,6 @@ function _dt_default_ajax(params) {
                                 const matches = label => {
                                     label = label.toLowerCase();
                                     switch (criteria) {
-                                        case "exact":
-                                            return label === needle;
                                         case "starts_with":
                                             return label.startsWith(needle);
                                         case "ends_with":
@@ -577,14 +576,21 @@ function _dt_default_ajax(params) {
                                             return label.includes(needle);
                                     }
                                 };
-                                coded_codes = [
+                                const entries = [
                                     ...coded_values[coded_datatype].entries(),
-                                ]
+                                ];
+                                coded_codes = entries
                                     .filter(([label]) => matches(label))
                                     .map(([, code]) => code);
 
-                                if (coded_codes.length) {
-                                    // Found using the description => no need to search on the code
+                                // Found using the description, only search on
+                                // the code if it could match as well
+                                // (e.g. "test" matches the description of
+                                // "Protestant" and the code "TEST")
+                                if (
+                                    coded_codes.length &&
+                                    !entries.some(([, code]) => matches(code))
+                                ) {
                                     default_build = false;
                                     part[
                                         !attr.includes(".")
@@ -625,6 +631,11 @@ function _dt_default_ajax(params) {
                             value_part = built_value
                                 ? [like, built_value]
                                 : like;
+                        }
+
+                        if (coded_codes.length) {
+                            // Codes matching the description or the code
+                            value_part = [...coded_codes, value_part];
                         }
 
                         part[!attr.includes(".") ? "me." + attr : attr] =
