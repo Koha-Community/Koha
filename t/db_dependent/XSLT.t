@@ -225,6 +225,64 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'buildKohaItemsNamespace() with several items' => sub {
+    plan tests => 6;
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'UseRecalls', 'opac' );
+
+    my $biblio  = $builder->build_sample_biblio;
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my %items   = map {
+        $_ => $builder->build_sample_item(
+            { biblionumber => $biblio->biblionumber, library => $library->branchcode, itemcallnumber => $_ } )
+    } qw( recall pending waiting transit lost available );
+
+    $builder->build_object(
+        {
+            class => 'Koha::Recalls',
+            value => {
+                biblio_id         => $biblio->biblionumber,
+                item_id           => $items{recall}->itemnumber,
+                pickup_library_id => $library->branchcode,
+                item_level        => 1,
+            }
+        }
+    )->set_waiting;
+    $builder->build( { source => 'TmpHoldsqueue', value => { itemnumber => $items{pending}->itemnumber } } );
+    $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                biblionumber => $biblio->biblionumber,
+                itemnumber   => $items{waiting}->itemnumber,
+                found        => 'W',
+                priority     => 0,
+            }
+        }
+    );
+    $builder->build(
+        {
+            source => 'Branchtransfer',
+            value  => { itemnumber => $items{transit}->itemnumber, datearrived => undef, datecancelled => undef }
+        }
+    );
+    $items{lost}->itemlost(1)->store;
+
+    my $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, [] );
+
+    # callnumber => substatus, whatever the order of the items in the output
+    my %substatus = reverse( $xml =~ m{<substatus>([^<]*)</substatus><itemcallnumber>([^<]*)</itemcallnumber>}g );
+    is( $substatus{recall},    'Recall waiting', 'Recall waiting reported on the recalled item' );
+    is( $substatus{pending},   'Pending hold',   'Pending hold reported on the item in the holds queue' );
+    is( $substatus{waiting},   'Hold waiting',   'Hold waiting reported on the item with the waiting hold' );
+    is( $substatus{transit},   'In transit',     'In transit reported on the item being transferred' );
+    is( $substatus{lost},      'Lost',           'Lost reported on the lost item' );
+    is( $substatus{available}, '',               'No substatus on the available item' );
+
+    $schema->storage->txn_rollback;
+};
+
 subtest 'buildKohaItemsNamespace() including/omitting items tests' => sub {
     plan tests => 23;
 

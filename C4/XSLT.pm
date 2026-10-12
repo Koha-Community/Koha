@@ -361,8 +361,29 @@ sub buildKohaItemsNamespace {
         $items_rs = Koha::Items->new;
     }
 
-    my $items =
-        $items_rs->search( $query, { prefetch => [ 'current_branchtransfers', 'reserves', 'tmp_holdsqueue' ] } );
+    my @items       = $items_rs->search($query)->as_list;
+    my @itemnumbers = map { $_->itemnumber } @items;
+
+    # Statuses coming from other tables are looked up once for all the items
+    my ( %recall_waiting, %pending_hold, %hold_waiting, %in_transit );
+    if (@itemnumbers) {
+        if ( C4::Context->preference('UseRecalls') ne "off" ) {
+            %recall_waiting = map { $_ => 1 }
+                Koha::Recalls->search( { item_id => \@itemnumbers, status => 'waiting' } )->get_column('item_id');
+        }
+        %pending_hold =
+            map { $_ => 1 }
+            Koha::Database->new->schema->resultset('TmpHoldsqueue')
+            ->search( { itemnumber => \@itemnumbers } )
+            ->get_column('itemnumber')
+            ->all;
+        %hold_waiting =
+            map { $_ => 1 } Koha::Holds->search( { itemnumber => \@itemnumbers } )->waiting->get_column('itemnumber');
+        %in_transit =
+            map { $_ => 1 }
+            Koha::Item::Transfers->search( { itemnumber => \@itemnumbers } )
+            ->filter_by_current->get_column('itemnumber');
+    }
 
     my $shelflocations = {
         map { $_->{authorised_value} => $_->{opac_description} }
@@ -386,27 +407,22 @@ sub buildKohaItemsNamespace {
         Koha::AuthorisedValues->get_descriptions_by_koha_field( { kohafield => 'items.notforloan' } );
     my $ref_status = C4::Context->preference('Reference_NFL_Statuses') // q{};    # fallback to 1|2 removed
 
-    while ( my $item = $items->next ) {
+    foreach my $item (@items) {
         my $status;
         my $substatus = '';
-        my $recalls_count;
 
-        if ( C4::Context->preference('UseRecalls') ne "off" ) {
-            $recalls_count = Koha::Recalls->search( { item_id => $item->itemnumber, status => 'waiting' } )->count;
-        }
-
-        if ($recalls_count) {
+        if ( $recall_waiting{ $item->itemnumber } ) {
 
             # recalls take priority over holds
             $status    = 'other';
             $substatus = 'Recall waiting';
-        } elsif ( $item->has_pending_hold ) {
+        } elsif ( $pending_hold{ $item->itemnumber } ) {
             $status    = 'other';
             $substatus = 'Pending hold';
-        } elsif ( $item->holds->count && $item->holds->waiting->count ) {
+        } elsif ( $hold_waiting{ $item->itemnumber } ) {
             $status    = 'other';
             $substatus = 'Hold waiting';
-        } elsif ( $item->_result->current_branchtransfers->count ) {
+        } elsif ( $in_transit{ $item->itemnumber } ) {
             $status    = 'other';
             $substatus = 'In transit';
         } elsif ( $item->damaged && !C4::Context->preference('AllowHoldsOnDamagedItems') ) {
