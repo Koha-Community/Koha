@@ -144,14 +144,18 @@ Generate a new CSRF token.
 sub GenerateCSRF {
     my ($self) = @_;
 
+    my $session_id   = $self->{_CONTEXT}->stash->{sessionID};
     my $memory_cache = Koha::Cache::Memory::Lite->get_instance;
-    my $cache_key    = "CSRF-TOKEN";
+    my $cache_key    = "CSRF-TOKEN-" . $session_id;
     my $cached       = $memory_cache->get_from_cache($cache_key);
-    return $cached if $cached;
+    if ($cached) {
+        my ( $token, $timestamp ) = split /\|/, $cached;
+        my $max_cache_age = Koha::Token::CSRF_EXPIRY_HOURS() * 3600 - 3600;
+        return $token if time() - $timestamp < $max_cache_age;
+    }
 
-    my $session_id = $self->{_CONTEXT}->stash->{sessionID};
     my $csrf_token = Koha::Token->new->generate_csrf( { session_id => scalar $session_id } );
-    $memory_cache->set_in_cache( $cache_key, $csrf_token );
+    $memory_cache->set_in_cache( $cache_key, $csrf_token . '|' . time() );
     return $csrf_token;
 }
 
