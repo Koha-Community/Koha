@@ -761,6 +761,208 @@ describe("kohaTable (using REST API)", () => {
             });
         });
     });
+
+    describe("Coded values search - existing holds table", () => {
+        // Libraries with a code that is not part of the description
+        const libraries = [
+            { library_id: "ZQA", name: "Sparkly Unicorn Land" },
+            { library_id: "ZQB", name: "Grumpy Dragon Cave" },
+            // The description contains the code of another library
+            { library_id: "ZQC", name: "Contains zqa inside" },
+        ];
+        let table;
+
+        beforeEach(() => {
+            cy.task("query", {
+                sql: "SELECT value FROM systempreferences WHERE variable='HoldsSplitQueue'",
+            }).then(value => {
+                cy.wrap(value).as("syspref_HoldsSplitQueue");
+            });
+            cy.set_syspref("HoldsSplitQueue", "nothing");
+
+            cy.wrap([]).as("inserted_libraries");
+            libraries.forEach(values => {
+                cy.task("buildSampleObject", {
+                    object: "library",
+                    values,
+                })
+                    .then(generated =>
+                        cy.task("insertObject", {
+                            type: "library",
+                            object: generated,
+                        })
+                    )
+                    .then(library => {
+                        cy.get("@inserted_libraries").then(l =>
+                            l.push(library)
+                        );
+                    });
+            });
+
+            cy.task("insertSampleBiblio", { item_count: 1 }).then(objects => {
+                cy.wrap(objects).as("objects_biblio");
+                table = `patron_holds_table_${objects.biblio.biblio_id}_any`;
+                libraries.forEach((library, i) => {
+                    cy.task("insertSampleHold", {
+                        biblio: objects.biblio,
+                        library_id: library.library_id,
+                    }).then(hold => {
+                        cy.wrap(hold).as(`objects_hold_${i}`);
+                    });
+                });
+            });
+        });
+
+        afterEach(function () {
+            cy.task("deleteSampleObjects", [
+                this.objects_hold_0,
+                this.objects_hold_1,
+                this.objects_hold_2,
+                this.objects_biblio,
+                { libraries: this.inserted_libraries },
+            ]);
+            cy.set_syspref("HoldsSplitQueue", this.syspref_HoldsSplitQueue);
+        });
+
+        function search(term) {
+            cy.get(`#${table}_wrapper input.dt-input`).clear();
+            if (term) {
+                cy.get(`#${table}_wrapper input.dt-input`).type(term, {
+                    force: true,
+                });
+            }
+        }
+
+        // Holds displayed in the table, by hold_id
+        function expect_holds(...expected) {
+            cy.get(`#${table} tbody tr .select_hold`).should($checkboxes => {
+                const ids = $checkboxes
+                    .toArray()
+                    .map(c => Number(c.dataset.id));
+                expect(ids).to.have.members(expected);
+            });
+        }
+
+        // Typing triggers several requests, get the one carrying the term
+        function query_for(calls, term) {
+            // The url already has a q, kohaTable adds its own
+            const queries = calls
+                .flatMap(c => new URL(c.request.url).searchParams.getAll("q"))
+                .filter(q => q.includes(term));
+            return queries.length ? queries.pop() : null;
+        }
+
+        function visit_request_page() {
+            cy.get("@objects_biblio").then(objects => {
+                cy.intercept("GET", "/api/v1/holds/**").as("get-holds");
+                cy.visit(
+                    `/cgi-bin/koha/reserve/request.pl?biblionumber=${objects.biblio.biblio_id}`
+                );
+                cy.wait("@get-holds");
+            });
+        }
+
+        it("Filters by code and description", function () {
+            const hold_a = this.objects_hold_0.hold.hold_id;
+            const hold_b = this.objects_hold_1.hold.hold_id;
+            const hold_c = this.objects_hold_2.hold.hold_id;
+            visit_request_page();
+            expect_holds(hold_a, hold_b, hold_c);
+
+            // Code
+            search("ZQB");
+            expect_holds(hold_b);
+
+            // Code of a library and part of the description of another one
+            search("ZQA");
+            expect_holds(hold_a, hold_c);
+
+            // Beginning of the description
+            search("Sparkly");
+            expect_holds(hold_a);
+
+            // Not the beginning of the description
+            search("Unicorn");
+            expect_holds(hold_a);
+
+            // Whole description, regardless of the case
+            search("sparkly UNICORN land");
+            expect_holds(hold_a);
+
+            // The other library
+            search("Dragon");
+            expect_holds(hold_b);
+
+            // Beginning of the codes
+            search("ZQ");
+            expect_holds(hold_a, hold_b, hold_c);
+
+            // Nothing matches
+            search("Nothing like this");
+            cy.get(`#${table} tbody tr .select_hold`).should("not.exist");
+
+            // Back to the full list
+            search("");
+            expect_holds(hold_a, hold_b, hold_c);
+        });
+
+        it("Does not interpret the search as a regular expression", function () {
+            const hold_a = this.objects_hold_0.hold.hold_id;
+            const hold_b = this.objects_hold_1.hold.hold_id;
+            visit_request_page();
+
+            search(".*");
+            cy.get(`#${table} tbody tr .select_hold`).should("not.exist");
+
+            search("[");
+            cy.get(`#${table} tbody tr .select_hold`).should("not.exist");
+
+            search("Unicorn");
+            expect_holds(hold_a);
+        });
+
+        it("Sends the codes matching the description", function () {
+            visit_request_page();
+
+            search("Unicorn");
+            cy.get("@get-holds.all").should(calls => {
+                expect(query_for(calls, "Unicorn")).to.not.be.null;
+            });
+            cy.get("@get-holds.all").then(calls => {
+                expect(query_for(calls, "Unicorn")).to.contain(
+                    '"me.pickup_library_id":["ZQA"]'
+                );
+            });
+        });
+
+        it("Sends a like on the code when no description matches", function () {
+            visit_request_page();
+
+            search("ZQB");
+            cy.get("@get-holds.all").should(calls => {
+                expect(query_for(calls, "ZQB")).to.not.be.null;
+            });
+            cy.get("@get-holds.all").then(calls => {
+                expect(query_for(calls, "ZQB")).to.contain(
+                    '"me.pickup_library_id":{"like":"%ZQB%"}'
+                );
+            });
+        });
+
+        it("Sends the codes and a like on the code when both match", function () {
+            visit_request_page();
+
+            search("ZQA");
+            cy.get("@get-holds.all").should(calls => {
+                expect(query_for(calls, "ZQA")).to.not.be.null;
+            });
+            cy.get("@get-holds.all").then(calls => {
+                expect(query_for(calls, "ZQA")).to.contain(
+                    '"me.pickup_library_id":["ZQC",{"like":"%ZQA%"}]'
+                );
+            });
+        });
+    });
 });
 
 describe("ERM ", () => {
