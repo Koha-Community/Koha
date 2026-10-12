@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 6;
 
 use Template::Context;
 use Template::Stash;
@@ -28,6 +28,7 @@ use C4::Auth;
 use Koha::Cache::Memory::Lite;
 use Koha::Database;
 use Koha::Template::Plugin::Koha;
+use Koha::Token;
 
 use t::lib::Mocks;
 
@@ -80,6 +81,65 @@ subtest 'GenerateCSRF - New CSRF token generated every time we need one' => sub 
 
     $schema->storage->txn_rollback;
 
+};
+
+subtest 'GenerateCSRF - Token is not shared between sessions' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $session_id_a = 42;
+    my $session_id_b = 99;
+
+    my $stash_a   = Template::Stash->new( { sessionID => $session_id_a } );
+    my $context_a = Template::Context->new( { STASH => $stash_a } );
+    my $plugin_a  = Koha::Template::Plugin::Koha->new($context_a);
+
+    my $stash_b   = Template::Stash->new( { sessionID => $session_id_b } );
+    my $context_b = Template::Context->new( { STASH => $stash_b } );
+    my $plugin_b  = Koha::Template::Plugin::Koha->new($context_b);
+
+    Koha::Cache::Memory::Lite->flush();
+
+    my $token_a = $plugin_a->GenerateCSRF;
+
+    isnt(
+        $plugin_b->GenerateCSRF, $token_a,
+        'session B does not receive session A token from cache'
+    );
+    ok(
+        !Koha::Token->new->check_csrf( { session_id => $session_id_b, token => $token_a } ),
+        'token generated for session A is not valid for session B'
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'GenerateCSRF - Near-expired cached token is regenerated' => sub {
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $stash   = Template::Stash->new( { sessionID => $session_id } );
+    my $context = Template::Context->new( { STASH => $stash } );
+    my $plugin  = Koha::Template::Plugin::Koha->new($context);
+
+    Koha::Cache::Memory::Lite->flush();
+
+    my $token = $plugin->GenerateCSRF;
+
+    my $near_expired_timestamp = time() - ( Koha::Token::CSRF_EXPIRY_HOURS() * 3600 - 1800 );
+    Koha::Cache::Memory::Lite->get_instance->set_in_cache(
+        'CSRF-TOKEN-' . $session_id,
+        $token . '|' . $near_expired_timestamp
+    );
+
+    isnt(
+        $plugin->GenerateCSRF, $token,
+        'near-expired cached token is not returned, new one is generated'
+    );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'CSPNonce' => sub {
