@@ -115,6 +115,13 @@ __PACKAGE__->table("creator_layouts");
   is_nullable: 0
   size: 1
 
+=head2 barcode_justify
+
+  data_type: 'char'
+  default_value: 'L'
+  is_nullable: 0
+  size: 1
+
 =head2 format_string
 
   data_type: 'varchar'
@@ -185,6 +192,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", default_value => 0, is_nullable => 1 },
   "text_justify",
   { data_type => "char", default_value => "L", is_nullable => 0, size => 1 },
+  "barcode_justify",
+  { data_type => "char", default_value => "L", is_nullable => 0, size => 1 },
   "format_string",
   {
     data_type => "varchar",
@@ -216,8 +225,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("layout_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-05-24 13:05:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:W/ICw+9yY7wxZ0IgqqXcFg
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-10-13 14:47:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pxOJ0BA30gZOPyK6vi4xQg
 
 __PACKAGE__->add_columns(
     '+callnum_split' => { is_boolean => 0 },
