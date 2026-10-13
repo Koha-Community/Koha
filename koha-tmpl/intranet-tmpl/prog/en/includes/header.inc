@@ -95,7 +95,7 @@
                     </li>
                 [% END %]
             </ul>
-            [% SET ExtraContent = AdditionalContents.get( location => "StaffNavbarExtraContent", lang => lang, library => logged_in_user.branchcode || default_branch ) %][% IF ExtraContent.content %][% FOREACH elt IN ExtraContent.content %][% elt.content | $raw %][% END %][% END %]
+            [% SET ExtraContent = AdditionalContents.get( location => "StaffNavbarExtraContent", lang => lang, library => Branches.GetLoggedInBranchcode ) %][% IF ExtraContent.content %][% FOREACH elt IN ExtraContent.content %][% elt.content | $raw %][% END %][% END %]
 
             <ul id="user-menu" class="nav navbar-nav">
                 [% IF ( loggedinusername ) %]
