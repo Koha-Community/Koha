@@ -463,7 +463,7 @@
                     datatype: "coded_value:item_type",
                     dataFilter: "item_types",
                     className: "itype",
-                    searchable: true,
+                    searchable: !!Koha.prefs.item_level_itypes,
                     orderable: true,
                     render: function (data, type, row, meta) {
                         if (!Koha.prefs.item_level_itypes) return "";
@@ -537,7 +537,7 @@
                 {
                     data: "item_group_item.item_group.description",
                     className: "item_group",
-                    searchable: true,
+                    searchable: !!Koha.prefs.EnableItemGroups,
                     orderable: true,
                     render: function (data, type, row, meta) {
                         if (Koha.prefs.EnableItemGroups && row.item_group_item) {
@@ -872,7 +872,7 @@
                 },
                 {
                     data: "course_item.course_reserves.course.course_name",
-                    searchable: true,
+                    searchable: !!Koha.prefs.UseCourseReserves,
                     orderable: true,
                     render: function (data, type, row, meta) {
                         let nodes = "";
