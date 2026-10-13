@@ -94,7 +94,6 @@
                         </ul>
                     </div>
                 [% END %]
-
             [% END %]
             <div class="btn-group">
                 <a class="btn btn-default" href="/cgi-bin/koha/tools/scheduler.pl?id=[% id | html %]"> <i class="fa-solid fa-clock"></i> Schedule </a>

@@ -1179,7 +1179,7 @@ if ( $op eq 'run' ) {
                 'id'              => $report_id,
                 'sql_params'      => \@sql_params,
                 'param_names'     => \@param_names,
-                'template_code'   => $template_code,
+                'template_id'     => $template_id,
                 'choose_run_mode' => 1,
             );
         } elsif ( $limit_check->{any_exceeded} ) {
