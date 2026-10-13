@@ -104,7 +104,7 @@ subtest 'prep_report' => sub {
 };
 
 subtest 'prep_report throws when duplicate-running limit is exceeded' => sub {
-    plan tests => 5;
+    plan tests => 7;
 
     my $report = Koha::Report->new( { report_name => 'duplicate_running_test', savedsql => 'SELECT 1' } )->store;
 
@@ -122,15 +122,10 @@ subtest 'prep_report throws when duplicate-running limit is exceeded' => sub {
     lives_ok { $report->prep_report( [], [] ) } 'limit not yet reached, prep_report returns normally';
 
     # Pretend a copy of this report is already in flight.
-    my $reports_mock = Test::MockModule->new('Koha::Reports');
-    $reports_mock->mock(
-        'running',
-        sub {
-            my ( $class, $params ) = @_;
-            return $class->search( { id => $report->id } ) if $params->{report_id};
-            return $class->search( { id => undef } );
-        }
-    );
+    my $running_query    = sprintf( 'SELECT 1 /* { saved_sql.id: %d } { user_id: %d } */', $report->id, $patron->id );
+    my $processlist_rows = [ { info => $running_query } ];
+    my $reports_mock     = Test::MockModule->new('Koha::Reports');
+    $reports_mock->mock( '_processlist_rows', sub { return $processlist_rows } );
 
     my $exception;
     eval { $report->prep_report( [], [] ); };
@@ -141,6 +136,14 @@ subtest 'prep_report throws when duplicate-running limit is exceeded' => sub {
     );
     is( $exception->limit, 1, 'exception carries the configured limit' );
 
+    t::lib::Mocks::mock_config( 'duplicate_running_reports_per_user_limit', 2 );
+    lives_ok { $report->prep_report( [], [] ) } 'one copy running, limit of 2 not yet reached';
+
+    # Pretend a second copy of this report is in flight.
+    push @$processlist_rows, { info => $running_query };
+    throws_ok { $report->prep_report( [], [] ) }
+    'Koha::Exceptions::Report::DuplicateRunning',
+        'two copies running, limit of 2 reached -> DuplicateRunning exception';
 };
 
 subtest 'prep_report throws when total-running limit is exceeded' => sub {
@@ -156,14 +159,13 @@ subtest 'prep_report throws when total-running limit is exceeded' => sub {
     t::lib::Mocks::mock_config( 'duplicate_running_reports_per_user_limit', 0 );
 
     # Pretend the user has three reports of various ids in flight whenever
-    # running() is called without a report_id filter (ie. the "total" check).
+    # running_count() is called without a report_id filter (ie. the "total" check).
     my $reports_mock = Test::MockModule->new('Koha::Reports');
     $reports_mock->mock(
-        'running',
+        'running_count',
         sub {
             my ( $class, $params ) = @_;
-            return $class->search( { id => undef } ) if $params->{report_id};
-            return $class->search( { id => $report->id } );
+            return $params->{report_id} ? 0 : 1;
         }
     );
 
@@ -294,7 +296,7 @@ subtest 'apply_execution_time_limit' => sub {
 };
 
 subtest 'running' => sub {
-    plan tests => 8;
+    plan tests => 9;
 
     my $running = Koha::Reports->running;
     isa_ok( $running, 'Koha::Reports', 'running() returns a Koha::Reports resultset' );
@@ -336,10 +338,12 @@ subtest 'running' => sub {
 
     $synthetic_rows = [
         { info => "SELECT 1 /* { saved_sql.id: $a_id } { user_id: 17 } */" },
+        { info => "SELECT 1 /* { saved_sql.id: $a_id } { user_id: 17 } */" },
         { info => "SELECT 1 /* { saved_sql.id: $b_id } { user_id: 18 } */" },
         { info => "SELECT 1 /* no marker, should be ignored */" },
     ];
     is( Koha::Reports->running->count, 2, 'parses saved_sql.id markers and returns matching reports' );
+    is( Koha::Reports->running_count,  3, 'running_count() counts each run of a report' );
 
     @captured_binds = ();
     Koha::Reports->running( { user_id => 17 } );

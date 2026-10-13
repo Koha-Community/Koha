@@ -70,6 +70,36 @@ than aborting the operation they were guarding.
 sub running {
     my ( $class, $params ) = @_;
 
+    return $class->search( { id => { -in => [ $class->_running_report_ids($params) ] } } );
+}
+
+=head3 running_count
+
+Returns the number of saved report queries currently being executed. Takes
+the same optional parameters as L</running>, but a report running more than
+once is counted once per run.
+
+    my $count = Koha::Reports->running_count( { user_id => $patron->borrowernumber } );
+
+=cut
+
+sub running_count {
+    my ( $class, $params ) = @_;
+
+    my @report_ids = $class->_running_report_ids($params);
+    return scalar @report_ids;
+}
+
+=head3 _running_report_ids
+
+Used internally to find the saved report queries currently being executed.
+Returns a list of report ids, one per running query.
+
+=cut
+
+sub _running_report_ids {
+    my ( $class, $params ) = @_;
+
     my $user_id   = $params->{user_id};
     my $report_id = $params->{report_id};
 
@@ -98,13 +128,13 @@ sub running {
         $rows = [];
     }
 
-    my %report_ids;
+    my @report_ids;
     for my $row (@$rows) {
         next if $row->{info} =~ /^SELECT info FROM information_schema.processlist/;
-        $report_ids{$1} = 1 if $row->{info} =~ /saved_sql\.id:\s*(\d+)/;
+        push @report_ids, $1 if $row->{info} =~ /saved_sql\.id:\s*(\d+)/;
     }
 
-    return $class->search( { id => { -in => [ keys %report_ids ] } } );
+    return @report_ids;
 }
 
 =head3 _processlist_rows

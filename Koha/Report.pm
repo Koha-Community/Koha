@@ -256,8 +256,8 @@ sub prep_report {
 
     my $duplicate_limit = C4::Context->config('duplicate_running_reports_per_user_limit');
     if ( $duplicate_limit && $user_id ) {
-        my $running = Koha::Reports->running( { report_id => $report_id, user_id => $user_id } );
-        if ( $running->count >= $duplicate_limit ) {
+        my $running_count = Koha::Reports->running_count( { report_id => $report_id, user_id => $user_id } );
+        if ( $running_count >= $duplicate_limit ) {
             Koha::Exceptions::Report::DuplicateRunning->throw(
                 report_id => $report_id,
                 user_id   => $user_id,
@@ -268,8 +268,8 @@ sub prep_report {
 
     my $total_limit = C4::Context->config('total_running_reports_per_user_limit');
     if ( $total_limit && $user_id ) {
-        my $running = Koha::Reports->running( { user_id => $user_id } );
-        if ( $running->count >= $total_limit ) {
+        my $running_count = Koha::Reports->running_count( { user_id => $user_id } );
+        if ( $running_count >= $total_limit ) {
             Koha::Exceptions::Report::TotalRunning->throw(
                 user_id => $user_id,
                 limit   => $total_limit,
