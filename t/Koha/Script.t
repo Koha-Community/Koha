@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::Exception;
 
 BEGIN { use_ok('Koha::Script') }
@@ -154,6 +154,45 @@ subtest 'describe_options() exclusive tests' => sub {
 
     $opt = $describe->( '--exclude-code', 'BAR' );
     is_deeply( $opt->exclude_code, ['BAR'], 'The other side of a group given on its own: does not die' );
+};
+
+subtest 'describe_options() exclusive group names tests' => sub {
+
+    plan tests => 6;
+
+    my $describe = sub {
+        my ( $exclusive, @argv ) = @_;
+        local @ARGV = @argv;
+        return Koha::Script->describe_options(
+            '%c %o',
+            [ 'code|c:s@',         'letter code, repeatable' ],
+            [ 'exclude-code|x:s@', 'exclude letter code, repeatable' ],
+            [ 'active!',           'active' ],
+            [ 'inactive',          'inactive' ],
+            { exclusive => $exclusive },
+        );
+    };
+
+    throws_ok { $describe->( [ [qw(code exclude_code)] ] ) }
+    qr/The exclusive option 'exclude_code' must be written 'exclude-code'/,
+        'An underscore form is rejected, naming the expected name';
+
+    throws_ok { $describe->( [ [qw(c exclude-code)] ] ) }
+    qr/The exclusive option 'c' must be written 'code'/,
+        'An alias is rejected, naming the expected name';
+
+    throws_ok { $describe->( [ [qw(code nosuch)] ] ) }
+    'Koha::Exceptions::WrongParameter',
+        'An unknown option is rejected';
+    like( $@->message, qr/The exclusive option 'nosuch' is not a declared option/, 'with a clear message' );
+
+    throws_ok { $describe->( [ [qw(active inactive)] ], '--no-active', '--inactive' ) }
+    qr/The options --no-active and --inactive are mutually exclusive/,
+        'A negated option is reported as --no-foo';
+
+    throws_ok { $describe->( [ [qw(active inactive)] ], '--active', '--inactive' ) }
+    qr/The options --active and --inactive are mutually exclusive/,
+        'A negatable option given as is is reported as --foo';
 };
 
 1;

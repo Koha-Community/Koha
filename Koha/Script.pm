@@ -308,7 +308,12 @@ C<--flags>) and the usage text, the same as a missing required option
 would. An option is considered "given" if it was specified on the command
 line I<and> resolved to a non-empty value -- a bare flag with no value
 left over from L<Getopt::Long>'s optional-value (C<:s>) types (see bug
-37075) does not by itself trigger the conflict.
+37075) does not by itself trigger the conflict. A negatable option given
+as C<--no-foo> is reported as such. A group member that is not written
+as an option's first-declared name (an alias, an underscore form, or an
+unknown option) is a programming error: a
+L<Koha::Exceptions::WrongParameter> is thrown, naming the expected name
+when there is one, instead of the group being silently never enforced.
 
 Two options are added automatically to every script using this convention:
 
@@ -350,6 +355,22 @@ sub describe_options {
     my $epilog    = $meta->{epilog};
     my $args      = $meta->{args};
     my $exclusive = $meta->{exclusive};
+
+    my %negatable;
+    if ($exclusive) {
+        my $names = _option_names(@opt_specs);
+        for my $group (@$exclusive) {
+            for my $name (@$group) {
+                next if $names->{$name} && $names->{$name} eq $name;
+                Koha::Exceptions::WrongParameter->throw(
+                    $names->{$name}
+                    ? "The exclusive option '$name' must be written '$names->{$name}', as first declared in its spec"
+                    : "The exclusive option '$name' is not a declared option"
+                );
+            }
+        }
+        %negatable = map { $_ => 1 } _negatable_option_names(@opt_specs);
+    }
 
     my ( $opt, $usage ) = eval {
         Getopt::Long::Descriptive::describe_options(
@@ -396,7 +417,10 @@ sub describe_options {
     for my $group ( @{ $exclusive || [] } ) {
         my @given = grep { _opt_is_given( $opt, $_ ) } @$group;
         if ( @given > 1 ) {
-            my @flags = map { "--$_" } @given;
+            my @flags = map {
+                my $accessor = tr/-/_/r;
+                $negatable{$_} && !$opt->$accessor ? "--no-$_" : "--$_"
+            } @given;
             my $message =
                 @flags == 2
                 ? "The options $flags[0] and $flags[-1] are mutually exclusive.\nUse one or the other.\n\n"
@@ -435,6 +459,49 @@ sub _opt_is_given {
             : 0
         : ( defined($value) && $value ne q{} ) ? 1
         :                                        0;
+}
+
+=head3 _option_names
+
+    my $names = Koha::Script::_option_names(@opt_specs);
+
+Returns a hashref mapping every name an option can be referred to by (its
+first-declared name, its aliases, and their underscore forms) to its
+first-declared name, the one C<exclusive> groups must use.
+
+=cut
+
+sub _option_names {
+    my (@opt_specs) = @_;
+
+    my %names;
+    for my $spec (@opt_specs) {
+        next unless ref $spec eq 'ARRAY' && @$spec > 1 && defined $spec->[0];
+        my ($all) = $spec->[0] =~ /^([\w|?-]+)/;
+        next unless defined $all;
+        my ( $first, @aliases ) = split /\|/, $all;
+        for my $alias ( $first, @aliases ) {
+            $names{$alias} //= $first;
+            $names{ $alias =~ tr/-/_/r } //= $first;
+        }
+    }
+    return \%names;
+}
+
+=head3 _negatable_option_names
+
+    my @names = Koha::Script::_negatable_option_names(@opt_specs);
+
+Returns the first-declared names of the negatable (C<!>) options, so a
+conflict on C<--no-foo> is reported as such.
+
+=cut
+
+sub _negatable_option_names {
+    my (@opt_specs) = @_;
+
+    return map { $_->[0] =~ /^([\w?-]+)[\w|?-]*!/ ? $1 : () }
+        grep { ref $_ eq 'ARRAY' && @$_ > 1 && defined $_->[0] } @opt_specs;
 }
 
 =head2 Internal methods
