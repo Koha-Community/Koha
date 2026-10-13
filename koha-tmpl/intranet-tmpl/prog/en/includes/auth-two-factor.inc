@@ -20,7 +20,7 @@
                 </li>
                 <li>
                     <label for="pin_code">PIN code: </label>
-                    <input type="text" id="pin_code" name="pin_code" value="" />
+                    <input type="text" id="pin_code" name="pin_code" value="" autocomplete="one-time-code" inputmode="numeric" autocapitalize="off" />
                 </li>
             </ol>
         </fieldset>
