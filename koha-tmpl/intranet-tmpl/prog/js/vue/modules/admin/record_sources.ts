@@ -1,4 +1,4 @@
-import { createApp } from "vue";
+import { createApp, nextTick } from "vue";
 import { createPinia } from "pinia";
 import { createWebHistory, createRouter } from "vue-router";
 
@@ -53,11 +53,15 @@ app.provide("mainStore", mainStore);
 app.provide("navigationStore", navigationStore);
 app.mount("#record-source");
 
-document.dispatchEvent(
-    new CustomEvent("koha:vue-loaded", {
-        detail: { module: "admin/record_sources" },
-    })
-);
+router.isReady().then(() => {
+    nextTick(() => {
+        document.dispatchEvent(
+            new CustomEvent("koha:vue-loaded", {
+                detail: { module: "admin/record_sources" },
+            })
+        );
+    });
+});
 
 router.beforeEach(to => {
     navigationStore.$patch({ current: to.matched, params: to.params || {} });

@@ -1,4 +1,4 @@
-import { createApp } from "vue";
+import { createApp, nextTick } from "vue";
 import { createPinia } from "pinia";
 import { createWebHistory, createRouter } from "vue-router";
 
@@ -51,6 +51,16 @@ app.provide("mainStore", mainStore);
 app.provide("navigationStore", navigationStore);
 app.provide("circRulesStore", circRulesStore);
 app.mount("#__app");
+
+router.isReady().then(() => {
+    nextTick(() => {
+        document.dispatchEvent(
+            new CustomEvent("koha:vue-loaded", {
+                detail: { module: "admin/circulation_triggers" },
+            })
+        );
+    });
+});
 
 router.beforeEach((to, from, next) => {
     circRulesStore
