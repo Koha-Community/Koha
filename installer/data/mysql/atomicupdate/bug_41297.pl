@@ -12,14 +12,8 @@ return {
         # Master preference to enable duplicate blocking
         $ok = $dbh->do(
             q{
-                INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
-                VALUES (
-                    'EdifactInvoiceImportBlockDuplicates',
-                    '0',
-                    NULL,
-                    'Block automatic processing of EDIFACT invoices when a duplicate invoice number is detected for the same supplier. Similar to AcqWarnOnDuplicateInvoice for manually created invoices, but applies to invoices received via EDI.',
-                    'YesNo'
-                )
+                INSERT IGNORE INTO systempreferences (variable, value)
+                VALUES ('EdifactInvoiceImportBlockDuplicates', '0')
             }
         );
         if ($ok) {
@@ -34,14 +28,8 @@ return {
         # Email notification destination
         $ok = $dbh->do(
             q{
-                INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
-                VALUES (
-                    'EdifactInvoiceImportBlockDuplicatesEmailNotice',
-                    '0',
-                    '0|AcquisitionsDefaultEmailAddress|EdifactInvoiceImportBlockDuplicatesEmailAddresses|KohaAdminEmailAddress',
-                    'Send duplicate EDIFACT invoice block notifications using the EDI_DUP_INV_LIBRARY notice template to the selected address. Vendor EDI contacts are always notified separately via EDI_DUP_INV_VENDOR. Requires EdifactInvoiceImportBlockDuplicates to be enabled.',
-                    'Choice'
-                )
+                INSERT IGNORE INTO systempreferences (variable, value)
+                VALUES ('EdifactInvoiceImportBlockDuplicatesEmailNotice', '0')
             }
         );
         if ($ok) {
@@ -69,14 +57,8 @@ return {
         # Email recipient list
         $ok = $dbh->do(
             q{
-                INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
-                VALUES (
-                    'EdifactInvoiceImportBlockDuplicatesEmailAddresses',
-                    '',
-                    NULL,
-                    'Comma-separated list of acquisitions staff email addresses to use when EdifactInvoiceImportBlockDuplicatesEmailNotice is set to specific email addresses.',
-                    'Textarea'
-                )
+                INSERT IGNORE INTO systempreferences (variable, value)
+                VALUES ('EdifactInvoiceImportBlockDuplicatesEmailAddresses', '')
             }
         );
         if ($ok) {
