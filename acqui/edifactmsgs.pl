@@ -23,7 +23,7 @@ use CGI;
 use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Database;
-use Koha::EDI qw( process_invoice );
+use Koha::EDI qw( process_message );
 
 my $q = CGI->new;
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
@@ -44,10 +44,12 @@ if ( $cmd && $cmd eq 'cud-delete' ) {
     $msg->update;
 }
 
-if ( $cmd && $cmd eq 'import' ) {
-    my $id      = $q->param('message_id');
-    my $invoice = $schema->resultset('EdifactMessage')->find($id);
-    process_invoice($invoice);
+if ( $cmd && $cmd eq 'cud-import' ) {
+    my $id  = $q->param('message_id');
+    my $msg = $schema->resultset('EdifactMessage')->find($id);
+
+    # Only messages still waiting to be processed can be imported
+    process_message($msg) if $msg && $msg->status eq 'new';
 }
 
 output_html_with_http_headers( $q, $cookie, $template->output );

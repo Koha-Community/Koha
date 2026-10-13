@@ -25,6 +25,7 @@ BEGIN {
         process_quote
         process_invoice
         process_ordrsp
+        process_message
         create_edi_order
         get_edifact_ean
     );
@@ -51,6 +52,7 @@ use Koha::Edifact::Order;
 use Koha::Edifact;
 use C4::Log         qw( logaction );
 use Text::Unidecode qw( unidecode );
+use Koha::Exceptions;
 use Koha::Logger;
 use Koha::Plugins;    # Adds plugin dirs to @INC
 use Koha::Plugins::Handler;
@@ -935,6 +937,26 @@ sub process_quote {
     }
 
     return;
+}
+
+sub process_message {
+    my ($message) = @_;
+
+    my %processors = (
+        QUOTE   => \&process_quote,
+        INVOICE => \&process_invoice,
+        ORDRSP  => \&process_ordrsp,
+    );
+
+    my $type      = $message->message_type;
+    my $processor = $processors{$type}
+        or Koha::Exceptions::WrongParameter->throw(
+        name  => 'message_type',
+        value => $type,
+        type  => 'Only inbound QUOTE, INVOICE and ORDRSP messages can be processed',
+        );
+
+    return $processor->($message);
 }
 
 sub quote_item {
@@ -1954,6 +1976,17 @@ Koha::EDI
      passed a message object for a supplier response, process the contents
      If an orderline is cancelled cancel the corresponding orderline in koha
      otherwise record the supplier message against it
+
+     no meaningful return value
+
+=head2 process_message
+
+     process_message(message)
+
+     passed an inbound message object, dispatch it to the processor matching
+     its message_type (process_quote, process_invoice or process_ordrsp).
+     Throws Koha::Exceptions::WrongParameter for any other message type
+     (e.g. outbound ORDERS).
 
      no meaningful return value
 

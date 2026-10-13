@@ -22,7 +22,7 @@ use FindBin qw( $Bin );
 
 use Test::Exception;
 use Test::NoWarnings;
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::MockModule;
 use JSON qw( decode_json );
 
@@ -2145,6 +2145,50 @@ subtest 'LSL and LSQ field copy to item_hash' => sub {
 
     ok( defined $item6, 'Item created successfully when both LSL and LSQ disabled' );
     is( $item6->location, undef, 'Item location is undef when both LSL and LSQ disabled' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'process_message' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my %called;
+    my $module = Test::MockModule->new('Koha::EDI');
+    $module->mock( process_quote   => sub { $called{QUOTE}   = $_[0]->message_type } );
+    $module->mock( process_invoice => sub { $called{INVOICE} = $_[0]->message_type } );
+    $module->mock( process_ordrsp  => sub { $called{ORDRSP}  = $_[0]->message_type } );
+
+    for my $type (qw( QUOTE INVOICE ORDRSP )) {
+        my $message = $schema->resultset('EdifactMessage')->create(
+            {
+                message_type  => $type,
+                transfer_date => dt_from_string()->ymd,
+                status        => 'new',
+                raw_msg       => q{},
+                filename      => "process_message_$type",
+                vendor_id     => $builder->build( { source => 'Aqbookseller' } )->{id},
+            }
+        );
+        Koha::EDI::process_message($message);
+        is( $called{$type}, $type, "$type message dispatched to its own processor" );
+    }
+    is_deeply( [ sort keys %called ], [qw( INVOICE ORDRSP QUOTE )], 'Each processor called exactly once' );
+
+    my $orders = $schema->resultset('EdifactMessage')->create(
+        {
+            message_type  => 'ORDERS',
+            transfer_date => dt_from_string()->ymd,
+            status        => 'new',
+            raw_msg       => q{},
+            filename      => 'process_message_ORDERS',
+            vendor_id     => $builder->build( { source => 'Aqbookseller' } )->{id},
+        }
+    );
+    throws_ok { Koha::EDI::process_message($orders) } 'Koha::Exceptions::WrongParameter',
+        'Outbound ORDERS message cannot be processed';
+    is( scalar keys %called, 3, 'No processor called for ORDERS' );
 
     $schema->storage->txn_rollback;
 };
