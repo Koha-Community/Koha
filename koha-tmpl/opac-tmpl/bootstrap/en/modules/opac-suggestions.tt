@@ -78,7 +78,7 @@
                                     >Please fill out this form to make a purchase suggestion.
                                     [% IF ( loggedinusername ) %]
                                         You will receive an email when the library processes your suggestion.
-                                    [% ELSE %]
+                                    [% ELSIF ( Koha.Preference('opacuserlogin') ) %]
                                         If you wish to receive an email when the library processes your suggestion, please log in before making a purchase suggestion.
                                     [% END %]</p
                                 >
