@@ -19,6 +19,7 @@
                 <th id="[% tab | html %]_ccode" data-colname="ccode">Collection</th>
                 <th id="[% tab | html %]_item_group" data-colname="item_group">Item group</th>
                 <th id="[% tab | html %]_itemcallnumber" data-colname="itemcallnumber">Call number</th>
+                <th id="[% tab | html %]_itemnumber" data-colname="itemnumber">Item number</th>
                 <th id="[% tab | html %]_enumchron" data-colname="enumchron">Serial enumeration / chronology</th>
                 <th id="[% tab | html %]_status" data-colname="status">Status</th>
                 <th id="[% tab | html %]_lastseen" data-colname="lastseen">Last seen</th>
@@ -560,6 +561,15 @@
                     orderable: true,
                     render: function (data, type, row, meta) {
                         return escape_str(row.callnumber);
+                    },
+                },
+                {
+                    data: "me.itemnumber",
+                    className: "itemnumber",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return escape_str(row.item_id);
                     },
                 },
                 {
