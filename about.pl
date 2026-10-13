@@ -32,8 +32,8 @@ use List::MoreUtils           qw( any );
 use Module::Load::Conditional qw( can_load );
 use Config                    qw( %Config );
 use Search::Elasticsearch;
-use Try::Tiny   qw( catch try );
-use XML::Simple qw( XMLin );
+use Try::Tiny qw( catch try );
+use XML::LibXML;
 use YAML::XS;
 use Encode;
 
@@ -206,24 +206,19 @@ if ( $tab eq 'sysinfo' ) {
 
         if ( -r $sip_config_file ) {
             try {
-                my $sip_config = XMLin(
-                    $sip_config_file,
-                    ForceArray => ['service'],
-                    KeyAttr    => [],
-                );
+                my $sip_config = XML::LibXML->load_xml( location => $sip_config_file );
 
-                my $listeners = $sip_config->{listeners}->{service};
+                # Match on local names since the SIP server accepts SIPconfig.xml with or without its namespace
+                my @listeners = $sip_config->findnodes('//*[local-name()="listeners"]/*[local-name()="service"]');
 
-                if ($listeners) {
-                    foreach my $listener (@$listeners) {
-                        my $configured_port = $listener->{port} // '';
+                foreach my $listener (@listeners) {
+                    my $configured_port = $listener->getAttribute('port') // '';
 
-                        if ( $configured_port =~ /(?:^|:)(\d+)\/tcp(?:\/IPv[46])?$/i ) {
-                            push @sip_ports, {
-                                port      => $1,
-                                transport => $listener->{transport} // '',
-                            };
-                        }
+                    if ( $configured_port =~ /(?:^|:)(\d+)\/tcp(?:\/IPv[46])?$/i ) {
+                        push @sip_ports, {
+                            port      => $1,
+                            transport => $listener->getAttribute('transport') // '',
+                        };
                     }
                 }
             } catch {
