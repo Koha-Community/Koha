@@ -54,7 +54,7 @@ code use to identify the authorized value
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 200
+  size: 400
 
 authorized value description as printed in the staff interface
 
@@ -62,7 +62,7 @@ authorized value description as printed in the staff interface
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 200
+  size: 400
 
 authorized value description as printed in the OPAC
 
@@ -90,9 +90,9 @@ __PACKAGE__->add_columns(
   "authorised_value",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 80 },
   "lib",
-  { data_type => "varchar", is_nullable => 1, size => 200 },
+  { data_type => "varchar", is_nullable => 1, size => 400 },
   "lib_opac",
-  { data_type => "varchar", is_nullable => 1, size => 200 },
+  { data_type => "varchar", is_nullable => 1, size => 400 },
   "imageurl",
   { data_type => "varchar", is_nullable => 1, size => 200 },
 );
@@ -158,8 +158,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-05-06 20:57:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tpDBuX7UAaSn0UCqCeI54w
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-10-13 08:41:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:29Dne/dfeLTgBNHP0KioLA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
