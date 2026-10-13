@@ -36,7 +36,7 @@ use English   qw{ -no_match_vars };
 use Try::Tiny qw( catch try );
 use Business::ISBN;
 use DateTime;
-use JSON         qw( encode_json );
+use JSON         qw( encode_json to_json );
 use Scalar::Util qw( blessed );
 use C4::Context;
 use Koha::Database;

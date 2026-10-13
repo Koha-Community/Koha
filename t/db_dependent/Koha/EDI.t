@@ -30,6 +30,7 @@ use t::lib::Mocks;
 use t::lib::Mocks::Logger;
 use t::lib::TestBuilder;
 
+use Koha::ActionLogs;
 use Koha::EDI qw(process_quote process_invoice process_ordrsp create_edi_order);
 use Koha::Edifact::Transport;
 use Koha::Edifact::File::Errors;
@@ -40,7 +41,7 @@ my $builder = t::lib::TestBuilder->new;
 my $logger  = t::lib::Mocks::Logger->new();
 
 subtest 'process_quote' => sub {
-    plan tests => 10;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
@@ -446,6 +447,87 @@ subtest 'process_quote' => sub {
         is( $edi_orders->next->status, 'Pending', 'EDI order status is Pending' );
 
         $logger->clear();
+        $schema->storage->txn_rollback;
+    };
+
+    # Test 3b: auto orders with AcquisitionLog enabled
+    subtest 'auto_orders_acquisition_log' => sub {
+        plan tests => 4;
+
+        $schema->storage->txn_begin;
+
+        t::lib::Mocks::mock_preference( 'AcquisitionLog', 1 );
+
+        my $file_transport = $builder->build(
+            {
+                source => 'FileTransport',
+                value  => {
+                    name               => 'Test Acquisition Log Transport',
+                    transport          => 'local',
+                    download_directory => $dirname,
+                    upload_directory   => $dirname,
+                }
+            }
+        );
+        my $account = $builder->build(
+            {
+                source => 'VendorEdiAccount',
+                value  => {
+                    description       => 'auto order log vendor',
+                    file_transport_id => $file_transport->{file_transport_id},
+                    plugin            => '',
+                    san               => $test_san,
+                    orders_enabled    => 1,
+                    auto_orders       => 1,
+                }
+            }
+        );
+        $builder->build(
+            {
+                source => 'EdifactEan',
+                value  => {
+                    description => 'test ean',
+                    branchcode  => undef,
+                    ean         => $test_san
+                }
+            }
+        );
+        $builder->build(
+            {
+                source => 'Aqbudget',
+                value  => {
+                    budget_code      => 'REF',
+                    budget_period_id => $active_period->{budget_period_id}
+                }
+            }
+        );
+
+        my $filename = 'QUOTES_SMALL.CEQ';
+        my $trans    = Koha::Edifact::Transport->new( $account->{id} );
+        $trans->working_directory($dirname);
+        my $mhash = $trans->message_hash();
+        $mhash->{message_type} = 'QUOTE';
+        $trans->ingest( $mhash, $filename );
+        my $quote = $schema->resultset('EdifactMessage')->find( { filename => $filename } );
+
+        lives_ok { process_quote($quote) } 'Quote processed without dying when AcquisitionLog is enabled';
+
+        my $basket = Koha::Acquisition::Baskets->search( { booksellerid => $account->{vendor_id} } )->next;
+        ok( $basket->closedate, 'Basket closed for auto_orders' );
+
+        my $log = Koha::ActionLogs->search(
+            {
+                module => 'ACQUISITIONS',
+                action => 'APPROVE_BASKET',
+                object => $basket->basketno,
+            }
+        )->next;
+        ok( $log, 'APPROVE_BASKET action logged' );
+        is(
+            $log ? decode_json( $log->info )->{basketno} : undef, $basket->basketno,
+            'Log info contains the basket as JSON'
+        );
+
         $schema->storage->txn_rollback;
     };
 
