@@ -9,7 +9,7 @@
                 [% SET modified_items_count = report.modified_itemnumbers.size %]
                 [% SET modified_fields_count = report.modified_fields %]
                 <span
-                    >[% tnx( '{count} item modified', '{count} items modified', modified_items_count, { count = modified_items_count }) + ' (' + tnx( 'with {count} field modified', 'with {count} fields modified', modified_fields_count, { count = modified_fields_count }) + ').' | html %]</span
+                    >[% tnx( '{count} item modified', '{count} items modified', modified_items_count, { count = modified_items_count }) _ ' (' _ tnx( 'with {count} field modified', 'with {count} fields modified', modified_fields_count, { count = modified_fields_count }) _ ').' | html %]</span
                 >
             [% ELSE %]
                 <span>No items modified.</span>
