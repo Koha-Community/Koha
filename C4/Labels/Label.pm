@@ -631,8 +631,17 @@ sub barcode {
         $tot_bar_length = ( $bar_length * $num_of_bars ) + ( $guard_length * 2 );
         $x_scale_factor = ( $params{'width'} / $tot_bar_length ) * 0.9;
         eval {
+            my $barcode_width = ( 95 * 0.9 ) + 20;
+
+            my $adjusted_llx = $params{'llx'};
+            if ( $barcode_justify eq 'C' ) {
+                $adjusted_llx = $params{'llx'} + ( ( $self->{'width'} - $barcode_width ) / 2 );
+            } elsif ( $barcode_justify eq 'R' ) {
+                $adjusted_llx = $params{'llx'} + ( $self->{'width'} - $barcode_width );
+            }
+
             PDF::Reuse::Barcode::EAN13(
-                x     => $params{'llx'},
+                x     => $adjusted_llx,
                 y     => $params{'lly'},
                 value => sprintf( '%013d', $params{barcode_data} ),
 
