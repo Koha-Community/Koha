@@ -38,7 +38,8 @@ This class should be used in all scripts. It sets the interface and userenv appr
 use File::Basename            qw( fileparse );
 use Fcntl                     qw( LOCK_EX LOCK_NB );
 use Getopt::Long::Descriptive ();
-use Pod::Usage                ();
+use Koha::Script::Usage;
+use Pod::Usage ();
 
 use C4::Context;
 use C4::Log qw( cronlogaction logscriptaction );
@@ -312,6 +313,10 @@ something L<Getopt::Long::Descriptive> can't express as an option (e.g. a
 required positional argument) with a consistent error, via
 C<< $usage->die({ pre_text => "..." }) >>.
 
+Whatever the error (unknown option, missing required option or argument,
+or a C<< $usage->die >> call by the script), the script exits with status
+1, the same as C<pod2usage(1)> did.
+
 =cut
 
 sub describe_options {
@@ -321,12 +326,22 @@ sub describe_options {
     my $epilog = $meta->{epilog};
     my $args   = $meta->{args};
 
-    my ( $opt, $usage ) = Getopt::Long::Descriptive::describe_options(
-        $format,
-        @opt_specs,
-        [ 'help|?', 'print this usage message and exit',   { shortcircuit => 1 } ],
-        [ 'man',    'print the full manual page and exit', { shortcircuit => 1 } ],
-    );
+    my ( $opt, $usage ) = eval {
+        Getopt::Long::Descriptive::describe_options(
+            $format,
+            @opt_specs,
+            [ 'help|?', 'print this usage message and exit',   { shortcircuit => 1 } ],
+            [ 'man',    'print the full manual page and exit', { shortcircuit => 1 } ],
+        );
+    };
+    unless ($opt) {
+
+        # Unknown option, missing required option...: exit with status 1 too
+        my $error = $@;
+        Koha::Script::Usage::set_exit_status();
+        die $error;
+    }
+    bless $usage, 'Koha::Script::Usage';
 
     if ( $opt->man ) {
         Pod::Usage::pod2usage( { -verbose => 2, -exitval => 0 } );

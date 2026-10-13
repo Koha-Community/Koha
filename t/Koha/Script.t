@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Exception;
 
 BEGIN { use_ok('Koha::Script') }
@@ -87,6 +87,27 @@ subtest 'lock_exec() tests' => sub {
     throws_ok { Koha::Script->new( { lock_name => 'blah' } ); }
     'Koha::Exceptions::MissingParameter',
         'Not passing the "script" parameter makes it raise an exception';
+};
+
+subtest 'describe_options() exit status tests' => sub {
+
+    plan tests => 3;
+
+    my $inc = join ' ', map { "-I$_" } grep { !ref } @INC;
+    my $run = sub {
+        my ($code) = @_;
+        `$^X $inc -e '$code' 2>&1`;
+        return $? >> 8;
+    };
+    my $describe = q{use Koha::Script; open my $fh, "<", "/nonexistent"; }
+        . q{my ( $opt, $usage ) = Koha::Script->describe_options( "%c %o", [ "foo=s", "foo", { required => 1 } ] );};
+
+    is( $run->("\@ARGV = qw(--bogus); $describe"), 1, 'An unknown option exits with status 1' );
+    is( $run->("$describe"),                       1, 'A missing required option exits with status 1' );
+    is(
+        $run->("\@ARGV = qw(--foo bar); $describe \$usage->die( { pre_text => qq{Wrong\\n} } );"), 1,
+        '$usage->die exits with status 1'
+    );
 };
 
 1;
