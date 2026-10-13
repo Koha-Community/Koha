@@ -101,8 +101,8 @@
                             [% IF ( CAN_user_clubs_edit_templates || CAN_user_clubs_edit_clubs ) %]
                                 <td class="actions">
                                     <div class="btn-group dropup">
-                                        <a class="btn btn-default btn-xs dropdown-toggle" id="template_actions_[% c.id | html %]" role="button" data-bs-toggle="dropdown" href="#"> Actions </a>
-                                        <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="template_actions_[% c.id | html %]">
+                                        <a class="btn btn-default btn-xs dropdown-toggle" id="template_actions_[% t.id | html %]" role="button" data-bs-toggle="dropdown" href="#"> Actions </a>
+                                        <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="template_actions_[% t.id | html %]">
                                             [% IF CAN_user_clubs_edit_templates %]
                                                 <li>
                                                     <a class="dropdown-item" href="/cgi-bin/koha/clubs/templates-add-modify.pl?id=[% t.id | html %]"> <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit </a>
