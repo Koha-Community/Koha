@@ -19,7 +19,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 78;
+use Test::More tests => 79;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -6782,6 +6782,88 @@ subtest 'Filling a hold should cancel existing transfer' => sub {
         Koha::Item::Transfers->search( { itemnumber => $item->itemnumber, datearrived => undef } )->count, 0,
         "No outstanding transfers when hold is waiting"
     );
+};
+
+subtest 'Confirming a hold on an item checked out again is refused' => sub {
+    plan tests => 9;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    set_userenv($library);
+    my $patron_a = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                categorycode => $patron_category->{categorycode},
+                branchcode   => $library->branchcode,
+            }
+        }
+    );
+    my $patron_b = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                categorycode => $patron_category->{categorycode},
+                branchcode   => $library->branchcode,
+            }
+        }
+    );
+    my $patron_c = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                categorycode => $patron_category->{categorycode},
+                branchcode   => $library->branchcode,
+            }
+        }
+    );
+
+    my $item = $builder->build_sample_item(
+        {
+            homebranch => $library->branchcode,
+        }
+    );
+
+    # The item is checked out to patron A
+    AddIssue( $patron_a, $item->barcode );
+
+    # Patron B places an item level hold on it
+    my $reserve_id = AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron_b->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            itemnumber     => $item->itemnumber,
+        }
+    );
+
+    # The item is returned: a hold is found
+    my ( $returned, $messages ) = AddReturn( $item->barcode, $library->branchcode, undef, undef );
+    ok( $returned,             'Item is returned' );
+    ok( $messages->{ResFound}, 'A hold is found on checkin' );
+
+    # While the hold confirmation is pending, the item is checked out
+    # again (forced checkout) to patron C
+    AddIssue( $patron_c, $item->barcode );
+    ok( Koha::Items->find( $item->itemnumber )->checkout, 'Item is checked out again' );
+
+    # Confirming the hold must not set it waiting: the item is on loan
+    my $confirmed = ModReserveAffect( $item->itemnumber, $patron_b->borrowernumber, 0, $reserve_id );
+    ok( !$confirmed, 'Hold is not confirmed while the item is on loan' );
+    my $hold = Koha::Holds->find($reserve_id);
+    ok( ( $hold->found // q{} ) ne 'W', 'Hold is not set waiting' );
+
+    # The same applies when the hold would need a transfer
+    $confirmed = ModReserveAffect( $item->itemnumber, $patron_b->borrowernumber, 1, $reserve_id );
+    ok( !$confirmed, 'Hold is not confirmed for a transfer while the item is on loan' );
+    $hold->discard_changes;
+    ok( ( $hold->found // q{} ) ne 'T', 'Hold is not set in transit' );
+
+    # Once the item is returned again, the hold can be confirmed
+    AddReturn( $item->barcode, $library->branchcode, undef, undef );
+    $confirmed = ModReserveAffect( $item->itemnumber, $patron_b->borrowernumber, 0, $reserve_id );
+    ok( $confirmed, 'Hold is confirmed once the item is returned' );
+    $hold->discard_changes;
+    is( $hold->found, 'W', 'Hold is set waiting' );
 };
 
 subtest 'Tests for NoRefundOnLostReturnedItemsAge with AddReturn' => sub {
