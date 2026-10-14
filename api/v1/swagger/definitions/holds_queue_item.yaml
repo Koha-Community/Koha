@@ -60,7 +60,12 @@ properties:
     type:
       - string
       - "null"
-    description: Item type description (materialized)
+    description: Item type description (materialized, default language)
+  item_type_id:
+    type:
+      - string
+      - "null"
+    description: Item type code
   ccode_description:
     type:
       - string
@@ -91,4 +96,9 @@ properties:
       - object
       - "null"
     description: The pickup library (x-koha-embed)
+  _strings:
+    type:
+      - object
+      - "null"
+    description: Coded values translations (x-koha-embed +strings)
 additionalProperties: false

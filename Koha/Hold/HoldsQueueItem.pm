@@ -22,6 +22,7 @@ use Modern::Perl;
 use Koha::Database;
 
 use Koha::Items;
+use Koha::ItemTypes;
 use Koha::Biblios;
 use Koha::Libraries;
 use Koha::Patrons;
@@ -98,6 +99,40 @@ sub pickup_library {
 }
 
 =head2 Internal methods
+
+=head3 strings_map
+
+    my $strings = $queue_item->strings_map($params);
+
+Returns a map of coded values to their descriptions, following the C<+strings>
+API embed convention. Currently exposes the item type (C<item_type_id>)
+translated description for the current language, mirroring
+C<Koha::Item/strings_map>.
+
+The item type is resolved via C<< Koha::ItemTypes->find->translated_description >>.
+The expensive part (loading a language's translations) is already cached by the
+C<localization> cache, so each row only costs a primary-key lookup.
+
+=cut
+
+sub strings_map {
+    my ( $self, $params ) = @_;
+
+    my $strings = {};
+
+    if ( my $item_type_id = $self->_result->get_column('item_type_id') ) {
+
+        # TODO: explore cleaner/batched approaches once available, e.g. the
+        # cached Koha::ItemTypes->description_for() class method from Bug 43269.
+        my $itemtype = Koha::ItemTypes->find($item_type_id);
+        $strings->{item_type_id} = {
+            str  => $itemtype ? $itemtype->translated_description : $item_type_id,
+            type => 'item_type',
+        };
+    }
+
+    return $strings;
+}
 
 =head3 _type
 

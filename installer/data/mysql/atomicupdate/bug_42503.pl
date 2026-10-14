@@ -8,6 +8,28 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
+        unless ( column_exists( 'tmp_holdsqueue', 'item_type_id' ) ) {
+            $dbh->do(
+                q{
+                ALTER TABLE tmp_holdsqueue
+                    ADD COLUMN `item_type_id` varchar(10) DEFAULT NULL AFTER `local_holdgroup_match`
+            }
+            );
+            say_success( $out, "Added column 'tmp_holdsqueue.item_type_id'" );
+        }
+
+        unless ( foreign_key_exists( 'tmp_holdsqueue', 'tmp_holdsqueue_ibfk_4' ) ) {
+            $dbh->do(
+                q{
+                ALTER TABLE tmp_holdsqueue
+                    ADD CONSTRAINT `tmp_holdsqueue_ibfk_4`
+                        FOREIGN KEY (`item_type_id`) REFERENCES `itemtypes` (`itemtype`)
+                        ON DELETE SET NULL ON UPDATE CASCADE
+            }
+            );
+            say_success( $out, "Added foreign key 'tmp_holdsqueue.tmp_holdsqueue_ibfk_4'" );
+        }
+
         unless ( column_exists( 'tmp_holdsqueue', 'itype_description' ) ) {
             $dbh->do(
                 q{

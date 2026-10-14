@@ -374,9 +374,24 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 tmp_holdsqueues
 
-# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-08-18 09:40:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3sUQnki/t9TLhH4ORPeg5Q
+Type: has_many
+
+Related object: L<Koha::Schema::Result::TmpHoldsqueue>
+
+=cut
+
+__PACKAGE__->has_many(
+  "tmp_holdsqueues",
+  "Koha::Schema::Result::TmpHoldsqueue",
+  { "foreign.item_type_id" => "self.itemtype" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-10-15 03:07:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qKmpfCQGX1ytE+qGDG2vuQ
 
 __PACKAGE__->add_columns(
     '+automatic_checkin'            => { is_boolean => 1 },

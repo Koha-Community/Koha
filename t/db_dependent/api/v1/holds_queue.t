@@ -18,12 +18,14 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Mojo;
+use Test::MockModule;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
+use Koha::Caches;
 use Koha::Hold::HoldsQueueItems;
 use Koha::Database;
 
@@ -115,6 +117,99 @@ subtest 'list() tests' => sub {
     $t->get_ok("//$userid:$password\@/api/v1/holds/queue?holding_library_id=NONEXISTENT")
         ->status_is(200)
         ->json_is( [] );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'item_type_id and +strings tests' => sub {
+
+    plan tests => 10;
+
+    $schema->storage->txn_begin;
+
+    Koha::Caches->get_instance('localization')->flush_all();
+    Koha::Hold::HoldsQueueItems->delete;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**1 }    # circulate flag
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $itemtype = $builder->build_object(
+        {
+            class => 'Koha::ItemTypes',
+            value => { description => 'Book' },
+        }
+    );
+
+    my $biblio = $builder->build_sample_biblio;
+    my $item   = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itype => $itemtype->itemtype } );
+    my $hold_patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $library     = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    $builder->build_object(
+        {
+            class => 'Koha::Hold::HoldsQueueItems',
+            value => {
+                biblionumber      => $biblio->biblionumber,
+                itemnumber        => $item->itemnumber,
+                barcode           => $item->barcode,
+                surname           => $hold_patron->surname,
+                firstname         => $hold_patron->firstname,
+                borrowernumber    => $hold_patron->borrowernumber,
+                cardnumber        => $hold_patron->cardnumber,
+                title             => $biblio->title,
+                holdingbranch     => $item->holdingbranch,
+                pickbranch        => $library->branchcode,
+                item_type_id      => $itemtype->itemtype,
+                itype_description => $itemtype->description,
+            },
+        }
+    );
+
+    # item_type_id exposes the materialized item type code
+    $t->get_ok("//$userid:$password\@/api/v1/holds/queue")
+        ->status_is(200)
+        ->json_is( '/0/item_type_id'      => $itemtype->itemtype,    'item_type_id is the materialized itype code' )
+        ->json_is( '/0/itype_description' => $itemtype->description, 'itype_description still exposed' );
+
+    # Without a translation, +strings falls back to the base description
+    $t->get_ok( "//$userid:$password\@/api/v1/holds/queue" => { 'x-koha-embed' => '+strings' } )
+        ->status_is(200)
+        ->json_is(
+        '/0/_strings/item_type_id/str' => $itemtype->description,
+        '+strings uses the base item type description when no translation exists'
+        );
+
+    # With a de-DE translation, +strings returns the translated description
+    my $module = Test::MockModule->new('C4::Languages');
+    $module->mock( _get_language_dirs => sub { return 'en', 'de-DE' } );
+
+    $schema->resultset('Localization')->create(
+        {
+            entity      => 'itemtypes',
+            code        => $itemtype->itemtype,
+            property    => 'description',
+            lang        => 'de-DE',
+            translation => 'translated',
+        }
+    );
+    Koha::Caches->get_instance('localization')->flush_all();
+
+    $t->get_ok(
+        "//$userid:$password\@/api/v1/holds/queue",
+        { 'x-koha-embed' => '+strings', Cookie => 'KohaOpacLanguage=de-DE', 'Accept-Language' => 'en' }
+    )->status_is(200)->json_is(
+        '/0/_strings/item_type_id/str' => 'translated',
+        'translations in _strings use the language set in the KohaOpacLanguage cookie'
+    );
+
+    Koha::Caches->get_instance('localization')->flush_all();
 
     $schema->storage->txn_rollback;
 };

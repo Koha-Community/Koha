@@ -122,6 +122,15 @@ __PACKAGE__->table("tmp_holdsqueue");
 
 set when the queue targeted this item as a local hold group match for the reserve
 
+=head2 item_type_id
+
+  data_type: 'varchar'
+  is_foreign_key: 1
+  is_nullable: 1
+  size: 10
+
+item type code materialized at queue build time, used to look up translated descriptions
+
 =head2 itype_description
 
   data_type: 'varchar'
@@ -192,6 +201,8 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "local_holdgroup_match",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "item_type_id",
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
   "itype_description",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "ccode_description",
@@ -256,6 +267,26 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+=head2 item_type
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Itemtype>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "item_type",
+  "Koha::Schema::Result::Itemtype",
+  { itemtype => "item_type_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 itemnumber
 
 Type: belongs_to
@@ -272,8 +303,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-07-31 18:54:02
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZoQ0yT6ujIc5s8pMIMrgcA
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-10-15 03:07:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0gHma5VawdGTo0ZMgJVV5A
 
 __PACKAGE__->add_columns(
     '+item_level_request'    => { is_boolean => 1 },

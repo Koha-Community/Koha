@@ -7026,6 +7026,7 @@ CREATE TABLE `tmp_holdsqueue` (
   `hold_group_id` int(10) unsigned DEFAULT NULL,
   `item_level_request` tinyint(4) NOT NULL DEFAULT 0,
   `local_holdgroup_match` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'set when the queue targeted this item as a local hold group match for the reserve',
+  `item_type_id` varchar(10) DEFAULT NULL COMMENT 'item type code materialized at queue build time, used to look up translated descriptions',
   `itype_description` varchar(255) DEFAULT NULL COMMENT 'materialized description of the item type at queue build time',
   `ccode_description` varchar(255) DEFAULT NULL COMMENT 'materialized description of the collection code at queue build time',
   `location_description` varchar(255) DEFAULT NULL COMMENT 'materialized description of the shelving location at queue build time',
@@ -7034,9 +7035,11 @@ CREATE TABLE `tmp_holdsqueue` (
   KEY `tmp_holdsqueue_ibfk_1` (`itemnumber`),
   KEY `tmp_holdsqueue_ibfk_2` (`biblionumber`),
   KEY `tmp_holdsqueue_ibfk_3` (`borrowernumber`),
+  KEY `tmp_holdsqueue_ibfk_4` (`item_type_id`),
   CONSTRAINT `tmp_holdsqueue_ibfk_1` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tmp_holdsqueue_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `tmp_holdsqueue_ibfk_3` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `tmp_holdsqueue_ibfk_3` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `tmp_holdsqueue_ibfk_4` FOREIGN KEY (`item_type_id`) REFERENCES `itemtypes` (`itemtype`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

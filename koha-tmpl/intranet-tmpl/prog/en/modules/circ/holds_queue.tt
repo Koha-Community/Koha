@@ -187,8 +187,9 @@
                         url: "/api/v1/holds/queue",
                     },
                     embed: [
+                        "+strings",
                         "biblio",
-                        "item+strings",
+                        "item",
                         "item.holding_library",
                         "item.home_library",
                         "item.item_group",
@@ -289,11 +290,19 @@
                             },
                         },
                         {
-                            data: "itype_description",
+                            data: "item_type_id",
                             orderable: true,
                             searchable: true,
                             render: function (data, type, row) {
-                                return (data || "").escapeHtml();
+                                // Display the translated item type description (+strings),
+                                // falling back to the materialized default-language value.
+                                // Sorting/filtering is on the item type code (item_type_id);
+                                // sorting by the translated description is left as a follow-up.
+                                let str =
+                                    row._strings &&
+                                    row._strings.item_type_id &&
+                                    row._strings.item_type_id.str;
+                                return (str || row.itype_description || "").escapeHtml();
                             },
                         },
                         {

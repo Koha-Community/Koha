@@ -129,9 +129,9 @@ sub GetHoldsQueueItems {
 
     my $search_params;
     $search_params->{'me.holdingbranch'} = $params->{branchlimit}    if $params->{branchlimit};
-    $search_params->{'itype'}            = $params->{itemtypeslimit} if $params->{itemtypeslimit};
-    $search_params->{'ccode'}            = $params->{ccodeslimit}    if $params->{ccodeslimit};
-    $search_params->{'location'}         = $params->{locationslimit} if $params->{locationslimit};
+    $search_params->{'item.itype'}       = $params->{itemtypeslimit} if $params->{itemtypeslimit};
+    $search_params->{'item.ccode'}       = $params->{ccodeslimit}    if $params->{ccodeslimit};
+    $search_params->{'item.location'}    = $params->{locationslimit} if $params->{locationslimit};
 
     my $results = Koha::Hold::HoldsQueueItems->search(
         $search_params,
@@ -1148,8 +1148,8 @@ sub CreatePicklistFromItemMap {
         INSERT INTO tmp_holdsqueue (biblionumber,itemnumber,barcode,surname,firstname,phone,borrowernumber,
                                     cardnumber,reservedate,title, itemcallnumber,
                                     holdingbranch,pickbranch,notes, hold_group_id, item_level_request,
-                                    local_holdgroup_match, itype_description, ccode_description, location_description)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                                    local_holdgroup_match, item_type_id, itype_description, ccode_description, location_description)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     " );
 
     foreach my $itemnumber ( sort keys %$item_map ) {
@@ -1167,6 +1167,7 @@ sub CreatePicklistFromItemMap {
         my $barcode        = $item->barcode;
         my $itemcallnumber = $item->itemcallnumber;
 
+        my $itype = $item->effective_itemtype;
         my $itype_description;
         if ( my $itemtype = $item->itemtype ) {
             $itype_description = $itemtype->description;
@@ -1193,10 +1194,10 @@ sub CreatePicklistFromItemMap {
         }
 
         $sth_load->execute(
-            $biblionumber,          $itemnumber,        $barcode,      $surname, $firstname, $phone, $borrowernumber,
-            $cardnumber,            $reservedate,       $title,        $itemcallnumber,
-            $holdingbranch,         $pickbranch,        $reservenotes, $hold_group_id, $item_level,
-            $local_holdgroup_match, $itype_description, $ccode_description, $location_description
+            $biblionumber,          $itemnumber,  $barcode,           $surname, $firstname, $phone, $borrowernumber,
+            $cardnumber,            $reservedate, $title,             $itemcallnumber,
+            $holdingbranch,         $pickbranch,  $reservenotes,      $hold_group_id,     $item_level,
+            $local_holdgroup_match, $itype,       $itype_description, $ccode_description, $location_description
         );
     }
 }
