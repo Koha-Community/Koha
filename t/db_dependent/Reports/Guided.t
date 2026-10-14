@@ -25,6 +25,8 @@ use Test::MockModule qw(strict);
 use Test::More tests => 16;
 use Test::Warn;
 
+use JSON qw( to_json );
+
 use t::lib::TestBuilder;
 use C4::Context;
 use Koha::Database;
@@ -820,6 +822,40 @@ subtest 'get_columns' => sub {
         !exists $columns->{password},
         "Password is a forbidden field and should not be returned"
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'format_results' => sub {
+    plan tests => 9;
+
+    $schema->storage->txn_begin;
+
+    my $report = $builder->build_object( { class => 'Koha::Reports' } );
+
+    # Results stored by the run_report background job include headers
+    my $saved_id = C4::Reports::Guided::store_results(
+        $report->id,
+        to_json( { headers => [ 'id', 'title' ], rows => [ [ 1, 'Foo' ], [ 2, 'Bar' ] ] } )
+    );
+    my $result = C4::Reports::Guided::format_results($saved_id);
+    is( $result->{report_id},   $report->id,          'report_id returned' );
+    is( $result->{report_name}, $report->report_name, 'report_name returned' );
+    is_deeply( $result->{headers}, [ 'id', 'title' ], 'headers returned' );
+    is_deeply( $result->{results}, [ [ 1, 'Foo' ], [ 2, 'Bar' ] ], 'rows returned' );
+
+    # Legacy results are a bare array of rows
+    my $legacy_id = C4::Reports::Guided::store_results( $report->id, to_json( [ [ 3, 'Baz' ] ] ) );
+    $result = C4::Reports::Guided::format_results($legacy_id);
+    is( $result->{headers}, undef, 'legacy results have no headers' );
+    is_deeply( $result->{results}, [ [ 3, 'Baz' ] ], 'legacy rows returned' );
+
+    my $missing_id = $legacy_id + 1;
+    is( C4::Reports::Guided::format_results($missing_id), undef, 'undef for results that do not exist' );
+
+    $report->delete;
+    is( C4::Reports::Guided::format_results($saved_id),  undef, 'undef once the report is deleted' );
+    is( C4::Reports::Guided::format_results($legacy_id), undef, 'undef for legacy results once the report is deleted' );
 
     $schema->storage->txn_rollback;
 };

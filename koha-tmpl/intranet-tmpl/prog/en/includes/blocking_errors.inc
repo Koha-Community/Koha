@@ -28,6 +28,8 @@
         <div class="alert alert-info">Necessary Elasticsearch packages are not installed on your server. Please contact your server admin if you wish to configure Elasticsearch.</div>
     [% CASE 'insufficient_permission' %]
         <div class="alert alert-info">You do not have sufficient permission to continue.</div>
+    [% CASE 'unknown_saved_results' %]
+        <div class="alert alert-info">These saved report results do not exist, or the report they belong to has been deleted.</div>
     [% CASE 'duplicate_tagfield' %]
         <div class="alert alert-info">MARC field not added to MARC bibliographic framework. MARC tag already exists in framework.</div>
     [% CASE %]

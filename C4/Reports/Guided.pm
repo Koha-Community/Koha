@@ -793,7 +793,13 @@ sub store_results {
 
 =head2 format_results
 
-Missing POD for format_results.
+    my $result = format_results($saved_reports_id);
+
+Returns a hashref with the stored results for the given saved_reports id,
+along with the name, notes and id of the report they belong to.
+
+Returns undef if there are no stored results with that id, or if the
+report they belong to has been deleted.
 
 =cut
 
@@ -808,6 +814,8 @@ sub format_results {
        WHERE sr.id = ?
     |, undef, $id
     );
+    return unless defined $json;
+
     my $decoded = from_json($json);
 
     # The background-job worker stores results as { headers => [...], rows => [[...], ...] }.
