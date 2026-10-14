@@ -22,13 +22,13 @@
     [% FOR m IN job.messages %]
         <div class="alert alert-danger">
             [% IF m.code == 'report_not_found' %]
-                <span><strong>Report not found</strong> [% m.error | html %]</span>
+                <span><strong>Report not found.</strong> [% m.error | html %]</span>
             [% END %]
             [% IF m.code == 'execute_error' %]
                 <span><strong>Query error.</strong> [% m.error | html %]</span>
             [% END %]
             [% IF m.code == 'internal_error' %]
-                <span><strong>Unexcpeted error.</strong> [% m.error | html %]</span>
+                <span><strong>Unexpected error.</strong> [% m.error | html %]</span>
             [% END %]
         </div>
     [% END %]

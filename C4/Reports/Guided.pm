@@ -229,6 +229,18 @@ Dies if the table name is not a known Koha table.
 
 =cut
 
+=head2 _get_columns
+
+    my $columns = _get_columns($table_name);
+
+Internal function used by get_columns. Returns an arrayref of hashrefs, one per
+column of C<$table_name>, with C<name> (as C<table.column>) and C<description>.
+Columns that reports are not allowed to use, such as passwords, are left out.
+
+Dies if C<$table_name> is not a known database table.
+
+=cut
+
 sub _get_columns {
     my ($table_name) = @_;
     my $dbh          = C4::Context->dbh();
@@ -307,6 +319,18 @@ LEFT JOINed using the matching join condition from C<$keys>. C<$criteria>
 is appended as the WHERE clause, C<$definition> adds dictionary
 conditions, C<$totals> adds aggregate columns and a GROUP BY, and
 C<$orderby> is appended as given. Returns the SQL string.
+
+=cut
+
+=head2 _build_query
+
+    my $sql = _build_query( $tables, $columns, $criteria, $keys, $orderby, $totals, $definition );
+
+Internal function used by build_query. Builds the SQL for a guided report:
+selects C<$columns> from the first table in C<$tables>, LEFT JOINs the other
+tables using the join conditions in C<$keys>, then adds C<$criteria>, the
+saved SQL of any dictionary definitions in C<$definition>, a GROUP BY for
+C<$totals> and C<$orderby>. Returns the SQL string.
 
 =cut
 
@@ -1312,6 +1336,17 @@ Returns the value to display for a criteria option. For the
 C<periodicity> column the value is looked up in
 C<subscription_frequencies> and the description is returned. For every
 other column the original value is returned unchanged.
+
+=cut
+
+=head2 _get_display_value
+
+    my $display_value = _get_display_value( $original_value, $column );
+
+Internal function used by get_criteria. Returns the value to show for
+C<$original_value> in the criteria list for C<$column>. For C<periodicity>
+this is the subscription frequency description; for any other column the
+original value is returned unchanged.
 
 =cut
 

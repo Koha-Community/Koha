@@ -204,6 +204,19 @@ sub cancel {
     };
 }
 
+=head2 Internal methods
+
+=head3 _render_job
+
+    my $job_data = _render_job( $job, \%reports_by_id, \%patrons_by_id );
+
+Returns the API representation (see the report_job definition) of a run_report
+background job. The report and patron names are looked up in the given hashrefs,
+which are keyed by report id and borrowernumber. The saved results id, row count
+and first error message come from the job's data.
+
+=cut
+
 sub _render_job {
     my ( $job, $reports_by_id, $patrons_by_id ) = @_;
 
