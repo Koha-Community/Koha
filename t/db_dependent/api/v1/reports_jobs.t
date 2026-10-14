@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Mojo;
 
 use JSON qw( encode_json );
@@ -150,6 +150,66 @@ subtest 'list endpoint, job whose report was deleted' => sub {
     my $jobs = $t->get_ok("//${\$runner->userid}:$password@/api/v1/reports/jobs")->status_is(200)->tx->res->json;
     is( scalar @{$jobs},         1,     'job for a deleted report is still listed' );
     is( $jobs->[0]->{report_id}, undef, 'and has no report_id' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'list endpoint, LimitReportsByLibrary' => sub {
+    plan tests => 16;
+    $schema->storage->txn_begin;
+
+    Koha::BackgroundJobs->delete;
+    t::lib::Mocks::mock_preference( 'LimitReportsByLibrary', 1 );
+
+    my $my_library    = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $other_library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $runner = make_patron(0);    # execute_reports_foreground only, cannot manage limits
+    $runner->branchcode( $my_library->branchcode )->store;
+    grant_reports_perm( $runner, 'execute_reports_foreground' );
+    my $super = make_patron(1);
+
+    my $open_report    = $builder->build_object( { class => 'Koha::Reports' } );
+    my $my_report      = $builder->build_object( { class => 'Koha::Reports' } );
+    my $limited_report = $builder->build_object( { class => 'Koha::Reports' } );
+    $my_report->replace_library_limits( [ $my_library->branchcode ] );
+    $limited_report->replace_library_limits( [ $other_library->branchcode ] );
+
+    my $open_job    = enqueue_report_job( $runner, 'finished', $open_report->id );
+    my $my_job      = enqueue_report_job( $runner, 'finished', $my_report->id );
+    my $limited_job = enqueue_report_job( $runner, 'finished', $limited_report->id );
+
+    my $deleted_report = $builder->build_object( { class => 'Koha::Reports' } );
+    my $deleted_job    = enqueue_report_job( $runner, 'finished', $deleted_report->id );
+    $deleted_report->delete;
+
+    my $url = "//${\$runner->userid}:$password@/api/v1/reports/jobs?_order_by=job_id&_per_page=2";
+
+    # The hidden job is filtered before paging, so the total and pages only count visible jobs
+    my $page1 = $t->get_ok("$url&_page=1")->status_is(200)->header_is( 'X-Total-Count', 3 )->tx->res->json;
+    is( scalar @{$page1}, 2, 'first page is full' );
+    my $page2 = $t->get_ok("$url&_page=2")->status_is(200)->header_is( 'X-Total-Count', 3 )->tx->res->json;
+    is( scalar @{$page2}, 1, 'second page has the remaining job' );
+
+    is_deeply(
+        [ sort { $a <=> $b } map { $_->{job_id} } @{$page1}, @{$page2} ],
+        [ sort { $a <=> $b } $open_job->id, $my_job->id, $deleted_job->id ],
+        'jobs for unrestricted reports, reports limited to my library and deleted reports are listed'
+    );
+
+    # Users who can manage report limits see every job
+    $t->get_ok("//${\$super->userid}:$password@/api/v1/reports/jobs")
+        ->status_is(200)
+        ->header_is( 'X-Total-Count', 4, 'superlibrarian sees all jobs' );
+
+    # With the preference off, nothing is hidden
+    t::lib::Mocks::mock_preference( 'LimitReportsByLibrary', 0 );
+    my $all =
+        $t->get_ok("//${\$runner->userid}:$password@/api/v1/reports/jobs")
+        ->status_is(200)
+        ->header_is( 'X-Total-Count', 4 )
+        ->tx->res->json;
+    ok( ( grep { $_->{job_id} == $limited_job->id } @{$all} ), 'limited job is listed when the preference is off' );
 
     $schema->storage->txn_rollback;
 };

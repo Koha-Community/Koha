@@ -22,10 +22,12 @@ use Mojo::Base 'Mojolicious::Controller';
 use JSON qw( decode_json );
 use Try::Tiny;
 
+use C4::Context;
 use Koha::BackgroundJobs;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Patrons;
+use Koha::Report;
 use Koha::Reports;
 use Koha::Reports::BackgroundJobs;
 
@@ -58,6 +60,26 @@ sub list {
             $rs           = $rs->search( { enqueued_on => \%bounds } );
         }
 
+        # Only list jobs for reports the logged in user is allowed to see. This is done
+        # in the query, before paging, so the pagination headers match what is returned.
+        my $patron = $c->stash('koha.user');
+        if ( C4::Context->preference('LimitReportsByLibrary') && !Koha::Report->can_manage_limits($patron) ) {
+            my $allowed_reports =
+                C4::Context::mybranch()
+                ? Koha::Reports->search_with_library_limits( {}, {}, C4::Context::mybranch() )
+                : Koha::Reports->search( { 'reports_branches.branchcode' => undef }, { join => 'reports_branches' } );
+            $rs = $rs->search(
+                {
+                    -or => [
+
+                        # The report has been deleted
+                        { report_id => undef },
+                        { report_id => { -in => $allowed_reports->_resultset->get_column('me.id')->as_query } },
+                    ]
+                }
+            );
+        }
+
         my $paged = $c->objects->search_rs($rs);
         $c->add_pagination_headers;
 
@@ -80,14 +102,7 @@ sub list {
             while ( my $p = $rs->next ) { $patrons_by_id{ $p->borrowernumber } = $p; }
         }
 
-        #only render reports that the logged in user is allowed to see
-        my $patron = $c->stash('koha.user');
-        my @rendered;
-        for my $job (@jobs) {
-            my $report = $job->report_id ? $reports_by_id{ $job->report_id } : undef;
-            next if $report && !$report->can_access($patron);
-            push @rendered, _render_job( $job, \%reports_by_id, \%patrons_by_id );
-        }
+        my @rendered = map { _render_job( $_, \%reports_by_id, \%patrons_by_id ) } @jobs;
 
         return $c->render( status => 200, openapi => \@rendered );
     } catch {
