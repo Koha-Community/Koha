@@ -1120,6 +1120,8 @@ sub backend_create {
     };
     my $result = $self->_backend->create($args);
 
+    $self->after_created if $self->in_storage;
+
     # ... simple case: we're not at 'commit' stage.
     my $stage = $result->{stage};
     return $self->expand_template($result)
@@ -2295,12 +2297,20 @@ sub after_completed {
 
     $request->after_created;
 
-Actions to be done after the request has been fully created
+Actions to be done after the request has been fully created.
+
+Called by I<backend_create> and the REST API once the backend has created the
+request. Code creating requests by other means must call it.
+
+A request only ever gets one I<illreq_created> statistic.
 
 =cut
 
 sub after_created {
     my ($self) = @_;
+
+    return
+        if Koha::Statistics->search( { illrequest_id => $self->illrequest_id, type => 'illreq_created' } )->count;
 
     Koha::Statistic->new(
         {

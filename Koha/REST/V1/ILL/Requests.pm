@@ -142,6 +142,7 @@ sub add {
                 my $new_id        = $create_result->illrequest_id;
 
                 my $new_req = Koha::ILL::Requests->find($new_id);
+                $new_req->after_created;
 
                 $c->res->headers->location( $c->req->url->to_string . '/' . $new_req->illrequest_id );
                 return $c->render(
