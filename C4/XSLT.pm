@@ -373,10 +373,7 @@ sub buildKohaItemsNamespace {
         }
         %pending_hold =
             map { $_ => 1 }
-            Koha::Database->new->schema->resultset('TmpHoldsqueue')
-            ->search( { itemnumber => \@itemnumbers } )
-            ->get_column('itemnumber')
-            ->all;
+            Koha::Hold::HoldsQueueItems->search( { itemnumber => \@itemnumbers } )->get_column('itemnumber');
         %hold_waiting =
             map { $_ => 1 } Koha::Holds->search( { itemnumber => \@itemnumbers } )->waiting->get_column('itemnumber');
         %in_transit =
