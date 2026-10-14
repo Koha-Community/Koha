@@ -85,7 +85,7 @@ sub list {
         my @rendered;
         for my $job (@jobs) {
             my $report = $job->report_id ? $reports_by_id{ $job->report_id } : undef;
-            next if !$report->can_access($patron);
+            next if $report && !$report->can_access($patron);
             push @rendered, _render_job( $job, \%reports_by_id, \%patrons_by_id );
         }
 

@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Mojo;
 
 use JSON qw( encode_json );
@@ -127,6 +127,29 @@ subtest 'list endpoint, auth & time range' => sub {
         ->tx->res->json;
     is( scalar @{$stale},      1,          'before= keeps only the old job' );
     is( $stale->[0]->{status}, 'finished', 'and the kept job is the finished one' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'list endpoint, job whose report was deleted' => sub {
+    plan tests => 5;
+    $schema->storage->txn_begin;
+
+    Koha::BackgroundJobs->delete;
+
+    my $runner = make_patron( 2**16 );
+    grant_reports_perm( $runner, 'execute_reports_foreground' );
+
+    my $report = $builder->build_object( { class => 'Koha::Reports' } );
+    my $job    = enqueue_report_job( $runner, 'finished', $report->id, 999 );
+
+    # The foreign key sets background_jobs.report_id to NULL
+    $report->delete;
+    is( $job->get_from_storage->report_id, undef, 'report_id is NULL once the report is deleted' );
+
+    my $jobs = $t->get_ok("//${\$runner->userid}:$password@/api/v1/reports/jobs")->status_is(200)->tx->res->json;
+    is( scalar @{$jobs},         1,     'job for a deleted report is still listed' );
+    is( $jobs->[0]->{report_id}, undef, 'and has no report_id' );
 
     $schema->storage->txn_rollback;
 };
