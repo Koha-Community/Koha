@@ -1294,6 +1294,9 @@ take care of the waiting status
 
 This function also removes any entry of the hold in holds queue table.
 
+Returns 1 if the hold was affected, 0 if the item is currently on loan and
+the hold could not be affected (the hold is left unchanged).
+
 =cut
 
 sub ModReserveAffect {
@@ -1326,6 +1329,13 @@ sub ModReserveAffect {
 
     my $already_on_shelf = $hold->found && $hold->found eq 'W';
 
+    my $item = Koha::Items->find($itemnumber);
+
+    # The item may have been checked out again (e.g. from another
+    # workstation) while a hold confirmation was pending: a hold can only
+    # be set aside or put in transit for an item that is not on loan
+    return 0 if $item->checkout && !$already_on_shelf;
+
     $hold->itemnumber($itemnumber);
 
     my @reserve_ids;
@@ -1353,7 +1363,6 @@ sub ModReserveAffect {
     _koha_notify_hold_changed($hold) if $notify_library;
 
     FixPriority( { biblionumber => $biblionumber } );
-    my $item = Koha::Items->find($itemnumber);
     if (   $item->location
         && $item->location eq 'CART'
         && ( !$item->permanent_location || $item->permanent_location ne 'CART' ) )
@@ -1381,7 +1390,7 @@ sub ModReserveAffect {
     logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, $hold, undef, $original )
         if C4::Context->preference('HoldsLog');
 
-    return;
+    return 1;
 }
 
 =head2 ModReserveCancelAll
