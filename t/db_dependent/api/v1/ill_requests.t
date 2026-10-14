@@ -31,6 +31,7 @@ use t::lib::Mocks;
 
 use Koha::AuthorisedValueCategories;
 use Koha::ILL::Requests;
+use Koha::Statistics;
 use Koha::DateUtils qw( format_sqldatetime );
 
 my $schema  = Koha::Database->new->schema;
@@ -428,7 +429,7 @@ subtest 'patron_list() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -540,6 +541,11 @@ subtest 'add() tests' => sub {
     # Confirm there is a notesopac value
     my $req = Koha::ILL::Requests->search()->next;
     ok( $req->notesopac, "notesopac value exists" ) if $req;
+
+    is(
+        Koha::Statistics->search( { illrequest_id => $req->illrequest_id, type => 'illreq_created' } )->count,
+        1, 'illreq_created statistic recorded'
+    );
 
     $schema->storage->txn_rollback;
 };
