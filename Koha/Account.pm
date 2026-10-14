@@ -609,7 +609,7 @@ already exists for this (item, issue) pair, returns without adding anything.
 
 Honours C<useDefaultReplacementCost>: where the replacement price is 0 and the
 preference is on, the itemtype's C<defaultreplacecost> is charged instead. Does
-B<not> consult C<WhenLostChargeReplacementFee> — that gate is the caller's
+B<not> consult C<WhenLostChargeReplacementFee>: that gate is the caller's
 responsibility. Branch and interface are caller-supplied.
 
 Returns C<$self> in all cases.
