@@ -149,9 +149,19 @@ if ( $query->param('reserve_id') && $op eq 'cud-affect_reserve' ) {
 
         # diffBranchSend tells ModReserveAffect whether document is expected in this library or not,
         # i.e., whether to apply waiting status
-        ModReserveAffect( $itemnumber, $borrowernumber, $diffBranchSend, $reserve_id, $desk_id );
+        my $hold_confirmed = ModReserveAffect( $itemnumber, $borrowernumber, $diffBranchSend, $reserve_id, $desk_id );
 
-        if ($diffBranchSend) {
+        if ( !$hold_confirmed ) {
+
+            # The item has been checked out again (e.g. from another
+            # workstation) while the hold confirmation was pending: the
+            # hold could not be set aside and remains pending
+            $template->param(
+                hold_not_confirmed_item_on_loan => 1,
+                item                            => $item,
+                patron                          => Koha::Patrons->find($borrowernumber),
+            );
+        } elsif ($diffBranchSend) {
             my $tobranch = $hold->pickup_library();
 
             # Add transfer, enqueue if one is already in the queue, and immediately set to in transit

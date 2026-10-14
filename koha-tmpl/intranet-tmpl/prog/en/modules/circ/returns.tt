@@ -120,6 +120,17 @@
             <!-- /.hold-auto-filled -->
         [% END # /IF hold_auto_filled %]
 
+        [% IF hold_not_confirmed_item_on_loan %]
+            <div class="alert alert-warning hold-not-confirmed-item-on-loan">
+                <h3>[% t('Hold could not be confirmed') | html %]</h3>
+                <p> [% tx('The item {barcode} has been checked out in the meantime: the hold has not been set aside and remains pending.', { barcode = item.barcode }) | html %] </p>
+                [% IF patron %]
+                    <p>[% t('Hold for:') | html %] [% patron.surname | html %], [% patron.firstname | html %]</p>
+                [% END %]
+            </div>
+            <!-- /.hold-not-confirmed-item-on-loan -->
+        [% END # /IF hold_not_confirmed_item_on_loan %]
+
         [% IF ( trigger && !transfertodo ) %]
             <div id="transfer-trigger" class="alert alert-info">
                 <h3>Reason for transfer</h3>
