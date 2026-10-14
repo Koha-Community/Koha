@@ -1189,7 +1189,8 @@ subtest "LinkBibHeadingsToAuthorities codes new authorities with the source thes
 
     # Case 6: ind2=4 (explicitly "source not specified") - must also respect a customised
     # MARCAuthorityControlField008 syspref default rather than being forced to '|'
-    t::lib::Mocks::mock_preference( 'MARCAuthorityControlField008', '|| acn||aabn           | a|a     d' );
+    my $custom_008 = '|| acn||aabn           | a|a     d';    # codespell:ignore acn
+    t::lib::Mocks::mock_preference( 'MARCAuthorityControlField008', $custom_008 );
     $biblio = $builder->build_sample_biblio();
     $record = $biblio->metadata->record;
     $field  = MARC::Field->new( '650', '', '4', 'a' => 'Source not specified' );
