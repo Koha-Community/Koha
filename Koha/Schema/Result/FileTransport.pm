@@ -187,8 +187,9 @@ __PACKAGE__->has_many(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aepVBfAwINe8dLAE5xLi1A
 
 __PACKAGE__->add_columns(
-    '+passive' => { is_boolean => 1 },
-    '+debug'   => { is_boolean => 1 },
+    '+passive'         => { is_boolean => 1 },
+    '+debug'           => { is_boolean => 1 },
+    '+copy_file_attrs' => { is_boolean => 1 },
 );
 
 =head2 koha_objects_class
