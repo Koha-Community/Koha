@@ -21,7 +21,7 @@ use File::Temp;
 use File::Path qw/make_path/;
 use MARC::Record;
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Warn;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
