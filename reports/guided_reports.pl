@@ -345,6 +345,7 @@ if ( !$op ) {
                     'notes'                 => $notes,
                     'cache_expiry'          => $cache_expiry,
                     'public'                => $public,
+                    'run_type'              => $run_type,
                     'usecache'              => $usecache,
                     'tables'                => $tables,
                     'report'                => $report
@@ -756,6 +757,7 @@ if ( !$op ) {
                 'notes'                 => $notes,
                 'cache_expiry'          => $cache_expiry,
                 'public'                => $public,
+                'run_type'              => $run_type,
                 'usecache'              => $usecache,
                 'tables'                => $tables,
                 'report'                => $report,
@@ -1187,7 +1189,11 @@ if ( $op eq 'run' ) {
                 'id'              => $report_id,
                 'template_id'     => $template_id,
             );
-        } elsif ( $report_run_type eq 'any' && $can_run_report->{foreground} && $can_run_report->{background} && !$run_in_background_chosen ) {
+        } elsif ( $report_run_type eq 'any'
+            && $can_run_report->{foreground}
+            && $can_run_report->{background}
+            && !$run_in_background_chosen )
+        {
 
             # User needs to pick foreground vs background for this run.
             $template->param(
