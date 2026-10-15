@@ -242,7 +242,7 @@ C<$params-E<gt>{run_type}> is required and must be C<foreground> or
 C<background>. Missing throws L<Koha::Exceptions::MissingParameter>; any
 other value throws L<Koha::Exceptions::BadParameter>.
 
-If C<saved_sql.run_type> is set to a single mode, calling C<prep_report>
+If L</effective_run_type> is a single mode, calling C<prep_report>
 with the other mode throws L<Koha::Exceptions::Report::RunTypeNotAllowed>.
 
 =cut
@@ -333,7 +333,7 @@ sub prep_report {
     Koha::Exceptions::BadParameter->throw( parameter => 'run_type' )
         unless $run_type =~ /^(foreground|background)$/;
 
-    my $report_run_type = $self->run_type;
+    my $report_run_type = $self->effective_run_type;
     if ( $report_run_type ne 'any' && $report_run_type ne $run_type ) {
         Koha::Exceptions::Report::RunTypeNotAllowed->throw(
             report_id => $report_id,
@@ -577,6 +577,20 @@ sub can_run_foreground_background {
     }
 
     return $can_run;
+}
+
+=head3 effective_run_type
+
+Returns the report's run_type, or 'any' when ReportsRunInBackground is not set to 'user_choice'.
+
+=cut
+
+sub effective_run_type {
+    my ($self) = @_;
+
+    return 'any' unless C4::Context->preference('ReportsRunInBackground') eq 'user_choice';
+
+    return $self->run_type;
 }
 
 1;

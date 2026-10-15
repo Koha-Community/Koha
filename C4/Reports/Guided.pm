@@ -792,7 +792,7 @@ sub update_sql {
     $report->report_subgroup($subgroup);
     $report->cache_expiry($cache_expiry) if defined $cache_expiry;
     $report->public($public);
-    $report->run_type($run_type);
+    $report->run_type($run_type) if defined $run_type;
     $report->store();
 
     if ( $cache_expiry >= 2592000 ) {

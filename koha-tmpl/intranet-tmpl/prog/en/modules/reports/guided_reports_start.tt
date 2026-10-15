@@ -1610,14 +1610,16 @@
                             </select>
                         </li>
                     [% END # /IF (usecache) %]
-                    <li>
-                        <label for="run_type">Run type:</label>
-                        <select id="run_type" name="run_type">
-                            <option value="any" [% IF !run_type || run_type == 'any' %]selected="selected"[% END %]>Both</option>
-                            <option value="foreground" [% IF run_type == 'foreground' %]selected="selected"[% END %]>Foreground only</option>
-                            <option value="background" [% IF run_type == 'background' %]selected="selected"[% END %]>Background only</option>
-                        </select>
-                    </li>
+                    [% IF Koha.Preference('ReportsRunInBackground') == 'user_choice' %]
+                        <li>
+                            <label for="run_type">Run type:</label>
+                            <select id="run_type" name="run_type">
+                                <option value="any" [% IF !run_type || run_type == 'any' %]selected="selected"[% END %]>Both</option>
+                                <option value="foreground" [% IF run_type == 'foreground' %]selected="selected"[% END %]>Foreground only</option>
+                                <option value="background" [% IF run_type == 'background' %]selected="selected"[% END %]>Background only</option>
+                            </select>
+                        </li>
+                    [% END %]
                     <li>
                         <label for="notes">Notes:</label>
                         <textarea id="notes" name="notes" cols="50" rows="2">[% notes | scrub_html type => 'note' | $raw %]</textarea>
@@ -1749,14 +1751,16 @@
                             </select>
                         </li>
                     [% END %]
-                    <li>
-                       <label for="run_type">Run type:</label>
-                       <select id="run_type" name="run_type">
-                           <option value="any" [% IF !run_type || run_type == 'any' %]selected="selected"[% END %]>Both</option>
-                           <option value="foreground" [% IF run_type == 'foreground' %]selected="selected"[% END %]>Foreground only</option>
-                           <option value="background" [% IF run_type == 'background' %]selected="selected"[% END %]>Background only</option>
-                       </select>
-                    </li>
+                    [% IF Koha.Preference('ReportsRunInBackground') == 'user_choice' %]
+                        <li>
+                            <label for="run_type">Run type:</label>
+                            <select id="run_type" name="run_type">
+                                <option value="any" [% IF !run_type || run_type == 'any' %]selected="selected"[% END %]>Both</option>
+                                <option value="foreground" [% IF run_type == 'foreground' %]selected="selected"[% END %]>Foreground only</option>
+                                <option value="background" [% IF run_type == 'background' %]selected="selected"[% END %]>Background only</option>
+                            </select>
+                        </li>
+                    [% END %]
                     <li>
                         <label for="notes">Notes:</label>
                         <textarea id="notes" name="notes" cols="50" rows="2">[% notes | scrub_html type => 'note' | $raw %]</textarea>

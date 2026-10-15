@@ -969,7 +969,7 @@ if ( $op eq 'run' ) {
 
     # Decide whether to run as a background job. A value set in saved_sql.run_type
     # overrides the user's choice.
-    my $report_run_type          = $report ? $report->run_type : 'any';
+    my $report_run_type          = $report ? $report->effective_run_type : 'any';
     my $run_in_background_chosen = defined $input->param('run_in_background_chosen');
     my $run_in_background;
     if ( $report_run_type eq 'background' ) {

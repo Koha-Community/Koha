@@ -20,7 +20,7 @@ use Modern::Perl;
 use Test::Exception;
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 24;
+use Test::More tests => 25;
 
 use C4::Context;
 use Koha::BackgroundJob;
@@ -1219,7 +1219,9 @@ subtest 'can_run_foreground_background' => sub {
 };
 
 subtest 'prep_report() honors saved_sql.run_type setting' => sub {
-    plan tests => 5;
+    plan tests => 6;
+
+    t::lib::Mocks::mock_preference( 'ReportsRunInBackground', 'user_choice' );
 
     my $fg_report =
         Koha::Report->new( { report_name => 'fg_only', savedsql => 'SELECT 1', run_type => 'foreground' } )->store;
@@ -1244,6 +1246,29 @@ subtest 'prep_report() honors saved_sql.run_type setting' => sub {
 
     lives_ok { $any_report->prep_report( [], [], { run_type => 'background' } ) }
     'any-runtype report accepts either request';
+
+    t::lib::Mocks::mock_preference( 'ReportsRunInBackground', 'never' );
+    lives_ok { $bg_report->prep_report( [], [], { run_type => 'foreground' } ) }
+    'background-only report accepts a foreground request when ReportsRunInBackground is never';
+};
+
+subtest 'effective_run_type() tests' => sub {
+    plan tests => 6;
+
+    my $fg_report = $builder->build_object( { class => 'Koha::Reports', value => { run_type => 'foreground' } } );
+    my $bg_report = $builder->build_object( { class => 'Koha::Reports', value => { run_type => 'background' } } );
+
+    t::lib::Mocks::mock_preference( 'ReportsRunInBackground', 'user_choice' );
+    is( $fg_report->effective_run_type, 'foreground', 'user_choice: foreground-only report is enforced' );
+    is( $bg_report->effective_run_type, 'background', 'user_choice: background-only report is enforced' );
+
+    t::lib::Mocks::mock_preference( 'ReportsRunInBackground', 'always' );
+    is( $fg_report->effective_run_type, 'any', 'always: foreground-only report is ignored' );
+    is( $bg_report->effective_run_type, 'any', 'always: background-only report is ignored' );
+
+    t::lib::Mocks::mock_preference( 'ReportsRunInBackground', 'never' );
+    is( $fg_report->effective_run_type, 'any', 'never: foreground-only report is ignored' );
+    is( $bg_report->effective_run_type, 'any', 'never: background-only report is ignored' );
 };
 
 $schema->storage->txn_rollback;
