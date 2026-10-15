@@ -39,7 +39,14 @@
             [% CASE 'patron_not_deleted' %]
                 [% patron_identifier = BLOCK %][% IF m.cardnumber %][% m.cardnumber | html %][% ELSE %][% m.borrowernumber | html %][% END %][% END %]
                 <span>Patron [% patron_identifier | $raw | $KohaSpan %] cannot be deleted:</span>
-                <span>[% m.reason | html %]</span>
+                [% SWITCH m.reason %]
+                [% CASE 'patron_protected' %]
+                    <span>Patron is protected</span>
+                [% CASE 'patron_anonymous' %]
+                    <span>Patron is the anonymous patron</span>
+                [% CASE %]
+                    <span>[% m.reason | html %]</span>
+                [% END %]
             [% CASE %]
                 <span>Unknown message '[% m.code | html %]'</span>
             [% END %]

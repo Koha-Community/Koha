@@ -80,6 +80,11 @@ sub process {
 
     my $schema = Koha::Database->new->schema;
 
+    my %reason_codes = (
+        'Koha::Exceptions::Patron::FailedDeleteProtectedPatron' => 'patron_protected',
+        'Koha::Exceptions::Patron::FailedDeleteAnonymousPatron' => 'patron_anonymous',
+    );
+
     for my $borrowernumber (@record_ids) {
 
         last if $self->get_from_storage->status eq 'cancelled';
@@ -114,7 +119,7 @@ sub process {
                 code           => 'patron_not_deleted',
                 borrowernumber => $borrowernumber,
                 cardnumber     => $cardnumber,
-                reason         => ref($_) ? $_->message : $_,
+                reason         => $reason_codes{ ref $_ } // ( ref($_) ? $_->message : $_ ),
             };
         };
 

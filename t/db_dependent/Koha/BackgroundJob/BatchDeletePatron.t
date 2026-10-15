@@ -126,7 +126,7 @@ subtest 'process() with move_to_deleted' => sub {
 
 subtest 'process() does not move a patron to deleted when delete fails' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -148,6 +148,7 @@ subtest 'process() does not move a patron to deleted when delete fails' => sub {
         $job->report->{not_deleted_borrowernumbers}, [$borrowernumber],
         'The patron is reported as not deleted'
     );
+    is( $job->messages->[0]->{reason}, 'patron_protected', 'The reason is patron_protected' );
 
     is(
         Koha::Patrons->search( { borrowernumber => $borrowernumber } )->count,
