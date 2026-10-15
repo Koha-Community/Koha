@@ -34,7 +34,7 @@ our $LOCAL_PATH_RE = qr{
     (?: /cgi-bin/koha/
       | /bib/\d+
       | /(?:isbn|issn)/[\w-]+
-      | /search(?:[?/]|$)
+      | /(?:opac-search.pl|search)(?:[?/]|$)
     )
 }x;
 
