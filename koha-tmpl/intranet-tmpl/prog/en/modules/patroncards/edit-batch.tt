@@ -297,7 +297,7 @@
         $(document).ready(function () {
             // Build the lengthMenu
             let lengthMenu = dataTablesDefaults.lengthMenu;
-            let patronsPerPage = [% Koha.Preference('PatronsPerPage') || '20' | html %]
+            let patronsPerPage = parseInt(Koha.prefs.PatronsPerPage) || 20;
             // Merge, remove -1, sort, add -1
             lengthMenu = [...new Set(lengthMenu.concat(patronsPerPage).filter(v => v !== -1))].sort((a, b) => a - b).concat(-1);
 
