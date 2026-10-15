@@ -2733,7 +2733,26 @@ subtest "local_holdgroup_match uses exclusivity controls, not LocalHoldsPriority
     );
 
     # Patron home = lib_c (Midway); pickup = lib_a (Fairfield)
-    my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $lib_c->branchcode } } );
+    # Build the patron with a category that is NOT excluded from local holds
+    # priority. Otherwise the LocalHoldsPriority phase is skipped for this
+    # patron and item targeting falls back to generic (hash-ordered, i.e.
+    # non-deterministic) allocation, which can pick item_b instead of item_c
+    # and makes this test flaky.
+    my $lhp_category = $builder->build_object(
+        {
+            class => 'Koha::Patron::Categories',
+            value => { exclude_from_local_holds_priority => 0 },
+        }
+    );
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode   => $lib_c->branchcode,
+                categorycode => $lhp_category->categorycode,
+            }
+        }
+    );
     my $reserve_id = AddReserve(
         {
             branchcode     => $lib_a->branchcode,
