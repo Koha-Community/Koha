@@ -42,6 +42,7 @@ use Koha::ItemTypes;
 use Koha::Plugins;
 use Koha::RecordProcessor;
 use Koha::Libraries;
+use Koha::Hold::HoldsQueueItems;
 use Koha::Recalls;
 use Koha::TemplateUtils qw( process_tt );
 use Koha::AdditionalContents;
