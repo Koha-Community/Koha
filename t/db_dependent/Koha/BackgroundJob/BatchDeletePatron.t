@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use Koha::BackgroundJob::BatchDeletePatron;
 use Koha::BackgroundJobs;
@@ -119,6 +119,43 @@ subtest 'process() with move_to_deleted' => sub {
     is(
         $schema->resultset('Deletedborrower')->search( { borrowernumber => $borrowernumber } )->count,
         1, 'Patron was copied to deletedborrowers'
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'process() does not move a patron to deleted when delete fails' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $patron         = $builder->build_object( { class => 'Koha::Patrons', value => { protected => 1 } } );
+    my $borrowernumber = $patron->borrowernumber;
+
+    my $job_id = Koha::BackgroundJob::BatchDeletePatron->new->enqueue(
+        {
+            record_ids      => [$borrowernumber],
+            move_to_deleted => 1,
+        }
+    );
+    my $job = Koha::BackgroundJobs->find($job_id)->_derived_class;
+    $job->process( $job->json->decode( $job->data ) );
+
+    $job = Koha::BackgroundJobs->find($job_id)->_derived_class;
+    is( $job->report->{total_success}, 0, 'The protected patron was not deleted' );
+    is_deeply(
+        $job->report->{not_deleted_borrowernumbers}, [$borrowernumber],
+        'The patron is reported as not deleted'
+    );
+
+    is(
+        Koha::Patrons->search( { borrowernumber => $borrowernumber } )->count,
+        1, 'Patron still exists in borrowers'
+    );
+    is(
+        $schema->resultset('Deletedborrower')->search( { borrowernumber => $borrowernumber } )->count,
+        0, 'Patron was not copied to deletedborrowers'
     );
 
     $schema->storage->txn_rollback;

@@ -25,6 +25,7 @@ use Modern::Perl;
 
 use Try::Tiny;
 
+use Koha::Database;
 use Koha::Patrons;
 
 use base 'Koha::BackgroundJob';
@@ -77,6 +78,8 @@ sub process {
     my @messages;
     my ( @deleted_borrowernumbers, @not_deleted_borrowernumbers );
 
+    my $schema = Koha::Database->new->schema;
+
     for my $borrowernumber (@record_ids) {
 
         last if $self->get_from_storage->status eq 'cancelled';
@@ -86,8 +89,12 @@ sub process {
         my $cardnumber = $patron->cardnumber;
 
         try {
-            $patron->move_to_deleted if $move_to_deleted;
-            $patron->delete;
+            $schema->txn_do(
+                sub {
+                    $patron->move_to_deleted if $move_to_deleted;
+                    $patron->delete;
+                }
+            );
 
             push @deleted_borrowernumbers, $borrowernumber;
             $report->{total_success}++;
