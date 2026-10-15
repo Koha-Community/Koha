@@ -163,7 +163,7 @@ subtest 'process() does not move a patron to deleted when delete fails' => sub {
 
 subtest 'process() skips patrons that no longer exist or already deleted' => sub {
 
-    plan tests => 3;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -186,6 +186,13 @@ subtest 'process() skips patrons that no longer exist or already deleted' => sub
     my $report = $job->report;
     is( $report->{total_records}, 2, 'Two patrons were passed for deletion' );
     is( $report->{total_success}, 1, 'Only the existing patron was deleted' );
+    is( $job->progress,           2, 'The missing patron counts towards the progress' );
+
+    is_deeply(
+        $job->messages,
+        [ { type => 'warning', code => 'patron_not_found', borrowernumber => $borrowernumber } ],
+        'A patron_not_found message is recorded for the missing patron'
+    );
 
     $schema->storage->txn_rollback;
 };

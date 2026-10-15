@@ -84,7 +84,16 @@ sub process {
 
         last if $self->get_from_storage->status eq 'cancelled';
 
-        my $patron = Koha::Patrons->find($borrowernumber) || next;
+        my $patron = Koha::Patrons->find($borrowernumber);
+        unless ($patron) {
+            push @messages, {
+                type           => 'warning',
+                code           => 'patron_not_found',
+                borrowernumber => $borrowernumber,
+            };
+            $self->step;
+            next;
+        }
 
         my $cardnumber = $patron->cardnumber;
 
