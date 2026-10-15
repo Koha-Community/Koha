@@ -57,8 +57,8 @@ if ( $op eq 'cud-add' ) {
     my $download_directory = $input->param('download_directory') || undef;
     my $upload_directory   = $input->param('upload_directory')   || undef;
     my $status             = $input->param('status')             || '';
-    my $debug              = ( scalar $input->param('debug_mode') )      ? 1 : 0;
-    my $copy_file_attrs    = ( scalar $input->param('copy_file_attrs') ) ? 1 : 0;
+    my $debug              = ( scalar $input->param('debug_mode') )           ? 1 : 0;
+    my $copy_file_attrs    = ( scalar $input->param('copy_file_attrs') // 1 ) ? 1 : 0;
 
     try {
         my $file_transport = Koha::File::Transport->new(
@@ -149,8 +149,8 @@ if ( $op eq 'cud-add' ) {
         my $download_directory = $input->param('download_directory') || undef;
         my $upload_directory   = $input->param('upload_directory')   || undef;
         my $status             = $input->param('status')             || '';
-        my $debug              = ( scalar $input->param('debug_mode') )      ? 1 : 0;
-        my $copy_file_attrs    = ( scalar $input->param('copy_file_attrs') ) ? 1 : 0;
+        my $debug              = ( scalar $input->param('debug_mode') )           ? 1 : 0;
+        my $copy_file_attrs    = ( scalar $input->param('copy_file_attrs') // 1 ) ? 1 : 0;
 
         try {
             $file_transport->set(
