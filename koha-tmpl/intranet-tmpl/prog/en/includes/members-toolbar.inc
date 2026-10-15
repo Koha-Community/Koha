@@ -7,7 +7,7 @@
 [% USE scalar %]
 <div id="toolbar" class="btn-toolbar">
     [% IF CAN_user_borrowers_edit_borrowers %]
-        <a id="editpatron" class="btn btn-default" href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]"
+        <a id="editpatron" class="btn btn-default" href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=[% destination | html %]&amp;borrowernumber=[% patron.borrowernumber | html %]"
             ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a
         >
     [% END %]
