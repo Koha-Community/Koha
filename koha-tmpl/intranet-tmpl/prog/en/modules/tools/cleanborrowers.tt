@@ -240,7 +240,14 @@
         <!-- Step 3 START -->
         <div id="step3">
             [% FOR m IN messages %]
-                <div class="alert alert-warning"> [% m.code | html %]1 </div>
+                <div class="alert alert-warning">
+                    [% IF m.code == 'cannot_enqueue_job' %]
+                        <span>Cannot enqueue this job.</span>
+                    [% END %]
+                    [% IF m.error %]
+                        <span>(The error was: [% m.error | html %], see the Koha log file for more information).</span>
+                    [% END %]
+                </div>
             [% END %]
             [% IF ( testrun ) %]
                 <h4>[% TotalDel | html %] patrons would have been removed (if it wasn't a test run)</h4>
