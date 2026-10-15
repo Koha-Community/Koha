@@ -178,12 +178,6 @@
                 order: [[1, "asc"]],
             });
 
-            $(".delete_patron").on("click", function () {
-                $(".dropdown").removeClass("open");
-                var list = $(this).data("list-name");
-                return confirmDelete(_("Are you sure you want to delete the list %s?").format(list));
-            });
-
             $("#patrons_lists_form").submit(function () {
                 var checkedItems = $("input[name=patron_lists_ids]:checked");
                 if (checkedItems.size() == 0) {
