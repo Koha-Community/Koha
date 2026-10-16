@@ -39,14 +39,6 @@
                         <td>Monthly usages added</td>
                         <td>[% report.us_report_info.added_mus | html %]</td>
                     </tr>
-                    <tr>
-                        <td>Yearly usages skipped</td>
-                        <td>[% report.us_report_info.skipped_yus | html %]</td>
-                    </tr>
-                    <tr>
-                        <td>Yearly usages added</td>
-                        <td>[% report.us_report_info.added_yus | html %]</td>
-                    </tr>
                 </table>
             [% ELSIF job.status == 'started' %]
                 <p id="jobactionlabel"></p>

@@ -31,6 +31,7 @@ use Koha::ERM::EUsage::UsageItem;
 use Koha::ERM::EUsage::UsageItems;
 use Koha::ERM::EUsage::UsageTitle;
 use Koha::ERM::EUsage::UsageTitles;
+use Koha::ERM::EUsage::YearlyUsages;
 use Koha::ERM::EUsage::UsageDataProvider;
 use Koha::ERM::EUsage::SushiCounter;
 use Koha::Exceptions::ERM::EUsage::CounterFile;
@@ -124,7 +125,8 @@ sub get_usage_data_provider {
 Goes through COUNTER file and adds usage objects for each row
 A usage object may be a erm_usage_title, erm_usage_platform, erm_usage_item or erm_usage_database
 
-#FIXME?: "Yearly" usage may be incorrect, it'll only add up the months in the current report, not necessarily the whole year
+Only monthly usage is stored by the rows. The yearly usage in erm_usage_yus is rebuilt from the monthly usage
+for each year of the file when all rows are done.
 
 =cut
 
@@ -135,6 +137,9 @@ sub _add_usage_objects {
     my $usage_data_provider = $self->get_usage_data_provider;
     my $previous_object     = undef;
     my $usage_object        = undef;
+
+    # The years of the months that were written, to rebuild their yearly usage
+    my %years;
 
     # Set job size to the amount of rows we're processing
     $self->{job_callbacks}->{set_size_callback}->( scalar( @{$rows} ) )
@@ -185,7 +190,6 @@ sub _add_usage_objects {
             }
 
             # Add monthly usage statistics for this usage object
-            my %yearly_usages = ();
             foreach my $year_month (@date_fields) {
                 my $usage = %{$row}{$year_month};
 
@@ -195,23 +199,13 @@ sub _add_usage_objects {
                 my $month = substr( $year_month, 0, 3 );
                 my $year  = substr( $year_month, 4, 4 );
 
-                if ( !exists $yearly_usages{$year} ) {
-                    $yearly_usages{$year} = $usage;
-                } else {
-                    $yearly_usages{$year} += $usage;
-                }
+                $years{$year} = 1;
 
                 $self->_add_monthly_usage_entries(
                     $usage_object,
                     $row->{Metric_Type}, $row, $year, $month, $usage
                 );
             }
-
-            # Add yearly usage statistics for this usage object
-            $self->_add_yearly_usage_entries(
-                $usage_object, $row->{Metric_Type},
-                $row,          \%yearly_usages
-            );
 
             $previous_object = $usage_object;
 
@@ -221,6 +215,15 @@ sub _add_usage_objects {
             warn $_;
         }
     }
+
+    # erm_usage_yus is derived from erm_usage_mus: a new or changed month changes the total of its year
+    Koha::ERM::EUsage::YearlyUsages->rebuild(
+        {
+            usage_data_provider_id => $usage_data_provider->erm_usage_data_provider_id,
+            report_type            => $self->type,
+            year                   => $_,
+        }
+    ) for sort keys %years;
 }
 
 =head3 _add_monthly_usage_entries
@@ -259,49 +262,6 @@ sub _add_monthly_usage_entries {
         ],
         $self->{job_callbacks}
     );
-}
-
-=head3 _add_yearly_usage_entries
-
-Adds erm_usage_yus database entries
-
-=cut
-
-sub _add_yearly_usage_entries {
-    my ( $self, $usage_object, $metric_type, $row, $yearly_usages ) = @_;
-
-    my $usage_data_provider = $self->get_usage_data_provider;
-    my $usage_object_info   = $self->_get_usage_object_id_hash($usage_object);
-    my $specific_fields     = Koha::ERM::EUsage::SushiCounter->get_report_type_specific_fields_by_release(
-        $self->type,
-        $self->get_COUNTER_report_release->{header_value}
-    );
-
-    while ( my ( $year, $usage ) = each( %{$yearly_usages} ) ) {
-
-        # Skip this yearly usage entry if it's 0
-        next if $usage eq "0";
-
-        $usage_object->yearly_usages(
-            [
-                {
-                    %{$usage_object_info},
-                    usage_data_provider_id => $usage_data_provider->erm_usage_data_provider_id,
-                    year                   => $year,
-                    totalcount             => $usage,
-                    metric_type            => $metric_type,
-                    grep ( /Access_Type/, @{$specific_fields} )
-                    ? ( access_type => $row->{Access_Type} )
-                    : (),
-                    grep ( /YOP/, @{$specific_fields} )
-                    ? ( yop => $row->{YOP} )
-                    : (),
-                    report_type => $self->type
-                }
-            ],
-            $self->{job_callbacks}
-        );
-    }
 }
 
 =head3 validate

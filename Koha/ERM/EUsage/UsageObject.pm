@@ -21,7 +21,6 @@ use Modern::Perl;
 
 use base qw(Koha::Object);
 
-use Koha::ERM::EUsage::YearlyUsage;
 use Koha::ERM::EUsage::YearlyUsages;
 use Koha::ERM::EUsage::MonthlyUsage;
 use Koha::ERM::EUsage::MonthlyUsages;
@@ -33,8 +32,9 @@ Koha::ERM::EUsage::UsageObject - Base class for ERM usage report entities
 =head1 SYNOPSIS
 
 This is the base class for the usage report entities (titles, platforms,
-items and databases). Each entity has monthly and yearly usage records
-attached through the erm_usage_mus and erm_usage_yus tables.
+items and databases). Each entity has monthly usage records stored in the
+erm_usage_mus table. Yearly usage is read from the erm_usage_yus table, which
+holds the monthly usage summed per year.
 
 Subclasses must implement C<_type>.
 
@@ -68,28 +68,17 @@ sub erm_usage_yuses {
 
 =head3 yearly_usages
 
-Getter/setter for yearly_usages for this usage object
-Skips adding yearly_usage if it already exists
+Getter for yearly_usages for this usage object
+
+Yearly usage is read-only. The erm_usage_yus table is rebuilt from the monthly
+usage by Koha::ERM::EUsage::YearlyUsages->rebuild, so there is nothing to store here.
 
 =cut
 
 sub yearly_usages {
-    my ( $self, $yearly_usages, $job_callbacks ) = @_;
+    my ($self) = @_;
 
-    if ($yearly_usages) {
-        for my $yearly_usage (@$yearly_usages) {
-            if ( $self->yearly_usages()->search($yearly_usage)->last ) {
-                $job_callbacks->{report_info_callback}->('skipped_yus')
-                    if $job_callbacks;
-                next;
-            }
-            $job_callbacks->{report_info_callback}->('added_yus')
-                if $job_callbacks;
-            Koha::ERM::EUsage::YearlyUsage->new($yearly_usage)->store;
-        }
-    }
-    my $yearly_usages_rs = $self->_result->erm_usage_yuses;
-    return Koha::ERM::EUsage::YearlyUsages->_new_from_dbic($yearly_usages_rs);
+    return $self->erm_usage_yuses;
 }
 
 =head3 monthly_usages

@@ -62,9 +62,7 @@ sub process {
 
     $self->{us_report_info} = {
         skipped_mus         => 0,
-        skipped_yus         => 0,
         added_mus           => 0,
-        added_yus           => 0,
         added_usage_objects => 0,
     };
 
