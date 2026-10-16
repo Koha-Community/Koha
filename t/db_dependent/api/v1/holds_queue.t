@@ -308,7 +308,7 @@ subtest 'sorting on embedded fields' => sub {
 
 subtest 'HidePatronName tests' => sub {
 
-    plan tests => 13;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -365,11 +365,12 @@ subtest 'HidePatronName tests' => sub {
     t::lib::Mocks::mock_preference( 'HidePatronName', 1 );
 
     my $tx =
-        $t->get_ok( "//$userid:$password\@/api/v1/holds/queue" => { 'x-koha-embed' => 'patron' } )
+        $t->get_ok( "//$userid:$password\@/api/v1/holds/queue" => { 'x-koha-embed' => 'patron,patron.library' } )
         ->status_is(200)
         ->json_hasnt('/0/patron/surname')
         ->json_hasnt('/0/patron/firstname')
-        ->json_hasnt('/0/patron/library_id');
+        ->json_has('/0/patron/library_id')
+        ->json_has('/0/patron/library');
 
     # HidePatronName ON applies even to superlibrarians
     my $superlibrarian = $builder->build_object(
@@ -383,7 +384,7 @@ subtest 'HidePatronName tests' => sub {
 
     $t->get_ok( "//$super_userid:$password\@/api/v1/holds/queue" => { 'x-koha-embed' => 'patron' } )
         ->status_is(200)
-        ->json_hasnt('/0/patron/library_id');
+        ->json_hasnt('/0/patron/surname');
 
     $schema->storage->txn_rollback;
 };

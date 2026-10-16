@@ -62,7 +62,9 @@ sub list {
                     patron_id   => $patron->{patron_id},
                     cardnumber  => $patron->{cardnumber},
                     category_id => $patron->{category_id},
+                    library_id  => $patron->{library_id},
                     ( category => $patron->{category} ) x !!$patron->{category},
+                    ( library  => $patron->{library} ) x !!$patron->{library},
                 };
             }
         }

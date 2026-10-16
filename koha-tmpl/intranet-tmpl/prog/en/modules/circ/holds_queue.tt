@@ -351,18 +351,19 @@
                             searchable: true,
                             render: function (data, type, row) {
                                 if (!row.patron) return "";
-                                // Use the shared patron formatter: it handles preferred
-                                // name, middle/other names, the card number, and the
-                                // "A patron from <library>" fallback when the patron is
-                                // redacted (cross-library staff without permission).
-                                let html =
-                                    "<p>" +
-                                    $patron_to_html(row.patron, {
+                                let patron_label;
+                                if (row.patron.patron_id && !row.patron.surname && !row.patron.preferred_name) {
+                                    patron_label = row.patron.cardnumber
+                                        ? '<a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=' + encodeURIComponent(row.patron.patron_id) + '#reserves">' + row.patron.cardnumber.escapeHtml() + "</a>"
+                                        : "";
+                                } else {
+                                    patron_label = $patron_to_html(row.patron, {
                                         invert_name: true,
                                         display_cardnumber: true,
                                         url: "circulation_reserves",
-                                    }) +
-                                    "</p>";
+                                    });
+                                }
+                                let html = "<p>" + patron_label + "</p>";
                                 if (row.patron.phone) {
                                     html += "<p>" + row.patron.phone.escapeHtml() + "</p>";
                                 }
