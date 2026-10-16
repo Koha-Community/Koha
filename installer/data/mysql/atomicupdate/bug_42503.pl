@@ -12,7 +12,7 @@ return {
             $dbh->do(
                 q{
                 ALTER TABLE tmp_holdsqueue
-                    ADD COLUMN `item_type_id` varchar(10) DEFAULT NULL AFTER `local_holdgroup_match`
+                    ADD COLUMN `item_type_id` varchar(10) DEFAULT NULL COMMENT 'item type code materialized at queue build time, used to look up translated descriptions' AFTER `local_holdgroup_match`
             }
             );
             say_success( $out, "Added column 'tmp_holdsqueue.item_type_id'" );
@@ -34,7 +34,7 @@ return {
             $dbh->do(
                 q{
                 ALTER TABLE tmp_holdsqueue
-                    ADD COLUMN `itype_description` varchar(255) DEFAULT NULL AFTER `local_holdgroup_match`
+                    ADD COLUMN `itype_description` varchar(255) DEFAULT NULL COMMENT 'materialized description of the item type at queue build time' AFTER `item_type_id`
             }
             );
             say_success( $out, "Added column 'tmp_holdsqueue.itype_description'" );
@@ -44,7 +44,7 @@ return {
             $dbh->do(
                 q{
                 ALTER TABLE tmp_holdsqueue
-                    ADD COLUMN `ccode_description` varchar(255) DEFAULT NULL AFTER `itype_description`
+                    ADD COLUMN `ccode_description` varchar(255) DEFAULT NULL COMMENT 'materialized description of the collection code at queue build time' AFTER `itype_description`
             }
             );
             say_success( $out, "Added column 'tmp_holdsqueue.ccode_description'" );
@@ -54,7 +54,7 @@ return {
             $dbh->do(
                 q{
                 ALTER TABLE tmp_holdsqueue
-                    ADD COLUMN `location_description` varchar(255) DEFAULT NULL AFTER `ccode_description`
+                    ADD COLUMN `location_description` varchar(255) DEFAULT NULL COMMENT 'materialized description of the shelving location at queue build time' AFTER `ccode_description`
             }
             );
             say_success( $out, "Added column 'tmp_holdsqueue.location_description'" );
