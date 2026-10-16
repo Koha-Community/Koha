@@ -461,7 +461,7 @@
         const multiple_orders = "[% multiple_orders | html %]";
         const only_one_order = [% only_one_order ? 1 : 0 | html %];
         Koha.addPrefs({
-            AcqCreateItem: [% Koha.Preference('AcqCreateItem') ? 1 : 0 | html %],
+            AcqCreateItem: "[% Koha.Preference('AcqCreateItem') | html %]",
             UniqueItemFields: "[% Koha.Preference('UniqueItemFields') || '' | html %]",
         });
         Koha.addPermissions({
