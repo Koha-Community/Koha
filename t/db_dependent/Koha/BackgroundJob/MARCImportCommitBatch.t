@@ -55,7 +55,7 @@ subtest 'enqueue() tests' => sub {
 
 subtest 'process() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -76,17 +76,24 @@ subtest 'process() tests' => sub {
     my $job_id = Koha::BackgroundJob::MARCImportCommitBatch->new->enqueue( { import_batch_id => $import_batch->id } );
     my $job    = Koha::BackgroundJobs->find($job_id)->_derived_class;
 
-    @{$batch_return} = ( 0, 0, 0, 0, 0, 2 );
+    @{$batch_return} = ( 0, 0, 0, 0, 0, 2, 0 );
     $job->process( { import_batch_id => $import_batch->id } );
     $job->discard_changes;
     is( $job->status, 'finished', 'A job where all records are ignored is a success' );
 
     $job->status('new')->store;
-    @{$batch_return} = ( 1, 1, 0, 0, 0, 1 );
+    @{$batch_return} = ( 1, 1, 0, 0, 0, 1, 0 );
     $job->process( { import_batch_id => $import_batch->id } );
     $job->discard_changes;
     is( $job->status,   'failed', 'A job where the record counts do not match is failed' );
     is( $job->size,     '2',      'Size is based on number of records' );
     is( $job->progress, '3', 'Progress is the total number of records processed, including added/updated/ignored' );
+
+    $job->status('new')->store;
+    @{$batch_return} = ( 1, 0, 0, 0, 0, 0, 1 );
+    $job->process( { import_batch_id => $import_batch->id } );
+    $job->discard_changes;
+    is( $job->status,   'finished', 'A job where some records are skipped as locked is a success' );
+    is( $job->progress, '2',        'Progress includes locked records' );
     $schema->storage->txn_rollback;
 };
