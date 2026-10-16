@@ -4000,7 +4000,7 @@ subtest 'find_by_identifier() tests' => sub {
 };
 
 subtest 'check_for_existing_matches' => sub {
-    plan tests => 14;
+    plan tests => 19;
 
     $schema->storage->txn_begin;
 
@@ -4095,6 +4095,47 @@ subtest 'check_for_existing_matches' => sub {
     $match_result =
         Koha::Patrons->check_for_existing_matches( { firstname => 'John', surname => 'Smith', sort1 => '0' } );
     is( $match_result->{duplicate_found}, 1, "Duplicate found when both records have a sort1 of '0'" );
+
+    # A record that is blank in every compared field is not a duplicate of anyone.
+    # Other patrons in the database may match legitimately, so only the fixture is checked.
+    t::lib::Mocks::mock_preference( 'PatronDuplicateMatchingAddFields', 'surname|firstname|dateofbirth' );
+
+    my $blank_patron = $builder->build_object(
+        { class => 'Koha::Patrons', value => { firstname => undef, surname => q{}, dateofbirth => undef } } );
+    my $matches_blank_patron = sub {
+        my ($result) = @_;
+        return 0 unless $result->{matching_patrons};
+        return $result->{matching_patrons}->search( { borrowernumber => $blank_patron->borrowernumber } )->count;
+    };
+
+    $match_result = Koha::Patrons->check_for_existing_matches(
+        { firstname => 'Jane', surname => 'Doe', dateofbirth => '1990-05-05' } );
+    is(
+        $matches_blank_patron->($match_result), 0,
+        'An existing patron blank in all the compared fields is not a match'
+    );
+
+    $match_result = Koha::Patrons->check_for_existing_matches( { surname => 'Doe' } );
+    is(
+        $matches_blank_patron->($match_result), 0,
+        'An existing patron blank in the only compared field is not a match'
+    );
+
+    $blank_patron->dateofbirth('1990-05-05')->store;
+    $match_result = Koha::Patrons->check_for_existing_matches( { surname => 'Doe' } );
+    is(
+        $matches_blank_patron->($match_result), 0,
+        'A populated field that is not compared does not count as a match'
+    );
+
+    $blank_patron->dateofbirth(undef)->surname('Doe')->store;
+    $match_result = Koha::Patrons->check_for_existing_matches(
+        { firstname => 'Jane', surname => 'Doe', dateofbirth => '1990-05-05' } );
+    is(
+        $match_result->{duplicate_found}, 1,
+        'Duplicate found when one compared field matches and the others are blank in the existing patron'
+    );
+    is( $matches_blank_patron->($match_result), 1, 'The partially blank patron is returned as a match' );
 
     $schema->storage->txn_rollback;
 };
