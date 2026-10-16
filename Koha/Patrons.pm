@@ -743,6 +743,9 @@ sub extended_attributes_config {
     means the field is not compared at all, and a blank value in an existing patron record
     does not stop that record being reported as a possible duplicate.
 
+    At least one of the compared fields must hold the same value in the existing record,
+    so a record with all of those fields blank is never reported as a duplicate.
+
 =cut
 
 sub check_for_existing_matches {
@@ -753,10 +756,13 @@ sub check_for_existing_matches {
     my $result_source = $self->_resultset->result_source;
 
     my @match_conditions;
+    my @value_matches;
     for my $field (@duplicate_match_fields) {
 
         my $value = $new_patron_data->{$field};
         next unless defined $value && $value ne q{};
+
+        push @value_matches, { $field => $value };
 
         # An empty value in the existing record is unknown, not a mismatch. Only text
         # columns are compared against the empty string, it is not a valid value for
@@ -771,7 +777,9 @@ sub check_for_existing_matches {
     # unfiltered and match every patron in the system.
     return { 'duplicate_found' => 0 } unless @match_conditions;
 
-    my $patrons = Koha::Patrons->search( { -and => \@match_conditions } );
+    # A record that is blank in every compared field matches nothing, it must
+    # share at least one actual value with the new patron.
+    my $patrons = Koha::Patrons->search( { -and => [ @match_conditions, { -or => \@value_matches } ] } );
     if ( $patrons->count > 0 ) {
         return {
             'duplicate_found'  => 1,
