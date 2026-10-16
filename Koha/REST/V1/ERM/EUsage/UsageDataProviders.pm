@@ -364,10 +364,10 @@ sub process_SUSHI_response {
     my $begin_date = $body->{begin_date};
     my $end_date   = $body->{end_date};
 
-    unless ( $begin_date lt $end_date ) {
+    unless ( $begin_date le $end_date ) {
         return $c->render(
             status  => 400,
-            openapi => { error => "Begin date must be before end date" }
+            openapi => { error => "Begin date must not be after end date" }
         );
     }
 
@@ -389,6 +389,12 @@ sub process_SUSHI_response {
             openapi => { jobs => [ @{$jobs} ] }
         );
     } catch {
+        if ( blessed $_ && $_->isa('Koha::Exceptions::BadParameter') ) {
+            return $c->render(
+                status  => 400,
+                openapi => { error => $_->error }
+            );
+        }
         $c->unhandled_exception($_);
     };
 }

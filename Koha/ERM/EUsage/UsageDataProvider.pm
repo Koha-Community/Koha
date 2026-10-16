@@ -23,6 +23,7 @@ use HTTP::Request;
 use JSON qw( decode_json );
 use LWP::UserAgent;
 
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
 
 use Try::Tiny qw( catch try );
@@ -91,9 +92,91 @@ sub enqueue_counter_file_processing_job {
     return \@jobs;
 }
 
+=head3 harvest_periods
+
+    my $periods = $ud_provider->harvest_periods(
+        {
+            begin_date => '2023-08-15',
+            end_date   => '2023-10-02',
+        }
+    );
+
+Splits a date range into one period per calendar month. Returns an arrayref of
+hashrefs with C<begin_date> and C<end_date> in C<YYYY-MM-DD> format:
+
+    [
+        { begin_date => '2023-08-15', end_date => '2023-08-31' },
+        { begin_date => '2023-09-01', end_date => '2023-09-30' },
+        { begin_date => '2023-10-01', end_date => '2023-10-02' },
+    ]
+
+The first period starts on the given begin date and the last period ends on the
+given end date. Months in between run from the first to the last day. Equal
+begin and end dates give one period of one day.
+
+The dates are calendar days without a time zone. An end date after today is
+reduced to today, so no job is enqueued for a month that has not happened yet.
+
+Throws C<Koha::Exceptions::MissingParameter> if a date is missing and
+C<Koha::Exceptions::BadParameter> if the begin date is after the end date or
+after today.
+
+=cut
+
+sub harvest_periods {
+    my ( $self, $args ) = @_;
+
+    for my $param (qw( begin_date end_date )) {
+        Koha::Exceptions::MissingParameter->throw( parameter => $param )
+            unless $args->{$param};
+    }
+
+    my $begin = dt_from_string( $args->{begin_date}, undef, 'floating' )->truncate( to => 'day' );
+    my $end   = dt_from_string( $args->{end_date},   undef, 'floating' )->truncate( to => 'day' );
+    my $today = dt_from_string( undef,               undef, 'floating' )->truncate( to => 'day' );
+
+    Koha::Exceptions::BadParameter->throw(
+        parameter => 'begin_date',
+        error     => 'begin_date must not be after end_date'
+    ) if $begin > $end;
+
+    Koha::Exceptions::BadParameter->throw(
+        parameter => 'begin_date',
+        error     => 'begin_date must not be in the future'
+    ) if $begin > $today;
+
+    $end = $today if $end > $today;
+
+    my @periods;
+    my $cursor = $begin->clone;
+    while ( $cursor <= $end ) {
+        my $last_day_of_month = $cursor->clone->set_day( $cursor->month_length );
+        my $period_end        = $last_day_of_month > $end ? $end : $last_day_of_month;
+
+        push @periods, { begin_date => $cursor->ymd, end_date => $period_end->ymd };
+
+        $cursor = $last_day_of_month->add( days => 1 );
+    }
+
+    return \@periods;
+}
+
 =head3 enqueue_sushi_harvest_jobs
 
-Enqueues one harvest background job for each report type in this usage data provider
+    my $jobs = $ud_provider->enqueue_sushi_harvest_jobs(
+        {
+            begin_date => '2023-08-15',
+            end_date   => '2023-10-02',
+        }
+    );
+
+Enqueues one harvest background job for each report type of this usage data
+provider and each calendar month in the date range, see L</harvest_periods>.
+
+Returns an arrayref with one hashref per job, ordered by report type and then
+by month:
+
+    { report_type => 'TR_J1', job_id => 12, begin_date => '2023-08-15', end_date => '2023-08-31' }
 
 =cut
 
@@ -101,27 +184,32 @@ sub enqueue_sushi_harvest_jobs {
     my ( $self, $args ) = @_;
 
     my @report_types = split( /;/, $self->report_types );
+    my $periods      = $self->harvest_periods($args);
 
     my @jobs;
     foreach my $report_type (@report_types) {
+        foreach my $period ( @{$periods} ) {
 
-        my $job_id = Koha::BackgroundJob::ErmSushiHarvester->new->enqueue(
-            {
-                ud_provider_id   => $self->erm_usage_data_provider_id,
-                report_type      => $report_type,
-                begin_date       => $args->{begin_date},
-                end_date         => $args->{end_date},
-                ud_provider_name => $self->name,
-            }
-        );
+            my $job_id = Koha::BackgroundJob::ErmSushiHarvester->new->enqueue(
+                {
+                    ud_provider_id   => $self->erm_usage_data_provider_id,
+                    report_type      => $report_type,
+                    begin_date       => $period->{begin_date},
+                    end_date         => $period->{end_date},
+                    ud_provider_name => $self->name,
+                }
+            );
 
-        push(
-            @jobs,
-            {
-                report_type => $report_type,
-                job_id      => $job_id
-            }
-        );
+            push(
+                @jobs,
+                {
+                    report_type => $report_type,
+                    job_id      => $job_id,
+                    begin_date  => $period->{begin_date},
+                    end_date    => $period->{end_date},
+                }
+            );
+        }
     }
 
     return \@jobs;
@@ -234,7 +322,7 @@ sub harvest_sushi {
                     date_uploaded          => POSIX::strftime( "%Y%m%d%H%M%S", localtime ),
 
                     #TODO: add ".csv" to end of filename here
-                    filename => $self->name . "_" . $self->{report_type},
+                    filename => $self->_counter_filename,
                 }
             ]
         );
@@ -413,6 +501,24 @@ sub _build_url_query {
     $url .= '&access_method=Regular' if $self->{report_type} =~ /^(?:PR|DR|TR|IR)$/i;
 
     return $url;
+}
+
+=head3 _counter_filename
+
+    my $filename = $self->_counter_filename;
+
+Builds the filename of a harvested COUNTER file: provider name, report type and,
+when the harvest has a begin date, the harvested month (C<YYYY-MM>).
+
+=cut
+
+sub _counter_filename {
+    my ($self) = @_;
+
+    my $filename = $self->name . "_" . $self->{report_type};
+    $filename .= "_" . substr( $self->{begin_date}, 0, 7 ) if $self->{begin_date};
+
+    return $filename;
 }
 
 =head3 _validate_url

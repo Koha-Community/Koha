@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -418,6 +418,92 @@ subtest 'delete() tests' => sub {
 
     # Attempt to delete non-existent usage_data_provider
     $t->delete_ok("//$userid:$password@/api/v1/erm/usage_data_providers/$usage_data_provider_id")->status_is(404);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'process_SUSHI_response() tests' => sub {
+
+    plan tests => 21;
+
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**28 }
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $unauth_userid = $patron->userid;
+
+    my $usage_data_provider = $builder->build_object(
+        {
+            class => 'Koha::ERM::EUsage::UsageDataProviders',
+            value => { report_types => 'TR_J1;PR' }
+        }
+    );
+    my $usage_data_provider_id = $usage_data_provider->erm_usage_data_provider_id;
+
+    my $dates = { begin_date => '2023-08-15', end_date => '2023-10-02' };
+
+    # Unauthorized attempt
+    $t->post_ok(
+        "//$unauth_userid:$password@/api/v1/erm/usage_data_providers/$usage_data_provider_id/process_SUSHI_response" =>
+            json => $dates )->status_is(403);
+
+    # Both dates are required
+    $t->post_ok(
+        "//$userid:$password@/api/v1/erm/usage_data_providers/$usage_data_provider_id/process_SUSHI_response" =>
+            json => { begin_date => '2023-08-15' } )->status_is(400);
+
+    # Begin date must be before end date
+    $t->post_ok(
+        "//$userid:$password@/api/v1/erm/usage_data_providers/$usage_data_provider_id/process_SUSHI_response" =>
+            json => { begin_date => '2023-10-02', end_date => '2023-08-15' } )
+        ->status_is(400)
+        ->json_is( '/error' => 'Begin date must be before end date' );
+
+    # Unknown usage data provider
+    my $non_existent_id = $usage_data_provider_id;
+    $usage_data_provider->delete;
+    $t->post_ok(
+        "//$userid:$password@/api/v1/erm/usage_data_providers/$non_existent_id/process_SUSHI_response" => json =>
+            $dates )->status_is(404)->json_is( '/error' => 'Usage data provider not found' );
+
+    # One job per report type and per month
+    $usage_data_provider = $builder->build_object(
+        {
+            class => 'Koha::ERM::EUsage::UsageDataProviders',
+            value => { report_types => 'TR_J1;PR' }
+        }
+    );
+    $usage_data_provider_id = $usage_data_provider->erm_usage_data_provider_id;
+
+    $t->post_ok(
+        "//$userid:$password@/api/v1/erm/usage_data_providers/$usage_data_provider_id/process_SUSHI_response" =>
+            json => $dates )->status_is(200)->json_has('/jobs');
+
+    my $jobs = $t->tx->res->json->{jobs};
+    is( scalar @{$jobs},           6,            '2 report types x 3 months = 6 jobs' );
+    is( $jobs->[0]->{report_type}, 'TR_J1',      'First job is for the first report type' );
+    is( $jobs->[0]->{begin_date},  '2023-08-15', 'First job starts on the requested begin date' );
+    is( $jobs->[0]->{end_date},    '2023-08-31', 'First job ends at the end of the first month' );
+    is( $jobs->[2]->{begin_date},  '2023-10-01', 'Last month starts on the first day' );
+    is( $jobs->[2]->{end_date},    '2023-10-02', 'Last month ends on the requested end date' );
+    is( $jobs->[3]->{report_type}, 'PR',         'Fourth job is for the second report type' );
+    ok( $jobs->[0]->{job_id}, 'Each job has a job_id' );
 
     $schema->storage->txn_rollback;
 };

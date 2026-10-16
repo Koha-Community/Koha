@@ -18,12 +18,16 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
+use Test::Exception;
 
+use Koha::BackgroundJobs;
 use Koha::ERM::EUsage::UsageDataProvider;
 use Koha::Database;
 use Test::MockModule;
 use Test::MockObject;
+
+use t::lib::Mocks;
 
 use t::lib::TestBuilder;
 
@@ -222,6 +226,131 @@ subtest 'test_connection() tests' => sub {
         { class => 'Koha::ERM::EUsage::UsageDataProviders', value => { name => 'TestProvider' } } );
 
     is( $usage_data_provider->test_connection, 1 );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'harvest_periods() tests' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $usage_data_provider = $builder->build_object( { class => 'Koha::ERM::EUsage::UsageDataProviders' } );
+
+    is_deeply(
+        $usage_data_provider->harvest_periods( { begin_date => '2023-08-05', end_date => '2023-08-20' } ),
+        [ { begin_date => '2023-08-05', end_date => '2023-08-20' } ],
+        'A range inside one month gives one period with the exact dates'
+    );
+
+    is_deeply(
+        $usage_data_provider->harvest_periods( { begin_date => '2023-11-15', end_date => '2024-02-02' } ),
+        [
+            { begin_date => '2023-11-15', end_date => '2023-11-30' },
+            { begin_date => '2023-12-01', end_date => '2023-12-31' },
+            { begin_date => '2024-01-01', end_date => '2024-01-31' },
+            { begin_date => '2024-02-01', end_date => '2024-02-02' },
+        ],
+        'A range across a year boundary is split into months, keeping the exact first and last dates'
+    );
+
+    is_deeply(
+        $usage_data_provider->harvest_periods( { begin_date => '2024-01-01', end_date => '2024-03-31' } ),
+        [
+            { begin_date => '2024-01-01', end_date => '2024-01-31' },
+            { begin_date => '2024-02-01', end_date => '2024-02-29' },
+            { begin_date => '2024-03-01', end_date => '2024-03-31' },
+        ],
+        'Month-aligned dates and a leap year are handled'
+    );
+
+    is_deeply(
+        $usage_data_provider->harvest_periods( { begin_date => '2023-08-15', end_date => '2023-08-15' } ),
+        [ { begin_date => '2023-08-15', end_date => '2023-08-15' } ],
+        'Equal begin and end dates give one period'
+    );
+
+    throws_ok {
+        $usage_data_provider->harvest_periods( { begin_date => '2023-08-01' } );
+    }
+    'Koha::Exceptions::MissingParameter', 'A missing end_date throws MissingParameter';
+
+    throws_ok {
+        $usage_data_provider->harvest_periods( { begin_date => '2023-09-01', end_date => '2023-08-31' } );
+    }
+    'Koha::Exceptions::BadParameter', 'A begin_date after the end_date throws BadParameter';
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'enqueue_sushi_harvest_jobs() tests' => sub {
+
+    plan tests => 11;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { patron => $patron } );
+
+    my $usage_data_provider = $builder->build_object(
+        {
+            class => 'Koha::ERM::EUsage::UsageDataProviders',
+            value => { name => 'TestProvider', report_types => 'TR_J1;PR' }
+        }
+    );
+
+    my $jobs_before = Koha::BackgroundJobs->search( { type => 'erm_sushi_harvester' } )->count;
+
+    my $jobs = $usage_data_provider->enqueue_sushi_harvest_jobs(
+        {
+            begin_date => '2023-08-15',
+            end_date   => '2023-10-02',
+        }
+    );
+
+    is( scalar @{$jobs}, 6, 'One job per report type and per month is enqueued' );
+    is(
+        Koha::BackgroundJobs->search( { type => 'erm_sushi_harvester' } )->count, $jobs_before + 6,
+        '6 background jobs were created'
+    );
+
+    is_deeply(
+        [ map { $_->{report_type} } @{$jobs} ],
+        [ 'TR_J1', 'TR_J1', 'TR_J1', 'PR', 'PR', 'PR' ],
+        'Jobs are ordered by report type'
+    );
+    is_deeply(
+        [ map { [ $_->{begin_date}, $_->{end_date} ] } @{$jobs} ],
+        [
+            [ '2023-08-15', '2023-08-31' ],
+            [ '2023-09-01', '2023-09-30' ],
+            [ '2023-10-01', '2023-10-02' ],
+            [ '2023-08-15', '2023-08-31' ],
+            [ '2023-09-01', '2023-09-30' ],
+            [ '2023-10-01', '2023-10-02' ],
+        ],
+        'Each job covers one month and the first and last keep the exact dates'
+    );
+
+    my @job_ids = map { $_->{job_id} } @{$jobs};
+    is( scalar( keys %{ { map { $_ => 1 } @job_ids } } ), 6, 'Every job has its own job_id' );
+
+    my $second_job = Koha::BackgroundJobs->find( $jobs->[1]->{job_id} );
+    my $job_args   = $second_job->decoded_data;
+    is(
+        $job_args->{ud_provider_id}, $usage_data_provider->erm_usage_data_provider_id,
+        'Job args hold the provider id'
+    );
+    is( $job_args->{ud_provider_name}, 'TestProvider', 'Job args hold the provider name' );
+    is( $job_args->{report_type},      'TR_J1',        'Job args hold the report type' );
+    is( $job_args->{begin_date},       '2023-09-01',   'Job args hold the monthly begin date' );
+    is( $job_args->{end_date},         '2023-09-30',   'Job args hold the monthly end date' );
+
+    throws_ok {
+        $usage_data_provider->enqueue_sushi_harvest_jobs( { begin_date => '2023-08-01' } );
+    }
+    'Koha::Exceptions::MissingParameter', 'A missing date is rejected before any job is enqueued';
 
     $schema->storage->txn_rollback;
 };
