@@ -43,13 +43,18 @@ sub job_type {
 
 =head3 process
 
-Koha::BackgroundJob->find($id)->process(
-    {
-        ud_provider_id => $self->erm_usage_data_provider_id
-    }
-);
+    Koha::BackgroundJob->find($id)->process(
+        {
+            ud_provider_id => $ud_provider->erm_usage_data_provider_id,
+            report_type    => 'TR_J1',
+            begin_date     => '2023-08-01',
+            end_date       => '2023-08-31',
+        }
+    );
 
-Process the harvesting.
+Process the harvesting. The job either harvests one report type for one period
+from the SUSHI service (C<report_type>, C<begin_date>, C<end_date>) or processes
+an uploaded COUNTER file (C<file_content>).
 
 =cut
 
@@ -110,6 +115,8 @@ sub process {
     # Prepare job report
     my $report = {
         report_type      => $job_report_report_type,
+        begin_date       => $args->{begin_date},
+        end_date         => $args->{end_date},
         us_report_info   => $self->{us_report_info},
         ud_provider_id   => $ud_provider->erm_usage_data_provider_id,
         ud_provider_name => $ud_provider->name,

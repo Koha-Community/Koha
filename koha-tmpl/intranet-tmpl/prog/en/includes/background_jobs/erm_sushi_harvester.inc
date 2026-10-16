@@ -15,6 +15,12 @@
                         <td>Report type</td>
                         <td>[% report.report_type | html %]</td>
                     </tr>
+                    [% IF report.begin_date %]
+                        <tr>
+                            <td>Harvest period</td>
+                            <td>[% tx("{begin} to {end}", { begin = report.begin_date, end = report.end_date }) | html %]</td>
+                        </tr>
+                    [% END %]
                     <tr>
                         <td>Report rows processed</td>
                         <td>[% job.progress | html %]</td>
@@ -51,6 +57,10 @@
                     <tr>
                         <td>Report type</td>
                         <td id="failed_report_type"></td>
+                    </tr>
+                    <tr>
+                        <td>Harvest period</td>
+                        <td id="failed_harvest_period"></td>
                     </tr>
                 </table>
             [% END %]
@@ -132,6 +142,9 @@
             let ud_provider_name = job_data.ud_provider_name;
             $("#failed_report_type").text(report_type);
             $("#failed_provider_name").text(ud_provider_name);
+            if (job_data.begin_date) {
+                $("#failed_harvest_period").text(_("%s to %s").format(job_data.begin_date, job_data.end_date));
+            }
         });
     </script>
 [% END %]

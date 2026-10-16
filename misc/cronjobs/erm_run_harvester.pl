@@ -26,6 +26,8 @@ use POSIX;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::ERM::EUsage::UsageDataProviders;
 use Koha::Script -cron;
+use Scalar::Util qw( blessed );
+use Try::Tiny    qw( catch try );
 
 =head1 NAME
 
@@ -43,9 +45,9 @@ erm_run_harvester.pl
    --help                         brief help message
    --man                          detailed help message
    --debug                        print additional debug messages during run
-   --dry-run                      test run only, do not harvest data
+   --dry-run                      list the jobs that would be enqueued, do not enqueue them
    --begin-date <YYYY-MM-DD>      date to harvest from
-   --end-date <YYYY-MM-DD>        date to harvest until, defaults to today if not set
+   --end-date <YYYY-MM-DD>        date to harvest until, defaults to today; a later date is reduced to today
    -p|--provider-id <id> ...      harvest only given providers
 
 =head1 OPTIONS
@@ -70,7 +72,8 @@ Date from which to harvest, previously harvested data will be ignored
 
 =item B<--end-date>
 
-Date to harvest until, defaults to today if not set
+Date to harvest until, defaults to today. A date after today is reduced to
+today, so no job is enqueued for a month that has not happened yet.
 
 =item B<-p|--provider-id ...>
 
@@ -78,7 +81,8 @@ Provider IDs that should be harvested; harvest all active providers if not set
 
 =item B<--dry-run>
 
-Test run only, do not harvest
+List the report types and the monthly periods that would be enqueued for each
+provider, without enqueuing any job
 
 =back
 
@@ -88,7 +92,9 @@ This script fetches usage data from ERM data providers defined in the interface.
 
 =head2 Configuration
 
-This script harvests from the given date to the specified end date, or until today
+This script harvests from the given date to the specified end date, or until today.
+One background job is enqueued for each report type of the provider and for each
+calendar month in the date range.
 
 =head1 USAGE EXAMPLES
 
@@ -101,7 +107,7 @@ C<erm_run_harvester.pl --begin-date 2000-01-01 --end-date 2024-01-01> - Harvest 
 
 C<erm_run_harvester.pl --begin-date 2000-01-01 --provider-id 1 --provider-id 3> - Harvest from the given date until today, but only the given providers
 
-C<erm_run_harvester.pl --begin-date 2000-01-01 --end-date 2024-01-01 --debug --dry-run> - Dry run, with debuig information
+C<erm_run_harvester.pl --begin-date 2000-01-01 --end-date 2024-01-01 --debug --dry-run> - Dry run, with debug information
 
 =cut
 
@@ -141,7 +147,7 @@ unless ($begin_date) {
     pod2usage(1);
 }
 
-debug_msg("Dry run: Harvests will not be enqueued") if $dry_run;
+debug_msg("Dry run: no harvest job will be enqueued") if $dry_run;
 while ( my $udprovider = $udproviders->next ) {
     debug_msg(
         sprintf(
@@ -152,33 +158,59 @@ while ( my $udprovider = $udproviders->next ) {
     my $harvest_begin_date = dt_from_string($begin_date);
     my $harvest_end_date   = dt_from_string($end_date) || dt_from_string();
 
-    if ( $harvest_begin_date > $harvest_end_date ) {
-        die sprintf(
-            "ERROR: begin-date must be earlier than end-date. Begin is %s and end date is %s",
-            $harvest_begin_date->ymd,
-            $harvest_end_date->ymd,
-        );
-    }
-
-    if ( !$dry_run ) {
-        my $job_ids = $udprovider->enqueue_sushi_harvest_jobs(
+    my @report_types = split /;/, $udprovider->report_types;
+    my $periods      = try {
+        $udprovider->harvest_periods(
             {
                 begin_date => $harvest_begin_date->ymd,
                 end_date   => $harvest_end_date->ymd
             }
         );
-        my $report_type_jobs = join ", ", map { $_->{report_type} . ': Job ID #' . $_->{job_id} } @{$job_ids};
+    } catch {
+        die sprintf( "ERROR: %s\n", blessed $_ && $_->can('error') ? $_->error : $_ );
+    };
+    my $periods_text = join "\n - ", map { sprintf( "%s to %s", $_->{begin_date}, $_->{end_date} ) } @{$periods};
 
-        debug_msg(
-            sprintf(
-                " - Harvest job enqueued (yyyy-mm-dd):\n - Begin date: %s \n - End date: %s \n - %s",
-                $harvest_begin_date->ymd,
-                $harvest_end_date->ymd,
-                $report_type_jobs
-            )
+    if ($dry_run) {
+        print sprintf(
+            "Dry run: %d job(s) would be enqueued for provider #%d, one per report type (%s) and month:\n - %s\n",
+            scalar(@report_types) * scalar( @{$periods} ),
+            $udprovider->erm_usage_data_provider_id,
+            join( ", ", @report_types ),
+            $periods_text
         );
+        next;
     }
 
+    my $jobs = $udprovider->enqueue_sushi_harvest_jobs(
+        {
+            begin_date => $harvest_begin_date->ymd,
+            end_date   => $harvest_end_date->ymd
+        }
+    );
+    my %jobs_by_report_type;
+    push @{ $jobs_by_report_type{ $_->{report_type} } }, $_ for @{$jobs};
+
+    my $report_type_jobs = join "\n - ", map {
+        my $type_jobs = $jobs_by_report_type{$_};
+        sprintf(
+            "%s: %d job(s) (%s to %s), Job IDs %s",
+            $_,
+            scalar @{$type_jobs},
+            substr( $type_jobs->[0]->{begin_date}, 0, 7 ),
+            substr( $type_jobs->[-1]->{end_date},  0, 7 ),
+            join( ", ", map { '#' . $_->{job_id} } @{$type_jobs} )
+        );
+    } grep { $jobs_by_report_type{$_} } @report_types;
+
+    debug_msg(
+        sprintf(
+            " - Harvest jobs enqueued (yyyy-mm-dd):\n - Begin date: %s \n - End date: %s \n - %s",
+            $periods->[0]->{begin_date},
+            $periods->[-1]->{end_date},
+            $report_type_jobs
+        )
+    );
 }
 
 sub debug_msg {

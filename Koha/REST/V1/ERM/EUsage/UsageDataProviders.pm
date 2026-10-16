@@ -353,7 +353,9 @@ sub process_COUNTER_file {
 =head3 process_SUSHI_response
 
 Controller function that handles processing of the SUSHI response
-It will ->enqueue_sushi_harvest_jobs for this usage data provider
+It will ->enqueue_sushi_harvest_jobs for this usage data provider, one job per
+report type and per calendar month in the date range. Returns the list of
+enqueued jobs with their report type and period.
 
 =cut
 
