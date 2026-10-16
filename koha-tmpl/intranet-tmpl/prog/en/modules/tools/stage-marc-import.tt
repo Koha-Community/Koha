@@ -66,6 +66,8 @@
         <div class="alert [% message_class | html %]">
             [% IF message.code == 'cannot_enqueue_job' %]
                 <span>Cannot enqueue this job.</span>
+            [% ELSIF message.code == 'set_record_source_not_allowed' %]
+                <span>The selected modification template sets a record source and you do not have permission to set record sources.</span>
             [% END %]
             [% IF message.error %]
                 <span>(The error was: [% message.error | html %], see the Koha log file for more information).</span>

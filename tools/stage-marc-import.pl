@@ -41,6 +41,8 @@ use Koha::UploadedFiles;
 use C4::MarcModificationTemplates qw( GetModificationTemplates );
 use Koha::Plugins;
 use Koha::ImportBatches;
+use Koha::MarcModificationTemplates;
+use Koha::Patrons;
 use Koha::BackgroundJob::StageMARCForImport;
 
 my $input = CGI->new;
@@ -75,6 +77,24 @@ $template->param(
     basketno     => $basketno,
     booksellerid => $booksellerid,
 );
+
+my $logged_in_patron = Koha::Patrons->find($loggedinuser);
+my $can_set_record_sources =
+    $logged_in_patron && $logged_in_patron->has_permission( { editcatalogue => 'set_record_sources' } );
+
+my $template_sets_source =
+       $marc_modification_template
+    && ( $record_type // 'biblio' ) eq 'biblio'
+    && Koha::MarcModificationTemplates->record_source_id_for($marc_modification_template);
+
+if ( $op eq 'cud-stage' && $fileID && $template_sets_source && !$can_set_record_sources ) {
+    push @messages,
+        {
+        type => 'error',
+        code => 'set_record_source_not_allowed',
+        };
+    $op = q{};
+}
 
 if ( $op eq 'cud-stage' && $fileID ) {
     my $upload   = Koha::UploadedFiles->find($fileID);
@@ -126,6 +146,7 @@ if ( $op eq 'cud-stage' && $fileID ) {
     $template->param( available_matchers => \@matchers );
 
     my @templates = GetModificationTemplates();
+    @templates = grep { !$_->{record_source_id} } @templates unless $can_set_record_sources;
     $template->param( MarcModificationTemplatesLoop => \@templates );
 
     if ( C4::Context->config('enable_plugins') ) {

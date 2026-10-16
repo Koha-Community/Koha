@@ -74,4 +74,65 @@ describe("MARC modification template record source", () => {
             templateName
         );
     });
+
+    it("Hides source templates when staging MARC records without the permission", () => {
+        cy.task("query", {
+            sql: `UPDATE marc_modification_templates SET record_source_id=(SELECT record_source_id FROM record_sources WHERE name='${sourceName}') WHERE name='${templateName}'`,
+        });
+
+        cy.visit("/cgi-bin/koha/tools/stage-marc-import.pl");
+        cy.get("#marc_modification_template_id").contains(templateName);
+        cy.get("#marc_modification_template_id").contains(plainTemplateName);
+
+        cy.task("query", {
+            sql: "UPDATE borrowers SET flags=8196 WHERE borrowernumber=51",
+        });
+        cy.visit("/cgi-bin/koha/tools/stage-marc-import.pl");
+        cy.get("#marc_modification_template_id").contains(plainTemplateName);
+        cy.get("#marc_modification_template_id").should(
+            "not.contain.text",
+            templateName
+        );
+    });
+
+    it("Refuses to stage with a source template without the permission", () => {
+        cy.task("query", {
+            sql: `UPDATE marc_modification_templates SET record_source_id=(SELECT record_source_id FROM record_sources WHERE name='${sourceName}') WHERE name='${templateName}'`,
+        });
+        cy.task("query", {
+            sql: "UPDATE borrowers SET flags=8196 WHERE borrowernumber=51",
+        });
+
+        cy.task("query", {
+            sql: `SELECT template_id FROM marc_modification_templates WHERE name='${templateName}'`,
+        }).then(rows => {
+            const templateId = rows[0].template_id;
+            cy.visit("/cgi-bin/koha/tools/stage-marc-import.pl");
+            cy.get("input[name='csrf_token']")
+                .first()
+                .invoke("val")
+                .then(csrfToken => {
+                    cy.request({
+                        method: "POST",
+                        url: "/cgi-bin/koha/tools/stage-marc-import.pl",
+                        form: true,
+                        body: {
+                            csrf_token: csrfToken,
+                            op: "cud-stage",
+                            uploadedfileid: "1",
+                            record_type: "biblio",
+                            marc_modification_template_id: templateId,
+                        },
+                    }).then(response => {
+                        expect(response.status).to.eq(200);
+                        expect(response.body).to.contain(
+                            "you do not have permission to set record sources"
+                        );
+                        expect(response.body).not.to.contain(
+                            "The job has been enqueued"
+                        );
+                    });
+                });
+        });
+    });
 });
