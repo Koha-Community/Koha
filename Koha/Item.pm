@@ -33,6 +33,7 @@ use C4::Log         qw( logaction );
 
 use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::Biblio::ItemGroups;
+use Koha::Bookings;
 use Koha::Checkouts;
 use Koha::CirculationRules;
 use Koha::Courses;
@@ -641,7 +642,8 @@ that fall in that lead period as conflicts too.
 
 Optionally, you may pass an exclude_booking_id to leave a specific booking out of the checks; this is
 helpful when looking for bookings that would clash with an extension of the checkout that is already
-satisfying that booking.
+satisfying that booking. As extending that checkout extends the excluded booking too, its trail period
+is then also taken into account, and the lead/trail rules are looked up for its pickup library.
 
 FIXME: This can be simplified, it was originally intended to iterate all biblio level bookings
 to catch cases where this item may be the last available to satisfy a biblio level only booking.
@@ -658,15 +660,19 @@ sub find_booking {
     my $exclude_booking_id = $params->{exclude_booking_id};
     my $biblio             = $self->biblio;
 
-    my $rule = Koha::CirculationRules->get_effective_rule(
+    # Match the clash detection Koha::Booking->store applies to the extended booking
+    my $extended_booking = $exclude_booking_id ? Koha::Bookings->find($exclude_booking_id) : undef;
+
+    my $rules = Koha::CirculationRules->get_effective_rules(
         {
-            rule_name  => 'bookings_lead_period',
+            rules      => [ 'bookings_lead_period', 'bookings_trail_period' ],
             itemtype   => $self->effective_itemtype,
-            branchcode => "*"
+            branchcode => $extended_booking ? $extended_booking->pickup_library_id : "*",
         }
     );
-    my $preparation_period = $rule && $rule->rule_value ? $rule->rule_value : 0;
-    $end_date = $end_date->clone->add( days => $preparation_period );
+    my $buffer_days = $rules->{bookings_lead_period} || 0;
+    $buffer_days += $rules->{bookings_trail_period}  || 0 if $extended_booking;
+    $end_date = $end_date->clone->add( days => $buffer_days );
 
     my $dtf      = Koha::Database->new->schema->storage->datetime_parser;
     my $bookings = $biblio->bookings(

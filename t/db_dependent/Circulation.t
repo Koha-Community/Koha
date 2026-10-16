@@ -1928,7 +1928,7 @@ subtest "CanBookBeRenewed tests" => sub {
 };
 
 subtest "CanBookBeRenewed | bookings" => sub {
-    plan tests => 8;
+    plan tests => 10;
 
     my $schema = Koha::Database->schema;
     $schema->storage->txn_begin;
@@ -2017,6 +2017,24 @@ subtest "CanBookBeRenewed | bookings" => sub {
         $datedue->clone()->add( days => 1 )
     );
     is( $renewok, 1, "Requested due date clear of the next booking is allowed" );
+
+    # Extending the own booking must leave its trail period clear of the next booking,
+    # using the rules of its pickup library
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode => $pickup_library->branchcode,
+            itemtype   => $item->effective_itemtype,
+            rule_name  => 'bookings_trail_period',
+            rule_value => 1,
+        }
+    );
+
+    ( $renewok, $error ) = CanBookBeRenewed(
+        $renewing_patron, $issue, 0, undef,
+        $datedue->clone()->add( days => 1 )
+    );
+    is( $renewok, 0,        "Requested due date whose trail period runs into the next booking is refused" );
+    is( $error,   'booked', "Error is 'booked'" );
 
     $schema->storage->txn_rollback;
 };
