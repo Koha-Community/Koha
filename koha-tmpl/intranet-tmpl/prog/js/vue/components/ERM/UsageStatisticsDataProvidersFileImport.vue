@@ -84,6 +84,13 @@ export default {
                             message +=
                                 "<li>" +
                                 $__("Job for uploaded file has been queued") +
+                                (job.begin_date
+                                    ? " (" +
+                                      escape_str(
+                                          job.begin_date.substring(0, 7)
+                                      ) +
+                                      ")"
+                                    : "") +
                                 '. <a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=' +
                                 job.job_id +
                                 '" target="_blank">' +

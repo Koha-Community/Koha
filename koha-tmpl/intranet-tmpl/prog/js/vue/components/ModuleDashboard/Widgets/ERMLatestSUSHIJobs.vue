@@ -82,6 +82,30 @@ export default {
                     },
                 },
                 {
+                    title: $__("Report type"),
+                    data: "data",
+                    searchable: false,
+                    orderable: false,
+                    render(data) {
+                        return escape_str(data.report_type || "");
+                    },
+                },
+                {
+                    title: $__("Period"),
+                    data: "data",
+                    searchable: false,
+                    orderable: false,
+                    render(data) {
+                        if (!data.begin_date) return "";
+                        return escape_str(
+                            $__("%s to %s").format(
+                                data.begin_date.substring(0, 7),
+                                data.end_date.substring(0, 7)
+                            )
+                        );
+                    },
+                },
+                {
                     title: $__("Started"),
                     data: "started_date",
                     searchable: true,
@@ -107,7 +131,7 @@ export default {
             options: {
                 tableFeatures: [],
                 pageLength: 5,
-                order: [2, "desc"],
+                order: [4, "desc"],
                 processing: false,
             },
             url: "/api/v1/jobs",

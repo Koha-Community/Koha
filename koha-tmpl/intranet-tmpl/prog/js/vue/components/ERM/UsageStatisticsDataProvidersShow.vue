@@ -149,7 +149,7 @@ import UsageStatisticsDataProvidersCounterLogs from "./UsageStatisticsDataProvid
 import UsageStatisticsDataProviderDetails from "./UsageStatisticsDataProviderDetails.vue";
 import UsageStatisticsProviderDataList from "./UsageStatisticsProviderDataList.vue";
 import { useRoute, useRouter } from "vue-router";
-import { $__ } from "@koha-vue/i18n/";
+import { $__, $__n } from "@koha-vue/i18n/";
 
 export default {
     setup() {
@@ -319,19 +319,45 @@ export default {
                         )
                         .then(
                             success => {
+                                const jobsByReportType = success.jobs.reduce(
+                                    (acc, job) => {
+                                        (acc[job.report_type] ||= []).push(job);
+                                        return acc;
+                                    },
+                                    {}
+                                );
                                 let message = "";
-                                success.jobs.forEach((job, i) => {
-                                    message +=
-                                        "<li>" +
-                                        $__(
-                                            "Job for report type <strong>%s</strong> has been queued"
-                                        ).format(job.report_type) +
-                                        '. <a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=' +
-                                        job.job_id +
-                                        '" target="_blank">' +
-                                        $__("Check job progress") +
-                                        ".</a></li>";
-                                });
+                                Object.entries(jobsByReportType).forEach(
+                                    ([reportType, jobs]) => {
+                                        const jobLinks = jobs
+                                            .map(
+                                                job =>
+                                                    '<a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=' +
+                                                    job.job_id +
+                                                    '" target="_blank">' +
+                                                    escape_str(
+                                                        job.begin_date.substring(
+                                                            0,
+                                                            7
+                                                        )
+                                                    ) +
+                                                    "</a>"
+                                            )
+                                            .join(", ");
+                                        message +=
+                                            "<li>" +
+                                            $__n(
+                                                "%s job queued for report type <strong>%s</strong>: %s",
+                                                "%s jobs queued for report type <strong>%s</strong>: %s",
+                                                jobs.length
+                                            ).format(
+                                                jobs.length,
+                                                reportType,
+                                                jobLinks
+                                            ) +
+                                            "</li>";
+                                    }
+                                );
                                 setMessage(message, true);
                             },
                             error => {}

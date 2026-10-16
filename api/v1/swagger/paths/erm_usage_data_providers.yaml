@@ -385,19 +385,47 @@
               type: string
               description: end date of the harvest
               format: date
+          required:
+            - begin_date
+            - end_date
           additionalProperties: false
     responses:
       200:
-        description: Successful SUSHI COUNTER processing
+        description: Successful SUSHI COUNTER processing, one job per report type and month
         schema:
-          items:
-            $ref: "../swagger.yaml#/definitions/erm_usage_data_provider"
+          type: object
+          properties:
+            jobs:
+              type: array
+              items:
+                type: object
+                properties:
+                  job_id:
+                    type: integer
+                    description: Background job internal identifier
+                  report_type:
+                    type: string
+                    description: COUNTER report type harvested by the job
+                  begin_date:
+                    type: string
+                    format: date
+                    description: begin date of the period harvested by the job
+                  end_date:
+                    type: string
+                    format: date
+                    description: end date of the period harvested by the job
+                additionalProperties: false
+          additionalProperties: false
       400:
         description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       403:
         description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Usage data provider not found
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       500:
