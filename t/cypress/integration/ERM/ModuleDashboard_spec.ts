@@ -92,9 +92,7 @@ describe("ERM Module Dashboard", () => {
                         us_report_info: {
                             added_mus: 0,
                             added_usage_objects: 0,
-                            added_yus: 0,
                             skipped_mus: 0,
-                            skipped_yus: 0,
                         },
                     },
                     report_type: "PR",

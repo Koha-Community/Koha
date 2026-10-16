@@ -23,6 +23,7 @@ use Test::More tests => 6;
 use Koha::Database;
 use Koha::BackgroundJobs;
 use Koha::BackgroundJob::ErmSushiHarvester;
+use Koha::ERM::EUsage::YearlyUsages;
 
 use JSON           qw( decode_json );
 use File::Basename qw( dirname );
@@ -79,7 +80,7 @@ $ua->mock(
 
 subtest 'enqueue_sushi_harvest_jobs' => sub {
 
-    plan tests => 16;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -115,10 +116,14 @@ subtest 'enqueue_sushi_harvest_jobs' => sub {
     is( $report->{report_type},                           'TR_J1' );
     is( $report->{ud_provider_name},                      $usage_data_provider->name );
     is( $report->{us_report_info}->{skipped_mus},         0 );
-    is( $report->{us_report_info}->{skipped_yus},         0 );
-    is( $report->{us_report_info}->{added_yus},           6 );
     is( $report->{us_report_info}->{added_mus},           22 );
     is( $report->{us_report_info}->{added_usage_objects}, 2 );
+
+    my $yus_search = { usage_data_provider_id => $usage_data_provider->erm_usage_data_provider_id };
+    is(
+        Koha::ERM::EUsage::YearlyUsages->search($yus_search)->count, 6,
+        '6 yearly usages rebuilt from the monthly usage'
+    );
 
     # Subsequent job
     my $another_job = Koha::BackgroundJob::ErmSushiHarvester->new(
@@ -148,10 +153,13 @@ subtest 'enqueue_sushi_harvest_jobs' => sub {
     is( $another_report->{report_type},                           'TR_J1' );
     is( $another_report->{ud_provider_name},                      $usage_data_provider->name );
     is( $another_report->{us_report_info}->{skipped_mus},         22 );
-    is( $another_report->{us_report_info}->{skipped_yus},         6 );
-    is( $another_report->{us_report_info}->{added_yus},           0 );
     is( $another_report->{us_report_info}->{added_mus},           0 );
     is( $another_report->{us_report_info}->{added_usage_objects}, 0 );
+
+    is(
+        Koha::ERM::EUsage::YearlyUsages->search($yus_search)->count, 6,
+        'Yearly usages are not duplicated by a second harvest'
+    );
 
     #TODO: Test more report types
 
@@ -161,7 +169,7 @@ subtest 'enqueue_sushi_harvest_jobs' => sub {
 
 subtest 'enqueue_counter_file_processing_job' => sub {
 
-    plan tests => 16;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -194,10 +202,14 @@ subtest 'enqueue_counter_file_processing_job' => sub {
     is( $report->{report_type},                           'TR_J1' );
     is( $report->{ud_provider_name},                      $usage_data_provider->name );
     is( $report->{us_report_info}->{skipped_mus},         0 );
-    is( $report->{us_report_info}->{skipped_yus},         0 );
-    is( $report->{us_report_info}->{added_yus},           6 );
     is( $report->{us_report_info}->{added_mus},           22 );
     is( $report->{us_report_info}->{added_usage_objects}, 2 );
+
+    my $yus_search = { usage_data_provider_id => $usage_data_provider->erm_usage_data_provider_id };
+    is(
+        Koha::ERM::EUsage::YearlyUsages->search($yus_search)->count, 6,
+        '6 yearly usages rebuilt from the monthly usage'
+    );
 
     # Subsequent job
     my $another_job = Koha::BackgroundJob::ErmSushiHarvester->new(
@@ -224,10 +236,13 @@ subtest 'enqueue_counter_file_processing_job' => sub {
     is( $another_report->{report_type},                           'TR_J1' );
     is( $another_report->{ud_provider_name},                      $usage_data_provider->name );
     is( $another_report->{us_report_info}->{skipped_mus},         22 );
-    is( $another_report->{us_report_info}->{skipped_yus},         6 );
-    is( $another_report->{us_report_info}->{added_yus},           0 );
     is( $another_report->{us_report_info}->{added_mus},           0 );
     is( $another_report->{us_report_info}->{added_usage_objects}, 0 );
+
+    is(
+        Koha::ERM::EUsage::YearlyUsages->search($yus_search)->count, 6,
+        'Yearly usages are not duplicated by a second file upload'
+    );
 
     #TODO: Test a big file larger than max_allowed_packets
     #TODO: Test more report types

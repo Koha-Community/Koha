@@ -43,7 +43,7 @@ my $sushi_counter_report_TR_J1 =
 
 subtest 'store' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -73,13 +73,27 @@ subtest 'store' => sub {
     my $mus_rs = Koha::ERM::EUsage::MonthlyUsages->search(
         { usage_data_provider_id => $usage_data_provider->erm_usage_data_provider_id } );
 
-    # YearlyUsages are added on CounterFile->store
+    # YearlyUsages are rebuilt from the monthly usages
     my $yus_rs = Koha::ERM::EUsage::YearlyUsages->search(
         { usage_data_provider_id => $usage_data_provider->erm_usage_data_provider_id } );
 
     is( $titles_rs->count, 2,  '2 titles were added' );
     is( $mus_rs->count,    22, '22 monthly usages were added' );
-    is( $yus_rs->count,    6,  '6 yearly usages were added' );
+    is( $yus_rs->count,    6,  '6 yearly usages are written' );
+
+    my $yearly_usage   = $yus_rs->next;
+    my $expected_total = 0;
+    $expected_total += $_->usage_count
+        for Koha::ERM::EUsage::MonthlyUsages->search(
+        {
+            title_id               => $yearly_usage->title_id,
+            usage_data_provider_id => $yearly_usage->usage_data_provider_id,
+            year                   => $yearly_usage->year,
+            metric_type            => $yearly_usage->metric_type,
+            report_type            => $yearly_usage->report_type,
+        }
+        )->as_list;
+    is( $yearly_usage->totalcount, $expected_total, 'Yearly totalcount is the sum of the monthly usage counts' );
 
     $schema->storage->txn_rollback;
 
