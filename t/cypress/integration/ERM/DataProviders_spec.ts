@@ -645,6 +645,54 @@ describe("Data provider tab options", () => {
         );
     });
 
+    it("Should show the month of each job of a manual file upload", () => {
+        cy.get("#usage_data_providerstabs").contains("Manual upload").click();
+
+        cy.get("#import_file").click();
+        cy.get("#import_file").selectFile("t/cypress/fixtures/file.json");
+
+        cy.intercept(
+            "POST",
+            "/api/v1/erm/usage_data_providers/1/process_COUNTER_file*",
+            {
+                statusCode: 200,
+                body: {
+                    jobs: [
+                        {
+                            job_id: 1,
+                            begin_date: "2026-09-01",
+                            end_date: "2026-09-30",
+                        },
+                        {
+                            job_id: 2,
+                            begin_date: "2026-10-01",
+                            end_date: "2026-10-31",
+                        },
+                    ],
+                },
+            }
+        );
+
+        cy.get("#files > form > fieldset > button").click();
+
+        cy.get("main div[class='alert alert-info'] li").should(
+            "have.length",
+            2
+        );
+        cy.get("main div[class='alert alert-info'] li")
+            .eq(0)
+            .should(
+                "have.text",
+                "Job for uploaded file has been queued (2026-09). Check job progress."
+            );
+        cy.get("main div[class='alert alert-info'] li")
+            .eq(1)
+            .should(
+                "have.text",
+                "Job for uploaded file has been queued (2026-10). Check job progress."
+            );
+    });
+
     it("Should display import logs", () => {
         cy.intercept("GET", "/api/v1/erm/counter_files*", {
             statusCode: 200,
@@ -737,12 +785,20 @@ describe("Data providers action buttons", () => {
                         {
                             report_type: "TR_J1",
                             job_id: 1,
+                            begin_date: "2025-01-01",
+                            end_date: "2025-01-31",
+                        },
+                        {
+                            report_type: "PR",
+                            job_id: 2,
+                            begin_date: "2025-01-01",
+                            end_date: "2025-01-31",
                         },
                     ],
                 },
                 headers: {
-                    "X-Base-Total-Count": "1",
-                    "X-Total-Count": "1",
+                    "X-Base-Total-Count": "2",
+                    "X-Total-Count": "2",
                 },
             }
         );
@@ -756,8 +812,13 @@ describe("Data providers action buttons", () => {
         cy.get("#accept_modal").click();
         cy.get("main div[class='alert alert-info']").should(
             "have.text",
-            "Job for report type TR_J1 has been queued. Check job progress."
+            "1 job queued for report type TR_J1: 2025-01" +
+                "1 job queued for report type PR: 2025-01"
         );
+        cy.get("main div[class='alert alert-info'] a")
+            .first()
+            .should("have.attr", "href")
+            .and("include", "background_jobs.pl?op=view&id=1");
     });
 
     it("Should test a provider's SUSHI connection", () => {

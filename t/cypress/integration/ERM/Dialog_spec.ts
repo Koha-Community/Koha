@@ -215,12 +215,20 @@ describe("Dialog operations", () => {
                         {
                             report_type: "TR_J1",
                             job_id: 1,
+                            begin_date: "2025-01-01",
+                            end_date: "2025-01-31",
+                        },
+                        {
+                            report_type: "TR_J1",
+                            job_id: 2,
+                            begin_date: "2025-02-01",
+                            end_date: "2025-02-15",
                         },
                     ],
                 },
                 headers: {
-                    "X-Base-Total-Count": "1",
-                    "X-Total-Count": "1",
+                    "X-Base-Total-Count": "2",
+                    "X-Total-Count": "2",
                 },
             }
         );
@@ -234,7 +242,7 @@ describe("Dialog operations", () => {
         cy.get("#accept_modal").click();
         cy.get("main div[class='alert alert-info']").should(
             "have.text",
-            "Job for report type TR_J1 has been queued. Check job progress."
+            "2 jobs queued for report type TR_J1 (2025-01 to 2025-02). Check job progress."
         );
     });
 });

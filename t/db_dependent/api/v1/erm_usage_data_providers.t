@@ -424,7 +424,7 @@ subtest 'delete() tests' => sub {
 
 subtest 'process_SUSHI_response() tests' => sub {
 
-    plan tests => 21;
+    plan tests => 27;
 
     $schema->storage->txn_begin;
 
@@ -473,7 +473,20 @@ subtest 'process_SUSHI_response() tests' => sub {
         "//$userid:$password@/api/v1/erm/usage_data_providers/$usage_data_provider_id/process_SUSHI_response" =>
             json => { begin_date => '2023-10-02', end_date => '2023-08-15' } )
         ->status_is(400)
-        ->json_is( '/error' => 'Begin date must be before end date' );
+        ->json_is( '/error' => 'Begin date must not be after end date' );
+
+    # Equal dates give one job per report type
+    $t->post_ok(
+        "//$userid:$password@/api/v1/erm/usage_data_providers/$usage_data_provider_id/process_SUSHI_response" =>
+            json => { begin_date => '2023-08-15', end_date => '2023-08-15' } )->status_is(200);
+    is( scalar @{ $t->tx->res->json->{jobs} }, 2, 'Equal dates give one job per report type' );
+
+    # A begin date in the future is rejected
+    $t->post_ok(
+        "//$userid:$password@/api/v1/erm/usage_data_providers/$usage_data_provider_id/process_SUSHI_response" =>
+            json => { begin_date => '2999-01-01', end_date => '2999-01-31' } )
+        ->status_is(400)
+        ->json_is( '/error' => 'begin_date must not be in the future' );
 
     # Unknown usage data provider
     my $non_existent_id = $usage_data_provider_id;

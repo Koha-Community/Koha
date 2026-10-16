@@ -373,7 +373,15 @@ describe("ERM Module Dashboard", () => {
         ).contains("Wiley Online Library");
 
         cy.get(
-            ".widget#ERMLatestSUSHIJobs .widget-content table tbody tr td:nth-child(5)"
+            ".widget#ERMLatestSUSHIJobs .widget-content table tbody tr td:nth-child(3)"
+        ).contains("PR");
+
+        cy.get(
+            ".widget#ERMLatestSUSHIJobs .widget-content table tbody tr td:nth-child(4)"
+        ).contains("2025-01 to 2025-03");
+
+        cy.get(
+            ".widget#ERMLatestSUSHIJobs .widget-content table tbody tr td:nth-child(7)"
         )
             .contains("View")
             .click();

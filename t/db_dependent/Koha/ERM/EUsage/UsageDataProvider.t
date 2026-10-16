@@ -20,6 +20,8 @@ use Modern::Perl;
 use Test::NoWarnings;
 use Test::More tests => 5;
 use Test::Exception;
+use Time::Fake;
+use DateTime;
 
 use Koha::BackgroundJobs;
 use Koha::ERM::EUsage::UsageDataProvider;
@@ -232,7 +234,7 @@ subtest 'test_connection() tests' => sub {
 
 subtest 'harvest_periods() tests' => sub {
 
-    plan tests => 6;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -280,6 +282,31 @@ subtest 'harvest_periods() tests' => sub {
         $usage_data_provider->harvest_periods( { begin_date => '2023-09-01', end_date => '2023-08-31' } );
     }
     'Koha::Exceptions::BadParameter', 'A begin_date after the end_date throws BadParameter';
+
+    # Today is 2024-06-15 for the next cases
+    Time::Fake->offset( DateTime->new( year => 2024, month => 6, day => 15, hour => 12 )->epoch );
+
+    is_deeply(
+        $usage_data_provider->harvest_periods( { begin_date => '2024-05-20', end_date => '2024-08-01' } ),
+        [
+            { begin_date => '2024-05-20', end_date => '2024-05-31' },
+            { begin_date => '2024-06-01', end_date => '2024-06-15' },
+        ],
+        'An end date in the future is reduced to today'
+    );
+
+    is_deeply(
+        $usage_data_provider->harvest_periods( { begin_date => '2024-06-01', end_date => '2024-06-15' } ),
+        [ { begin_date => '2024-06-01', end_date => '2024-06-15' } ],
+        'An end date of today is kept'
+    );
+
+    throws_ok {
+        $usage_data_provider->harvest_periods( { begin_date => '2024-07-01', end_date => '2024-08-01' } );
+    }
+    'Koha::Exceptions::BadParameter', 'A begin_date in the future throws BadParameter';
+
+    Time::Fake->reset;
 
     $schema->storage->txn_rollback;
 };

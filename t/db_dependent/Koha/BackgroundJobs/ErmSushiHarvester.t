@@ -80,7 +80,7 @@ $ua->mock(
 
 subtest 'enqueue_sushi_harvest_jobs' => sub {
 
-    plan tests => 14;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -114,6 +114,8 @@ subtest 'enqueue_sushi_harvest_jobs' => sub {
 
     is( $report->{ud_provider_id},                        $usage_data_provider->erm_usage_data_provider_id );
     is( $report->{report_type},                           'TR_J1' );
+    is( $report->{begin_date},                            '2023-08-01', 'Report holds the harvest begin date' );
+    is( $report->{end_date},                              '2023-09-30', 'Report holds the harvest end date' );
     is( $report->{ud_provider_name},                      $usage_data_provider->name );
     is( $report->{us_report_info}->{skipped_mus},         0 );
     is( $report->{us_report_info}->{added_mus},           22 );
@@ -169,7 +171,7 @@ subtest 'enqueue_sushi_harvest_jobs' => sub {
 
 subtest 'enqueue_counter_file_processing_job' => sub {
 
-    plan tests => 14;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -200,6 +202,8 @@ subtest 'enqueue_counter_file_processing_job' => sub {
 
     is( $report->{ud_provider_id},                        $usage_data_provider->erm_usage_data_provider_id );
     is( $report->{report_type},                           'TR_J1' );
+    is( $report->{begin_date},                            undef, 'A file upload has no harvest begin date' );
+    is( $report->{end_date},                              undef, 'A file upload has no harvest end date' );
     is( $report->{ud_provider_name},                      $usage_data_provider->name );
     is( $report->{us_report_info}->{skipped_mus},         0 );
     is( $report->{us_report_info}->{added_mus},           22 );
