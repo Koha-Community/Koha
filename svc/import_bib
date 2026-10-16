@@ -28,6 +28,7 @@ use C4::ImportBatch
 use C4::MarcModificationTemplates qw( ModifyRecordWithTemplate );
 use C4::Matcher;
 use Koha::MarcModificationTemplates;
+use Koha::Patrons;
 use XML::Simple;
 
 # use Carp::Always;
@@ -72,6 +73,16 @@ sub import_bib {
 
     my $template_id = delete $params->{marc_modification_template_id};
     $params->{record_source_id} = Koha::MarcModificationTemplates->record_source_id_for($template_id);
+
+    if ( $params->{record_source_id} ) {
+        my $userenv = C4::Context->userenv;
+        my $patron  = $userenv && Koha::Patrons->find( $userenv->{number} );
+        unless ( $patron && $patron->has_permission( { editcatalogue => 'set_record_sources' } ) ) {
+            $result->{'status'} = "failed";
+            $result->{'error'}  = "set_record_source_not_allowed";
+            return $result;
+        }
+    }
 
     my $batch_id = GetWebserviceBatchId($params);
     unless ($batch_id) {

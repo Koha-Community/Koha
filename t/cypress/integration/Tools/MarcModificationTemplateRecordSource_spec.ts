@@ -135,4 +135,73 @@ describe("MARC modification template record source", () => {
                 });
         });
     });
+
+    describe("svc/import_bib", () => {
+        const marcxml =
+            '<record xmlns="http://www.loc.gov/MARC21/slim"><leader>00000nam a2200000 a 4500</leader><datafield tag="245" ind1="0" ind2="0"><subfield code="a">Cypress import_bib record source</subfield></datafield></record>';
+
+        const postImportBib = () =>
+            cy
+                .task("query", {
+                    sql: `SELECT template_id FROM marc_modification_templates WHERE name='${templateName}'`,
+                })
+                .then(rows => {
+                    cy.visit("/cgi-bin/koha/mainpage.pl");
+                    return cy
+                        .get("meta[name='csrf-token']")
+                        .invoke("attr", "content")
+                        .then(csrfToken =>
+                            cy.request({
+                                method: "POST",
+                                url: "/cgi-bin/koha/svc/import_bib",
+                                form: true,
+                                body: {
+                                    csrf_token: csrfToken,
+                                    xml: marcxml,
+                                    marc_modification_template_id:
+                                        rows[0].template_id,
+                                },
+                            })
+                        );
+                });
+
+        beforeEach(() => {
+            cy.task("query", {
+                sql: `UPDATE marc_modification_templates SET record_source_id=(SELECT record_source_id FROM record_sources WHERE name='${sourceName}') WHERE name='${templateName}'`,
+            });
+        });
+
+        afterEach(() => {
+            cy.task("query", {
+                sql: "DELETE FROM user_permissions WHERE borrowernumber=51 AND module_bit=9 AND code='edit_catalogue'",
+            });
+            cy.task("query", {
+                sql: `DELETE FROM import_batches WHERE batch_type='webservice' AND record_source_id=(SELECT record_source_id FROM record_sources WHERE name='${sourceName}')`,
+            });
+        });
+
+        it("Accepts a source template with the set_record_sources permission", () => {
+            postImportBib().then(response => {
+                expect(response.status).to.eq(200);
+                expect(response.body).to.contain("<status>ok</status>");
+            });
+        });
+
+        it("Refuses a source template without the set_record_sources permission", () => {
+            cy.task("query", {
+                sql: "UPDATE borrowers SET flags=4 WHERE borrowernumber=51",
+            });
+            cy.task("query", {
+                sql: "INSERT INTO user_permissions (borrowernumber, module_bit, code) VALUES (51, 9, 'edit_catalogue')",
+            });
+
+            postImportBib().then(response => {
+                expect(response.status).to.eq(200);
+                expect(response.body).to.contain("<status>failed</status>");
+                expect(response.body).to.contain(
+                    "<error>set_record_source_not_allowed</error>"
+                );
+            });
+        });
+    });
 });
