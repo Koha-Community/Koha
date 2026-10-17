@@ -29,7 +29,7 @@
 [% IF lang && lang != 'en' %]
     [% Asset.js(lang _ '/js/locale_data.js') | $raw %]
 [% END %]
-[% Asset.js('js/Gettext.js') | $raw %]
+[% Asset.js('lib/tannin/tannin-1.2.0.min.js') | $raw %]
 [% Asset.js('js/i18n.js') | $raw %]
 [% Asset.js('js/stores.js') | $raw %]
 [% Asset.js("lib/jquery/jquery-3.6.0.min.js") | $raw %]

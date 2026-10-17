@@ -74,7 +74,6 @@ my $exceptions = {
         tidy => [
             qw(
                 koha-tmpl/intranet-tmpl/lib
-                koha-tmpl/intranet-tmpl/js/Gettext.js
                 koha-tmpl/opac-tmpl/lib
                 Koha/ILL/Backend/
             )
@@ -82,9 +81,7 @@ my $exceptions = {
         codespell => [
             qw(
                 koha-tmpl/intranet-tmpl/lib
-                koha-tmpl/intranet-tmpl/js/Gettext.js
                 koha-tmpl/opac-tmpl/lib
-                koha-tmpl/opac-tmpl/bootstrap/js/Gettext.js
             )
         ],
         core => [
