@@ -163,6 +163,10 @@ sub run {
     my $response = q{};
     my $error;
 
+    # Where we got to when something failed: refusing the request is not the
+    # same as the handler failing.
+    my $stage = 'check';
+
     # These C4::SIP::Sip globals are imported into MsgType, so localizing them
     # would not be seen by the handler ( the import aliases the original
     # scalar ). Set them in place and restore the previous values afterwards.
@@ -188,6 +192,7 @@ sub run {
         # information requests needs the protocol version set above. It must
         # run before the session below, it depends on who is logged in.
         $self->_check_request($request);
+        $stage = 'handler';
 
         C4::Context->set_userenv( @{$sip_userenv} );
 
@@ -238,7 +243,15 @@ sub run {
     Koha::Exception->throw( error => "Could not roll back the test transaction: $rollback_error" )
         if $rollback_error;
 
-    die $error if $error;
+    if ($error) {
+
+        # A refusal of the request is thrown as it is. Anything thrown by a
+        # handler is a server side problem, not something wrong with the request,
+        # so don't hand it back as an exception that a caller might read as bad
+        # input, a missing patron or a refusal.
+        die $error if $stage eq 'check';
+        Koha::Exception->throw( error => 'The SIP message handler failed: ' . $error );
+    }
 
     my ( $fixed, $fields ) = $self->_parse_response($response);
 
@@ -353,12 +366,17 @@ sub _build_server {
     $server->{account} = $config->{accounts}->{$login_id};
 
     my $institution_id = $server->{account}->{institution};
+    Koha::Exceptions::ObjectNotFound->throw("SIP institution '$institution_id' not found in configuration")
+        unless $config->{institutions}->{$institution_id};
+
     $server->{institution} = $config->{institutions}->{$institution_id};
     $server->{policy}      = $server->{institution}->{policy};
 
     my $module = $server->{institution}->{implementation};
     $module = 'C4::SIP::ILS' if $module eq 'ILS';
-    $module->use;
+    $module->use
+        or
+        Koha::Exception->throw( error => "Cannot load the SIP implementation '$module': $UNIVERSAL::require::ERROR" );
     $server->{ils} = $module->new( $server->{institution}, $server->{account} );
 
     return $server;
@@ -502,7 +520,8 @@ sub _parse_response {
 =head3 _field
 
 Builds a single variable length field. An optional field with no value is
-omitted entirely.
+omitted entirely. A value containing the field delimiter is refused, it would
+add fields to the request that the form didn't ask for.
 
 =cut
 
@@ -510,7 +529,12 @@ sub _field {
     my ( $field_id, $value, $params ) = @_;
     $params //= {};
 
-    return q{} if $params->{optional} && !$value;
+    return q{} if $params->{optional} && !( defined $value && length $value );
+
+    Koha::Exceptions::BadParameter->throw(
+        parameter => $field_id,
+        error     => "The field delimiter cannot be used in the value for '$field_id'",
+    ) if defined $value && index( $value, q{|} ) != -1;
 
     return $field_id . ( defined $value ? $value : q{} ) . '|';
 }

@@ -244,6 +244,8 @@ sub test_message {
                 return $c->render( status => 400, openapi => { error => "$_" } );
             } elsif ( $_->isa('Koha::Exceptions::Patron::NotFound') ) {
                 return $c->render_resource_not_found("Patron");
+            } elsif ( $_->isa('Koha::Exceptions::ObjectNotFound') ) {
+                return $c->render( status => 404, openapi => { error => "$_" } );
             } elsif ( $_->isa('Koha::Exceptions::NoPermission') ) {
                 return $c->render( status => 403, openapi => { error => "$_" } );
             }

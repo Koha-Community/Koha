@@ -223,7 +223,7 @@ subtest 'run() with a raw request' => sub {
 };
 
 subtest 'run() error handling' => sub {
-    plan tests => 2;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -237,6 +237,34 @@ subtest 'run() error handling' => sub {
     throws_ok { $tester->run( { message => 'no_such_message' } ) }
     'Koha::Exceptions::BadParameter',
         'run() with an unsupported message throws';
+
+    $account->institution->implementation('No::Such::Module')->store;
+    throws_ok { $tester->run( { message => 'patron_status', patron_id => $patron->cardnumber } ) }
+    'Koha::Exception', 'run() with an implementation that cannot be loaded throws';
+    $account->institution->implementation('ILS')->store;
+
+    # A value with the field delimiter would add fields to the request
+    throws_ok { $tester->run( { message => 'patron_status', patron_id => '123|AB456' } ) }
+    'Koha::Exceptions::BadParameter', 'A delimiter in the patron identifier is refused';
+    throws_ok { $tester->run( { message => 'item_information', item_id => 'I1|AA1' } ) }
+    'Koha::Exceptions::BadParameter', 'A delimiter in the item identifier is refused';
+    throws_ok { $tester->run( { message => 'patron_information', patron_id => 'P1', patron_password => 'a|b' } ) }
+    'Koha::Exceptions::BadParameter', 'A delimiter in the password is refused';
+
+    my $built = $tester->_build_request(
+        { account   => { institution => 'MPL' } }, 'patron_information',
+        { patron_id => 'P1', patron_password => '0' }
+    );
+    like( $built, qr/\|AD0\|/, 'A password of 0 is kept in the request' );
+
+    # Whatever a handler throws is a failure of the server, not of the request
+    my $handler = Test::MockModule->new('C4::SIP::Sip::MsgType');
+    $handler->mock( handle => sub { Koha::Exceptions::NoPermission->throw('deep in a handler') } );
+    my $error;
+    try { $tester->run( { message => 'patron_status', patron_id => $patron->cardnumber } ) }
+    catch { $error = $_ };
+    is( ref($error), 'Koha::Exception', 'An exception from a handler is not passed on as it is' );
+    like( $error->error, qr/handler failed: .*deep in a handler/, 'but its message is kept' );
 
     $schema->storage->txn_rollback;
 };
@@ -305,7 +333,7 @@ subtest 'run() access restrictions' => sub {
 };
 
 subtest 'run() isolation and clean up' => sub {
-    plan tests => 18;
+    plan tests => 19;
 
     $schema->storage->txn_begin;
 
@@ -367,7 +395,8 @@ subtest 'run() isolation and clean up' => sub {
     # A handler that dies
     $handler->mock( handle => sub { die "handler blew up\n" } );
     throws_ok { $tester->run( { message => 'patron_status', patron_id => $patron->cardnumber } ) }
-    qr/handler blew up/, 'A handler error is thrown';
+    'Koha::Exception', 'A handler error is thrown as a Koha::Exception';
+    like( $@->error, qr/handler failed: handler blew up/, 'The handler error is kept in the message' );
     $check_state_restored->('after handler error');
 
     $schema->storage->txn_rollback;

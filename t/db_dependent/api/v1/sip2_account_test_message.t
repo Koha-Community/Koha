@@ -18,7 +18,8 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
+use Test::MockModule;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -261,6 +262,46 @@ subtest 'test_message() library restrictions' => sub {
 
     $t->post_ok( "//$userid:$password\@$url" => json => { message => 'item_information', item_id => $item->barcode } )
         ->status_is(200);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'test_message() error handling tests' => sub {
+    plan tests => 10;
+
+    $schema->storage->txn_begin;
+
+    my ( $account, $patron, $item ) = build_test_account();
+
+    my $password  = 'thePassword123';
+    my $librarian = build_librarian( $patron->branchcode, $password );
+    my $userid    = $librarian->userid;
+
+    my $url = "/api/v1/sip2/accounts/" . $account->sip_account_id . "/test_message";
+
+    $t->post_ok( "//$userid:$password\@$url" => json => {} )->status_is(400);
+
+    # What a handler throws is a failure of the server, it must not be reported
+    # as a refusal or as a missing patron
+    my $handler = Test::MockModule->new('C4::SIP::Sip::MsgType');
+    $handler->mock( handle => sub { Koha::Exceptions::NoPermission->throw('deep in a handler') } );
+    $t->post_ok(
+        "//$userid:$password\@$url" => json => { message => 'patron_status', patron_id => $patron->cardnumber } )
+        ->status_is(500)
+        ->json_is( '/error_code' => 'internal_server_error' );
+
+    $handler->mock( handle => sub { die "something went wrong\n" } );
+    $t->post_ok(
+        "//$userid:$password\@$url" => json => { message => 'patron_status', patron_id => $patron->cardnumber } )
+        ->status_is(500);
+    $handler->unmock_all;
+
+    # An account that has no patron to log in as is a missing object
+    Koha::Patrons->find( { userid => $account->login_id } )->delete;
+    $t->post_ok(
+        "//$userid:$password\@$url" => json => { message => 'patron_status', patron_id => $patron->cardnumber } )
+        ->status_is(404)
+        ->json_like( '/error' => qr/No patron with the userid/ );
 
     $schema->storage->txn_rollback;
 };
