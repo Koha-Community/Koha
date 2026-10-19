@@ -3,27 +3,22 @@
 
     function setSidebarState(collapsed) {
         var sidebar = $("#sidebar-container");
-        var toggle_button = $("#toggle-sidebar");
-        var icon = $("#toggle-sidebar i");
-        var mainContainer = $("main").parent();
-
-        if (collapsed) {
-            sidebar.addClass("collapsed");
-            icon.removeClass("fa-chevron-left").addClass("fa-chevron-right");
-            mainContainer
-                .removeClass("col-md-10")
-                .addClass("col-md-12")
-                .css("width", "90%");
-            toggle_button.attr("aria-expanded", "false");
-        } else {
-            sidebar.removeClass("collapsed");
-            icon.removeClass("fa-chevron-right").addClass("fa-chevron-left");
-            mainContainer
-                .removeClass("col-md-12")
-                .addClass("col-md-10")
-                .removeAttr("style");
-            toggle_button.attr("aria-expanded", "true");
+        if (!sidebar.length) {
+            return;
         }
+
+        var toggle_button = $("#toggle-sidebar");
+
+        document.documentElement.classList.toggle(
+            "sidebar-collapsed",
+            collapsed
+        );
+        sidebar.toggleClass("collapsed", collapsed);
+        toggle_button
+            .find("i")
+            .toggleClass("fa-chevron-right", collapsed)
+            .toggleClass("fa-chevron-left", !collapsed);
+        toggle_button.attr("aria-expanded", collapsed ? "false" : "true");
 
         try {
             localStorage.setItem(STORAGE_KEY, collapsed ? "true" : "false");

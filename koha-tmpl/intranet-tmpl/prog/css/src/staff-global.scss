@@ -4899,7 +4899,10 @@ div .suggestion_note {
             padding-top: 2.5em;
         }
 
-        &.collapsed {
+        // :root.sidebar-collapsed is set in the document head before
+        // first paint; .collapsed follows once sidebar.js has run.
+        &.collapsed,
+        :root.sidebar-collapsed & {
             width: 3rem;
 
             .sidebar_menu,
@@ -4980,6 +4983,16 @@ div .suggestion_note {
             right: .5em;
             top: .5em;
             z-index: 1;
+        }
+    }
+
+    :root.sidebar-collapsed {
+        .sidebar-main {
+            width: 90%;
+        }
+
+        #toggle-sidebar .fa-chevron-left {
+            --fa: "\f054";
         }
     }
 }

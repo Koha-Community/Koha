@@ -6,7 +6,7 @@
             [% SET asides = [aside] %]
         [% END %]
         [% IF ( asides && asides.size ) || aside_block %]
-            <div class="col-md-10 order-sm-1 order-md-2">
+            <div class="col-md-10 order-sm-1 order-md-2 sidebar-main">
                 <main>
                     [% IF messages_block %]
                         [% messages_block | $raw %]

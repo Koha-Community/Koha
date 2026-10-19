@@ -16,6 +16,13 @@
     // We could use addPrefs but it's defined later (js/stores.js) and we will need to adjust the occurrences where this variable is used
     var CAN_user_parameters_manage_column_config = [% CAN_user_parameters_manage_column_config ? 1 : 0 | $raw %];
 </script>
+<script nonce="[% Koha.CSPNonce | $raw %]">
+    try {
+        if (localStorage.getItem("sidebar-collapsed") === "true") {
+            document.documentElement.classList.add("sidebar-collapsed");
+        }
+    } catch (e) {}
+</script>
 [%# Prevent XFS attacks -%]
 [% UNLESS popup %]
     <style nonce="[% Koha.CSPNonce | $raw %]" id="antiClickjack">
