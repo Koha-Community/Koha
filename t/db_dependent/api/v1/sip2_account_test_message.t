@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::MockModule;
 use Test::Mojo;
 
@@ -302,6 +302,50 @@ subtest 'test_message() error handling tests' => sub {
         "//$userid:$password\@$url" => json => { message => 'patron_status', patron_id => $patron->cardnumber } )
         ->status_is(404)
         ->json_like( '/error' => qr/No patron with the userid/ );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'test_message() patron password tests' => sub {
+    plan tests => 12;
+
+    $schema->storage->txn_begin;
+
+    my ( $account, $patron, $item ) = build_test_account();
+
+    my $password = 'thePassword123';
+    $patron->set_password( { password => 'real_secret', skip_validation => 1 } );
+    my $librarian = build_librarian( $patron->branchcode, $password );
+    my $userid    = $librarian->userid;
+
+    my $url = "/api/v1/sip2/accounts/" . $account->sip_account_id . "/test_message";
+
+    my $fields = sub {
+        return { map { $_->{field} => $_->{value} } @{ $t->tx->res->json->{fields} } };
+    };
+
+    $t->post_ok( "//$userid:$password\@$url" => json =>
+            { message => 'patron_information', patron_id => $patron->cardnumber, patron_password => 'GOOD' } )
+        ->status_is(200);
+    is( $fields->()->{CQ}, 'Y', 'GOOD is reported as a valid password' );
+
+    $t->post_ok( "//$userid:$password\@$url" => json =>
+            { message => 'patron_information', patron_id => $patron->cardnumber, patron_password => 'BAD' } )
+        ->status_is(200);
+    is( $fields->()->{CQ}, 'N', 'BAD is reported as a password that is not valid' );
+
+    # The real password is not accepted, it is not even a value the API takes
+    $t->post_ok( "//$userid:$password\@$url" => json =>
+            { message => 'patron_information', patron_id => $patron->cardnumber, patron_password => 'real_secret' } )
+        ->status_is(400);
+
+    # ...and typing it into a raw request does not get it past the tester either
+    $t->post_ok(
+        "//$userid:$password\@$url" => json => { message => 'patron_information', patron_id => $patron->cardnumber } );
+    ( my $raw = $t->tx->res->json->{request} ) =~ s/(\|AC\|)/$1ADreal_secret|/;
+    $t->post_ok( "//$userid:$password\@$url" => json => { request => $raw } )
+        ->status_is(400)
+        ->json_like( '/error' => qr/GOOD or BAD/ );
 
     $schema->storage->txn_rollback;
 };

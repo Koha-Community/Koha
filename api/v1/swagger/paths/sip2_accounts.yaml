@@ -305,11 +305,11 @@
       Generates the SIP2 response a saved account would return for the given
       message, without going through a real SIP session and without needing the
       SIP account password. The message is handled in a transaction that is
-      rolled back, so database changes are undone. Plugin hooks still run, and a
-      wrong patron password is not counted towards a lockout. Only patrons the
-      logged in user can see may be used, and when IndependentBranches is
-      enabled, only items from the logged in user's library. Every test is
-      logged.
+      rolled back, so database changes are undone. Plugin hooks still run. A
+      patron password is never checked: GOOD stands for a password that matches
+      and BAD for one that does not. Only patrons the logged in user can see may
+      be used, and when IndependentBranches is enabled, only items from the
+      logged in user's library. Every test is logged.
     consumes:
       - application/json
     produces:
@@ -340,7 +340,12 @@
               description: The item barcode to test with
             patron_password:
               type: string
-              description: The patron password to test with
+              description: >
+                Whether the patron password counts as correct. The password
+                itself is never checked, a real one is refused.
+              enum:
+                - GOOD
+                - BAD
             request:
               type: string
               description: A raw SIP2 request string to run as-is instead of building one

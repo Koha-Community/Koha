@@ -45,8 +45,15 @@ describe("Account tester", () => {
             .invoke("val")
             .should("contain", "AA23529000000001|");
 
-        // The patron password is not shown as it is typed
-        cy.get("#patron_password").should("have.attr", "type", "password");
+        // The patron password is a choice of outcome, a real one is never typed
+        cy.get("#patron_password").should("have.prop", "tagName", "SELECT");
+        cy.get("#raw_request").invoke("val").should("not.contain", "AD");
+        cy.get("#patron_password").select("GOOD");
+        cy.get("#raw_request").invoke("val").should("contain", "ADGOOD|");
+        cy.get("#patron_password").select("BAD");
+        cy.get("#raw_request").invoke("val").should("contain", "ADBAD|");
+        cy.get("#patron_password").select("");
+        cy.get("#raw_request").invoke("val").should("not.contain", "AD");
 
         // Switching message type changes the fields and the request
         cy.get("#message").select("item_information");
@@ -76,7 +83,7 @@ describe("Account tester", () => {
 
         cy.get("#patron_id").type("123|AB456");
         cy.get("#sip2_account_tester [role=alert]").contains(
-            "cannot be used in a barcode or password"
+            "cannot be used in a barcode"
         );
         cy.get("#sip2_account_tester input[type=submit]").should("be.disabled");
 

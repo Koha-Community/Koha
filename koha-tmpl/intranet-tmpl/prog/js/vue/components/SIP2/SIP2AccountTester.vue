@@ -65,18 +65,31 @@
                                     <label for="patron_password">{{
                                         $__("Patron password")
                                     }}</label>
-                                    <input
+                                    <select
                                         id="patron_password"
                                         v-model="form.patron_password"
-                                        type="password"
-                                        autocomplete="off"
-                                    />
+                                    >
+                                        <option value="">
+                                            {{ $__("Not sent") }}
+                                        </option>
+                                        <option value="GOOD">
+                                            {{ $__("Valid password") }}
+                                        </option>
+                                        <option value="BAD">
+                                            {{ $__("Invalid password") }}
+                                        </option>
+                                    </select>
+                                    <span class="hint">{{
+                                        $__(
+                                            "The patron's password is never checked, this chooses the outcome."
+                                        )
+                                    }}</span>
                                 </li>
                             </ol>
                             <p v-if="hasDelimiter" class="error" role="alert">
                                 {{
                                     $__(
-                                        "The | character cannot be used in a barcode or password."
+                                        "The | character cannot be used in a barcode."
                                     )
                                 }}
                             </p>
@@ -225,9 +238,7 @@ export default {
 
         // A delimiter in a value would add fields to the generated request
         const hasDelimiter = computed(() =>
-            [form.patron_id, form.item_id, form.patron_password].some(value =>
-                value?.includes("|")
-            )
+            [form.patron_id, form.item_id].some(value => value?.includes("|"))
         );
 
         // The message of an error without the "Error: " the http client adds

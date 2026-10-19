@@ -25,6 +25,7 @@ use C4::Circulation qw( barcodedecode );
 use C4::Context;
 use C4::SIP::Sip            qw( timestamp );
 use C4::SIP::Sip::Constants qw( :all );
+use C4::SIP::ILS::Patron;
 use C4::SIP::Sip::Configuration;
 use C4::SIP::Sip::MsgType;
 
@@ -79,10 +80,15 @@ changes made by even checkout and checkin messages are undone. That is the only
 thing that is undone: plugin hooks ( for instance after_circ_action ) still run,
 and anything a plugin sends elsewhere is not recalled. Publishing of background
 job messages is suppressed while the handler runs and the "last seen" activity
-is not recorded, but the rollback also means a wrong patron password is never
-counted against the patron, so the lockout that the real SIP server applies does
-not happen here. Every test is logged ( who, which account, which message ) so it
+is not recorded. Every test is logged ( who, which account, which message ) so it
 can be audited.
+
+A patron password is never checked. A request that carries one says what the
+outcome should be instead: GOOD makes the password count as the patron's, BAD
+makes it count as wrong. A real password is refused. If it were not, the tester
+would let anyone who can use it try passwords for the patrons they can see,
+without the lockout of the real SIP server, as the failed attempts are rolled
+back with everything else.
 
 The handlers run with the session of the SIP account's own user and institution,
 as they do after a real SIP login, not the session of the staff member running
@@ -221,6 +227,14 @@ sub run {
         # in the cache that it did so for the day, which is not. A real
         # connection afterwards would then skip the update.
         local *Koha::Patron::update_lastseen = sub { return $_[0] };
+
+        # The password of the patron is not checked, GOOD is a password that
+        # matches and anything else is one that does not. Checking a real one
+        # would make this a way to guess the password of any patron.
+        local *C4::SIP::ILS::Patron::check_password = sub {
+            my ( $patron, $password ) = @_;
+            return ( defined $password && $password eq 'GOOD' ) ? 1 : 0;
+        };
 
         C4::SIP::Sip::MsgType::handle( $request, $server, q{} );
 
@@ -470,6 +484,13 @@ sub _check_request {
     # Parse the request the same way the handler does, so we check the same
     # patron and item the handler will look up, even for a hand edited request.
     my $fields = C4::SIP::Sip::MsgType->new( $request, 0 )->{fields};
+
+    # Whatever the request holds as the patron password is not checked, but a
+    # real one in a request would still be a password somebody typed in, so say
+    # that GOOD and BAD are what to use instead of ignoring it.
+    my $patron_password = $fields->{ (FID_PATRON_PWD) };
+    Koha::Exceptions::BadParameter->throw("A patron password cannot be tested, use GOOD or BAD")
+        if defined $patron_password && length $patron_password && $patron_password !~ /\A(?:GOOD|BAD)\z/;
 
     my $patron_id = $fields->{ (FID_PATRON_ID) };
     if ( defined $patron_id && length $patron_id ) {

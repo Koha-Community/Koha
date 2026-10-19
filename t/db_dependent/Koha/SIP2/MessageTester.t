@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 16;
+use Test::More tests => 17;
 use Test::Exception;
 use Test::MockModule;
 use Encode    qw( encode );
@@ -565,4 +565,62 @@ subtest '_parse_response() tests' => sub {
         [ $fixed, [ { field => 'X', value => q{} } ] ],
         'A chunk of one character is a field without a value'
     );
+};
+
+subtest 'run() never checks a real patron password' => sub {
+    plan tests => 10;
+
+    $schema->storage->txn_begin;
+
+    my ( $account, $patron, $item ) = build_test_account();
+    $patron->set_password( { password => 'real_secret', skip_validation => 1 } );
+    my $tester = Koha::SIP2::MessageTester->new( { account => $account } );
+
+    # The real check is what would make this a way to guess passwords
+    my $checks = 0;
+    my $ils    = Test::MockModule->new('C4::SIP::ILS::Patron');
+    $ils->mock( checkpw => sub { $checks++; die "a real password was checked\n" } );
+
+    my $fields_of = sub {
+        return { map { $_->{field} => $_->{value} } @{ shift->{fields} } };
+    };
+
+    my $result = $tester->run(
+        { message => 'patron_information', patron_id => $patron->cardnumber, patron_password => 'GOOD' } );
+    is( substr( $result->{response}, 0, 2 ), '64', 'GOOD: got a patron information response' );
+    is( $fields_of->($result)->{CQ},         'Y',  'GOOD: the password is reported as valid' );
+
+    $result =
+        $tester->run( { message => 'patron_information', patron_id => $patron->cardnumber, patron_password => 'BAD' } );
+    is( $fields_of->($result)->{CQ}, 'N', 'BAD: the password is reported as not valid' );
+
+    # The real password is the one that must not be sent
+    throws_ok {
+        $tester->run(
+            { message => 'patron_information', patron_id => $patron->cardnumber, patron_password => 'real_secret' } )
+    }
+    'Koha::Exceptions::BadParameter', 'A real password is refused';
+    like( $@->error // "$@", qr/GOOD or BAD/, 'and the message says what to use instead' );
+
+    # ...also when it is typed into the raw request
+    my $built = $tester->run(
+        { message => 'patron_information', patron_id => $patron->cardnumber, patron_password => 'GOOD' } );
+    ( my $raw = $built->{request} ) =~ s/\|ADGOOD\|/|ADreal_secret|/;
+    isnt( $raw, $built->{request}, 'The raw request was changed to carry the real password' );
+    throws_ok { $tester->run( { request => $raw } ) }
+    'Koha::Exceptions::BadParameter', 'A real password in a raw request is refused';
+
+    # No password, and an empty one, are fine and answer as not valid
+    lives_ok {
+        $tester->run( { message => 'patron_information', patron_id => $patron->cardnumber } )
+    }
+    'A request without a password is run';
+    lives_ok {
+        $tester->run( { message => 'patron_information', patron_id => $patron->cardnumber, patron_password => q{} } )
+    }
+    'A request with an empty password is run';
+
+    is( $checks, 0, 'No real password was ever checked' );
+
+    $schema->storage->txn_rollback;
 };
