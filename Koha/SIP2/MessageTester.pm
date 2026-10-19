@@ -17,6 +17,7 @@ package Koha::SIP2::MessageTester;
 
 use Modern::Perl;
 
+use Encode    qw( decode );
 use Try::Tiny qw( catch try );
 use UNIVERSAL::require;
 
@@ -252,6 +253,11 @@ sub run {
         die $error if $stage eq 'check';
         Koha::Exception->throw( error => 'The SIP message handler failed: ' . $error );
     }
+
+    # The server writes the response in the encoding of the account, show it as
+    # the characters a terminal reads from it.
+    my $encoding = $server->{account}->{encoding};
+    $response = decode( $encoding, $response ) if $encoding && length $response;
 
     my ( $fixed, $fields ) = $self->_parse_response($response);
 

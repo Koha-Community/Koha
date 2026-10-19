@@ -18,9 +18,10 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::Exception;
 use Test::MockModule;
+use Encode    qw( encode );
 use Try::Tiny qw( catch try );
 
 use t::lib::TestBuilder;
@@ -500,6 +501,44 @@ subtest 'run() logs each test where the web server keeps it' => sub {
     my @tester_loggers = grep { ( $_->{cat} // q{} ) =~ /sip2\.message_tester/ } @loggers;
     is( scalar @tester_loggers,    1,                         'The test is logged once' );
     is( $tester_loggers[0]->{cat}, 'api.sip2.message_tester', 'under the api category, not plack-api' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'run() returns the response as characters, not as the account encoding' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my ( $account, $patron, $item ) = build_test_account();
+    $account->encoding('utf8')->store;
+    my $tester = Koha::SIP2::MessageTester->new( { account => $account } );
+
+    # The handler writes the response in the encoding of the account
+    my $surname = "M\x{fc}ller \x{263a}";
+    my $handler = Test::MockModule->new('C4::SIP::Sip::MsgType');
+    $handler->mock(
+        handle => sub {
+            $C4::SIP::Sip::last_response = encode( 'UTF-8', '24' . ( ' ' x 35 ) . "AE$surname|" );
+            return;
+        }
+    );
+
+    my $result = $tester->run( { message => 'patron_status', patron_id => $patron->cardnumber } );
+    is( $result->{fields}->[0]->{value}, $surname, 'The value is the characters the terminal reads' );
+    ok( utf8::is_utf8( $result->{fields}->[0]->{value} ), 'and a character string' );
+    is(
+        length( $result->{response} ), 37 + length("AE$surname|"),
+        'The response has one character for each character'
+    );
+
+    $account->encoding(undef)->store;
+    $result = Koha::SIP2::MessageTester->new( { account => $account } )
+        ->run( { message => 'patron_status', patron_id => $patron->cardnumber } );
+    is(
+        $result->{fields}->[0]->{value}, encode( 'UTF-8', $surname ),
+        'Without an encoding the response is left alone'
+    );
 
     $schema->storage->txn_rollback;
 };
