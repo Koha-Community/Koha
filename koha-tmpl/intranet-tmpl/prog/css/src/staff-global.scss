@@ -4951,6 +4951,7 @@ div .suggestion_note {
                 ul li a {
                     display: block;
                     padding: .7em 0;
+                    position: relative;
                     text-align: center;
 
                     &.router-link-active {
@@ -4967,7 +4968,8 @@ div .suggestion_note {
                 }
 
                 .menu-label {
-                    display: none;
+                    @include visually-hidden();
+                    display: block;
                 }
 
                 .pref-subtabs,
