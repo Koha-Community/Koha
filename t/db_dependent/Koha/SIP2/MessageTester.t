@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 15;
+use Test::More tests => 16;
 use Test::Exception;
 use Test::MockModule;
 use Encode    qw( encode );
@@ -541,4 +541,28 @@ subtest 'run() returns the response as characters, not as the account encoding' 
     );
 
     $schema->storage->txn_rollback;
+};
+
+subtest '_parse_response() tests' => sub {
+    plan tests => 4;
+
+    my $tester = Koha::SIP2::MessageTester->new( { account => 'not used here' } );
+
+    is_deeply( [ $tester->_parse_response(q{}) ], [ q{}, [] ], 'An empty response has nothing in it' );
+
+    my $fixed = '24' . ( ' ' x 35 );    # patron status response, 37 characters
+    my ( $got_fixed, $fields ) = $tester->_parse_response( $fixed . 'AEA Patron||AAP1|' );
+    is( $got_fixed, $fixed, 'The fixed portion is split off' );
+    is_deeply(
+        $fields,
+        [ { field => 'AE', value => 'A Patron' }, { field => 'AA', value => 'P1' } ],
+        'Fields are split and empty chunks skipped'
+    );
+
+    # A trailing chunk shorter than a field identifier and value must not warn
+    is_deeply(
+        [ $tester->_parse_response( $fixed . 'X' ) ],
+        [ $fixed, [ { field => 'X', value => q{} } ] ],
+        'A chunk of one character is a field without a value'
+    );
 };

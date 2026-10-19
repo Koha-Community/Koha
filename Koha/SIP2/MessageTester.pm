@@ -516,7 +516,7 @@ sub _parse_response {
         push @fields,
             {
             field => substr( $chunk, 0, 2 ),
-            value => substr( $chunk, 2 ),
+            value => length $chunk > 2 ? substr( $chunk, 2 ) : q{},
             };
     }
 
