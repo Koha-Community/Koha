@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 17;
+use Test::More tests => 18;
 use Test::Exception;
 use Test::MockModule;
 use Encode    qw( encode );
@@ -621,6 +621,71 @@ subtest 'run() never checks a real patron password' => sub {
     'A request with an empty password is run';
 
     is( $checks, 0, 'No real password was ever checked' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'run() patron information detail' => sub {
+    plan tests => 14;
+
+    $schema->storage->txn_begin;
+
+    my ( $account, $patron, $item ) = build_test_account();
+    $account->av_field_template('[% accountline.description %] owes [% accountline.amountoutstanding %]')->store;
+    $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => {
+                borrowernumber    => $patron->borrowernumber,
+                amount            => 2.5,
+                amountoutstanding => 2.5,
+                debit_type_code   => 'OVERDUE',
+                credit_type_code  => undef,
+                description       => 'Photocopies',
+                status            => undef,
+            },
+        }
+    );
+    my $tester = Koha::SIP2::MessageTester->new( { account => $account } );
+
+    my $fine_items = sub {
+        return [ grep { $_->{field} eq 'AV' } @{ shift->{fields} } ];
+    };
+
+    # Without a detail the lists of items, and the templates that format them, are left out
+    my $result = $tester->run( { message => 'patron_information', patron_id => $patron->cardnumber } );
+    is( scalar @{ $fine_items->($result) }, 0, 'No detail: no fine items in the response' );
+    like( $result->{request}, qr/^63001.{18} {10}AO/, 'No detail: the summary field of the request is all spaces' );
+
+    $result =
+        $tester->run( { message => 'patron_information', patron_id => $patron->cardnumber, summary => 'fine_items' } );
+    like( $result->{request}, qr/^63001.{18} {3}Y {6}AO/, 'Fine items: the request has a Y in the fourth place' );
+    is( scalar @{ $fine_items->($result) }, 1, 'Fine items: the fine is in the response' );
+    like(
+        $fine_items->($result)->[0]->{value}, qr/^Photocopies owes 2\.5/,
+        'and is formatted by the template of the account'
+    );
+
+    # Another detail brings another list, not the fines
+    $result = $tester->run(
+        { message => 'patron_information', patron_id => $patron->cardnumber, summary => 'charged_items' } );
+    is( scalar @{ $fine_items->($result) }, 0, 'Charged items: the fines are not in the response' );
+
+    # Where the Y goes for each of the details
+    my @details = qw( hold_items overdue_items charged_items fine_items recall_items unavailable_holds );
+    foreach my $i ( 0 .. $#details ) {
+        is(
+            Koha::SIP2::MessageTester::_summary( $details[$i] ),
+            ( q{ } x $i ) . 'Y' . ( q{ } x ( 9 - $i ) ),
+            "$details[$i]: the Y is in place " . ( $i + 1 )
+        );
+    }
+    is( Koha::SIP2::MessageTester::_summary(), q{ } x 10, 'No detail is ten spaces' );
+
+    throws_ok {
+        $tester->run( { message => 'patron_information', patron_id => $patron->cardnumber, summary => 'bogus' } )
+    }
+    'Koha::Exceptions::BadParameter', 'A detail that does not exist is refused';
 
     $schema->storage->txn_rollback;
 };

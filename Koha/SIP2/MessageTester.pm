@@ -47,6 +47,11 @@ use constant LANGUAGE => '001';
 # can build. Anything else ( a login, a hold, a fee paid, ... ) is refused.
 my %SUPPORTED_REQUESTS = map { $_ => 1 } ( PATRON_STATUS_REQ, PATRON_INFO, ITEM_INFORMATION, CHECKOUT, CHECKIN );
 
+# The detail a patron information request can ask for, in the order of the
+# positions of the ten character summary field of the request. The server reads
+# the first Y only, so there is one choice.
+my @SUMMARY_DETAILS = qw( hold_items overdue_items charged_items fine_items recall_items unavailable_holds );
+
 # Number of characters at the start of each response that make up the
 # message code plus the fixed length fields, keyed by response code. The
 # variable length fields that hold the interesting template values follow.
@@ -121,7 +126,8 @@ sub new {
             message         => 'patron_information',
             patron_id       => $patron_barcode,
             item_id         => $item_barcode,
-            patron_password => $patron_password,
+            patron_password => 'GOOD',
+            summary         => 'fine_items',
         }
     );
 
@@ -141,6 +147,11 @@ A raw 'request' string is used as-is if given, otherwise the request is built
 from 'message' and the patron/item parameters. Valid messages are
 'patron_status', 'patron_information', 'item_information', 'checkout' and
 'checkin'.
+
+A patron information request can ask for one list of items in the response, with
+the 'summary' parameter: 'hold_items', 'overdue_items', 'charged_items',
+'fine_items', 'recall_items' or 'unavailable_holds'. Without it the lists are
+left out, and so are the templates that format them ( the fines, for one ).
 
 The logged in user's restrictions apply: a patron the user cannot see throws
 Koha::Exceptions::Patron::NotFound, and when IndependentBranches is enabled an
@@ -428,7 +439,11 @@ sub _build_request {
             . _field( FID_TERMINAL_PWD, q{} )
             . _field( FID_PATRON_PWD,   $patron_password, { optional => 1 } );
     } elsif ( $message eq 'patron_information' ) {
-        return PATRON_INFO . LANGUAGE . $date . '          '    # summary, ten spaces, no detail requested
+        return
+              PATRON_INFO
+            . LANGUAGE
+            . $date
+            . _summary( $params->{summary} )
             . _field( FID_INST_ID,      $institution_id )
             . _field( FID_PATRON_ID,    $patron_id )
             . _field( FID_TERMINAL_PWD, q{} )
@@ -542,6 +557,33 @@ sub _parse_response {
     }
 
     return ( $fixed, \@fields );
+}
+
+=head3 _summary
+
+    my $summary = _summary('fine_items');
+
+Builds the ten character summary field of a patron information request: spaces,
+or a Y at the position of the detail that is asked for. Without a detail, the
+server leaves out the lists of items.
+
+=cut
+
+sub _summary {
+    my ($detail) = @_;
+
+    return ( q{ } x 10 ) unless defined $detail && length $detail;
+
+    my ($position) = grep { $SUMMARY_DETAILS[$_] eq $detail } 0 .. $#SUMMARY_DETAILS;
+    Koha::Exceptions::BadParameter->throw(
+        parameter => 'summary',
+        error     => "Unsupported summary '$detail'",
+    ) unless defined $position;
+
+    my @summary = (q{ }) x 10;
+    $summary[$position] = 'Y';
+
+    return join q{}, @summary;
 }
 
 =head3 _field

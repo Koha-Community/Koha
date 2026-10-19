@@ -233,6 +233,7 @@ sub test_message {
                 patron_id       => $body->{patron_id},
                 item_id         => $body->{item_id},
                 patron_password => $body->{patron_password},
+                summary         => $body->{summary},
                 request         => $body->{request},
             }
         );

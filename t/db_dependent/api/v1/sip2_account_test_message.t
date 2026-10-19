@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::MockModule;
 use Test::Mojo;
 
@@ -346,6 +346,46 @@ subtest 'test_message() patron password tests' => sub {
     $t->post_ok( "//$userid:$password\@$url" => json => { request => $raw } )
         ->status_is(400)
         ->json_like( '/error' => qr/GOOD or BAD/ );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'test_message() patron information detail tests' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my ( $account, $patron, $item ) = build_test_account();
+    $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => {
+                borrowernumber    => $patron->borrowernumber,
+                amount            => 2.5,
+                amountoutstanding => 2.5,
+                debit_type_code   => 'OVERDUE',
+                credit_type_code  => undef,
+                description       => 'Photocopies',
+                status            => undef,
+            },
+        }
+    );
+
+    my $password  = 'thePassword123';
+    my $librarian = build_librarian( $patron->branchcode, $password );
+    my $userid    = $librarian->userid;
+
+    my $url = "/api/v1/sip2/accounts/" . $account->sip_account_id . "/test_message";
+
+    $t->post_ok( "//$userid:$password\@$url" => json =>
+            { message => 'patron_information', patron_id => $patron->cardnumber, summary => 'fine_items' } )
+        ->status_is(200);
+    my @fines = grep { $_->{field} eq 'AV' } @{ $t->tx->res->json->{fields} };
+    is( scalar @fines, 1, 'The fines are in the response' );
+    like( $fines[0]->{value}, qr/Photocopies/, 'and are the fines of the patron' );
+
+    $t->post_ok( "//$userid:$password\@$url" => json =>
+            { message => 'patron_information', patron_id => $patron->cardnumber, summary => 'bogus' } )->status_is(400);
 
     $schema->storage->txn_rollback;
 };

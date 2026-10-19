@@ -87,6 +87,30 @@
                                         }}</span>
                                     </span>
                                 </li>
+                                <li v-if="needsSummary">
+                                    <label for="summary">{{
+                                        $__("Detail")
+                                    }}</label>
+                                    <span class="with-hint">
+                                        <select
+                                            id="summary"
+                                            v-model="form.summary"
+                                        >
+                                            <option
+                                                v-for="option in summaryOptions"
+                                                :key="option.value"
+                                                :value="option.value"
+                                            >
+                                                {{ option.label }}
+                                            </option>
+                                        </select>
+                                        <span class="hint">{{
+                                            $__(
+                                                "The list of items to include in the response."
+                                            )
+                                        }}</span>
+                                    </span>
+                                </li>
                             </ol>
                             <p v-if="hasDelimiter" class="error" role="alert">
                                 {{
@@ -228,6 +252,7 @@ export default {
             patron_id: "",
             item_id: "",
             patron_password: "",
+            summary: "",
         });
 
         const messageOptions = [
@@ -246,6 +271,34 @@ export default {
         // The message of an error without the "Error: " the http client adds
         const errorMessage = e =>
             (e?.message || String(e)).replace(/^Error: /, "");
+
+        // The detail a patron information request can ask for. The order is the
+        // order of the positions of the summary field of the request, the server
+        // reads the first Y only.
+        const summaryOptions = [
+            { value: "", label: $__("None") },
+            { value: "hold_items", label: $__("Hold items") },
+            { value: "overdue_items", label: $__("Overdue items") },
+            { value: "charged_items", label: $__("Charged items") },
+            { value: "fine_items", label: $__("Fine items") },
+            { value: "recall_items", label: $__("Recall items") },
+            { value: "unavailable_holds", label: $__("Unavailable holds") },
+        ];
+
+        // The ten character summary field: spaces, or a Y at the position of the
+        // detail that is asked for
+        const sipSummary = () => {
+            const position = summaryOptions.findIndex(
+                option => option.value && option.value === form.summary
+            );
+            return Array.from({ length: 10 }, (_, i) =>
+                i === position - 1 ? "Y" : " "
+            ).join("");
+        };
+
+        const needsSummary = computed(
+            () => form.message === "patron_information"
+        );
 
         const needsPatron = computed(() =>
             ["patron_status", "patron_information", "checkout"].includes(
@@ -311,7 +364,7 @@ export default {
                         "63" +
                         language +
                         date +
-                        "          " +
+                        sipSummary() +
                         sipField("AO", institution_id) +
                         sipField("AA", patron_id) +
                         sipField("AC", "") +
@@ -415,6 +468,8 @@ export default {
             messageOptions,
             needsPatron,
             needsItem,
+            needsSummary,
+            summaryOptions,
             hasDelimiter,
             rawRequest,
             rawEdited,

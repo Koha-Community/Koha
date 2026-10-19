@@ -346,6 +346,18 @@
               enum:
                 - GOOD
                 - BAD
+            summary:
+              type: string
+              description: >
+                The list of items a patron information message asks for in the
+                response. Without it the lists are left out.
+              enum:
+                - hold_items
+                - overdue_items
+                - charged_items
+                - fine_items
+                - recall_items
+                - unavailable_holds
             request:
               type: string
               description: A raw SIP2 request string to run as-is instead of building one

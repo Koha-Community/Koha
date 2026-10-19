@@ -79,9 +79,28 @@ describe("Account tester", () => {
         cy.get("#patron_password").select("");
         cy.get("#raw_request").invoke("val").should("not.contain", "AD");
 
+        // A patron information request asks for one list of items with the summary
+        cy.get("#summary").should("have.value", "");
+        cy.get("#raw_request")
+            .invoke("val")
+            .should("match", /^63001.{18} {10}AO/);
+        cy.get("#summary").select("fine_items");
+        cy.get("#raw_request")
+            .invoke("val")
+            .should("match", /^63001.{18} {3}Y {6}AO/);
+        cy.get("#summary").select("hold_items");
+        cy.get("#raw_request")
+            .invoke("val")
+            .should("match", /^63001.{18}Y {9}AO/);
+        cy.get("#summary").select("");
+        cy.get("#raw_request")
+            .invoke("val")
+            .should("match", /^63001.{18} {10}AO/);
+
         // Switching message type changes the fields and the request
         cy.get("#message").select("item_information");
         cy.get("#patron_id").should("not.exist");
+        cy.get("#summary").should("not.exist");
         cy.get("#item_id").type("39999000001234");
         cy.get("#raw_request").invoke("val").should("match", /^17/);
         cy.get("#raw_request")
