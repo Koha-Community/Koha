@@ -65,25 +65,27 @@
                                     <label for="patron_password">{{
                                         $__("Patron password")
                                     }}</label>
-                                    <select
-                                        id="patron_password"
-                                        v-model="form.patron_password"
-                                    >
-                                        <option value="">
-                                            {{ $__("Not sent") }}
-                                        </option>
-                                        <option value="GOOD">
-                                            {{ $__("Valid password") }}
-                                        </option>
-                                        <option value="BAD">
-                                            {{ $__("Invalid password") }}
-                                        </option>
-                                    </select>
-                                    <span class="hint">{{
-                                        $__(
-                                            "The patron's password is never checked, this chooses the outcome."
-                                        )
-                                    }}</span>
+                                    <span class="with-hint">
+                                        <select
+                                            id="patron_password"
+                                            v-model="form.patron_password"
+                                        >
+                                            <option value="">
+                                                {{ $__("Not sent") }}
+                                            </option>
+                                            <option value="GOOD">
+                                                {{ $__("Valid password") }}
+                                            </option>
+                                            <option value="BAD">
+                                                {{ $__("Invalid password") }}
+                                            </option>
+                                        </select>
+                                        <span class="hint">{{
+                                            $__(
+                                                "The patron's password is never checked, this chooses the outcome."
+                                            )
+                                        }}</span>
+                                    </span>
                                 </li>
                             </ol>
                             <p v-if="hasDelimiter" class="error" role="alert">
@@ -98,7 +100,7 @@
                         <fieldset class="rows">
                             <legend>{{ $__("Request message") }}</legend>
                             <ol>
-                                <li>
+                                <li class="stacked">
                                     <label for="raw_request">{{
                                         $__("Raw request")
                                     }}</label>
@@ -161,7 +163,7 @@
                     <fieldset v-if="result" class="rows">
                         <legend>{{ $__("Response") }}</legend>
                         <ol>
-                            <li>
+                            <li class="stacked">
                                 <span class="label">{{
                                     $__("Raw response")
                                 }}</span>
@@ -169,7 +171,7 @@
                                     result.response
                                 }}</pre>
                             </li>
-                            <li v-if="result.fixed">
+                            <li v-if="result.fixed" class="stacked">
                                 <span class="label">{{
                                     $__("Fixed fields")
                                 }}</span>
@@ -433,6 +435,38 @@ export default {
     white-space: pre-wrap;
     word-break: break-all;
     width: 100%;
+}
+
+/* A label above content that is as wide as the form, left aligned with it,
+   instead of the narrow right aligned label next to short inputs */
+li.stacked > label,
+li.stacked > span.label {
+    display: block;
+    float: none;
+    margin: 0 0 0.25em;
+    padding: 0;
+    text-align: left;
+    width: auto;
+}
+
+li.stacked > textarea,
+li.stacked > pre {
+    box-sizing: border-box;
+    display: block;
+    margin: 0;
+    width: 100%;
+}
+
+/* A hint under the field it explains, lined up with it and not wrapping back
+   under the label */
+.with-hint {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.with-hint > .hint {
+    display: block;
+    max-width: 20em;
 }
 
 table.sip-fields {

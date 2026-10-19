@@ -1,3 +1,13 @@
+// Where an element starts, to check that things line up
+function left(el: HTMLElement) {
+    return Math.round(el.getBoundingClientRect().left);
+}
+
+// How wide an element is, a label above its content is as wide as the content
+function width(el: HTMLElement) {
+    return Math.round(el.getBoundingClientRect().width);
+}
+
 function get_account() {
     return {
         sip_account_id: 1,
@@ -44,6 +54,20 @@ describe("Account tester", () => {
         cy.get("#raw_request")
             .invoke("val")
             .should("contain", "AA23529000000001|");
+
+        // The labels sit above their content and line up with it, the hint of the
+        // password is under the choice it explains
+        cy.get("label[for=raw_request]").then($label => {
+            cy.get("#raw_request").then($request => {
+                expect(left($label[0]), "raw request label").to.equal(
+                    left($request[0])
+                );
+            });
+        });
+        cy.get("#patron_password").then($select => {
+            const hint = $select[0].parentElement.querySelector(".hint");
+            expect(left(hint), "password hint").to.equal(left($select[0]));
+        });
 
         // The patron password is a choice of outcome, a real one is never typed
         cy.get("#patron_password").should("have.prop", "tagName", "SELECT");
@@ -115,6 +139,14 @@ describe("Account tester", () => {
             .its("request.body")
             .should("have.property", "request");
 
+        // The labels of the response sit above what they label, as wide as it
+        cy.get("#sip2_account_tester span.label").each($label => {
+            const content = $label[0].parentElement.querySelector("pre");
+            expect(left($label[0]), $label.text()).to.equal(left(content));
+            expect(width($label[0]), $label.text() + " width").to.equal(
+                width(content)
+            );
+        });
         cy.get("table.sip-fields").contains("td", "AA - Patron identifier");
         cy.get("table.sip-fields").contains("td", "A Patron");
         cy.get("#sip2_account_tester").contains("64              001AAA1|");
