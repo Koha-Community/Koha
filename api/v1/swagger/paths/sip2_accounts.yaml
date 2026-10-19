@@ -304,10 +304,12 @@
     description: >
       Generates the SIP2 response a saved account would return for the given
       message, without going through a real SIP session and without needing the
-      SIP account password. Everything runs in a transaction that is rolled
-      back, so no data is changed. Only patrons the logged in user can see may be
-      used, and when IndependentBranches is enabled, only items from the logged
-      in user's library.
+      SIP account password. The message is handled in a transaction that is
+      rolled back, so database changes are undone. Plugin hooks still run, and a
+      wrong patron password is not counted towards a lockout. Only patrons the
+      logged in user can see may be used, and when IndependentBranches is
+      enabled, only items from the logged in user's library. Every test is
+      logged.
     consumes:
       - application/json
     produces:

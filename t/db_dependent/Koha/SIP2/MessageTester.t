@@ -18,12 +18,17 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 9;
+use Test::More tests => 14;
 use Test::Exception;
+use Test::MockModule;
+use Try::Tiny qw( catch try );
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
+use Koha::BackgroundJob;
+use Koha::Caches;
+use Koha::Logger;
 use Koha::Database;
 use Koha::Checkouts;
 use Koha::SIP2::MessageTester;
@@ -62,6 +67,7 @@ sub build_test_account {
             class => 'Koha::SIP2::Accounts',
             value => {
                 sip_institution_id      => $institution->sip_institution_id,
+                login_id                => 'sip' . int( rand(1e9) ),
                 encoding                => 'utf8',
                 allow_fields            => '',
                 hide_fields             => '',
@@ -71,6 +77,14 @@ sub build_test_account {
                 show_checkin_message    => 0,
                 show_outstanding_amount => 0,
             },
+        }
+    );
+
+    # The patron the SIP account logs in as
+    $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { userid => $account->login_id, branchcode => $library->branchcode },
         }
     );
 
@@ -286,6 +300,177 @@ subtest 'run() access restrictions' => sub {
         substr( $result->{response}, 0, 2 ), '18',
         'run() allows an item from the librarian\'s library when IndependentBranches is enabled'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'run() isolation and clean up' => sub {
+    plan tests => 18;
+
+    $schema->storage->txn_begin;
+
+    my ( $account, $patron, $item ) = build_test_account();
+    my $tester = Koha::SIP2::MessageTester->new( { account => $account } );
+
+    my $login_patron  = Koha::Patrons->find( { userid => $account->login_id } );
+    my $institution   = $account->institution->name;
+    my $original_conn = \&Koha::BackgroundJob::connect;
+
+    # What the handler sees while it runs
+    my %seen;
+    my $handler = Test::MockModule->new('C4::SIP::Sip::MsgType');
+    $handler->mock(
+        handle => sub {
+            my $userenv = C4::Context->userenv;
+            %seen = (
+                number           => $userenv->{number},
+                branch           => $userenv->{branch},
+                connection       => scalar Koha::BackgroundJob->connect,
+                protocol_version => $C4::SIP::Sip::protocol_version,
+            );
+            $C4::SIP::Sip::last_response = '24' . ( ' ' x 35 );
+            return;
+        }
+    );
+
+    # The state we expect to get back untouched, the staff member running the test
+    my $staff = $builder->build_object(
+        { class => 'Koha::Patrons', value => { branchcode => $patron->branchcode, flags => 0 } } );
+    t::lib::Mocks::mock_userenv( { patron => $staff } );
+    $C4::SIP::Sip::protocol_version = 'sentinel_protocol';
+    $C4::SIP::Sip::error_detection  = 'sentinel_error_detection';
+    $C4::SIP::Sip::last_response    = 'sentinel_last_response';
+    local $ENV{MESSAGE_TESTER_SENTINEL} = 'untouched';
+    my %env_before = %ENV;
+    my $depth      = $schema->storage->transaction_depth;
+
+    my $check_state_restored = sub {
+        my ($label) = @_;
+        is( $C4::SIP::Sip::protocol_version, 'sentinel_protocol',        "$label: protocol version restored" );
+        is( $C4::SIP::Sip::error_detection,  'sentinel_error_detection', "$label: error detection restored" );
+        is( $C4::SIP::Sip::last_response,    'sentinel_last_response',   "$label: last response restored" );
+        is( C4::Context->userenv->{number},  $staff->borrowernumber,     "$label: userenv restored" );
+        is_deeply( \%ENV, \%env_before, "$label: environment restored" );
+        is( $schema->storage->transaction_depth, $depth, "$label: transaction closed" );
+    };
+
+    $tester->run( { message => 'patron_status', patron_id => $patron->cardnumber } );
+
+    is( $seen{number},           $login_patron->borrowernumber, 'The handler ran as the SIP account patron' );
+    is( $seen{branch},           $institution,                  'The handler ran at the institution library' );
+    is( $seen{protocol_version}, 2,                             'The handler ran with protocol version 2' );
+    ok( !$seen{connection}, 'No message broker connection while the handler ran' );
+    $check_state_restored->('after success');
+
+    ok( \&Koha::BackgroundJob::connect == $original_conn, 'The broker connection method is back' );
+
+    # A handler that dies
+    $handler->mock( handle => sub { die "handler blew up\n" } );
+    throws_ok { $tester->run( { message => 'patron_status', patron_id => $patron->cardnumber } ) }
+    qr/handler blew up/, 'A handler error is thrown';
+    $check_state_restored->('after handler error');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'run() forgets the last seen activity it caused' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my ( $account, $patron, $item ) = build_test_account();
+    my $tester = Koha::SIP2::MessageTester->new( { account => $account } );
+
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'connection' );
+
+    my $cache = Koha::Caches->get_instance;
+    my $key   = 'track_activity_' . $patron->borrowernumber;
+    $cache->clear_from_cache($key);
+
+    $tester->run( { message => 'patron_status', patron_id => $patron->cardnumber } );
+    ok( !$cache->get_from_cache($key), 'No activity cache entry was left after the test' );
+
+    # A real connection afterwards must still be recorded
+    $patron->discard_changes;
+    $patron->update_lastseen('connection');
+    ok( $cache->get_from_cache($key), 'A real activity is still tracked afterwards' );
+    $cache->clear_from_cache($key);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'run() needs the patron the account logs in as' => sub {
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my ( $account, $patron, $item ) = build_test_account();
+    Koha::Patrons->find( { userid => $account->login_id } )->delete;
+
+    throws_ok {
+        Koha::SIP2::MessageTester->new( { account => $account } )
+            ->run( { message => 'patron_status', patron_id => $patron->cardnumber } )
+    }
+    'Koha::Exceptions::ObjectNotFound', 'run() throws when the account has no login patron';
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'run() reports a rollback that failed' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my ( $account, $patron, $item ) = build_test_account();
+    my $tester = Koha::SIP2::MessageTester->new( { account => $account } );
+
+    my $depth = $schema->storage->transaction_depth;
+    my $error;
+    {
+        no warnings 'redefine';
+
+        # Only the tester's own rollback fails, others ( the template
+        # processing rolls back too ) carry on as usual
+        my $real_rollback = \&DBIx::Class::Schema::txn_rollback;
+        local *DBIx::Class::Schema::txn_rollback = sub {
+            die "rollback exploded\n" if caller eq 'Koha::SIP2::MessageTester';
+            goto &$real_rollback;
+        };
+        try { $tester->run( { message => 'patron_status', patron_id => $patron->cardnumber } ) }
+        catch { $error = $_ };
+    }
+
+    isa_ok( $error, 'Koha::Exception', 'A failed rollback is thrown' );
+    like( $error->error, qr/Could not roll back the test transaction: rollback exploded/, 'The cause is reported' );
+
+    # Undo what the failed rollback left open ( the tester's and our own )
+    $schema->storage->txn_rollback while $schema->storage->transaction_depth >= $depth;
+    is( $schema->storage->transaction_depth, $depth - 1, 'Test transaction cleaned up' );
+};
+
+subtest 'run() logs each test where the web server keeps it' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my ( $account, $patron, $item ) = build_test_account();
+    my $tester = Koha::SIP2::MessageTester->new( { account => $account } );
+
+    # Under Plack Koha::Logger prefixes the category with plack-, and plack-api
+    # only logs from WARN, so the line is lost unless the prefix is turned off
+    my $context = Test::MockModule->new('C4::Context');
+    $context->mock( psgi_env => sub { return 1 } );
+
+    my $real_get = Koha::Logger->can('get');
+    my @loggers;
+    my $logger = Test::MockModule->new('Koha::Logger');
+    $logger->mock( get => sub { my $l = $real_get->(@_); push @loggers, $l; return $l } );
+
+    $tester->run( { message => 'patron_status', patron_id => $patron->cardnumber } );
+
+    my @tester_loggers = grep { ( $_->{cat} // q{} ) =~ /sip2\.message_tester/ } @loggers;
+    is( scalar @tester_loggers,    1,                         'The test is logged once' );
+    is( $tester_loggers[0]->{cat}, 'api.sip2.message_tester', 'under the api category, not plack-api' );
 
     $schema->storage->txn_rollback;
 };

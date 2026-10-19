@@ -59,6 +59,7 @@ sub build_test_account {
             class => 'Koha::SIP2::Accounts',
             value => {
                 sip_institution_id      => $institution->sip_institution_id,
+                login_id                => 'sip' . int( rand(1e9) ),
                 encoding                => 'utf8',
                 allow_fields            => '',
                 hide_fields             => '',
@@ -68,6 +69,14 @@ sub build_test_account {
                 show_checkin_message    => 0,
                 show_outstanding_amount => 0,
             },
+        }
+    );
+
+    # The patron the SIP account logs in as
+    $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { userid => $account->login_id, branchcode => $library->branchcode },
         }
     );
 

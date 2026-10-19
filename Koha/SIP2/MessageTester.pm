@@ -17,7 +17,7 @@ package Koha::SIP2::MessageTester;
 
 use Modern::Perl;
 
-use Try::Tiny qw( catch finally try );
+use Try::Tiny qw( catch try );
 use UNIVERSAL::require;
 
 use C4::Circulation qw( barcodedecode );
@@ -27,10 +27,15 @@ use C4::SIP::Sip::Constants qw( :all );
 use C4::SIP::Sip::Configuration;
 use C4::SIP::Sip::MsgType;
 
+use Koha::BackgroundJob;
 use Koha::Database;
+use Koha::Exception;
 use Koha::Exceptions;
 use Koha::Exceptions::Patron;
 use Koha::Items;
+use Koha::Libraries;
+use Koha::Logger;
+use Koha::Patron;
 use Koha::Patrons;
 
 # The language field sent in every request. '001' is English.
@@ -68,8 +73,19 @@ to the real message handlers, and returns the generated response. This lets a
 librarian check the value of the custom template fields configured on an account
 without knowing the SIP account password.
 
-The whole thing runs inside a transaction that is always rolled back, so even
-checkout and checkin messages don't actually do anything.
+The handlers run inside a transaction that is always rolled back, so database
+changes made by even checkout and checkin messages are undone. That is the only
+thing that is undone: plugin hooks ( for instance after_circ_action ) still run,
+and anything a plugin sends elsewhere is not recalled. Publishing of background
+job messages is suppressed while the handler runs and the "last seen" activity
+is not recorded, but the rollback also means a wrong patron password is never
+counted against the patron, so the lockout that the real SIP server applies does
+not happen here. Every test is logged ( who, which account, which message ) so it
+can be audited.
+
+The handlers run with the session of the SIP account's own user and institution,
+as they do after a real SIP login, not the session of the staff member running
+the test.
 
 =head1 API
 
@@ -137,8 +153,12 @@ sub run {
         $request = $self->_build_request( $server, $message, $params );
     }
 
-    # Run the handler in a transaction we always roll back so nothing is
-    # actually changed, even for checkout and checkin.
+    # The session a real SIP login has. Found before anything is run so the test
+    # fails early if the account has no patron to log in as.
+    my $sip_userenv = $self->_sip_userenv($server);
+
+    $self->_log_test($request);
+
     my $schema   = Koha::Database->new->schema;
     my $response = q{};
     my $error;
@@ -148,18 +168,28 @@ sub run {
     # scalar ). Set them in place and restore the previous values afterwards.
     # Protocol version 2 is required for the patron and item information
     # messages, error detection off keeps the response free of a checksum.
-    my $saved_protocol_version = $C4::SIP::Sip::protocol_version;
-    my $saved_error_detection  = $C4::SIP::Sip::error_detection;
-    my $saved_last_response    = $C4::SIP::Sip::last_response;
-    $C4::SIP::Sip::protocol_version = 2;
-    $C4::SIP::Sip::error_detection  = 0;
-    $C4::SIP::Sip::last_response    = q{};
+    my @saved_globals = (
+        $C4::SIP::Sip::protocol_version, $C4::SIP::Sip::error_detection,
+        $C4::SIP::Sip::last_response,    $C4::SIP::Sip::field_delimiter
+    );
+    my $saved_userenv = C4::Context->userenv;
 
+    # Run the handler in a transaction we always roll back so nothing is
+    # actually changed, even for checkout and checkin. Begin it before any
+    # global is touched, so a failure to begin leaves nothing to undo.
     $schema->txn_begin;
+
     try {
+        $C4::SIP::Sip::protocol_version = 2;
+        $C4::SIP::Sip::error_detection  = 0;
+        $C4::SIP::Sip::last_response    = q{};
+
         # Checked here rather than up front because parsing the patron and item
-        # information requests needs the protocol version set above.
+        # information requests needs the protocol version set above. It must
+        # run before the session below, it depends on who is logged in.
         $self->_check_request($request);
+
+        C4::Context->set_userenv( @{$sip_userenv} );
 
         # The handler prints the response to STDOUT and stashes it in
         # $last_response. Capture STDOUT so it doesn't leak into the worker's
@@ -171,17 +201,42 @@ sub run {
 
         local %ENV = %ENV;
 
+        # Things that reach outside the transaction, which rolling it back
+        # would not undo.
+        no warnings 'redefine';
+
+        # Background jobs are published to the message broker as soon as they
+        # are enqueued, the workers would be told about jobs that never
+        # existed. Without a connection enqueue only stores the job row, which
+        # we roll back.
+        local *Koha::BackgroundJob::connect = sub { return };
+
+        # update_lastseen stores the date, which is rolled back, and remembers
+        # in the cache that it did so for the day, which is not. A real
+        # connection afterwards would then skip the update.
+        local *Koha::Patron::update_lastseen = sub { return $_[0] };
+
         C4::SIP::Sip::MsgType::handle( $request, $server, q{} );
 
         $response = $C4::SIP::Sip::last_response;
     } catch {
         $error = $_;
-    } finally {
-        $C4::SIP::Sip::protocol_version = $saved_protocol_version;
-        $C4::SIP::Sip::error_detection  = $saved_error_detection;
-        $C4::SIP::Sip::last_response    = $saved_last_response;
-        $schema->txn_rollback;
     };
+
+    # Put everything back with plain statements, not a finally block: an error
+    # thrown from a finally block is swallowed by Try::Tiny, and a rollback that
+    # silently failed would leave the changes in place.
+    (
+        $C4::SIP::Sip::protocol_version, $C4::SIP::Sip::error_detection,
+        $C4::SIP::Sip::last_response,    $C4::SIP::Sip::field_delimiter
+    ) = @saved_globals;
+    $self->_restore_userenv($saved_userenv);
+
+    my $rollback_error;
+    try { $schema->txn_rollback } catch { $rollback_error = $_ };
+
+    Koha::Exception->throw( error => "Could not roll back the test transaction: $rollback_error" )
+        if $rollback_error;
 
     die $error if $error;
 
@@ -196,6 +251,83 @@ sub run {
 }
 
 =head2 Internal methods
+
+=head3 _sip_userenv
+
+Returns the arguments for C4::Context->set_userenv that describe the session a
+real SIP login would have had: the patron the account logs in as, at the
+institution's library.
+
+=cut
+
+sub _sip_userenv {
+    my ( $self, $server ) = @_;
+
+    my $login_id = $self->{account}->login_id;
+    my $patron   = Koha::Patrons->find( { userid => $login_id } )
+        or Koha::Exceptions::ObjectNotFound->throw(
+        "No patron with the userid '$login_id' that the SIP account logs in as");
+
+    my $institution_id = $server->{account}->{institution};
+    my $library        = Koha::Libraries->find($institution_id);
+
+    return [
+        $patron->borrowernumber, $patron->userid, $patron->cardnumber,                   $patron->firstname,
+        $patron->surname,        $institution_id, $library ? $library->branchname : q{}, $patron->flags,
+        $patron->email,
+    ];
+}
+
+=head3 _restore_userenv
+
+Puts back the session that was in place before the test.
+
+=cut
+
+sub _restore_userenv {
+    my ( $self, $saved ) = @_;
+
+    if ($saved) {
+        C4::Context->set_userenv(
+            @{$saved}{
+                qw( number id cardnumber firstname surname branch branchname flags emailaddress
+                    shibboleth desk_id desk_name register_id register_name session_id )
+            }
+        );
+    } else {
+        C4::Context->unset_userenv;
+    }
+
+    return;
+}
+
+=head3 _log_test
+
+Logs who ran which message against which account. This is done outside the
+transaction that is rolled back, so the record of a test always survives. The
+patron and item identifiers are left out on purpose.
+
+The prefix that Koha::Logger adds under Plack is turned off: the default
+configuration only logs plack-api from WARN, so an INFO line would be dropped
+for every request the web server handles.
+
+=cut
+
+sub _log_test {
+    my ( $self, $request ) = @_;
+
+    my $userenv = C4::Context->userenv;
+    Koha::Logger->get( { interface => 'api', category => 'sip2.message_tester', prefix => 0 } )->info(
+        sprintf(
+            'SIP2 message tester: user %s ran message %s against account %s',
+            $userenv ? $userenv->{number} : 'unknown',
+            substr( $request, 0, 2 ),
+            $self->{account}->sip_account_id,
+        )
+    );
+
+    return;
+}
 
 =head3 _build_server
 
