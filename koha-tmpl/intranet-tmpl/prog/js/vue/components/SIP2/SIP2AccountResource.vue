@@ -4,7 +4,6 @@
 
 <script>
 import { inject } from "vue";
-import { useRouter } from "vue-router";
 import BaseResource from "./../BaseResource.vue";
 import { useBaseResource } from "../../composables/base-resource.js";
 import { storeToRefs } from "pinia";
@@ -24,8 +23,6 @@ export default {
     setup(props) {
         const SIP2Store = inject("SIP2Store");
         const { sysprefs } = storeToRefs(SIP2Store);
-
-        const router = useRouter();
 
         const explodeValues = (value, delimiter) => {
             if (!value) return null;
@@ -907,14 +904,12 @@ export default {
                 show: can_test_sip2_messages
                     ? [
                           {
-                              onClick: () =>
-                                  router.push({
-                                      name: "SIP2AccountsTest",
-                                      params: {
-                                          sip_account_id:
-                                              resource.sip_account_id,
-                                      },
-                                  }),
+                              to: {
+                                  name: "SIP2AccountsTest",
+                                  params: {
+                                      sip_account_id: resource.sip_account_id,
+                                  },
+                              },
                               icon: "flask",
                               title: $__("Test SIP2 messages"),
                               index: 2,
@@ -1048,7 +1043,6 @@ export default {
         return {
             ...baseResource,
             tableOptions,
-            getSIPFields,
             explodeValues,
             onFormSave,
             afterResourceFetch,
