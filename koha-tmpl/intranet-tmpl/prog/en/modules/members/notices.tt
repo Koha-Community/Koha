@@ -162,6 +162,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
+    [% Asset.js("lib/dompurify/purify.min.js") | $raw %]
     <script>
         $(document).ready(function() {
             $("#noticestable").dataTable($.extend(true, {}, dataTablesDefaults, {
@@ -174,12 +175,13 @@
                 var title = $(this).text();
                 var noticeid = $(this).data("noticeid");
                 var body = $("#notice" + noticeid ).attr("srcdoc");
+                var sanitized = DOMPurify.sanitize(body, { WHOLE_DOCUMENT: true });
                 if( $("#resend_notice" + noticeid ).length ){
                     $("#resend-notice").show();
                 }
                 $("#resend-notice").data("noticeid", noticeid );
                 $("#noticeModalLabel").text( title );
-                $("#noticeModal .modal-body").html( body );
+                $("#noticeModal .modal-body").html( sanitized );
                 $("#noticeModal").modal("show");
             });
 
