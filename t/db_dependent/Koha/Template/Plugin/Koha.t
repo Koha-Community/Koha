@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use Template::Context;
 use Template::Stash;
@@ -140,6 +140,25 @@ subtest 'GenerateCSRF - Near-expired cached token is regenerated' => sub {
     );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'GenerateCSRF - No session' => sub {
+    plan tests => 3;
+
+    my $stash   = Template::Stash->new( {} );
+    my $context = Template::Context->new( { STASH => $stash } );
+    my $plugin  = Koha::Template::Plugin::Koha->new($context);
+
+    Koha::Cache::Memory::Lite->flush();
+
+    # A warning here is caught by Test::NoWarnings
+    my @returned = $plugin->GenerateCSRF;
+    is( scalar @returned,             0,     'Nothing is returned when the template is rendered without a session' );
+    is( scalar $plugin->GenerateCSRF, undef, 'No token in scalar context either' );
+    ok(
+        !Koha::Cache::Memory::Lite->get_instance->get_from_cache('CSRF-TOKEN-'),
+        'Nothing is cached under a session-less key'
+    );
 };
 
 subtest 'CSPNonce' => sub {

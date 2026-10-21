@@ -139,12 +139,17 @@ sub Version {
 
 Generate a new CSRF token.
 
+The token is bound to the session, so nothing is returned when the template is
+rendered without one, as L<Koha::Token/generate_csrf> does.
+
 =cut
 
 sub GenerateCSRF {
     my ($self) = @_;
 
-    my $session_id   = $self->{_CONTEXT}->stash->{sessionID};
+    my $session_id = $self->{_CONTEXT}->stash->{sessionID};
+    return unless $session_id;
+
     my $memory_cache = Koha::Cache::Memory::Lite->get_instance;
     my $cache_key    = "CSRF-TOKEN-" . $session_id;
     my $cached       = $memory_cache->get_from_cache($cache_key);
