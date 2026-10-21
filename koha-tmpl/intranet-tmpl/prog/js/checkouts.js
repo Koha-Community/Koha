@@ -447,7 +447,7 @@ function LoadIssuesTable() {
                                 "</span>";
 
                             span_style = "display: none";
-                            span_class = "renewals-allowed";
+                            span_class = "renewals-allowed-too_soon";
                         } else if (oObj.can_renew_error == "auto_too_late") {
                             msg +=
                                 "<span class='renewals-disabled'>" +
@@ -1421,12 +1421,14 @@ $(document).ready(function () {
                 if (this.checked) {
                     if (AllowRenewalLimitOverride) {
                         $(".renewals-allowed-too_many").show();
+                        $(".renewals-allowed-too_soon").show();
                     }
                     if (AllowRenewalOnHoldOverride) {
                         $(".renewals-allowed-on_reserve").show();
                     }
                 } else {
                     $(".renewals-allowed-too_many").hide();
+                    $(".renewals-allowed-too_soon").hide();
                     $(".renewals-allowed-on_reserve").hide();
                 }
             })
