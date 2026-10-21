@@ -141,9 +141,11 @@ sub score_for_path {
 
     return 1 unless $path;
 
+    # Plack runs the first script in the path and passes anything after it along as path info,
+    # so score that script, otherwise 'opac-search.pl/' or 'opac-search.pl/foo' would score 1
     my ($script) = $path =~ m{
-        ( [^/]+ )    # the last path segment (the script name)
-        \z           # anchored to the end of the path
+        ( [^/\\]+ \.pl )    # the first path segment naming a script
+        (?: [/\\] | \z )    # followed by extra path info or the end of the path
     }x;
 
     return 1 unless $script;

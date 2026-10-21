@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use t::lib::Mocks;
 
@@ -63,6 +63,26 @@ subtest "score_for_path() default weights" => sub {
     is( $mw->score_for_path('/cgi-bin/koha/opac-reserve.pl'), 1, 'unmapped script gets baseline 1' );
     is( $mw->score_for_path(''),                              1, 'empty path gets baseline 1' );
     is( $mw->score_for_path(undef),                           1, 'undef path gets baseline 1' );
+};
+
+subtest "extra path info after the script doesn't change the score" => sub {
+    plan tests => 6;
+
+    my $mw = Koha::Middleware::ComplexityScore->new( app => $app );
+    $mw->prepare_app;
+
+    is( $mw->score_for_path('/cgi-bin/koha/opac-search.pl/'), 25, 'a trailing slash still scores the script' );
+    is(
+        $mw->score_for_path('/cgi-bin/koha/opac-search.pl/foo'), 25,
+        'a trailing path segment still scores the script'
+    );
+    is(
+        $mw->score_for_path('/cgi-bin/koha/opac-search.pl/opac-main.pl'), 25,
+        'a cheaper script name in the path info does not replace the script that runs'
+    );
+    is( $mw->score_for_path('/cgi-bin/koha/opac-search.pl\\foo'), 25, 'a backslash separator still scores the script' );
+    is( $mw->score_for_path('/opac/opac-detail.pl/'), 20, 'packaged /opac/ path shape with a trailing slash' );
+    is( $mw->score_for_path('/cgi-bin/koha/svc/shelfbrowser.pl/'), 2, 'svc script with a trailing slash' );
 };
 
 subtest "koha-conf.xml weights override and extend the defaults" => sub {
