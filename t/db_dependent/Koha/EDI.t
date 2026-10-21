@@ -3932,7 +3932,7 @@ subtest 'duplicate_order_email_notifications' => sub {
 };
 
 subtest 'unparsable interchanges' => sub {
-    plan tests => 20;
+    plan tests => 22;
 
     $schema->storage->txn_begin;
 
@@ -3995,14 +3995,24 @@ subtest 'unparsable interchanges' => sub {
         1, 'Invoice was created from the syntax 4 interchange'
     );
 
-    # Missing service string advice, followed by a good message
+    # No service string advice: the default separators are assumed
     my $no_una = $build_message->( 'INVOICE', $body->('NOUNA001') );
-    lives_ok { process_invoice($no_una) } 'Invoice without UNA does not die';
+    process_invoice($no_una);
     $no_una->discard_changes;
-    is( $no_una->status,                'error', 'Invoice without UNA is marked error' );
-    is( $no_una->edifact_errors->count, 1,       'An error is recorded' );
+    is( $no_una->status, 'received', 'Invoice with no UNA is processed with the default separators' );
+    is(
+        $schema->resultset('Aqinvoice')->search( { invoicenumber => 'NOUNA001' } )->count,
+        1, 'and the invoice was created'
+    );
+
+    # Not an interchange at all, followed by a good message
+    my $garbage = $build_message->( 'INVOICE', 'this is not an interchange' );
+    lives_ok { process_invoice($garbage) } 'Invoice that is not an interchange does not die';
+    $garbage->discard_changes;
+    is( $garbage->status,                'error', 'Invoice that is not an interchange is marked error' );
+    is( $garbage->edifact_errors->count, 1,       'An error is recorded' );
     like(
-        $no_una->edifact_errors->first->details,
+        $garbage->edifact_errors->first->details,
         qr/File does not start with a Service String Advice/, 'with the reason'
     );
     $logger->error_like( qr/not processed/, 'and the failure is logged' );
@@ -4057,15 +4067,15 @@ subtest 'unparsable interchanges' => sub {
     }
 
     # Quotes and order responses are handled the same way
-    my $quote = $build_message->( 'QUOTE', $body->('Q001') );
-    lives_ok { process_quote($quote) } 'Quote without UNA does not die';
+    my $quote = $build_message->( 'QUOTE', 'this is not an interchange' );
+    lives_ok { process_quote($quote) } 'Quote that is not an interchange does not die';
     $quote->discard_changes;
-    is( $quote->status, 'error', 'Quote without UNA is marked error' );
+    is( $quote->status, 'error', 'Quote that is not an interchange is marked error' );
 
-    my $ordrsp = $build_message->( 'ORDRSP', $body->('R001') );
+    my $ordrsp = $build_message->( 'ORDRSP', 'this is not an interchange' );
     process_ordrsp($ordrsp);
     $ordrsp->discard_changes;
-    is( $ordrsp->status, 'error', 'Order response without UNA is marked error' );
+    is( $ordrsp->status, 'error', 'Order response that is not an interchange is marked error' );
 
     $schema->storage->txn_rollback;
 };

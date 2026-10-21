@@ -136,12 +136,16 @@ sub _init {
     my $msg = shift;
     Koha::Exceptions::FileNotParsed->throw( message => 'Empty transmission' ) if !$msg;
 
-    if ( $msg !~ s/^UNA(.{6})// ) {
-        Koha::Exceptions::FileNotParsed->throw( message => 'File does not start with a Service String Advice' );
+    if ( $msg =~ s/^UNA(.{6})// ) {
+        my $ssa = $1;
+        Koha::Exceptions::FileNotParsed->throw( message => "Unsupported Service String Advice [$ssa]" )
+            unless service_string_advice($ssa);
+    } elsif ( $msg !~ /^UNB/ ) {
+        Koha::Exceptions::FileNotParsed->throw(
+            message => 'File does not start with a Service String Advice or an Interchange Header' );
     }
-    my $ssa = $1;
-    Koha::Exceptions::FileNotParsed->throw( message => "Unsupported Service String Advice [$ssa]" )
-        unless service_string_advice($ssa);
+
+    # An interchange may omit the UNA, in which case the default separators apply
 
     my $segments = segmentize($msg);
     Koha::Exceptions::FileNotParsed->throw( message => 'Interchange contains no messages' )
@@ -370,8 +374,11 @@ Edifact - Edifact message handler
      instantiate the Edifact parser, requires either to be passed an in-memory
      edifact message as transmission or a filename which it will read on creation
 
-     Throws Koha::Exceptions::FileNotParsed if the transmission is empty, does not
-     start with a Service String Advice, declares one that is not supported, or
+     If the transmission has no Service String Advice but starts with an
+     Interchange Header, the default separators are assumed.
+
+     Throws Koha::Exceptions::FileNotParsed if the transmission is empty, starts
+     with neither, declares a Service String Advice that is not supported, or
      contains no messages
 
 =head2 interchange_header

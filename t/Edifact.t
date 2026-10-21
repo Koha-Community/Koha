@@ -316,7 +316,7 @@ if ( $lin_related_segment && $lin_segment ) {
 }
 
 subtest 'service string advice' => sub {
-    plan tests => 10;
+    plan tests => 11;
 
     my $body =
           q{UNB+UNOC:3+SENDER+RECIPIENT+200101:1200+1'}
@@ -337,9 +337,14 @@ subtest 'service string advice' => sub {
     'Koha::Exceptions::FileNotParsed', 'Service string advice with unsupported separators throws';
     like( $@->message, qr/Unsupported Service String Advice \[;\+\.\? '\]/, 'and says which one' );
 
-    throws_ok { Koha::Edifact->new( { transmission => $body } ) }
-    'Koha::Exceptions::FileNotParsed', 'An interchange with no service string advice throws';
-    like( $@->message, qr/does not start with a Service String Advice/, 'and says why' );
+    is(
+        scalar @{ Koha::Edifact->new( { transmission => $body } )->message_array },
+        1, 'An interchange with no service string advice is read with the default separators'
+    );
+
+    throws_ok { Koha::Edifact->new( { transmission => q{UNH+1+INVOIC:D:96A:UN:EAN008'} } ) }
+    'Koha::Exceptions::FileNotParsed', 'A transmission starting with neither UNA nor UNB throws';
+    like( $@->message, qr/does not start with a Service String Advice or an Interchange Header/, 'and says why' );
 
     throws_ok { Koha::Edifact->new( { transmission => q{} } ) }
     'Koha::Exceptions::FileNotParsed', 'An empty transmission throws';
