@@ -20,8 +20,9 @@ package Koha::Edifact;
 use strict;
 use warnings;
 use File::Slurp qw( read_file );
-use Carp        qw( carp croak );
+use Carp        qw( carp );
 use JSON        qw( encode_json );
+use Koha::Exceptions;
 use Koha::Edifact::Segment;
 use Koha::Edifact::Message;
 
@@ -133,19 +134,19 @@ sub message_type {
 
 sub _init {
     my $msg = shift;
-    if ( !$msg ) {
-        return;
-    }
-    if ( $msg =~ s/^UNA(.{6})// ) {
-        if ( service_string_advice($1) ) {
-            return segmentize($msg);
+    Koha::Exceptions::FileNotParsed->throw( message => 'Empty transmission' ) if !$msg;
 
-        }
-        return;
-    } else {
-        my $s = substr $msg, 10;
-        croak "File does not start with a Service string advice :$s";
+    if ( $msg !~ s/^UNA(.{6})// ) {
+        Koha::Exceptions::FileNotParsed->throw( message => 'File does not start with a Service String Advice' );
     }
+    my $ssa = $1;
+    Koha::Exceptions::FileNotParsed->throw( message => "Unsupported Service String Advice [$ssa]" )
+        unless service_string_advice($ssa);
+
+    my $segments = segmentize($msg);
+    Koha::Exceptions::FileNotParsed->throw( message => 'Interchange contains no messages' )
+        unless grep { $_->tag eq 'UNH' } @{$segments};
+    return $segments;
 }
 
 # return an array of Message objects
@@ -289,10 +290,14 @@ sub service_string_advice {
     # At present this just validates that the ssa
     # is standard Edifact
     # TBD reset the seps if non standard
-    if ( $ssa ne q{:+.? '} ) {
-        carp " Non standard Service String Advice [$ssa]";
-        return;
-    }
+
+    # The fifth character is reserved (a space) in syntax version 3 and is
+    # the repetition separator in version 4. Nothing here splits on it, so
+    # ignore what is declared rather than discarding the interchange.
+    my $separators = $ssa;
+    substr( $separators, 4, 1, q{ } ) if length $separators > 4;
+
+    return if $separators ne q{:+.? '};
 
     # else use default separators
     return 1;
@@ -364,6 +369,10 @@ Edifact - Edifact message handler
 
      instantiate the Edifact parser, requires either to be passed an in-memory
      edifact message as transmission or a filename which it will read on creation
+
+     Throws Koha::Exceptions::FileNotParsed if the transmission is empty, does not
+     start with a Service String Advice, declares one that is not supported, or
+     contains no messages
 
 =head2 interchange_header
 

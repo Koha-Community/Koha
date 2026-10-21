@@ -3,8 +3,9 @@ use strict;
 use warnings;
 use FindBin qw( $Bin );
 
+use Test::Exception;
 use Test::NoWarnings;
-use Test::More tests => 75;
+use Test::More tests => 76;
 use JSON qw( decode_json );
 use Koha::EDI;
 
@@ -313,3 +314,38 @@ ok( $lin_related_segment, 'Found line-related segment with line_id' );
 if ( $lin_related_segment && $lin_segment ) {
     is( $lin_related_segment->{line_id}, $lin_segment->{line_id}, 'Line-related segment has matching line_id' );
 }
+
+subtest 'service string advice' => sub {
+    plan tests => 10;
+
+    my $body =
+          q{UNB+UNOC:3+SENDER+RECIPIENT+200101:1200+1'}
+        . q{UNH+1+INVOIC:D:96A:UN:EAN008'BGM+380+INV001+9'}
+        . q{DTM+137:20200101:102'NAD+BY+12345::9'UNT+5+1'}
+        . q{UNZ+1+1'};
+
+    is(
+        scalar @{ Koha::Edifact->new( { transmission => qq{UNA:+.? '$body} } )->message_array },
+        1, 'Syntax 3 service string advice is accepted'
+    );
+    is(
+        scalar @{ Koha::Edifact->new( { transmission => qq{UNA:+.?*'$body} } )->message_array },
+        1, 'Syntax 4 service string advice, with a repetition separator, is accepted'
+    );
+
+    throws_ok { Koha::Edifact->new( { transmission => qq{UNA;+.? '$body} } ) }
+    'Koha::Exceptions::FileNotParsed', 'Service string advice with unsupported separators throws';
+    like( $@->message, qr/Unsupported Service String Advice \[;\+\.\? '\]/, 'and says which one' );
+
+    throws_ok { Koha::Edifact->new( { transmission => $body } ) }
+    'Koha::Exceptions::FileNotParsed', 'An interchange with no service string advice throws';
+    like( $@->message, qr/does not start with a Service String Advice/, 'and says why' );
+
+    throws_ok { Koha::Edifact->new( { transmission => q{} } ) }
+    'Koha::Exceptions::FileNotParsed', 'An empty transmission throws';
+    like( $@->message, qr/Empty transmission/, 'and says why' );
+
+    throws_ok { Koha::Edifact->new( { transmission => q{UNA:+.? 'UNB+UNOC:3+A+B+200101:1200+1'UNZ+0+1'} } ) }
+    'Koha::Exceptions::FileNotParsed', 'An interchange with no messages throws';
+    like( $@->message, qr/contains no messages/, 'and says why' );
+};

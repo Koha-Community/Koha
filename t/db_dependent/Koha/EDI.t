@@ -22,7 +22,7 @@ use FindBin qw( $Bin );
 
 use Test::Exception;
 use Test::NoWarnings;
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::MockModule;
 use JSON qw( decode_json );
 
@@ -3927,6 +3927,145 @@ subtest 'duplicate_order_email_notifications' => sub {
         $logger->clear();
         $schema->storage->txn_rollback;
     };
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'unparsable interchanges' => sub {
+    plan tests => 20;
+
+    $schema->storage->txn_begin;
+
+    my $logger  = t::lib::Mocks::Logger->new();
+    my $account = $builder->build(
+        {
+            source => 'VendorEdiAccount',
+            value  => { description => 'Test account for unparsable interchanges', plugin => q{} }
+        }
+    );
+    my $order = $builder->build(
+        {
+            source => 'Aqorder',
+            value  => {
+                quantity         => 1,
+                listprice        => 10.00,
+                unitprice        => 10.00,
+                quantityreceived => 0,
+                orderstatus      => 'ordered',
+                biblionumber     => $builder->build_sample_biblio->biblionumber,
+                basketno         =>
+                    $builder->build( { source => 'Aqbasket', value => { booksellerid => $account->{vendor_id} } } )
+                    ->{basketno},
+            }
+        }
+    );
+
+    my $body = sub {
+        my $invoicenumber = shift;
+        return
+            qq{UNB+UNOC:3+TEST+KOHA+200101:0000+1'UNH+1+INVOIC:D:96A:UN'BGM+380+$invoicenumber+9'DTM+137:20200101:102'NAD+BY+12345::9'NAD+SU+$account->{san}::9'LIN+1++123456789:EN'QTY+47:1'GIR+001+TEST:LLO+12345678901234:LAC+TEST001:LCO+TESTATB:LFN'PRI+AAA:10.00'PRI+AAB:10.00'MOA+203:10.00'RFF+LI:$order->{ordernumber}'UNS+S'CNT+1:1'MOA+79:10.00'MOA+129:10.00'MOA+122:10.00'UNT+15+1'UNZ+1+1'};
+    };
+
+    my $build_message = sub {
+        my ( $type, $raw_msg ) = @_;
+        my $row = $builder->build(
+            {
+                source => 'EdifactMessage',
+                value  => {
+                    message_type => $type,
+                    filename     => "$type.TEST",
+                    raw_msg      => $raw_msg,
+                    status       => 'new',
+                    vendor_id    => $account->{vendor_id},
+                    edi_acct     => $account->{id},
+                }
+            }
+        );
+        return $schema->resultset('EdifactMessage')->find( $row->{id} );
+    };
+
+    # Syntax 4 service string advice
+    my $v4 = $build_message->( 'INVOICE', qq{UNA:+.?*'} . $body->('V4INV001') );
+    lives_ok { process_invoice($v4) } 'Syntax 4 invoice processed without dying';
+    $v4->discard_changes;
+    is( $v4->status, 'received',                                               'Syntax 4 invoice is marked received' );
+    is( $v4->edifact_errors->search( { section => 'Interchange' } )->count, 0, 'No parse error recorded' );
+    is(
+        $schema->resultset('Aqinvoice')->search( { invoicenumber => 'V4INV001' } )->count,
+        1, 'Invoice was created from the syntax 4 interchange'
+    );
+
+    # Missing service string advice, followed by a good message
+    my $no_una = $build_message->( 'INVOICE', $body->('NOUNA001') );
+    lives_ok { process_invoice($no_una) } 'Invoice without UNA does not die';
+    $no_una->discard_changes;
+    is( $no_una->status,                'error', 'Invoice without UNA is marked error' );
+    is( $no_una->edifact_errors->count, 1,       'An error is recorded' );
+    like(
+        $no_una->edifact_errors->first->details,
+        qr/File does not start with a Service String Advice/, 'with the reason'
+    );
+    $logger->error_like( qr/not processed/, 'and the failure is logged' );
+
+    my $good = $build_message->( 'INVOICE', qq{UNA:+.? '} . $body->('GOOD001') );
+    process_invoice($good);
+    $good->discard_changes;
+    is( $good->status, 'received', 'The next message is still processed' );
+
+    # Unsupported separators parse to nothing
+    my $odd = $build_message->( 'INVOICE', qq{UNA;+.? '} . $body->('ODD001') );
+    {
+        local $SIG{__WARN__} = sub { };
+        process_invoice($odd);
+    }
+    $odd->discard_changes;
+    is( $odd->status,                'error', 'Invoice with unsupported separators is marked error' );
+    is( $odd->edifact_errors->count, 1,       'with an error recorded' );
+
+    # Valid service string advice, but nothing usable after it
+    my $empty = $build_message->( 'INVOICE', qq{UNA:+.? 'UNB+UNOC:3+TEST+KOHA+200101:0000+1'UNZ+0+1'} );
+    process_invoice($empty);
+    $empty->discard_changes;
+    is( $empty->status, 'error', 'Interchange with no messages is marked error' );
+    is(
+        $empty->edifact_errors->first->details,
+        'Interchange contains no messages', 'with the reason recorded'
+    );
+
+    # A parser supplied by a plugin is used instead of the one built from raw_msg
+    {
+        local $INC{'Test/EdiParserPlugin.pm'} = 1;
+
+        package Test::EdiParserPlugin;
+        sub new { return bless {}, shift }
+
+        package main;
+
+        $schema->resultset('VendorEdiAccount')->find( $account->{id} )->update( { plugin => 'Test::EdiParserPlugin' } );
+        my $parser = Koha::Edifact->new( { transmission => qq{UNA:+.? '} . $body->('PLUGIN001') } );
+        my $mock   = Test::MockModule->new('Koha::Plugins::Handler');
+        $mock->mock( run => sub { return $parser } );
+
+        my $plugin_message = $build_message->( 'INVOICE', 'this is not an interchange' );
+        lives_ok { process_invoice($plugin_message) } 'Invoice with a plugin parser does not die';
+        $plugin_message->discard_changes;
+        is( $plugin_message->status, 'received', 'The plugin parser was used, not the unparsable raw message' );
+        is(
+            $schema->resultset('Aqinvoice')->search( { invoicenumber => 'PLUGIN001' } )->count,
+            1, 'and the invoice it parsed was created'
+        );
+    }
+
+    # Quotes and order responses are handled the same way
+    my $quote = $build_message->( 'QUOTE', $body->('Q001') );
+    lives_ok { process_quote($quote) } 'Quote without UNA does not die';
+    $quote->discard_changes;
+    is( $quote->status, 'error', 'Quote without UNA is marked error' );
+
+    my $ordrsp = $build_message->( 'ORDRSP', $body->('R001') );
+    process_ordrsp($ordrsp);
+    $ordrsp->discard_changes;
+    is( $ordrsp->status, 'error', 'Order response without UNA is marked error' );
 
     $schema->storage->txn_rollback;
 };

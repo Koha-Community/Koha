@@ -36,7 +36,9 @@ use English   qw{ -no_match_vars };
 use Try::Tiny qw( catch try );
 use Business::ISBN;
 use DateTime;
-use JSON qw( encode_json );
+use JSON         qw( encode_json );
+use Scalar::Util qw( blessed );
+use Try::Tiny    qw( catch try );
 use C4::Context;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
@@ -202,6 +204,33 @@ sub create_edi_order {
     return;
 }
 
+sub _edifact_parser {
+    my ( $message, $edi ) = @_;
+
+    return $edi if $edi;
+
+    my $reason;
+    try {
+        $edi = Koha::Edifact->new( { transmission => $message->raw_msg } );
+    } catch {
+        die $_ unless blessed $_ && $_->isa('Koha::Exceptions::FileNotParsed');
+        $reason = $_->message;
+    };
+    return $edi unless $reason;
+
+    $message->add_to_edifact_errors(
+        {
+            section => 'Interchange',
+            details => $reason,
+        }
+    );
+    Koha::Logger->get( { interface => 'edi' } )
+        ->error( 'EDI message ' . $message->filename . ' not processed: ' . $reason );
+    $message->status('error');
+    $message->update;
+    return;
+}
+
 sub process_ordrsp {
     my $response_message = shift;
     $response_message->status('processing');
@@ -209,7 +238,7 @@ sub process_ordrsp {
     my $schema = Koha::Database->new()->schema();
     my $logger = Koha::Logger->get( { interface => 'edi' } );
     my $vendor_acct;
-    my $edi      = Koha::Edifact->new( { transmission => $response_message->raw_msg, } );
+    my $edi      = _edifact_parser($response_message) or return;
     my $messages = $edi->message_array();
 
     if ( @{$messages} ) {
@@ -310,9 +339,7 @@ sub process_invoice {
         );
     }
 
-    my $edi = $edi_plugin
-        || Koha::Edifact->new( { transmission => $invoice_message->raw_msg, } );
-
+    my $edi      = _edifact_parser( $invoice_message, $edi_plugin ) or return;
     my $messages = $edi->message_array();
 
     if ( @{$messages} ) {
@@ -754,7 +781,7 @@ sub process_quote {
     $quote_message->status('processing');
     $quote_message->update;
 
-    my $edi = Koha::Edifact->new( { transmission => $quote_message->raw_msg, } );
+    my $edi = _edifact_parser($quote_message) or return;
 
     my $messages       = $edi->message_array();
     my $process_errors = 0;
@@ -2245,6 +2272,15 @@ Koha::EDI
        item_hashref = _create_item_from_quote( lineitem, quote)
 
        returns a hashref representing the item fields specified in the quote
+
+=head2 _edifact_parser
+
+    my $edi = _edifact_parser( $message, $edi_plugin );
+
+    passed an edifact_messages row, and optionally a parser already supplied by a
+    plugin, returns the Koha::Edifact object for the message's raw_msg.
+    If the interchange cannot be parsed the message is set to error, the reason is
+    added to its edifact_errors and nothing is returned.
 
 =head2 _get_invoiced_price
 
