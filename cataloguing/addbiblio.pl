@@ -47,6 +47,7 @@ use C4::Charset     qw( SetMarcUnicodeFlag );
 use C4::Languages   qw( getlanguage );
 use C4::Scrubber;
 use Koha::BiblioFrameworks;
+use Koha::BiblioFrameworkMarcMatchers;
 use Koha::DateUtils qw( dt_from_string );
 
 use Koha::Acquisition::Orders;
@@ -709,11 +710,15 @@ if ( $op eq "cud-addbiblio" ) {
     $record = TransformHtmlToMarc( $input, 1 );
 
     # check for a duplicate
-    my ($duplicate) = C4::Search::FindDuplicateWithMatchingRules(
-        $record,
-        $frameworkcode,
-        $is_a_modif ? $biblionumber : undef
-    );
+    my $duplicate;
+    if ( !$is_a_modif || Koha::BiblioFrameworkMarcMatchers->find($frameworkcode) ) {
+        ($duplicate) = C4::Search::FindDuplicateWithMatchingRules(
+            $record,
+            $frameworkcode,
+            $is_a_modif ? $biblionumber : undef
+        );
+        $duplicate->{forbid_duplicate_creation} = 0 if $duplicate && $is_a_modif;
+    }
     my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
 
     # it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)

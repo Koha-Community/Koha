@@ -149,6 +149,7 @@ sub FindDuplicate {
 
     @duplicates = FindDuplicateWithMatchingRules($record);
     @duplicates = FindDuplicateWithMatchingRules( $record, $frameworkcode );
+    @duplicates = FindDuplicateWithMatchingRules( $record, $frameworkcode, $exclude_biblionumber );
 
 This function attempts to find duplicate records using the record matching rule
 configured for the given C<$frameworkcode> (or the default MARC framework if
@@ -156,6 +157,9 @@ not given).
 
 If no record matching rule is configured for the given framework, it tries to
 find duplicates using C<FindDuplicate>.
+
+If C<$exclude_biblionumber> is given (when editing an existing record), this
+biblio is excluded from the duplicates found.
 
 It returns a list of hashrefs (one per duplicate found), containing the following keys:
 
@@ -182,7 +186,7 @@ sub FindDuplicateWithMatchingRules {
         my $matcher = C4::Matcher->fetch( $biblio_framework_marc_matcher->marc_matcher_id );
         if ($matcher) {
             my @duplicates;
-            my $max_matches = 1;
+            my $max_matches = $exclude_biblionumber ? 2 : 1;
             my @matches     = $matcher->get_matches( $record, $max_matches );
             foreach my $match (@matches) {
                 next if $exclude_biblionumber && $match->{record_id} == $exclude_biblionumber;

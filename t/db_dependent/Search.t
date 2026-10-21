@@ -1374,7 +1374,7 @@ subtest 'FindDuplicate' => sub {
 };
 
 subtest 'FindDuplicateWithMatchingRules' => sub {
-    plan tests => 3;
+    plan tests => 6;
 
     my $marcflavour = 'MARC21';
     my $mock_zebra  = t::lib::Mocks::Zebra->new( { marcflavour => $marcflavour } );
@@ -1440,6 +1440,23 @@ subtest 'FindDuplicateWithMatchingRules' => sub {
 
     ($duplicate) = C4::Search::FindDuplicateWithMatchingRules($record);
     is( $duplicate && $duplicate->{biblionumber}, 51, 'Matcher is used and returns a duplicate' );
+
+    ($duplicate) = C4::Search::FindDuplicateWithMatchingRules( $record, '', 51 );
+    ok( !defined $duplicate, 'The excluded biblionumber is not returned as a duplicate' );
+
+    my $matcher_module = Test::MockModule->new('C4::Matcher');
+    my $max_matches;
+    $matcher_module->mock(
+        'get_matches',
+        sub {
+            ( undef, undef, $max_matches ) = @_;
+            return ( { record_id => 51 }, { record_id => 52 } );
+        }
+    );
+    C4::Search::FindDuplicateWithMatchingRules($record);
+    is( $max_matches, 1, 'Only one match is requested when not excluding a record' );
+    C4::Search::FindDuplicateWithMatchingRules( $record, '', 51 );
+    is( $max_matches, 2, 'Two matches are requested when excluding a record' );
 
     $schema->txn_rollback;
 };

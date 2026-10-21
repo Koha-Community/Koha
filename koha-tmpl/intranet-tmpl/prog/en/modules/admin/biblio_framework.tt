@@ -131,7 +131,7 @@
                         </li>
                     [% END %]
                     <li>
-                        [% IF framework && frameworkcode == '' %]
+                        [% IF framework && framework.frameworkcode == '' %]
                             <label for="description">Description: </label>
                             <span>[% framework.frameworktext | html %]</span>
                         [% ELSE %]
