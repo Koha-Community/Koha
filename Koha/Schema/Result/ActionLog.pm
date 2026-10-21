@@ -183,6 +183,33 @@ __PACKAGE__->belongs_to(
     },
 );
 
+# Circulation logs carry the itemnumber in info, either as a legacy number
+# or in JSON. A SQL relationship makes the displayed barcode searchable
+# before pagination. Other modules may use info for unrelated identifiers.
+__PACKAGE__->belongs_to(
+    "item",
+    "Koha::Schema::Result::Item",
+    sub {
+        my ($args) = @_;
+        my $self_alias = $args->{self_alias};
+        my $itemnumber = qq{
+            CASE WHEN $self_alias.module = 'CIRCULATION' THEN
+                CASE
+                    WHEN $self_alias.info REGEXP '^[[:space:]]*[0-9]+[[:space:]]*\$'
+                        THEN TRIM($self_alias.info)
+                    WHEN JSON_VALID($self_alias.info)
+                        THEN JSON_UNQUOTE(JSON_EXTRACT($self_alias.info, '\$.itemnumber'))
+                END
+            END
+        };
+        return { "$args->{foreign_alias}.itemnumber" => { '=' => \$itemnumber } };
+    },
+    {
+        is_foreign_key_constraint => 0,
+        join_type                 => "LEFT",
+    },
+);
+
 sub koha_object_class {
     'Koha::ActionLog';
 }
