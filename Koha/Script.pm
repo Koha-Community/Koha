@@ -35,6 +35,7 @@ This class should be used in all scripts. It sets the interface and userenv appr
 
 =cut
 
+use Carp                      qw( carp );
 use File::Basename            qw( fileparse );
 use Fcntl                     qw( LOCK_EX LOCK_NB );
 use Getopt::Long::Descriptive ();
@@ -336,6 +337,20 @@ Neither returns control to the caller; some options being declared
 C<required> does not stop C<--help> or C<--man> from working, as both
 shortcircuit that check.
 
+Scripts converted to this convention used to be parsed by plain
+L<Getopt::Long>, which also accepted (and many scripts documented) a long
+option with a single dash, e.g. C<-days 5>; L<Getopt::Long::Descriptive>
+parses with bundling and no longer understands it, so existing command
+lines such as cron jobs would stop working. To give them time to migrate,
+such an argument is rewritten as the standard C<--days> and a deprecation
+warning is printed to STDERR (cron mails it to the administrator). Only an
+argument that is a single dash followed by at least two characters is
+considered, and only if it is a declared long option name or the unique
+prefix of one and is not a bundle of declared one-character flags (C<-vc>
+is still C<-v -c>). The values given to options, and anything after C<-->,
+are left alone. This is a compatibility shim and will be removed in a future
+release; use C<--long> in new command lines and documentation.
+
 Returns the C<$opt> object in scalar context. In list context, also
 returns the C<$usage> object, useful for scripts that need to enforce
 something L<Getopt::Long::Descriptive> can't express as an option (e.g. a
@@ -371,6 +386,9 @@ sub describe_options {
         }
         %negatable = map { $_ => 1 } _negatable_option_names(@opt_specs);
     }
+
+    # Scripts converted from plain Getopt::Long used to accept -long as well as --long
+    @ARGV = _translate_legacy_options( [ @opt_specs, [ 'help|?', 'help' ], [ 'man', 'man' ] ], @ARGV );
 
     my ( $opt, $usage ) = eval {
         Getopt::Long::Descriptive::describe_options(
@@ -502,6 +520,77 @@ sub _negatable_option_names {
 
     return map { $_->[0] =~ /^([\w?-]+)[\w|?-]*!/ ? $1 : () }
         grep { ref $_ eq 'ARRAY' && @$_ > 1 && defined $_->[0] } @opt_specs;
+}
+
+=head3 _translate_legacy_options
+
+    my @argv = _translate_legacy_options( \@opt_specs, @ARGV );
+
+Rewrites legacy single-dash long options (C<-days 5>, C<-days=5>) as the
+standard C<--days>, warning that the old form is deprecated. See
+L</describe_options> for the rules.
+
+=cut
+
+sub _translate_legacy_options {
+    my ( $opt_specs, @argv ) = @_;
+
+    # name => 0 (flag), 1 (mandatory value) or 2 (optional value)
+    my ( %takes_value, %is_short, @long_names );
+    for my $spec (@$opt_specs) {
+        next unless ref $spec eq 'ARRAY' && defined $spec->[0];
+        my ( $names, $type ) = $spec->[0] =~ /^([\w|?-]+)([=:].*)?/ or next;
+        my $arity = !defined $type ? 0 : $type =~ /^=/ ? 1 : 2;
+        for my $name ( split /\|/, $names ) {
+            $takes_value{$name} = $arity;
+            if ( length $name == 1 ) { $is_short{$name} = 1 }
+            else                     { push @long_names, $name }
+        }
+    }
+
+    # A declared long option name, or the unique prefix of one
+    my $resolve = sub {
+        my ($name) = @_;
+        return $name if grep { $_ eq $name } @long_names;
+        my @matches = grep { index( $_, $name ) == 0 } @long_names;
+        return @matches == 1 ? $matches[0] : undef;
+    };
+
+    my ( @out, $value_follows );
+    while (@argv) {
+        my $arg = shift @argv;
+
+        if ($value_follows) {    # the value of the previous option, never an option
+            push @out, $arg;
+            $value_follows = 0;
+        } elsif ( $arg eq '--' ) {
+            push @out, $arg, @argv;
+            last;
+        } elsif ( $arg =~ /^--([\w?-]+)(=.*)?$/s ) {
+            my ( $name, $value ) = ( $1, $2 );
+            my $known = $resolve->($name);
+            $value_follows = 1 if defined $known && $takes_value{$known} == 1 && !defined $value;
+            push @out, $arg;
+        } elsif ( $arg =~ /^-([A-Za-z][\w-]+)(=.*)?$/s ) {    # a dash and at least two characters
+            my ( $word, $value ) = ( $1, $2 );
+            my $is_bundle = !grep { !$is_short{$_} } split //, $word;
+            my $name      = $is_bundle ? undef : $resolve->($word);
+            if ( defined $name ) {
+                carp "WARNING: -$word is deprecated, use --$name instead "
+                    . "(single-dash long options will stop working in a future release)";
+                push @out, "--$name" . ( $value // '' );
+                $value_follows = 1 if $takes_value{$name} == 1 && !defined $value;
+            } else {
+                push @out, $arg;
+                $value_follows = 1 if $is_bundle && $takes_value{ substr $word, -1 } == 1;
+            }
+        } else {
+            $value_follows = 1 if $arg =~ /^-([A-Za-z?])$/ && ( $takes_value{$1} // 0 ) == 1;
+            push @out, $arg;
+        }
+    }
+
+    return @out;
 }
 
 =head2 Internal methods

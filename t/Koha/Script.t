@@ -18,8 +18,9 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::Exception;
+use Test::Warn;
 
 BEGIN { use_ok('Koha::Script') }
 
@@ -196,3 +197,77 @@ subtest 'describe_options() exclusive group names tests' => sub {
 };
 
 1;
+
+subtest 'describe_options() legacy single-dash long options tests' => sub {
+
+    plan tests => 24;
+
+    my $describe = sub {
+        local @ARGV = @_;
+        my $opt = Koha::Script->describe_options(
+            '%c %o',
+            [ 'days=i',       'days' ],
+            [ 'lettercode=s', 'letter code' ],
+            [ 'limit|l=s',    'limit' ],
+            [ 'verbose|v',    'verbose' ],
+            [ 'confirm|c',    'confirm' ],
+            [ 'name:s',       'optional value' ],
+        );
+        return ( $opt, [@ARGV] );
+    };
+
+    my ( $opt, $rest );
+
+    warning_like { ( $opt, $rest ) = $describe->( '-days', '5' ) }
+    qr/^WARNING: -days is deprecated, use --days instead/,
+        '-days is accepted with a deprecation warning';
+    is( $opt->days, 5, '-days 5 sets the option' );
+
+    warnings_like { ( $opt, $rest ) = $describe->( '-days=5', '-lettercode', 'X' ) }
+    [ qr/-days is deprecated, use --days/, qr/-lettercode is deprecated, use --lettercode/ ],
+        'Each legacy option warns, with the =value form too';
+    is_deeply( [ $opt->days, $opt->lettercode ], [ 5, 'X' ], '-days=5 -lettercode X set both options' );
+
+    warnings_are { ( $opt, $rest ) = $describe->( '--days', '5' ) } [], 'The standard --days does not warn';
+    is( $opt->days, 5, '--days 5 sets the option' );
+
+    warnings_like { ( $opt, $rest ) = $describe->( '-letter', 'X' ) }
+    [qr/-letter is deprecated, use --lettercode/],
+        'A unique prefix of a long option is accepted, warning with the full name';
+    is( $opt->lettercode, 'X', 'The prefix set the option' );
+
+    warnings_like { ( $opt, $rest ) = $describe->( '-name', 'foo' ) }
+    [qr/-name is deprecated, use --name/], 'An optional-value option is translated';
+    is( $opt->name, 'foo', 'The optional value was kept' );
+
+    warnings_are { ( $opt, $rest ) = $describe->('-vc') } [], 'A bundle of declared flags does not warn';
+    ok( $opt->verbose && $opt->confirm, '-vc is still -v -c' );
+
+    warnings_are { ( $opt, $rest ) = $describe->( '--lettercode', '-days' ) } [],
+        'The value of an option is not rewritten';
+    is_deeply( [ $opt->lettercode, $opt->days ], [ '-days', undef ], '--lettercode -days keeps -days as the value' );
+
+    warnings_are { ( $opt, $rest ) = $describe->( '-l', '-days', '--days', '3' ) } [],
+        'The value of a short option is not rewritten either';
+    is_deeply( [ $opt->limit, $opt->days ], [ '-days', 3 ], '-l -days keeps -days as the value' );
+
+    warnings_are { ( $opt, $rest ) = $describe->( '--days', '1', '--', '-days' ) } [], 'Nothing is rewritten after --';
+    is_deeply( $rest, ['-days'], '-days after -- is left as a positional argument' );
+
+    my @warnings;
+    my $died;
+    {
+        local $SIG{__WARN__} = sub { push @warnings, @_ };
+        $died = !eval { $describe->('-bogus'); 1 };
+    }
+    ok( $died, 'An unknown single-dash option is still an error' );
+    like( $warnings[0], qr/Unknown option/, '... with the usual Getopt::Long message, and no deprecation warning' );
+    unlike( join( '', @warnings ), qr/deprecated/, 'An unknown option is not reported as deprecated' );
+
+    my $inc = join ' ', map { "-I$_" } grep { !ref } @INC;
+    my $out =
+        `$^X $inc -e 'use Koha::Script; \@ARGV = qw(-help); Koha::Script->describe_options( "%c %o", [ "days=i", "days" ] );' 2>&1`;
+    is( $? >> 8, 0, '-help exits with status 0' );
+    like( $out, qr/-help is deprecated, use --help instead/, '-help warns that it is deprecated' );
+    like( $out, qr/--days/,                                  '-help prints the usage text' );
+};
