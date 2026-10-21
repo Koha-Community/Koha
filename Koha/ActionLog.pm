@@ -19,13 +19,11 @@ package Koha::ActionLog;
 
 use Modern::Perl;
 
-use JSON qw( decode_json );
-
 use C4::Context;
 
 # Avoid `use Koha::Patrons` here: Koha::ActionLog is loaded transitively by
 # C4::Log very early in the dependency chain, before Koha::Patron has been
-# fully defined. The accessors below reach for Koha::Patron (and Koha::Items)
+# fully defined. The accessors below reach for Koha::Patron (and Koha::Item)
 # at call time, by which point they are reliably available.
 
 use base qw(Koha::Object);
@@ -91,21 +89,11 @@ sub item {
 
     return unless ( $self->module // q{} ) eq 'CIRCULATION';
 
-    my $info = $self->info;
-    return unless defined $info;
+    my $rs = $self->_result->item;
+    return unless $rs;
 
-    my $itemnumber;
-    my $decoded = eval { decode_json($info) };
-    if ( ref($decoded) eq 'HASH' && $decoded->{itemnumber} ) {
-        $itemnumber = $decoded->{itemnumber};
-    } elsif ( $info =~ /^\s*(\d+)\s*$/ ) {
-        $itemnumber = $1;
-    }
-
-    return unless $itemnumber;
-
-    require Koha::Items;
-    return Koha::Items->find($itemnumber);
+    require Koha::Item;
+    return Koha::Item->_new_from_dbic($rs);
 }
 
 =head2 Internal methods

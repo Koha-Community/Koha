@@ -758,7 +758,7 @@ $(document).ready(function () {
                         render: renderObject,
                     },
                     {
-                        data: "info",
+                        data: "info:item.external_id",
                         title: __("Info"),
                         searchable: true,
                         orderable: false,
