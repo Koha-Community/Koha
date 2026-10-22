@@ -73,7 +73,7 @@ export default {
         }
 
         let buttons = _dt_buttons({
-            settings: { ...props.options, disable_share: true },
+            settings: props.options,
             table_settings: {
                 ...props.table_settings,
                 columns: tableColumns.value,

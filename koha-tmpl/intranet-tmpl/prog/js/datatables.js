@@ -935,7 +935,7 @@ function _dt_buttons(params) {
         buttons: export_buttons,
     });
 
-    if (table_settings && !settings.disable_share) {
+    if (table_settings) {
         const writeToClipboard = async (text, node) => {
             await navigator.clipboard.writeText(text);
             $(node)
