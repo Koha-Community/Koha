@@ -29,6 +29,7 @@ use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
+use MARC::Record;
 use Mojo::JSON qw(encode_json);
 
 use C4::Auth;
@@ -2371,7 +2372,7 @@ subtest 'put() malformed body tests' => sub {
 
 subtest 'list() tests' => sub {
 
-    plan tests => 21;
+    plan tests => 22;
 
     $schema->storage->txn_begin;
 
@@ -2485,6 +2486,41 @@ subtest 'list() tests' => sub {
         # An undeclared embed value is rejected
         $t->get_ok( "//$userid:$password@/api/v1/biblios?q=$embed_query" =>
                 { Accept => 'application/marcxml+xml', 'x-koha-embed' => 'unknown_relation' } )->status_is(400);
+    };
+
+    subtest 'x-koha-embed: items tests (other formats)' => sub {
+
+        plan tests => 12;
+
+        my $biblio_with_items = $builder->build_sample_biblio;
+        $builder->build_sample_item( { biblionumber => $biblio_with_items->biblionumber } ) for 1 .. 3;
+        my $items_count = $biblio_with_items->items->count;
+
+        my $embed_query = encode_json( { biblio_id => $biblio_with_items->biblionumber } );
+        my $url         = "//$userid:$password@/api/v1/biblios?q=$embed_query";
+
+        my $mij =
+            $t->get_ok( $url => { Accept => 'application/marc-in-json', 'x-koha-embed' => 'items' } )
+            ->status_is(200)
+            ->tx->res->json;
+        my $mij_count = grep { exists $_->{'952'} } @{ $mij->[0]->{fields} };
+        is( $mij_count, $items_count, 'marc-in-json: one 952 field per item' );
+
+        my $raw =
+            $t->get_ok( $url => { Accept => 'application/marc', 'x-koha-embed' => 'items' } )
+            ->status_is(200)
+            ->tx->res->body;
+        my $marc = MARC::Record->new_from_usmarc($raw);
+        is( scalar( () = $marc->field('952') ), $items_count, 'marc: one 952 field per item' );
+
+        my $txt =
+            $t->get_ok( $url => { Accept => 'text/plain', 'x-koha-embed' => 'items' } )->status_is(200)->tx->res->body;
+        my $txt_count = () = $txt =~ m{^952 }mg;
+        is( $txt_count, $items_count, 'text/plain: one 952 field per item' );
+
+        $t->get_ok( $url => { Accept => 'application/marc', } )->status_is(200);
+        my $no_embed = MARC::Record->new_from_usmarc( $t->tx->res->body );
+        is( scalar( () = $no_embed->field('952') ), 0, 'marc: no 952 fields without x-koha-embed' );
     };
 
     $schema->storage->txn_rollback;
