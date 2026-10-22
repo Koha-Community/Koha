@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 72;
+use Test::More tests => 73;
 use Test::NoWarnings;
 use Test::MockModule;
 use Test::Warn;
@@ -931,6 +931,83 @@ subtest '_koha_notify_reserve() tests' => sub {
     ModReserveAffect( $item2->itemnumber, $hold_borrower, 0 );
     $new_count = count_hold_print_messages();
     is( $new_count, $hold_notice_count, 'patron not notified a second time (bug 11445)' );
+};
+
+subtest '_koha_notify_reserve() itiva tests' => sub {
+
+    plan tests => 6;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    $dbh->do('DELETE FROM letter');
+    for my $mtt (qw(print itiva)) {
+        $builder->build(
+            {
+                source => 'Letter',
+                value  => {
+                    message_transport_type => $mtt,
+                    branchcode             => '',
+                    code                   => 'HOLD',
+                    module                 => 'reserves',
+                    lang                   => 'default',
+                }
+            }
+        );
+    }
+
+    my $mp = Test::MockModule->new('C4::Members::Messaging');
+    $mp->mock(
+        'GetMessagingPreferences',
+        {
+            wants_digest => '0',
+            transports   => { itiva => 'HOLD' },
+            letter_code  => 'HOLD',
+        }
+    );
+
+    my $fill_hold = sub {
+        my ($patron) = @_;
+        my $item = $builder->build_sample_item(
+            { homebranch => $library->branchcode, holdingbranch => $library->branchcode } );
+        C4::Reserves::AddReserve(
+            {
+                branchcode     => $library->branchcode,
+                borrowernumber => $patron->borrowernumber,
+                biblionumber   => $item->biblionumber,
+            }
+        );
+        ModReserveAffect( $item->itemnumber, $patron->borrowernumber, 0 );
+    };
+
+    my $count_messages = sub {
+        my ( $patron, $mtt ) = @_;
+        return $schema->resultset('MessageQueue')->search(
+            {
+                letter_code            => 'HOLD',
+                message_transport_type => $mtt,
+                borrowernumber         => $patron->borrowernumber,
+            }
+        )->count;
+    };
+
+    my $patron = $builder->build_object(
+        { class => 'Koha::Patrons', value => { phone => '5555555555', branchcode => $library->branchcode } } );
+
+    t::lib::Mocks::mock_preference( 'TalkingTechItivaPhoneNotification', 1 );
+    $fill_hold->($patron);
+    is( $count_messages->( $patron, 'print' ), 0, 'No print notice when itiva handles the notice' );
+    is( $count_messages->( $patron, 'itiva' ), 0, 'No itiva notice queued, the outbound script generates it' );
+
+    my $no_phone = $builder->build_object(
+        { class => 'Koha::Patrons', value => { phone => '', branchcode => $library->branchcode } } );
+    $fill_hold->($no_phone);
+    is( $count_messages->( $no_phone, 'print' ), 1, 'Print notice when itiva has no phone number to call' );
+    is( $count_messages->( $no_phone, 'itiva' ), 0, 'No itiva notice queued without a phone number' );
+
+    t::lib::Mocks::mock_preference( 'TalkingTechItivaPhoneNotification', 0 );
+    $fill_hold->($patron);
+    is( $count_messages->( $patron, 'print' ), 1, 'Print notice when TalkingTechItivaPhoneNotification is disabled' );
+    is( $count_messages->( $patron, 'itiva' ), 0, 'No itiva notice queued when the preference is disabled' );
 };
 
 subtest 'ReservesNeedReturns' => sub {
