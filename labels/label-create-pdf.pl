@@ -23,6 +23,7 @@ use CGI      qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Creators;
 use C4::Labels;
+use C4::Creators::Lib qw( get_barcode_range );
 
 my $cgi = CGI->new;
 
@@ -45,14 +46,12 @@ my $start_label = $cgi->param('start_label') || 1;
 @label_ids    = $cgi->multi_param('label_id')    if $cgi->param('label_id');
 @item_numbers = $cgi->multi_param('item_number') if $cgi->param('item_number');
 
-my $txt_from = $cgi->param('from')              || undef;
-my $from     = int($txt_from)                   || undef;
-my $count    = int( $cgi->param('count') || 0 ) || undef;
-
-# if count is greater than 1000, just set it to 1000. We don't want to generate more than 1000 barcodes at a time!
-$count = 1000 if $count && $count > 1000;
-my $to             = ( $from && $count ) ? $from + $count - 1 : undef;
-my $barcode_length = length($txt_from) || undef;
+my $txt_from       = $cgi->param('from')  || undef;
+my $txt_count      = $cgi->param('count') || undef;
+my $range          = get_barcode_range( { from => $txt_from, count => $txt_count } );
+my $from           = $range->{from};
+my $to             = $range->{to};
+my $barcode_length = $range->{barcode_length};
 
 my $items = undef;
 

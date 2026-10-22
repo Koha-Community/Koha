@@ -40,6 +40,7 @@ BEGIN {
         get_output_formats
         get_table_names
         get_unit_values
+        get_barcode_range
         html_table
     );
 }
@@ -523,6 +524,40 @@ sub get_table_names {
         push( @$table_names, $info->{'TABLE_NAME'} );
     }
     return $table_names;
+}
+
+=head2 get_barcode_range
+
+    my $range = get_barcode_range( $txt_from, $txt_count );
+
+Takes the starting barcode and the number of barcodes to print, and returns
+a hashref with txt_from, from, count, to, txt_to and barcode_length.
+The count is capped at 1000.
+
+=cut
+
+sub get_barcode_range {
+    my ($params) = @_;
+
+    my $txt_from = $params->{from};
+    my $from     = int( $txt_from        || 0 ) || undef;
+    my $count    = int( $params->{count} || 0 ) || undef;
+
+    # if count is greater than 1000, just set it to 1000. We don't want to generate more than 1000 barcodes at a time!
+    $count = 1000 if $count && $count > 1000;
+
+    my $to             = ( $from && $count ) ? $from + $count - 1                      : undef;
+    my $barcode_length = $txt_from           ? length($txt_from)                       : undef;
+    my $txt_to         = $to                 ? sprintf( '%0*d', $barcode_length, $to ) : undef;
+
+    return {
+        txt_from       => $txt_from,
+        from           => $from,
+        count          => $count,
+        to             => $to,
+        txt_to         => $txt_to,
+        barcode_length => $barcode_length,
+    };
 }
 
 =head2 C4::Creators::Lib::html_table()

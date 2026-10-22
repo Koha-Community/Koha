@@ -30,6 +30,7 @@ use C4::Creators::Lib qw(
     get_output_formats
 );
 use C4::Labels::Batch;
+use C4::Creators::Lib qw( get_barcode_range );
 
 my $cgi = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -54,12 +55,12 @@ my @item_numbers;
 my $output_format = $cgi->param('output_format') || 'pdf';
 my $referer       = $cgi->param('referer')       || undef;
 
-my $txt_from = $cgi->param('from')              || undef;
-my $from     = int($txt_from)                   || undef;
-my $count    = int( $cgi->param('count') || 0 ) || undef;
-$count = 1000 if $count && $count > 1000;
-my $to             = ( $from && $count ) ? $from + $count - 1 : undef;
-my $barcode_length = length($txt_from) || undef;
+my $txt_from  = $cgi->param('from')  || undef;
+my $txt_count = $cgi->param('count') || undef;
+my $range     = get_barcode_range( { from => $txt_from, count => $txt_count } );
+my $from      = $range->{from};
+my $count     = $range->{count};
+my $to        = $range->{to};
 
 my $layouts           = undef;
 my $templates         = undef;
@@ -142,13 +143,13 @@ if ( $op eq 'cud-export' ) {
         push(
             @batches,
             {
-                create_script  => 'label-create-pdf.pl',
-                from           => $from,
-                count          => $count,
-                barcode_length => $barcode_length,
-                template_id    => $template_id,
-                layout_id      => $layout_id,
-                start_label    => $start_label,
+                create_script => 'label-create-pdf.pl',
+                from          => $txt_from,
+                to            => $range->{txt_to},
+                count         => $count,
+                template_id   => $template_id,
+                layout_id     => $layout_id,
+                start_label   => $start_label,
             }
         );
         $template->param(
@@ -183,7 +184,6 @@ if ( $op eq 'cud-export' ) {
         referer           => $referer,
         from              => $from,
         count             => $count,
-        barcode_length    => $barcode_length,
         txt_from          => $txt_from,
     );
 }
