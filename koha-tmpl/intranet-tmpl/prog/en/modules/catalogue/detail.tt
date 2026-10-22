@@ -1294,7 +1294,7 @@
     [% END %]
     [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
         <script nonce="[% Koha.CSPNonce | $raw %]">
-            var table_settings = [% TablesSettings.GetTableSettings( 'catalogue', 'concerns', 'table_concerns', 'json' ) | $raw %];
+            var concerns_table_settings = [% TablesSettings.GetTableSettings( 'catalogue', 'concerns', 'table_concerns', 'json' ) | $raw %];
             const biblio_id = "[% biblionumber | html %]";
         </script>
         <script nonce="[% Koha.CSPNonce | $raw %]">
@@ -1458,7 +1458,7 @@
                             },
                         ],
                     },
-                    table_settings,
+                    concerns_table_settings,
                     0,
                     additional_filters,
                     undefined,
