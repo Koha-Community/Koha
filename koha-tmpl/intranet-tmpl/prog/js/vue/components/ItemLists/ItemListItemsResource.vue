@@ -63,7 +63,7 @@ export default {
                     escape_str(resource.biblio.title);
                 if (resource.biblio.subtitle) {
                     result += escape_str(
-                        row.biblio.subtitle.split("|").join(" ")
+                        resource.biblio.subtitle.split("|").join(" ")
                     );
                 }
                 result += "<br/>";
