@@ -238,17 +238,25 @@ export function useBaseResource(resourceConfig) {
     };
 
     /**
-     * Resource deletion handler.
-     * Accepts an optional callback function to run after deletion.
-     * If no callback is provided, does the following:
-     * - If deleting from show component, navigates to resource list component.
-     * - If deleting from resource list component, redraws the table.
-     *
+     * Helper for resource delete or remove functions.
+     * @param {string} dialogTitle - The title of the confirmation dialog to display
+     * @param {string} dialogAcceptLabel - The text for the accept button in the confirmation dialog
+     * @param {string} dialogCancelLabel - The text for the cancel button in the confirmation dialog
+     * @param {string} successMessage - The text displayed upon the success of the operation. Formatted with the resource name.
+     * @param {function} apiMethod - API method to call with the resource ID upon confirmation.
      * @param {Object} resource - The resource to delete (optional)
      * @param {Object} callback - Callback to call after deletion (optional)
-     * @return {void}
+     * @return {function}
      */
-    const doResourceDelete = (resource, callback) => {
+    const _doResourceDeleteOrRemove = (
+        dialogTitle,
+        dialogAcceptLabel,
+        dialogCancelLabel,
+        successMessage,
+        apiMethod,
+        resource,
+        callback
+    ) => {
         let resourceId = resource
             ? resource[resourceConfig.idAttr]
             : resourceConfig.newResource[resourceConfig.idAttr];
@@ -260,18 +268,15 @@ export function useBaseResource(resourceConfig) {
 
         setConfirmationDialog(
             {
-                title: i18n.deleteConfirmationMessage,
+                title: dialogTitle,
                 message: resourceName,
-                accept_label: $__("Yes, delete"),
-                cancel_label: $__("No, do not delete"),
+                accept_label: dialogAcceptLabel,
+                cancel_label: dialogCancelLabel,
             },
             () => {
-                resourceConfig.apiClient.delete(resourceId).then(
+                apiMethod(resourceId).then(
                     success => {
-                        setMessage(
-                            i18n.deleteSuccessMessage.format(resourceName),
-                            true
-                        );
+                        setMessage(successMessage.format(resourceName), true);
                         if (typeof callback === "function") {
                             callback();
                         } else {
@@ -289,6 +294,29 @@ export function useBaseResource(resourceConfig) {
     };
 
     /**
+     * Resource deletion handler.
+     * Accepts an optional callback function to run after deletion.
+     * If no callback is provided, does the following:
+     * - If deleting from show component, navigates to resource list component.
+     * - If deleting from resource list component, redraws the table.
+     *
+     * @param {Object} resource - The resource to delete (optional)
+     * @param {Object} callback - Callback to call after deletion (optional)
+     * @return {void}
+     */
+    const doResourceDelete = (resource, callback) => {
+        _doResourceDeleteOrRemove(
+            i18n.deleteConfirmationMessage,
+            $__("Yes, delete"),
+            $__("No, do not delete"),
+            i18n.deleteSuccessMessage,
+            resourceConfig.apiClient.delete,
+            resource,
+            callback
+        );
+    };
+
+    /**
      * Resource removal handler.
      * Accepts an optional callback function to run after removal.
      * If no callback is provided, does the following:
@@ -300,42 +328,14 @@ export function useBaseResource(resourceConfig) {
      * @return {void}
      */
     const doResourceRemove = (resource, callback) => {
-        let resourceId = resource
-            ? resource[resourceConfig.idAttr]
-            : resourceConfig.newResource[resourceConfig.idAttr];
-        let resourceName = resource
-            ? resourceConfig.describeResource
-                ? resourceConfig.describeResource(resource)
-                : resource[resourceConfig.nameAttr]
-            : resourceConfig.newResource[resourceConfig.nameAttr];
-
-        setConfirmationDialog(
-            {
-                title: i18n.removeConfirmationMessage,
-                message: resourceName,
-                accept_label: $__("Yes, remove"),
-                cancel_label: $__("No, do not remove"),
-            },
-            () => {
-                resourceConfig.apiClient.remove(resourceId).then(
-                    success => {
-                        setMessage(
-                            i18n.removeSuccessMessage.format(resourceName),
-                            true
-                        );
-                        if (typeof callback === "function") {
-                            callback();
-                        } else {
-                            if (resourceConfig.props.routeAction === "list") {
-                                callback.ajax.reload();
-                            } else {
-                                goToResourceList();
-                            }
-                        }
-                    },
-                    error => {}
-                );
-            }
+        _doResourceDeleteOrRemove(
+            i18n.removeConfirmationMessage,
+            $__("Yes, remove"),
+            $__("No, do not remove"),
+            i18n.removeSuccessMessage,
+            resourceConfig.apiClient.remove,
+            resource,
+            callback
         );
     };
 
