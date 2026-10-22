@@ -405,7 +405,8 @@ describe("Vendor module", () => {
                     this.vendor.name
                 );
                 cy.wait("@get-vendors");
-                cy.get(`#${table_id} tbody tr:first`)
+                cy.get(`#${table_id} tbody`)
+                    .contains("tr", this.vendor.name)
                     .contains("Receive shipments")
                     .click();
                 cy.url().should(
