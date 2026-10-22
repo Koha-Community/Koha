@@ -249,7 +249,8 @@ if ( !$op ) {
         my $cache_expiry_units = $input->param('cache_expiry_units');
         my $public             = $input->param('public');
         my $run_type           = $input->param('run_type');
-        my $save_anyway        = $input->param('save_anyway');
+        $run_type = undef unless defined $run_type && $run_type =~ /^(?:any|foreground|background)$/;
+        my $save_anyway = $input->param('save_anyway');
         my @errors;
         my $tables   = get_tables();
         my @branches = grep { $_ ne q{} } $input->multi_param('branches');
@@ -656,9 +657,10 @@ if ( !$op ) {
     my $cache_expiry_units = $input->param('cache_expiry_units');
     my $public             = $input->param('public');
     my $run_type           = $input->param('run_type');
-    my $save_anyway        = $input->param('save_anyway');
-    my $tables             = get_tables();
-    my @branches           = grep { $_ ne q{} } $input->multi_param('branches');
+    $run_type = undef unless defined $run_type && $run_type =~ /^(?:any|foreground|background)$/;
+    my $save_anyway = $input->param('save_anyway');
+    my $tables      = get_tables();
+    my @branches    = grep { $_ ne q{} } $input->multi_param('branches');
 
     if ( $limit_reports_active && !$can_manage_report_limits ) {
         @branches = ( $logged_in_user->branchcode );
@@ -779,6 +781,9 @@ if ( !$op ) {
 
     output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
         unless $can_run_report->{foreground};
+
+    output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
+        if $report && $report->effective_run_type eq 'background';
 
     # export results to tab separated text or CSV
     if ($report) {

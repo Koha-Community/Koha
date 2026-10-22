@@ -45,6 +45,12 @@ $report_id = $report_rec->id;
 
 die "Sorry this report is not public\n" unless $report_rec->public;
 
+if ( $report_rec->effective_run_type eq 'background' ) {
+    print $query->header( -type => 'application/json', -status => '403 Forbidden' );
+    print encode_json( { error => 'report_background_only' } );
+    exit 0;
+}
+
 my @sql_params  = $query->multi_param('sql_params');
 my @param_names = $query->multi_param('param_names');
 

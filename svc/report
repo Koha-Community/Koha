@@ -50,6 +50,12 @@ unless ( $status eq "ok" ) {
     exit 0;
 }
 
+if ( $report_rec->effective_run_type eq 'background' ) {
+    print $query->header( -type => 'application/json', -status => '403 Forbidden' );
+    print to_json( { error => 'report_background_only' } );
+    exit 0;
+}
+
 my $cache        = Koha::Caches->get_instance();
 my $cache_active = $cache->is_cache_active;
 my ( $cache_key, $json_text );
