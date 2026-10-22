@@ -175,6 +175,7 @@ export default {
                 embed: "item_list_contents+count,item_list_shares+count",
             },
             url: baseResource.getResourceTableUrl(),
+            table_settings: item_lists_table_settings,
             actionsDropdown: true,
             actions: {
                 "-1": [

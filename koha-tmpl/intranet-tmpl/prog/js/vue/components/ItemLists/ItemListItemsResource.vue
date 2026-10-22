@@ -430,6 +430,7 @@ export default {
                     })),
             },
             url: baseResource.getResourceTableUrl(),
+            table_settings: item_list_items_table_settings,
             actions: resource => ({
                 "-1": resource?.can_manage ? ["remove"] : [],
             }),

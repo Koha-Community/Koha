@@ -318,6 +318,16 @@
         [% END %]
 
         [% WRAPPER accordion_item %]
+            [% WRAPPER accordion_heading panel_id="item_lists" %]
+                <span>Item lists</span>
+            [% END %]
+            [% WRAPPER accordion_panel panel_id="item_lists" %]
+                <h3>Item list tables</h3>
+                [% PROCESS pagelist module=modules.item_lists modulename="item_lists" %]
+            [% END %]
+        [% END %]
+
+        [% WRAPPER accordion_item %]
             [% WRAPPER accordion_heading panel_id="illrequests" %]
                 <span>Interlibrary loans</span>
             [% END %]

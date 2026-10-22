@@ -35,5 +35,10 @@
     [% INCLUDE 'js-date-format.inc' %]
     [% Asset.js("js/vue/dist/item_lists.js") | $raw %]
     [% INCLUDE 'select2.inc' %]
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+        const item_lists_table_settings = [% TablesSettings.GetTableSettings( 'item_lists', 'lists', 'lists', 'json' ) | $raw %];
+        const item_list_items_table_settings = [% TablesSettings.GetTableSettings( 'item_lists', 'items', 'items', 'json' ) | $raw %];
+        const item_list_shares_table_settings = [% TablesSettings.GetTableSettings( 'item_lists', 'shares', 'shares', 'json' ) | $raw %];
+    </script>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

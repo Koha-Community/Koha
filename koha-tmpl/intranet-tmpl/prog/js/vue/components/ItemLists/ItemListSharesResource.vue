@@ -126,6 +126,7 @@ export default {
                 embed: "patron",
             },
             url: baseResource.getResourceTableUrl(),
+            table_settings: item_list_shares_table_settings,
             actions: {
                 "-1": ["remove"],
             },
