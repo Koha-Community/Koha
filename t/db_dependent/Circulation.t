@@ -8189,12 +8189,23 @@ subtest "CanBookBeIssued + needsconfirmation message" => sub {
 
 subtest 'Tests for BlockReturnOfWithdrawnItems' => sub {
 
-    plan tests => 2;
+    plan tests => 7;
+
+    my @indexed_biblionumbers;
+    my $index_records = sub {
+        my ( $self, $record_numbers ) = @_;
+        push @indexed_biblionumbers, ref $record_numbers ? @{$record_numbers} : $record_numbers;
+    };
+    my $es_indexer_mock    = Test::MockModule->new('Koha::SearchEngine::Elasticsearch::Indexer');
+    my $zebra_indexer_mock = Test::MockModule->new('Koha::SearchEngine::Zebra::Indexer');
+    $es_indexer_mock->mock( 'index_records', $index_records );
+    $zebra_indexer_mock->mock( 'index_records', $index_records );
 
     t::lib::Mocks::mock_preference( 'BlockReturnOfWithdrawnItems', 1 );
     t::lib::Mocks::mock_preference( 'RecordLocalUseOnReturn',      0 );
     my $item = $builder->build_sample_item();
     $item->withdrawn(1)->itemlost(1)->store;
+    @indexed_biblionumbers = ();
     my @return = AddReturn( $item->barcode, $item->homebranch, 0, undef );
     is_deeply(
         [ @return[ 0 .. 3 ] ],
@@ -8202,6 +8213,29 @@ subtest 'Tests for BlockReturnOfWithdrawnItems' => sub {
         "Item returned as withdrawn, no other messages"
     );
     isa_ok( $return[4], 'Koha::Checkin', 'AddReturn returns the created checkin record' );
+    is_deeply( \@indexed_biblionumbers, [], "Nothing changed, the record is not reindexed" );
+
+    # Inconsistent data: onloan is set but the item is not checked out
+    $item->onloan( dt_from_string() )->store;
+    @indexed_biblionumbers = ();
+    AddReturn( $item->barcode, $item->homebranch, 0, undef );
+    is( $item->get_from_storage->onloan, undef, "onloan is cleared even if the return is blocked" );
+    is_deeply(
+        \@indexed_biblionumbers, [ $item->biblionumber ],
+        "The record is reindexed once after clearing onloan"
+    );
+
+    t::lib::Mocks::mock_preference( 'RecordLocalUseOnReturn', 1 );
+    $item->onloan( dt_from_string() )->store;
+    @indexed_biblionumbers = ();
+    AddReturn( $item->barcode, $item->homebranch, 0, undef );
+    is( $item->get_from_storage->localuse, 1, "Local use is recorded" );
+    is_deeply(
+        \@indexed_biblionumbers, [ $item->biblionumber ],
+        "The record is reindexed only once when local use is also recorded"
+    );
+
+    t::lib::Mocks::mock_preference( 'RecordLocalUseOnReturn', 0 );
 };
 
 subtest 'Tests for Wrongbranch blocker (AllowReturnToBranch)' => sub {

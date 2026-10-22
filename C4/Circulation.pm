@@ -2473,9 +2473,14 @@ sub AddReturn {
     }
 
     # Set NotIssued message if item not checked out
+    # The record is reindexed at the end, or before any early return
+    my $needs_reindex;
     if ( !$issue ) {
         $messages->{'NotIssued'} = $barcode;
-        $item->onloan(undef)->store( { skip_record_index => 1, skip_holds_queue => 1 } ) if defined $item->onloan;
+        if ( defined $item->onloan ) {
+            $item->onloan(undef)->store( { skip_record_index => 1, skip_holds_queue => 1 } );
+            $needs_reindex = 1;
+        }
         $doreturn = 0;
     }
 
@@ -2503,9 +2508,15 @@ sub AddReturn {
         if ( !$issue && C4::Context->preference("RecordLocalUseOnReturn") ) {
             my $localuse_count = $item->localuse || 0;
             $localuse_count++;
-            $item->localuse($localuse_count)->store;
+            $item->localuse($localuse_count)->store;    # also reindexes the record
             $messages->{'LocalUse'} = 1;
             $checkin_record->local_use(1)->store;
+            $needs_reindex = 0;
+        }
+
+        if ($needs_reindex) {
+            my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+            $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
         }
 
         _attach_messages_to_checkin( $checkin_record, $messages, { patron => $patron } );
