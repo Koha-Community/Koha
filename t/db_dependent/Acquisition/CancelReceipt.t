@@ -18,7 +18,8 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 13;
+use Test::More tests => 16;
+use Test::MockModule;
 use t::lib::TestBuilder;
 
 use C4::Context;
@@ -33,6 +34,7 @@ use Koha::DateUtils;
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;
 use Koha::Items;
+use Koha::Old::Items;
 use MARC::Record;
 
 my $schema = Koha::Database->new()->schema();
@@ -95,9 +97,42 @@ ModReceiveOrder(
 
 $order->add_item($itemnumber);
 
+my @indexed_biblionumbers;
+my $indexer_mock = Test::MockModule->new('Koha::SearchEngine::Elasticsearch::Indexer');
+$indexer_mock->mock(
+    'index_records',
+    sub {
+        my ( $self, $record_numbers ) = @_;
+        push @indexed_biblionumbers, @{$record_numbers};
+    }
+);
+my $zebra_indexer_mock = Test::MockModule->new('Koha::SearchEngine::Zebra::Indexer');
+$zebra_indexer_mock->mock(
+    'index_records',
+    sub {
+        my ( $self, $record_numbers ) = @_;
+        push @indexed_biblionumbers, @{$record_numbers};
+    }
+);
+
 CancelReceipt($ordernumber);
 
 is( $order->items->count, 0, "Create items on receiving: 0 item exist after cancelling a receipt" );
+is(
+    Koha::Old::Items->search( { itemnumber => $itemnumber } )->count, 1,
+    "Create items on receiving: the deleted item is moved to deleteditems"
+);
+is(
+    $schema->resultset('AqordersItem')->search( { itemnumber => $itemnumber } )->count, 0,
+    "Create items on receiving: the link between the order and the deleted item is removed"
+);
+is_deeply(
+    \@indexed_biblionumbers, [$biblionumber],
+    "Create items on receiving: the bibliographic record is reindexed once after cancelling a receipt"
+);
+
+$indexer_mock->unmock_all;
+$zebra_indexer_mock->unmock_all;
 
 my $itemnumber1 = Koha::Item->new( { itype => $itemtype, biblionumber => $biblionumber } )->store->itemnumber;
 my $itemnumber2 = Koha::Item->new( { itype => $itemtype, biblionumber => $biblionumber } )->store->itemnumber;

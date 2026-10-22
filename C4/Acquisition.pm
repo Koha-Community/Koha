@@ -80,11 +80,14 @@ use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Invoices;
 use Koha::Acquisition::Orders;
 use Koha::AdditionalFieldValue;
+use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::Biblios;
 use Koha::Exceptions;
 use Koha::Items;
 use Koha::Number::Price;
 use Koha::Libraries;
+use Koha::SearchEngine;
+use Koha::SearchEngine::Indexer;
 use Koha::CsvProfiles;
 use Koha::Patrons;
 
@@ -1715,6 +1718,19 @@ sub CancelReceipt {
     return $parent_ordernumber;
 }
 
+=head3 _cancel_items_receipt
+
+    _cancel_items_receipt( $order, $parent_ordernumber );
+
+    Internal helper of CancelReceipt.
+    If items are created at receipt (AcqCreateItem = receiving), delete the
+    items of the order (they are moved to deleteditems), remove their links
+    in aqorders_items and reindex the affected records once.
+    Otherwise, link the items to $parent_ordernumber (or to the order itself
+    if no parent order number is given).
+
+=cut
+
 sub _cancel_items_receipt {
     my ( $order, $parent_ordernumber ) = @_;
     $parent_ordernumber ||= $order->ordernumber;
@@ -1723,15 +1739,23 @@ sub _cancel_items_receipt {
     if ( $order->basket->effective_create_items eq 'receiving' ) {
 
         # Remove items that were created at receipt
-        my $query = qq{
-            DELETE FROM items, aqorders_items
-            USING items, aqorders_items
-            WHERE items.itemnumber = ? AND aqorders_items.itemnumber = ?
-        };
-        my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare($query);
-        while ( my $item = $items->next ) {
-            $sth->execute( $item->itemnumber, $item->itemnumber );
+        my $order_items = $order->_result->aqorders_items;
+        my %biblionumbers;
+        foreach my $item ( $items->as_list ) {
+            $biblionumbers{ $item->biblionumber } = 1;
+            $item->move_to_deleted;
+            $item->delete( { skip_record_index => 1, skip_holds_queue => 1 } );
+
+            # aqorders_items has no FK on items, the link must be removed explicitly
+            $order_items->search( { itemnumber => $item->itemnumber } )->delete;
+        }
+
+        if (%biblionumbers) {
+            my @biblionumbers = keys %biblionumbers;
+            my $indexer       = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+            $indexer->index_records( \@biblionumbers, "specialUpdate", "biblioserver" );
+            Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue( { biblio_ids => \@biblionumbers } )
+                if C4::Context->preference('RealTimeHoldsQueue');
         }
     } else {
 
