@@ -19,7 +19,7 @@
 use Modern::Perl;
 use Graphics::Magick;
 use Test::NoWarnings;
-use Test::More tests => 654;
+use Test::More tests => 655;
 use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -29,7 +29,7 @@ use Test::Warn;
 BEGIN {
     use_ok(
         'C4::Creators::Lib',
-        qw( get_all_templates get_all_layouts get_all_profiles get_all_image_names get_batch_summary get_label_summary get_card_summary get_barcode_types get_label_types get_font_types get_text_justification_types get_output_formats get_table_names get_unit_values html_table )
+        qw( get_all_templates get_all_layouts get_all_profiles get_all_image_names get_batch_summary get_label_summary get_card_summary get_barcode_types get_label_types get_font_types get_text_justification_types get_output_formats get_table_names get_unit_values get_barcode_range html_table )
     );
     use_ok('C4::Biblio');
     use_ok('C4::Context');
@@ -1517,6 +1517,40 @@ subtest '_add_backtics' => sub {
     while ( my $f = shift @a_exp ) {
         is( shift @b, $f, ( shift @a ) . ' became ' . $f );
     }
+};
+
+subtest 'get_barcode_range' => sub {
+    plan tests => 16;
+
+    my $range = get_barcode_range( { from => '00003', count => 10 } );
+    is( $range->{from},           3,       'from is numeric' );
+    is( $range->{to},             12,      'to is from + count - 1' );
+    is( $range->{count},          10,      'count is returned' );
+    is( $range->{txt_from},       '00003', 'txt_from keeps leading zeros' );
+    is( $range->{txt_to},         '00012', 'txt_to is padded to the length of txt_from' );
+    is( $range->{barcode_length}, 5,       'barcode_length is the length of txt_from' );
+
+    $range = get_barcode_range( { from => '123', count => 3 } );
+    is( $range->{txt_to}, '125', 'No padding when the starting barcode has no leading zeros' );
+
+    $range = get_barcode_range( { from => '0999', count => 3 } );
+    is( $range->{to},     1001,   'Range can grow past the starting width' );
+    is( $range->{txt_to}, '1001', 'txt_to is not padded when it is already as long as txt_from' );
+
+    $range = get_barcode_range( { from => '1', count => 5000 } );
+    is( $range->{count}, 1000, 'count is capped at 1000' );
+    is( $range->{to},    1000, 'to uses the capped count' );
+
+    $range = get_barcode_range( { from => '1', count => 1000 } );
+    is( $range->{count}, 1000, 'count of exactly 1000 is allowed' );
+
+    $range = get_barcode_range( { from => '00003', count => 0 } );
+    is( $range->{count}, undef, 'count of 0 is undef' );
+    is( $range->{to},    undef, 'to is undef when count is 0' );
+
+    $range = get_barcode_range( { count => 10 } );
+    is( $range->{from}, undef, 'from is undef when no starting barcode is given' );
+    is( $range->{to},   undef, 'to is undef when no starting barcode is given' );
 };
 
 # ---------- Sub ------------------------------------------
