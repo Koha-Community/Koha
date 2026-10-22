@@ -131,7 +131,7 @@ sub _search_limited {
                 '-and' => $group_filter,
             ]
         },
-        { join => [ 'owner', 'item_list_shares' ], order_by => 'me.name' }
+        { distinct => 1, join => [ 'owner', 'item_list_shares' ], order_by => 'me.name' }
     );
 }
 

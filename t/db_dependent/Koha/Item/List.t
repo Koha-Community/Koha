@@ -183,7 +183,7 @@ subtest 'action logs' => sub {
 };
 
 subtest 'permissions' => sub {
-    plan tests => 105;
+    plan tests => 108;
 
     $schema->storage->txn_begin;
 
@@ -197,6 +197,8 @@ subtest 'permissions' => sub {
     my $patron1 =
         $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library1->branchcode } } );
     my $patron2 =
+        $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library2->branchcode } } );
+    my $patron3 =
         $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library2->branchcode } } );
     my $list = $builder->build_object(
         { class => 'Koha::Item::Lists', value => { visibility => 'private', owner => $patron1->borrowernumber } } );
@@ -225,6 +227,13 @@ subtest 'permissions' => sub {
     is( Koha::Item::Lists->get_readable_lists($patron2)->count,   1 );
     is( Koha::Item::Lists->get_manageable_lists($patron2)->count, 0 );
 
+    # Test multiple shares on the same list only appear once
+    $list->share( { borrowernumber => $patron3->borrowernumber, permission => 'view' } );
+    is( Koha::Item::Lists->get_readable_lists($patron1)->count, 1 );
+    is( Koha::Item::Lists->get_readable_lists($patron2)->count, 1 );
+    is( Koha::Item::Lists->get_readable_lists($patron3)->count, 1 );
+
+    $list->remove_share( $patron3->borrowernumber );
     $list->share( { borrowernumber => $patron2->borrowernumber, permission => 'edit' } );
     ok( $list->can_be_read_by($patron2) );
     ok( $list->can_be_updated_by($patron2) );
