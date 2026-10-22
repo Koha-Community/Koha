@@ -1,5 +1,9 @@
 <template>
-    <BaseResource :routeAction="routeAction" :instancedResource="this">
+    <BaseResource
+        ref="resource"
+        :routeAction="routeAction"
+        :instancedResource="this"
+    >
         <template v-slot:list-header="slotProps">
             <h1>
                 {{ $__("Contents of") }} <em>{{ slotProps.resource.name }}</em>
@@ -30,7 +34,7 @@
     </BaseResource>
 </template>
 <script>
-import { inject } from "vue";
+import { inject, useTemplateRef } from "vue";
 import BaseResource from "../BaseResource.vue";
 import { useBaseResource } from "../../composables/base-resource.js";
 import { APIClient } from "../../fetch/api-client.js";
@@ -50,6 +54,82 @@ export default {
 
         const route = useRoute();
         const item_list_id = route.params.id;
+
+        const resource_ref = useTemplateRef("resource");
+
+        const postVirtualForm = (action, data) => {
+            let form = document.createElement("form");
+            form.action = action;
+            form.method = "POST";
+
+            data["csrf_token"] = document.querySelector(
+                'meta[name="csrf-token"]'
+            ).content;
+
+            for (const name in data) {
+                let value = data[name];
+                if (!Array.isArray(value)) {
+                    value = [value];
+                }
+                for (const v of value) {
+                    let input = document.createElement("input");
+                    input.name = name;
+                    input.type = "hidden";
+                    input.value = v;
+                    form.appendChild(input);
+                }
+            }
+            document.body.appendChild(form);
+            form.submit();
+        };
+
+        const batchRemove = (ids, callback) => {
+            if (ids.length === 0) return;
+
+            setConfirmationDialog(
+                {
+                    title: $__(
+                        "Are you sure you want to remove these items from the list?"
+                    ),
+                    message:
+                        ids.length > 1
+                            ? $__("Removing %s items").format(ids.length)
+                            : $__("Removing 1 item"),
+                    accept_label: $__("Yes, remove"),
+                    cancel_label: $__("No, do not remove"),
+                },
+                () => {
+                    baseResource.apiClient.removeMany(ids).then(
+                        success => {
+                            setMessage($__("Items removed"), true);
+                            callback();
+                        },
+                        error => {}
+                    );
+                }
+            );
+        };
+
+        const batchEdit = ids => {
+            if (ids.length === 0) return;
+
+            const path = "/cgi-bin/koha/tools/batchMod.pl";
+            return postVirtualForm(path, {
+                itemnumber: ids,
+                op: "cud-show",
+            });
+        };
+
+        const batchDelete = ids => {
+            if (ids.length === 0) return;
+
+            const path = "/cgi-bin/koha/tools/batchMod.pl";
+            return postVirtualForm(path, {
+                itemnumber: ids,
+                op: "cud-show",
+                del: "1",
+            });
+        };
 
         const baseResource = useBaseResource({
             emit: emit,
@@ -134,17 +214,71 @@ export default {
                 if (!resource?.can_update) return {};
                 if (!config.value?.permissions?.list_borrowers) return {};
 
-                return {
-                    list: [
-                        {
-                            to: {
-                                name: "ItemListSharesAdd",
-                                params: { id: item_list_id },
-                            },
-                            icon: "plus",
-                            title: $__("Add shares"),
+                let list_buttons = [
+                    {
+                        to: {
+                            name: "ItemListSharesAdd",
+                            params: { id: item_list_id },
                         },
-                    ],
+                        icon: "plus",
+                        title: $__("Add shares"),
+                    },
+                    {
+                        icon: "minus",
+                        title: $__("Batch remove from list"),
+                        onClick: () => {
+                            const dt = resource_ref?.value?.useTableObject();
+                            if (!dt) return;
+                            batchRemove(
+                                dt
+                                    .rows({ selected: true })
+                                    .data()
+                                    .map(row => row.item_id)
+                                    .toArray(),
+                                () => dt.ajax.reload()
+                            );
+                        },
+                    },
+                ];
+
+                if (config.value?.permissions?.items_batchmod) {
+                    list_buttons.push({
+                        icon: "pencil",
+                        title: $__("Batch edit"),
+                        onClick: () => {
+                            const dt = resource_ref?.value?.useTableObject();
+                            if (!dt) return;
+                            batchEdit(
+                                dt
+                                    .rows({ selected: true })
+                                    .data()
+                                    .map(row => row.item_id)
+                                    .toArray()
+                            );
+                        },
+                    });
+                }
+
+                if (config.value?.permissions?.items_batchdel) {
+                    list_buttons.push({
+                        icon: "trash",
+                        title: $__("Batch delete"),
+                        onClick: () => {
+                            const dt = resource_ref?.value?.useTableObject();
+                            if (!dt) return;
+                            batchDelete(
+                                dt
+                                    .rows({ selected: true })
+                                    .data()
+                                    .map(row => row.item_id)
+                                    .toArray()
+                            );
+                        },
+                    });
+                }
+
+                return {
+                    list: list_buttons,
                 };
             },
             props,
@@ -281,141 +415,10 @@ export default {
             ],
         });
 
-        const postVirtualForm = (action, data) => {
-            let form = document.createElement("form");
-            form.action = action;
-            form.method = "POST";
-
-            data["csrf_token"] = document.querySelector(
-                'meta[name="csrf-token"]'
-            ).content;
-
-            for (const name in data) {
-                let value = data[name];
-                if (!Array.isArray(value)) {
-                    value = [value];
-                }
-                for (const v of value) {
-                    let input = document.createElement("input");
-                    input.name = name;
-                    input.type = "hidden";
-                    input.value = v;
-                    form.appendChild(input);
-                }
-            }
-            document.body.appendChild(form);
-            form.submit();
-        };
-
-        const batchRemove = (ids, callback) => {
-            if (ids.length === 0) return;
-
-            setConfirmationDialog(
-                {
-                    title: $__(
-                        "Are you sure you want to remove these items from the list?"
-                    ),
-                    message:
-                        ids.length > 1
-                            ? $__("Removing %s items").format(ids.length)
-                            : $__("Removing 1 item"),
-                    accept_label: $__("Yes, remove"),
-                    cancel_label: $__("No, do not remove"),
-                },
-                () => {
-                    baseResource.apiClient.removeMany(ids).then(
-                        success => {
-                            setMessage($__("Items removed"), true);
-                            callback();
-                        },
-                        error => {}
-                    );
-                }
-            );
-        };
-
-        const batchEdit = ids => {
-            if (ids.length === 0) return;
-
-            const path = "/cgi-bin/koha/tools/batchMod.pl";
-            return postVirtualForm(path, {
-                itemnumber: ids,
-                op: "cud-show",
-            });
-        };
-
-        const batchDelete = ids => {
-            if (ids.length === 0) return;
-
-            const path = "/cgi-bin/koha/tools/batchMod.pl";
-            return postVirtualForm(path, {
-                itemnumber: ids,
-                op: "cud-show",
-                del: "1",
-            });
-        };
-
-        function onSelectionChange(e, dt) {
-            const buttons_enabled = dt.rows({ selected: true }).count() > 0;
-            dt.button("batch_remove:name").enable(buttons_enabled);
-            dt.button("batch_edit:name").enable(buttons_enabled);
-            dt.button("batch_delete:name").enable(buttons_enabled);
-        }
-
         const tableOptions = {
             options: {
                 embed: "biblio,holding_library,home_library,item_type,+strings",
                 order: [[1, "asc"]],
-                additionalButtons: [
-                    {
-                        name: "batch_remove",
-                        text: $__("Batch remove from list"),
-                        enabled: false,
-                        action: (e, dt, node, config) =>
-                            batchRemove(
-                                dt
-                                    .rows({ selected: true })
-                                    .data()
-                                    .map(row => row.item_id)
-                                    .toArray(),
-                                () => dt.ajax.reload()
-                            ),
-                    },
-                    ...(config.value?.permissions?.items_batchmod
-                        ? [
-                              {
-                                  name: "batch_edit",
-                                  text: $__("Batch edit"),
-                                  enabled: false,
-                                  action: (e, dt, node, config) =>
-                                      batchEdit(
-                                          dt
-                                              .rows({ selected: true })
-                                              .data()
-                                              .map(row => row.item_id)
-                                              .toArray()
-                                      ),
-                              },
-                          ]
-                        : []),
-                    ...(config.value?.permissions?.items_batchdel
-                        ? [
-                              {
-                                  name: "batch_delete",
-                                  text: $__("Batch delete"),
-                                  enabled: false,
-                                  action: (e, dt, node, config) =>
-                                      batchDelete(
-                                          dt
-                                              .rows({ selected: true })
-                                              .data()
-                                              .map(row => row.item_id)
-                                              .toArray()
-                                      ),
-                              },
-                          ]
-                        : []),
-                ],
             },
             select: true,
             add_filters: true,
@@ -434,10 +437,6 @@ export default {
             actions: resource => ({
                 "-1": resource?.can_manage ? ["remove"] : [],
             }),
-            additionalEvents: {
-                select: onSelectionChange,
-                deselect: onSelectionChange,
-            },
         };
 
         const onFormSave = (e, itemToSave) => {

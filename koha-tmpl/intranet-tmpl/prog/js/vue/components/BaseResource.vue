@@ -5,6 +5,7 @@
             :instancedResource="instancedResource"
             :key="instancedResource.refreshTemplate"
             @select-resource="$emit('select-resource', $event)"
+            ref="list"
         >
             <template #toolbar="{ resource, componentPropData }">
                 <Toolbar
@@ -87,6 +88,7 @@ export default {
 
         return {
             ...(typeof logged_in_user !== "undefined" && { logged_in_user }),
+            useTableObject,
         };
     },
     name: "BaseResource",
