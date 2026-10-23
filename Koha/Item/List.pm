@@ -384,11 +384,10 @@ sub _check_access {
 
     my $borrowernumber = $patron->borrowernumber;
 
-    # First, check for explicit access: either the list is unowned, we own it, or it
+    # First, check for explicit access: either we own the list, or it
     # was explicitly shared with us.
     return 1
-        if !defined( $self->owner )
-        || $self->owner == $borrowernumber
+        if ( defined $self->owner && $self->owner == $borrowernumber )
         || $self->is_shared_with( { borrowernumber => $borrowernumber, permission => $share_permission } );
 
     # If it wasn't explicitly shared with us, check we have the relevant permission for
@@ -396,18 +395,18 @@ sub _check_access {
     return 0
         unless !defined($subpermission) || $patron->has_permission( { item_lists => $subpermission } );
 
-    my $branchcode = Koha::Patrons->find( $self->owner )->branchcode;
-
     # Check we can see it implicitly, either because it's public or because it's shared
     # within a group we have visibility into.
     return (
-        $self->visibility eq 'group' && $patron->can_see_things_from(
+               defined $self->owner
+            && $self->visibility eq 'group'
+            && $patron->can_see_things_from(
             {
-                branchcode    => $branchcode,
+                branchcode    => Koha::Patrons->find( $self->owner )->branchcode,
                 permission    => 'superlibrarian',
                 subpermission => '*'
             }
-        )
+            )
     ) || $self->visibility eq 'public';
 }
 

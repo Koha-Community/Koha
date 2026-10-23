@@ -183,7 +183,7 @@ subtest 'action logs' => sub {
 };
 
 subtest 'permissions' => sub {
-    plan tests => 108;
+    plan tests => 118;
 
     $schema->storage->txn_begin;
 
@@ -366,15 +366,31 @@ subtest 'permissions' => sub {
     is( Koha::Item::Lists->get_readable_lists($patron2)->count,   0 );
     is( Koha::Item::Lists->get_manageable_lists($patron2)->count, 0 );
 
+    $patron1->set_permissions(
+        { item_lists => { edit_item_lists => 1, delete_item_lists => 1, manage_item_list_contents => 1 } } );
     $list->update( { owner => undef } );
+    ok( !$list->can_be_read_by($patron1) );
+    ok( !$list->can_be_updated_by($patron1) );
+    ok( !$list->can_be_deleted_by($patron1) );
+    ok( !$list->can_be_managed_by($patron1) );
+    is( Koha::Item::Lists->get_readable_lists($patron1)->count,   0 );
+    is( Koha::Item::Lists->get_manageable_lists($patron1)->count, 0 );
+
+    $list->update( { visibility => 'group' } );
+    ok( !$list->can_be_read_by($patron1) );
+    ok( !$list->can_be_updated_by($patron1) );
+    ok( !$list->can_be_deleted_by($patron1) );
+    ok( !$list->can_be_managed_by($patron1) );
+    is( Koha::Item::Lists->get_readable_lists($patron1)->count,   0 );
+    is( Koha::Item::Lists->get_manageable_lists($patron1)->count, 0 );
+
+    $list->update( { visibility => 'public' } );
     ok( $list->can_be_read_by($patron1) );
-    ok( $list->can_be_read_by($patron2) );
+    ok( $list->can_be_updated_by($patron1) );
+    ok( $list->can_be_deleted_by($patron1) );
     ok( $list->can_be_managed_by($patron1) );
-    ok( $list->can_be_managed_by($patron2) );
     is( Koha::Item::Lists->get_readable_lists($patron1)->count,   1 );
     is( Koha::Item::Lists->get_manageable_lists($patron1)->count, 1 );
-    is( Koha::Item::Lists->get_readable_lists($patron2)->count,   1 );
-    is( Koha::Item::Lists->get_manageable_lists($patron2)->count, 1 );
 
     $schema->storage->txn_rollback;
 };

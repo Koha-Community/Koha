@@ -118,8 +118,8 @@ sub _search_limited {
                 # A public list we can implicitly see
                 'me.visibility' => ( $has_implicit_permission ? 'public' : [] ),
 
-                # A list that is unowned or belongs to us
-                'me.owner' => [ $patron->borrowernumber, undef ],
+                # A list that belongs to us
+                'me.owner' => $patron->borrowernumber,
 
                 # A list shared with us at the required access level
                 '-and' => {
