@@ -233,7 +233,7 @@
                         href="/cgi-bin/koha/admin/currency.pl"
                         :title="$__('Currencies')"
                         ><i
-                            class="fa-solid fa-money-bill-1 fa-fw"
+                            class="fa-solid fa-dollar-sign fa-fw"
                             aria-hidden="true"
                         ></i>
                         <span class="menu-label">{{

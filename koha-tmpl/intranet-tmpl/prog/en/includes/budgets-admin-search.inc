@@ -47,7 +47,7 @@
     [% END # /tab_panels %]
     [% WRAPPER tabs_nav %]
         [% WRAPPER tab_item tabname= "budgets_search" bt_active= 1 %]
-            <i class="fa-solid fa-fw fa-credit-card"></i> <span class="tab-title">Search funds</span>
+            <i class="fa-solid fa-fw fa-sack-dollar"></i> <span class="tab-title">Search funds</span>
         [% END %]
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             [% WRAPPER tab_item tabname= "circ_search" %]

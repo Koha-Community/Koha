@@ -28,7 +28,7 @@
 
     [% WRAPPER tabs_nav %]
         [% WRAPPER tab_item tabname= "contract_description_search" bt_active= 1 %]
-            <i class="fa-solid fa-fw fa-pen-to-square" aria-hidden="true"></i> <span class="tab-title">Search contracts</span>
+            <i class="fa-solid fa-fw fa-file-signature" aria-hidden="true"></i> <span class="tab-title">Search contracts</span>
         [% END %]
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             [% WRAPPER tab_item tabname= "circ_search" %]

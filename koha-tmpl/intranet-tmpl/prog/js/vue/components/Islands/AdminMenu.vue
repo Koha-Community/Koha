@@ -9,7 +9,7 @@
                         href="/cgi-bin/koha/admin/preferences.pl"
                         :title="$__('System preferences')"
                         ><i
-                            class="fa-solid fa-sliders fa-fw"
+                            class="fa-solid fa-gears fa-fw"
                             aria-hidden="true"
                         ></i>
                         <span class="menu-label">{{
@@ -110,7 +110,7 @@
                         href="/cgi-bin/koha/admin/categories.pl"
                         :title="$__('Patron categories')"
                         ><i
-                            class="fa-solid fa-id-badge fa-fw"
+                            class="fa-solid fa-id-card fa-fw"
                             aria-hidden="true"
                         ></i>
                         <span class="menu-label">{{
@@ -386,7 +386,7 @@
                         href="/cgi-bin/koha/admin/background_jobs.pl"
                         :title="$__('Jobs')"
                         ><i
-                            class="fa-solid fa-gears fa-fw"
+                            class="fa-solid fa-bars-progress fa-fw"
                             aria-hidden="true"
                         ></i>
                         <span class="menu-label">{{ $__("Jobs") }}</span></a
@@ -608,7 +608,7 @@
                         href="/cgi-bin/koha/admin/currency.pl"
                         :title="$__('Currencies and exchange rates')"
                         ><i
-                            class="fa-solid fa-money-bill-transfer fa-fw"
+                            class="fa-solid fa-dollar-sign fa-fw"
                             aria-hidden="true"
                         ></i>
                         <span class="menu-label">{{

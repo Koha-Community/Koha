@@ -27,7 +27,7 @@
     [% END # /tab_panels %]
     [% WRAPPER tabs_nav %]
         [% WRAPPER tab_item tabname= "city_search" bt_active= 1 %]
-            <i class="fa fa-fw fa-building" aria-hidden="true"></i> <span class="tab-title">Search cities</span>
+            <i class="fa-solid fa-fw fa-city" aria-hidden="true"></i> <span class="tab-title">Search cities</span>
         [% END %]
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             [% WRAPPER tab_item tabname= "circ_search" %]

@@ -31,7 +31,7 @@
     [% END # /tab_panels %]
     [% WRAPPER tabs_nav %]
         [% WRAPPER tab_item tabname= "suggestions_search" bt_active= 1 %]
-            <i class="fa-solid fa-comment" aria-hidden="true"></i> <span class="tab-title">Search suggestions</span>
+            <i class="fa-solid fa-lightbulb" aria-hidden="true"></i> <span class="tab-title">Search suggestions</span>
         [% END %]
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             [% WRAPPER tab_item tabname= "circ_search" %]
