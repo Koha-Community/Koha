@@ -4996,8 +4996,12 @@ div .suggestion_note {
     }
 
     :root.sidebar-collapsed {
+        // The collapsed sidebar column is a fixed 3rem wide; let the
+        // main column take whatever is left instead of a fixed share.
         .sidebar-main {
-            width: 90%;
+            flex: 1 1 0;
+            min-width: 0;
+            width: auto;
         }
 
         #toggle-sidebar .fa-chevron-left {
