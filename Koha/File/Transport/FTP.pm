@@ -314,7 +314,7 @@ sub _mtime_from_mlsd_fact {
     return eval { timegm( $6, $5, $4, $3, $2 - 1, $1 ) };
 }
 
-=head3 _rename_file
+=head3 rename_file
 
     my $success = $server->rename_file($old_name, $new_name);
 
