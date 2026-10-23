@@ -56,13 +56,14 @@ my $results = $objects->search_with_library_group_limits(
 );
 
 Searches objects respecting library group limits. For the given C<$library_id>
-(defaults to the logged-in user's branch), finds all library groups where
-C<$ft_column> is enabled on the root group and the user's library is a member,
-then returns objects whose junction-table entry matches any branchcode in those
-groups (or has no limit at all).
+(defaults to the logged-in user's branch), finds all root library groups where
+C<$ft_column> is enabled and the user's library is a member at any depth, then
+returns objects whose junction-table entry matches any branchcode in the whole
+tree under those roots (or has no limit at all). A library that is not in any
+such tree only sees objects limited to itself.
 
 C<$ft_column> must be the name of an C<ft_*> boolean column on the
-C<library_groups> table (e.g. C<'ft_limit_reports'>).
+C<library_groups> table (e.g. C<'ft_reports'>).
 
 =cut
 
@@ -76,17 +77,16 @@ sub search_with_library_group_limits {
 
     require Koha::Library::Groups;
 
-    # Find all library groups that have $ft_column enabled on the root group
-    # and contain the user's library, then collect every branchcode in those groups.
+    # Find all root library groups that have $ft_column enabled and contain
+    # the user's library, then collect every branchcode in those trees.
     my @accessible_branchcodes = ($library_id);
     my $lib_nodes              = Koha::Library::Groups->search( { branchcode => $library_id } );
 
     for my $lib_node ( $lib_nodes->as_list ) {
         my $root = Koha::Library::Groups->get_root_ancestor( { id => $lib_node->id } );
         next unless $root->$ft_column;
-        my $parent = $lib_node->parent;
         push @accessible_branchcodes,
-            map { $_->branchcode } $parent->all_libraries;
+            map { $_->branchcode } $root->all_libraries;
     }
 
     return $self->search( $params, $attributes ) unless @accessible_branchcodes;

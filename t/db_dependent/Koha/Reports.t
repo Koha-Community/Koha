@@ -501,16 +501,23 @@ subtest 'library limits enforcement on save and update' => sub {
 };
 
 subtest 'library_group_limits' => sub {
-    plan tests => 20;
+    plan tests => 25;
 
     my $library_a = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library_b = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library_c = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_d = $builder->build_object( { class => 'Koha::Libraries' } );
 
+    # root (ft_reports)
+    #   group_a: library_a, library_b
+    #     group_d: library_d
+    # library_c is not in any group
     my $root_group = Koha::Library::Group->new( { title     => 'test root group', ft_reports => 1 } )->store;
     my $group_a    = Koha::Library::Group->new( { parent_id => $root_group->id, title => 'test group a' } )->store;
+    my $group_d    = Koha::Library::Group->new( { parent_id => $group_a->id,    title => 'test group d' } )->store;
     Koha::Library::Group->new( { parent_id => $group_a->id, branchcode => $library_a->branchcode } )->store;
     Koha::Library::Group->new( { parent_id => $group_a->id, branchcode => $library_b->branchcode } )->store;
+    Koha::Library::Group->new( { parent_id => $group_d->id, branchcode => $library_d->branchcode } )->store;
 
     my $report_no_limit  = $builder->build_object( { class => 'Koha::Reports' } );
     my $report_library_a = $builder->build_object( { class => 'Koha::Reports' } );
@@ -519,16 +526,34 @@ subtest 'library_group_limits' => sub {
     my $limits = $report_no_limit->library_group_limits;
     is( scalar @$limits, 0, 'report with no limits returns empty arrayref' );
 
-    # Limited to library_a - returns parent group_a
+    # Limited to library_a - returns the root group, not the immediate parent
     $report_library_a->replace_library_limits( [ $library_a->branchcode ] );
     $limits = $report_library_a->library_group_limits;
-    is( scalar @$limits,  1,            'report limited to library_a returns one parent group' );
-    is( $limits->[0]->id, $group_a->id, 'returned group is group_a' );
+    is( scalar @$limits,  1,               'report limited to library_a returns one group' );
+    is( $limits->[0]->id, $root_group->id, 'returned group is the root group' );
 
-    # Limited to library_a and library_b (same parent) - deduplicated to one group
+    # Limited to library_a and library_b (same tree) - deduplicated to one group
     $report_library_a->replace_library_limits( [ $library_a->branchcode, $library_b->branchcode ] );
     $limits = $report_library_a->library_group_limits;
-    is( scalar @$limits, 1, 'limits for two libraries sharing a parent deduplicates to one group' );
+    is( scalar @$limits, 1, 'limits for two libraries sharing a root deduplicates to one group' );
+
+    # Limited to library_d (nested sub-group) - still returns the root group
+    my $report_library_d = $builder->build_object( { class => 'Koha::Reports' } );
+    $report_library_d->replace_library_limits( [ $library_d->branchcode ] );
+    $limits = $report_library_d->library_group_limits;
+    is( scalar @$limits,  1,               'report limited to a library in a sub-group returns one group' );
+    is( $limits->[0]->id, $root_group->id, 'nested library: returned group is the root group' );
+    is( scalar @{ $report_library_d->ungrouped_library_limits }, 0, 'nested library: not ungrouped' );
+    is_deeply(
+        [ sort @{ $report_library_d->library_group_limit_branchcodes } ],
+        [ sort ( $library_a->branchcode, $library_b->branchcode, $library_d->branchcode ) ],
+        'nested library: resolves to every library in the tree under the root'
+    );
+
+    # Limited to library_a and library_d (different depths, same tree) - one group
+    $report_library_d->replace_library_limits( [ $library_a->branchcode, $library_d->branchcode ] );
+    $limits = $report_library_d->library_group_limits;
+    is( scalar @$limits, 1, 'limits for libraries at different depths of one tree deduplicate to one group' );
 
     # ft_reports disabled on root - group excluded by filter
     $root_group->ft_reports(0)->store;
@@ -549,19 +574,19 @@ subtest 'library_group_limits' => sub {
     $report_a_c->replace_library_limits( [ $library_a->branchcode, $library_c->branchcode ] );
 
     $limits = $report_a_c->library_group_limits;
-    is( scalar @$limits,  1,            'grouped + ungrouped: only the qualifying group is returned' );
-    is( $limits->[0]->id, $group_a->id, 'grouped + ungrouped: returned group is group_a' );
+    is( scalar @$limits,  1,               'grouped + ungrouped: only the qualifying group is returned' );
+    is( $limits->[0]->id, $root_group->id, 'grouped + ungrouped: returned group is the root group' );
 
     my $ungrouped = $report_a_c->ungrouped_library_limits;
     is( scalar @$ungrouped,          1,                      'grouped + ungrouped: one ungrouped library' );
     is( $ungrouped->[0]->branchcode, $library_c->branchcode, 'grouped + ungrouped: ungrouped library is library_c' );
 
     my $branchcodes = $report_a_c->library_group_limit_branchcodes;
-    is( scalar @$branchcodes, 3, 'grouped + ungrouped: resolves to all group members plus the ungrouped library' );
+    is( scalar @$branchcodes, 4, 'grouped + ungrouped: resolves to the whole tree plus the ungrouped library' );
     is_deeply(
         [ sort @$branchcodes ],
-        [ sort ( $library_a->branchcode, $library_b->branchcode, $library_c->branchcode ) ],
-        'grouped + ungrouped: resolved branchcodes are a, b and c'
+        [ sort ( $library_a->branchcode, $library_b->branchcode, $library_c->branchcode, $library_d->branchcode ) ],
+        'grouped + ungrouped: resolved branchcodes are a, b, c and d'
     );
 
     # Limited to library_c only - enforced as a group of one
@@ -589,16 +614,23 @@ subtest 'library_group_limits' => sub {
 };
 
 subtest 'can_access with library_group' => sub {
-    plan tests => 9;
+    plan tests => 13;
 
     my $library_a = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library_b = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library_c = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_d = $builder->build_object( { class => 'Koha::Libraries' } );
 
+    # root (ft_reports)
+    #   group_ab: library_a, library_b
+    #     group_d: library_d
+    # library_c is not in any group
     my $root_group = Koha::Library::Group->new( { title => 'can_access root', ft_reports => 1 } )->store;
     my $group_ab = Koha::Library::Group->new( { parent_id => $root_group->id, title => 'can_access group ab' } )->store;
+    my $group_d  = Koha::Library::Group->new( { parent_id => $group_ab->id,   title => 'can_access group d' } )->store;
     Koha::Library::Group->new( { parent_id => $group_ab->id, branchcode => $library_a->branchcode } )->store;
     Koha::Library::Group->new( { parent_id => $group_ab->id, branchcode => $library_b->branchcode } )->store;
+    Koha::Library::Group->new( { parent_id => $group_d->id,  branchcode => $library_d->branchcode } )->store;
 
     my $basic_patron = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
     my $super_patron = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1 } } );
@@ -606,21 +638,30 @@ subtest 'can_access with library_group' => sub {
     my $report_no_limit = $builder->build_object( { class => 'Koha::Reports' } );
     my $report_a        = $builder->build_object( { class => 'Koha::Reports' } );
     my $report_c        = $builder->build_object( { class => 'Koha::Reports' } );
+    my $report_d        = $builder->build_object( { class => 'Koha::Reports' } );
     $report_a->replace_library_limits( [ $library_a->branchcode ] );
     $report_c->replace_library_limits( [ $library_c->branchcode ] );
+    $report_d->replace_library_limits( [ $library_d->branchcode ] );
 
     t::lib::Mocks::mock_preference( 'LimitReportsBy', 'library_group' );
 
-    # User at library_a (grouped with library_b)
+    # User at library_a (grouped with library_b, library_d in a sub-group)
     t::lib::Mocks::mock_userenv( { branchcode => $library_a->branchcode } );
     ok( $report_no_limit->can_access($basic_patron), 'branch a: report with no limits accessible' );
     ok( $report_a->can_access($basic_patron),        'branch a: report limited to own branch accessible' );
     ok( !$report_c->can_access($basic_patron),       'branch a: report limited to ungrouped branch c denied' );
+    ok( $report_d->can_access($basic_patron),        'branch a: report limited to a branch in a sub-group accessible' );
 
     # User at library_b (sibling of library_a)
     t::lib::Mocks::mock_userenv( { branchcode => $library_b->branchcode } );
     ok( $report_a->can_access($basic_patron),  'branch b: report limited to group sibling accessible' );
     ok( !$report_c->can_access($basic_patron), 'branch b: report limited to ungrouped branch c denied' );
+
+    # User at library_d (sub-group) - the whole tree under the root is one group
+    t::lib::Mocks::mock_userenv( { branchcode => $library_d->branchcode } );
+    ok( $report_d->can_access($basic_patron),  'branch d: report limited to own branch accessible' );
+    ok( $report_a->can_access($basic_patron),  'branch d: report limited to a branch higher in the tree accessible' );
+    ok( !$report_c->can_access($basic_patron), 'branch d: report limited to ungrouped branch c denied' );
 
     # User at library_c (not in any group) - own branch is a group of one
     t::lib::Mocks::mock_userenv( { branchcode => $library_c->branchcode } );
@@ -634,46 +675,60 @@ subtest 'can_access with library_group' => sub {
 };
 
 subtest 'search_with_library_group_limits' => sub {
-    plan tests => 5;
+    plan tests => 6;
 
     C4::Context->unset_userenv;
 
     my $library_a = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library_b = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library_c = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_d = $builder->build_object( { class => 'Koha::Libraries' } );
 
+    # root (ft_reports)
+    #   group_a: library_a, library_b
+    #     group_d: library_d
+    # library_c is not in any group
     my $root_group = Koha::Library::Group->new( { title => 'search test root', ft_reports => 1 } )->store;
     my $group_a = Koha::Library::Group->new( { parent_id => $root_group->id, title => 'search test group a' } )->store;
+    my $group_d = Koha::Library::Group->new( { parent_id => $group_a->id,    title => 'search test group d' } )->store;
     Koha::Library::Group->new( { parent_id => $group_a->id, branchcode => $library_a->branchcode } )->store;
     Koha::Library::Group->new( { parent_id => $group_a->id, branchcode => $library_b->branchcode } )->store;
+    Koha::Library::Group->new( { parent_id => $group_d->id, branchcode => $library_d->branchcode } )->store;
 
     my $report_no_limit  = $builder->build_object( { class => 'Koha::Reports' } );
     my $report_library_a = $builder->build_object( { class => 'Koha::Reports' } );
     my $report_library_b = $builder->build_object( { class => 'Koha::Reports' } );
+    my $report_library_d = $builder->build_object( { class => 'Koha::Reports' } );
     $report_library_a->replace_library_limits( [ $library_a->branchcode ] );
     $report_library_b->replace_library_limits( [ $library_b->branchcode ] );
+    $report_library_d->replace_library_limits( [ $library_d->branchcode ] );
 
-    my @ids       = ( $report_no_limit->id, $report_library_a->id, $report_library_b->id );
+    my @ids       = ( $report_no_limit->id, $report_library_a->id, $report_library_b->id, $report_library_d->id );
     my $id_filter = { 'me.id' => { '-in' => \@ids } };
 
     # No library_id - unrestricted search
     my @results = Koha::Reports->search_with_library_group_limits( $id_filter, {}, undef, 'ft_reports' )->as_list;
-    is( scalar @results, 3, 'no library_id returns all reports unrestricted' );
+    is( scalar @results, 4, 'no library_id returns all reports unrestricted' );
 
     # library_c not in any group - only own-branch and unlimited reports accessible
     @results = Koha::Reports->search_with_library_group_limits( $id_filter, {}, $library_c->branchcode, 'ft_reports' )
         ->as_list;
     is( scalar @results, 1, 'library not in any group sees only reports with no limit' );
 
-    # library_a in group_a (ft_reports=1) - whole group is accessible, sees library_b limited reports too
+    # library_a in group_a (ft_reports=1) - whole tree is accessible, sees library_b and library_d limited reports too
     @results = Koha::Reports->search_with_library_group_limits( $id_filter, {}, $library_a->branchcode, 'ft_reports' )
         ->as_list;
-    is( scalar @results, 3, 'library in ft_reports group sees all reports limited to group siblings' );
+    is( scalar @results, 4, 'library in ft_reports group sees all reports limited to libraries in the tree' );
 
     # library_b (sibling of library_a) - same result
     @results = Koha::Reports->search_with_library_group_limits( $id_filter, {}, $library_b->branchcode, 'ft_reports' )
         ->as_list;
-    is( scalar @results, 3, 'sibling library in the same group also sees all group-limited reports' );
+    is( scalar @results, 4, 'sibling library in the same group also sees all group-limited reports' );
+
+    # library_d (sub-group) - sees reports limited to libraries higher in the tree
+    @results = Koha::Reports->search_with_library_group_limits( $id_filter, {}, $library_d->branchcode, 'ft_reports' )
+        ->as_list;
+    is( scalar @results, 4, 'library in a sub-group sees all reports limited to libraries in the tree' );
 
     # ft_reports disabled on root - library_a falls back to own-branch only
     $root_group->ft_reports(0)->store;

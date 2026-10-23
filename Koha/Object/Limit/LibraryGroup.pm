@@ -47,8 +47,10 @@ This class must always be subclassed .
 my $limits = $object->library_group_limits();
 
 Returns an array reference of Koha::Library::Group objects representing the
-current library group limits. Returns an empty array reference if no limits
-are defined.
+current library group limits: the root library groups that have the feature
+column enabled and contain at least one of the limited libraries, at any
+depth. A library group is the whole tree under such a root. Returns an empty
+array reference if no limits are defined.
 
 =cut
 
@@ -64,17 +66,13 @@ sub library_group_limits {
     my $ft_column = $self->_library_group_limits->{group};
 
     my %seen;
-    my @parents =
+    my @roots =
+        grep { $_->$ft_column }
         grep { !$seen{ $_->id }++ }
-        grep { defined }
-        map  { $_->parent } Koha::Library::Groups->search( { branchcode => { '-in' => \@branchcodes } } )->as_list;
+        map  { Koha::Library::Groups->get_root_ancestor( { id => $_->id } ) }
+        Koha::Library::Groups->search( { branchcode => { '-in' => \@branchcodes } } )->as_list;
 
-    @parents = grep {
-        my $root = Koha::Library::Groups->get_root_ancestor( { id => $_->id } );
-        $root && $root->$ft_column;
-    } @parents;
-
-    return \@parents;
+    return \@roots;
 }
 
 =head3 ungrouped_library_limits
