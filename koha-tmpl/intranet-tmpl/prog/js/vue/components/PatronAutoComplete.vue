@@ -1,6 +1,7 @@
 <template>
     <input
         type="text"
+        :id="id"
         ref="searchInputRef"
         class="patron-search-input"
         :placeholder="placeholder"
