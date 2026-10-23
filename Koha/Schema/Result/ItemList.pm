@@ -47,6 +47,14 @@ name of the item list
 
 borrowernumber of the item list owner
 
+=head2 branchcode
+
+  data_type: 'varchar'
+  is_nullable: 0
+  size: 10
+
+branchcode of the item list owner
+
 =head2 visibility
 
   data_type: 'enum'
@@ -83,6 +91,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "owner",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "branchcode",
+  { data_type => "varchar", is_nullable => 0, size => 10 },
   "visibility",
   {
     data_type => "enum",
@@ -185,8 +195,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-08-27 10:38:44
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uxr/3wfj0mZEEiP/5CqnPw
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-10-23 10:38:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TcsZIQMQFAiuzZXGNMZGdQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
