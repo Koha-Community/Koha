@@ -7,12 +7,12 @@
         >
         [% IF ( CAN_user_reports_create_reports ) %]
             <li
-                ><a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form" title="Build new"><i class="fa-solid fa-plus fa-fw" aria-hidden="true"></i><span class="menu-label">Build new</span></a></li
+                ><a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form" title="Build new"><i class="fa-solid fa-code-branch fa-fw" aria-hidden="true"></i><span class="menu-label">Build new</span></a></li
             >
         [% END %]
         [% IF ( CAN_user_reports_execute_reports_foreground || CAN_user_reports_execute_reports_background ) %]
             <li
-                ><a href="/cgi-bin/koha/reports/guided_reports.pl?op=list" title="View saved"><i class="fa-solid fa-folder-open fa-fw" aria-hidden="true"></i><span class="menu-label">View saved</span></a></li
+                ><a href="/cgi-bin/koha/reports/guided_reports.pl?op=list" title="View saved"><i class="fa-solid fa-list fa-fw" aria-hidden="true"></i><span class="menu-label">View saved</span></a></li
             >
             <li
                 ><a href="/cgi-bin/koha/reports/jobs.pl" title="Report jobs"><i class="fa-solid fa-list-check fa-fw" aria-hidden="true"></i> <span class="menu-label">Report jobs</span></a></li
@@ -20,7 +20,7 @@
         [% END %]
         [% IF ( CAN_user_reports_create_reports ) %]
             <li
-                ><a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form_sql" title="Create from SQL"><i class="fa-solid fa-database fa-fw" aria-hidden="true"></i><span class="menu-label">Create from SQL</span></a></li
+                ><a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form_sql" title="Create from SQL"><i class="fa-solid fa-plus fa-fw" aria-hidden="true"></i><span class="menu-label">Create from SQL</span></a></li
             >
         [% END %]
     </ul>

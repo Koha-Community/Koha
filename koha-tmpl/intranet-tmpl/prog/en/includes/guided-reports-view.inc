@@ -4,7 +4,7 @@
     <ul>
         [% IF ( CAN_user_reports_execute_reports_foreground || CAN_user_reports_execute_reports_background || CAN_user_reports_create_reports || CAN_user_reports_delete_own_reports || CAN_user_reports_delete_all_reports ) %]
             <li
-                ><a href="/cgi-bin/koha/reports/guided_reports.pl?op=list" title="Saved reports"><i class="fa-solid fa-folder-open fa-fw" aria-hidden="true"></i><span class="menu-label">Saved reports</span></a></li
+                ><a href="/cgi-bin/koha/reports/guided_reports.pl?op=list" title="Saved reports"><i class="fa-solid fa-list fa-fw" aria-hidden="true"></i><span class="menu-label">Saved reports</span></a></li
             >
         [% END %]
     </ul>

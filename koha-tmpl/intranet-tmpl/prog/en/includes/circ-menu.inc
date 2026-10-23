@@ -176,9 +176,7 @@
         <ul>
             [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
                 <li [% IF circview %]class="active"[% END %]>
-                    <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% patron.borrowernumber | uri %]" title="Check out"
-                        ><i class="fa-solid fa-right-from-bracket fa-fw" aria-hidden="true"></i><span class="menu-label">Check out</span></a
-                    >
+                    <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% patron.borrowernumber | uri %]" title="Check out"><i class="fa-solid fa-upload fa-fw" aria-hidden="true"></i><span class="menu-label">Check out</span></a>
                 </li>
                 [% IF Koha.Preference('BatchCheckouts') && Koha.Preference('BatchCheckoutsValidCategories').split(',').grep('^' _ patron.categorycode _ '$').size > 0 %]
                     <li [% IF batch_checkout_view %]class="active"[% END %]>
