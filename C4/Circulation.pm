@@ -1985,6 +1985,19 @@ sub AddIssue {
             $item_object->onloan( $datedue->ymd() );
             $item_object->datelastborrowed( dt_from_string()->ymd() );
             $item_object->datelastseen( dt_from_string() );
+
+            # Set the new notforloan status before storing, so that the record
+            # is reindexed with it
+            my $rules = C4::Context->yaml_preference('UpdateNotForLoanStatusOnCheckout');
+            if ($rules) {
+                foreach my $key ( keys %$rules ) {
+                    if ( $item_object->notforloan eq $key ) {
+                        $item_object->notforloan( $rules->{$key} );
+                        last;
+                    }
+                }
+            }
+
             $item_object->store( { log_action => 0, skip_holds_queue => 1 } );
 
             # If the item was lost, it has now been found, charge the overdue if necessary
@@ -2028,17 +2041,6 @@ sub AddIssue {
                     AddIssuingCharge( $issue, $accumulate_charge, 'RENT_DAILY' );
                     $charge += $accumulate_charge;
                     $item_unblessed->{charge} = $charge;
-                }
-            }
-
-            my $rules = C4::Context->yaml_preference('UpdateNotForLoanStatusOnCheckout');
-            if ($rules) {
-                foreach my $key ( keys %$rules ) {
-                    if ( $item_object->notforloan eq $key ) {
-                        $item_object->notforloan( $rules->{$key} )
-                            ->store( { log_action => 0, skip_record_index => 1 } );
-                        last;
-                    }
                 }
             }
 

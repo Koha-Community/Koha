@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 73;
+use Test::More tests => 74;
 use DateTime::Duration;
 
 use t::lib::Mocks;
@@ -950,6 +950,40 @@ is(
     $item6->location, 'CART',
     q{UpdateItemLocationOnCheckout updates location value from NULL (i.e. the item has no shelving location set) to 'CART' with setting "_ALL_: CART"}
 );
+
+subtest 'UpdateNotForLoanStatusOnCheckout is stored before the record is reindexed' => sub {
+    plan tests => 3;
+
+    my $item = $builder->build_sample_item(
+        {
+            library    => $branchcode_1,
+            itype      => $itemtype,
+            notforloan => -1,
+        }
+    );
+    my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $categorycode } } );
+
+    my @notforloan_when_indexed;
+    my $index_records = sub {
+        my ( $self, $record_numbers ) = @_;
+        push @notforloan_when_indexed, Koha::Items->find( $item->itemnumber )->notforloan;
+    };
+    my $es_indexer    = Test::MockModule->new('Koha::SearchEngine::Elasticsearch::Indexer');
+    my $zebra_indexer = Test::MockModule->new('Koha::SearchEngine::Zebra::Indexer');
+    $es_indexer->mock( index_records => $index_records );
+    $zebra_indexer->mock( index_records => $index_records );
+
+    t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckout', '-1: 0' );
+    t::lib::Mocks::mock_userenv( { patron => $patron, branchcode => $branchcode_1 } );
+
+    AddIssue( $patron, $item->barcode );
+
+    is( $item->get_from_storage->notforloan, 0, 'notforloan is updated on checkout' );
+    is( scalar @notforloan_when_indexed,     1, 'The record is reindexed once' );
+    is( $notforloan_when_indexed[0], 0, 'The item already has the new notforloan value when the record is reindexed' );
+
+    t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckout', q{} );
+};
 
 #End transaction
 $schema->storage->txn_rollback;
