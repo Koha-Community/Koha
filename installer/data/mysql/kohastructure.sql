@@ -4347,6 +4347,7 @@ CREATE TABLE `item_lists` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique id for the item list',
   `name` varchar(255) NOT NULL COMMENT 'name of the item list',
   `owner` int(11) DEFAULT NULL COMMENT 'borrowernumber of the item list owner',
+  `branchcode` VARCHAR(10)  NOT NULL COMMENT 'branchcode of the item list owner',
   `visibility` enum('private','group','public') NOT NULL DEFAULT 'private' COMMENT 'visibility determining ability to read the item list',
   `created_on` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'when the item list was created',
   `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'when the item list was last updated',

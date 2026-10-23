@@ -109,7 +109,7 @@ sub _search_limited {
             subpermission => '*'
         }
     );
-    $group_filter->{'owner.branchcode'} = \@allowed_branchcodes if @allowed_branchcodes;
+    $group_filter->{'branchcode'} = \@allowed_branchcodes if @allowed_branchcodes;
 
     return $self->search(
         {

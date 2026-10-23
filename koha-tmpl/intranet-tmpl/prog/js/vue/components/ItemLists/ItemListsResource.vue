@@ -239,6 +239,7 @@ export default {
             const itemListId = itemList.id;
 
             delete itemList.id;
+            delete itemList.branchcode;
             delete itemList.item_list_contents_count;
             delete itemList.created_date;
             delete itemList.updated_date;

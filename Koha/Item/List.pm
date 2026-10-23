@@ -56,7 +56,12 @@ sub store {
 
     my $original = Koha::Item::Lists->find( $self->id );
     my $is_mod   = $self->in_storage;
-    my $result   = $self->SUPER::store($self);
+
+    if ( $self->owner ) {
+        $self->branchcode( Koha::Patrons->find( $self->owner )->branchcode );
+    }
+
+    my $result = $self->SUPER::store($self);
     $self->discard_changes;
 
     if ($is_mod) {
@@ -398,11 +403,11 @@ sub _check_access {
     # Check we can see it implicitly, either because it's public or because it's shared
     # within a group we have visibility into.
     return (
-               defined $self->owner
+               defined $self->branchcode
             && $self->visibility eq 'group'
             && $patron->can_see_things_from(
             {
-                branchcode    => Koha::Patrons->find( $self->owner )->branchcode,
+                branchcode    => $self->branchcode,
                 permission    => 'superlibrarian',
                 subpermission => '*'
             }

@@ -15,6 +15,7 @@ return {
                   id             INT(11)      NOT NULL AUTO_INCREMENT COMMENT 'unique id for the item list',
                   name           VARCHAR(255) NOT NULL COMMENT 'name of the item list',
                   owner          INT(11)      NULL COMMENT 'borrowernumber of the item list owner',
+                  branchcode     VARCHAR(10)  NOT NULL COMMENT 'branchcode of the item list owner',
                   visibility     ENUM('private','group','public') NOT NULL DEFAULT 'private' COMMENT 'visibility determining ability to read the item list',
                   created_on     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'when the item list was created',
                   updated_on     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'when the item list was last updated',
