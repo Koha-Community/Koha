@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import { useTemplateRef } from "vue";
 import ResourceListFilters from "./ResourceListFilters.vue";
 import ResourceShow from "./ResourceShow.vue";
 import ResourceFormSave from "./ResourceFormSave.vue";
@@ -79,6 +80,11 @@ export default {
         Toolbar,
     },
     setup(props) {
+        const list = useTemplateRef("list");
+        const useTableObject = () => {
+            return list?.value?.$refs?.table?.useTableObject();
+        };
+
         return {
             ...(typeof logged_in_user !== "undefined" && { logged_in_user }),
         };
