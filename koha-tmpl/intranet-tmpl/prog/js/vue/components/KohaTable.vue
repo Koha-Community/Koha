@@ -74,10 +74,9 @@ export default {
 
         let buttons = _dt_buttons({
             settings: props.options,
-            table_settings: {
-                ...props.table_settings,
-                columns: tableColumns.value,
-            },
+            table_settings: props.table_settings
+                ? { ...props.table_settings, columns: tableColumns.value }
+                : null,
         });
 
         const allOptions = ref({
