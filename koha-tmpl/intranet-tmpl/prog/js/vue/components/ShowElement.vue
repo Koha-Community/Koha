@@ -132,6 +132,9 @@
                 >{{ formatPatronHTML(resource[attribute.patronEmbedName]) }}</a
             >
         </span>
+        <span v-else-if="!attribute.patronEmbedName">{{
+            resource[attribute.name]
+        }}</span>
     </template>
     <template
         v-else-if="attribute.type == 'relationship' && attribute.componentPath"

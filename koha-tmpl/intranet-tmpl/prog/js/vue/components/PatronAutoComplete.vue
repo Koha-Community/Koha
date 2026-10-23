@@ -26,6 +26,7 @@ export default {
         id: { type: String, required: true },
         placeholder: String,
         patronAutoCompleteOptions: Object,
+        valueAttr: { type: String, default: "patron_id" },
         required: Boolean,
         modelValue: { type: [Number, String], default: null },
     },
@@ -70,7 +71,7 @@ export default {
                     input_name: props.id,
                 },
                 "on-select-callback": (event, ui) => {
-                    emit("update:modelValue", ui.item.patron_id);
+                    emit("update:modelValue", ui.item[props.valueAttr]);
                     $searchInputRef.val("");
                     return false;
                 },
@@ -85,9 +86,18 @@ export default {
             });
 
             if (props.modelValue) {
-                APIClient.patron.patrons
-                    .get(props.modelValue)
+                const getPatron =
+                    props.valueAttr === "patron_id"
+                        ? APIClient.patron.patrons.get(props.modelValue)
+                        : APIClient.patron.patrons
+                              .getAll({ [props.valueAttr]: props.modelValue })
+                              .then(patrons => patrons[0]);
+                getPatron
                     .then(p => {
+                        if (!p) {
+                            emit("update:modelValue", null);
+                            return;
+                        }
                         window.patron_autocomplete_render_selection(
                             p,
                             $selectionContainer,

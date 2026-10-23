@@ -180,6 +180,7 @@
             v-model="resource[attr.name]"
             :placeholder="attr.placeholder || attr.label"
             :patronAutoCompleteOptions="attr.patronAutoCompleteOptions"
+            :valueAttr="attr.patronValueAttr"
             :required="attr.required ? true : false"
         />
     </template>
