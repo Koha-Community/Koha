@@ -33,8 +33,10 @@ export default {
             {
                 name: "login_id",
                 required: true,
-                type: "text",
+                type: "patronAutoComplete",
+                patronValueAttr: "userid",
                 label: __("Staff userid for SIP2 authentication"),
+                placeholder: __("Search for a patron"),
                 group: "details",
                 toolTip: __(
                     "Must match the userid of an existing Koha user with appropriate circulation permissions"
