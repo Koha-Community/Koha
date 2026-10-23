@@ -401,13 +401,13 @@ subtest 'get_saved_reports branch limits' => sub {
     # r3 has no limits
 
     # Preference OFF: should ignore limits, return all three, no library_limits metadata
-    t::lib::Mocks::mock_preference( 'LimitReportsByLibrary', 0 );
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'none' );
     my $all_pref_off = get_saved_reports();
     is( scalar(@$all_pref_off), 3, 'Pref OFF returns all reports' );
     ok( !defined $all_pref_off->[0]{library_limits}, 'Pref OFF does not attach metadata' );
 
     # Preference ON, filtering applied (userenv branch is lib_a)
-    t::lib::Mocks::mock_preference( 'LimitReportsByLibrary', 1 );
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'library' );
     my $filtered = get_saved_reports();
     is( scalar(@$filtered), 2, 'Pref ON filters reports by user branch and unrestricted reports' );
     my @filtered_ids = sort map { $_->{id} } @$filtered;

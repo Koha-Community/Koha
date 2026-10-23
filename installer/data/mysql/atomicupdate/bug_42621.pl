@@ -19,17 +19,11 @@ return {
             say $out "Added column 'ft_reports' to library_groups";
         }
 
-        if ( column_exists( 'systempreferences', 'variable' ) ) {
-            $dbh->do(
-                q{UPDATE IGNORE systempreferences
-                SET variable = 'LimitReportsBy',
-                    value    = IF(value = '1', 'library', 'none'),
-                    options  = 'none|library|library_group',
-                    type     = 'Choice'
-                WHERE variable = 'LimitReportsByLibrary'}
-            );
-
-            say $out "Renamed system preference 'LimitReportsByLibrary' to 'LimitReportsBy'";
-        }
+        $dbh->do(
+            q{UPDATE IGNORE systempreferences
+            SET variable = 'LimitReportsBy',
+                value    = IF(value = '1', 'library', 'none')
+            WHERE variable = 'LimitReportsByLibrary'}
+        ) == 1 && say $out "Renamed system preference 'LimitReportsByLibrary' to 'LimitReportsBy'";
     },
 };
