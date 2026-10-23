@@ -211,19 +211,24 @@ export default {
                 };
             },
             additionalToolbarButtons: (resource, componentData) => {
-                if (!resource?.can_update) return {};
-                if (!config.value?.permissions?.list_borrowers) return {};
+                let list_buttons = [];
 
-                let list_buttons = [
-                    {
+                if (
+                    resource?.can_update &&
+                    config.value?.permissions?.list_borrowers
+                ) {
+                    list_buttons.push({
                         to: {
                             name: "ItemListSharesAdd",
                             params: { id: item_list_id },
                         },
                         icon: "plus",
                         title: $__("Add shares"),
-                    },
-                    {
+                    });
+                }
+
+                if (resource?.can_manage) {
+                    list_buttons.push({
                         icon: "minus",
                         title: $__("Batch remove from list"),
                         onClick: () => {
@@ -238,8 +243,8 @@ export default {
                                 () => dt.ajax.reload()
                             );
                         },
-                    },
-                ];
+                    });
+                }
 
                 if (config.value?.permissions?.items_batchmod) {
                     list_buttons.push({
