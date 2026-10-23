@@ -389,7 +389,10 @@ sub _check_access {
 
     my $borrowernumber = $patron->borrowernumber;
 
-    # First, check for explicit access: either we own the list, or it
+    # Superlibrarians can access any item list
+    return 1 if $patron->is_superlibrarian;
+
+    # Check for explicit access: either we own the list, or it
     # was explicitly shared with us.
     return 1
         if ( defined $self->owner && $self->owner == $borrowernumber )

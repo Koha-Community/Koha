@@ -94,6 +94,9 @@ sub _search_limited {
     my $share_permission        = $params->{share_permission};
     my $has_implicit_permission = $params->{has_implicit_permission};
 
+    # Superlibrarians can access any item list
+    return $self->search() if $patron->is_superlibrarian;
+
     # group_filter handles the conditions for viewing a list shared within
     # a group. If we don't have the permission for implicit access, it
     # will always fail.
