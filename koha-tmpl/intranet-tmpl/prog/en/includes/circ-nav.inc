@@ -28,7 +28,7 @@
         [% END %]
         [% IF ( fast_cataloging && CAN_user_editcatalogue_fast_cataloging ) %]
             <li>
-                <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA" title="Fast cataloging"><i class="fa-solid fa-plus fa-fw" aria-hidden="true"></i><span class="menu-label">Fast cataloging</span></a>
+                <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA" title="Fast cataloging"><i class="fa-solid fa-bolt fa-fw" aria-hidden="true"></i><span class="menu-label">Fast cataloging</span></a>
             </li>
         [% END %]
         [% IF ( Koha.Preference('AllowCheckoutNotes') && CAN_user_circulate_manage_checkout_notes ) %]

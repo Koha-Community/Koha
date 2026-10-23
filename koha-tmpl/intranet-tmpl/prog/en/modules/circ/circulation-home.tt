@@ -57,7 +57,7 @@
                 [% IF ( fast_cataloging ) %]
                     [% IF ( CAN_user_editcatalogue_fast_cataloging ) %]
                         <li>
-                            <a class="circ-button fastadd" href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA"><i class="fa fa-plus"></i> Fast cataloging</a>
+                            <a class="circ-button fastadd" href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA"><i class="fa-solid fa-bolt"></i> Fast cataloging</a>
                         </li>
                     [% END %]
                 [% END %]
@@ -102,7 +102,7 @@
                     </li>
                     [% IF Koha.Preference('EnableBooking') %]
                         <li>
-                            <a class="circ-button bookings-to-collect" href="/cgi-bin/koha/circ/pendingbookings.pl"><i class="fa-solid fa-calendar-days"></i> Bookings to collect</a>
+                            <a class="circ-button bookings-to-collect" href="/cgi-bin/koha/circ/pendingbookings.pl"><i class="fa-solid fa-calendar-check"></i> Bookings to collect</a>
                         </li>
                     [% END %]
                 </ul>
@@ -114,21 +114,21 @@
 
                     <ul class="buttons-list">
                         <li
-                            ><a class="circ-button recalls-queue" href="/cgi-bin/koha/recalls/recalls_queue.pl" title="All active recalls"><i class="fa fa-tasks"></i> Recalls queue</a></li
+                            ><a class="circ-button recalls-queue" href="/cgi-bin/koha/recalls/recalls_queue.pl" title="All active recalls"><i class="fa-solid fa-clipboard-list"></i> Recalls queue</a></li
                         >
                         <li
                             ><a class="circ-button recalls-to-pull" href="/cgi-bin/koha/recalls/recalls_to_pull.pl" title="Recalls that could be filled but have not been set waiting"
-                                ><i class="fa-solid fa-hand-back-fist"></i> Recalls to pull</a
+                                ><i class="fa-solid fa-hand-holding"></i> Recalls to pull</a
                             ></li
                         >
                         <li
-                            ><a class="circ-button overdue-recalls" href="/cgi-bin/koha/recalls/recalls_overdue.pl" title="Recalled items that are overdue to be returned"><i class="fa-solid fa-clock"></i> Overdue recalls</a></li
+                            ><a class="circ-button overdue-recalls" href="/cgi-bin/koha/recalls/recalls_overdue.pl" title="Recalled items that are overdue to be returned"><i class="fa-solid fa-hourglass-end"></i> Overdue recalls</a></li
                         >
                         <li
-                            ><a class="circ-button recalls-awaiting" href="/cgi-bin/koha/recalls/recalls_waiting.pl" title="Recalled items awaiting pickup"><i class="fa-solid fa-calendar-days"></i> Recalls awaiting pickup</a></li
+                            ><a class="circ-button recalls-awaiting" href="/cgi-bin/koha/recalls/recalls_waiting.pl" title="Recalled items awaiting pickup"><i class="fa-solid fa-box"></i> Recalls awaiting pickup</a></li
                         >
                         <li
-                            ><a class="circ-button old-recalls" href="/cgi-bin/koha/recalls/recalls_old_queue.pl" title="Inactive recalls"><i class="fa fa-tasks"></i> Old recalls</a></li
+                            ><a class="circ-button old-recalls" href="/cgi-bin/koha/recalls/recalls_old_queue.pl" title="Inactive recalls"><i class="fa-solid fa-box-archive"></i> Old recalls</a></li
                         >
                     </ul>
                 </div>
@@ -178,7 +178,9 @@
                             >
                         </li>
                         <li>
-                            <a class="circ-button overdues-fines" href="/cgi-bin/koha/circ/branchoverdues.pl" title="Limited to your library.  See report help for other details."><i class="fa-solid fa-clock"></i> Overdues with fines</a>
+                            <a class="circ-button overdues-fines" href="/cgi-bin/koha/circ/branchoverdues.pl" title="Limited to your library.  See report help for other details."
+                                ><i class="fa-solid fa-money-bill-wave"></i> Overdues with fines</a
+                            >
                         </li>
                     </ul>
                 </div>
