@@ -75,6 +75,17 @@ function get_account() {
     };
 }
 
+function get_patron() {
+    return {
+        patron_id: 1,
+        userid: "asdas",
+        firstname: "SIP",
+        surname: "Terminal",
+        cardnumber: "SIP001",
+        library: { library_id: "CPL", name: "Centerville" },
+    };
+}
+
 describe("Accounts", () => {
     beforeEach(() => {
         cy.login();
@@ -150,7 +161,19 @@ describe("Accounts", () => {
             "have.length",
             2
         );
-        cy.get("#login_id").type(account.login_id);
+
+        cy.intercept("GET", "/api/v1/patrons*", {
+            statusCode: 200,
+            body: [get_patron()],
+            headers: {
+                "X-Base-Total-Count": "1",
+                "X-Total-Count": "1",
+            },
+        }).as("searchPatrons");
+        cy.get(".patron-search-input").type("SIP");
+        cy.wait("@searchPatrons");
+        cy.get("li.ui-menu-item").first().click();
+        cy.get("#patron_selection_login_id").contains(get_patron().surname);
 
         cy.wait(["@getSIP2Institutions", "@getItemTypes"]);
         cy.get("#sip_institution_id .vs__search").type(
@@ -235,7 +258,7 @@ describe("Accounts", () => {
             cy.wrap($el).children(".collapse").should("not.have.class", "show");
         });
 
-        cy.get("#login_id").should("not.be.visible");
+        cy.get("#patron_selection_login_id").should("not.be.visible");
 
         cy.get("#register_id").should("not.exist");
 
@@ -253,8 +276,11 @@ describe("Accounts", () => {
         cy.intercept("POST", "/api/v1/sip2/accounts", {
             statusCode: 201,
             body: account,
-        });
+        }).as("createAccount");
         cy.get("#accounts_add").contains("Save").click();
+        cy.wait("@createAccount")
+            .its("request.body.login_id")
+            .should("eq", get_patron().userid);
         cy.get("main div[class='alert alert-info']").contains(
             "Account created"
         );
@@ -287,6 +313,9 @@ describe("Accounts", () => {
         cy.intercept("GET", "/api/v1/sip2/accounts/*", account).as(
             "get-account"
         );
+        cy.intercept("GET", "/api/v1/patrons*", [get_patron()]).as(
+            "get-patron"
+        );
 
         // Click the 'Edit' button from the list
         cy.get("#accounts_list table tbody tr:first").contains("Edit").click();
@@ -295,7 +324,8 @@ describe("Accounts", () => {
         cy.left_menu_active_item_is("Accounts");
 
         // Form has been correctly filled in
-        cy.get("#login_id").should("have.value", accounts[0].login_id);
+        cy.wait("@get-patron");
+        cy.get("#patron_selection_login_id").contains(get_patron().surname);
         cy.get("#register_id").should("not.exist");
 
         // cy.get("#checkin_yes").should("be.checked");
