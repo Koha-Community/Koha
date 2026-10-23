@@ -362,6 +362,27 @@ describe("Accounts", () => {
         );
     });
 
+    it("Edit account with a login_id matching no patron", () => {
+        let account = get_account();
+
+        cy.intercept("GET", "/api/v1/sip2/accounts/*", account).as(
+            "get-account"
+        );
+        cy.intercept("GET", "/api/v1/patrons*", []).as("get-patron");
+        cy.visit("/cgi-bin/koha/sip2/accounts/edit/" + account.sip_account_id);
+        cy.wait(["@get-account", "@get-patron"]);
+
+        cy.get("#accounts_add").contains(
+            "Invalid patron data (" + account.login_id + ")"
+        );
+
+        cy.get("#accounts_add").contains("Remove").click();
+        cy.get("#accounts_add")
+            .contains("Invalid patron data")
+            .should("not.exist");
+        cy.get(".patron-search-input").should("be.visible");
+    });
+
     it("Show account", () => {
         let account = get_account();
         let accounts = [account];

@@ -16,6 +16,13 @@
         @invalid="handleValidation"
     />
     <span v-if="loading">{{ $__("Loading...") }}</span>
+    <span v-if="invalidValue">
+        {{ $__("Invalid patron data (%s)").format(invalidValue) }}
+        (<a href="#" @click.prevent="removeInvalidValue"
+            ><i class="fa fa-trash-can" aria-hidden="true"></i>
+            {{ $__("Remove") }}</a
+        >)
+    </span>
     <span :id="`patron_selection_${id}`"></span>
 </template>
 
@@ -36,6 +43,17 @@ export default {
     setup(props, { emit }) {
         const searchInputRef = ref(null);
         const loading = ref(false);
+        const invalidValue = ref(null);
+
+        const clearValue = () => {
+            emit("update:modelValue", null);
+            nextTick(() => searchInputRef.value?.focus());
+        };
+
+        const removeInvalidValue = () => {
+            invalidValue.value = null;
+            clearValue();
+        };
 
         const handleValidation = event => {
             const input = event.target;
@@ -79,8 +97,7 @@ export default {
                     return false;
                 },
                 "on-remove-callback": () => {
-                    emit("update:modelValue", null);
-                    nextTick(() => $searchInputRef.focus());
+                    clearValue();
                     return false;
                 },
                 "additional-filters":
@@ -97,24 +114,31 @@ export default {
                               .getAll({ [props.valueAttr]: props.modelValue })
                               .then(patrons => patrons[0]);
                 getPatron
+                    .catch(err => console.error("Koha API Error:", err))
                     .then(p => {
                         if (!p) {
-                            emit("update:modelValue", null);
+                            invalidValue.value = props.modelValue;
                             return;
                         }
                         window.patron_autocomplete_render_selection(
                             p,
                             $selectionContainer,
                             props.id,
-                            () => emit("update:modelValue", null)
+                            clearValue
                         );
                     })
-                    .catch(err => console.error("Koha API Error:", err))
                     .finally(() => (loading.value = false));
             }
         });
 
-        return { searchInputRef, loading, handleValidation, handleInput };
+        return {
+            searchInputRef,
+            loading,
+            invalidValue,
+            removeInvalidValue,
+            handleValidation,
+            handleInput,
+        };
     },
 };
 </script>
