@@ -429,7 +429,7 @@ function LoadIssuesTable() {
                                 "</span>";
 
                             span_style = "display: none";
-                            span_class = "renewals-allowed";
+                            span_class = "renewals-allowed-restriction";
                         } else if (oObj.can_renew_error == "overdue") {
                             msg +=
                                 "<span class='renewals-disabled'>" +
@@ -437,7 +437,7 @@ function LoadIssuesTable() {
                                 "</span>";
 
                             span_style = "display: none";
-                            span_class = "renewals-allowed";
+                            span_class = "renewals-allowed-overdue";
                         } else if (oObj.can_renew_error == "too_soon") {
                             msg +=
                                 "<span class='renewals-disabled'>" +
@@ -457,7 +457,7 @@ function LoadIssuesTable() {
                                 "</span>";
 
                             span_style = "display: none";
-                            span_class = "renewals-allowed";
+                            span_class = "renewals-allowed-auto_too_late";
                         } else if (
                             oObj.can_renew_error == "auto_too_much_owing"
                         ) {
@@ -481,7 +481,8 @@ function LoadIssuesTable() {
                                 "</span>";
 
                             span_style = "display: none";
-                            span_class = "renewals-allowed";
+                            span_class =
+                                "renewals-allowed-auto_account_expired";
                         } else if (oObj.can_renew_error == "onsite_checkout") {
                             // Don't display something if it's an onsite checkout
                         } else if (
@@ -493,7 +494,7 @@ function LoadIssuesTable() {
                                 "</span>";
 
                             span_style = "display: none";
-                            span_class = "renewals-allowed";
+                            span_class = "renewals-allowed-item_denied_renewal";
                         } else if (oObj.can_renew_error == "too_much_owing") {
                             msg +=
                                 "<span class='renewals-disabled'>" +
@@ -1422,6 +1423,11 @@ $(document).ready(function () {
                     if (AllowRenewalLimitOverride) {
                         $(".renewals-allowed-too_many").show();
                         $(".renewals-allowed-too_soon").show();
+                        $(".renewals-allowed-overdue").show();
+                        $(".renewals-allowed-restriction").show();
+                        $(".renewals-allowed-auto_too_late").show();
+                        $(".renewals-allowed-auto_account_expired").show();
+                        $(".renewals-allowed-item_denied_renewal").show();
                     }
                     if (AllowRenewalOnHoldOverride) {
                         $(".renewals-allowed-on_reserve").show();
@@ -1430,6 +1436,11 @@ $(document).ready(function () {
                     $(".renewals-allowed-too_many").hide();
                     $(".renewals-allowed-too_soon").hide();
                     $(".renewals-allowed-on_reserve").hide();
+                    $(".renewals-allowed-overdue").hide();
+                    $(".renewals-allowed-restriction").hide();
+                    $(".renewals-allowed-auto_too_late").hide();
+                    $(".renewals-allowed-auto_account_expired").hide();
+                    $(".renewals-allowed-item_denied_renewal").hide();
                 }
             })
             .prop("checked", false);
