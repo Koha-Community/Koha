@@ -3344,10 +3344,10 @@ sub CanBookBeRenewed {
     }
 
     unless ($cron) {
-    $soonest = GetSoonestRenewDate( $patron, $issue );
-    if ( $soonest > dt_from_string() ) {
-        return ( 0, "too_soon", { soonest_renew_date => $soonest } ) unless $override_limit;
-    }
+        $soonest = GetSoonestRenewDate( $patron, $issue );
+        if ( $soonest > dt_from_string() ) {
+            return ( 0, "too_soon", { soonest_renew_date => $soonest } ) unless $override_limit;
+        }
     }
 
     my $auto_renew_code =

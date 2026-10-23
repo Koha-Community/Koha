@@ -108,8 +108,8 @@ function display_pickup_location(state) {
 /* global __ borrowernumber SuspendHoldsIntranet */
 $(document).ready(function () {
     window.coded_values = {
-    library: new Map(all_libraries.map(l => [l.branchname, l.branchcode])),
-};
+        library: new Map(all_libraries.map(l => [l.branchname, l.branchcode])),
+    };
 
     let patron_page = holds_table_patron_page();
     function suspend_hold(hold_ids, end_date) {
@@ -1538,11 +1538,11 @@ async function load_patron_holds_table(biblio_id, split_data) {
                                 library ? library._str : row.pickup_library_id
                             );
                         }
-                            return $patron_to_html(row.patron, {
-                                url: true,
-                                display_cardnumber: true,
-                                hide_patron_name: HidePatronName,
-                            });
+                        return $patron_to_html(row.patron, {
+                            url: true,
+                            display_cardnumber: true,
+                            hide_patron_name: HidePatronName,
+                        });
                     },
                 },
                 {
