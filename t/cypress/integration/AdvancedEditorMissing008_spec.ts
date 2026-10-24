@@ -9,6 +9,8 @@ describe("Advanced Editor missing 008", () => {
     let sampleBiblioIds = [];
     let sampleTitle;
 
+    // Framework configuration has no REST CRUD routes, so setup and cleanup use
+    // parameterized SQL scoped to the temporary frameworks created by this spec.
     function createFrameworkWith008(frameworkCode, mandatory, defaultValue) {
         return cy
             .task("query", {
@@ -42,7 +44,7 @@ describe("Advanced Editor missing 008", () => {
             );
     }
 
-    function createBiblioWithout008(frameworkCode) {
+    function createSampleBiblio(frameworkCode, field008?: string) {
         sampleTitle = `Cypress Advanced Editor missing 008 ${Cypress._.random(
             100000,
             999999
@@ -52,7 +54,6 @@ describe("Advanced Editor missing 008", () => {
             .request({
                 method: "POST",
                 url: "/api/v1/biblios",
-                failOnStatusCode: false,
                 followRedirect: false,
                 headers: {
                     Accept: "application/json",
@@ -63,6 +64,9 @@ describe("Advanced Editor missing 008", () => {
                 body: {
                     leader: "     nam a22     7a 4500",
                     fields: [
+                        ...(field008 === undefined
+                            ? []
+                            : [{ "008": field008 }]),
                         {
                             "245": {
                                 ind1: "",
@@ -74,29 +78,33 @@ describe("Advanced Editor missing 008", () => {
                 },
             })
             .then(response => {
-                expect([200, 201, 302]).to.include(response.status);
-                const isJson = String(
-                    response.headers["content-type"] || ""
-                ).includes("application/json");
-                const result = isJson
-                    ? typeof response.body === "string"
-                        ? JSON.parse(response.body)
-                        : response.body
-                    : null;
-                const locationMatch = String(
-                    response.headers.location || ""
-                ).match(/\/(\d+)$/);
-                sampleBiblioId = result?.id || Number(locationMatch?.[1]);
-                expect(sampleBiblioId).to.be.a("number").and.not.equal(0);
+                expect(response.status).to.equal(200);
+                expect(response.headers["content-type"]).to.include(
+                    "application/json"
+                );
+                sampleBiblioId = response.body.id;
+                expect(sampleBiblioId).to.be.a("number").and.be.greaterThan(0);
                 sampleBiblioIds.push(sampleBiblioId);
+            })
+            .then(() =>
+                cy.request({
+                    url: `/api/v1/biblios/${sampleBiblioId}`,
+                    headers: { Accept: "application/marc-in-json" },
+                })
+            )
+            .then(response => {
+                expect(response.status).to.equal(200);
+                const record =
+                    typeof response.body === "string"
+                        ? JSON.parse(response.body)
+                        : response.body;
+                const values = record.fields
+                    .filter(field => "008" in field)
+                    .map(field => field["008"]);
+                expect(values).to.deep.equal(
+                    field008 === undefined ? [] : [field008]
+                );
             });
-    }
-
-    function add008ToSampleBiblio(value) {
-        return cy.task("query", {
-            sql: "UPDATE biblio_metadata SET metadata = REPLACE(metadata, '</leader>', CONCAT('</leader><controlfield tag=\"008\">', ?, '</controlfield>')) WHERE biblionumber = ?",
-            values: [value, sampleBiblioId],
-        });
     }
 
     function getBasicEditorGenerated008() {
@@ -111,20 +119,18 @@ describe("Advanced Editor missing 008", () => {
             .then(value => String(value));
     }
 
-    function getAdvancedEditorFieldValues(tag) {
+    function assertAdvancedEditorFieldValues(tag, assertValues) {
         return cy
             .get("#editor .CodeMirror", { timeout: 30000 })
-            .should("be.visible")
             .should($editor => {
+                expect($editor).to.be.visible;
                 const text = ($editor[0] as any).CodeMirror.getValue();
                 expect(text).to.contain(sampleTitle);
-            })
-            .then($editor => {
-                const text = ($editor[0] as any).CodeMirror.getValue();
-                return text
+                const values = text
                     .split("\n")
                     .filter(line => line.startsWith(`${tag} `))
                     .map(line => line.substring(4));
+                assertValues(values);
             });
     }
 
@@ -139,15 +145,13 @@ describe("Advanced Editor missing 008", () => {
             cy.visit(
                 `/cgi-bin/koha/cataloguing/editor.pl?cypress_test=${sampleBiblioId}#catalog/${sampleBiblioId}`
             );
-            getAdvancedEditorFieldValues("008").should("deep.equal", [
-                basic008,
-            ]);
+            assertAdvancedEditorFieldValues("008", values => {
+                expect(values).to.deep.equal([basic008]);
+            });
         });
     }
 
     before(() => {
-        cy.login();
-        cy.clearLocalStorage();
         return cy
             .task("query", {
                 sql: "SELECT frameworkcode FROM biblio_framework",
@@ -172,11 +176,23 @@ describe("Advanced Editor missing 008", () => {
                 };
             })
             .then(() =>
-                cy.task("query", {
-                    sql: "SELECT variable, value FROM systempreferences WHERE variable IN ('ApplyFrameworkDefaults', 'EnableAdvancedCatalogingEditor')",
+                cy.task("apiGet", {
+                    endpoint:
+                        "/api/v1/sysprefs?q=" +
+                        encodeURIComponent(
+                            JSON.stringify({
+                                variable: {
+                                    "-in": [
+                                        "ApplyFrameworkDefaults",
+                                        "EnableAdvancedCatalogingEditor",
+                                    ],
+                                },
+                            })
+                        ),
                 })
             )
             .then(rows => {
+                expect(rows).to.have.length(2);
                 const preferences = Object.fromEntries(
                     rows.map(row => [row.variable, row.value])
                 );
@@ -185,8 +201,6 @@ describe("Advanced Editor missing 008", () => {
                 originalEnableAdvancedCatalogingEditor =
                     preferences.EnableAdvancedCatalogingEditor;
             })
-            .then(() => cy.set_syspref("ApplyFrameworkDefaults", "new"))
-            .then(() => cy.set_syspref("EnableAdvancedCatalogingEditor", 0))
             .then(() =>
                 createFrameworkWith008(frameworkCodes.mandatoryBlank, 1, "")
             )
@@ -206,10 +220,26 @@ describe("Advanced Editor missing 008", () => {
         sampleBiblioId = null;
         sampleTitle = null;
         cy.login();
+        cy.get("#logged-in-menu").should("be.visible");
         cy.clearLocalStorage();
+        cy.set_syspref("ApplyFrameworkDefaults", "new");
+        cy.set_syspref("EnableAdvancedCatalogingEditor", 0);
     });
 
     after(() => {
+        if (originalApplyFrameworkDefaults !== undefined) {
+            cy.set_syspref(
+                "ApplyFrameworkDefaults",
+                originalApplyFrameworkDefaults
+            );
+        }
+        if (originalEnableAdvancedCatalogingEditor !== undefined) {
+            cy.set_syspref(
+                "EnableAdvancedCatalogingEditor",
+                originalEnableAdvancedCatalogingEditor
+            );
+        }
+
         let cleanup = cy.wrap(null);
         sampleBiblioIds.forEach(biblioId => {
             cleanup = cleanup.then(() =>
@@ -239,23 +269,11 @@ describe("Advanced Editor missing 008", () => {
                     })
                 );
         });
-        return cleanup
-            .then(() =>
-                cy.set_syspref(
-                    "ApplyFrameworkDefaults",
-                    originalApplyFrameworkDefaults
-                )
-            )
-            .then(() =>
-                cy.set_syspref(
-                    "EnableAdvancedCatalogingEditor",
-                    originalEnableAdvancedCatalogingEditor
-                )
-            );
+        return cleanup;
     });
 
     it("initializes a missing mandatory 008 like the basic editor", () => {
-        createBiblioWithout008(frameworkCodes.mandatoryBlank).then(() => {
+        createSampleBiblio(frameworkCodes.mandatoryBlank).then(() => {
             openBasicEditorThenCompareAdvanced008(value => {
                 expect(value).not.to.equal(frameworkDefault008);
             });
@@ -263,7 +281,7 @@ describe("Advanced Editor missing 008", () => {
     });
 
     it("does not apply a framework default during ordinary editing", () => {
-        createBiblioWithout008(frameworkCodes.mandatoryDefault).then(() => {
+        createSampleBiblio(frameworkCodes.mandatoryDefault).then(() => {
             openBasicEditorThenCompareAdvanced008(value => {
                 expect(value).not.to.equal(frameworkDefault008);
             });
@@ -271,39 +289,39 @@ describe("Advanced Editor missing 008", () => {
     });
 
     it("preserves the existing blank-008 widget behavior", () => {
-        createBiblioWithout008(frameworkCodes.mandatoryDefault)
-            .then(() => add008ToSampleBiblio(""))
-            .then(() => {
-                cy.visit(
-                    `/cgi-bin/koha/cataloguing/editor.pl?cypress_test=${sampleBiblioId}#catalog/${sampleBiblioId}`
-                );
-                getAdvancedEditorFieldValues("008").should(values => {
-                    expect(values).to.have.length(1);
-                    expect(values[0]).to.have.length(40);
-                    expect(values[0]).not.to.equal(frameworkDefault008);
-                });
-            });
-    });
-
-    it("preserves an existing populated 008", () => {
-        createBiblioWithout008(frameworkCodes.mandatoryBlank)
-            .then(() => add008ToSampleBiblio(existing008))
-            .then(() => {
-                cy.visit(
-                    `/cgi-bin/koha/cataloguing/editor.pl?cypress_test=${sampleBiblioId}#catalog/${sampleBiblioId}`
-                );
-                getAdvancedEditorFieldValues("008").should("deep.equal", [
-                    existing008,
-                ]);
-            });
-    });
-
-    it("does not add an optional missing 008", () => {
-        createBiblioWithout008(frameworkCodes.optionalBlank).then(() => {
+        createSampleBiblio(frameworkCodes.mandatoryDefault, "").then(() => {
             cy.visit(
                 `/cgi-bin/koha/cataloguing/editor.pl?cypress_test=${sampleBiblioId}#catalog/${sampleBiblioId}`
             );
-            getAdvancedEditorFieldValues("008").should("deep.equal", []);
+            assertAdvancedEditorFieldValues("008", values => {
+                expect(values).to.have.length(1);
+                expect(values[0]).to.have.length(40);
+                expect(values[0]).not.to.equal(frameworkDefault008);
+            });
+        });
+    });
+
+    it("preserves an existing populated 008", () => {
+        createSampleBiblio(frameworkCodes.mandatoryBlank, existing008).then(
+            () => {
+                cy.visit(
+                    `/cgi-bin/koha/cataloguing/editor.pl?cypress_test=${sampleBiblioId}#catalog/${sampleBiblioId}`
+                );
+                assertAdvancedEditorFieldValues("008", values => {
+                    expect(values).to.deep.equal([existing008]);
+                });
+            }
+        );
+    });
+
+    it("does not add an optional missing 008", () => {
+        createSampleBiblio(frameworkCodes.optionalBlank).then(() => {
+            cy.visit(
+                `/cgi-bin/koha/cataloguing/editor.pl?cypress_test=${sampleBiblioId}#catalog/${sampleBiblioId}`
+            );
+            assertAdvancedEditorFieldValues("008", values => {
+                expect(values).to.deep.equal([]);
+            });
         });
     });
 });
