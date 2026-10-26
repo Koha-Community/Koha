@@ -105,7 +105,12 @@
         schema:
           $ref: "../swagger.yaml#/definitions/message"
       "400":
-        description: Bad request
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_patron_id`
+            * `invalid_library_id`
+            * `invalid_manager_id`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -114,10 +119,6 @@
           $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
-        schema:
-          $ref: "../swagger.yaml#/definitions/error"
-      "409":
-        description: Conflict in creating resource
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "500":
@@ -196,7 +197,12 @@
         schema:
           $ref: "../swagger.yaml#/definitions/message"
       "400":
-        description: Bad request
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_patron_id`
+            * `invalid_library_id`
+            * `invalid_manager_id`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -244,7 +250,12 @@
         schema:
           $ref: "../swagger.yaml#/definitions/message"
       "400":
-        description: Bad request
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_patron_id`
+            * `invalid_library_id`
+            * `invalid_manager_id`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":

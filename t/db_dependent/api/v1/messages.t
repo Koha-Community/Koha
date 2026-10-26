@@ -18,8 +18,9 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Mojo;
+use Test::Warn;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -227,7 +228,7 @@ subtest 'get() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 33;
+    plan tests => 46;
 
     $schema->storage->txn_begin;
 
@@ -353,12 +354,44 @@ subtest 'add() tests' => sub {
         ->status_is(400)
         ->json_is( '/errors/0/path' => '/body/message' );
 
+    my $deleted_patron    = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $deleted_patron_id = $deleted_patron->id;
+    $deleted_patron->delete;
+
+    # Non-existent patron
+    $t->post_ok( "//$userid:$password@/api/v1/messages" => json => { %{$message}, patron_id => $deleted_patron_id } )
+        ->status_is(400)
+        ->json_is( '/error_code' => 'invalid_patron_id' );
+
+    # Non-existent manager
+    warning_like {
+        $t->post_ok(
+            "//$userid:$password@/api/v1/messages" => json => { %{$message}, manager_id => $deleted_patron_id } )
+            ->status_is(400)
+            ->json_is( '/error_code' => 'invalid_manager_id' );
+    }
+    qr/Broken FK constraint/;
+
+    my $deleted_library    = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $deleted_library_id = $deleted_library->id;
+    $deleted_library->delete;
+
+    # Non-existent library
+    $t->post_ok( "//$userid:$password@/api/v1/messages" => json => { %{$message}, library_id => $deleted_library_id } )
+        ->status_is(400)
+        ->json_is( '/error_code' => 'invalid_library_id' );
+
+    # null library_id defaults to the logged in user library
+    $t->post_ok( "//$userid:$password@/api/v1/messages" => json => { %{$message}, library_id => undef } )
+        ->status_is(201)
+        ->json_is( '/library_id' => $librarian->branchcode );
+
     $schema->storage->txn_rollback;
 };
 
 subtest 'update() tests' => sub {
 
-    plan tests => 24;
+    plan tests => 27;
 
     $schema->storage->txn_begin;
 
@@ -446,7 +479,7 @@ subtest 'update() tests' => sub {
 
     $t->put_ok( "//$userid:$password@/api/v1/messages/$message_id" => json => $message_with_null_field )
         ->status_is(400)
-        ->json_is( '/error' => "library_id cannot be empty" );
+        ->json_is( '/error_code' => 'invalid_library_id' );
 
     # Full object update on PUT
     my $message_with_updated_field = {
@@ -501,6 +534,14 @@ subtest 'update() tests' => sub {
     $t->patch_ok( "//$userid:$password@/api/v1/messages/$message_id" => json => $message_with_some_updates )
         ->status_is(200)
         ->json_is( '/message' => 'Young Fox jumped over Cheeseboy' );
+
+    my $deleted_patron    = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $deleted_patron_id = $deleted_patron->id;
+    $deleted_patron->delete;
+
+    $t->patch_ok( "//$userid:$password@/api/v1/messages/$message_id" => json => { patron_id => $deleted_patron_id } )
+        ->status_is(400)
+        ->json_is( '/error_code' => 'invalid_patron_id' );
 
     $schema->storage->txn_rollback;
 };
@@ -558,6 +599,125 @@ subtest 'delete() tests' => sub {
     $t->delete_ok("//$userid:$password@/api/v1/messages/$message_id")->status_is(204)->content_is('');
 
     $t->delete_ok("//$userid:$password@/api/v1/messages/$message_id")->status_is(404);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'library restrictions tests' => sub {
+
+    plan tests => 22;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'AllowAllMessageDeletion', 0 );
+
+    my $library       = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $other_library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    # Librarians in $library can only see patrons from their group
+    my $group = $builder->build_object(
+        {
+            class => 'Koha::Library::Groups',
+            value => { ft_hide_patron_info => 1, branchcode => undef, parent_id => undef }
+        }
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::Library::Groups',
+            value => { parent_id => $group->id, branchcode => $library->id }
+        }
+    );
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0, branchcode => $library->id }
+        }
+    );
+
+    for my $permission (qw(list_borrowers edit_borrowers)) {
+        $builder->build(
+            {
+                source => 'UserPermission',
+                value  => {
+                    borrowernumber => $librarian->borrowernumber,
+                    module_bit     => 4,
+                    code           => $permission,
+                },
+            }
+        );
+    }
+
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $visible_patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library->id } } );
+    my $hidden_patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $other_library->id } } );
+
+    my $visible_message = $builder->build_object(
+        {
+            class => 'Koha::Patron::Messages',
+            value => { borrowernumber => $visible_patron->id, branchcode => $library->id }
+        }
+    );
+    my $hidden_message = $builder->build_object(
+        {
+            class => 'Koha::Patron::Messages',
+            value => { borrowernumber => $hidden_patron->id, branchcode => $library->id }
+        }
+    );
+    my $other_library_message = $builder->build_object(
+        {
+            class => 'Koha::Patron::Messages',
+            value => { borrowernumber => $visible_patron->id, branchcode => $other_library->id }
+        }
+    );
+
+    $t->get_ok( "//$userid:$password@/api/v1/messages?q={\"patron_id\":{\"-in\":["
+            . $visible_patron->id . ","
+            . $hidden_patron->id
+            . "]}}" )->status_is(200);
+    is_deeply(
+        [ sort map { $_->{message_id} } @{ $t->tx->res->json } ],
+        [ sort ( $visible_message->id, $other_library_message->id ) ],
+        'Only messages for visible patrons are listed'
+    );
+
+    $t->get_ok( "//$userid:$password@/api/v1/messages/" . $hidden_message->id )->status_is(404);
+
+    # Cannot create or move messages to patrons the user cannot see
+    $t->post_ok(
+        "//$userid:$password@/api/v1/messages" => json => {
+            patron_id    => $hidden_patron->id,
+            message_type => 'L',
+            message      => 'Sneaky'
+        }
+    )->status_is(400)->json_is( '/error_code' => 'invalid_patron_id' );
+
+    $t->patch_ok(
+        "//$userid:$password@/api/v1/messages/" . $visible_message->id => json => { patron_id => $hidden_patron->id } )
+        ->status_is(400)
+        ->json_is( '/error_code' => 'invalid_patron_id' );
+
+    # AllowAllMessageDeletion disabled: only messages from the user library can be modified
+    $t->patch_ok(
+        "//$userid:$password@/api/v1/messages/" . $other_library_message->id => json => { message => 'Nope' } )
+        ->status_is(404);
+    $t->delete_ok( "//$userid:$password@/api/v1/messages/" . $other_library_message->id )->status_is(404);
+
+    # AllowAllMessageDeletion enabled
+    t::lib::Mocks::mock_preference( 'AllowAllMessageDeletion', 1 );
+
+    $t->patch_ok( "//$userid:$password@/api/v1/messages/" . $other_library_message->id => json => { message => 'Yes' } )
+        ->status_is(200)
+        ->json_is( '/message' => 'Yes' );
+    $t->delete_ok( "//$userid:$password@/api/v1/messages/" . $other_library_message->id )->status_is(204);
+
+    # Messages for patrons the user cannot see are never reachable
+    $t->delete_ok( "//$userid:$password@/api/v1/messages/" . $hidden_message->id )->status_is(404);
 
     $schema->storage->txn_rollback;
 };
