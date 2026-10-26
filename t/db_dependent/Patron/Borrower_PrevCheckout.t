@@ -681,6 +681,8 @@ subtest 'Check previous checkouts with delay' => sub {
     my $biblio      = $builder->build_sample_biblio;
     my $patron      = $builder->build( { source => 'Borrower' } );
     my $item_object = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $librarian   = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { patron => $librarian } );
 
     my $issue = Koha::Checkout->new(
         {

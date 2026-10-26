@@ -342,6 +342,7 @@ subtest 'automatic_checkin' => sub {
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { patron => $patron } );
 
     my $due_ac_item  = $builder->build_sample_item( { homebranch => $patron->branchcode, itemlost => 0 } );
     my $ac_item      = $builder->build_sample_item( { homebranch => $patron->branchcode, itemlost => 0 } );
