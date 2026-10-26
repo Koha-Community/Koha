@@ -66,7 +66,8 @@
                                         <tr>
                                             <td>
                                                 <a class="notice-title" data-noticeid="[% QUEUED_MESSAGE.message_id | html %]" href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber | uri %]&amp;noticeid=[% QUEUED_MESSAGE.message_id | uri %]">[% QUEUED_MESSAGE.subject | html %]</a>
-                                                <iframe class="notice" id="notice[% QUEUED_MESSAGE.message_id | html %]" srcdoc="[% QUEUED_MESSAGE.html_content | html %]"></iframe>
+                                                <template id="template_notice[% QUEUED_MESSAGE.message_id | html %]">[% QUEUED_MESSAGE.html_content     | html %]</template>
+                                                <iframe class="notice" id="notice[% QUEUED_MESSAGE.message_id | html %]" srcdoc=""></iframe>
                                             </td>
                                             <td>
                                                 [% IF ( QUEUED_MESSAGE.message_transport_type == 'email' ) %]<span>email</span>
@@ -174,7 +175,8 @@
                 e.preventDefault();
                 var title = $(this).text();
                 var noticeid = $(this).data("noticeid");
-                var body = $("#notice" + noticeid ).attr("srcdoc");
+                const template = this.parentNode.querySelector("#template_notice" + noticeid);
+                var body = template.content.textContent;
                 var sanitized = DOMPurify.sanitize(body, { WHOLE_DOCUMENT: true });
                 if( $("#resend_notice" + noticeid ).length ){
                     $("#resend-notice").show();
