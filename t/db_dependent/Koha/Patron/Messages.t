@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 16;
+use Test::More tests => 17;
 
 use C4::Context;
 use Koha::ActionLogs;
@@ -164,6 +164,78 @@ subtest 'message_without_newlines' => sub {
 
     $message->message(undef);
     is( $message->message_without_newlines, undef, 'Undef message returns undef' );
+};
+
+subtest 'search_limited() tests' => sub {
+
+    plan tests => 4;
+
+    # restore the real userenv, mocked at file level
+    $context->unmock('userenv');
+
+    my $library       = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $other_library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $group = $builder->build_object(
+        {
+            class => 'Koha::Library::Groups',
+            value => { ft_hide_patron_info => 1, branchcode => undef, parent_id => undef }
+        }
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::Library::Groups',
+            value => { parent_id => $group->id, branchcode => $library->id }
+        }
+    );
+
+    my $librarian =
+        $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0, branchcode => $library->id } } );
+
+    my $visible_patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library->id } } );
+    my $hidden_patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $other_library->id } } );
+
+    my $visible_message = $builder->build_object(
+        { class => 'Koha::Patron::Messages', value => { borrowernumber => $visible_patron->id, message_type => 'L' } }
+    );
+    my $visible_b_message = $builder->build_object(
+        { class => 'Koha::Patron::Messages', value => { borrowernumber => $visible_patron->id, message_type => 'B' } }
+    );
+    my $hidden_message = $builder->build_object(
+        { class => 'Koha::Patron::Messages', value => { borrowernumber => $hidden_patron->id, message_type => 'L' } } );
+
+    my $filter = { 'me.message_id' => [ $visible_message->id, $visible_b_message->id, $hidden_message->id ] };
+
+    C4::Context->unset_userenv;
+    is( Koha::Patron::Messages->search_limited( {%$filter} )->count, 3, 'No logged in user, no restrictions' );
+
+    t::lib::Mocks::mock_userenv( { patron => $librarian } );
+    is_deeply(
+        [ sort map { $_->id } Koha::Patron::Messages->search_limited( {%$filter} )->as_list ],
+        [ sort ( $visible_message->id, $visible_b_message->id ) ],
+        'Only messages for visible patrons returned'
+    );
+    is(
+        Koha::Patron::Messages->search_limited( { %$filter, message_type => 'L' } )->next->id,
+        $visible_message->id, 'Passed parameters are honored'
+    );
+
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $librarian->id,
+                module_bit     => 4,
+                code           => 'view_borrower_infos_from_any_libraries',
+            },
+        }
+    );
+    is(
+        Koha::Patron::Messages->search_limited( {%$filter} )->count, 3,
+        'view_borrower_infos_from_any_libraries lifts the restriction'
+    );
 };
 
 $schema->storage->txn_rollback;

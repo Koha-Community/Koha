@@ -17,9 +17,11 @@ package Koha::Patron::Messages;
 
 use Modern::Perl;
 
+use C4::Context;
 use Koha::Database;
 
 use Koha::Patron::Message;
+use Koha::Patrons;
 
 use base qw(Koha::Objects);
 
