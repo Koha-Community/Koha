@@ -1,9 +1,6 @@
 ---
 type: object
 properties:
-  message_id:
-    type: integer
-    description: Internal message identifier
   patron_id:
     type: integer
     description: Internal patron identifier
@@ -17,10 +14,13 @@ properties:
   message_type:
     type: string
     description: "One of the following values: L = for Librarians, B = for Patrons"
-    maxLength: 1
+    enum:
+      - L
+      - B
   message:
     type: string
     description: Message content
+    minLength: 1
   manager_id:
     type:
       - integer

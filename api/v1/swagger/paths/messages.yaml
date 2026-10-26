@@ -31,19 +31,26 @@
         type: string
       - name: message_date
         in: query
-        description: Case insensitive search on message date
+        description: Search on message date
         required: false
         type: string
       - name: manager_id
         in: query
-        description: Case insensitive search on manager patron id
+        description: Search on manager patron id
         required: false
         type: integer
       - name: patron_read_date
         in: query
-        description: Case insensitive search on patron read date
+        description: Search on patron read date
         required: false
         type: string
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/request_id_header"
     responses:
       "200":
         description: A list of messages
@@ -52,7 +59,14 @@
           items:
             $ref: "../swagger.yaml#/definitions/message"
       "400":
-        description: Bad request
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "403":
@@ -69,9 +83,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        borrowers:
-          - list_borrowers
-          - view_borrower_infos_from_any_libraries
+        borrowers: list_borrowers
   post:
     x-mojo-to: Messages#add
     operationId: addMessage
@@ -139,6 +151,14 @@
         description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Message not found
         schema:
@@ -153,9 +173,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        borrowers:
-          - list_borrowers
-          - view_borrower_infos_from_any_libraries
+        borrowers: list_borrowers
   patch:
     x-mojo-to: Messages#update
     operationId: editMessage

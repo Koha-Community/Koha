@@ -20,7 +20,6 @@ use Modern::Perl;
 use Test::NoWarnings;
 use Test::More tests => 6;
 use Test::Mojo;
-use Test::Warn;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -36,7 +35,7 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 subtest 'list() tests' => sub {
 
-    plan tests => 20;
+    plan tests => 32;
 
     $schema->storage->txn_begin;
 
@@ -81,7 +80,11 @@ subtest 'list() tests' => sub {
     $t->get_ok("//$userid:$password@/api/v1/messages")->status_is(200)->json_is( [] );
 
     my $message = $builder->build_object(
-        { class => 'Koha::Patron::Messages', value => { borrowernumber => $patron->borrowernumber } } );
+        {
+            class => 'Koha::Patron::Messages',
+            value => { borrowernumber => $patron->borrowernumber, message_type => 'L' }
+        }
+    );
 
     # One message created, should get returned
     my $res = $t->get_ok("//$userid:$password@/api/v1/messages")->status_is(200)->tx->res->json;
@@ -95,7 +98,11 @@ subtest 'list() tests' => sub {
         }
     );
     my $message_with_another_message_type = $builder->build_object(
-        { class => 'Koha::Patron::Messages', value => { borrowernumber => $patron->borrowernumber } } );
+        {
+            class => 'Koha::Patron::Messages',
+            value => { borrowernumber => $patron->borrowernumber, message_type => 'B' }
+        }
+    );
 
     # Two messages created, they should both be returned
     my $res2 = $t->get_ok("//$userid:$password@/api/v1/messages")->status_is(200)->tx->res->json;
@@ -104,23 +111,55 @@ subtest 'list() tests' => sub {
 
     # Filtering works, two messages sharing message_type
     my $res3 =
-        $t->get_ok( "//$userid:$password@/api/v1/messages?message_type=" . $message->message_type )->status_is(200)
+        $t->get_ok( "//$userid:$password@/api/v1/messages?message_type=" . $message->message_type )
+        ->status_is(200)
         ->tx->res->json;
 
     is( scalar @{$res3}, 2, 'Two messages returned' );
 
     my $res4 =
-        $t->get_ok( "//$userid:$password@/api/v1/messages?message=" . $message->message )->status_is(200)
+        $t->get_ok( "//$userid:$password@/api/v1/messages?message=" . $message->message )
+        ->status_is(200)
         ->tx->res->json;
 
     is( scalar @{$res4}, 1, 'One message returned' );
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/messages?message_blah=blah")->status_is(400)
+    $t->get_ok("//$userid:$password@/api/v1/messages?message_blah=blah")
+        ->status_is(400)
         ->json_is( [ { path => '/query/message_blah', message => 'Malformed query string' } ] );
+
+    # Pagination and sorting
+    $t->get_ok("//$userid:$password@/api/v1/messages?_page=1&_per_page=2&_order_by=-message_id")
+        ->status_is(200)
+        ->header_is( 'X-Total-Count' => 3 )
+        ->json_is( '/0/message_id' => $message_with_another_message_type->id );
+
+    is( scalar @{ $t->tx->res->json }, 2, 'Pagination is honored' );
+
+    # q parameter
+    $t->get_ok( "//$userid:$password@/api/v1/messages?q={\"message_id\":" . $another_message->id . "}" )
+        ->status_is(200)
+        ->json_is( '/0/message_id' => $another_message->id );
 
     # Unauthorized access
     $t->get_ok("//$unauth_userid:$password@/api/v1/messages")->status_is(403);
+
+    # view_borrower_infos_from_any_libraries alone is not enough
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->borrowernumber,
+                module_bit     => 4,
+                code           => 'view_borrower_infos_from_any_libraries',
+            },
+        }
+    );
+    $t->get_ok("//$unauth_userid:$password@/api/v1/messages")->status_is(403);
+
+    # Unauthenticated access
+    $t->get_ok("/api/v1/messages")->status_is(401);
 
     $schema->storage->txn_rollback;
 };
@@ -179,7 +218,8 @@ subtest 'get() tests' => sub {
     my $non_existent_id   = $message_to_delete->id;
     $message_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/messages/$non_existent_id")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/messages/$non_existent_id")
+        ->status_is(404)
         ->json_is( '/error' => 'Message not found' );
 
     $schema->storage->txn_rollback;
@@ -187,7 +227,7 @@ subtest 'get() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 27;
+    plan tests => 33;
 
     $schema->storage->txn_begin;
 
@@ -245,7 +285,8 @@ subtest 'add() tests' => sub {
         manager_id   => $librarian->borrowernumber
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/messages" => json => $message_with_invalid_field )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/messages" => json => $message_with_invalid_field )
+        ->status_is(400)
         ->json_is(
         "/errors" => [
             {
@@ -257,24 +298,34 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to write
     my $message_id =
-        $t->post_ok( "//$userid:$password@/api/v1/messages" => json => $message )->status_is( 201, 'SWAGGER3.2.1' )
+        $t->post_ok( "//$userid:$password@/api/v1/messages" => json => $message )
+        ->status_is( 201, 'SWAGGER3.2.1' )
         ->header_like(
         Location => qr|^\/api\/v1\/messages/\d*|,
         'SWAGGER3.4.1'
-    )->json_is( '/patron_id' => $message->{patron_id} )->json_is( '/library_id' => $message->{library_id} )
-        ->json_is( '/message_type' => $message->{message_type} )->json_is( '/message' => $message->{message} )
-        ->json_is( '/manager_id'   => $librarian->borrowernumber )->tx->res->json->{message_id};
+        )
+        ->json_is( '/patron_id'    => $message->{patron_id} )
+        ->json_is( '/library_id'   => $message->{library_id} )
+        ->json_is( '/message_type' => $message->{message_type} )
+        ->json_is( '/message'      => $message->{message} )
+        ->json_is( '/manager_id'   => $librarian->borrowernumber )
+        ->tx->res->json->{message_id};
 
     # Authorized attempt to write with manager_id defined
     $message->{manager_id} = $message->{patron_id};
     $message_id =
-        $t->post_ok( "//$userid:$password@/api/v1/messages" => json => $message )->status_is( 201, 'SWAGGER3.2.1' )
+        $t->post_ok( "//$userid:$password@/api/v1/messages" => json => $message )
+        ->status_is( 201, 'SWAGGER3.2.1' )
         ->header_like(
         Location => qr|^\/api\/v1\/messages/\d*|,
         'SWAGGER3.4.1'
-    )->json_is( '/patron_id' => $message->{patron_id} )->json_is( '/library_id' => $message->{library_id} )
-        ->json_is( '/message_type' => $message->{message_type} )->json_is( '/message' => $message->{message} )
-        ->json_is( '/manager_id'   => $message->{patron_id} )->tx->res->json->{message_id};
+        )
+        ->json_is( '/patron_id'    => $message->{patron_id} )
+        ->json_is( '/library_id'   => $message->{library_id} )
+        ->json_is( '/message_type' => $message->{message_type} )
+        ->json_is( '/message'      => $message->{message} )
+        ->json_is( '/manager_id'   => $message->{patron_id} )
+        ->tx->res->json->{message_id};
 
     # Authorized attempt to create with null id
     $message->{message_id} = undef;
@@ -282,10 +333,25 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to create with existing id
     $message->{message_id} = $message_id;
-    warnings_like {
-        $t->post_ok( "//$userid:$password@/api/v1/messages" => json => $message )->status_is(409);
-    }
-    qr/Duplicate ID/;
+    $t->post_ok( "//$userid:$password@/api/v1/messages" => json => $message )->status_is(400)->json_is(
+        "/errors" => [
+            {
+                message => "Read-only.",
+                path    => "/body/message_id"
+            }
+        ]
+    );
+    delete $message->{message_id};
+
+    # Invalid message_type
+    $t->post_ok( "//$userid:$password@/api/v1/messages" => json => { %{$message}, message_type => 'Z' } )
+        ->status_is(400)
+        ->json_is( '/errors/0/path' => '/body/message_type' );
+
+    # Empty message
+    $t->post_ok( "//$userid:$password@/api/v1/messages" => json => { %{$message}, message => '' } )
+        ->status_is(400)
+        ->json_is( '/errors/0/path' => '/body/message' );
 
     $schema->storage->txn_rollback;
 };
@@ -355,7 +421,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/messages/$message_id" => json => $message_with_missing_field )
-        ->status_is(400)->json_is( "/errors" => [ { message => "Missing property.", path => "/body/message_type" } ] );
+        ->status_is(400)
+        ->json_is( "/errors" => [ { message => "Missing property.", path => "/body/message_type" } ] );
 
     my $message_with_empty_field = {
         patron_id    => $patron->borrowernumber,
@@ -366,7 +433,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/messages/$message_id" => json => $message_with_empty_field )
-        ->status_is(400)->json_is( '/error' => "message_type cannot be empty" );
+        ->status_is(400)
+        ->json_is( '/errors/0/path' => '/body/message_type' );
 
     my $message_with_null_field = {
         patron_id    => $patron->borrowernumber,
@@ -377,7 +445,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/messages/$message_id" => json => $message_with_null_field )
-        ->status_is(400)->json_is( '/error' => "library_id cannot be empty" );
+        ->status_is(400)
+        ->json_is( '/error' => "library_id cannot be empty" );
 
     # Full object update on PUT
     my $message_with_updated_field = {
@@ -389,7 +458,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/messages/$message_id" => json => $message_with_updated_field )
-        ->status_is(200)->json_is( '/message' => 'Old Fox jumped over Cheeseboy' );
+        ->status_is(200)
+        ->json_is( '/message' => 'Old Fox jumped over Cheeseboy' );
 
     # Authorized attempt to write invalid data
     my $message_with_invalid_field = {
@@ -402,7 +472,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/messages/$message_id" => json => $message_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: blah.",
@@ -428,7 +499,8 @@ subtest 'update() tests' => sub {
     my $message_with_some_updates = { message => "Young Fox jumped over Cheeseboy" };
 
     $t->patch_ok( "//$userid:$password@/api/v1/messages/$message_id" => json => $message_with_some_updates )
-        ->status_is(200)->json_is( '/message' => 'Young Fox jumped over Cheeseboy' );
+        ->status_is(200)
+        ->json_is( '/message' => 'Young Fox jumped over Cheeseboy' );
 
     $schema->storage->txn_rollback;
 };

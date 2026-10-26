@@ -662,6 +662,9 @@ sub _gen_default_values {
             require_strong_password       => undef,
             BlockExpiredPatronOpacActions => q{follow_syspref_BlockExpiredPatronOpacActions},
         },
+        Message => {
+            message_type => 'B',
+        },
         Branch => {
             pickup_location => 0,
             opacuserjs      => q{},
