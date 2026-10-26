@@ -17,6 +17,7 @@ package Koha::BiblioFramework;
 
 use Modern::Perl;
 
+use Koha::BiblioFrameworkMarcMatchers;
 use Koha::Database;
 
 use base qw(Koha::Object);
