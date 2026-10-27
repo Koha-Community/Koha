@@ -834,8 +834,6 @@ function patron_autocomplete(node, options) {
                       ? "/cgi-bin/koha/reserve/request.pl"
                       : link_to == "recall"
                         ? "/cgi-bin/koha/recalls/request.pl"
-                      : link_to == "notices"
-                        ? "/cgi-bin/koha/members/notices.pl"
                         : "/cgi-bin/koha/members/moremember.pl";
             item.link +=
                 (url_params ? "?" + url_params + "&" : "?") +

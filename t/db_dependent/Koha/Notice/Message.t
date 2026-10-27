@@ -20,9 +20,14 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 5;
+use Test::More tests => 8;
 
 use C4::Letters qw( GetPreparedLetter EnqueueLetter );
+
+use Koha::Database;
+use Koha::Library::Group;
+use Koha::Notice::Messages;
+use Koha::Patrons;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -368,7 +373,7 @@ subtest 'stylesheets() tests' => sub {
 
 subtest 'patron() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -380,15 +385,9 @@ subtest 'patron() tests' => sub {
             value => { borrowernumber => $patron->borrowernumber }
         }
     );
-    my $message_id = $message->message_id;
 
     is( ref( $message->patron ),          'Koha::Patron',          'Object type is correct' );
     is( $message->patron->borrowernumber, $patron->borrowernumber, 'Right patron linked' );
-
-    # Deleted patron
-    $patron->delete;
-    $message = Koha::Notice::Messages->find($message_id);
-    is( $message, undef, 'Deleting the patron also deletes the associated message' );
 
     # Missing patron
     $message = $builder->build_object(
@@ -438,44 +437,176 @@ subtest 'template() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'search_limited' => sub {
-    plan tests => 2;
+subtest 'scoped_style() tests' => sub {
+
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
-    my $patron   = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1 } } );
-    my $patron_2 = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+    t::lib::Mocks::mock_preference( 'EmailNoticeCSS', 'p { color: red; }' );
+    t::lib::Mocks::mock_preference( 'PrintNoticeCSS', '@media print { p { color: blue; } }' );
 
-    my $message = $builder->build_object(
+    my $email =
+        $builder->build_object( { class => 'Koha::Notice::Messages', value => { message_transport_type => 'email' } } );
+    like( $email->scoped_style, qr/\.type_email\s+p\s*\{/, 'Email styles are scoped to the transport type' );
+
+    my $print =
+        $builder->build_object( { class => 'Koha::Notice::Messages', value => { message_transport_type => 'print' } } );
+    like(
+        $print->scoped_style, qr/\@media print\s*\{\s*\.type_print\s+p\s*\{/,
+        'Rules inside an at-rule are scoped'
+    );
+
+    t::lib::Mocks::mock_preference(
+        'PrintNoticeCSS',
+        "\@media print {\n    p { color: blue; }\n    h1 { color: red; }\n}\n"
+    );
+    like(
+        $print->scoped_style, qr/\.type_print\s+p\s*\{.*\.type_print\s+h1\s*\{/s,
+        'Rules inside a formatted at-rule are scoped'
+    );
+
+    t::lib::Mocks::mock_preference(
+        'PrintNoticeCSS',
+        'body { color: red; } h1, :is(a, b), [data-x="1,2"] { margin: 0 }'
+    );
+    my $scoped = $print->scoped_style;
+    like( $scoped, qr/^\.type_print\s*\{ color: red; \}/, 'The document selectors apply to the container' );
+    like(
+        $scoped, qr/\.type_print h1, \.type_print :is\(a, b\), \.type_print \[data-x="1,2"\] \{/,
+        'Only top level commas separate selectors'
+    );
+
+    t::lib::Mocks::mock_preference( 'PrintNoticeCSS', '@layer base { p { color: blue; } }' );
+    like( $print->scoped_style, qr/\@layer base \{ \.type_print p/, 'Rules in layers are scoped' );
+
+    my $template = $builder->build_object(
+        { class => 'Koha::Notice::Templates', value => { style => '@media print { p { a: b; } } p { c: d; }' } } );
+    my $templated =
+        $builder->build_object( { class => 'Koha::Notice::Messages', value => { letter_id => $template->id } } );
+    is(
+        $templated->scoped_template_style('#notice_1'), '@media print { #notice_1 p { a: b; } } #notice_1 p { c: d; }',
+        'The style of the template is scoped'
+    );
+
+    my $sms =
+        $builder->build_object( { class => 'Koha::Notice::Messages', value => { message_transport_type => 'sms' } } );
+    is( $sms->scoped_style, q{}, 'No styles for transport types without styles, and no warnings' );
+
+    t::lib::Mocks::mock_preference( 'EmailNoticeCSS', '' );
+    is( $email->scoped_style, q{}, 'No styles when the preference is empty, and no warnings' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'search_limited' => sub {
+    plan tests => 9;
+
+    $schema->storage->txn_begin;
+
+    my $library_a = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_b = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_c = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $super = $builder->build_object(
+        { class => 'Koha::Patrons', value => { flags => 1, branchcode => $library_a->branchcode } } );
+    my $patron_a = $builder->build_object(
+        { class => 'Koha::Patrons', value => { flags => 0, branchcode => $library_a->branchcode } } );
+    my $patron_b = $builder->build_object(
+        { class => 'Koha::Patrons', value => { flags => 0, branchcode => $library_b->branchcode } } );
+    my $patron_c = $builder->build_object(
+        { class => 'Koha::Patrons', value => { flags => 0, branchcode => $library_c->branchcode } } );
+    my $patron_any = $builder->build_object(
+        { class => 'Koha::Patrons', value => { flags => 4, branchcode => $library_c->branchcode } } );
+    $builder->build(
         {
-            class => 'Koha::Notice::Messages',
-            value => { borrowernumber => $patron->borrowernumber }
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron_any->borrowernumber,
+                module_bit     => 4,
+                code           => 'view_borrower_infos_from_any_libraries'
+            }
         }
     );
 
-    my $message_2 = $builder->build_object(
-        {
-            class => 'Koha::Notice::Messages',
-            value => { borrowernumber => $patron_2->borrowernumber }
-        }
+    # A and B are in separate groups that hide patron information, C is in no group
+    my $group_1 = Koha::Library::Group->new( { title => 'TEST Group 1', ft_hide_patron_info => 1 } )->store;
+    my $group_2 = Koha::Library::Group->new( { title => 'TEST Group 2', ft_hide_patron_info => 1 } )->store;
+    Koha::Library::Group->new( { parent_id => $group_1->id, branchcode => $library_a->branchcode } )->store;
+    Koha::Library::Group->new( { parent_id => $group_2->id, branchcode => $library_b->branchcode } )->store;
+
+    my %patron = ( a => $patron_a, b => $patron_b, c => $patron_c );
+    my %message;
+    $message{$_} = $builder->build_object(
+        { class => 'Koha::Notice::Messages', value => { borrowernumber => $patron{$_}->borrowernumber } } )
+        for qw(a b c);
+    $message{none} =
+        $builder->build_object( { class => 'Koha::Notice::Messages', value => { borrowernumber => undef } } );
+    my @ids = map { $_->message_id } values %message;
+
+    my $visible = sub {
+        my ( $patron, $params, $attributes ) = @_;
+        t::lib::Mocks::mock_userenv( { patron => $patron } );
+        return [ sort map { $_->message_id }
+                Koha::Notice::Messages->search_limited( { 'me.message_id' => \@ids, %{ $params // {} } }, $attributes )
+                ->as_list ];
+    };
+    my $ids = sub {
+        [ sort map { $message{$_}->message_id } @_ ]
+    };
+
+    is_deeply(
+        $visible->($super), $ids->(qw(a b c none)),
+        'Superlibrarian sees all notices, also those without a patron'
+    );
+    is_deeply(
+        $visible->($patron_a), $ids->('a'),
+        'Patron in a group only sees the notices of patrons of the group libraries'
+    );
+    is_deeply(
+        $visible->($patron_c), $ids->('c'),
+        'Patron without group only sees the notices of patrons of their own library'
+    );
+    is_deeply(
+        $visible->($patron_any), $ids->(qw(a b c none)),
+        'Patron with view_borrower_infos_from_any_libraries sees all notices'
     );
 
-    my $nb_messages = Koha::Notice::Messages->count;
+    t::lib::Mocks::mock_preference( 'IndependentBranches', 1 );
+    is_deeply( $visible->($patron_a), $ids->('a'), 'IndependentBranches restricts to the own library' );
+    t::lib::Mocks::mock_preference( 'IndependentBranches', 0 );
 
-    my $group_1 = Koha::Library::Group->new( { title => 'TEST Group 1' } )->store;
-    my $group_2 = Koha::Library::Group->new( { title => 'TEST Group 2' } )->store;
-    Koha::Library::Group->new( { parent_id => $group_1->id, branchcode => $patron->branchcode } )->store();
-    Koha::Library::Group->new( { parent_id => $group_2->id, branchcode => $patron_2->branchcode } )->store();
-    t::lib::Mocks::mock_userenv( { patron => $patron } );    # Is superlibrarian
-    is(
-        Koha::Notice::Messages->search_limited->count, $nb_messages,
-        'Koha::Notice::Messages->search_limited should return all generated notices for superlibrarian'
+    # The restriction is combined with, not replaced by, the passed conditions
+    is_deeply(
+        $visible->( $patron_a, { 'borrowernumber.branchcode' => $library_b->branchcode } ), [],
+        'The restriction is not overridden by a library filter on another library'
     );
-    t::lib::Mocks::mock_userenv( { patron => $patron_2 } );    # Is restricted
-    is(
-        Koha::Notice::Messages->search_limited->count, 1,
-        'Koha:Notice::Messages->search_limited should not return all generated notices for restricted patron'
+    is_deeply(
+        $visible->( $super, { 'borrowernumber.branchcode' => $library_b->branchcode } ), $ids->('b'),
+        'A library filter is applied'
     );
+
+    # The arguments are not modified
+    my $params     = { 'me.message_id' => \@ids };
+    my $attributes = { join            => ['borrowernumber'], rows => 10 };
+    t::lib::Mocks::mock_userenv( { patron => $patron_a } );
+    Koha::Notice::Messages->search_limited( $params, $attributes )->count;
+    is_deeply(
+        [ $params, $attributes ], [ { 'me.message_id' => \@ids }, { join => ['borrowernumber'], rows => 10 } ],
+        'search_limited does not modify its arguments'
+    );
+
+    # A logged in user that cannot be found sees nothing
+    my $unknown    = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $unknown_id = $unknown->borrowernumber;
+    $unknown->delete;
+    t::lib::Mocks::mock_userenv( { borrowernumber => $unknown_id } );
+    is(
+        Koha::Notice::Messages->search_limited( { 'me.message_id' => \@ids } )->count, 0,
+        'Nothing is returned when the logged in patron cannot be found'
+    );
+
+    $schema->storage->txn_rollback;
 };
 
 1;

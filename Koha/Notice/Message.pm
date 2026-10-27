@@ -17,7 +17,10 @@ package Koha::Notice::Message;
 
 use Modern::Perl;
 
+use C4::Context;
 use Koha::Database;
+use Koha::Notice::Template;
+use Koha::Patron;
 use Koha::Patron::Debarments qw( AddDebarment );
 
 use base qw(Koha::Object);
@@ -188,50 +191,148 @@ sub template {
 
   my $scoped_style = $message->scoped_style;
 
-Returns a string of all the scoped styles for the message
+Returns a string of all the scoped styles for the message: the styles defined for its
+transport type, with every selector prefixed by a class for the transport type so they
+only apply to notices of that type.
 
 =cut
 
 sub scoped_style {
-    my ($self)       = @_;
-    my $type         = $self->message_transport_type;
-    my $scoped_class = ".type_$type";
+    my ($self) = @_;
+    my $type = $self->message_transport_type;
     my $css_content;
 
-    if ( $self->message_transport_type eq 'email' ) {
+    if ( $type eq 'email' ) {
         $css_content = C4::Context->preference("EmailNoticeCSS");
-    } elsif ( $self->message_transport_type eq 'print' ) {
+    } elsif ( $type eq 'print' ) {
         $css_content = C4::Context->preference("PrintNoticeCSS");
     }
 
-    # Modify the CSS content, handling @media, @supports, @document
-    $css_content =~ s!
-        (@(media|supports|-moz-document)[^\{]+\{)  # Match the at-rule start
-        (                                         # Capture group for block content
-          (?:                                     # Non-capturing group
-            [^{]+\{[^}]*\}                        # Match CSS rules within the at-rule block
-          )*
+    # No styles are defined for other transport types, or for an empty preference
+    return q{} unless $css_content;
+
+    return _scope_css( $css_content, ".type_$type" );
+}
+
+=head3 scoped_template_style
+
+  my $style = $message->scoped_template_style('#notice_123');
+
+Returns the styles of the notice template the message was generated from, with every selector
+prefixed by the given scope, or an empty string if the message has no template or the template
+has no styles.
+
+=cut
+
+sub scoped_template_style {
+    my ( $self, $scope ) = @_;
+
+    my $template = $self->template;
+    return q{} unless $template && $template->style;
+
+    return _scope_css( $template->style, $scope );
+}
+
+=head3 _split_selectors
+
+  my @selectors = _split_selectors('a, :is(b, c), [data-x="1,2"]');
+
+Split a selector list on its top level commas, commas in parentheses, brackets and strings are kept.
+
+=cut
+
+sub _split_selectors {
+    my ($list) = @_;
+
+    my @selectors;
+    my ( $current, $depth, $quote ) = ( q{}, 0, undef );
+    for my $char ( split //, $list ) {
+        if ($quote) {
+            $quote = undef if $char eq $quote;
+        } elsif ( $char eq '"' or $char eq "'" ) {
+            $quote = $char;
+        } elsif ( $char eq '(' or $char eq '[' ) {
+            $depth++;
+        } elsif ( $char eq ')' or $char eq ']' ) {
+            $depth-- if $depth;
+        } elsif ( $char eq ',' and !$depth ) {
+            push @selectors, $current;
+            $current = q{};
+            next;
+        }
+        $current .= $char;
+    }
+    push @selectors, $current;
+
+    return @selectors;
+}
+
+=head3 _scope_css
+
+  my $scoped_css = _scope_css( $css, '.scope' );
+
+Prefix every selector of the given CSS with the given scope. Rules nested in conditional
+group at-rules (@media, @supports, @document, @layer, @container) are scoped too, other at-rules
+(@font-face, @keyframes, @import...) and comments are left alone.
+
+=cut
+
+sub _scope_css {
+    my ( $css, $scope ) = @_;
+
+    my $scoped = q{};
+    while (
+        $css =~ m{
+            \G
+            (?: (?<comment> /\*.*?\*/ )
+              | (?<space> \s+ )
+              | (?<atrule> \@(?<name>[\w-]+) (?<prelude>[^{};]*)
+                    (?: ; | (?<block> \{ (?: [^{}]++ | (?&block) )* \} ) ) )
+              | (?<selector> [^{}\@;]+? ) (?<declarations> \{ [^{}]* \} )
+            )
+        }gcsx
         )
-        \}
-    !
-        my $header = $1;
-        my $inner_rules = $2;                     # Capture the rules within the at-rule block
+    {
+        # Copy what we need, the recursive call below resets the match variables
+        my %match = ( %+, all => $& );
 
-        # Apply the scoped class to the inner rules
-        $inner_rules =~ s/([^{]+)\{/ $scoped_class $1\{/g;
+        if ( defined $match{comment} or defined $match{space} ) {
+            $scoped .= $match{all};
+        } elsif ( defined $match{atrule} ) {
+            if ( defined $match{block}
+                and $match{name} =~ m/^(?:media|supports|-moz-document|document|layer|container)$/ )
+            {
+                my $inner = substr( $match{block}, 1, -1 );
+                $scoped .= '@' . $match{name} . $match{prelude} . '{' . _scope_css( $inner, $scope ) . '}';
+            } else {
+                $scoped .= $match{all};
+            }
+        } else {
+            my ($leading) = $match{selector} =~ m/^(\s*)/;
+            my @selectors = grep { length } map { s/^\s+|\s+$//gr } _split_selectors( $match{selector} );
 
-        # Return the modified block
-        "$header$inner_rules"
+            # The notice replaces the document, so the document selectors apply to its container
+            my @scoped_selectors;
+            for my $selector (@selectors) {
+                if ( $selector =~ s/^(?:html|body|:root)(?=$|[\s>+~])/$scope/ ) {
+                    push @scoped_selectors, $selector;
+                } else {
+                    push @scoped_selectors, "$scope $selector";
+                }
+            }
+            $scoped .= $leading . join( ', ', @scoped_selectors ) . ' ' . $match{declarations};
+        }
+    }
 
-    !egx;
+    # Anything we could not make sense of is kept as it was
+    $scoped .= substr( $css, pos($css) // 0 );
 
-    $css_content =~ s/([^{]+)\{/$scoped_class $1\{/g
-        unless $css_content =~ /\@(media|supports|-moz-document)/;
-
-    return $css_content;
+    return $scoped;
 }
 
 =head3 _type
+
+Return the name of the DBIC result class this object wraps
 
 =cut
 

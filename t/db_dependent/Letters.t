@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 use File::Basename qw(dirname);
-use Test::More tests => 106;
+use Test::More tests => 107;
 use Test::NoWarnings;
 
 use Test::MockModule;
@@ -174,7 +174,10 @@ is( $messages->[0]->{failure_code}, '', 'Failure code for successful message cor
 my $yesterday   = dt_from_string->subtract( days => 1 );
 my $message_obj = Koha::Notice::Messages->find( $messages->[0]->{message_id} )->time_queued($yesterday)->store;
 my $patron_obj  = Koha::Patrons->find($borrowernumber);
-is_deeply( $message_obj->patron, $patron_obj, "Koha::Notice::Message->patron sub correctly returns patron object" );
+is(
+    $message_obj->patron->borrowernumber, $patron_obj->borrowernumber,
+    "Koha::Notice::Message->patron sub correctly returns patron object"
+);
 
 # EnqueueLetter - Test characters limitation for SMS
 $my_message->{letter}->{content} = "a" x 2000;

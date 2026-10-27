@@ -17,7 +17,9 @@ package Koha::Notice::Messages;
 
 use Modern::Perl;
 
+use C4::Context;
 use Koha::Database;
+use Koha::Patrons;
 use Koha::Notice::Message;
 
 use base qw(Koha::Objects);
@@ -57,7 +59,18 @@ sub get_failed_notices {
 
     my $messages = Koha::Notice::Messages->search_limited( $params, $attributes );
 
-Search for generated and queued notices according to logged in patron restrictions
+Search for generated and queued notices according to the restrictions of the
+logged in patron: where the patron can only see patrons from some libraries
+(see L<Koha::Patron/libraries_where_can_see_patrons>), only the notices of
+patrons from those libraries are returned.
+
+The restriction is added to, not a replacement for, any condition on the patron's
+library passed in C<$params>. Notices that are not linked to a patron are only
+returned when there is no restriction. The passed C<$params> and C<$attributes>
+are not modified.
+
+When there is no logged in user (cronjobs, scripts) no restriction is applied, but when the
+logged in patron cannot be found nothing is returned.
 
 =cut
 
@@ -65,19 +78,38 @@ sub search_limited {
     my ( $self, $params, $attributes ) = @_;
 
     my $userenv = C4::Context->userenv;
-    my @restricted_branchcodes;
+    my $restriction;
     if ( $userenv and $userenv->{number} ) {
         my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
-        @restricted_branchcodes = $logged_in_user->libraries_where_can_see_patrons;
+        if ($logged_in_user) {
+            my @restricted_branchcodes = $logged_in_user->libraries_where_can_see_patrons;
+
+            # TODO This 'borrowernumber' relation name is confusing and needs to be renamed
+            $restriction = { 'borrowernumber.branchcode' => { -in => \@restricted_branchcodes } }
+                if @restricted_branchcodes;
+        } else {
+
+            # A logged in user we cannot find cannot be allowed to see anything
+            $restriction = \['1 = 0'];
+        }
     }
 
-    # TODO This 'borrowernumber' relation name is confusing and needs to be renamed
-    $params->{'borrowernumber.branchcode'} = { -in => \@restricted_branchcodes } if @restricted_branchcodes;
-    $attributes->{join}                    = 'borrowernumber';
-    return $self->search( $params, $attributes );
+    my $where =
+         !$restriction ? $params
+        : $params      ? { -and => [ $params, $restriction ] }
+        :                $restriction;
+
+    my %attrs = %{ $attributes // {} };
+    my @joins = ref( $attrs{join} ) eq 'ARRAY' ? @{ $attrs{join} } : defined $attrs{join} ? ( $attrs{join} ) : ();
+    push @joins, 'borrowernumber' unless grep { defined && !ref && $_ eq 'borrowernumber' } @joins;
+    $attrs{join} = \@joins;
+
+    return $self->search( $where, \%attrs );
 }
 
-=head3 type
+=head3 _type
+
+Return the name of the DBIC result class this class wraps
 
 =cut
 
@@ -85,9 +117,9 @@ sub _type {
     return 'MessageQueue';
 }
 
-=head2 object_class
+=head3 object_class
 
-Missing POD for object_class.
+Return the name of the class of the objects this class manages
 
 =cut
 
