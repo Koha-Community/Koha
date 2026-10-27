@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Data::Dumper;    # REMOVEME with diag
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockModule;
 use Test::MockTime qw( set_fixed_time );
 use t::lib::TestBuilder;
@@ -30,7 +30,9 @@ use C4::Items;
 use C4::Members qw( IssueSlip );
 
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Libraries;
 use Koha::Library;
+use Koha::Notice::Template;
 use Koha::Patrons;
 use DateTime::Duration;
 
@@ -437,6 +439,61 @@ EOS
         AddReturn( $barcode2, $branchcode );
     };
 
+};
+
+subtest 'Default ISSUEQSLIP notice' => sub {
+    if ( $today->hour == 23 and $today->minute == 59 ) {
+        plan skip_all => "It's 23:59!";
+    } else {
+        plan tests => 11;
+    }
+
+    # Use the notice that ships in sample_notices.yml rather than the test notice above
+    my $default = Koha::Notice::Template->new(
+        {
+            module                 => 'circulation',
+            code                   => 'ISSUEQSLIP',
+            message_transport_type => 'email',
+            lang                   => 'default',
+        }
+    )->get_default;
+    ok( $default, 'The default ISSUEQSLIP notice is found in sample_notices.yml' );
+    unlike( $default, qr/<<|<checkedout>/, 'The default ISSUEQSLIP notice uses Template Toolkit syntax only' );
+
+    $dbh->do(
+        q|UPDATE letter SET content = ?, is_html = 1 WHERE module = 'circulation' AND code = 'ISSUEQSLIP'|,
+        {}, $default
+    );
+
+    $borrower->set( { firstname => 'Ada', surname => 'Lovelace', cardnumber => 'CARD15283' } )->store;
+    my $library_name = Koha::Libraries->find($branchcode)->branchname;
+
+    my $date_due = $today->clone->set( hour => 23, minute => 59 );
+    AddIssue(
+        $borrower, $barcode1, $date_due, undef,
+        $today->clone->subtract_duration( DateTime::Duration->new( minutes => 1 ) )
+    );
+    AddIssue( $borrower, $barcode2, $date_due, undef, $yesterday->clone );
+
+    my $slip = IssueSlip( $branchcode, $borrowernumber, 'quickslip' );
+    like( $slip->{content}, qr/\Q$library_name\E/,              'The library name is displayed' );
+    like( $slip->{content}, qr/Checked out to .*Ada.*Lovelace/, 'The patron name is displayed' );
+    like( $slip->{content}, qr/\(CARD15283\)/,                  'The card number is displayed' );
+    like(
+        $slip->{content}, qr/\Q@{[ output_pref( { dt => $today, dateonly => 1 } ) ]}\E/,
+        "Today's date is displayed"
+    );
+    like( $slip->{content}, qr/\Q$title1\E/,            'The title of the item checked out today is displayed' );
+    like( $slip->{content}, qr/Barcode: \Q$barcode1\E/, 'The barcode of the item checked out today is displayed' );
+    like(
+        $slip->{content}, qr/Date due: \Q@{[ output_pref($date_due) ]}\E/,
+        'The due date is displayed with the time'
+    );
+    unlike( $slip->{content}, qr/\Q$title2\E|\Q$barcode2\E/, 'Items not checked out today are not displayed' );
+    unlike( $slip->{content}, qr/\[%|%\]|<<|>>/,             'No unprocessed template markers are left in the slip' );
+
+    AddReturn( $barcode1, $branchcode );
+    AddReturn( $barcode2, $branchcode );
 };
 
 subtest 'bad calls' => sub {

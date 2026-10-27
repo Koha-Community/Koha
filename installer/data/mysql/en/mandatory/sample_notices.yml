@@ -922,20 +922,20 @@ tables:
           lang: default
           content:
             - "[%~ USE KohaDates ~%]"
-            - "<h3><<branches.branchname>></h3>"
-            - "Checked out to <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br>"
-            - "(<<borrowers.cardnumber>>) <br>"
+            - "<h3>[% branch.branchname | html %]</h3>"
+            - "Checked out to [% borrower.title | html %] [% borrower.firstname | html %] [% borrower.initials | html %] [% borrower.surname | html %] <br>"
+            - "([% borrower.cardnumber | html %]) <br>"
             - "<br>"
-            - "<<today>><br>"
+            - "[% today | $KohaDates %]<br>"
             - "<br>"
             - "<h4>Checked out today</h4>"
-            - "<checkedout>"
+            - "[% FOREACH checkout IN checkouts %]"
             - "<p>"
-            - "<<biblio.title>> <br>"
-            - "Barcode: <<items.barcode>><br>"
-            - "Date due: <<issues.date_due>><br>"
+            - "[% checkout.item.biblio.title | html %] <br>"
+            - "Barcode: [% checkout.item.barcode | html %]<br>"
+            - "Date due: [% checkout.date_due | $KohaDates with_hours => 1 %]<br>"
             - "</p>"
-            - "</checkedout>"
+            - "[% END %]"
 
         - module: circulation
           code: ISSUESLIP
