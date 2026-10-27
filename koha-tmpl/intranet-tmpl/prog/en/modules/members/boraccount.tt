@@ -673,6 +673,22 @@
                     }
                     return true;
                 });
+
+                $("#payout_form").on("submit", function (e) {
+                    var payout_type = $("#payout_type").val();
+                    var register = $("#payout_registerid").val();
+
+                    // Only require register for CASH or SIP00 payment types
+                    if (payout_type && (payout_type === "CASH" || payout_type.match(/^SIP\d{2}$/))) {
+                        if (!register || register === "") {
+                            e.preventDefault();
+                            alert(_("Cash register is required for cash payouts"));
+                            $("#payout_registerid").focus();
+                            return false;
+                        }
+                    }
+                    return true;
+                });
             }
 
             $("#applyDiscountModal").on("shown.bs.modal", function (e) {
