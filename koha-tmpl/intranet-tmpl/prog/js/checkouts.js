@@ -1427,7 +1427,6 @@ $(document).ready(function () {
                         $(".renewals-allowed-restriction").show();
                         $(".renewals-allowed-auto_too_late").show();
                         $(".renewals-allowed-auto_account_expired").show();
-                        $(".renewals-allowed-item_denied_renewal").show();
                     }
                     if (AllowRenewalOnHoldOverride) {
                         $(".renewals-allowed-on_reserve").show();
