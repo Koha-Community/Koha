@@ -281,11 +281,18 @@ sub prep_report {
     }
     @lookup{@$param_names} = @$sql_params;
 
-    # Check for a library to ensure the user can access data from that branch
+    # Check every library parameter so the user cannot reach data from a
+    # branch the report's limits exclude. Match on the authorised value,
+    # the label is free text. Multi-select values arrive joined by newlines.
     for my $i ( 0 .. $#$param_names ) {
-        my ($name) = split /\|/, $param_names->[$i];
-        next unless $name eq 'Library';
-        $self->_confirm_branch_param_allowed( $sql_params->[$i] );
+        my ( undef, $authorised_value_all ) = split /\|/, $param_names->[$i];
+        next unless defined $authorised_value_all;
+        my ($authorised_value) = split /:/, $authorised_value_all;
+        next unless $authorised_value eq 'branches';
+        for my $branchcode ( split /\n/, $sql_params->[$i] // '' ) {
+            $branchcode =~ s/\r//;
+            $self->_confirm_branch_param_allowed($branchcode);
+        }
     }
 
     @split = split /<<|>>/, $sql;

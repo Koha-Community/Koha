@@ -970,6 +970,9 @@ if ( $op eq 'run' ) {
                         my $allowed_branchcodes   = $report->library_parameter_branchcodes;
                         $library_search_params = { branchcode => { '-in' => $allowed_branchcodes } }
                             if $allowed_branchcodes;
+
+                        # A limited report must not offer "All", the value '%' is never allowed
+                        $all = undef if $allowed_branchcodes;
                         my $libraries =
                             Koha::Libraries->search( $library_search_params, { order_by => ['branchname'] } );
                         while ( my $library = $libraries->next ) {

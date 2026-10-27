@@ -20,7 +20,7 @@ use Modern::Perl;
 use Test::Exception;
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 23;
+use Test::More tests => 24;
 
 use C4::Context;
 use Koha::Library::Group;
@@ -845,6 +845,64 @@ subtest '_confirm_branch_param_allowed' => sub {
     'pref library_group: ungrouped limit passes its own branchcode';
     throws_ok { $report_c->_confirm_branch_param_allowed( $library_a->branchcode ) }
     $exception, 'pref library_group: ungrouped limit throws for another branchcode';
+};
+
+subtest 'prep_report enforces library parameter limits' => sub {
+    plan tests => 10;
+
+    t::lib::Mocks::mock_config( 'total_running_reports_per_instance_limit', 0 );
+
+    my $library_a = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_b = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_c = $builder->build_object( { class => 'Koha::Libraries' } );
+    my ( $code_a, $code_b, $code_c ) = map { $_->branchcode } ( $library_a, $library_b, $library_c );
+
+    my $report_no_limit = $builder->build_object( { class => 'Koha::Reports' } );
+    my $report_ab       = $builder->build_object( { class => 'Koha::Reports' } );
+    $report_ab->replace_library_limits( [ $code_a, $code_b ] );
+
+    my $exception = 'Koha::Exceptions::Report::UnauthorizedBranchParameter';
+
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'library' );
+    t::lib::Mocks::mock_userenv( { branchcode => $code_a } );
+
+    # The label is free text, the authorised value selects the check
+    $report_ab->savedsql('SELECT branchcode FROM branches WHERE branchcode = <<Branch|branches>>');
+    lives_ok { $report_ab->prep_report( ['Branch|branches'], [$code_a] ) }
+    'label Branch: branchcode within the report limits passes';
+    throws_ok { $report_ab->prep_report( ['Branch|branches'], [$code_c] ) }
+    $exception, 'label Branch: branchcode outside the report limits throws';
+
+    # A multi-select value is joined by newlines, each code is checked
+    $report_ab->savedsql('SELECT branchcode FROM branches WHERE branchcode IN <<Library|branches:in>>');
+    my $sql;
+    lives_ok { ($sql) = $report_ab->prep_report( ['Library|branches:in'], ["$code_a\n$code_b"] ) }
+    'multi-select: two branchcodes within the report limits pass';
+    like( $sql, qr/IN \('\Q$code_a\E','\Q$code_b\E'\)/, 'multi-select: both branchcodes are in the SQL' );
+    throws_ok { $report_ab->prep_report( ['Library|branches:in'], ["$code_a\r\n$code_c"] ) }
+    $exception, 'multi-select: a branchcode outside the report limits throws';
+
+    # The "All" value is never allowed on a limited report
+    $report_ab->savedsql('SELECT branchcode FROM branches WHERE branchcode LIKE <<Library|branches:all>>');
+    throws_ok { $report_ab->prep_report( ['Library|branches:all'], ['%'] ) }
+    $exception, 'all option: % throws on a limited report';
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'none' );
+    lives_ok { $report_ab->prep_report( ['Library|branches:all'], ['%'] ) }
+    'all option: % passes when LimitReportsBy is none';
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'library' );
+
+    # A parameter is only checked when its authorised value is branches
+    $report_ab->savedsql('SELECT itype FROM items WHERE itype = <<Library|itemtypes>>');
+    lives_ok { $report_ab->prep_report( ['Library|itemtypes'], [$code_c] ) }
+    'label Library with another authorised value: not checked';
+    $report_ab->savedsql('SELECT branchcode FROM branches WHERE branchcode = <<Library>>');
+    lives_ok { $report_ab->prep_report( ['Library'], [$code_c] ) }
+    'label Library with no authorised value: not checked';
+
+    # A report with no limits is unrestricted
+    $report_no_limit->savedsql('SELECT branchcode FROM branches WHERE branchcode = <<Branch|branches>>');
+    lives_ok { $report_no_limit->prep_report( ['Branch|branches'], [$code_c] ) }
+    'report with no limits: any branchcode passes';
 };
 
 subtest 'running' => sub {
