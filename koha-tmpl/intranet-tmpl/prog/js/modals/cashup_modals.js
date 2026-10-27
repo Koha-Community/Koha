@@ -99,7 +99,7 @@ function initTriggerCashupModal(modalSelector, options) {
             quickInstructions =
                 "<li>" +
                 __(
-                    "Confirm you have removed %s cash from the register to bank immediately"
+                    "Confirm you have removed the bankable amount of %s from the register to bank immediately"
                 ).format(absAmountFormatted) +
                 "</li>";
         }
