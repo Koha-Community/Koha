@@ -3186,6 +3186,44 @@ sub get_extended_attribute {
     return $attribute->next;
 }
 
+=head3 extended_attribute_values
+
+    my $values = $patron->extended_attribute_values;
+
+Returns a hashref of the patron's extended attribute values, keyed by the
+attribute type code. Repeatable attribute types always map to an arrayref (empty
+when there are no values), whilst non-repeatable types map to the single value,
+or undef when it is not set.
+
+It is primarily intended to make the attributes easy to reach from Template
+Toolkit notices, where, for example, one can write:
+
+    [% borrower.extended_attribute_values.UNCLE %]
+
+    [% FOREACH value IN borrower.extended_attribute_values.NICKNAMES %]
+        [% value | html %]
+    [% END %]
+
+=cut
+
+sub extended_attribute_values {
+    my ($self) = @_;
+
+    my %repeatable = map { $_->code => $_->repeatable } Koha::Patron::Attribute::Types->search->as_list;
+    my %values     = map { $_       => $repeatable{$_} ? [] : undef } keys %repeatable;
+
+    for my $attribute ( $self->extended_attributes->as_list ) {
+        my $code = $attribute->code;
+        if ( $repeatable{$code} ) {
+            push @{ $values{$code} }, $attribute->attribute;
+        } else {
+            $values{$code} = $attribute->attribute;
+        }
+    }
+
+    return \%values;
+}
+
 =head3 set_default_messaging_preferences
 
     $patron->set_default_messaging_preferences

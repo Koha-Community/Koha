@@ -871,7 +871,7 @@ subtest 'permissions() tests' => sub {
 
 subtest 'extended_attributes' => sub {
 
-    plan tests => 16;
+    plan tests => 17;
 
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
@@ -1264,6 +1264,73 @@ subtest 'extended_attributes' => sub {
             "We can set no attributes, mandatory attribute for other category not required"
         );
 
+    };
+
+    subtest 'extended_attribute_values() tests' => sub {
+
+        plan tests => 7;
+
+        $schema->storage->txn_begin;
+
+        Koha::Patron::Attribute::Types->search->delete;
+
+        $builder->build_object(
+            {
+                class => 'Koha::Patron::Attribute::Types',
+                value => { code => 'SMARTNUM', repeatable => 0, mandatory => 0, category_code => undef }
+            }
+        );
+        $builder->build_object(
+            {
+                class => 'Koha::Patron::Attribute::Types',
+                value => { code => 'FAVBOOKS', repeatable => 1, mandatory => 0, category_code => undef }
+            }
+        );
+        my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+        is_deeply(
+            $patron->extended_attribute_values,
+            { SMARTNUM => undef, FAVBOOKS => [] },
+            'Unset attributes are undef, or an empty list when repeatable'
+        );
+
+        $patron->extended_attributes(
+            [
+                { code => 'SMARTNUM', attribute => 'SM1234' },
+                { code => 'FAVBOOKS', attribute => 'Book1' },
+                { code => 'FAVBOOKS', attribute => 'Book2' },
+            ]
+        );
+
+        my $values = $patron->extended_attribute_values;
+        is( $values->{SMARTNUM}, 'SM1234', 'Non-repeatable attribute returns its single value' );
+        is_deeply(
+            [ sort @{ $values->{FAVBOOKS} } ], [ 'Book1', 'Book2' ],
+            'Repeatable attribute returns all of its values'
+        );
+
+        my $other_patron = $builder->build_object( { class => 'Koha::Patrons' } );
+        is_deeply(
+            $other_patron->extended_attribute_values,
+            { SMARTNUM => undef, FAVBOOKS => [] },
+            'Values of other patrons are not included'
+        );
+
+        # Attribute codes never shadow Koha::Patron methods or columns
+        $builder->build_object(
+            {
+                class => 'Koha::Patron::Attribute::Types',
+                value => { code => 'surname', repeatable => 0, mandatory => 0, category_code => undef }
+            }
+        );
+        $patron->extended_attributes( [ { code => 'surname', attribute => 'Attribute value' } ] );
+        is( $patron->extended_attribute_values->{surname}, 'Attribute value', 'Attribute code surname is namespaced' );
+        isnt( $patron->surname, 'Attribute value', 'Patron surname accessor is not affected' );
+
+        throws_ok { $patron->SMARTNUM } 'Koha::Exceptions::Object::MethodNotCoveredByTests',
+            'Attribute codes are not available as accessors on the patron';
+
+        $schema->storage->txn_rollback;
     };
 
 };
