@@ -119,8 +119,8 @@ CancelReceipt($ordernumber);
 
 is( $order->items->count, 0, "Create items on receiving: 0 item exist after cancelling a receipt" );
 is(
-    Koha::Old::Items->search( { itemnumber => $itemnumber } )->count, 1,
-    "Create items on receiving: the deleted item is moved to deleteditems"
+    Koha::Old::Items->search( { itemnumber => $itemnumber } )->count, 0,
+    "Create items on receiving: the deleted item is not copied to deleteditems"
 );
 is(
     $schema->resultset('AqordersItem')->search( { itemnumber => $itemnumber } )->count, 0,

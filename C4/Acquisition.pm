@@ -1724,8 +1724,10 @@ sub CancelReceipt {
 
     Internal helper of CancelReceipt.
     If items are created at receipt (AcqCreateItem = receiving), delete the
-    items of the order (they are moved to deleteditems), remove their links
-    in aqorders_items and reindex the affected records once.
+    items of the order, remove their links in aqorders_items and reindex the
+    affected records once. The items are not copied to deleteditems: they
+    never were part of the collection, so they must not be counted as
+    weeded items.
     Otherwise, link the items to $parent_ordernumber (or to the order itself
     if no parent order number is given).
 
@@ -1743,7 +1745,8 @@ sub _cancel_items_receipt {
         my %biblionumbers;
         foreach my $item ( $items->as_list ) {
             $biblionumbers{ $item->biblionumber } = 1;
-            $item->move_to_deleted;
+
+            # No move_to_deleted: the item never was part of the collection
             $item->delete( { skip_record_index => 1, skip_holds_queue => 1 } );
 
             # aqorders_items has no FK on items, the link must be removed explicitly
