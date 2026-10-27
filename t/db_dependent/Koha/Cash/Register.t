@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 16;
+use Test::More tests => 17;
 
 use Test::Exception;
 
@@ -2189,6 +2189,69 @@ subtest 'cashup_per_payment_type_notes' => sub {
         );
     }
     'Koha::Exceptions::MissingParameter', 'Whitespace-only entry note does not satisfy the note-required check';
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'balanced_reconciliations' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'CashupPaymentTypes',               'CASH,CHEQUE' );
+    t::lib::Mocks::mock_preference( 'CashupReconciliationNoteRequired', 0 );
+
+    my $register = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my $actual = $register->balanced_reconciliations;
+    is_deeply(
+        [ map { [ $_->{payment_type}, $_->{actual_amount} + 0 ] } @$actual ],
+        [ [ 'CASH', 0 ], [ 'CHEQUE', 0 ] ],
+        'One entry per configured payment type, zero when there are no takings'
+    );
+
+    for my $line ( [ 'CASH', -10.00 ], [ 'CASH', -5.00 ], [ 'CHEQUE', -4.00 ] ) {
+        $builder->build_object(
+            {
+                class => 'Koha::Account::Lines',
+                value => {
+                    register_id      => $register->id,
+                    borrowernumber   => $patron->id,
+                    amount           => $line->[1],
+                    credit_type_code => 'PAYMENT',
+                    debit_type_code  => undef,
+                    payment_type     => $line->[0],
+                    date             => \'SYSDATE() - INTERVAL 1 MINUTE',
+                    timestamp        => \'SYSDATE() - INTERVAL 1 MINUTE',
+                }
+            }
+        );
+    }
+
+    $actual = $register->balanced_reconciliations;
+    is_deeply(
+        [ map { [ $_->{payment_type}, $_->{actual_amount} + 0 ] } @$actual ],
+        [ [ 'CASH', 15 ], [ 'CHEQUE', 4 ] ],
+        'actual_amount is the expected total for each payment type'
+    );
+    ok( !exists $actual->[0]->{note}, 'No note is set, so none can be required' );
+
+    my $cashup;
+    lives_ok { $cashup = $register->add_cashup( { manager_id => $patron->id, reconciliations => $actual } ) }
+    'The result can be passed straight to add_cashup';
+    ok( $cashup, 'Cashup created' );
+
+    is(
+        Koha::Account::Lines->search(
+            {
+                register_id => $register->id,
+                '-or'       => [ { credit_type_code => 'CASHUP_SURPLUS' }, { debit_type_code => 'CASHUP_DEFICIT' } ]
+            }
+        )->count,
+        0,
+        'No surplus or deficit lines, the cashup is balanced'
+    );
 
     $schema->storage->txn_rollback;
 };

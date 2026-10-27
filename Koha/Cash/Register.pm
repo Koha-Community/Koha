@@ -390,6 +390,25 @@ sub cashup_payment_types_breakdown {
     ];
 }
 
+=head3 balanced_reconciliations
+
+    my $reconciliations = $cash_register->balanced_reconciliations;
+
+Returns an arrayref of reconciliation entries, one per configured cashup
+payment type, whose C<actual_amount> is the expected total for that type (see
+L</cashup_payment_types_breakdown>). Passing the result to L</add_cashup>
+completes the cashup with no surplus or deficit. This is what a Quick cashup
+uses, where staff confirm the expected amounts rather than counting them.
+
+=cut
+
+sub balanced_reconciliations {
+    my ($self) = @_;
+
+    return [ map { { payment_type => $_->{payment_type}, actual_amount => $_->{expected} } }
+            @{ $self->cashup_payment_types_breakdown } ];
+}
+
 =head3 add_cashup
 
     my $cashup = $cash_register->add_cashup(

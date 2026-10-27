@@ -169,6 +169,10 @@ if ( !$registers->count ) {
                 };
             }
 
+            # The Quick cashup path posts no amounts at all, so fill in the
+            # expected per-type totals so the cashup is balanced.
+            @reconciliations = @{ $cash_register->balanced_reconciliations } unless @reconciliations;
+
             my $valid_amounts = @reconciliations
                 && !grep { $_->{actual_amount} !~ /^-?\d+(?:\.\d{1,2})?$/ } @reconciliations;
 
