@@ -16,6 +16,18 @@
     [% END %]</title
 >
 [% INCLUDE 'doc-head-close.inc' %]
+[% FILTER collapse %]
+    <style nonce="[% Koha.CSPNonce | $raw %]">
+        .notice {
+            display: none;
+        }
+        #noticeModal .notice-preview {
+            border: 0;
+            height: 60vh;
+            width: 100%;
+        }
+    </style>
+[% END %]
 </head>
 
 <body id="pat_notices" class="pat">
@@ -42,39 +54,47 @@
     [% INCLUDE 'members-toolbar.inc' %]
     <h1>Notices for [% INCLUDE 'patron-title.inc' %]</h1>
 
-    <div class="alert alert-warning">Printing a notice will mark it as sent.</div>
+    [% SET can_print = CAN_user_tools_view_generated_notices && Koha.Preference('NoticesManagement') %]
+    [% IF can_print %]
+        <div class="alert alert-warning">Printing a notice will mark it as sent.</div>
+    [% END %]
 
     [% IF ( QUEUED_MESSAGES ) %]
         <div class="page-section">
-            <span id="checkbox_actions"
-                ><a href="#" class="select_all"><i class="fa fa-check"></i> Select all</a> | <a href="#" class="clear_all"><i class="fa fa-remove"></i> Clear all</a></span
-            >
+            [% IF can_print %]
+                <span id="checkbox_actions"
+                    ><a href="#" class="select_all"><i class="fa fa-check"></i> Select all</a> | <a href="#" class="clear_all"><i class="fa fa-remove"></i> Clear all</a></span
+                >
+            [% END %]
             <form id="print_multiple" action="/cgi-bin/koha/members/print_notice.pl" method="post" target="_blank">
                 [% INCLUDE 'csrf-token.inc' %]
+                <input type="hidden" name="op" value="cud-print" />
 
                 <table id="noticestable">
                     <thead>
                         <tr>
-                            <th class="NoSort">&nbsp;</th>
+                            [% IF can_print %]<th class="no-sort">&nbsp;</th>[% END %]
                             <th>Time created</th>
                             <th>Notice</th>
                             <th>Type</th>
                             <th>Status</th>
                             <th>Updated on</th>
                             <th>Delivery note</th>
-                            <th>Actions</th>
+                            [% IF can_print %]<th class="no-sort">Actions</th>[% END %]
                         </tr>
                     </thead>
                     <tbody>
                         [% FOREACH QUEUED_MESSAGE IN QUEUED_MESSAGES %]
                             <tr>
-                                <td>
-                                    [% IF QUEUED_MESSAGE.status == 'pending' %]
-                                        <input type="checkbox" name="message_ids" value="[% QUEUED_MESSAGE.message_id | html %]" disabled="disabled" title="Cannot resend a pending notice" />
-                                    [% ELSE %]
-                                        <input type="checkbox" name="message_ids" value="[% QUEUED_MESSAGE.message_id | html %]" />
-                                    [% END %]
-                                </td>
+                                [% IF can_print %]
+                                    <td>
+                                        [% IF QUEUED_MESSAGE.status == 'pending' %]
+                                            <input type="checkbox" name="message_ids" value="[% QUEUED_MESSAGE.message_id | html %]" disabled="disabled" title="Cannot print a pending notice" />
+                                        [% ELSE %]
+                                            <input type="checkbox" name="message_ids" value="[% QUEUED_MESSAGE.message_id | html %]" />
+                                        [% END %]
+                                    </td>
+                                [% END %]
                                 <td data-order="[% QUEUED_MESSAGE.time_queued | html %]">[% QUEUED_MESSAGE.time_queued | $KohaDates  with_hours => 1 %]</td>
                                 <td>
                                     <a
@@ -85,7 +105,7 @@
                                         href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber | uri %]&amp;noticeid=[% QUEUED_MESSAGE.message_id | uri %]"
                                         >[% QUEUED_MESSAGE.subject | html %]</a
                                     >
-                                    <div style="display:none;" class="notice" id="notice[% QUEUED_MESSAGE.message_id | html %]">[% QUEUED_MESSAGE.html_content | html %]</div>
+                                    <iframe class="notice" id="notice[% QUEUED_MESSAGE.message_id | html %]" title="Notice content" sandbox="" srcdoc="[% QUEUED_MESSAGE.html_content | html %]"></iframe>
                                 </td>
                                 <td>
                                     [% IF ( QUEUED_MESSAGE.message_transport_type == 'email' ) %]
@@ -152,19 +172,30 @@
                                         [% END %]
                                     [% END %]
                                 </td>
-                                <td class="actions"
-                                    >[% IF QUEUED_MESSAGE.status != 'pending' %]
-                                        <a target="_blank" class="btn btn-default btn-xs" href="/cgi-bin/koha/members/print_notice.pl?message_ids=[% QUEUED_MESSAGE.message_id | uri %]"><i class="fa fa-print"></i> Print</a>
-                                    [% END %]</td
-                                >
+                                [% IF can_print %]
+                                    <td class="actions">
+                                        [% IF QUEUED_MESSAGE.status != 'pending' %]
+                                            <button type="button" class="btn btn-default btn-xs print" data-noticeid="[% QUEUED_MESSAGE.message_id | html %]"><i class="fa fa-print"></i> Print</button>
+                                        [% END %]
+                                    </td>
+                                [% END %]
                             </tr>
                         [% END %]
                     </tbody>
                 </table>
-                <fieldset class="action">
-                    <input type="submit" class="btn btn-primary" value="Print selected notices" id="print_multiple_button" />
-                </fieldset>
+                [% IF can_print %]
+                    <fieldset class="action">
+                        <input type="submit" class="btn btn-primary" value="Print selected notices" id="print_multiple_button" />
+                    </fieldset>
+                [% END %]
             </form>
+            [% IF can_print %]
+                <form id="print_single" action="/cgi-bin/koha/members/print_notice.pl" method="post" target="_blank">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="op" value="cud-print" />
+                    <input type="hidden" name="message_ids" value="" />
+                </form>
+            [% END %]
         </div>
         <!-- /.page-section -->
     [% ELSE %]
@@ -172,7 +203,7 @@
     [% END %]
 [% END %]
 <!-- Modal -->
-<div class="modal printable" id="noticeModal" tabindex="-1" aria-labelledby="noticeModalLabel" aria-hidden="true">
+<div class="modal" id="noticeModal" tabindex="-1" aria-labelledby="noticeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -181,14 +212,16 @@
             </div>
             <div class="modal-body"> ... </div>
             <div class="modal-footer">
-                <form id="resend_notice" action="/cgi-bin/koha/members/notices.pl" method="POST" style="display:none">
+                <form id="resend_notice" action="/cgi-bin/koha/members/notices.pl" method="POST" class="d-none">
                     [% INCLUDE 'csrf-token.inc' %]
                     <input type="hidden" name="op" value="cud-resend_notice" />
                     <input type="hidden" name="borrowernumber" value="" />
                     <input type="hidden" name="message_id" value="" />
                     <button type="submit" id="resend_notice_button" class="btn btn-default"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Resend</button>
                 </form>
-                <button type="button" class="printModal btn btn-primary"><i class="fa fa-print"></i> Print</button>
+                [% IF can_print %]
+                    <button type="button" class="print-notice-modal btn btn-primary d-none"><i class="fa fa-print"></i> Print</button>
+                [% END %]
                 <button type="button" class="btn btn-default deny cancel" data-bs-dismiss="modal"><i class="fa fa-remove"></i> Close</button>
             </div>
         </div>
@@ -200,12 +233,20 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/dompurify/purify.min.js") | $raw %]
-    [% Asset.js("js/modal_printer.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
             $("#noticestable").kohaTable({
-                order: [[3, "desc"]],
+                order: [[[% IF can_print %]1[% ELSE %]0[% END %], "desc"]],
+            });
+
+            function print_notice(noticeid) {
+                $("#print_single input[name='message_ids']").val(noticeid);
+                $("#print_single").trigger("submit");
+            }
+
+            $("#noticestable").on("click", ".print", function (e) {
+                e.preventDefault();
+                print_notice($(this).data("noticeid"));
             });
 
             $("#noticestable").on("click", ".notice-title", function (e) {
@@ -214,30 +255,31 @@
                 $("#noticeModalLabel").text(title);
 
                 var noticeid = $(this).data("noticeid");
-                // Sanitize before rendering in the shadow DOM
-                var srcdoc = $("#notice" + noticeid).text();
-                var sanitized = DOMPurify.sanitize(srcdoc, { WHOLE_DOCUMENT: true });
-
-                var shadowHost = document.createElement("div");
-                var shadowRoot = shadowHost.attachShadow({ mode: "open" });
-                shadowRoot.innerHTML = sanitized;
-
-                $("#noticeModal .modal-body").html("");
-                $("#noticeModal .modal-body")[0].appendChild(shadowHost);
-
+                var body = $("#notice" + noticeid).attr("srcdoc");
                 if ($(this).data("status") !== "pending") {
                     let borrowerNumber = $(this).data("borrowernumber");
                     $('#resend_notice input[name="borrowernumber"]').val(borrowerNumber);
                     $('#resend_notice input[name="message_id"]').val(noticeid);
-                    $("#resend_notice").show();
+                    $("#resend_notice").removeClass("d-none");
+                    $("#noticeModal .print-notice-modal").removeClass("d-none");
                 }
+                $("#noticeModal").data("noticeid", noticeid);
+                $("#noticeModalLabel").text(title);
+
+                // The notice content is shown in a sandboxed frame so that nothing in it can run
+                $("#noticeModal .modal-body").html($('<iframe class="notice-preview" sandbox=""></iframe>').attr("title", _("Notice content")).attr("srcdoc", body));
                 $("#noticeModal").modal("show");
+            });
+
+            $("#noticeModal .print-notice-modal").on("click", function () {
+                print_notice($("#noticeModal").data("noticeid"));
             });
 
             $("#noticeModal").on("hide.bs.modal", function () {
                 $('#resend_notice input[name="borrowernumber"]').val("");
                 $('#resend_notice input[name="message_id"]').val("");
-                $("#resend_notice").hide();
+                $("#resend_notice").addClass("d-none");
+                $("#noticeModal .print-notice-modal").addClass("d-none");
                 $("#noticeModalLabel").text("");
                 $("#noticeModal .modal-body").html("");
             });
@@ -245,7 +287,7 @@
             $("#print_multiple_button").click(function (e) {
                 var selected_notices = $("#print_multiple").find("input[name='message_ids']:checked");
                 if (selected_notices.length == 0) {
-                    alert(_("Please select at least one sent notice."));
+                    alert(_("Please select at least one notice."));
                     e.preventDefault();
                     return false;
                 }

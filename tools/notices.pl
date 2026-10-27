@@ -13,15 +13,18 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
+# along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
 
-use CGI        qw ( -utf8 );
-use C4::Auth   qw( get_template_and_user );
+use CGI      qw ( -utf8 );
+use C4::Auth qw( get_template_and_user );
+use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
-use Koha::Notice::Messages;
+use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Notice::Messages;
+use Koha::Notice::Templates;
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -35,9 +38,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 unless ( C4::Context->preference('NoticesManagement') ) {
     print $query->redirect('/cgi-bin/koha/tools/tools-home.pl');
+    exit;
 }
-
-my $op = $query->param('op');
 
 my $letter_code  = $query->param('letter_code')  || undef;
 my $categorycode = $query->param('categorycode') || undef;
@@ -50,44 +52,45 @@ my %where = ();
 $where{'me.letter_code'}              = $letter_code  if ($letter_code);
 $where{'borrowernumber.categorycode'} = $categorycode if ($categorycode);
 $where{'borrowernumber.branchcode'}   = $branchcode   if ($branchcode);
-if ($from) {
-    if ($to) {
-        $where{'me.time_queued'} = [
-            -and => { '<=', $to },
-            { '>=', $from }
-        ];
-    } else {
-        $where{'me.time_queued'} = { '>=', $from };
-    }
-} elsif ($to) {
-    $where{'me.time_queued'} = { '<=', $to };
-}
-$where{'me.status'} = $status if ($status);
+$where{'me.status'}                   = $status       if ($status);
 
-my $notices = Koha::Notice::Messages->search_limited(
-    {%where},
-    { order_by => { -desc => 'time_queued' } }
+# The 'to' date is inclusive: the notices queued during that whole day are included
+my $dtf     = Koha::Database->new->schema->storage->datetime_parser;
+my $from_dt = _day_start($from);
+my $to_dt   = _day_start($to);
+$to_dt->add( days => 1 ) if $to_dt;
+my @time_queued = (
+    ( $from_dt ? ( { '>=' => $dtf->format_datetime($from_dt) } ) : () ),
+    ( $to_dt   ? ( { '<'  => $dtf->format_datetime($to_dt) } )   : () ),
 );
+$where{'me.time_queued'} = [ -and => @time_queued ] if @time_queued;
+
+# Every notice is rendered in the page, so only the most recent ones are listed
+my $limit    = 1000;
+my $matching = Koha::Notice::Messages->search_limited( {%where} );
+my $notices  = $matching->search( undef, { order_by => { -desc => 'me.time_queued' }, rows => $limit } );
 
 $template->param(
     notices      => $notices,
+    limit        => $limit,
+    truncated    => $matching->count > $limit ? 1 : 0,
     letter_code  => $letter_code,
     categorycode => $categorycode,
     branchcode   => $branchcode,
     from         => $from,
     to           => $to,
     status       => $status,
-);
-
-$template->param(
-    letters => Koha::Notice::Templates->search(
+    letters      => Koha::Notice::Templates->search(
         {}, { select => [ 'name', 'code' ], group_by => [ 'name', 'code' ], order_by => { -asc => 'code' } }
-    ),
-    attribute_type_codes => (
-        C4::Context->preference('ExtendedPatronAttributes')
-        ? [ Koha::Patron::Attribute::Types->search( { staff_searchable => 1 } )->get_column('code') ]
-        : []
     ),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
+
+# The start of the given day as a DateTime, undef if there is no valid date
+sub _day_start {
+    my ($date) = @_;
+    return unless $date;
+    my $dt = eval { dt_from_string($date) };
+    return $dt ? $dt->truncate( to => 'day' ) : undef;
+}

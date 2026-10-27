@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE Categories %]
@@ -18,6 +19,11 @@
     <style nonce="[% Koha.CSPNonce | $raw %]">
         .notice {
             display: none;
+        }
+        #noticeModal .notice-preview {
+            border: 0;
+            height: 60vh;
+            width: 100%;
         }
     </style>
 [% END %]
@@ -49,8 +55,12 @@
 
                 <div class="alert alert-warning">Printing a notice will mark it as sent.</div>
 
+                [% IF truncated %]
+                    <div class="alert alert-info">Only the most recent [% limit | html %] notices matching the search are shown, use the search filters to narrow the results.</div>
+                [% END %]
+
                 [% IF notices.count == 0 %]
-                    <div class="page-section bg-info"> No sent notices were found with those search parameters. </div>
+                    <div class="page-section bg-info"> No notices were found with those search parameters. </div>
                 [% ELSE %]
                     <div class="page-section">
                         <span id="checkbox_actions"
@@ -58,10 +68,11 @@
                         >
                         <form id="print_multiple" action="/cgi-bin/koha/members/print_notice.pl" method="post" target="_blank">
                             [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="op" value="cud-print" />
                             <table id="notices">
                                 <thead>
                                     <tr>
-                                        <th class="NoSort">&nbsp;</th>
+                                        <th class="no-sort">&nbsp;</th>
                                         <th>Time created</th>
                                         <th>Patron</th>
                                         <th>Notice</th>
@@ -69,7 +80,7 @@
                                         <th>Status</th>
                                         <th>Updated on</th>
                                         <th>Delivery note</th>
-                                        <th class="NoSort">Actions</th>
+                                        <th class="no-sort">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -87,7 +98,7 @@
                                                     href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% notice.borrowernumber | uri %]&amp;noticeid=[% notice.message_id | uri %]"
                                                     >[% notice.subject | html %]</a
                                                 >
-                                                <iframe class="notice" id="notice[% notice.message_id | html %]" srcdoc="[% notice.html_content | html %]"></iframe>
+                                                <iframe class="notice" id="notice[% notice.message_id | html %]" title="Notice content" sandbox="" srcdoc="[% notice.html_content | html %]"></iframe>
                                             </td>
                                             <td>
                                                 [% IF ( notice.message_transport_type == 'email' ) %]
@@ -123,7 +134,7 @@
                                                     [% ELSIF ( notice.failure_code == 'NO_EMAIL' ) %]
                                                         <span class="clearfix">Unable to find an email address for this patron</span>
                                                     [% ELSIF ( matches = notice.failure_code.match('INVALID_EMAIL:(\w+)') ) %]
-                                                        <span class="clearfix">Invalid [% matches.0 | html %] email address found [% borrowernumber | html %]</span>
+                                                        <span class="clearfix">Invalid [% matches.0 | html %] email address found [% notice.borrowernumber | html %]</span>
                                                     [% ELSIF ( notice.failure_code == 'NO_FROM' ) %]
                                                         <span class="clearfix">Missing from email address</span>
                                                     [% ELSIF ( notice.failure_code == 'MISSING_SMS' ) %]
@@ -155,7 +166,7 @@
                                                 [% END %]
                                             </td>
                                             <td class="actions"
-                                                ><a target="_blank" class="btn btn-default btn-xs print" href="/cgi-bin/koha/members/print_notice.pl?message_ids=[% notice.message_id | uri %]"><i class="fa fa-print"></i> Print</a></td
+                                                ><button type="button" class="btn btn-default btn-xs print" data-noticeid="[% notice.message_id | html %]"><i class="fa fa-print"></i> Print</button></td
                                             >
                                         </tr>
                                     [% END %]
@@ -207,26 +218,10 @@
                                 <label for="status">Notice status:</label>
                                 <select id="status" name="status">
                                     <option value="">All statuses</option>
-                                    [% IF status == 'sent' %]
-                                        <option selected="selected" value="sent">Sent</option>
-                                    [% ELSE %]
-                                        <option value="sent">Sent</option>
-                                    [% END %]
-                                    [% IF status == 'sent' %]
-                                        <option selected="selected" value="pending">Pending</option>
-                                    [% ELSE %]
-                                        <option value="pending">Pending</option>
-                                    [% END %]
-                                    [% IF status == 'sent' %]
-                                        <option selected="selected" value="failed">Failed</option>
-                                    [% ELSE %]
-                                        <option value="failed">Failed</option>
-                                    [% END %]
-                                    [% IF status == 'sent' %]
-                                        <option selected="selected" value="deleted">Deleted</option>
-                                    [% ELSE %]
-                                        <option value="deleted">Deleted</option>
-                                    [% END %]
+                                    <option value="sent" [% IF status == 'sent' %]selected="selected"[% END %]>Sent</option>
+                                    <option value="pending" [% IF status == 'pending' %]selected="selected"[% END %]>Pending</option>
+                                    <option value="failed" [% IF status == 'failed' %]selected="selected"[% END %]>Failed</option>
+                                    <option value="deleted" [% IF status == 'deleted' %]selected="selected"[% END %]>Deleted</option>
                                 </select>
                             </li>
                             <li>
@@ -272,8 +267,14 @@
     </div>
     <!-- /.row -->
 
+    <form id="print_single" action="/cgi-bin/koha/members/print_notice.pl" method="post" target="_blank">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="op" value="cud-print" />
+        <input type="hidden" name="message_ids" value="" />
+    </form>
+
     <!-- Modal -->
-    <div class="modal printable" id="noticeModal" tabindex="-1" aria-labelledby="noticeModalLabel" aria-hidden="true">
+    <div class="modal" id="noticeModal" tabindex="-1" aria-labelledby="noticeModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -282,14 +283,16 @@
                 </div>
                 <div class="modal-body"> ... </div>
                 <div class="modal-footer">
-                    <form id="resend_notice" action="/cgi-bin/koha/members/notices.pl" method="POST" style="display:none">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="cud-resend_notice" />
-                        <input type="hidden" name="borrowernumber" value="" />
-                        <input type="hidden" name="message_id" value="" />
-                        <button type="submit" id="resend_notice_button" class="btn btn-default"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Resend</button>
-                    </form>
-                    <button type="button" class="printModal btn btn-primary"><i class="fa fa-print"></i> Print</button>
+                    [% IF CAN_user_borrowers_edit_borrowers %]
+                        <form id="resend_notice" action="/cgi-bin/koha/members/notices.pl" method="POST" class="d-none">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="op" value="cud-resend_notice" />
+                            <input type="hidden" name="borrowernumber" value="" />
+                            <input type="hidden" name="message_id" value="" />
+                            <button type="submit" id="resend_notice_button" class="btn btn-default"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Resend</button>
+                        </form>
+                    [% END %]
+                    <button type="button" class="print-notice-modal btn btn-primary"><i class="fa fa-print"></i> Print</button>
                     <button type="button" class="btn btn-default deny cancel" data-bs-dismiss="modal"><i class="fa fa-remove"></i> Close</button>
                 </div>
             </div>
@@ -303,15 +306,21 @@
         [% Asset.js("js/tools-menu.js") | $raw %]
         [% INCLUDE 'calendar.inc' %]
         [% INCLUDE 'datatables.inc' %]
-        [% Asset.js("js/modal_printer.js") | $raw %]
         <script nonce="[% Koha.CSPNonce | $raw %]">
             $(document).ready(function () {
-                $("#notices").dataTable(
-                    $.extend(true, {}, dataTablesDefaults, {
-                        aaSorting: [[1, "desc"]],
-                        sPaginationType: "full",
-                    })
-                );
+                $("#notices").kohaTable({
+                    order: [[1, "desc"]],
+                });
+
+                function print_notice(noticeid) {
+                    $("#print_single input[name='message_ids']").val(noticeid);
+                    $("#print_single").trigger("submit");
+                }
+
+                $("#notices").on("click", ".print", function (e) {
+                    e.preventDefault();
+                    print_notice($(this).data("noticeid"));
+                });
 
                 $("#notices").on("click", ".notice-title", function (e) {
                     e.preventDefault();
@@ -322,17 +331,24 @@
                         let borrowerNumber = $(this).data("borrowernumber");
                         $('#resend_notice input[name="borrowernumber"]').val(borrowerNumber);
                         $('#resend_notice input[name="message_id"]').val(noticeid);
-                        $("#resend_notice").show();
+                        $("#resend_notice").removeClass("d-none");
                     }
+                    $("#noticeModal").data("noticeid", noticeid);
                     $("#noticeModalLabel").text(title);
-                    $("#noticeModal .modal-body").html(body);
+
+                    // The notice content is shown in a sandboxed frame so that nothing in it can run
+                    $("#noticeModal .modal-body").html($('<iframe class="notice-preview" sandbox=""></iframe>').attr("title", _("Notice content")).attr("srcdoc", body));
                     $("#noticeModal").modal("show");
+                });
+
+                $("#noticeModal .print-notice-modal").on("click", function () {
+                    print_notice($("#noticeModal").data("noticeid"));
                 });
 
                 $("#noticeModal").on("hide.bs.modal", function () {
                     $('#resend_notice input[name="borrowernumber"]').val("");
                     $('#resend_notice input[name="message_id"]').val("");
-                    $("#resend_notice").hide();
+                    $("#resend_notice").addClass("d-none");
                     $("#noticeModalLabel").text("");
                     $("#noticeModal .modal-body").html("");
                 });
@@ -340,7 +356,7 @@
                 $("#print_multiple_button").click(function (e) {
                     var selected_notices = $("#notices").find("input[name='message_ids']:checked");
                     if (selected_notices.length == 0) {
-                        alert(_("Please select at least one sent notice."));
+                        alert(_("Please select at least one notice."));
                         e.preventDefault();
                         return false;
                     }

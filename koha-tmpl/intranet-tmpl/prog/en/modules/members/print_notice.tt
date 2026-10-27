@@ -4,43 +4,54 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-    [% UNLESS notices && notices.size %]
-        [% SET notices = [{content => notice, is_html => is_html, style => style, id => id }] %]
-    [% END %]
-    <title>[% FILTER collapse %]
+<title
+    >[% FILTER collapse %]
         [% IF notices.size > 1 %]
-        [% t("Print notices") | html %] &rsaquo;
+            [% t("Print notices") | html %]
         [% ELSE %]
-        [% t("Print notice") | html %] &rsaquo;
+            [% t("Print notice") | html %]
         [% END %]
-        [% t("Patrons") | html %] &rsaquo;
-        [% t("Koha") | html %]
-    [% END %]</title>
-    [% INCLUDE 'doc-head-close.inc' %]
-    [% Asset.css("css/print.css") | $raw %]
-    [% IF ( Koha.Preference('AllNoticeCSS') ) %]
-    <style nonce="[% Koha.CSPNonce | $raw %]">[% Koha.Preference('AllNoticeCSS') | $raw %]</style>
-    [% END %]
-    [% FOR style IN styles %]
-    <style nonce="[% Koha.CSPNonce | $raw %]">[% style | $raw %]</style>
-    [% END %]
-    [% FOR notice IN notices %]
-        [% IF notice.style %]<style nonce="[% Koha.CSPNonce | $raw %]">[% notice.style.replace('([^\{\}]+?)\s*\{', '#notice_' _ notice.id _ ' $1 {') | $raw %]</style>[% END %]
-    [% END %]
-</head>
-<body id="members_printnotice" class="member">
-[% FOR notice IN notices %]
-    <div id="notice_[% notice.id | html %]" class="type_[% notice.type | html %]">
-        [% IF notice.is_html %]
-            [% IF ( notice.content ) %][% notice.content | $raw %][% ELSE %]No notice template found[% END %]
-        [% ELSE %]
-            <pre>[% IF ( notice.content ) %][% notice.content | html %][% ELSE %]No notice template found[% END %]</pre>
-        [% END %]
-    </div>
-    [% IF notices.size > 1 && !loop.last%]<div class="pagebreak"></div>[% END %]
+        &rsaquo; [% t("Tools") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
+[% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("css/print.css") | $raw %]
+[% IF ( stylesheet ) %]
+    <link rel="stylesheet" type="text/css" href="[% stylesheet | html %]" />
 [% END %]
+<!-- prettier-ignore-start -->
+[% IF ( Koha.Preference('AllNoticeCSS') ) %]
+    <style nonce="[% Koha.CSPNonce | $raw %]">[% Koha.Preference('AllNoticeCSS') | $raw %]</style>
+[% END %]
+[% FOR style IN styles %]
+    <style nonce="[% Koha.CSPNonce | $raw %]">[% style | $raw %]</style>
+[% END %]
+[% FOR notice IN notices %]
+    [% IF notice.style %]<style nonce="[% Koha.CSPNonce | $raw %]">[% notice.style | $raw %]</style>[% END %]
+[% END %]
+<!-- prettier-ignore-end -->
+</head>
+
+<body id="tools_print_notice" class="tools">
+[% IF notices.size %]
+    [% FOR notice IN notices %]
+        <div id="notice_[% notice.id | html %]" class="type_[% notice.type | html %]">
+            [% IF notice.is_html %]
+                [% IF ( notice.content ) %][% notice.content | $raw %][% ELSE %][% t("No notice template found") | html %][% END %]
+            [% ELSE %]
+                <pre>[% IF ( notice.content ) %][% notice.content | html %][% ELSE %][% t("No notice template found") | html %][% END %]</pre>
+            [% END %]
+        </div>
+        [% IF notices.size > 1 && !loop.last %]<div class="pagebreak"></div>[% END %]
+    [% END %]
+[% ELSE %]
+    <div class="alert alert-info">[% t("No notices were found to print.") | html %]</div>
+[% END %]
+
 [% MACRO jsinclude BLOCK %]
-    [% INCLUDE 'slip-print.inc' #printThenClose %]
+    [% IF notices.size %]
+        [% INCLUDE 'slip-print.inc' #printThenClose %]
+    [% END %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -59,7 +59,7 @@ my $op = $input->param('op') || q{};
 if ( $op eq 'cud-resend_notice' ) {
     my $message_id = $input->param('message_id');
     my $message    = C4::Letters::GetMessage($message_id);
-    if ( $message->{borrowernumber} = $borrowernumber ) {
+    if ( $message && $message->{borrowernumber} && $message->{borrowernumber} == $borrowernumber ) {
         C4::Letters::ResendMessage($message_id);
 
         # redirect to self to avoid form submission on refresh

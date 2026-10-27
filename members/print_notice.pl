@@ -15,13 +15,14 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
+# along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Auth   qw( get_template_and_user );
+use Koha::Notice::Messages;
 
 my $input = CGI->new;
 
@@ -34,19 +35,30 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+unless ( C4::Context->preference('NoticesManagement') ) {
+    print $input->redirect('/cgi-bin/koha/tools/tools-home.pl');
+    exit;
+}
+
+# Only POSTs, with a valid CSRF token, can have a 'cud-' operation: displaying the
+# notices must not change anything, marking them as printed is an explicit action.
+my $op          = $input->param('op') || q{};
+my @message_ids = grep { /^\d+$/ } $input->multi_param('message_ids');
+
+# Restrict to the notices of the patrons the logged in user is allowed to see,
+# unknown or unauthorised ids are ignored
+my $messages =
+    Koha::Notice::Messages->search_limited( { 'me.message_id' => \@message_ids }, { order_by => 'me.message_id' } );
+
 my $types_seen = {};
 my @scoped_styles;
-my @message_ids = $input->multi_param('message_ids');
 my @notices;
-foreach my $message_id (@message_ids) {
-    my $message  = Koha::Notice::Messages->find($message_id);
-    my $template = $message->template;
-
+while ( my $message = $messages->next ) {
     push @notices, {
         content => $message->content,
         is_html => $message->is_html,
-        style   => $template ? $template->style : undef,
-        id      => $message_id,
+        style   => $message->scoped_template_style( '#notice_' . $message->message_id ),
+        id      => $message->message_id,
         type    => $message->message_transport_type,
     };
 
@@ -55,12 +67,13 @@ foreach my $message_id (@message_ids) {
         $types_seen->{ $message->message_transport_type } = 1;
     }
 
-    $message->update( { status => 'sent' } );
+    $message->update( { status => 'sent' } ) if $op eq 'cud-print';
 }
+
 $template->param(
     notices    => \@notices,
     stylesheet => C4::Context->preference("AllNoticeStylesheet"),
-    styles     => \@scoped_styles
+    styles     => \@scoped_styles,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
