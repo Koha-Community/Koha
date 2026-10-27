@@ -257,8 +257,10 @@ if ( $op eq 'cud-create' ) {
             ) if $patron;
 
             if ($patron) {
-                $patron->extended_attributes->filter_by_branch_limitations->delete;
-                $patron->extended_attributes($attributes);
+                if ( C4::Context->preference('ExtendedPatronAttributes') ) {
+                    $patron->extended_attributes->filter_by_branch_limitations->delete;
+                    $patron->extended_attributes($attributes);
+                }
 
                 $template->param( password_cleartext => $patron->plain_text_password );
                 $template->param( borrower           => $patron->unblessed );
