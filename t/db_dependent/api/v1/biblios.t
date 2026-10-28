@@ -20,7 +20,7 @@ use Modern::Perl;
 use utf8;
 use Encode;
 
-use Test::More tests => 17;
+use Test::More tests => 18;
 use Test::NoWarnings;
 use Test::MockModule;
 use Test::Mojo;
