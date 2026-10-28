@@ -480,23 +480,23 @@ describe("Booking Modal Date Picker Tests", () => {
 
         // Test in clear zone starting at Day 50 to avoid conflicts
         const clearZoneStart = today.add(50, "day");
-        // Start date counts as day 1 (Koha convention), so max end = start + (maxPeriod - 1)
+        // Max end = start + maxPeriod, the due date of a checkout on start
         const maxPeriod =
             dateTestCirculationRules.issuelength +
             dateTestCirculationRules.renewalsallowed *
                 dateTestCirculationRules.renewalperiod; // 10 + 3*5 = 25
-        const calculatedMaxDate = clearZoneStart.add(maxPeriod - 1, "day"); // Day 50 + 24 = Day 74
+        const calculatedMaxDate = clearZoneStart.add(maxPeriod, "day"); // Day 50 + 25 = Day 75
 
-        const beyondMaxDate = calculatedMaxDate.add(1, "day"); // Day 75
+        const beyondMaxDate = calculatedMaxDate.add(1, "day"); // Day 76
 
         cy.log(
             `Clear zone start: ${clearZoneStart.format("YYYY-MM-DD")} (Day 50)`
         );
         cy.log(
-            `Calculated max date: ${calculatedMaxDate.format("YYYY-MM-DD")} (Day 74)`
+            `Calculated max date: ${calculatedMaxDate.format("YYYY-MM-DD")} (Day 75)`
         );
         cy.log(
-            `Beyond max date: ${beyondMaxDate.format("YYYY-MM-DD")} (Day 75 - should be disabled)`
+            `Beyond max date: ${beyondMaxDate.format("YYYY-MM-DD")} (Day 76 - should be disabled)`
         );
 
         // Select the start date to establish context for bold date calculation

@@ -8,6 +8,7 @@
  */
 
 import { formatYMD, toDay, today } from "./dates.js";
+import { calculateMaxEndDate } from "./availability/predicate.js";
 import { idsEqual } from "../../utils/functions.js";
 import { $__ } from "@koha-vue/i18n";
 
@@ -215,8 +216,11 @@ function getDisabledReason(d, dateKey, ctx) {
 
     // Exceeds maximum booking period
     if (ctx.isSelectingEnd && ctx.maxPeriod > 0 && ctx.selectedDateRange?.[0]) {
-        const start = toDay(ctx.selectedDateRange[0]);
-        if (d.isAfter(start.add(ctx.maxPeriod, "day"), "day")) {
+        const maxEnd = calculateMaxEndDate(
+            ctx.selectedDateRange[0],
+            ctx.maxPeriod
+        );
+        if (d.isAfter(maxEnd, "day")) {
             return $__(
                 "Cannot select: exceeds maximum booking period (%s days)"
             ).format(ctx.maxPeriod);

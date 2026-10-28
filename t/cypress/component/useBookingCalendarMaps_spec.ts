@@ -1,5 +1,6 @@
 import BookingCalendar from "@koha-vue/components/Bookings/BookingCalendar.vue";
 import { useBookingCalendarMaps } from "@koha-vue/lib/booking/composables/useBookingCalendarMaps.js";
+import { calculateMaxEndDate } from "@koha-vue/lib/booking/availability/predicate.js";
 import { computed, toRefs } from "vue";
 
 // This spec tests the composable's contract directly: given input refs,
@@ -560,7 +561,7 @@ describe("useBookingCalendarMaps (classByDate constrained-range)", () => {
                 (wrapper.vm.classByDate.get(key) || "").includes(
                     "booking-constrained-range-marker"
                 );
-            // Would have been anchor..anchor+maxPeriod-1 under the old
+            // Would have been anchor..anchor+maxPeriod under the old
             // eager-highlight behaviour; none of it is pre-painted now.
             expect(has("2026-03-10")).to.be.false;
             expect(has("2026-03-12")).to.be.false;
@@ -608,9 +609,16 @@ describe("useBookingCalendarMaps (rangePreviewFn)", () => {
                 maxBookingPeriod: 3,
             }),
         }).then(({ wrapper }) => {
+            // The last valid end is anchor + maxPeriod (Mar 13)
+            expect(
+                wrapper.vm.rangePreviewFn(
+                    new Date(2026, 2, 10),
+                    new Date(2026, 2, 13)
+                ).status
+            ).to.equal("valid");
             const status = wrapper.vm.rangePreviewFn(
                 new Date(2026, 2, 10),
-                new Date(2026, 2, 15)
+                new Date(2026, 2, 14)
             );
             expect(status.status).to.equal("invalid");
             expect(status.message).to.contain("max booking period");
@@ -827,6 +835,19 @@ describe("useBookingCalendarMaps (loanBoundaryTimes)", () => {
         });
     });
 
+    it("marks the last selectable end date as the issue-length boundary", () => {
+        const anchor = new Date(2026, 2, 10);
+        cy.mount(LoanBoundaryHost, {
+            props: loanBoundaryProps({
+                modelValue: [anchor, null],
+                circulationRules: [{ issuelength: 3 }],
+            }),
+        }).then(({ wrapper }) => {
+            const lastEnd = calculateMaxEndDate(anchor, 3).valueOf();
+            expect([...wrapper.vm.loanBoundaryTimes]).to.include(lastEnd);
+        });
+    });
+
     it("adds one boundary per renewal when renewalperiod and renewalsallowed are set", () => {
         // anchor=Mar 10, issuelength=5, renewalperiod=3, renewalsallowed=2:
         // expect {Mar 10, Mar 15 (issuelength), Mar 18 (k=1), Mar 21 (k=2)}.
@@ -903,8 +924,8 @@ describe("useBookingCalendarMaps (loanBoundaryTimes)", () => {
 describe("useBookingCalendarMaps (end-date-only mode)", () => {
     // booking_constraint_mode: "end_date_only" means the user picks the
     // anchor and the picker enforces a fixed range from the anchor to the
-    // forced end anchor+maxPeriod-1 (the start counts as day 1, mirroring
-    // calculateMaxEndDate). Intermediate days inside that span are soft-
+    // forced end anchor+maxPeriod (see calculateMaxEndDate). Intermediate
+    // days inside that span are soft-
     // disabled so they can't be clicked (which would otherwise restart
     // the range); the forced end itself MUST stay clickable — it is the
     // only valid commit target.
@@ -918,16 +939,16 @@ describe("useBookingCalendarMaps (end-date-only mode)", () => {
                 ],
             }),
         }).then(({ wrapper }) => {
-            // Mar 10 is anchor (day 1); Mar 11..13 are intermediate;
-            // Mar 14 = anchor+maxPeriod-1 is the forced end.
+            // Mar 10 is anchor; Mar 11..14 are intermediate;
+            // Mar 15 = anchor+maxPeriod is the forced end.
             expect(
                 wrapper.vm.disabledByDate.get("2026-03-11")?.severity
             ).to.equal("soft");
             expect(
-                wrapper.vm.disabledByDate.get("2026-03-13")?.severity
+                wrapper.vm.disabledByDate.get("2026-03-14")?.severity
             ).to.equal("soft");
-            expect(wrapper.vm.disabledByDate.has("2026-03-14")).to.be.false;
             expect(wrapper.vm.disabledByDate.has("2026-03-15")).to.be.false;
+            expect(wrapper.vm.disabledByDate.has("2026-03-16")).to.be.false;
         });
     });
 
@@ -946,11 +967,11 @@ describe("useBookingCalendarMaps (end-date-only mode)", () => {
                     "booking-intermediate-blocked"
                 );
             expect(has("2026-03-11")).to.be.true;
-            expect(has("2026-03-13")).to.be.true;
-            // Anchor and the forced end (anchor+maxPeriod-1) are not
+            expect(has("2026-03-14")).to.be.true;
+            // Anchor and the forced end (anchor+maxPeriod) are not
             // intermediates.
             expect(has("2026-03-10")).to.be.false;
-            expect(has("2026-03-14")).to.be.false;
+            expect(has("2026-03-15")).to.be.false;
         });
     });
 

@@ -74,15 +74,15 @@ function makeDisableFn(opts) {
 }
 
 describe("calculateMaxEndDate", () => {
-    it("returns start + (maxPeriod - 1) so start counts as day 1", () => {
-        // start=Mar 20, maxPeriod=5 → end=Mar 24 (Mar 20, 21, 22, 23, 24)
+    it("returns start + maxPeriod, the due date of a checkout on start", () => {
+        // start=Mar 20, maxPeriod=5 → end=Mar 25
         const result = calculateMaxEndDate(new Date(2026, 2, 20), 5);
-        expect(result.format("YYYY-MM-DD")).to.equal("2026-03-24");
+        expect(result.format("YYYY-MM-DD")).to.equal("2026-03-25");
     });
 
-    it("returns the start day itself when maxPeriod is 1", () => {
+    it("returns the next day when maxPeriod is 1", () => {
         const result = calculateMaxEndDate(new Date(2026, 2, 20), 1);
-        expect(result.format("YYYY-MM-DD")).to.equal("2026-03-20");
+        expect(result.format("YYYY-MM-DD")).to.equal("2026-03-21");
     });
 
     it("throws when maxPeriod is zero", () => {
@@ -249,16 +249,15 @@ describe("createDisableFunction (lead period from today)", () => {
 });
 
 describe("createDisableFunction (end-date selection)", () => {
-    it("disables an end date past anchor + maxPeriod - 1", () => {
-        // anchor=Mar 20, maxPeriod=5 → calculatedEnd = anchor + 4 = Mar 24
-        // (anchor counts as day 1; see calculateMaxEndDate). Mar 25 must
-        // be disabled, Mar 24 allowed.
+    it("disables an end date past anchor + maxPeriod", () => {
+        // anchor=Mar 20, maxPeriod=5 → calculatedEnd = Mar 25 (see
+        // calculateMaxEndDate). Mar 26 must be disabled, Mar 25 allowed.
         const fn = makeDisableFn({
             rules: { issuelength: 5 },
             selectedDates: [new Date(2026, 2, 20)],
         });
-        expect(fn(new Date(2026, 2, 24))).to.be.false;
-        expect(fn(new Date(2026, 2, 25))).to.be.true;
+        expect(fn(new Date(2026, 2, 25))).to.be.false;
+        expect(fn(new Date(2026, 2, 26))).to.be.true;
     });
 
     it("disables an end date whose [start, end] range overlaps a booking", () => {
@@ -291,9 +290,9 @@ describe("createDisableFunction (end-date selection)", () => {
 
 describe("createDisableFunction (end-date-only mode)", () => {
     it("blocks a start date when no single item can serve the full fixed period (any item)", () => {
-        // end_date_only forces the end to start + maxPeriod - 1, so the
+        // end_date_only forces the end to start + maxPeriod, so the
         // whole range must fit on ONE item. Items 1 and 2 each have a
-        // disjoint single-day booking inside [Mar 20, Mar 24] — no day
+        // disjoint single-day booking inside [Mar 20, Mar 25] — no day
         // has both items blocked, but neither item is free for the full
         // period, so Mar 20 must not be selectable as a start date.
         const fn = makeDisableFn({
@@ -326,9 +325,9 @@ describe("createDisableFunction (end-date-only mode)", () => {
         expect(fn(new Date(2026, 2, 20))).to.be.false;
     });
 
-    it("allows the calculated end date exactly at anchor + maxPeriod - 1", () => {
+    it("allows the calculated end date exactly at anchor + maxPeriod", () => {
         // end_date_only with maxPeriod=5, anchor=Mar 20:
-        // calculatedEnd=Mar 24 must be selectable (short-circuit at the
+        // calculatedEnd=Mar 25 must be selectable (short-circuit at the
         // isEndDateOnly + isSame(calculatedEnd) check).
         const fn = makeDisableFn({
             rules: {
@@ -337,13 +336,13 @@ describe("createDisableFunction (end-date-only mode)", () => {
             },
             selectedDates: [new Date(2026, 2, 20)],
         });
-        expect(fn(new Date(2026, 2, 24))).to.be.false;
+        expect(fn(new Date(2026, 2, 25))).to.be.false;
     });
 
     it("does not disable intermediate dates at the flatpickr level (soft handling owns UX)", () => {
         // end_date_only with maxPeriod=5, anchor=Mar 20:
-        // intermediates Mar 21-23 stay enabled here so flatpickr's range
-        // validator accepts [Mar 20, Mar 24]. The disabledByDate Map applies
+        // intermediates Mar 21-24 stay enabled here so flatpickr's range
+        // validator accepts [Mar 20, Mar 25]. The disabledByDate Map applies
         // soft severity for UI affordance instead.
         const fn = makeDisableFn({
             rules: {
@@ -353,11 +352,11 @@ describe("createDisableFunction (end-date-only mode)", () => {
             selectedDates: [new Date(2026, 2, 20)],
         });
         expect(fn(new Date(2026, 2, 21))).to.be.false;
-        expect(fn(new Date(2026, 2, 23))).to.be.false;
+        expect(fn(new Date(2026, 2, 24))).to.be.false;
     });
 
     it("disables dates past the calculated end even in end-date-only mode", () => {
-        // anchor + maxPeriod - 1 = Mar 24, so Mar 25 must be disabled.
+        // anchor + maxPeriod = Mar 25, so Mar 26 must be disabled.
         const fn = makeDisableFn({
             rules: {
                 booking_constraint_mode: "end_date_only",
@@ -365,7 +364,7 @@ describe("createDisableFunction (end-date-only mode)", () => {
             },
             selectedDates: [new Date(2026, 2, 20)],
         });
-        expect(fn(new Date(2026, 2, 25))).to.be.true;
+        expect(fn(new Date(2026, 2, 26))).to.be.true;
     });
 });
 

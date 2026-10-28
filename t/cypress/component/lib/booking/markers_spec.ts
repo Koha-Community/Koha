@@ -63,6 +63,23 @@ describe("getDateFeedbackMessage - effective maxPeriod", () => {
         );
     });
 
+    it("reports the maximum booking period from the first day after anchor + maxPeriod", () => {
+        const context = {
+            isDisabled: true,
+            selectedDateRange: ["2026-09-30"],
+            maxPeriod: 3,
+            unavailableByDate: { "2026-10-03": { 1: ["booking"] } },
+            holidays: [],
+        };
+
+        expect(
+            getDateFeedbackMessage(new Date(2026, 9, 4), context).message
+        ).to.equal("Cannot select: exceeds maximum booking period (3 days)");
+        expect(
+            getDateFeedbackMessage(new Date(2026, 9, 3), context).message
+        ).to.not.contain("exceeds maximum booking period");
+    });
+
     it("defaults maxPeriod/leadDays/trailDays to 0 when the caller omits them, rather than throwing", () => {
         const feedback = getDateFeedbackMessage(new Date("2026-10-09"), {
             isDisabled: true,

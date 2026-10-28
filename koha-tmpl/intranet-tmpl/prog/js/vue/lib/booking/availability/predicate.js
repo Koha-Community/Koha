@@ -25,7 +25,9 @@ import {
 } from "./server-map.js";
 
 /**
- * Calculate maximum end date based on start date and max period
+ * Calculate maximum end date based on start date and max period.
+ * The end matches the due date of a checkout on the start date
+ * (start + maxPeriod), which is what checking out a booking applies.
  * @param {import("dayjs").Dayjs|Date|string} startDate - The start date
  * @param {number} maxPeriod - Maximum booking period in days
  * @returns {import("dayjs").Dayjs} Maximum end date
@@ -35,9 +37,7 @@ export function calculateMaxEndDate(startDate, maxPeriod) {
         throw new Error("maxPeriod must be a positive number");
     }
 
-    const start = toDay(startDate);
-    // Start date is day 1, so end = start + (maxPeriod - 1)
-    return start.add(maxPeriod - 1, "day");
+    return toDay(startDate).add(maxPeriod, "day");
 }
 
 /**
@@ -98,7 +98,7 @@ export function trailWindowConflicts(
 
 /**
  * The forced end for fixed-duration modes: the backend-calculated due
- * date when it is usable, else start + maxPeriod - 1, else null.
+ * date when it is usable, else calculateMaxEndDate, else null.
  *
  * @param {import('dayjs').Dayjs} start Proposed booking start.
  * @param {{calculatedDueDate?: import('dayjs').Dayjs|null, maxPeriod?: number|null}} config Effective rules.

@@ -186,11 +186,9 @@ export function useBookingCalendarMaps({
         const maxPeriod = maxBookingPeriod?.value;
         if (isEndDateOnly && anchor && maxPeriod && maxPeriod > 0) {
             const start = toDay(anchor);
-            // The forced end is start + maxPeriod - 1 (start counts as
-            // day 1, mirroring calculateMaxEndDate). It must stay
-            // clickable — only the dates strictly between anchor and
-            // target are soft-disabled.
-            const targetEnd = start.add(maxPeriod - 1, "day");
+            // The forced end must stay clickable — only the dates strictly
+            // between anchor and target are soft-disabled.
+            const targetEnd = calculateMaxEndDate(start, maxPeriod);
             for (
                 let d = start.clone().add(1, "day");
                 d.isBefore(targetEnd, "day");
@@ -407,10 +405,9 @@ export function useBookingCalendarMaps({
         // but cannot be clicked.
         if (isEndDateOnly && anchor && maxPeriod && maxPeriod > 0) {
             const start = toDay(anchor);
-            // Forced end = start + maxPeriod - 1 (start counts as day 1);
-            // it is the one clickable date, so it must not carry the
-            // intermediate-blocked affordance.
-            const targetEnd = start.add(maxPeriod - 1, "day");
+            // The forced end is the one clickable date, so it must not
+            // carry the intermediate-blocked affordance.
+            const targetEnd = calculateMaxEndDate(start, maxPeriod);
             for (
                 let d = start.clone().add(1, "day");
                 d.isBefore(targetEnd, "day");
@@ -525,8 +522,10 @@ export function useBookingCalendarMaps({
         }
 
         const maxPeriod = maxBookingPeriod?.value;
-        const days = h.diff(a, "day") + 1;
-        if (maxPeriod && days > maxPeriod) {
+        if (
+            maxPeriod > 0 &&
+            h.isAfter(calculateMaxEndDate(a, maxPeriod), "day")
+        ) {
             return {
                 status: "invalid",
                 message: $__(
