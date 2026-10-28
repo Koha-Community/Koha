@@ -150,6 +150,10 @@ const formActive = ref(false);
 const titleId = `booking-modal-title-${useId()}`;
 let bsModal: InstanceType<typeof window.bootstrap.Modal> | null = null;
 let returnFocusTo: HTMLElement | null = null;
+// Bootstrap ignores show() and hide() while it animates, so the requested
+// state is kept and applied once the running transition ends.
+let transitioning = false;
+let wantOpen = false;
 
 const modalTitle = computed(
     () =>
@@ -173,7 +177,8 @@ function showModal(): void {
                 : null;
     }
     formActive.value = true;
-    bsModal?.show();
+    wantOpen = true;
+    syncModal();
 }
 
 /**
@@ -183,7 +188,48 @@ function showModal(): void {
  */
 function hideModal(): void {
     formActive.value = false;
-    bsModal?.hide();
+    wantOpen = false;
+    syncModal();
+}
+
+/**
+ * Apply the requested open state unless a transition is running.
+ *
+ * @returns {void}
+ */
+function syncModal(): void {
+    if (transitioning) return;
+    if (wantOpen) bsModal?.show();
+    else bsModal?.hide();
+}
+
+/**
+ * Mark a Bootstrap transition as running.
+ *
+ * @returns {void}
+ */
+function handleTransitionStart(): void {
+    transitioning = true;
+}
+
+/**
+ * Apply a state requested while the show transition ran.
+ *
+ * @returns {void}
+ */
+function handleShown(): void {
+    transitioning = false;
+    syncModal();
+}
+
+/**
+ * Treat any hide, including Escape, as a request to close.
+ *
+ * @returns {void}
+ */
+function handleHide(): void {
+    transitioning = true;
+    wantOpen = false;
 }
 
 /**
@@ -215,6 +261,12 @@ function handleSubmitted(detail: SubmittedDetail): void {
  * @returns {void}
  */
 function handleHidden(): void {
+    transitioning = false;
+    // Reopened while hiding: show again instead of closing the new session
+    if (wantOpen) {
+        syncModal();
+        return;
+    }
     formActive.value = false;
     const focusTarget = returnFocusTo;
     returnFocusTo = null;
@@ -235,6 +287,9 @@ onMounted(() => {
     bsModal = new window.bootstrap.Modal(modalElement.value, {
         backdrop: "static",
     });
+    modalElement.value.addEventListener("show.bs.modal", handleTransitionStart);
+    modalElement.value.addEventListener("shown.bs.modal", handleShown);
+    modalElement.value.addEventListener("hide.bs.modal", handleHide);
     modalElement.value.addEventListener("hidden.bs.modal", handleHidden);
     if (props.open) showModal();
 });
@@ -242,6 +297,12 @@ onMounted(() => {
 onUnmounted(() => {
     formActive.value = false;
     returnFocusTo = null;
+    modalElement.value?.removeEventListener(
+        "show.bs.modal",
+        handleTransitionStart
+    );
+    modalElement.value?.removeEventListener("shown.bs.modal", handleShown);
+    modalElement.value?.removeEventListener("hide.bs.modal", handleHide);
     modalElement.value?.removeEventListener("hidden.bs.modal", handleHidden);
     bsModal?.dispose();
 });

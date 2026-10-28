@@ -40,13 +40,19 @@ const BookingFormStub = {
     },
 };
 
+// With `transitional` set, the stub behaves like Bootstrap: it fires the
+// show/hide events, ignores show() and hide() while a transition runs, and
+// only completes one when finishTransition() is called.
 class ModalStub {
     static latest;
+    static transitional = false;
     element;
     options;
     showCalls = 0;
     hideCalls = 0;
     disposeCalls = 0;
+    shown = false;
+    pending = null;
 
     constructor(element, options) {
         this.element = element;
@@ -56,11 +62,29 @@ class ModalStub {
 
     show() {
         this.showCalls += 1;
+        if (!ModalStub.transitional) return;
+        if (this.shown || this.pending) return;
+        this.shown = true;
+        this.pending = "shown.bs.modal";
+        this.element.dispatchEvent(new window.Event("show.bs.modal"));
     }
 
     hide() {
         this.hideCalls += 1;
-        this.element.dispatchEvent(new window.Event("hidden.bs.modal"));
+        if (!ModalStub.transitional) {
+            this.element.dispatchEvent(new window.Event("hidden.bs.modal"));
+            return;
+        }
+        if (!this.shown || this.pending) return;
+        this.shown = false;
+        this.pending = "hidden.bs.modal";
+        this.element.dispatchEvent(new window.Event("hide.bs.modal"));
+    }
+
+    finishTransition() {
+        const event = this.pending;
+        this.pending = null;
+        this.element.dispatchEvent(new window.Event(event));
     }
 
     toggle() {
@@ -95,6 +119,7 @@ function mountModal(props = {}) {
 describe("BookingModal", () => {
     beforeEach(() => {
         ModalStub.latest = null;
+        ModalStub.transitional = false;
         window.bootstrap = { Modal: ModalStub };
     });
 
@@ -200,6 +225,42 @@ describe("BookingModal", () => {
                     expect(ModalStub.latest.hideCalls).to.equal(1);
                     wrapper.unmount();
                     expect(ModalStub.latest.disposeCalls).to.equal(1);
+                });
+        });
+    });
+    it("closes a modal that is closed while it is still opening", () => {
+        ModalStub.transitional = true;
+        let wrapper;
+        mountModal({ open: true }).then(mounted => {
+            wrapper = mounted.wrapper;
+        });
+
+        cy.contains("button", "Cancel").click();
+
+        cy.then(() => {
+            expect(wrapper.emitted("close")).to.equal(undefined);
+            ModalStub.latest.finishTransition(); // show ends, hide starts
+            ModalStub.latest.finishTransition(); // hide ends
+            expect(wrapper.emitted("close")).to.have.length(1);
+            expect(ModalStub.latest.shown).to.equal(false);
+        });
+    });
+
+    it("stays open when reopened while it is still closing", () => {
+        ModalStub.transitional = true;
+        mountModal({ open: true }).then(({ wrapper }) => {
+            ModalStub.latest.finishTransition();
+            return wrapper
+                .setProps({ open: false })
+                .then(() => wrapper.setProps({ open: true }))
+                .then(() => {
+                    ModalStub.latest.finishTransition(); // hide ends, show starts
+                    ModalStub.latest.finishTransition(); // show ends
+                    expect(wrapper.emitted("close")).to.equal(undefined);
+                    expect(ModalStub.latest.shown).to.equal(true);
+                    expect(
+                        wrapper.findComponent(BookingFormStub).props("active")
+                    ).to.equal(true);
                 });
         });
     });
