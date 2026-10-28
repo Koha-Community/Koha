@@ -126,7 +126,7 @@ if (@label_ids) {
         my $padding = '0' x ( $barcode_length - length($i) );
         push @$items, { item_number => $padding . $i };
     }
-} elsif ($batch_id) {
+} else {
     $items = $batch->get_attr('items');
 }
 
