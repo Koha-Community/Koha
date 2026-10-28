@@ -15,9 +15,13 @@ export function toDay(input) {
     return value;
 }
 
-/** @returns {import("dayjs").Dayjs} */
+/**
+ * The library's current calendar date, as a local day like toDay() returns.
+ *
+ * @returns {import("dayjs").Dayjs}
+ */
 export function today() {
-    return dayjs().tz(window.$timezone()).startOf("day");
+    return toDay(dayjs().tz(window.$timezone()).format("YYYY-MM-DD"));
 }
 
 /**

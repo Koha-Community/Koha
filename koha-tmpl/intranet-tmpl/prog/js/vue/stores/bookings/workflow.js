@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { formatYMD, addDays } from "../../lib/booking/dates.js";
+import { formatYMD, addDays, today } from "../../lib/booking/dates.js";
 import { idsEqual } from "../../utils/functions.js";
 import { calculateMaxBookingPeriod } from "../../lib/booking/availability/predicate.js";
 
@@ -248,9 +248,10 @@ export function useBookingWorkflow({
      * @returns {{from: string, to: string}} Buffered API date window.
      */
     function computeAvailabilityWindow(viewport, maxPeriod) {
-        const today = new Date();
-        const start = viewport?.start ?? today;
-        const end = viewport?.end ?? addDays(today, DEFAULT_LOOKAHEAD_DAYS);
+        const libraryToday = today();
+        const start = viewport?.start ?? libraryToday;
+        const end =
+            viewport?.end ?? addDays(libraryToday, DEFAULT_LOOKAHEAD_DAYS);
         let from = addDays(start, -CALENDAR_BUFFER_DAYS);
         let to = addDays(
             end,

@@ -15,6 +15,7 @@ import {
     addDays,
     formatYMD,
     today,
+    toDay,
 } from "@koha-vue/lib/booking/dates.js";
 
 describe("Library-timezone day-boundary contract helpers", () => {
@@ -65,6 +66,8 @@ describe("Library-timezone day-boundary contract helpers", () => {
         cy.clock(new Date("2026-08-09T20:00:00Z").getTime(), ["Date"]);
         cy.then(() => {
             expect(formatYMD(today())).to.eq("2026-08-10");
+            expect(today().valueOf()).to.eq(toDay("2026-08-10").valueOf());
+            expect(toDay("2026-08-09").isBefore(today(), "day")).to.eq(true);
         });
     });
 });

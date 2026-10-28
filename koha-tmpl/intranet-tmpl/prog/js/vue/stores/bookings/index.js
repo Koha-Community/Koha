@@ -3,6 +3,7 @@ import { computed, reactive, ref, watch } from "vue";
 import { $__ } from "@koha-vue/i18n";
 import { idsEqual } from "../../utils/functions.js";
 import { itemsAvailableForPeriod } from "../../lib/booking/availability/server-map.js";
+import { today } from "../../lib/booking/dates.js";
 import { useBookingCalendarState } from "./calendar.js";
 import { useBookingWorkflow } from "./workflow.js";
 import { useDataSection } from "./data.js";
@@ -163,19 +164,14 @@ function useDraftSection() {
     });
 
     /**
-     * Earliest selectable date: tomorrow at midnight. Past-date
+     * Earliest selectable date: the library's tomorrow. Past-date
      * hard-disabling is also enforced inside createDisableFunction;
      * pinning minDate keeps flatpickr from rendering today as a hover
      * target.
      *
      * @type {import('vue').ComputedRef<Date>}
      */
-    const minDate = computed(() => {
-        const d = new Date();
-        d.setHours(0, 0, 0, 0);
-        d.setDate(d.getDate() + 1);
-        return d;
-    });
+    const minDate = computed(() => today().add(1, "day").toDate());
 
     /**
      * Write a Date-shaped picker value back into the store as the
