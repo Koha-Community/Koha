@@ -28,9 +28,9 @@ use C4::Creators::Lib qw(
     get_all_layouts
     get_all_templates
     get_output_formats
+    get_barcode_range
 );
 use C4::Labels::Batch;
-use C4::Creators::Lib qw( get_barcode_range );
 
 my $cgi = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

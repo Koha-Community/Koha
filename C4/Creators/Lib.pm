@@ -528,11 +528,11 @@ sub get_table_names {
 
 =head2 get_barcode_range
 
-    my $range = get_barcode_range( $txt_from, $txt_count );
+    my $range = get_barcode_range( { from => $txt_from, count => $txt_count } );
 
 Takes the starting barcode and the number of barcodes to print, and returns
 a hashref with txt_from, from, count, to, txt_to and barcode_length.
-The count is capped at 1000.
+The count is capped at 1000. txt_from and txt_to keep any leading zeros.
 
 =cut
 
