@@ -54,6 +54,7 @@ describe("Booking Modal Date Picker Tests", () => {
             })
             .then(patronResult => {
                 testData.patron = patronResult.patron;
+                testData.category = patronResult.patron_category;
             });
     });
 
@@ -1255,6 +1256,8 @@ describe("Booking Modal Date Picker Tests", () => {
 
         // Setup: Create biblio with 4 bookable items via the builder
         let testLibrary = null;
+        let testItemType = null;
+        let testCategory = null;
         cy.task("insertSampleBiblio", {
             item_count: 4,
             item_values: [0, 1, 2, 3].map(index => ({
@@ -1268,6 +1271,7 @@ describe("Booking Modal Date Picker Tests", () => {
                 testBiblio = objects.biblio;
                 testItems = objects.items;
                 testLibrary = objects.libraries[0];
+                testItemType = objects.item_type;
 
                 return cy.task("insertSamplePatron", {
                     library: testLibrary,
@@ -1275,6 +1279,7 @@ describe("Booking Modal Date Picker Tests", () => {
             })
             .then(patronResult => {
                 testPatron = patronResult.patron;
+                testCategory = patronResult.patron_category;
             })
             .then(() => {
                 // Create strategic bookings sequentially
@@ -1417,7 +1422,10 @@ describe("Booking Modal Date Picker Tests", () => {
                 cy.task("deleteSampleObjects", {
                     biblio: testBiblio,
                     items: testItems,
+                    library: testLibrary,
+                    item_type: testItemType,
                     patron: testPatron,
+                    category: testCategory,
                 });
             }
         });
@@ -1438,6 +1446,8 @@ describe("Booking Modal Date Picker Tests", () => {
         let testBiblio = null;
         let testPatron = null;
         let testLibraries = null;
+        let testItemType = null;
+        let testCategory = null;
 
         // Circulation rules with non-zero lead/trail periods
         const circulationRules = {
@@ -1462,6 +1472,7 @@ describe("Booking Modal Date Picker Tests", () => {
                 testBiblio = objects.biblio;
                 testItems = objects.items;
                 testLibraries = objects.libraries;
+                testItemType = objects.item_type;
 
                 return cy.task("insertSamplePatron", {
                     library: testLibraries[0],
@@ -1469,6 +1480,7 @@ describe("Booking Modal Date Picker Tests", () => {
             })
             .then(patronResult => {
                 testPatron = patronResult.patron;
+                testCategory = patronResult.patron_category;
             })
             .then(() => {
                 // Create bookings on ITEM 0 and ITEM 1 for days 10-12
@@ -1812,7 +1824,9 @@ describe("Booking Modal Date Picker Tests", () => {
                     biblio: testBiblio,
                     items: testItems,
                     libraries: testLibraries,
+                    item_type: testItemType,
                     patron: testPatron,
+                    category: testCategory,
                 });
             }
         });

@@ -68,6 +68,7 @@ describe("Booking Modal Timezone Tests", () => {
             })
             .then(patronResult => {
                 testData.patron = patronResult.patron;
+                testData.category = patronResult.patron_category;
             });
     });
 

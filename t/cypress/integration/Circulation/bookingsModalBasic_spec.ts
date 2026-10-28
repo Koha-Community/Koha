@@ -48,6 +48,7 @@ describe("Booking Modal Basic Tests", () => {
             })
             .then(patronResult => {
                 testData.patron = patronResult.patron;
+                testData.category = patronResult.patron_category;
             });
     });
 
@@ -700,6 +701,7 @@ describe("Booking Modal Basic Tests", () => {
             secondPatron = patronResult.patron;
             testData.patrons = testData.patrons || [];
             testData.patrons.push(secondPatron);
+            testData.categories = [patronResult.patron_category];
         });
 
         cy.then(() =>
