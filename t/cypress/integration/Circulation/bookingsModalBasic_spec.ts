@@ -1,5 +1,10 @@
 import dayjs from "dayjs";
 
+// Pin for cy.clock(..., ["Date"]): the 10th of next month at 09:00 local,
+// derived from the real date so created bookings stay in the future.
+const pinnedToday = () =>
+    dayjs().add(1, "month").date(10).hour(9).minute(0).second(0).millisecond(0);
+
 describe("Booking Modal Basic Tests", () => {
     let testData = {};
 
@@ -342,14 +347,12 @@ describe("Booking Modal Basic Tests", () => {
          * 3. An appropriate item is automatically assigned by the server
          */
 
-        // Fix the browser Date object to June 10, 2026 at 09:00 Europe/London
         // Using ["Date"] to avoid freezing timers which breaks async operations
-        const fixedToday = new Date("2026-06-10T08:00:00Z"); // 09:00 BST (UTC+1)
-        cy.clock(fixedToday, ["Date"]);
+        const fixedToday = pinnedToday();
+        cy.clock(fixedToday.toDate(), ["Date"]);
 
-        // Define fixed dates for consistent testing
-        const startDate = dayjs("2026-06-15"); // 5 days from fixed today
-        const endDate = dayjs("2026-06-20"); // 10 days from fixed today
+        const startDate = fixedToday.startOf("day").add(5, "day");
+        const endDate = fixedToday.startOf("day").add(10, "day");
         cy.intercept("POST", "/api/v1/bookings").as("createAnyItemBooking");
 
         cy.visit(
@@ -430,7 +433,7 @@ describe("Booking Modal Basic Tests", () => {
             values: [
                 testData.biblio.biblio_id,
                 testData.patron.patron_id,
-                "2026-06-15", // Fixed start date
+                startDate.format("YYYY-MM-DD"),
             ],
         }).then(result => {
             expect(result).to.have.length(1);
@@ -444,8 +447,10 @@ describe("Booking Modal Basic Tests", () => {
             ]);
 
             // Verify booking dates match what we selected
-            expect(booking.start_date).to.include("2026-06-15");
-            expect(booking.end_date).to.include("2026-06-20");
+            expect(booking.start_date).to.include(
+                startDate.format("YYYY-MM-DD")
+            );
+            expect(booking.end_date).to.include(endDate.format("YYYY-MM-DD"));
 
             // Clean up the test booking
             cy.task("query", {

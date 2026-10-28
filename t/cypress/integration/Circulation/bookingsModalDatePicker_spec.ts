@@ -729,7 +729,7 @@ describe("Booking Modal Date Picker Tests", () => {
          *
          * Fixed Date Setup:
          * ================
-         * - Today: June 10, 2026 (Wednesday)
+         * - Today (T): first Wednesday of next month; days are written as T+n
          * - Lead Period: 2 days
          * - Trail Period: 3 days
          * - Issue Length: 3 days
@@ -737,13 +737,16 @@ describe("Booking Modal Date Picker Tests", () => {
          * - Max Renewals: 2
          * - Max Booking Period: 3 + (2 × 2) = 7 days
          *
-         * Blocker Booking: June 25-27, 2026
+         * Blocker Booking: T+15 to T+17 (Thursday to Saturday)
          */
 
-        // Fix the browser Date object to June 10, 2026 at 09:00 Europe/London
-        const fixedToday = new Date("2026-06-10T08:00:00Z"); // 09:00 BST (UTC+1)
-        cy.clock(fixedToday, ["Date"]);
-        cy.log(`Fixed today: June 10, 2026`);
+        // The band geometry below depends on weekdays, so pin to the first
+        // Wednesday of next month; T to T+20 then share one month grid
+        let fixedToday = pinnedToday().date(1);
+        while (fixedToday.day() !== 3) fixedToday = fixedToday.add(1, "day");
+        cy.clock(fixedToday.toDate(), ["Date"]);
+        const isoDay = (offset: number) =>
+            fixedToday.add(offset, "day").format("YYYY-MM-DD");
 
         // Circulation rules with short periods for focused testing
         const circulationRules = {
@@ -773,13 +776,13 @@ describe("Booking Modal Date Picker Tests", () => {
             "getFixedDateRules"
         );
 
-        // Create blocker booking: June 25-27, 2026 (local time)
+        // Create blocker booking: T+15 to T+17 (local time)
         cy.task("insertSampleBooking", {
             item: testData.items[0],
             patron: testData.patron,
             pickup_library_id: testData.libraries[0].library_id,
-            start_date: dayjs("2026-06-25").startOf("day").toISOString(),
-            end_date: dayjs("2026-06-27").endOf("day").toISOString(),
+            start_date: dayjs(isoDay(15)).startOf("day").toISOString(),
+            end_date: dayjs(isoDay(17)).endOf("day").toISOString(),
         });
 
         // Setup modal
@@ -878,14 +881,14 @@ describe("Booking Modal Date Picker Tests", () => {
             return cy.get("@fp").getFlatpickrDate(date);
         };
 
-        // June 27 is a Saturday: its outward band half is the 2.5px to the
+        // T+17 is a Saturday: its outward band half is the 2.5px to the
         // grid edge, not the 5px that bridges to a neighbouring cell.
-        getDateByISO("2026-06-26").should($day => {
+        getDateByISO(isoDay(16)).should($day => {
             expect(getComputedStyle($day[0]).boxShadow).to.match(
                 /-5px 0px 0px 0px, .* 5px 0px 0px 0px$/
             );
         });
-        getDateByISO("2026-06-27").should($day => {
+        getDateByISO(isoDay(17)).should($day => {
             expect(getComputedStyle($day[0]).boxShadow).to.match(
                 /-5px 0px 0px 0px, .* 2\.5px 0px 0px 0px$/
             );
@@ -896,45 +899,42 @@ describe("Booking Modal Date Picker Tests", () => {
         // ========================================================================
         cy.log("=== PHASE 1: Lead period visual hints on hover ===");
 
-        // Hover June 13 as potential start date
-        // Lead period: June 11-12 (both after today June 10, no booking conflict)
-        hoverDateByISO("2026-06-13");
+        // Hover T+3 as potential start date
+        // Lead period: T+1 to T+2 (both after today, no booking conflict)
+        hoverDateByISO(isoDay(3));
 
-        // June 11-12 are clear, so June 13 should NOT be disabled
-        getDateByISO("2026-06-13").should(
-            "not.have.class",
-            "flatpickr-disabled"
-        );
+        // T+1 to T+2 are clear, so T+3 should NOT be disabled
+        getDateByISO(isoDay(3)).should("not.have.class", "flatpickr-disabled");
 
         // Both bands preview around the hovered candidate even before a
-        // start is chosen - lead before it (June 11-12), trail after it
-        // (June 14-16, trailDays=3) - matching the old UI's behaviour.
-        // Only the far edge of each band ever rounds (June 11 for lead,
-        // June 16 for trail); the near edge, flush against the hovered
+        // start is chosen - lead before it (T+1 to T+2), trail after it
+        // (T+4 to T+6, trailDays=3) - matching the old UI's behaviour.
+        // Only the far edge of each band ever rounds (T+1 for lead,
+        // T+6 for trail); the near edge, flush against the hovered
         // candidate, stays square - and the candidate cell itself is
         // marked adjoins-lead/adjoins-trail so its own native rounding
         // is suppressed on both sides too, keeping the whole strip
         // continuous instead of every segment rounding independently.
-        getDateByISO("2026-06-11")
+        getDateByISO(isoDay(1))
             .should("have.class", "booking-day--my-lead-buffer")
             .and("have.class", "booking-day--run-start")
             .and("not.have.class", "booking-day--run-end");
-        getDateByISO("2026-06-12")
+        getDateByISO(isoDay(2))
             .should("have.class", "booking-day--my-lead-buffer")
             .and("not.have.class", "booking-day--run-start")
             .and("not.have.class", "booking-day--run-end");
-        getDateByISO("2026-06-13")
+        getDateByISO(isoDay(3))
             .should("have.class", "booking-day--adjoins-lead")
             .and("have.class", "booking-day--adjoins-trail");
-        getDateByISO("2026-06-14")
+        getDateByISO(isoDay(4))
             .should("have.class", "booking-day--my-trail-buffer")
             .and("not.have.class", "booking-day--run-start")
             .and("not.have.class", "booking-day--run-end");
-        getDateByISO("2026-06-15")
+        getDateByISO(isoDay(5))
             .should("have.class", "booking-day--my-trail-buffer")
             .and("not.have.class", "booking-day--run-start")
             .and("not.have.class", "booking-day--run-end");
-        getDateByISO("2026-06-16")
+        getDateByISO(isoDay(6))
             .should("have.class", "booking-day--my-trail-buffer")
             .and("not.have.class", "booking-day--run-start")
             .and("have.class", "booking-day--run-end");
@@ -951,18 +951,15 @@ describe("Booking Modal Date Picker Tests", () => {
         // ========================================================================
         cy.log("=== PHASE 2: Trail period visual hints on hover ===");
 
-        // Select June 13 as start date
-        clickDateByISO("2026-06-13");
+        // Select T+3 as start date
+        clickDateByISO(isoDay(3));
 
-        // Hover June 16 as potential end date
-        // Trail period: June 17-19 (clear of any bookings)
-        hoverDateByISO("2026-06-16");
+        // Hover T+6 as potential end date
+        // Trail period: T+7 to T+9 (clear of any bookings)
+        hoverDateByISO(isoDay(6));
 
-        // June 16 should not be disabled (trail is clear)
-        getDateByISO("2026-06-16").should(
-            "not.have.class",
-            "flatpickr-disabled"
-        );
+        // T+6 should not be disabled (trail is clear)
+        getDateByISO(isoDay(6)).should("not.have.class", "flatpickr-disabled");
 
         // Clear selection for next phase
         cy.get("#booking_period").clearFlatpickr();
@@ -973,52 +970,46 @@ describe("Booking Modal Date Picker Tests", () => {
         // ========================================================================
         cy.log("=== PHASE 3: Lead period conflicts ===");
 
-        // Hover June 14 - Lead period (June 12-13), both after today, no booking conflict
-        // Note: June 11 would be disabled by minimum advance booking (today+leadDays=June 12),
-        // so we test with June 14 which is past the minimum advance period.
-        hoverDateByISO("2026-06-14");
-        getDateByISO("2026-06-14").should(
-            "not.have.class",
-            "flatpickr-disabled"
-        );
+        // Hover T+4 - Lead period (T+2 to T+3), both after today, no booking conflict
+        // Note: T+1 would be disabled by minimum advance booking (today+leadDays=T+2),
+        // so we test with T+4 which is past the minimum advance period.
+        hoverDateByISO(isoDay(4));
+        getDateByISO(isoDay(4)).should("not.have.class", "flatpickr-disabled");
 
-        // Hover June 29 - Lead period (June 27-28), June 27 is in blocker booking
-        hoverDateByISO("2026-06-29");
-        getDateByISO("2026-06-29").should("have.class", "flatpickr-disabled");
+        // Hover T+19 - Lead period (T+17 to T+18), T+17 is in blocker booking
+        hoverDateByISO(isoDay(19));
+        getDateByISO(isoDay(19)).should("have.class", "flatpickr-disabled");
 
         // ========================================================================
         // PHASE 3c: BIDIRECTIONAL - Lead Period Conflicts with Existing Booking TRAIL
         // ========================================================================
 
-        // July 1: Lead June 29-30 → overlaps blocker trail (June 28-30) → DISABLED
-        hoverDateByISO("2026-07-01");
-        getDateByISO("2026-07-01").should("have.class", "flatpickr-disabled");
+        // T+21: Lead T+19 to T+20 → overlaps blocker trail (T+18 to T+20) → DISABLED
+        hoverDateByISO(isoDay(21));
+        getDateByISO(isoDay(21)).should("have.class", "flatpickr-disabled");
 
-        // July 2: Lead June 30-July 1 → June 30 in blocker trail → DISABLED
-        hoverDateByISO("2026-07-02");
-        getDateByISO("2026-07-02").should("have.class", "flatpickr-disabled");
+        // T+22: Lead T+20 to T+21 → T+20 in blocker trail → DISABLED
+        hoverDateByISO(isoDay(22));
+        getDateByISO(isoDay(22)).should("have.class", "flatpickr-disabled");
 
         // ========================================================================
         // PHASE 3d: First Clear Start Date After Blocker's Protected Period
         // ========================================================================
 
-        // July 3: Lead July 1-2 → clear of blocker trail → NOT disabled
-        hoverDateByISO("2026-07-03");
-        getDateByISO("2026-07-03").should(
-            "not.have.class",
-            "flatpickr-disabled"
-        );
+        // T+23: Lead T+21-2 → clear of blocker trail → NOT disabled
+        hoverDateByISO(isoDay(23));
+        getDateByISO(isoDay(23)).should("not.have.class", "flatpickr-disabled");
 
         // ========================================================================
         // PHASE 4a: Trail Period Conflict - Existing Booking ACTUAL Dates
         // ========================================================================
 
-        // Select June 20 as start date (lead June 18-19, both clear)
-        clickDateByISO("2026-06-20");
+        // Select T+10 as start date (lead T+8 to T+9, both clear)
+        clickDateByISO(isoDay(10));
 
-        // Hover June 23 - Trail (June 24-26) overlaps blocker ACTUAL (June 25-27)
-        hoverDateByISO("2026-06-23");
-        getDateByISO("2026-06-23").should("have.class", "flatpickr-disabled");
+        // Hover T+13 - Trail (T+14 to T+16) overlaps blocker ACTUAL (T+15 to T+17)
+        hoverDateByISO(isoDay(13));
+        getDateByISO(isoDay(13)).should("have.class", "flatpickr-disabled");
 
         // Clear selection for next phase
         cy.get("#booking_period").clearFlatpickr();
@@ -1028,23 +1019,20 @@ describe("Booking Modal Date Picker Tests", () => {
         // PHASE 4b: BIDIRECTIONAL - Trail Period Conflicts with Existing Booking LEAD
         // ========================================================================
 
-        // Select June 13 as start (lead June 11-12, both clear)
-        clickDateByISO("2026-06-13");
+        // Select T+3 as start (lead T+1 to T+2, both clear)
+        clickDateByISO(isoDay(3));
 
-        // Hover June 21 - Trail (June 22-24) overlaps blocker LEAD (June 23-24) → DISABLED
-        hoverDateByISO("2026-06-21");
-        getDateByISO("2026-06-21").should("have.class", "flatpickr-disabled");
+        // Hover T+11 - Trail (T+12 to T+14) overlaps blocker LEAD (T+13 to T+14) → DISABLED
+        hoverDateByISO(isoDay(11));
+        getDateByISO(isoDay(11)).should("have.class", "flatpickr-disabled");
 
-        // June 20 - Trail (June 21-23), June 23 overlaps blocker lead → DISABLED
-        hoverDateByISO("2026-06-20");
-        getDateByISO("2026-06-20").should("have.class", "flatpickr-disabled");
+        // T+10 - Trail (T+11 to T+13), T+13 overlaps blocker lead → DISABLED
+        hoverDateByISO(isoDay(10));
+        getDateByISO(isoDay(10)).should("have.class", "flatpickr-disabled");
 
-        // June 19 - Trail (June 20-22) doesn't reach blocker lead (starts June 23) → NOT disabled
-        hoverDateByISO("2026-06-19");
-        getDateByISO("2026-06-19").should(
-            "not.have.class",
-            "flatpickr-disabled"
-        );
+        // T+9 - Trail (T+10 to T+12) doesn't reach blocker lead (starts T+13) → NOT disabled
+        hoverDateByISO(isoDay(9));
+        getDateByISO(isoDay(9)).should("not.have.class", "flatpickr-disabled");
 
         // Clear selection for next phase
         cy.get("#booking_period").clearFlatpickr();
@@ -1054,22 +1042,19 @@ describe("Booking Modal Date Picker Tests", () => {
         // PHASE 5: Max Date Selectable When Trail is Clear
         // ========================================================================
 
-        // Select June 13 as start date
-        clickDateByISO("2026-06-13");
+        // Select T+3 as start date
+        clickDateByISO(isoDay(3));
 
-        // June 20: trail (June 21-23) overlaps blocker lead (June 23-24) → DISABLED
-        hoverDateByISO("2026-06-20");
-        getDateByISO("2026-06-20").should("have.class", "flatpickr-disabled");
+        // T+10: trail (T+11 to T+13) overlaps blocker lead (T+13 to T+14) → DISABLED
+        hoverDateByISO(isoDay(10));
+        getDateByISO(isoDay(10)).should("have.class", "flatpickr-disabled");
 
-        // June 19: trail (June 20-22) clear of blocker lead → NOT disabled
-        hoverDateByISO("2026-06-19");
-        getDateByISO("2026-06-19").should(
-            "not.have.class",
-            "flatpickr-disabled"
-        );
+        // T+9: trail (T+10 to T+12) clear of blocker lead → NOT disabled
+        hoverDateByISO(isoDay(9));
+        getDateByISO(isoDay(9)).should("not.have.class", "flatpickr-disabled");
 
-        // Actually select June 19 to confirm booking can be made
-        clickDateByISO("2026-06-19");
+        // Actually select T+9 to confirm booking can be made
+        clickDateByISO(isoDay(9));
 
         // Verify dates were accepted in the form
         cy.get("#booking_period").should("not.have.value", "");
@@ -1236,10 +1221,9 @@ describe("Booking Modal Date Picker Tests", () => {
          * it is NEVER re-added even if it becomes available again later.
          */
 
-        // Fix the browser Date object to June 10, 2026 at 09:00 Europe/London
-        const fixedToday = new Date("2026-06-10T08:00:00Z"); // 09:00 BST (UTC+1)
-        cy.clock(fixedToday, ["Date"]);
-        const today = dayjs(fixedToday);
+        const fixedToday = pinnedToday();
+        cy.clock(fixedToday.toDate(), ["Date"]);
+        const today = fixedToday;
 
         let testItems = [];
         let testBiblio = null;
