@@ -16,6 +16,11 @@ import { getDateFeedbackMessage } from "@koha-vue/lib/booking/markers.js";
 // toEffectiveRules, the same pipeline createDisableFunction uses).
 
 describe("getDateFeedbackMessage - effective maxPeriod", () => {
+    // Pin today before the fixtures so the past-date guard does not win.
+    beforeEach(() => {
+        cy.clock(new Date("2026-09-15T12:00:00Z").getTime(), ["Date"]);
+    });
+
     it("reports the trail-conflict reason, not a bogus max-period one, when maxPeriod is comfortably larger than the candidate range", () => {
         // issuelength=5, renewalsallowed=5, renewalperiod=5 -> effective
         // maxPeriod=30 (issuelength_with_renewals). Candidate end is only
