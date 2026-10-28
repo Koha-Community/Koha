@@ -396,6 +396,77 @@ describe("Booking Modal Date Picker Tests", () => {
             .should("not.have.class", "flatpickr-disabled");
     });
 
+    it("should keep bookings in the second visible month disabled after navigating back", () => {
+        const fixedToday = pinnedToday();
+        cy.clock(fixedToday.toDate(), ["Date"]);
+        const today = fixedToday.startOf("day");
+
+        // A short loan keeps the availability window tight: a one-month
+        // viewport then stops well before the second month's end
+        cy.task("insertSampleCirculationRules", {
+            item_type_id: testData.items[0].item_type_id,
+            rules: { issuelength: 3, renewalsallowed: 0, renewalperiod: 0 },
+        }).then(objects => {
+            testData.circulation_rules = objects.circulation_rules;
+        });
+
+        // Late in the second visible month, beyond what a one-month
+        // viewport's availability window reaches
+        const bookingStart = today.add(1, "month").date(25);
+        const bookingEnd = bookingStart.add(2, "day");
+
+        cy.task("insertSampleBooking", {
+            item: testData.items[0],
+            patron: testData.patron,
+            pickup_library_id: testData.libraries[0].library_id,
+            start_date: bookingStart.toISOString(),
+            end_date: bookingEnd.toISOString(),
+        });
+
+        setupModalForDateTesting({ skipItemSelection: true });
+
+        cy.vueSelectShouldBeEnabled("booking_item_id");
+        cy.vueSelect(
+            "booking_item_id",
+            testData.items[0].external_id,
+            testData.items[0].external_id
+        );
+        cy.wait("@getCirculationRules");
+
+        cy.get("#booking_period").should("not.be.disabled");
+        cy.get("#booking_period").as("flatpickrInput");
+        cy.get("@flatpickrInput").openFlatpickr();
+
+        cy.intercept("GET", "/api/v1/biblios/*/booking_availability*").as(
+            "getAvailability"
+        );
+        cy.get("@flatpickrInput").then($input =>
+            $input[0]._flatpickr.changeMonth(1)
+        );
+        cy.wait("@getAvailability");
+        cy.get("@flatpickrInput").then($input =>
+            $input[0]._flatpickr.changeMonth(-1)
+        );
+        // Both visible months must be fetched again, through the booking
+        cy.wait("@getAvailability").then(({ request }) => {
+            const toDate = new URL(request.url).searchParams.get("to_date");
+            expect(toDate >= bookingEnd.format("YYYY-MM-DD"), request.url).to.be
+                .true;
+        });
+
+        // Query the cell directly: getFlatpickrDate would navigate the
+        // booked month into first position
+        for (
+            let date = bookingStart;
+            date.isSameOrBefore(bookingEnd);
+            date = date.add(1, "day")
+        ) {
+            cy.get(
+                `.flatpickr-day:not(.hidden)[aria-label="${date.format("MMMM D, YYYY")}"]`
+            ).should("have.class", "flatpickr-disabled");
+        }
+    });
+
     it("should handle date range validation correctly", () => {
         setupModalForDateTesting();
 

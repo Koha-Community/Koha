@@ -637,17 +637,28 @@ function onCalendarLeave(): void {
 /**
  * Attach feedback behavior after Flatpickr creates its calendar.
  *
- * @param {{calendarContainer?: HTMLElement, config?: {showMonths?: number}}} instance Flatpickr instance.
+ * @param {{calendarContainer?: HTMLElement, config?: {showMonths?: number}, currentYear: number, currentMonth: number}} instance Flatpickr instance.
  * @returns {void}
  */
 function onPickerReady(instance: {
     calendarContainer?: HTMLElement;
     config?: { showMonths?: number };
+    currentYear: number;
+    currentMonth: number;
 }): void {
     if (!instance.calendarContainer) return;
     calendarContainer = instance.calendarContainer;
-    calendarMonths.value = instance.config?.showMonths || 1;
+    const months = instance.config?.showMonths || 1;
+    const monthsGrew = months > calendarMonths.value;
+    calendarMonths.value = months;
     observeCalendarWidth(instance.calendarContainer);
+    // A rebuild for a wider calendar can reveal a month not yet fetched
+    if (monthsGrew) {
+        onUpdateViewport({
+            year: instance.currentYear,
+            month: instance.currentMonth,
+        });
+    }
 }
 
 onMounted(() => {
@@ -896,14 +907,14 @@ function onDayLeave(): void {
 }
 
 /**
- * Refresh booking context for a newly visible calendar month.
+ * Refresh booking context for the visible calendar months.
  *
- * @param {{year: number, month: number}} vp Visible calendar month.
+ * @param {{year: number, month: number}} vp First visible calendar month.
  * @returns {void}
  */
 function onUpdateViewport(vp: { year: number; month: number }): void {
     const start = new Date(vp.year, vp.month, 1);
-    const end = new Date(vp.year, vp.month + 1, 0);
+    const end = new Date(vp.year, vp.month + calendarMonths.value, 0);
     store.changeViewport({ start, end }).catch((error: Error) => {
         if (error?.name !== "AbortError") {
             store.setError(formatApiError(error), "api");
