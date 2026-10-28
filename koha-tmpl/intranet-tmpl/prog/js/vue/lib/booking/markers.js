@@ -95,8 +95,6 @@ export function getBookingMarkersForDate(
     for (const [item_id, reasons] of Object.entries(entry)) {
         const item = findItem(item_id);
         for (const reason of reasons) {
-            // Map IntervalTree/Sweep reasons to CSS class names
-            // lead and trail periods keep their original names for CSS
             const type = MARKER_TYPE_MAP[reason] ?? reason;
             markers.push({
                 /** @type {import('./types/bookings.d.ts').MarkerType} */
