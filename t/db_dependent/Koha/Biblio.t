@@ -2606,6 +2606,8 @@ subtest 'check_booking tests' => sub {
             $builder->build_sample_item( { biblionumber => $edit_biblio->biblionumber, bookable => 1 } );
         my $unrelated_item =
             $builder->build_sample_item( { biblionumber => $edit_biblio->biblionumber, bookable => 0 } );
+        my $unbooked_item =
+            $builder->build_sample_item( { biblionumber => $edit_biblio->biblionumber, bookable => 0 } );
         my $edit_start = dt_from_string()->add( days => 10 );
         my $edit_end   = $edit_start->clone->add( days => 7 );
         my $booking    = $builder->build_object(
@@ -2652,7 +2654,7 @@ subtest 'check_booking tests' => sub {
                     start_date => $edit_start->clone->add( days => 1 ),
                     end_date   => $edit_end->clone->add( days => 1 ),
                     booking_id => $booking->booking_id,
-                    item_id    => $unrelated_item->itemnumber,
+                    item_id    => $unbooked_item->itemnumber,
                 }
             ),
             0,
