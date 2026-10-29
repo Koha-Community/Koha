@@ -208,17 +208,15 @@ $(document).ready(function () {
                     "background-color": "",
                     border: "",
                 });
-            if ($(this).parent().siblings().find(".text-success").length > 0) {
-                $(this).closest(".list-group-item").css({
-                    "background-color": "rgba(0, 128, 0, 0.1)",
-                    border: "1px solid rgba(0, 128, 0, 0.7)",
-                });
-            } else if (
-                $(this).parent().siblings().find(".text-warning").length > 0
-            ) {
+            if ($(this).parent().siblings().find(".text-warning").length > 0) {
                 $(this).closest(".list-group-item").css({
                     "background-color": "rgba(255, 228, 0, 0.1)",
                     border: "1px solid rgba(255, 228, 0, 0.7)",
+                });
+            } else {
+                $(this).closest(".list-group-item").css({
+                    "background-color": "rgba(0, 128, 0, 0.1)",
+                    border: "1px solid rgba(0, 128, 0, 0.7)",
                 });
             }
         }
