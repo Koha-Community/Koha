@@ -17,7 +17,7 @@
                 "dt_count":
                     "[% tnx('{count} item', '{count} items', d.count, { count = d.count }) | $raw %]",
                 "dt_is_shared":
-                    "[% IF d.public %]<span>Public</span>[% ELSIF d.is_shared %]<span>Shared</span>[% ELSE %]<span>Private</span>[% END %]",
+                    "[% IF d.public %]<span>[% t('Public') | $raw %]</span>[% ELSIF d.is_shared %]<span>[% t('Shared') | $raw %]</span>[% ELSE %]<span>[% t('Private') | $raw %]</span>[% END %]",
                 "dt_owner":
                     "<a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% d.owner | html %]'>[% d.firstname | html | $To %] [% d.surname | html | $To %]</a>",
                 "dt_sortby":
