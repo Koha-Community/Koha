@@ -75,7 +75,7 @@ Foreign key to the letters table
 
   data_type: 'enum'
   default_value: 'pending'
-  extra: {list => ["sent","pending","failed","deleted"]}
+  extra: {list => ["sent","pending","failed","deleted","printed"]}
   is_nullable: 0
 
 =head2 time_queued
@@ -144,7 +144,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "enum",
     default_value => "pending",
-    extra => { list => ["sent", "pending", "failed", "deleted"] },
+    extra => { list => ["sent", "pending", "failed", "deleted", "printed"] },
     is_nullable => 0,
   },
   "time_queued",
@@ -244,8 +244,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-09-18 14:26:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:eJFHJ3sXu+kLt+uW4ILPIA
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-10-29 10:07:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wVk9qD4PE8IxNvx1Dds/SA
 
 =head2 koha_object_class
 
