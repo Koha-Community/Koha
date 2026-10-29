@@ -305,7 +305,7 @@
                         <label for="rentalcharge">Rental charge: </label>
                     </div>
                     <div class="fg-input">
-                        <input type="text" id="rentalcharge" name="rentalcharge" value="[% itemtype.rentalcharge | $Price on_editing => 1 %]" />
+                        <input type="text" id="rentalcharge" name="rentalcharge" value="[% itemtype.rentalcharge | $Price on_editing => 1 %]" min="0" />
                     </div>
                     <div class="hint">This fee is charged once per checkout/renewal per item</div>
                 </div>
