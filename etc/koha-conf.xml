@@ -349,9 +349,9 @@
      - GoogleJackets:
          script-src https://books.google.com
          img-src https://books.google.com
-     - OpenLibraryCovers (recent covers are redirected to archive.org):
+     - OpenLibraryCovers (older covers are redirected to archive.org):
          script-src https://openlibrary.org
-         img-src https://covers.openlibrary.org https://*.us.archive.org
+         img-src https://covers.openlibrary.org https://archive.org https://*.us.archive.org
      - SyndeticsCoverImages:
          img-src https://secure.syndetics.com
      - OpacCoce: the Coce server (queried with JSONP, so script-src; connect-src
@@ -359,10 +359,10 @@
        which are those of its providers (above):
          script-src https://coce.example.org
          connect-src 'self' https://coce.example.org
-         img-src https://books.google.com https://images-na.ssl-images-amazon.com https://covers.openlibrary.org https://*.us.archive.org
+         img-src https://books.google.com https://images-na.ssl-images-amazon.com https://covers.openlibrary.org https://archive.org https://*.us.archive.org
 
    Example of an OPAC policy allowing Amazon and Coce covers:
-        <csp_header_value>default-src 'self'; script-src 'self' 'nonce-_CSP_NONCE_' https://coce.example.org; style-src 'self' 'nonce-_CSP_NONCE_'; style-src-attr 'unsafe-inline'; connect-src 'self' https://coce.example.org; img-src 'self' data: https://images-na.ssl-images-amazon.com https://books.google.com https://covers.openlibrary.org https://*.us.archive.org; font-src 'self'; object-src 'none'</csp_header_value>
+        <csp_header_value>default-src 'self'; script-src 'self' 'nonce-_CSP_NONCE_' https://coce.example.org; style-src 'self' 'nonce-_CSP_NONCE_'; style-src-attr 'unsafe-inline'; connect-src 'self' https://coce.example.org; img-src 'self' data: https://images-na.ssl-images-amazon.com https://books.google.com https://covers.openlibrary.org https://archive.org https://*.us.archive.org; font-src 'self'; object-src 'none'</csp_header_value>
 
    To enable violation reporting, create your own csp_header_value including
     'report-to' pointing to csp-violations and add 'report-uri'.
