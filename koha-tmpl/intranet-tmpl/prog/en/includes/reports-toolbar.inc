@@ -52,7 +52,7 @@
                                         data-action="guided_reports.pl"
                                         data-method="post"
                                         data-op="cud-delete"
-                                        data-confirmation-msg="Are you sure you want to delete this report?"
+                                        data-confirmation-msg="[% t('Are you sure you want to delete this report?') | html %]"
                                         >Delete</a
                                     >
                                 </form>
