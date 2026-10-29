@@ -21,7 +21,7 @@
                 "dt_owner":
                     "<a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% d.owner | html %]'>[% d.firstname | html | $To %] [% d.surname | html | $To %]</a>",
                 "dt_sortby":
-                    [% IF d.sortby == "author" %]"<span>Author</span>"[% ELSIF d.sortby == "copyrightdate" %]"<span>Year</span>"[% ELSIF d.sortby == "itemcallnumber" %]"<span>Call number</span>"[% ELSIF d.sortby == "dateadded" %]"<span>Date added</span>"[% ELSE %]"<span>Title</span>"[% END %],
+                    [% PROCESS sortby_label sortby=d.sortby %],
                 "dt_created_on":
                     "[% d.created_on | $KohaDates %]",
                 "dt_modification_time":
@@ -32,6 +32,21 @@
         [% END %]
     ]
 }
+
+[% BLOCK sortby_label -%]
+[%~ IF sortby == "author" ~%]
+    [%~ label = t("Author") ~%]
+[%~ ELSIF sortby == "copyrightdate" ~%]
+    [%~ label = t("Year") ~%]
+[%~ ELSIF sortby == "itemcallnumber" ~%]
+    [%~ label = t("Call number") ~%]
+[%~ ELSIF sortby == "dateadded" ~%]
+    [%~ label = t("Date added") ~%]
+[%~ ELSE ~%]
+    [%~ label = t("Title") ~%]
+[%~ END ~%]
+"[%~ To.json('<span>' _ label _ '</span>') | $raw ~%]"
+[%~ END %]
 
 [% BLOCK action_form -%]
 [%~ SET action_block = '' ~%]
