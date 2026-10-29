@@ -25,6 +25,7 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Notice::Messages;
 use Koha::Notice::Templates;
+use Koha::Patrons;
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -70,17 +71,21 @@ my $limit    = 1000;
 my $matching = Koha::Notice::Messages->search_limited( {%where} );
 my $notices  = $matching->search( undef, { order_by => { -desc => 'me.time_queued' }, rows => $limit } );
 
+# There is nothing to filter on when the notices of the patrons of a single library can be seen
+my @visible_libraries = Koha::Patrons->find($loggedinuser)->libraries_where_can_see_patrons;
+
 $template->param(
-    notices      => $notices,
-    limit        => $limit,
-    truncated    => $matching->count > $limit ? 1 : 0,
-    letter_code  => $letter_code,
-    categorycode => $categorycode,
-    branchcode   => $branchcode,
-    from         => $from,
-    to           => $to,
-    status       => $status,
-    letters      => Koha::Notice::Templates->search(
+    show_library_filter => ( !@visible_libraries || @visible_libraries > 1 ) ? 1 : 0,
+    notices             => $notices,
+    limit               => $limit,
+    truncated           => $matching->count > $limit ? 1 : 0,
+    letter_code         => $letter_code,
+    categorycode        => $categorycode,
+    branchcode          => $branchcode,
+    from                => $from,
+    to                  => $to,
+    status              => $status,
+    letters             => Koha::Notice::Templates->search(
         {}, { select => [ 'name', 'code' ], group_by => [ 'name', 'code' ], order_by => { -asc => 'code' } }
     ),
 );

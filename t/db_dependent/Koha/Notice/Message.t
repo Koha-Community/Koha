@@ -20,10 +20,11 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 8;
+use Test::More tests => 9;
 
 use C4::Letters qw( GetPreparedLetter EnqueueLetter );
 
+use Koha::ActionLogs;
 use Koha::Database;
 use Koha::Library::Group;
 use Koha::Notice::Messages;
@@ -433,6 +434,62 @@ subtest 'template() tests' => sub {
     );
 
     is( $message->template, undef, 'Returns undef if no template used for message' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'can_be_printed() and mark_as_printed() tests' => sub {
+
+    plan tests => 7;
+
+    $schema->storage->txn_begin;
+
+    my $message = sub {
+        my ($value) = @_;
+        return $builder->build_object( { class => 'Koha::Notice::Messages', value => $value } );
+    };
+
+    # can_be_printed
+    my %printable = (
+        sent          => { message_transport_type => 'email', status => 'sent' },
+        failed        => { message_transport_type => 'sms',   status => 'failed' },
+        printed       => { message_transport_type => 'print', status => 'printed' },
+        pending_print => { message_transport_type => 'print', status => 'pending' },
+    );
+    ok(
+        $message->( { letter_code => 'HOLD_SLIP', %{ $printable{sent} } } )->can_be_printed,
+        'A sent email can be printed'
+    );
+    ok(
+        $message->( { letter_code => 'HOLD_SLIP', %{ $printable{failed} } } )->can_be_printed,
+        'A failed sms can be printed'
+    );
+    ok(
+        $message->( { letter_code => 'HOLD_SLIP', %{ $printable{pending_print} } } )->can_be_printed,
+        'A pending print notice can be printed'
+    );
+    ok(
+        !$message->( { letter_code => 'HOLD_SLIP', message_transport_type => 'email', status => 'pending' } )
+            ->can_be_printed,
+        'A pending email cannot be printed'
+    );
+
+    # mark_as_printed
+    t::lib::Mocks::mock_preference( 'NoticesLog', 1 );
+    my $to_print = $message->( { letter_code => 'HOLD_SLIP', message_transport_type => 'email', status => 'sent' } );
+    $to_print->mark_as_printed;
+    is( $to_print->get_from_storage->status, 'printed', 'The status is set to printed' );
+    is(
+        Koha::ActionLogs->search( { module => 'NOTICES', action => 'PRINT', object => $to_print->message_id } )->count,
+        1, 'It is logged when the notices are logged'
+    );
+    t::lib::Mocks::mock_preference( 'NoticesLog', 0 );
+    my $unlogged = $message->( { letter_code => 'HOLD_SLIP', status => 'sent' } );
+    $unlogged->mark_as_printed;
+    is(
+        Koha::ActionLogs->search( { module => 'NOTICES', action => 'PRINT', object => $unlogged->message_id } )->count,
+        0, 'It is not logged when the notices are not logged'
+    );
 
     $schema->storage->txn_rollback;
 };

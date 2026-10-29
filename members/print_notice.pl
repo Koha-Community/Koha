@@ -40,20 +40,22 @@ unless ( C4::Context->preference('NoticesManagement') ) {
     exit;
 }
 
-# Only POSTs, with a valid CSRF token, can have a 'cud-' operation: displaying the
-# notices must not change anything, marking them as printed is an explicit action.
+# Displaying notices must not change them. Marking them as printed does, so it needs a POST with
+# a valid CSRF token and the 'cud-print' operation.
 my $op          = $input->param('op') || q{};
 my @message_ids = grep { /^\d+$/ } $input->multi_param('message_ids');
 
 # Restrict to the notices of the patrons the logged in user is allowed to see,
-# unknown or unauthorised ids are ignored
-my $messages =
-    Koha::Notice::Messages->search_limited( { 'me.message_id' => \@message_ids }, { order_by => 'me.message_id' } );
+# unknown or unauthorised ids are ignored, as are those that cannot be printed
+my @messages = grep { $_->can_be_printed } Koha::Notice::Messages->search_limited(
+    { 'me.message_id' => \@message_ids },
+    { order_by        => 'me.message_id' }
+)->as_list;
 
 my $types_seen = {};
 my @scoped_styles;
 my @notices;
-while ( my $message = $messages->next ) {
+foreach my $message (@messages) {
     push @notices, {
         content => $message->content,
         is_html => $message->is_html,
@@ -66,9 +68,9 @@ while ( my $message = $messages->next ) {
         push @scoped_styles, $message->scoped_style;
         $types_seen->{ $message->message_transport_type } = 1;
     }
-
-    $message->update( { status => 'sent' } ) if $op eq 'cud-print';
 }
+
+$_->mark_as_printed for grep { $op eq 'cud-print' } @messages;
 
 $template->param(
     notices    => \@notices,

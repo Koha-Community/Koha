@@ -18,6 +18,7 @@ package Koha::Notice::Message;
 use Modern::Perl;
 
 use C4::Context;
+use C4::Log qw( logaction );
 use Koha::Database;
 use Koha::Notice::Template;
 use Koha::Patron;
@@ -87,6 +88,40 @@ EOS
         $wrapped .= "</div>";
     }
     return $wrapped;
+}
+
+=head3 can_be_printed
+
+    if ( $message->can_be_printed ) { ... }
+
+Returns true if the message can be printed from the notices pages: it must not be pending
+(waiting to be sent), unless it is a print notice that is waiting to be printed.
+
+=cut
+
+sub can_be_printed {
+    my ($self) = @_;
+
+    return 1 if $self->status ne 'pending';
+    return $self->message_transport_type eq 'print' ? 1 : 0;
+}
+
+=head3 mark_as_printed
+
+    $message->mark_as_printed;
+
+Set the status of the message to 'printed', and log it if the notices are logged.
+
+=cut
+
+sub mark_as_printed {
+    my ($self) = @_;
+
+    $self->update( { status => 'printed' } );
+    logaction( 'NOTICES', 'PRINT', $self->message_id, 'message_queue' )
+        if C4::Context->preference('NoticesLog');
+
+    return $self;
 }
 
 =head3 restrict_patron_when_notice_fails

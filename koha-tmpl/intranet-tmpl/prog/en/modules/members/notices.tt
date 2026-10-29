@@ -56,7 +56,7 @@
 
     [% SET can_print = CAN_user_tools_view_generated_notices && Koha.Preference('NoticesManagement') %]
     [% IF can_print %]
-        <div class="alert alert-warning">Printing a notice will mark it as sent.</div>
+        <div class="alert alert-warning">Printing a notice will mark it as printed.</div>
     [% END %]
 
     [% IF ( QUEUED_MESSAGES ) %]
@@ -69,7 +69,6 @@
             <form id="print_multiple" action="/cgi-bin/koha/members/print_notice.pl" method="post" target="_blank">
                 [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="op" value="cud-print" />
-
                 <table id="noticestable">
                     <thead>
                         <tr>
@@ -88,10 +87,10 @@
                             <tr>
                                 [% IF can_print %]
                                     <td>
-                                        [% IF QUEUED_MESSAGE.status == 'pending' %]
-                                            <input type="checkbox" name="message_ids" value="[% QUEUED_MESSAGE.message_id | html %]" disabled="disabled" title="Cannot print a pending notice" />
-                                        [% ELSE %]
+                                        [% IF QUEUED_MESSAGE.can_be_printed %]
                                             <input type="checkbox" name="message_ids" value="[% QUEUED_MESSAGE.message_id | html %]" />
+                                        [% ELSE %]
+                                            <input type="checkbox" name="message_ids" value="[% QUEUED_MESSAGE.message_id | html %]" disabled="disabled" title="This notice cannot be printed" />
                                         [% END %]
                                     </td>
                                 [% END %]
@@ -101,6 +100,7 @@
                                         class="notice-title"
                                         data-noticeid="[% QUEUED_MESSAGE.message_id | html %]"
                                         data-status="[% QUEUED_MESSAGE.status | html %]"
+                                        data-printable="[% IF QUEUED_MESSAGE.can_be_printed %]1[% ELSE %]0[% END %]"
                                         data-borrowernumber="[% borrowernumber | html %]"
                                         href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber | uri %]&amp;noticeid=[% QUEUED_MESSAGE.message_id | uri %]"
                                         >[% QUEUED_MESSAGE.subject | html %]</a
@@ -129,6 +129,8 @@
                                         <span>failed</span>
                                     [% ELSIF ( QUEUED_MESSAGE.status == 'deleted' ) %]
                                         <span>deleted</span>
+                                    [% ELSIF ( QUEUED_MESSAGE.status == 'printed' ) %]
+                                        <span>printed</span>
                                     [% ELSE %]
                                         [% QUEUED_MESSAGE.status | html %]
                                     [% END %]
@@ -174,7 +176,7 @@
                                 </td>
                                 [% IF can_print %]
                                     <td class="actions">
-                                        [% IF QUEUED_MESSAGE.status != 'pending' %]
+                                        [% IF QUEUED_MESSAGE.can_be_printed %]
                                             <button type="button" class="btn btn-default btn-xs print" data-noticeid="[% QUEUED_MESSAGE.message_id | html %]"><i class="fa fa-print"></i> Print</button>
                                         [% END %]
                                     </td>
@@ -261,8 +263,8 @@
                     $('#resend_notice input[name="borrowernumber"]').val(borrowerNumber);
                     $('#resend_notice input[name="message_id"]').val(noticeid);
                     $("#resend_notice").removeClass("d-none");
-                    $("#noticeModal .print-notice-modal").removeClass("d-none");
                 }
+                $("#noticeModal .print-notice-modal").toggleClass("d-none", $(this).data("printable") !== 1);
                 $("#noticeModal").data("noticeid", noticeid);
                 $("#noticeModalLabel").text(title);
 

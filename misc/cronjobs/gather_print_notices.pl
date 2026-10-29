@@ -183,7 +183,7 @@ sub print_notices {
                 C4::Letters::_set_message_status(
                     {
                         message_id => $message->{'message_id'},
-                        status     => 'sent'
+                        status     => 'printed'
                     }
                 );
             }
@@ -349,7 +349,7 @@ Define the output directory where the files will be generated.
 =item B<--send|--nosend>
 
 After files have been generated, messages status is changed from 'pending' to
-'sent'. This is the default action, without this parameter or with --send.
+'printed'. This is the default action, without this parameter or with --send.
 Using --nosend, the message status is not changed.
 
 =item B<-s|--split>

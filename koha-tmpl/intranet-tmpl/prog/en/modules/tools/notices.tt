@@ -53,7 +53,7 @@
 
                 <h1>Notices management</h1>
 
-                <div class="alert alert-warning">Printing a notice will mark it as sent.</div>
+                <div class="alert alert-warning">Printing a notice will mark it as printed.</div>
 
                 [% IF truncated %]
                     <div class="alert alert-info">Only the most recent [% limit | html %] notices matching the search are shown, use the search filters to narrow the results.</div>
@@ -86,7 +86,13 @@
                                 <tbody>
                                     [% FOREACH notice IN notices %]
                                         <tr>
-                                            <td><input type="checkbox" name="message_ids" value="[% notice.message_id | html %]" /></td>
+                                            <td>
+                                                [% IF notice.can_be_printed %]
+                                                    <input type="checkbox" name="message_ids" value="[% notice.message_id | html %]" />
+                                                [% ELSE %]
+                                                    <input type="checkbox" name="message_ids" value="[% notice.message_id | html %]" disabled="disabled" title="This notice cannot be printed" />
+                                                [% END %]
+                                            </td>
                                             <td data-order="[% notice.time_queued | html %]">[% notice.time_queued | $KohaDates with_hours = 1 %]</td>
                                             <td>[% INCLUDE 'patron-title.inc' patron=notice.patron hide_patron_infos_if_needed=1 %]</td>
                                             <td>
@@ -94,6 +100,7 @@
                                                     class="notice-title"
                                                     data-noticeid="[% notice.message_id | html %]"
                                                     data-status="[% notice.status | html %]"
+                                                    data-printable="[% IF notice.can_be_printed %]1[% ELSE %]0[% END %]"
                                                     data-borrowernumber="[% notice.borrowernumber | html %]"
                                                     href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% notice.borrowernumber | uri %]&amp;noticeid=[% notice.message_id | uri %]"
                                                     >[% notice.subject | html %]</a
@@ -122,6 +129,8 @@
                                                     <span>failed</span>
                                                 [% ELSIF ( notice.status == 'deleted' ) %]
                                                     <span>deleted</span>
+                                                [% ELSIF ( notice.status == 'printed' ) %]
+                                                    <span>printed</span>
                                                 [% ELSE %]
                                                     [% notice.status | html %]
                                                 [% END %]
@@ -166,7 +175,7 @@
                                                 [% END %]
                                             </td>
                                             <td class="actions"
-                                                ><button type="button" class="btn btn-default btn-xs print" data-noticeid="[% notice.message_id | html %]"><i class="fa fa-print"></i> Print</button></td
+                                                >[% IF notice.can_be_printed %]<button type="button" class="btn btn-default btn-xs print" data-noticeid="[% notice.message_id | html %]"><i class="fa fa-print"></i> Print</button>[% END %]</td
                                             >
                                         </tr>
                                     [% END %]
@@ -188,19 +197,21 @@
                     <form id="notices-search" action="/cgi-bin/koha/tools/notices.pl" method="get">
                         <h3>Search filters</h3>
                         <ol>
-                            <li>
-                                <label for="branchcode">Library:</label>
-                                <select id="branchcode" name="branchcode">
-                                    <option value="">All libraries</option>
-                                    [% FOREACH branch IN Branches.all( selected => branchcode ) %]
-                                        [% IF ( branch.selected ) %]
-                                            <option selected="selected" value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
-                                        [% ELSE %]
-                                            <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
+                            [% IF show_library_filter %]
+                                <li>
+                                    <label for="branchcode">Patron library:</label>
+                                    <select id="branchcode" name="branchcode">
+                                        <option value="">All libraries</option>
+                                        [% FOREACH branch IN Branches.all( selected => branchcode ) %]
+                                            [% IF ( branch.selected ) %]
+                                                <option selected="selected" value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
+                                            [% ELSE %]
+                                                <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
+                                            [% END %]
                                         [% END %]
-                                    [% END %]
-                                </select>
-                            </li>
+                                    </select>
+                                </li>
+                            [% END %]
                             <li>
                                 <label for="letter_code">Notice:</label>
                                 <select id="letter_code" name="letter_code">
@@ -222,6 +233,7 @@
                                     <option value="pending" [% IF status == 'pending' %]selected="selected"[% END %]>Pending</option>
                                     <option value="failed" [% IF status == 'failed' %]selected="selected"[% END %]>Failed</option>
                                     <option value="deleted" [% IF status == 'deleted' %]selected="selected"[% END %]>Deleted</option>
+                                    <option value="printed" [% IF status == 'printed' %]selected="selected"[% END %]>Printed</option>
                                 </select>
                             </li>
                             <li>
@@ -292,7 +304,7 @@
                             <button type="submit" id="resend_notice_button" class="btn btn-default"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Resend</button>
                         </form>
                     [% END %]
-                    <button type="button" class="print-notice-modal btn btn-primary"><i class="fa fa-print"></i> Print</button>
+                    <button type="button" class="print-notice-modal btn btn-primary d-none"><i class="fa fa-print"></i> Print</button>
                     <button type="button" class="btn btn-default deny cancel" data-bs-dismiss="modal"><i class="fa fa-remove"></i> Close</button>
                 </div>
             </div>
@@ -333,6 +345,7 @@
                         $('#resend_notice input[name="message_id"]').val(noticeid);
                         $("#resend_notice").removeClass("d-none");
                     }
+                    $("#noticeModal .print-notice-modal").toggleClass("d-none", $(this).data("printable") !== 1);
                     $("#noticeModal").data("noticeid", noticeid);
                     $("#noticeModalLabel").text(title);
 
@@ -349,6 +362,7 @@
                     $('#resend_notice input[name="borrowernumber"]').val("");
                     $('#resend_notice input[name="message_id"]').val("");
                     $("#resend_notice").addClass("d-none");
+                    $("#noticeModal .print-notice-modal").addClass("d-none");
                     $("#noticeModalLabel").text("");
                     $("#noticeModal .modal-body").html("");
                 });
@@ -364,7 +378,7 @@
 
                 $(".select_all").click(function (e) {
                     e.preventDefault();
-                    $("input[name='message_ids']").each(function () {
+                    $("input[name='message_ids']:not(:disabled)").each(function () {
                         $(this).prop("checked", true);
                     });
                 });
