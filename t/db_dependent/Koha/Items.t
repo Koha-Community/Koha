@@ -3019,7 +3019,7 @@ subtest 'filter_by_available' => sub {
 };
 
 subtest 'filters on a limited resultset' => sub {
-    plan tests => 6;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -3049,6 +3049,14 @@ subtest 'filters on a limited resultset' => sub {
     is(
         $newest_two->filter_by_checked_out->count, 0,
         "filter_by_checked_out only considers the items an ordered resultset with a limit contains"
+    );
+
+    # The two oldest items include the checked out one, so only the second oldest is available
+    my $oldest_two = $ordered_biblio->items->search( {}, { order_by => 'itemnumber', rows => 2 } );
+    is_deeply(
+        [ map { $_->itemnumber } $oldest_two->filter_by_available->as_list ],
+        [ $ordered_items[1]->itemnumber ],
+        "filter_by_available only considers the items a resultset with a limit contains"
     );
 
     $schema->storage->txn_rollback;
