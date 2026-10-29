@@ -56,26 +56,44 @@ return {
         }
 
         # Backfill: create checkin rows from old_issues
+        #
+        # Only returns that recorded where they took place (checkin_library,
+        # added by bug 33641) can be backfilled, and only if that library
+        # still exists. The checkout library is not a substitute: it says
+        # nothing about the checkin. old_issues doesn't record who processed
+        # the return (issuer_id is the staff member who did the checkout), so
+        # user_id is left empty.
         my ($backfilled) = $dbh->selectrow_array(q{ SELECT COUNT(*) FROM checkins WHERE checkout_id IS NOT NULL });
         unless ($backfilled) {
-            $dbh->do(
+            my $count = $dbh->do(
                 q{
-                INSERT INTO checkins (item_id, user_id, library_id, timestamp, checkout_id)
+                INSERT INTO checkins (item_id, library_id, timestamp, checkout_id)
                 SELECT oi.itemnumber,
-                       oi.issuer_id,
-                       COALESCE(oi.checkin_library, oi.branchcode),
+                       oi.checkin_library,
                        oi.returndate,
                        oi.issue_id
                 FROM old_issues oi
+                JOIN branches b ON b.branchcode = oi.checkin_library
                 WHERE oi.returndate IS NOT NULL
                   AND oi.itemnumber IS NOT NULL
-                  AND (oi.checkin_library IS NOT NULL OR oi.branchcode IS NOT NULL)
             }
             );
 
-            my $count = $dbh->rows;
             say $out "Backfilled $count checkin records from old_issues"
                 if $count > 0;
+
+            my ($skipped) = $dbh->selectrow_array(
+                q{
+                SELECT COUNT(*)
+                FROM old_issues oi
+                LEFT JOIN branches b ON b.branchcode = oi.checkin_library
+                WHERE oi.returndate IS NOT NULL
+                  AND oi.itemnumber IS NOT NULL
+                  AND b.branchcode IS NULL
+            }
+            );
+            say_info( $out, "Skipped $skipped old_issues with no recorded checkin library, or a deleted one" )
+                if $skipped > 0;
         }
     },
 };
