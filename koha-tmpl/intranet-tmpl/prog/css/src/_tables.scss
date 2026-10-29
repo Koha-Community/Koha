@@ -372,12 +372,8 @@ tr {
 }
 
 .selections-table {
-    tr {
-        &:hover {
-            td {
-                background-color: #FFFF99;
-            }
-        }
+    tbody tr:not(.warn, .ok, .selected-row, .highlighted-row):hover td:not(.bg-danger, .bg-warning, .bg-info, .bg-success, .bg-primary) {
+        background-color: #FFFF99;
     }
 }
 
@@ -418,18 +414,18 @@ caption {
 
 tbody {
     tr {
-        &:nth-child( odd ):not( .dtrg-group, .active, .ok, .highlighted-row, .selected-row, .previous ) {
+        &:where( :nth-child( odd ):not( .dtrg-group, .active, .ok, .highlighted-row, .selected-row, .previous ) ) {
             td {
-                &:not( .bg-danger, .bg-warning, .bg-info, .bg-success, .bg-primary, .highlighted-row ) {
+                &:where( :not( .bg-danger, .bg-warning, .bg-info, .bg-success, .bg-primary, .highlighted-row ) ) {
                     background-color: $table-odd-row;
                 }
             }
         }
 
         &.onissue {
-            &:nth-child( odd ):not( .dtrg-group, .active, .ok ) {
+            &:where( :nth-child( odd ):not( .dtrg-group, .active, .ok ) ) {
                 td {
-                    &:not( .bg-danger, .bg-warning, .bg-info, .bg-success, .bg-primary ) {
+                    &:where( :not( .bg-danger, .bg-warning, .bg-info, .bg-success, .bg-primary ) ) {
                         background-color: #F9FAE0;
                     }
                 }
