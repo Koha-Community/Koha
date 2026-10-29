@@ -85,6 +85,47 @@ describe("i18n.js", () => {
         });
     });
 
+    it("Accepts a count given as a string", () => {
+        // Plural rule with a strict-equality sensitive comparison
+        const de_locale_data = {
+            Koha: {
+                "": {
+                    Language: " de-DE",
+                    "Plural-Forms": " nplurals=2; plural=(n != 1);",
+                },
+                "{count} item": [
+                    "{count} items",
+                    "{count} Exemplar",
+                    "{count} Exemplare",
+                ],
+            },
+        };
+        cy.visit("/cgi-bin/koha/mainpage.pl", {
+            onBeforeLoad(win) {
+                win.json_locale_data = de_locale_data;
+            },
+        });
+        cy.window().then(win => {
+            // e.g. the "X-Total-Count" header value
+            ["1", 1].forEach(count => {
+                expect(
+                    win.__n("{count} item", "{count} items", count),
+                    `count=${typeof count} ${count}`
+                ).to.eq("{count} Exemplar");
+            });
+            ["0", "2", "21"].forEach(count => {
+                expect(
+                    win.__n("{count} item", "{count} items", count),
+                    `count=${count}`
+                ).to.eq("{count} Exemplare");
+            });
+            // Untranslated plural string
+            expect(win.__n("{count} unknown", "{count} unknowns", "1")).to.eq(
+                "{count} unknown"
+            );
+        });
+    });
+
     it("Uses the English plural forms without locale data", () => {
         cy.visit("/cgi-bin/koha/mainpage.pl");
         cy.window().then(win => {

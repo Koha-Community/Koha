@@ -24,6 +24,9 @@
     function translate(msgctxt, msgid, msgid_plural, count) {
         var key = msgctxt ? msgctxt + "\u0004" + msgid : msgid;
         var translations = locale_data[key];
+        // Tannin compares with ===, a count such as the "X-Total-Count"
+        // header value is a string
+        if (count !== undefined) count = Number(count);
         // An untranslated string is in English: use the English plural forms
         if (count !== undefined && !(translations && translations[0])) {
             return count != 1 ? msgid_plural : msgid;
