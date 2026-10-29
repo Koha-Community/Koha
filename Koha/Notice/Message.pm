@@ -20,11 +20,15 @@ use Modern::Perl;
 use C4::Context;
 use C4::Log qw( logaction );
 use Koha::Database;
+use Koha::I18N qw( __ );
 use Koha::Notice::Template;
 use Koha::Patron;
 use Koha::Patron::Debarments qw( AddDebarment );
 
 use base qw(Koha::Object);
+
+# Notices that can carry a secret, whose content must not be displayed or printed
+our @SENSITIVE_LETTER_CODES = qw( PASSWORD_RESET STAFF_PASSWORD_RESET OPAC_REG_VERIFY 2FA_OTP_TOKEN );
 
 =head1 NAME
 
@@ -54,6 +58,8 @@ sub is_html {
 
   my $wrapped_content = $message->html_content;
 
+The content of messages that can carry a secret (see L</is_sensitive>) is replaced by a notice.
+
 This method returns the message content appropriately wrapped
 with HTML headers and CSS includes for HTML formatted notices.
 
@@ -66,8 +72,18 @@ sub html_content {
     my $content     = $self->content;
     my $stylesheets = $self->stylesheets;
 
+    my $is_html = $self->is_html;
+    if ( $self->is_sensitive ) {
+        $content =
+            '<p><em>'
+            . __(
+            'The content of this notice is not displayed because it can contain a password reset link or a security code.'
+            ) . '</em></p>';
+        $is_html = 1;
+    }
+
     my $wrapped;
-    if ( $self->is_html ) {
+    if ($is_html) {
         $wrapped = <<EOS;
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -90,18 +106,38 @@ EOS
     return $wrapped;
 }
 
+=head3 is_sensitive
+
+    if ( $message->is_sensitive ) { ... }
+
+Returns true if the content of the message must not be displayed or printed, as it can
+contain a secret: a password reset link, an account verification link or a security code.
+The message itself is still recorded, with its status.
+
+=cut
+
+sub is_sensitive {
+    my ($self) = @_;
+
+    my $letter_code = $self->letter_code;
+    return 0 unless defined $letter_code;
+    return ( grep { $_ eq $letter_code } @SENSITIVE_LETTER_CODES ) ? 1 : 0;
+}
+
 =head3 can_be_printed
 
     if ( $message->can_be_printed ) { ... }
 
-Returns true if the message can be printed from the notices pages: it must not be pending
-(waiting to be sent), unless it is a print notice that is waiting to be printed.
+Returns true if the message can be printed from the notices pages: its content must not be
+sensitive, and it must not be pending (waiting to be sent), unless it is a print notice that
+is waiting to be printed.
 
 =cut
 
 sub can_be_printed {
     my ($self) = @_;
 
+    return 0 if $self->is_sensitive;
     return 1 if $self->status ne 'pending';
     return $self->message_transport_type eq 'print' ? 1 : 0;
 }

@@ -438,9 +438,9 @@ subtest 'template() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'can_be_printed() and mark_as_printed() tests' => sub {
+subtest 'is_sensitive(), can_be_printed() and mark_as_printed() tests' => sub {
 
-    plan tests => 7;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -448,6 +448,22 @@ subtest 'can_be_printed() and mark_as_printed() tests' => sub {
         my ($value) = @_;
         return $builder->build_object( { class => 'Koha::Notice::Messages', value => $value } );
     };
+
+    # is_sensitive
+    for my $code (qw( PASSWORD_RESET STAFF_PASSWORD_RESET OPAC_REG_VERIFY 2FA_OTP_TOKEN )) {
+        ok( $message->( { letter_code => $code } )->is_sensitive, "$code is sensitive" );
+    }
+    ok( !$message->( { letter_code => 'HOLD_SLIP' } )->is_sensitive, 'Other notices are not sensitive' );
+    ok( !$message->( { letter_code => undef } )->is_sensitive, 'Messages without a letter code are not sensitive' );
+
+    my $secret = $message->(
+        {
+            letter_code            => 'PASSWORD_RESET', content => 'https://example.org/reset?uniqueKey=SECRETKEY',
+            message_transport_type => 'email'
+        }
+    );
+    unlike( $secret->html_content, qr/SECRETKEY/, 'The content of a sensitive message is not in html_content' );
+    like( $secret->html_content, qr/not displayed/, 'html_content says why' );
 
     # can_be_printed
     my %printable = (
@@ -472,6 +488,11 @@ subtest 'can_be_printed() and mark_as_printed() tests' => sub {
         !$message->( { letter_code => 'HOLD_SLIP', message_transport_type => 'email', status => 'pending' } )
             ->can_be_printed,
         'A pending email cannot be printed'
+    );
+    ok(
+        !$message->( { letter_code => 'PASSWORD_RESET', message_transport_type => 'email', status => 'sent' } )
+            ->can_be_printed,
+        'A sensitive notice cannot be printed'
     );
 
     # mark_as_printed
