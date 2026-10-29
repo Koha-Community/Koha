@@ -365,6 +365,10 @@ sub filter_by_available {
         }
     );
 
+    # Only consider the items this set contains, otherwise a LIMIT on the set would be
+    # applied after the availability conditions and could pull in items from outside it
+    $available = $available->search( { 'me.itemnumber' => { -in => $self->_itemnumber_subquery } } );
+
     for my $not_available (
         $self->filter_by_checked_out, $self->filter_by_in_transit,
         $self->filter_by_has_holds,   $self->filter_by_has_recalls
