@@ -38,7 +38,6 @@ use Business::ISBN;
 use DateTime;
 use JSON         qw( encode_json );
 use Scalar::Util qw( blessed );
-use Try::Tiny    qw( catch try );
 use C4::Context;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
