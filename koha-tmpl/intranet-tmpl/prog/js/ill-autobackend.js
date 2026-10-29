@@ -30,6 +30,8 @@ $(document).ready(function () {
                 } else if (data.warning) {
                     _addWarningMessage(auto_backend.name, data);
                     auto_backend.available = 0;
+                } else {
+                    _addErrorMessage(auto_backend.name, __("Error"));
                 }
             },
             error: function (request, textstatus) {
