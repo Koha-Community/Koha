@@ -5,7 +5,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title
     >[% FILTER collapse %]
-        [% t("Editor") | html %]
+        [% tp("Bibliographic record editor", "Editor") | html %]
         &rsaquo; [% t("Cataloging") | html %] &rsaquo; [% t("Koha") | html %]
     [% END %]</title
 >
@@ -33,7 +33,7 @@
             <a href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cataloging</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>Editor</span>
+            <span>[% tp("Bibliographic record editor", "Editor") | html %]</span>
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
