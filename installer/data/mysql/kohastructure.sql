@@ -5140,7 +5140,7 @@ CREATE TABLE `message_queue` (
   `metadata` mediumtext DEFAULT NULL,
   `letter_code` varchar(64) DEFAULT NULL,
   `message_transport_type` varchar(20) NOT NULL,
-  `status` enum('sent','pending','failed','deleted','printed') NOT NULL DEFAULT 'pending',
+  `status` enum('sent','pending','failed','deleted','printed','converted') NOT NULL DEFAULT 'pending',
   `time_queued` timestamp NULL DEFAULT NULL,
   `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `to_address` longtext DEFAULT NULL,
