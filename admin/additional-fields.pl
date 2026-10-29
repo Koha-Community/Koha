@@ -57,13 +57,13 @@ if ( $op eq 'cud-add' ) {
     if ( $field_id and $name ) {
         my $updated    = 0;
         my $set_fields = {
-            name           => $name,
-            marcfield      => $marcfield,
-            marcfield_mode => $marcfield_mode,
-            searchable     => $searchable,
-            repeatable     => $repeatable,
+            name                      => $name,
+            authorised_value_category => $authorised_value_category,
+            marcfield                 => $marcfield,
+            marcfield_mode            => $marcfield_mode,
+            searchable                => $searchable,
+            repeatable                => $repeatable,
         };
-        $set_fields->{authorised_value_category} = $authorised_value_category if $authorised_value_category;
 
         eval {
             my $af = Koha::AdditionalFields->find($field_id);
@@ -77,14 +77,14 @@ if ( $op eq 'cud-add' ) {
     } elsif ($name) {
         my $inserted   = 0;
         my $set_fields = {
-            tablename      => $tablename,
-            name           => $name,
-            marcfield      => $marcfield,
-            marcfield_mode => $marcfield_mode,
-            searchable     => $searchable,
-            repeatable     => $repeatable,
+            tablename                 => $tablename,
+            name                      => $name,
+            authorised_value_category => $authorised_value_category,
+            marcfield                 => $marcfield,
+            marcfield_mode            => $marcfield_mode,
+            searchable                => $searchable,
+            repeatable                => $repeatable,
         };
-        $set_fields->{authorised_value_category} = $authorised_value_category if $authorised_value_category;
 
         eval {
             my $af = Koha::AdditionalField->new($set_fields);
