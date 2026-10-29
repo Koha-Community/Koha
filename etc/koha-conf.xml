@@ -354,6 +354,10 @@
          img-src https://covers.openlibrary.org https://archive.org https://*.us.archive.org
      - SyndeticsCoverImages:
          img-src https://secure.syndetics.com
+     - OPACCustomCoverImages: the host of CustomCoverImagesURL and the hosts it
+       redirects to, for instance for https://images.example.org/{isbn}.jpg
+       redirected to cdn.example.org:
+         img-src https://images.example.org https://cdn.example.org
      - OpacCoce: the Coce server (queried with JSONP, so script-src; connect-src
        if it is queried with fetch), and the hosts of the images it returns,
        which are those of its providers (above):
