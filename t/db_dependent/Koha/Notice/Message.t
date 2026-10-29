@@ -19,8 +19,10 @@
 
 use Modern::Perl;
 
+use Test::Exception;
+use Test::Warn;
 use Test::NoWarnings;
-use Test::More tests => 9;
+use Test::More tests => 10;
 
 use C4::Letters qw( GetPreparedLetter EnqueueLetter );
 
@@ -28,6 +30,7 @@ use Koha::ActionLogs;
 use Koha::Database;
 use Koha::Library::Group;
 use Koha::Notice::Messages;
+use Koha::Notice::Templates;
 use Koha::Patrons;
 
 use t::lib::Mocks;
@@ -511,6 +514,122 @@ subtest 'is_sensitive(), can_be_printed() and mark_as_printed() tests' => sub {
         Koha::ActionLogs->search( { module => 'NOTICES', action => 'PRINT', object => $unlogged->message_id } )->count,
         0, 'It is not logged when the notices are not logged'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'convert_to_print() tests' => sub {
+
+    plan tests => 21;
+
+    $schema->storage->txn_begin;
+
+    # The notice used to convert, with the patron and the original notice
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library->branchcode, address => '1 Test Street', lang => 'default' }
+        }
+    );
+    Koha::Notice::Templates->search( { code => 'CONVERTED_TO_PRINT' } )->delete;
+    $builder->build_object(
+        {
+            class => 'Koha::Notice::Templates',
+            value => {
+                module                 => 'members',
+                code                   => 'CONVERTED_TO_PRINT',
+                branchcode             => '',
+                message_transport_type => 'print',
+                lang                   => 'default',
+                is_html                => 1,
+                title                  => '[% original_message.subject %]',
+                content                =>
+                    '<p>[% borrower.address %]</p><p>[% original_message.status %]</p>[% original_message.content_as_html %]',
+            }
+        }
+    );
+
+    my $message = sub {
+        my ($value) = @_;
+        return $builder->build_object(
+            {
+                class => 'Koha::Notice::Messages',
+                value => {
+                    borrowernumber         => $patron->borrowernumber,
+                    letter_code            => 'HOLD_SLIP',
+                    message_transport_type => 'email',
+                    subject                => 'Your hold',
+                    content                => 'Come <and> get it',
+                    status                 => 'failed',
+                    %{$value}
+                }
+            }
+        );
+    };
+
+    # content_as_html
+    is(
+        $message->( { content => 'a <b>', content_type => 'text/plain; charset="UTF-8"' } )->content_as_html,
+        '<div style="white-space: pre-wrap;">a &lt;b&gt;</div>', 'Text is escaped'
+    );
+
+    # can_be_converted_to_print
+    ok( $message->( { status => 'failed' } )->can_be_converted_to_print, 'A failed email can be converted' );
+    ok(
+        $message->( { status => 'sent', message_transport_type => 'sms' } )->can_be_converted_to_print,
+        'A sent sms can be converted'
+    );
+    ok( !$message->( { status => 'pending' } )->can_be_converted_to_print,   'A pending notice cannot be converted' );
+    ok( !$message->( { status => 'printed' } )->can_be_converted_to_print,   'A printed notice cannot be converted' );
+    ok( !$message->( { status => 'converted' } )->can_be_converted_to_print, 'A converted notice cannot be converted' );
+    ok(
+        !$message->( { status => 'sent', message_transport_type => 'print' } )->can_be_converted_to_print,
+        'A print notice cannot be converted'
+    );
+    ok(
+        !$message->( { status => 'sent', letter_code => 'PASSWORD_RESET' } )->can_be_converted_to_print,
+        'A sensitive notice cannot be converted'
+    );
+    ok(
+        !$message->( { status => 'sent', borrowernumber => undef } )->can_be_converted_to_print,
+        'A notice without a patron cannot be converted'
+    );
+    ok(
+        !$message->( { status => 'converted' } )->can_be_printed,
+        'A converted notice is not printed, its print notice is'
+    );
+
+    # convert_to_print
+    t::lib::Mocks::mock_preference( 'NoticesLog', 1 );
+    my $original = $message->( { status => 'failed' } );
+    my $print    = $original->convert_to_print;
+    is( ref($print),                    'Koha::Notice::Message', 'The print notice is returned' );
+    is( $print->message_transport_type, 'print',                 'It is a print notice' );
+    is( $print->status,                 'pending',               'It is waiting to be printed' );
+    is( $print->borrowernumber,         $patron->borrowernumber, 'It is for the same patron' );
+    like(
+        $print->content, qr/1 Test Street.*failed.*Come &lt;and&gt; get it/s,
+        'It has the address and the original content'
+    );
+    is( $original->get_from_storage->status, 'converted', 'The original is converted' );
+    is(
+        Koha::ActionLogs->search( { module => 'NOTICES', action => 'CONVERT', object => $original->message_id } )
+            ->count,
+        1, 'It is logged'
+    );
+
+    throws_ok { $original->convert_to_print } 'Koha::Exceptions::Notice::CannotConvertToPrint',
+        'A converted notice cannot be converted again';
+
+    # Without the notice
+    Koha::Notice::Templates->search( { code => 'CONVERTED_TO_PRINT' } )->delete;
+    my $another = $message->( { status => 'sent' } );
+    warning_like {
+        throws_ok { $another->convert_to_print } 'Koha::Exceptions::Notice::NoConversionTemplate',
+        'There must be a notice to convert with'
+    } qr/No members CONVERTED_TO_PRINT letter transported by print/, 'Koha warns that the notice is missing';
+    is( $another->get_from_storage->status, 'sent', 'The notice is not changed' );
 
     $schema->storage->txn_rollback;
 };

@@ -25,6 +25,7 @@ use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_htt
 use CGI        qw ( -utf8 );
 use C4::Members;
 use C4::Letters qw( GetPreparedLetter EnqueueLetter );
+use Koha::Notice::Messages;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::Patron::Password::Recovery qw( SendPasswordRecoveryEmail ValidateBorrowernumber );
@@ -65,6 +66,27 @@ if ( $op eq 'cud-resend_notice' ) {
         # redirect to self to avoid form submission on refresh
         print $input->redirect("/cgi-bin/koha/members/notices.pl?borrowernumber=$borrowernumber");
     }
+}
+
+# Convert a notice of the patron to a print notice
+if ( $op eq 'cud-convert_to_print' ) {
+    unless ( C4::Context->preference('NoticesManagement')
+        && $logged_in_user->has_permission( { tools => 'view_generated_notices' } ) )
+    {
+        output_and_exit( $input, $cookie, $template, 'insufficient_permission' );
+    }
+
+    my ($message_id) = ( $input->param('message_id') // q{} ) =~ /^(\d+)$/;
+    my $message =
+        $message_id
+        ? Koha::Notice::Messages->search_limited(
+        { 'me.message_id' => $message_id, borrowernumber => $borrowernumber } )->next
+        : undef;
+    my $converted = $message && $message->can_be_converted_to_print && eval { $message->convert_to_print };
+
+    print $input->redirect( "/cgi-bin/koha/members/notices.pl?borrowernumber=$borrowernumber&conversion="
+            . ( $converted ? 'converted' : 'failed' ) );
+    exit;
 }
 
 if ( $op eq 'send_welcome' ) {
@@ -148,6 +170,7 @@ $template->param(
     QUEUED_MESSAGES => $queued_messages,
     borrowernumber  => $borrowernumber,
     sentnotices     => 1,
+    conversion      => scalar $input->param('conversion'),
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 

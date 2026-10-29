@@ -54,6 +54,12 @@
     [% INCLUDE 'members-toolbar.inc' %]
     <h1>Notices for [% INCLUDE 'patron-title.inc' %]</h1>
 
+    [% IF conversion == 'converted' %]
+        <div class="alert alert-success">The notice was converted to a print notice, which is waiting to be printed.</div>
+    [% ELSIF conversion == 'failed' %]
+        <div class="alert alert-danger">The notice could not be converted to a print notice.</div>
+    [% END %]
+
     [% SET can_print = CAN_user_tools_view_generated_notices && Koha.Preference('NoticesManagement') %]
     [% IF can_print %]
         <div class="alert alert-warning">Printing a notice will mark it as printed.</div>
@@ -101,6 +107,7 @@
                                         data-noticeid="[% QUEUED_MESSAGE.message_id | html %]"
                                         data-status="[% QUEUED_MESSAGE.status | html %]"
                                         data-printable="[% IF QUEUED_MESSAGE.can_be_printed %]1[% ELSE %]0[% END %]"
+                                        data-convertible="[% IF QUEUED_MESSAGE.can_be_converted_to_print %]1[% ELSE %]0[% END %]"
                                         data-borrowernumber="[% borrowernumber | html %]"
                                         href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber | uri %]&amp;noticeid=[% QUEUED_MESSAGE.message_id | uri %]"
                                         >[% QUEUED_MESSAGE.subject | html %]</a
@@ -131,6 +138,8 @@
                                         <span>deleted</span>
                                     [% ELSIF ( QUEUED_MESSAGE.status == 'printed' ) %]
                                         <span>printed</span>
+                                    [% ELSIF ( QUEUED_MESSAGE.status == 'converted' ) %]
+                                        <span>converted</span>
                                     [% ELSE %]
                                         [% QUEUED_MESSAGE.status | html %]
                                     [% END %]
@@ -179,6 +188,9 @@
                                         [% IF QUEUED_MESSAGE.can_be_printed %]
                                             <button type="button" class="btn btn-default btn-xs print" data-noticeid="[% QUEUED_MESSAGE.message_id | html %]"><i class="fa fa-print"></i> Print</button>
                                         [% END %]
+                                        [% IF QUEUED_MESSAGE.can_be_converted_to_print %]
+                                            <button type="button" class="btn btn-default btn-xs convert" data-noticeid="[% QUEUED_MESSAGE.message_id | html %]"><i class="fa fa-envelope"></i> Convert to print</button>
+                                        [% END %]
                                     </td>
                                 [% END %]
                             </tr>
@@ -196,6 +208,12 @@
                     [% INCLUDE 'csrf-token.inc' %]
                     <input type="hidden" name="op" value="cud-print" />
                     <input type="hidden" name="message_ids" value="" />
+                </form>
+                <form id="convert_to_print" action="/cgi-bin/koha/members/notices.pl" method="post">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="op" value="cud-convert_to_print" />
+                    <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
+                    <input type="hidden" name="message_id" value="" />
                 </form>
             [% END %]
         </div>
@@ -222,6 +240,7 @@
                     <button type="submit" id="resend_notice_button" class="btn btn-default"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Resend</button>
                 </form>
                 [% IF can_print %]
+                    <button type="button" class="convert-notice-modal btn btn-default d-none"><i class="fa fa-envelope"></i> Convert to print</button>
                     <button type="button" class="print-notice-modal btn btn-primary d-none"><i class="fa fa-print"></i> Print</button>
                 [% END %]
                 <button type="button" class="btn btn-default deny cancel" data-bs-dismiss="modal"><i class="fa fa-remove"></i> Close</button>
@@ -265,6 +284,7 @@
                     $("#resend_notice").removeClass("d-none");
                 }
                 $("#noticeModal .print-notice-modal").toggleClass("d-none", $(this).data("printable") !== 1);
+                $("#noticeModal .convert-notice-modal").toggleClass("d-none", $(this).data("convertible") !== 1);
                 $("#noticeModal").data("noticeid", noticeid);
                 $("#noticeModalLabel").text(title);
 
@@ -277,11 +297,26 @@
                 print_notice($("#noticeModal").data("noticeid"));
             });
 
+            function convert_to_print(noticeid) {
+                $("#convert_to_print input[name='message_id']").val(noticeid);
+                $("#convert_to_print").trigger("submit");
+            }
+
+            $("#noticestable").on("click", ".convert", function (e) {
+                e.preventDefault();
+                convert_to_print($(this).data("noticeid"));
+            });
+
+            $("#noticeModal .convert-notice-modal").on("click", function () {
+                convert_to_print($("#noticeModal").data("noticeid"));
+            });
+
             $("#noticeModal").on("hide.bs.modal", function () {
                 $('#resend_notice input[name="borrowernumber"]').val("");
                 $('#resend_notice input[name="message_id"]').val("");
                 $("#resend_notice").addClass("d-none");
                 $("#noticeModal .print-notice-modal").addClass("d-none");
+                $("#noticeModal .convert-notice-modal").addClass("d-none");
                 $("#noticeModalLabel").text("");
                 $("#noticeModal .modal-body").html("");
             });

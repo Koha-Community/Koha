@@ -51,6 +51,12 @@
             <main>
                 [% INCLUDE 'messages.inc' %]
 
+                [% IF conversion == 'converted' %]
+                    <div class="alert alert-success">The notice was converted to a print notice, which is waiting to be printed.</div>
+                [% ELSIF conversion == 'failed' %]
+                    <div class="alert alert-danger">The notice could not be converted to a print notice.</div>
+                [% END %]
+
                 <h1>Notices management</h1>
 
                 <div class="alert alert-warning">Printing a notice will mark it as printed.</div>
@@ -101,6 +107,7 @@
                                                     data-noticeid="[% notice.message_id | html %]"
                                                     data-status="[% notice.status | html %]"
                                                     data-printable="[% IF notice.can_be_printed %]1[% ELSE %]0[% END %]"
+                                                    data-convertible="[% IF notice.can_be_converted_to_print %]1[% ELSE %]0[% END %]"
                                                     data-borrowernumber="[% notice.borrowernumber | html %]"
                                                     href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% notice.borrowernumber | uri %]&amp;noticeid=[% notice.message_id | uri %]"
                                                     >[% notice.subject | html %]</a
@@ -131,6 +138,8 @@
                                                     <span>deleted</span>
                                                 [% ELSIF ( notice.status == 'printed' ) %]
                                                     <span>printed</span>
+                                                [% ELSIF ( notice.status == 'converted' ) %]
+                                                    <span>converted</span>
                                                 [% ELSE %]
                                                     [% notice.status | html %]
                                                 [% END %]
@@ -175,7 +184,10 @@
                                                 [% END %]
                                             </td>
                                             <td class="actions"
-                                                >[% IF notice.can_be_printed %]<button type="button" class="btn btn-default btn-xs print" data-noticeid="[% notice.message_id | html %]"><i class="fa fa-print"></i> Print</button>[% END %]</td
+                                                >[% IF notice.can_be_printed %]<button type="button" class="btn btn-default btn-xs print" data-noticeid="[% notice.message_id | html %]"><i class="fa fa-print"></i> Print</button>[% END %]
+                                                [% IF notice.can_be_converted_to_print %]
+                                                    <button type="button" class="btn btn-default btn-xs convert" data-noticeid="[% notice.message_id | html %]"><i class="fa fa-envelope"></i> Convert to print</button>
+                                                [% END %]</td
                                             >
                                         </tr>
                                     [% END %]
@@ -234,6 +246,7 @@
                                     <option value="failed" [% IF status == 'failed' %]selected="selected"[% END %]>Failed</option>
                                     <option value="deleted" [% IF status == 'deleted' %]selected="selected"[% END %]>Deleted</option>
                                     <option value="printed" [% IF status == 'printed' %]selected="selected"[% END %]>Printed</option>
+                                    <option value="converted" [% IF status == 'converted' %]selected="selected"[% END %]>Converted to print</option>
                                 </select>
                             </li>
                             <li>
@@ -285,6 +298,12 @@
         <input type="hidden" name="message_ids" value="" />
     </form>
 
+    <form id="convert_to_print" action="/cgi-bin/koha/tools/notices.pl" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="op" value="cud-convert_to_print" />
+        <input type="hidden" name="message_id" value="" />
+    </form>
+
     <!-- Modal -->
     <div class="modal" id="noticeModal" tabindex="-1" aria-labelledby="noticeModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -304,6 +323,7 @@
                             <button type="submit" id="resend_notice_button" class="btn btn-default"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Resend</button>
                         </form>
                     [% END %]
+                    <button type="button" class="convert-notice-modal btn btn-default d-none"><i class="fa fa-envelope"></i> Convert to print</button>
                     <button type="button" class="print-notice-modal btn btn-primary d-none"><i class="fa fa-print"></i> Print</button>
                     <button type="button" class="btn btn-default deny cancel" data-bs-dismiss="modal"><i class="fa fa-remove"></i> Close</button>
                 </div>
@@ -346,6 +366,7 @@
                         $("#resend_notice").removeClass("d-none");
                     }
                     $("#noticeModal .print-notice-modal").toggleClass("d-none", $(this).data("printable") !== 1);
+                    $("#noticeModal .convert-notice-modal").toggleClass("d-none", $(this).data("convertible") !== 1);
                     $("#noticeModal").data("noticeid", noticeid);
                     $("#noticeModalLabel").text(title);
 
@@ -358,11 +379,26 @@
                     print_notice($("#noticeModal").data("noticeid"));
                 });
 
+                function convert_to_print(noticeid) {
+                    $("#convert_to_print input[name='message_id']").val(noticeid);
+                    $("#convert_to_print").trigger("submit");
+                }
+
+                $("#notices").on("click", ".convert", function (e) {
+                    e.preventDefault();
+                    convert_to_print($(this).data("noticeid"));
+                });
+
+                $("#noticeModal .convert-notice-modal").on("click", function () {
+                    convert_to_print($("#noticeModal").data("noticeid"));
+                });
+
                 $("#noticeModal").on("hide.bs.modal", function () {
                     $('#resend_notice input[name="borrowernumber"]').val("");
                     $('#resend_notice input[name="message_id"]').val("");
                     $("#resend_notice").addClass("d-none");
                     $("#noticeModal .print-notice-modal").addClass("d-none");
+                    $("#noticeModal .convert-notice-modal").addClass("d-none");
                     $("#noticeModalLabel").text("");
                     $("#noticeModal .modal-body").html("");
                 });

@@ -42,6 +42,17 @@ unless ( C4::Context->preference('NoticesManagement') ) {
     exit;
 }
 
+# Converting a notice to a print notice changes it, so it needs a POST with a valid CSRF token
+my $op = $query->param('op') || q{};
+if ( $op eq 'cud-convert_to_print' ) {
+    my ($message_id) = ( $query->param('message_id') // q{} ) =~ /^(\d+)$/;
+    my $message =
+        $message_id ? Koha::Notice::Messages->search_limited( { 'me.message_id' => $message_id } )->next : undef;
+    my $converted = $message && $message->can_be_converted_to_print && eval { $message->convert_to_print };
+    print $query->redirect( '/cgi-bin/koha/tools/notices.pl?conversion=' . ( $converted ? 'converted' : 'failed' ) );
+    exit;
+}
+
 my $letter_code  = $query->param('letter_code')  || undef;
 my $categorycode = $query->param('categorycode') || undef;
 my $branchcode   = $query->param('branchcode')   || undef;
@@ -76,6 +87,7 @@ my @visible_libraries = Koha::Patrons->find($loggedinuser)->libraries_where_can_
 
 $template->param(
     show_library_filter => ( !@visible_libraries || @visible_libraries > 1 ) ? 1 : 0,
+    conversion          => scalar $query->param('conversion'),
     notices             => $notices,
     limit               => $limit,
     truncated           => $matching->count > $limit ? 1 : 0,

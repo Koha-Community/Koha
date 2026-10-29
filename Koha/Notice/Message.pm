@@ -20,6 +20,7 @@ use Modern::Perl;
 use C4::Context;
 use C4::Log qw( logaction );
 use Koha::Database;
+use Koha::Exceptions::Notice;
 use Koha::I18N qw( __ );
 use Koha::Notice::Template;
 use Koha::Patron;
@@ -130,7 +131,8 @@ sub is_sensitive {
 
 Returns true if the message can be printed from the notices pages: its content must not be
 sensitive, and it must not be pending (waiting to be sent), unless it is a print notice that
-is waiting to be printed.
+is waiting to be printed. A message that has been converted to a print notice is not printed,
+its print notice is.
 
 =cut
 
@@ -138,8 +140,107 @@ sub can_be_printed {
     my ($self) = @_;
 
     return 0 if $self->is_sensitive;
+    return 0 if $self->status eq 'converted';
     return 1 if $self->status ne 'pending';
     return $self->message_transport_type eq 'print' ? 1 : 0;
+}
+
+=head3 content_as_html
+
+    my $html = $message->content_as_html;
+
+Returns the content of the message as a fragment of HTML: the content of an HTML
+message, and the text of the others, escaped and with its line breaks kept.
+
+=cut
+
+sub content_as_html {
+    my ($self) = @_;
+
+    return $self->content if $self->is_html;
+
+    my $text = $self->content // q{};
+    $text =~ s/&/&amp;/g;
+    $text =~ s/</&lt;/g;
+    $text =~ s/>/&gt;/g;
+    return '<div style="white-space: pre-wrap;">' . $text . '</div>';
+}
+
+=head3 can_be_converted_to_print
+
+    if ( $message->can_be_converted_to_print ) { ... }
+
+Returns true if the message can be converted to a print notice: it is for a patron, it is
+not already a print notice, its content must not be sensitive, and it has been sent, has
+failed or has been deleted.
+
+=cut
+
+sub can_be_converted_to_print {
+    my ($self) = @_;
+
+    return 0 if $self->is_sensitive;
+    return 0 unless $self->borrowernumber;
+    return 0 if $self->message_transport_type eq 'print';
+    return ( grep { $_ eq $self->status } qw( sent failed deleted ) ) ? 1 : 0;
+}
+
+=head3 convert_to_print
+
+    my $print_notice = $message->convert_to_print;
+
+Queue a print notice for the patron with the notice CONVERTED_TO_PRINT, which adds the address of
+the patron and a note to the content of this message, and set the status of this message to
+'converted'. Returns the print notice, which is pending.
+
+Throws a L<Koha::Exceptions::Notice::CannotConvertToPrint> if the message cannot be converted
+(see L</can_be_converted_to_print>), and a L<Koha::Exceptions::Notice::NoConversionTemplate> if
+there is no CONVERTED_TO_PRINT notice.
+
+=cut
+
+sub convert_to_print {
+    my ($self) = @_;
+
+    Koha::Exceptions::Notice::CannotConvertToPrint->throw unless $self->can_be_converted_to_print;
+
+    require C4::Letters;
+    require Koha::Notice::Messages;
+
+    my $patron = $self->patron;
+    my $letter = C4::Letters::GetPreparedLetter(
+        module                 => 'members',
+        letter_code            => 'CONVERTED_TO_PRINT',
+        branchcode             => $patron->branchcode,
+        lang                   => $patron->lang || 'default',
+        message_transport_type => 'print',
+        tables                 => {
+            borrowers => $patron->borrowernumber,
+            branches  => $patron->branchcode,
+        },
+        objects => { original_message => $self },
+    ) or Koha::Exceptions::Notice::NoConversionTemplate->throw;
+
+    my $print_notice;
+    $self->_result->result_source->schema->txn_do(
+        sub {
+            my $message_id = C4::Letters::EnqueueLetter(
+                {
+                    letter                 => $letter,
+                    borrowernumber         => $patron->borrowernumber,
+                    message_transport_type => 'print',
+                }
+            ) or Koha::Exceptions::Notice::CannotConvertToPrint->throw( error => 'The print notice is empty' );
+
+            $self->update( { status => 'converted' } );
+            $print_notice = Koha::Notice::Messages->find($message_id);
+        }
+    );
+
+    logaction( 'NOTICES', 'CONVERT', $self->message_id, 'message_queue' )
+        if C4::Context->preference('NoticesLog');
+
+    return $print_notice;
 }
 
 =head3 mark_as_printed
