@@ -237,8 +237,10 @@
                     <div class="fg-row">
                         <div class="fg-label"><span class="label">Image: </span></div>
                         <div class="fg-text">
-                            Item type images are disabled. To enable them, turn off the
-                            <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=noItemTypeImages">noItemTypeImages or OpacNoItemTypeImages system preferences</a>
+                            <span>
+                                Item type images are disabled. To enable them, turn off the
+                                <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=noItemTypeImages">noItemTypeImages or OpacNoItemTypeImages system preferences</a>
+                            </span>
                         </div>
                     </div>
                 [% END %]
@@ -249,7 +251,7 @@
 
                 <div class="fg-row input-checkbox">
                     <div class="fg-label">
-                        <label for="hideinopac">Hide in OPAC: </label>
+                        <label for="hideinopac">Hide in OPAC</label>
                     </div>
                     <div class="fg-input">
                         [% IF ( itemtype.hideinopac ) %]
@@ -262,7 +264,7 @@
                 </div>
                 <div class="fg-row input-checkbox">
                     <div class="fg-label">
-                        <label for="notforloan">Not for loan: </label>
+                        <label for="notforloan">Not for loan</label>
                     </div>
                     <div class="fg-input">
                         [% IF itemtype.notforloan %]
@@ -275,7 +277,7 @@
                 </div>
                 <div class="fg-row input-checkbox">
                     <div class="fg-label">
-                        <label for="automatic_checkin">Automatic check-in: </label>
+                        <label for="automatic_checkin">Automatic check-in</label>
                     </div>
                     <div class="fg-input">
                         [% IF itemtype.automatic_checkin %]
@@ -290,7 +292,7 @@
                 </div>
                 <div class="fg-row input-checkbox">
                     <div class="fg-label">
-                        <label for="bookable">Bookable: </label>
+                        <label for="bookable">Bookable</label>
                     </div>
                     <div class="fg-input">
                         [% IF itemtype.bookable %]
@@ -321,7 +323,7 @@
                 </div>
                 <div class="fg-row input-checkbox">
                     <div class="fg-label">
-                        <label for="rentalcharge_daily_calendar">Daily rentals use calendar: </label>
+                        <label for="rentalcharge_daily_calendar">Daily rentals use calendar</label>
                     </div>
                     <div class="fg-input">
                         [% IF itemtype.rentalcharge_daily_calendar %]
@@ -343,7 +345,7 @@
                 </div>
                 <div class="fg-row input-checkbox">
                     <div class="fg-label">
-                        <label for="rentalcharge_hourly_calendar">Hourly rentals use calendar: </label>
+                        <label for="rentalcharge_hourly_calendar">Hourly rentals use calendar</label>
                     </div>
                     <div class="fg-input">
                         [% IF itemtype.rentalcharge_hourly_calendar %]
