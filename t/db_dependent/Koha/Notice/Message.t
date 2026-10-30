@@ -20,6 +20,7 @@
 use Modern::Perl;
 
 use Test::Exception;
+use Test::MockModule;
 use Test::Warn;
 use Test::NoWarnings;
 use Test::More tests => 9;
@@ -528,7 +529,7 @@ subtest 'is_sensitive(), can_be_printed() and mark_as_printed() tests' => sub {
 
 subtest 'convert_to_print() tests' => sub {
 
-    plan tests => 20;
+    plan tests => 28;
 
     $schema->storage->txn_begin;
 
@@ -621,17 +622,65 @@ subtest 'convert_to_print() tests' => sub {
     );
     is( $original->get_from_storage->status, 'converted', 'The original is converted' );
 
+    # The two notices are linked, in the delivery note of each
+    is(
+        $original->get_from_storage->failure_code, 'CONVERTED_TO_PRINT:' . $print->message_id,
+        'The original has the print notice in its delivery note'
+    );
+    is(
+        $print->get_from_storage->failure_code, 'CONVERTED_FROM:' . $original->message_id,
+        'The print notice has the original in its delivery note'
+    );
+
     throws_ok { $original->convert_to_print } 'Koha::Exceptions::Notice::CannotConvertToPrint',
         'A converted notice cannot be converted again';
 
     # Without the notice
+    ok( Koha::Notice::Message->conversion_template_exists, 'There is a notice to convert with' );
+    my $template = Koha::Notice::Templates->search( { code => 'CONVERTED_TO_PRINT' } )->next;
+    my $content  = $template->content;
     Koha::Notice::Templates->search( { code => 'CONVERTED_TO_PRINT' } )->delete;
+    ok( !Koha::Notice::Message->conversion_template_exists, 'There is not once it is deleted' );
     my $another = $message->( { status => 'sent' } );
-    warning_like {
-        throws_ok { $another->convert_to_print } 'Koha::Exceptions::Notice::NoConversionTemplate',
-        'There must be a notice to convert with'
-    } qr/No members CONVERTED_TO_PRINT letter transported by print/, 'Koha warns that the notice is missing';
+    throws_ok { $another->convert_to_print } 'Koha::Exceptions::Notice::NoConversionTemplate',
+        'There must be a notice to convert with';
     is( $another->get_from_storage->status, 'sent', 'The notice is not changed' );
+
+    # With a notice that cannot be processed, the error is reported and logged, and nothing is changed
+    $builder->build_object(
+        {
+            class => 'Koha::Notice::Templates',
+            value => {
+                module                 => 'members',
+                code                   => 'CONVERTED_TO_PRINT',
+                branchcode             => '',
+                message_transport_type => 'print',
+                lang                   => 'default',
+                is_html                => 1,
+                title                  => 'Broken',
+                content                => '<p>[% IF 1 %] never closed</p>',
+            }
+        }
+    );
+    my $queued = Koha::Notice::Messages->search(
+        { borrowernumber => $patron->borrowernumber, message_transport_type => 'print' } )->count;
+    my @logged;
+    my $logger = Test::MockModule->new('Koha::Logger');
+    $logger->mock( get => sub { return bless {}, 'Test::Logger' } );
+    no warnings 'once';
+    local *Test::Logger::error = sub { shift; push @logged, @_ };
+    throws_ok { $another->convert_to_print } 'Koha::Exceptions::Notice::ConversionTemplateError',
+        'An error in the notice to convert with is reported';
+    like( "@logged", qr/CONVERTED_TO_PRINT.*ERROR PROCESSING TEMPLATE/s, 'The error is logged' );
+    like( $@->error, qr/ERROR PROCESSING TEMPLATE/, 'The exception has the error of the template' );
+    is( $another->get_from_storage->status, 'sent', 'The notice is not changed' );
+    is(
+        Koha::Notice::Messages->search(
+            { borrowernumber => $patron->borrowernumber, message_transport_type => 'print' }
+        )->count,
+        $queued,
+        'No print notice is queued'
+    );
 
     $schema->storage->txn_rollback;
 };

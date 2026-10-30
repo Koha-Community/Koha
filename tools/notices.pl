@@ -23,9 +23,12 @@ use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Notice::Message;
 use Koha::Notice::Messages;
 use Koha::Notice::Templates;
 use Koha::Patrons;
+use Scalar::Util qw( blessed );
+use Try::Tiny    qw( catch try );
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -48,8 +51,20 @@ if ( $op eq 'cud-convert_to_print' ) {
     my ($message_id) = ( $query->param('message_id') // q{} ) =~ /^(\d+)$/;
     my $message =
         $message_id ? Koha::Notice::Messages->search_limited( { 'me.message_id' => $message_id } )->next : undef;
-    my $converted = $message && $message->can_be_converted_to_print && eval { $message->convert_to_print };
-    print $query->redirect( '/cgi-bin/koha/tools/notices.pl?conversion=' . ( $converted ? 'converted' : 'failed' ) );
+    my $conversion = 'failed';
+    if ($message) {
+        try {
+            $message->convert_to_print;
+            $conversion = 'converted';
+        } catch {
+            $conversion =
+                  !blessed($_)                                                 ? 'failed'
+                : $_->isa('Koha::Exceptions::Notice::NoConversionTemplate')    ? 'no_template'
+                : $_->isa('Koha::Exceptions::Notice::ConversionTemplateError') ? 'template_error'
+                :                                                                'failed';
+        };
+    }
+    print $query->redirect( '/cgi-bin/koha/tools/notices.pl?conversion=' . $conversion );
     exit;
 }
 
@@ -86,18 +101,19 @@ my $notices  = $matching->search( undef, { order_by => { -desc => 'me.time_queue
 my @visible_libraries = Koha::Patrons->find($loggedinuser)->libraries_where_can_see_patrons;
 
 $template->param(
-    show_library_filter => ( !@visible_libraries || @visible_libraries > 1 ) ? 1 : 0,
-    conversion          => scalar $query->param('conversion'),
-    notices             => $notices,
-    limit               => $limit,
-    truncated           => $matching->count > $limit ? 1 : 0,
-    letter_code         => $letter_code,
-    categorycode        => $categorycode,
-    branchcode          => $branchcode,
-    from                => $from,
-    to                  => $to,
-    status              => $status,
-    letters             => Koha::Notice::Templates->search(
+    show_library_filter        => ( !@visible_libraries || @visible_libraries > 1 ) ? 1 : 0,
+    conversion                 => scalar $query->param('conversion'),
+    conversion_template_exists => Koha::Notice::Message->conversion_template_exists,
+    notices                    => $notices,
+    limit                      => $limit,
+    truncated                  => $matching->count > $limit ? 1 : 0,
+    letter_code                => $letter_code,
+    categorycode               => $categorycode,
+    branchcode                 => $branchcode,
+    from                       => $from,
+    to                         => $to,
+    status                     => $status,
+    letters                    => Koha::Notice::Templates->search(
         {}, { select => [ 'name', 'code' ], group_by => [ 'name', 'code' ], order_by => { -asc => 'code' } }
     ),
 );

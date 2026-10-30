@@ -53,6 +53,16 @@
 
                 [% IF conversion == 'converted' %]
                     <div class="alert alert-success">The notice was converted to a print notice, which is waiting to be printed.</div>
+                [% ELSIF conversion == 'no_template' %]
+                    <div class="alert alert-danger"
+                        >The notice cannot be converted to a print notice because the CONVERTED_TO_PRINT notice does not exist. Create it in <a href="/cgi-bin/koha/tools/letter.pl">Notices and slips</a>, as a print notice of the Patrons
+                        module.</div
+                    >
+                [% ELSIF conversion == 'template_error' %]
+                    <div class="alert alert-danger"
+                        >The notice cannot be converted to a print notice because the CONVERTED_TO_PRINT notice has an error. Check it in <a href="/cgi-bin/koha/tools/letter.pl">Notices and slips</a>, the error is also in the error
+                        log.</div
+                    >
                 [% ELSIF conversion == 'failed' %]
                     <div class="alert alert-danger">The notice could not be converted to a print notice.</div>
                 [% END %]
@@ -107,7 +117,7 @@
                                                     data-noticeid="[% notice.message_id | html %]"
                                                     data-status="[% notice.status | html %]"
                                                     data-printable="[% IF notice.can_be_printed %]1[% ELSE %]0[% END %]"
-                                                    data-convertible="[% IF notice.can_be_converted_to_print %]1[% ELSE %]0[% END %]"
+                                                    data-convertible="[% IF conversion_template_exists && notice.can_be_converted_to_print %]1[% ELSE %]0[% END %]"
                                                     data-borrowernumber="[% notice.borrowernumber | html %]"
                                                     href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% notice.borrowernumber | uri %]&amp;noticeid=[% notice.message_id | uri %]"
                                                     >[% notice.subject | html %]</a
@@ -167,6 +177,10 @@
                                                         <span class="clearfix">Unhandled email failure, check the logs for further details</span>
                                                     [% ELSIF ( notice.failure_code == "UNKNOWN_ERROR" ) %]
                                                         <span class="clearfix">Unknown error</span>
+                                                    [% ELSIF ( matches = notice.failure_code.match('^CONVERTED_TO_PRINT:(\d+)$') ) %]
+                                                        <span class="clearfix">Converted to print notice [% matches.0 | html %]</span>
+                                                    [% ELSIF ( matches = notice.failure_code.match('^CONVERTED_FROM:(\d+)$') ) %]
+                                                        <span class="clearfix">Converted from notice [% matches.0 | html %]</span>
                                                     [% ELSE %]
                                                         <span class="clearfix">Message failed to send with the following error: [% notice.failure_code | html %]</span>
                                                     [% END %]
@@ -185,7 +199,7 @@
                                             </td>
                                             <td class="actions"
                                                 >[% IF notice.can_be_printed %]<button type="button" class="btn btn-default btn-xs print" data-noticeid="[% notice.message_id | html %]"><i class="fa fa-print"></i> Print</button>[% END %]
-                                                [% IF notice.can_be_converted_to_print %]
+                                                [% IF conversion_template_exists && notice.can_be_converted_to_print %]
                                                     <button type="button" class="btn btn-default btn-xs convert" data-noticeid="[% notice.message_id | html %]"><i class="fa fa-envelope"></i> Convert to print</button>
                                                 [% END %]</td
                                             >

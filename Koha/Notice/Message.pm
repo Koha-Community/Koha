@@ -21,6 +21,7 @@ use C4::Context;
 use HTML::Entities;
 use Koha::Database;
 use Koha::Exceptions::Notice;
+use Koha::Logger;
 use Koha::I18N qw( __ );
 use Koha::Notice::Template;
 use Koha::Patron;
@@ -194,6 +195,22 @@ sub can_be_converted_to_print {
     return ( grep { $_ eq $self->status } qw( sent failed deleted ) ) ? 1 : 0;
 }
 
+=head3 conversion_template_exists
+
+    if ( Koha::Notice::Message->conversion_template_exists ) { ... }
+
+Class method, returns true if there is a CONVERTED_TO_PRINT notice, which is needed to convert
+a notice to a print notice (see L</convert_to_print>).
+
+=cut
+
+sub conversion_template_exists {
+    require Koha::Notice::Templates;
+
+    return Koha::Notice::Templates->search(
+        { module => 'members', code => 'CONVERTED_TO_PRINT', message_transport_type => 'print' } )->count ? 1 : 0;
+}
+
 =head3 convert_to_print
 
     my $print_notice = $message->convert_to_print;
@@ -203,8 +220,14 @@ the patron and a note to the content of this message, and set the status of this
 'converted'. Returns the print notice, which is pending.
 
 Throws a L<Koha::Exceptions::Notice::CannotConvertToPrint> if the message cannot be converted
-(see L</can_be_converted_to_print>), and a L<Koha::Exceptions::Notice::NoConversionTemplate> if
-there is no CONVERTED_TO_PRINT notice.
+(see L</can_be_converted_to_print>), a L<Koha::Exceptions::Notice::NoConversionTemplate> if
+there is no CONVERTED_TO_PRINT notice, and a L<Koha::Exceptions::Notice::ConversionTemplateError>
+if it cannot be processed, for example because of an error in its template, which is also logged
+as an error. Nothing is changed when an exception is thrown.
+
+The two messages are linked in their delivery note (C<failure_code>): the original has
+C<CONVERTED_TO_PRINT:$message_id> with the id of the print notice, and the print notice has
+C<CONVERTED_FROM:$message_id> with the id of the original.
 
 =cut
 
@@ -212,23 +235,34 @@ sub convert_to_print {
     my ($self) = @_;
 
     Koha::Exceptions::Notice::CannotConvertToPrint->throw unless $self->can_be_converted_to_print;
+    Koha::Exceptions::Notice::NoConversionTemplate->throw unless $self->conversion_template_exists;
 
     require C4::Letters;
     require Koha::Notice::Messages;
 
     my $patron = $self->patron;
-    my $letter = C4::Letters::GetPreparedLetter(
-        module                 => 'members',
-        letter_code            => 'CONVERTED_TO_PRINT',
-        branchcode             => $patron->branchcode,
-        lang                   => $patron->lang || 'default',
-        message_transport_type => 'print',
-        tables                 => {
-            borrowers => $patron->borrowernumber,
-            branches  => $patron->branchcode,
-        },
-        objects => { original_message => $self },
-    ) or Koha::Exceptions::Notice::NoConversionTemplate->throw;
+    my $letter = eval {
+        C4::Letters::GetPreparedLetter(
+            module                 => 'members',
+            letter_code            => 'CONVERTED_TO_PRINT',
+            branchcode             => $patron->branchcode,
+            lang                   => $patron->lang || 'default',
+            message_transport_type => 'print',
+            tables                 => {
+                borrowers => $patron->borrowernumber,
+                branches  => $patron->branchcode,
+            },
+            objects => { original_message => $self },
+        );
+    };
+    if ( my $error = $@ ) {
+        $error = "$error";
+        Koha::Logger->get->error( "The CONVERTED_TO_PRINT notice could not be processed to convert notice "
+                . $self->message_id
+                . ": $error" );
+        Koha::Exceptions::Notice::ConversionTemplateError->throw( error => $error );
+    }
+    $letter or Koha::Exceptions::Notice::NoConversionTemplate->throw;
 
     my $print_notice;
     $self->_result->result_source->schema->txn_do(
@@ -241,8 +275,9 @@ sub convert_to_print {
                 }
             ) or Koha::Exceptions::Notice::CannotConvertToPrint->throw( error => 'The print notice is empty' );
 
-            $self->update( { status => 'converted' } );
             $print_notice = Koha::Notice::Messages->find($message_id);
+            $print_notice->update( { failure_code => 'CONVERTED_FROM:' . $self->message_id } );
+            $self->update( { status => 'converted', failure_code => 'CONVERTED_TO_PRINT:' . $message_id } );
         }
     );
 

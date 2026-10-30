@@ -34,6 +34,11 @@ use Exception::Class (
         isa         => 'Koha::Exceptions::Notice',
         description => 'There is no notice to convert a notice to a print notice (CONVERTED_TO_PRINT)',
     },
+
+    'Koha::Exceptions::Notice::ConversionTemplateError' => {
+        isa         => 'Koha::Exceptions::Notice',
+        description => 'The notice to convert a notice to a print notice (CONVERTED_TO_PRINT) has an error',
+    },
 );
 
 =head1 NAME
@@ -53,6 +58,11 @@ Exception to be used when a notice cannot be converted to a print notice
 =head2 Koha::Exceptions::Notice::NoConversionTemplate
 
 Exception to be used when the notice used to convert a notice to a print notice does not exist
+
+=head2 Koha::Exceptions::Notice::ConversionTemplateError
+
+Exception to be used when the notice used to convert a notice to a print notice cannot be processed,
+for example because of an error in its template. The error is in I<error>.
 
 =cut
 
