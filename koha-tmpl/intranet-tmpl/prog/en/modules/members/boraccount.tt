@@ -658,6 +658,18 @@
 
             // Validate cash register requirement for refunds
             if (Koha.prefs.UseCashRegisters) {
+                [% UNLESS Koha.Preference('RequireCashRegister') %]
+                $('#payout_type').on('change', function() {
+                   let val = $(this).val();
+                   if ( val == 'CASH' ) {
+                      $("label[for='registerid']").addClass('required');
+                      $('#payout_registerid').attr('required','required').after( '<span class="required">Required</span>' );
+                   } else {
+                      $("label[for='registerid']").removeClass('required');
+                      $('#payout_registerid').removeAttr('required').next("span").remove();
+                   }
+                });
+                [% END %]
                 $("#refund_form").on("submit", function (e) {
                     var refund_type = $("#refund_type").val();
                     var register = $("#refund_registerid").val();
