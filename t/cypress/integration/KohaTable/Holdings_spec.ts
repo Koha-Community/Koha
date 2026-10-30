@@ -397,9 +397,9 @@ describe("catalogue/detail/holdings_table with items", () => {
         cy.get("body").type("{esc}", { force: true });
 
         // The column has no value on the second page, it must not be displayed
-        cy.get(
-            `#${table_id}_wrapper .top.pager .dt-paging-button.next`
-        ).click();
+        cy.get(`#${table_id}_wrapper .dt-paging .dt-paging-button.next`)
+            .first()
+            .click();
         cy.wait("@searchItems");
         cy.get(`#${table_id}_wrapper .dt-info`).contains(
             `Showing 21 to ${baseTotalCount} of ${baseTotalCount} entries`
@@ -407,9 +407,9 @@ describe("catalogue/detail/holdings_table with items", () => {
         cy.get(call_number_column).should("not.exist");
 
         // The user choice is kept, the column is displayed again on the first page
-        cy.get(
-            `#${table_id}_wrapper .top.pager .dt-paging-button.previous`
-        ).click();
+        cy.get(`#${table_id}_wrapper .dt-paging .dt-paging-button.previous`)
+            .first()
+            .click();
         cy.wait("@searchItems");
         cy.get(`#${table_id}_wrapper .dt-info`).contains(
             `Showing 1 to ${RESTdefaultPageSize} of ${baseTotalCount} entries`

@@ -1094,9 +1094,9 @@ describe("Itemtypes", () => {
                 `Showing 1 to 10 of ${result[0].count} entries`
             );
 
-            cy.get(
-                `#${table_id}_wrapper .top.pager .dt-paging-button.next`
-            ).click();
+            cy.get(`#${table_id}_wrapper .dt-paging .dt-paging-button.next`)
+                .first()
+                .click();
             cy.get(`#${table_id}_wrapper .dt-info`).contains(
                 `Showing 11 to 20 of ${result[0].count} entries`
             );
