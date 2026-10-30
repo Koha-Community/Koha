@@ -21,7 +21,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 43;
+use Test::More tests => 44;
 use Test::Exception;
 use Test::MockModule;
 use Test::Warn;
@@ -4177,6 +4177,49 @@ subtest 'holds_fee() tests' => sub {
     # Test without patron
     $fee = $item->holds_fee(undef);
     is( $fee, 0, 'Item holds_fee returns 0 when no patron provided' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'effective_replacement_price() tests' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );
+
+    #build itemtype with 199.99 default replacement cost
+    my $itemtype = $builder->build_object(
+        {
+            class => 'Koha::ItemTypes',
+            value => { defaultreplacecost => 199.99 },
+        }
+    );
+
+    #build an item with that itemtype, no replacementprice set
+    my $item = $builder->build_sample_item( { itype => $itemtype->itemtype, replacementprice => undef } );
+
+    #item with no replacementprice should inherit 199.99 itemtype default replacement cost, only when useDefaultReplacementCost is on
+    t::lib::Mocks::mock_preference( 'useDefaultReplacementCost', 0 );
+
+    #cmp_ok() insted of is() for dealing with price comparison
+    cmp_ok( $item->effective_replacement_price, '==', 0, 'Returns 0 when item has no price and the preference is off' );
+
+    t::lib::Mocks::mock_preference( 'useDefaultReplacementCost', 1 );
+    cmp_ok(
+        $item->effective_replacement_price, '==', 199.99,
+        'Falls back to the item type default when item has no price and the preference is on'
+    );
+
+    $item->replacementprice(0)->store;
+    cmp_ok(
+        $item->effective_replacement_price, '==', 199.99,
+        'Falls back to the item type default when item price is 0 and the preference is on'
+    );
+
+    #test when an item has a replacementprice set
+    $item->replacementprice(11.00)->store;
+    cmp_ok( $item->effective_replacement_price, '==', 11, 'Uses the item price when it has one' );
 
     $schema->storage->txn_rollback;
 };
