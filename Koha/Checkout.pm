@@ -514,6 +514,41 @@ sub branch_for_fee_context {
     return $resolved;
 }
 
+=head3 processing_fee
+
+    my $fee = $checkout->processing_fee;
+
+Returns the processing fee. The controlling branch is chosen by
+branch_for_fee_context (honoring LostChargesControl and HomeOrHoldingBranch)
+
+Returns 0 if no rule applies
+
+=cut
+
+sub processing_fee {
+    my ( $self, $params ) = @_;
+
+    my $item = $self->item;
+
+    my $branchcode = Koha::Checkout->branch_for_fee_context(
+        fee_type => 'PROCESSING',
+        patron   => $self->patron,
+        item     => $item,
+        issue    => $self,
+    );
+
+    my $process_fee = Koha::CirculationRules->get_effective_rule_value(
+        {
+            rule_name    => 'lost_item_processing_fee',
+            categorycode => undef,                        #Default lost item fee policy doesn't use categorycode
+            branchcode   => $branchcode,
+            itemtype     => $item->effective_itemtype,
+        }
+    );
+
+    return $process_fee // 0;
+}
+
 =head2 Internal methods
 
 =head3 _type
