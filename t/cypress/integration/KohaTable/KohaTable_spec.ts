@@ -44,10 +44,10 @@ describe("kohaTable (using REST API)", () => {
                     `Showing 1 to ${RESTdefaultPageSize} of ${baseTotalCount} entries`
                 );
 
-                // Should be disabled by default - empty search bar
-                cy.get(`#${table_id}_wrapper .dt_button_clear_filter`).should(
-                    "have.class",
-                    "disabled"
+                // Should be hidden by default - empty search bar
+                cy.get(`#${table_id}_wrapper .dt-search-clear`).should(
+                    "not.have.class",
+                    "visible"
                 );
 
                 // Type something in the input search bar
@@ -59,14 +59,14 @@ describe("kohaTable (using REST API)", () => {
                     "centerville"
                 );
 
-                // Should no longer be disabled
-                cy.get(`#${table_id}_wrapper .dt_button_clear_filter`).should(
-                    "not.have.class",
-                    "disabled"
+                // Should now be visible
+                cy.get(`#${table_id}_wrapper .dt-search-clear`).should(
+                    "have.class",
+                    "visible"
                 );
 
-                // Click the clear_filter button
-                cy.get(`#${table_id}_wrapper .dt_button_clear_filter`).click();
+                // Click the clear icon
+                cy.get(`#${table_id}_wrapper .dt-search-clear`).click();
                 cy.get(`#${table_id}_wrapper input.dt-input`).should(
                     "have.value",
                     ""
@@ -652,10 +652,10 @@ describe("kohaTable (using REST API)", () => {
                     `Showing 1 to ${RESTdefaultPageSize} of ${baseTotalCount} entries`
                 );
 
-                // Should be disabled by default - empty search bar
-                cy.get(`#${table_id}_wrapper .dt_button_clear_filter`).should(
-                    "have.class",
-                    "disabled"
+                // Should be hidden by default - empty search bar
+                cy.get(`#${table_id}_wrapper .dt-search-clear`).should(
+                    "not.have.class",
+                    "visible"
                 );
 
                 // Type something in the input search bar
@@ -668,14 +668,14 @@ describe("kohaTable (using REST API)", () => {
                     "edna"
                 );
 
-                // Should no longer be disabled
-                cy.get(`#${table_id}_wrapper .dt_button_clear_filter`).should(
-                    "not.have.class",
-                    "disabled"
+                // Should now be visible
+                cy.get(`#${table_id}_wrapper .dt-search-clear`).should(
+                    "have.class",
+                    "visible"
                 );
 
-                // Click the clear_filter button
-                cy.get(`#${table_id}_wrapper .dt_button_clear_filter`).click({
+                // Click the clear icon
+                cy.get(`#${table_id}_wrapper .dt-search-clear`).click({
                     force: true,
                 }); // #searchheader is on top of it
                 cy.get(`#${table_id}_wrapper input.dt-input`).should(
@@ -997,10 +997,10 @@ describe("ERM ", () => {
                 `Showing 1 to 1 of 1 entries`
             );
 
-            // Should be disabled by default - empty search bar
-            cy.get(`#${container_id} .dt_button_clear_filter`).should(
-                "have.class",
-                "disabled"
+            // Should be hidden by default - empty search bar
+            cy.get(`#${container_id} .dt-search-clear`).should(
+                "not.have.class",
+                "visible"
             );
 
             // Type something in the input search bar
@@ -1012,14 +1012,14 @@ describe("ERM ", () => {
                 erm_title.publication_title
             );
 
-            // Should no longer be disabled
-            cy.get(`#${container_id} .dt_button_clear_filter`).should(
-                "not.have.class",
-                "disabled"
+            // Should now be visible
+            cy.get(`#${container_id} .dt-search-clear`).should(
+                "have.class",
+                "visible"
             );
 
-            // Click the clear_filter button
-            cy.get(`#${container_id} .dt_button_clear_filter`).click();
+            // Click the clear icon
+            cy.get(`#${container_id} .dt-search-clear`).click();
             cy.get(`#${container_id} input.dt-input`).should("have.value", "");
 
             // TODO: Some actual live API with data requests to test the search actually works
