@@ -175,11 +175,11 @@
                     <xsl:choose>
                     <xsl:when test="boolean($class) and substring($code6,string-length($code6)-1,2) ='/r'">
                         <xsl:attribute name="class"><xsl:value-of select="$class"/> m880</xsl:attribute>
-                        <xsl:attribute name="dir">rtl</xsl:attribute>
+                        <xsl:attribute name="dir"><xsl:value-of select="'rtl'" /></xsl:attribute>
                     </xsl:when>
                      <xsl:when test="boolean($class)">
                         <xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
-                        <xsl:attribute name="style">display:block; </xsl:attribute>
+                        <xsl:attribute name="style"><xsl:value-of select="'display:block; '" /></xsl:attribute>
                     </xsl:when>
                      <xsl:when test="substring($code6,string-length($code6)-1,2) ='/r'">
                         <xsl:attribute name="class"><xsl:value-of select="$class"/> m880</xsl:attribute>
@@ -726,12 +726,12 @@
                         </xsl:otherwise>
                     </xsl:choose>
                     <xsl:if test="$OPACURLOpenInNewWindow='1'">
-                        <xsl:attribute name="target">_blank</xsl:attribute>
+                        <xsl:attribute name="target"><xsl:value-of select="'_blank'" /></xsl:attribute>
                     </xsl:if>
                     <xsl:choose>
                         <xsl:when test="(($screen='detail' and $Show856uAsImage='Details' or $Show856uAsImage='Both') or
                         ($screen='results' and $Show856uAsImage='Results' or $Show856uAsImage='Both')) and (substring($SubqText,1,6)='image/' or $SubqText='img' or $SubqText='bmp' or $SubqText='cod' or $SubqText='gif' or $SubqText='ief' or $SubqText='jpe' or $SubqText='jpeg' or $SubqText='jpg' or $SubqText='jfif' or $SubqText='png' or $SubqText='svg' or $SubqText='tif' or $SubqText='tiff' or $SubqText='ras' or $SubqText='cmx' or $SubqText='ico' or $SubqText='pnm' or $SubqText='pbm' or $SubqText='pgm' or $SubqText='ppm' or $SubqText='rgb' or $SubqText='xbm' or $SubqText='xpm' or $SubqText='xwd')">
-                            <xsl:element name="img"><xsl:attribute name="src"><xsl:value-of select="marc:subfield[@code='u']" /></xsl:attribute><xsl:attribute name="alt"><xsl:value-of select="marc:subfield[@code='y']" /></xsl:attribute><xsl:attribute name="style">height:100px;</xsl:attribute></xsl:element><xsl:text></xsl:text>
+                            <xsl:element name="img"><xsl:attribute name="src"><xsl:value-of select="marc:subfield[@code='u']" /></xsl:attribute><xsl:attribute name="alt"><xsl:value-of select="marc:subfield[@code='y']" /></xsl:attribute><xsl:attribute name="style"><xsl:value-of select="'height:100px;'" /></xsl:attribute></xsl:element><xsl:text></xsl:text>
                         </xsl:when>
                         <xsl:when test="marc:subfield[@code='y' or @code='3' or @code='z']">
                             <xsl:call-template name="subfieldSelect">

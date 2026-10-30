@@ -51,7 +51,7 @@
                   </xsl:call-template>
                   <xsl:value-of select="str:encode-uri($biblionumber, true())"/>
                 </xsl:attribute>
-                <xsl:attribute name="class">title</xsl:attribute>
+                <xsl:attribute name="class"><xsl:value-of select="'title'" /></xsl:attribute>
                 <xsl:value-of select="$ntitle" />
               </a>
             </xsl:when>
@@ -111,11 +111,11 @@
         <xsl:value-of select="$openurltext" />
       </xsl:attribute>
       <xsl:attribute name="class">
-        <xsl:text>OpenURL</xsl:text>
+        <xsl:value-of select="'OpenURL'" />
       </xsl:attribute>
       <xsl:if test="$OPACURLOpenInNewWindow='1'">
         <xsl:attribute name="target">
-          <xsl:text>_blank</xsl:text>
+          <xsl:value-of select="'_blank'" />
         </xsl:attribute>
       </xsl:if>
       <xsl:choose>
@@ -173,7 +173,7 @@
                   <xsl:value-of select="marc:subfield[@code='u']"/>
                 </xsl:attribute>
                 <xsl:if test="$OPACURLOpenInNewWindow='1'">
-                    <xsl:attribute name="target">_blank</xsl:attribute>
+                    <xsl:attribute name="target"><xsl:value-of select="'_blank'" /></xsl:attribute>
                 </xsl:if>
                 <xsl:choose>
                   <xsl:when test="marc:subfield[@code='y' or @code='3' or @code='z']">

@@ -265,7 +265,7 @@ Added Log Comment
 		<xsl:for-each select="marc:datafield[@tag=720][not(marc:subfield[@code='t'])]">
 			<name>
 				<xsl:if test="@ind1=1">
-					<xsl:attribute name="type"><xsl:text>personal</xsl:text></xsl:attribute>
+                    <xsl:attribute name="type"><xsl:value-of select="'personal'" /></xsl:attribute>
 				</xsl:if>
 				<namePart>
 					<xsl:value-of select="marc:subfield[@code='a']"/>
@@ -275,10 +275,10 @@ Added Log Comment
 		</xsl:for-each>
 		<typeOfResource>
 			<xsl:if test="$leader7='c'">
-				<xsl:attribute name="collection">yes</xsl:attribute>
+                <xsl:attribute name="collection"><xsl:value-of select="'yes'" /></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="$leader6='d' or $leader6='f' or $leader6='p' or $leader6='t'">
-				<xsl:attribute name="manuscript">yes</xsl:attribute>
+                <xsl:attribute name="manuscript"><xsl:value-of select="'yes'" /></xsl:attribute>
 			</xsl:if>
 			<xsl:choose>
 				<xsl:when test="$leader6='a' or $leader6='t'">text</xsl:when>
@@ -587,8 +587,8 @@ Added Log Comment
 			<xsl:if test="translate($MARCpublicationCode,'|','')">
 				<place>
 					<placeTerm>
-						<xsl:attribute name="type">code</xsl:attribute>
-						<xsl:attribute name="authority">marccountry</xsl:attribute>
+                        <xsl:attribute name="type"><xsl:value-of select="'code'" /></xsl:attribute>
+                        <xsl:attribute name="authority"><xsl:value-of select="'marccountry'" /></xsl:attribute>
 						<xsl:value-of select="$MARCpublicationCode"/>
 					</placeTerm>
 				</place>
@@ -596,8 +596,8 @@ Added Log Comment
 			<xsl:for-each select="marc:datafield[@tag=044]/marc:subfield[@code='c']">
 				<place>
 					<placeTerm>
-						<xsl:attribute name="type">code</xsl:attribute>
-						<xsl:attribute name="authority">iso3166</xsl:attribute>
+                        <xsl:attribute name="type"><xsl:value-of select="'code'" /></xsl:attribute>
+                        <xsl:attribute name="authority"><xsl:value-of select="'iso3166'" /></xsl:attribute>
 						<xsl:value-of select="."/>
 					</placeTerm>
 				</place>
@@ -605,7 +605,7 @@ Added Log Comment
 			<xsl:for-each select="marc:datafield[@tag=260]/marc:subfield[@code='a']">
 				<place>
 					<placeTerm>
-						<xsl:attribute name="type">text</xsl:attribute>
+                        <xsl:attribute name="type"><xsl:value-of select="'text'" /></xsl:attribute>
 						<xsl:call-template name="chopPunctuationFront">
 							<xsl:with-param name="chopString">
 								<xsl:call-template name="chopPunctuation">
@@ -1970,7 +1970,7 @@ Added Log Comment
 	</xsl:template>
 	<xsl:template name="constituentOrRelatedType">
 		<xsl:if test="@ind2=2">
-			<xsl:attribute name="type">constituent</xsl:attribute>
+            <xsl:attribute name="type"><xsl:value-of select="'constituent'" /></xsl:attribute>
 		</xsl:if>
 	</xsl:template>
 	<xsl:template name="relatedTitle">
@@ -2037,8 +2037,8 @@ Added Log Comment
 					<xsl:for-each select="marc:subfield[@code='f']">
 						<place>
 							<placeTerm>
-								<xsl:attribute name="type">code</xsl:attribute>
-								<xsl:attribute name="authority">marcgac</xsl:attribute>
+                                <xsl:attribute name="type"><xsl:value-of select="'code'" /></xsl:attribute>
+                                <xsl:attribute name="authority"><xsl:value-of select="'marcgac'" /></xsl:attribute>
 								<xsl:value-of select="."/>
 							</placeTerm>
 						</place>
@@ -2278,7 +2278,7 @@ Added Log Comment
 	</xsl:template>
 	<xsl:template name="isInvalid">
 		<xsl:if test="marc:subfield[@code='z']">
-			<xsl:attribute name="invalid">yes</xsl:attribute>
+            <xsl:attribute name="invalid"><xsl:value-of select="'yes'" /></xsl:attribute>
 		</xsl:if>
 	</xsl:template>
 	<xsl:template name="subtitle">

@@ -81,17 +81,17 @@
             <xsl:choose>
                 <xsl:when test="$controlField008-06='d'">
                     <xsl:attribute name="geographicSubdivision">
-                        <xsl:text>direct</xsl:text>
+                        <xsl:value-of select="'direct'" />
                     </xsl:attribute>
                 </xsl:when>
                 <xsl:when test="$controlField008-06='i'">
                     <xsl:attribute name="geographicSubdivision">
-                        <xsl:text>indirect</xsl:text>
+                        <xsl:value-of select="'indirect'" />
                     </xsl:attribute>
                 </xsl:when>
                 <xsl:when test="$controlField008-06='n'">
                     <xsl:attribute name="geographicSubdivision">
-                        <xsl:text>not applicable</xsl:text>
+                        <xsl:value-of select="'not applicable'" />
                     </xsl:attribute>
                 </xsl:when>
             </xsl:choose>
@@ -421,7 +421,7 @@
 
     <xsl:template name="isInvalid">
         <xsl:if test="@code='z'">
-            <xsl:attribute name="invalid">yes</xsl:attribute>
+            <xsl:attribute name="invalid"><xsl:value-of select="'yes'" /></xsl:attribute>
         </xsl:if>
     </xsl:template>
 
@@ -1017,25 +1017,25 @@
         <mads:note>
             <xsl:choose>
                 <xsl:when test="@tag=667">
-                    <xsl:attribute name="type">nonpublic</xsl:attribute>
+                    <xsl:attribute name="type"><xsl:value-of select="'nonpublic'" /></xsl:attribute>
                 </xsl:when>
                 <xsl:when test="@tag=670">
-                    <xsl:attribute name="type">source</xsl:attribute>
+                    <xsl:attribute name="type"><xsl:value-of select="'source'" /></xsl:attribute>
                 </xsl:when>
                 <xsl:when test="@tag=675">
-                    <xsl:attribute name="type">notFound</xsl:attribute>
+                    <xsl:attribute name="type"><xsl:value-of select="'notFound'" /></xsl:attribute>
                 </xsl:when>
                 <xsl:when test="@tag=678">
-                    <xsl:attribute name="type">history</xsl:attribute>
+                    <xsl:attribute name="type"><xsl:value-of select="'history'" /></xsl:attribute>
                 </xsl:when>
                 <xsl:when test="@tag=681">
-                    <xsl:attribute name="type">subject example</xsl:attribute>
+                    <xsl:attribute name="type"><xsl:value-of select="'subject example'" /></xsl:attribute>
                 </xsl:when>
                 <xsl:when test="@tag=682">
-                    <xsl:attribute name="type">deleted heading information</xsl:attribute>
+                    <xsl:attribute name="type"><xsl:value-of select="'deleted heading information'" /></xsl:attribute>
                 </xsl:when>
                 <xsl:when test="@tag=688">
-                    <xsl:attribute name="type">application history</xsl:attribute>
+                    <xsl:attribute name="type"><xsl:value-of select="'application history'" /></xsl:attribute>
                 </xsl:when>
             </xsl:choose>
             <xsl:call-template name="chopPunctuation">
@@ -1079,33 +1079,33 @@
             <xsl:when
                 test="@tag=500 or @tag=510 or @tag=511 or @tag=548 or @tag=550 or @tag=551 or @tag=555 or @tag=580 or @tag=581 or @tag=582 or @tag=585">
                 <xsl:if test="substring(marc:subfield[@code='w'],1,1)='a'">
-                    <xsl:attribute name="type">earlier</xsl:attribute>
+                    <xsl:attribute name="type"><xsl:value-of select="'earlier'" /></xsl:attribute>
                 </xsl:if>
                 <xsl:if test="substring(marc:subfield[@code='w'],1,1)='b'">
-                    <xsl:attribute name="type">later</xsl:attribute>
+                    <xsl:attribute name="type"><xsl:value-of select="'later'" /></xsl:attribute>
                 </xsl:if>
                 <xsl:if test="substring(marc:subfield[@code='w'],1,1)='t'">
-                    <xsl:attribute name="type">parentOrg</xsl:attribute>
+                    <xsl:attribute name="type"><xsl:value-of select="'parentOrg'" /></xsl:attribute>
                 </xsl:if>
                 <xsl:if test="substring(marc:subfield[@code='w'],1,1)='g'">
-                    <xsl:attribute name="type">broader</xsl:attribute>
+                    <xsl:attribute name="type"><xsl:value-of select="'broader'" /></xsl:attribute>
                 </xsl:if>
                 <xsl:if test="substring(marc:subfield[@code='w'],1,1)='h'">
-                    <xsl:attribute name="type">narrower</xsl:attribute>
+                    <xsl:attribute name="type"><xsl:value-of select="'narrower'" /></xsl:attribute>
                 </xsl:if>
                 <xsl:if test="substring(marc:subfield[@code='w'],1,1)='r'">
-                    <xsl:attribute name="type">other</xsl:attribute>
+                    <xsl:attribute name="type"><xsl:value-of select="'other'" /></xsl:attribute>
                 </xsl:if>
                 <xsl:if test="contains('fin|', substring(marc:subfield[@code='w'],1,1))">
-                    <xsl:attribute name="type">other</xsl:attribute>
+                    <xsl:attribute name="type"><xsl:value-of select="'other'" /></xsl:attribute>
                 </xsl:if>
             </xsl:when>
             <xsl:when test="@tag=530 or @tag=730">
-                <xsl:attribute name="type">other</xsl:attribute>
+                <xsl:attribute name="type"><xsl:value-of select="'other'" /></xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
                 <!-- 7xx -->
-                <xsl:attribute name="type">equivalent</xsl:attribute>
+                <xsl:attribute name="type"><xsl:value-of select="'equivalent'" /></xsl:attribute>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:apply-templates select="marc:subfield[@code='i']"/>
@@ -1116,18 +1116,18 @@
             <xsl:when
                 test="@tag=400 or @tag=410 or @tag=411 or @tag=451 or @tag=455 or @tag=480 or @tag=481 or @tag=482 or @tag=485">
                 <xsl:if test="substring(marc:subfield[@code='w'],1,1)='d'">
-                    <xsl:attribute name="type">acronym</xsl:attribute>
+                    <xsl:attribute name="type"><xsl:value-of select="'acronym'" /></xsl:attribute>
                 </xsl:if>
                 <xsl:if test="substring(marc:subfield[@code='w'],1,1)='n'">
-                    <xsl:attribute name="type">other</xsl:attribute>
+                    <xsl:attribute name="type"><xsl:value-of select="'other'" /></xsl:attribute>
                 </xsl:if>
                 <xsl:if test="contains('fit', substring(marc:subfield[@code='w'],1,1))">
-                    <xsl:attribute name="type">other</xsl:attribute>
+                    <xsl:attribute name="type"><xsl:value-of select="'other'" /></xsl:attribute>
                 </xsl:if>
             </xsl:when>
             <xsl:otherwise>
                 <!-- 430  -->
-                <xsl:attribute name="type">other</xsl:attribute>
+                <xsl:attribute name="type"><xsl:value-of select="'other'" /></xsl:attribute>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:apply-templates select="marc:subfield[@code='i']"/>
@@ -1141,82 +1141,82 @@
             <xsl:when
                 test="ancestor-or-self::marc:datafield/@tag=100 and (@ind1=0 or @ind1=1) and $controlField008-11='a' and $controlField008-14='a'">
                 <xsl:attribute name="authority">
-                    <xsl:text>naf</xsl:text>
+                    <xsl:value-of select="'naf'" />
                 </xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="ancestor-or-self::marc:datafield/@tag=100 and (@ind1=0 or @ind1=1) and $controlField008-11='a' and $controlField008-14='b'">
                 <xsl:attribute name="authority">
-                    <xsl:text>lcsh</xsl:text>
+                    <xsl:value-of select="'lcsh'" />
                 </xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="ancestor-or-self::marc:datafield/@tag=100 and (@ind1=0 or @ind1=1) and $controlField008-11='k'">
                 <xsl:attribute name="authority">
-                    <xsl:text>lacnaf</xsl:text>
+                    <xsl:value-of select="'lacnaf'" />
                 </xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="ancestor-or-self::marc:datafield/@tag=100 and @ind1=3 and $controlField008-11='a' and $controlField008-14='b'">
                 <xsl:attribute name="authority">
-                    <xsl:text>lcsh</xsl:text>
+                    <xsl:value-of select="'lcsh'" />
                 </xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="ancestor-or-self::marc:datafield/@tag=100 and @ind1=3 and $controlField008-11='k' and $controlField008-14='b'">
-                <xsl:attribute name="authority">cash</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'cash'" /></xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="ancestor-or-self::marc:datafield/@tag=110 and $controlField008-11='a' and $controlField008-14='a'">
-                <xsl:attribute name="authority">naf</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'naf'" /></xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="ancestor-or-self::marc:datafield/@tag=110 and $controlField008-11='a' and $controlField008-14='b'">
-                <xsl:attribute name="authority">lcsh</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'lcsh'" /></xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="ancestor-or-self::marc:datafield/@tag=110 and $controlField008-11='k' and $controlField008-14='a'">
                 <xsl:attribute name="authority">
-                    <xsl:text>lacnaf</xsl:text>
+                    <xsl:value-of select="'lacnaf'" />
                 </xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="ancestor-or-self::marc:datafield/@tag=110 and $controlField008-11='k' and $controlField008-14='b'">
                 <xsl:attribute name="authority">
-                    <xsl:text>cash</xsl:text>
+                    <xsl:value-of select="'cash'" />
                 </xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="100 &lt;= ancestor-or-self::marc:datafield/@tag and ancestor-or-self::marc:datafield/@tag &lt;= 155 and $controlField008-11='b'">
                 <xsl:attribute name="authority">
-                    <xsl:text>lcshcl</xsl:text>
+                    <xsl:value-of select="'lcshcl'" />
                 </xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="(ancestor-or-self::marc:datafield/@tag=100 or ancestor-or-self::marc:datafield/@tag=110 or ancestor-or-self::marc:datafield/@tag=111 or ancestor-or-self::marc:datafield/@tag=130 or ancestor-or-self::marc:datafield/@tag=151) and $controlField008-11='c'">
                 <xsl:attribute name="authority">
-                    <xsl:text>nlmnaf</xsl:text>
+                    <xsl:value-of select="'nlmnaf'" />
                 </xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="(ancestor-or-self::marc:datafield/@tag=100 or ancestor-or-self::marc:datafield/@tag=110 or ancestor-or-self::marc:datafield/@tag=111 or ancestor-or-self::marc:datafield/@tag=130 or ancestor-or-self::marc:datafield/@tag=151) and $controlField008-11='d'">
                 <xsl:attribute name="authority">
-                    <xsl:text>nalnaf</xsl:text>
+                    <xsl:value-of select="'nalnaf'" />
                 </xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="100 &lt;= ancestor-or-self::marc:datafield/@tag and ancestor-or-self::marc:datafield/@tag &lt;= 155 and $controlField008-11='r'">
                 <xsl:attribute name="authority">
-                    <xsl:text>aat</xsl:text>
+                    <xsl:value-of select="'aat'" />
                 </xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="100 &lt;= ancestor-or-self::marc:datafield/@tag and ancestor-or-self::marc:datafield/@tag &lt;= 155 and $controlField008-11='s'">
-                <xsl:attribute name="authority">sears</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'sears'" /></xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="100 &lt;= ancestor-or-self::marc:datafield/@tag and ancestor-or-self::marc:datafield/@tag &lt;= 155 and $controlField008-11='v'">
-                <xsl:attribute name="authority">rvm</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'rvm'" /></xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="100 &lt;= ancestor-or-self::marc:datafield/@tag and ancestor-or-self::marc:datafield/@tag &lt;= 155 and $controlField008-11='z'">
@@ -1229,102 +1229,102 @@
             <xsl:when
                 test="(ancestor-or-self::marc:datafield/@tag=111 or ancestor-or-self::marc:datafield/@tag=130) and $controlField008-11='a' and $controlField008-14='a'">
                 <xsl:attribute name="authority">
-                    <xsl:text>naf</xsl:text>
+                    <xsl:value-of select="'naf'" />
                 </xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="(ancestor-or-self::marc:datafield/@tag=111 or ancestor-or-self::marc:datafield/@tag=130) and $controlField008-11='a' and $controlField008-14='b'">
                 <xsl:attribute name="authority">
-                    <xsl:text>lcsh</xsl:text>
+                    <xsl:value-of select="'lcsh'" />
                 </xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="(ancestor-or-self::marc:datafield/@tag=111 or ancestor-or-self::marc:datafield/@tag=130) and $controlField008-11='k' ">
                 <xsl:attribute name="authority">
-                    <xsl:text>lacnaf</xsl:text>
+                    <xsl:value-of select="'lacnaf'" />
                 </xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="(ancestor-or-self::marc:datafield/@tag=148 or ancestor-or-self::marc:datafield/@tag=150  or ancestor-or-self::marc:datafield/@tag=155) and $controlField008-11='a' ">
                 <xsl:attribute name="authority">
-                    <xsl:text>lcsh</xsl:text>
+                    <xsl:value-of select="'lcsh'" />
                 </xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="(ancestor-or-self::marc:datafield/@tag=148 or ancestor-or-self::marc:datafield/@tag=150  or ancestor-or-self::marc:datafield/@tag=155) and $controlField008-11='a' ">
                 <xsl:attribute name="authority">
-                    <xsl:text>lcsh</xsl:text>
+                    <xsl:value-of select="'lcsh'" />
                 </xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="(ancestor-or-self::marc:datafield/@tag=148 or ancestor-or-self::marc:datafield/@tag=150  or ancestor-or-self::marc:datafield/@tag=155) and $controlField008-11='c' ">
                 <xsl:attribute name="authority">
-                    <xsl:text>mesh</xsl:text>
+                    <xsl:value-of select="'mesh'" />
                 </xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="(ancestor-or-self::marc:datafield/@tag=148 or ancestor-or-self::marc:datafield/@tag=150  or ancestor-or-self::marc:datafield/@tag=155) and $controlField008-11='d' ">
                 <xsl:attribute name="authority">
-                    <xsl:text>nal</xsl:text>
+                    <xsl:value-of select="'nal'" />
                 </xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="(ancestor-or-self::marc:datafield/@tag=148 or ancestor-or-self::marc:datafield/@tag=150  or ancestor-or-self::marc:datafield/@tag=155) and $controlField008-11='k' ">
                 <xsl:attribute name="authority">
-                    <xsl:text>cash</xsl:text>
+                    <xsl:value-of select="'cash'" />
                 </xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="ancestor-or-self::marc:datafield/@tag=151 and $controlField008-11='a' and $controlField008-14='a'">
                 <xsl:attribute name="authority">
-                    <xsl:text>naf</xsl:text>
+                    <xsl:value-of select="'naf'" />
                 </xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="ancestor-or-self::marc:datafield/@tag=151 and $controlField008-11='a' and $controlField008-14='b'">
-                <xsl:attribute name="authority">lcsh</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'lcsh'" /></xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="ancestor-or-self::marc:datafield/@tag=151 and $controlField008-11='k' and $controlField008-14='a'">
-                <xsl:attribute name="authority">lacnaf</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'lacnaf'" /></xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="ancestor-or-self::marc:datafield/@tag=151 and $controlField008-11='k' and $controlField008-14='b'">
-                <xsl:attribute name="authority">cash</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'cash'" /></xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="(..//ancestor-or-self::marc:datafield/@tag=180 or ..//ancestor-or-self::marc:datafield/@tag=181 or ..//ancestor-or-self::marc:datafield/@tag=182 or ..//ancestor-or-self::marc:datafield/@tag=185) and $controlField008-11='a'">
-                <xsl:attribute name="authority">lcsh</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'lcsh'" /></xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="ancestor-or-self::marc:datafield/@tag=700 and (@ind1='0' or @ind1='1') and @ind2='0'">
-                <xsl:attribute name="authority">naf</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'naf'" /></xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="ancestor-or-self::marc:datafield/@tag=700 and (@ind1='0' or @ind1='1') and @ind2='5'">
-                <xsl:attribute name="authority">lacnaf</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'lacnaf'" /></xsl:attribute>
             </xsl:when>
             <xsl:when test="ancestor-or-self::marc:datafield/@tag=700 and @ind1='3' and @ind2='0'">
-                <xsl:attribute name="authority">lcsh</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'lcsh'" /></xsl:attribute>
             </xsl:when>
             <xsl:when test="ancestor-or-self::marc:datafield/@tag=700 and @ind1='3' and @ind2='5'">
-                <xsl:attribute name="authority">cash</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'cash'" /></xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="(700 &lt;= ancestor-or-self::marc:datafield/@tag and ancestor-or-self::marc:datafield/@tag &lt;= 755 ) and @ind2='1'">
-                <xsl:attribute name="authority">lcshcl</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'lcshcl'" /></xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="(ancestor-or-self::marc:datafield/@tag=700 or ancestor-or-self::marc:datafield/@tag=710 or ancestor-or-self::marc:datafield/@tag=711 or ancestor-or-self::marc:datafield/@tag=730 or ancestor-or-self::marc:datafield/@tag=751)  and @ind2='2'">
-                <xsl:attribute name="authority">nlmnaf</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'nlmnaf'" /></xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="(ancestor-or-self::marc:datafield/@tag=700 or ancestor-or-self::marc:datafield/@tag=710 or ancestor-or-self::marc:datafield/@tag=711 or ancestor-or-self::marc:datafield/@tag=730 or ancestor-or-self::marc:datafield/@tag=751)  and @ind2='3'">
-                <xsl:attribute name="authority">nalnaf</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'nalnaf'" /></xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="(700 &lt;= ancestor-or-self::marc:datafield/@tag and ancestor-or-self::marc:datafield/@tag &lt;= 755 ) and @ind2='6'">
-                <xsl:attribute name="authority">rvm</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'rvm'" /></xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="(700 &lt;= ancestor-or-self::marc:datafield/@tag and ancestor-or-self::marc:datafield/@tag &lt;= 755 ) and @ind2='7'">
@@ -1334,27 +1334,27 @@
             </xsl:when>
             <xsl:when
                 test="(ancestor-or-self::marc:datafield/@tag=710 or ancestor-or-self::marc:datafield/@tag=711 or ancestor-or-self::marc:datafield/@tag=730 or ancestor-or-self::marc:datafield/@tag=751)  and @ind2='5'">
-                <xsl:attribute name="authority">lacnaf</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'lacnaf'" /></xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="(ancestor-or-self::marc:datafield/@tag=710 or ancestor-or-self::marc:datafield/@tag=711 or ancestor-or-self::marc:datafield/@tag=730 or ancestor-or-self::marc:datafield/@tag=751)  and @ind2='0'">
-                <xsl:attribute name="authority">naf</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'naf'" /></xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="(ancestor-or-self::marc:datafield/@tag=748 or ancestor-or-self::marc:datafield/@tag=750 or ancestor-or-self::marc:datafield/@tag=755)  and @ind2='0'">
-                <xsl:attribute name="authority">lcsh</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'lcsh'" /></xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="(ancestor-or-self::marc:datafield/@tag=748 or ancestor-or-self::marc:datafield/@tag=750 or ancestor-or-self::marc:datafield/@tag=755)  and @ind2='2'">
-                <xsl:attribute name="authority">mesh</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'mesh'" /></xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="(ancestor-or-self::marc:datafield/@tag=748 or ancestor-or-self::marc:datafield/@tag=750 or ancestor-or-self::marc:datafield/@tag=755)  and @ind2='3'">
-                <xsl:attribute name="authority">nal</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'nal'" /></xsl:attribute>
             </xsl:when>
             <xsl:when
                 test="(ancestor-or-self::marc:datafield/@tag=748 or ancestor-or-self::marc:datafield/@tag=750 or ancestor-or-self::marc:datafield/@tag=755)  and @ind2='5'">
-                <xsl:attribute name="authority">cash</xsl:attribute>
+                <xsl:attribute name="authority"><xsl:value-of select="'cash'" /></xsl:attribute>
             </xsl:when>
         </xsl:choose>
     </xsl:template>

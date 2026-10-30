@@ -1729,7 +1729,7 @@
             <xsl:otherwise>
                 <xsl:if test="$OPACBaseURL!=''">
                     <span class="results_summary opac_view"><span class="label">OPAC view: </span>
-                        <a><xsl:attribute name="href"><xsl:value-of select="$OPACBaseURL"/>/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="str:encode-uri(marc:datafield[@tag=999]/marc:subfield[@code='c'], true())"/></xsl:attribute><xsl:attribute name="target">_blank</xsl:attribute>Open in new window</a>.
+                        <a><xsl:attribute name="href"><xsl:value-of select="$OPACBaseURL"/>/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="str:encode-uri(marc:datafield[@tag=999]/marc:subfield[@code='c'], true())"/></xsl:attribute><xsl:attribute name="target"><xsl:value-of select="'_blank'" /></xsl:attribute>Open in new window</a>.
                     </span>
                 </xsl:if>
             </xsl:otherwise>
@@ -2054,9 +2054,9 @@
         <a class='authlink'>
             <xsl:attribute name="href">/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="$authid"/></xsl:attribute>
             <xsl:attribute name="title">View authority record</xsl:attribute>
-            <xsl:attribute name="target">_blank</xsl:attribute>
+            <xsl:attribute name="target"><xsl:value-of select="'_blank'" /></xsl:attribute>
             <xsl:element name="i">
-                <xsl:attribute name="class">fa fa-search</xsl:attribute>
+                <xsl:attribute name="class"><xsl:value-of select="'fa fa-search'" /></xsl:attribute>
                 <xsl:attribute name="aria-label">View authority record</xsl:attribute>
             </xsl:element>
         </a>

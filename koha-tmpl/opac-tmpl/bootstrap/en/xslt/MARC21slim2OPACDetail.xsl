@@ -114,9 +114,9 @@
         <!-- Wrapper div for our schema.org object -->
         <xsl:element name="div">
             <xsl:attribute name="class"><xsl:value-of select="'record'" /></xsl:attribute>
-            <xsl:attribute name="vocab">http://schema.org/</xsl:attribute>
+            <xsl:attribute name="vocab"><xsl:value-of select="'http://schema.org/'" /></xsl:attribute>
             <xsl:attribute name="typeof"><xsl:value-of select='$schemaOrgType' /></xsl:attribute>
-            <xsl:attribute name="resource">#record</xsl:attribute>
+            <xsl:attribute name="resource"><xsl:value-of select="'#record'" /></xsl:attribute>
 
         <!-- Title Statement -->
         <!-- Alternate Graphic Representation (MARC 880) -->
@@ -763,7 +763,7 @@
                                     <a class='authlink'>
                                         <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
                                         <xsl:element name="i">
-                                            <xsl:attribute name="class">fa fa-search</xsl:attribute>
+                                            <xsl:attribute name="class"><xsl:value-of select="'fa fa-search'" /></xsl:attribute>
                                         </xsl:element>
                                     </a>
                                 </xsl:if>
@@ -909,7 +909,7 @@
                                             /cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of
                                                 select="str:encode-uri(marc:subfield[@code=9], true())" /></xsl:attribute>
                                         <xsl:element name="i">
-                                            <xsl:attribute name="class">fa fa-search</xsl:attribute>
+                                            <xsl:attribute name="class"><xsl:value-of select="'fa fa-search'" /></xsl:attribute>
                                         </xsl:element>
                                     </a>
                                 </xsl:if>
@@ -965,7 +965,7 @@
                                         <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
                                         <xsl:attribute name="title">View authority record</xsl:attribute>
                                         <xsl:element name="i">
-                                            <xsl:attribute name="class">fa fa-search</xsl:attribute>
+                                            <xsl:attribute name="class"><xsl:value-of select="'fa fa-search'" /></xsl:attribute>
                                             <xsl:attribute name="aria-label">View authority record</xsl:attribute>
                                         </xsl:element>
                                     </a>
@@ -1014,7 +1014,7 @@
                                     <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
                                     <xsl:attribute name="title">View authority record</xsl:attribute>
                                     <xsl:element name="i">
-                                        <xsl:attribute name="class">fa fa-search</xsl:attribute>
+                                        <xsl:attribute name="class"><xsl:value-of select="'fa fa-search'" /></xsl:attribute>
                                         <xsl:attribute name="aria-label">View authority record</xsl:attribute>
                                     </xsl:element>
                                 </a>
@@ -1300,7 +1300,7 @@
                                     <a>
                                         <xsl:attribute name="href"><xsl:value-of select="text()"/></xsl:attribute>
                                         <xsl:if test="$OPACURLOpenInNewWindow='1'">
-                                            <xsl:attribute name="target">_blank</xsl:attribute>
+                                            <xsl:attribute name="target"><xsl:value-of select="'_blank'" /></xsl:attribute>
                                         </xsl:if>
                                         <xsl:value-of select="text()"/>
                                     </a>
@@ -1893,11 +1893,11 @@
               <xsl:value-of select="$openurltext" />
             </xsl:attribute>
             <xsl:attribute name="class">
-              <xsl:text>OpenURL</xsl:text>
+              <xsl:value-of select="'OpenURL'" />
             </xsl:attribute>
             <xsl:if test="$OPACURLOpenInNewWindow='1'">
               <xsl:attribute name="target">
-                <xsl:text>_blank</xsl:text>
+                <xsl:value-of select="'_blank'" />
               </xsl:attribute>
             </xsl:if>
             <xsl:choose>
@@ -2023,20 +2023,20 @@
                     <xsl:choose>
                         <xsl:when test="substring(@tag, 1, 1)='1'">
                             <xsl:choose>
-                                <xsl:when test="$materialTypeLabel='Music'"><xsl:attribute name="property">byArtist</xsl:attribute></xsl:when>
-                                <xsl:otherwise><xsl:attribute name="property">author</xsl:attribute></xsl:otherwise>
+                                <xsl:when test="$materialTypeLabel='Music'"><xsl:attribute name="property"><xsl:value-of select="'byArtist'" /></xsl:attribute></xsl:when>
+                                <xsl:otherwise><xsl:attribute name="property"><xsl:value-of select="'author'" /></xsl:attribute></xsl:otherwise>
                             </xsl:choose>
                         </xsl:when>
-                        <xsl:otherwise><xsl:attribute name="property">contributor</xsl:attribute></xsl:otherwise>
+                        <xsl:otherwise><xsl:attribute name="property"><xsl:value-of select="'contributor'" /></xsl:attribute></xsl:otherwise>
                     </xsl:choose>
                     <xsl:choose>
                         <xsl:when test="substring(@tag, 2, 1)='0'">
                             <xsl:choose>
-                                <xsl:when test="$materialTypeLabel='Music'"><xsl:attribute name="typeof">MusicGroup</xsl:attribute></xsl:when>
-                                <xsl:otherwise><xsl:attribute name="typeof">Person</xsl:attribute></xsl:otherwise>
+                                <xsl:when test="$materialTypeLabel='Music'"><xsl:attribute name="typeof"><xsl:value-of select="'MusicGroup'" /></xsl:attribute></xsl:when>
+                                <xsl:otherwise><xsl:attribute name="typeof"><xsl:value-of select="'Person'" /></xsl:attribute></xsl:otherwise>
                             </xsl:choose>
                         </xsl:when>
-                        <xsl:otherwise><xsl:attribute name="typeof">Organization</xsl:attribute></xsl:otherwise>
+                        <xsl:otherwise><xsl:attribute name="typeof"><xsl:value-of select="'Organization'" /></xsl:attribute></xsl:otherwise>
                     </xsl:choose>
                 <span property="name">
                 <xsl:choose>
@@ -2249,7 +2249,7 @@
                     <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
                     <xsl:attribute name="title">View authority record</xsl:attribute>
                     <xsl:element name="i">
-                        <xsl:attribute name="class">fa fa-search</xsl:attribute>
+                        <xsl:attribute name="class"><xsl:value-of select="'fa fa-search'" /></xsl:attribute>
                         <xsl:attribute name="aria-label">View authority record</xsl:attribute>
                     </xsl:element>
                 </a>

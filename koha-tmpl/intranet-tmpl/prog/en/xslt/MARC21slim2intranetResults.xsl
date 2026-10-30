@@ -306,7 +306,7 @@
             </xsl:call-template>
             <xsl:value-of select="str:encode-uri($biblionumber, true())"/>
         </xsl:attribute>
-        <xsl:attribute name="class">title</xsl:attribute>
+        <xsl:attribute name="class"><xsl:value-of select="'title'" /></xsl:attribute>
 
         <xsl:if test="marc:datafield[@tag=245]">
             <xsl:for-each select="marc:datafield[@tag=245]">

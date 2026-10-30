@@ -104,7 +104,7 @@
   <xsl:template name="addClassRtl">
     <xsl:variable name="lang" select="marc:subfield[@code='7']" />
     <xsl:if test="$lang = 'ha' or $lang = 'Hebrew' or $lang = 'fa' or $lang = 'Arabe'">
-      <xsl:attribute name="class">rtl</xsl:attribute>
+      <xsl:attribute name="class"><xsl:value-of select="'rtl'" /></xsl:attribute>
     </xsl:if>
   </xsl:template>
 
@@ -480,7 +480,7 @@
                     <xsl:value-of select="str:encode-uri(marc:subfield[@code=3], true())"/>
                   </xsl:attribute>
                   <xsl:attribute name="title">IdRef</xsl:attribute>
-                  <xsl:attribute name="rel">gb_page_center[600,500]</xsl:attribute>
+                  <xsl:attribute name="rel"><xsl:value-of select="'gb_page_center[600,500]'" /></xsl:attribute>
                   <xsl:text>Idref</xsl:text>
                 </a>
               </xsl:if>

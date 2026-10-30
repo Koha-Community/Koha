@@ -322,7 +322,7 @@
 	<xsl:template name="addClassRtl">
     <xsl:variable name="lang" select="marc:subfield[@code='7']" />
     <xsl:if test="$lang = 'ha' or $lang = 'Hebrew' or $lang = 'fa' or $lang = 'Arabe'">
-      <xsl:attribute name="class">rtl</xsl:attribute>
+      <xsl:attribute name="class"><xsl:value-of select="'rtl'" /></xsl:attribute>
     </xsl:if>
   </xsl:template>
 

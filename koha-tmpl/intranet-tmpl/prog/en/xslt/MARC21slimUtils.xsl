@@ -179,11 +179,11 @@
                     <xsl:choose>
                     <xsl:when test="boolean($class) and substring($code6,string-length($code6)-1,2) ='/r'">
                         <xsl:attribute name="class"><xsl:value-of select="$class"/> m880</xsl:attribute>
-                        <xsl:attribute name="dir">rtl</xsl:attribute>
+                        <xsl:attribute name="dir"><xsl:value-of select="'rtl'" /></xsl:attribute>
                     </xsl:when>
                      <xsl:when test="boolean($class)">
                         <xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
-                        <xsl:attribute name="style">display:block; </xsl:attribute>
+                        <xsl:attribute name="style"><xsl:value-of select="'display:block; '" /></xsl:attribute>
                     </xsl:when>    
                      <xsl:when test="substring($code6,string-length($code6)-1,2) ='/r'">
                         <xsl:attribute name="class"><xsl:value-of select="$class"/> m880</xsl:attribute>

@@ -7,7 +7,7 @@
     <xsl:variable name="authid" select="marc:controlfield[@tag='001']"/>
     <xsl:element name="div">
       <xsl:attribute name="class">
-        <xsl:text>authority-summary</xsl:text>
+        <xsl:value-of select="'authority-summary'" />
       </xsl:attribute>
       <!-- *********** Personal Name 200 ********* -->
       <xsl:if test="marc:datafield[@tag='200']">

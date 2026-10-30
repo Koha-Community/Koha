@@ -485,11 +485,11 @@
           <xsl:value-of select="$openurltext" />
         </xsl:attribute>
         <xsl:attribute name="class">
-          <xsl:text>OpenURL</xsl:text>
+          <xsl:value-of select="'OpenURL'" />
         </xsl:attribute>
         <xsl:if test="$OPACURLOpenInNewWindow='1'">
           <xsl:attribute name="target">
-            <xsl:text>_blank</xsl:text>
+            <xsl:value-of select="'_blank'" />
           </xsl:attribute>
         </xsl:if>
         <xsl:choose>

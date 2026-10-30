@@ -36,7 +36,7 @@
           </xsl:call-template>
           <xsl:value-of select="str:encode-uri($biblionumber, true())"/>
         </xsl:attribute>
-        <xsl:attribute name="class">title</xsl:attribute>
+        <xsl:attribute name="class"><xsl:value-of select="'title'" /></xsl:attribute>
 
         <xsl:variable name="title" select="marc:subfield[@code='a']"/>
         <xsl:variable name="ntitle"

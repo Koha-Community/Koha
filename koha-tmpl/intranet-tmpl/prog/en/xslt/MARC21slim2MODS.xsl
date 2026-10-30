@@ -183,7 +183,7 @@
 			<xsl:for-each select="marc:datafield[@tag=720][not(marc:subfield[@code='t'])]">
 				<name>
 					<xsl:if test="@ind1=1">
-						<xsl:attribute name="type">personal</xsl:attribute>
+                        <xsl:attribute name="type"><xsl:value-of select="'personal'" /></xsl:attribute>
 					</xsl:if>
 					<namePart>
 						<xsl:value-of select="marc:subfield[@code='a']"/>
@@ -194,10 +194,10 @@
 
 			<typeOfResource>		
 				<xsl:if test="$leader7='c'">
-					<xsl:attribute name="collection">yes</xsl:attribute>
+                    <xsl:attribute name="collection"><xsl:value-of select="'yes'" /></xsl:attribute>
 				</xsl:if>
 				<xsl:if test="$leader6='d' or $leader6='f' or $leader6='p' or $leader6='t'">
-					<xsl:attribute name="manuscript">yes</xsl:attribute>
+                    <xsl:attribute name="manuscript"><xsl:value-of select="'yes'" /></xsl:attribute>
 				</xsl:if>
 
 				<xsl:choose>
@@ -644,10 +644,10 @@
 					<language>
 						<xsl:choose>
 							<xsl:when test="../marc:subfield[@code='2']">
-								<xsl:attribute name="authority">rfc3066</xsl:attribute>
+                                <xsl:attribute name="authority"><xsl:value-of select="'rfc3066'" /></xsl:attribute>
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:attribute name="authority">iso639-2b</xsl:attribute>						
+                                <xsl:attribute name="authority"><xsl:value-of select="'iso639-2b'" /></xsl:attribute>
 							</xsl:otherwise>
 						</xsl:choose>
 						<xsl:value-of select="text()"/>
