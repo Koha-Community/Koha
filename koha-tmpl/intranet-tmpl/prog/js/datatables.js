@@ -57,7 +57,8 @@ var dataTablesDefaults = {
 
         $("#" + tableId + "_wrapper")
             .find(".dt-search .dt-search-clear")
-            .on("click", function () {
+            .on("click", function (e) {
+                e.preventDefault();
                 let dt = $(`#${tableId}`).DataTable();
                 var input = $(this).siblings("input[type='search']");
                 input.val("");
