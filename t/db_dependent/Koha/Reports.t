@@ -776,40 +776,44 @@ subtest 'prep_report enforces library parameter limits' => sub {
 
     # The label is free text, the authorised value selects the check
     $report_ab->savedsql('SELECT branchcode FROM branches WHERE branchcode = <<Branch|branches>>');
-    lives_ok { $report_ab->prep_report( ['Branch|branches'], [$code_a] ) }
+    lives_ok { $report_ab->prep_report( ['Branch|branches'], [$code_a], { run_type => 'foreground' } ) }
     'label Branch: branchcode within the report limits passes';
-    throws_ok { $report_ab->prep_report( ['Branch|branches'], [$code_c] ) }
+    throws_ok { $report_ab->prep_report( ['Branch|branches'], [$code_c], { run_type => 'foreground' } ) }
     $exception, 'label Branch: branchcode outside the report limits throws';
 
     # A multi-select value is joined by newlines, each code is checked
     $report_ab->savedsql('SELECT branchcode FROM branches WHERE branchcode IN <<Library|branches:in>>');
     my $sql;
-    lives_ok { ($sql) = $report_ab->prep_report( ['Library|branches:in'], ["$code_a\n$code_b"] ) }
+    lives_ok {
+        ($sql) = $report_ab->prep_report( ['Library|branches:in'], ["$code_a\n$code_b"], { run_type => 'foreground' } )
+    }
     'multi-select: two branchcodes within the report limits pass';
     like( $sql, qr/IN \('\Q$code_a\E','\Q$code_b\E'\)/, 'multi-select: both branchcodes are in the SQL' );
-    throws_ok { $report_ab->prep_report( ['Library|branches:in'], ["$code_a\r\n$code_c"] ) }
+    throws_ok {
+        $report_ab->prep_report( ['Library|branches:in'], ["$code_a\r\n$code_c"], { run_type => 'foreground' } )
+    }
     $exception, 'multi-select: a branchcode outside the report limits throws';
 
     # The "All" value is never allowed on a limited report
     $report_ab->savedsql('SELECT branchcode FROM branches WHERE branchcode LIKE <<Library|branches:all>>');
-    throws_ok { $report_ab->prep_report( ['Library|branches:all'], ['%'] ) }
+    throws_ok { $report_ab->prep_report( ['Library|branches:all'], ['%'], { run_type => 'foreground' } ) }
     $exception, 'all option: % throws on a limited report';
     t::lib::Mocks::mock_preference( 'LimitReportsBy', 'none' );
-    lives_ok { $report_ab->prep_report( ['Library|branches:all'], ['%'] ) }
+    lives_ok { $report_ab->prep_report( ['Library|branches:all'], ['%'], { run_type => 'foreground' } ) }
     'all option: % passes when LimitReportsBy is none';
     t::lib::Mocks::mock_preference( 'LimitReportsBy', 'library' );
 
     # A parameter is only checked when its authorised value is branches
     $report_ab->savedsql('SELECT itype FROM items WHERE itype = <<Library|itemtypes>>');
-    lives_ok { $report_ab->prep_report( ['Library|itemtypes'], [$code_c] ) }
+    lives_ok { $report_ab->prep_report( ['Library|itemtypes'], [$code_c], { run_type => 'foreground' } ) }
     'label Library with another authorised value: not checked';
     $report_ab->savedsql('SELECT branchcode FROM branches WHERE branchcode = <<Library>>');
-    lives_ok { $report_ab->prep_report( ['Library'], [$code_c] ) }
+    lives_ok { $report_ab->prep_report( ['Library'], [$code_c], { run_type => 'foreground' } ) }
     'label Library with no authorised value: not checked';
 
     # A report with no limits is unrestricted
     $report_no_limit->savedsql('SELECT branchcode FROM branches WHERE branchcode = <<Branch|branches>>');
-    lives_ok { $report_no_limit->prep_report( ['Branch|branches'], [$code_c] ) }
+    lives_ok { $report_no_limit->prep_report( ['Branch|branches'], [$code_c], { run_type => 'foreground' } ) }
     'report with no limits: any branchcode passes';
 };
 
