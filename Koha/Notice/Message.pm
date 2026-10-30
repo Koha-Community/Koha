@@ -18,7 +18,6 @@ package Koha::Notice::Message;
 use Modern::Perl;
 
 use C4::Context;
-use C4::Log qw( logaction );
 use HTML::Entities;
 use Koha::Database;
 use Koha::Exceptions::Notice;
@@ -247,9 +246,6 @@ sub convert_to_print {
         }
     );
 
-    logaction( 'NOTICES', 'CONVERT', $self->message_id, 'message_queue' )
-        if C4::Context->preference('NoticesLog');
-
     return $print_notice;
 }
 
@@ -257,7 +253,7 @@ sub convert_to_print {
 
     $message->mark_as_printed;
 
-Set the status of the message to 'printed', and log it if the notices are logged.
+Set the status of the message to 'printed'.
 
 =cut
 
@@ -265,8 +261,6 @@ sub mark_as_printed {
     my ($self) = @_;
 
     $self->update( { status => 'printed' } );
-    logaction( 'NOTICES', 'PRINT', $self->message_id, 'message_queue' )
-        if C4::Context->preference('NoticesLog');
 
     return $self;
 }

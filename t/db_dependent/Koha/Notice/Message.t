@@ -26,7 +26,6 @@ use Test::More tests => 9;
 
 use C4::Letters qw( GetPreparedLetter EnqueueLetter );
 
-use Koha::ActionLogs;
 use Koha::Database;
 use Koha::Library::Group;
 use Koha::Notice::Messages;
@@ -464,7 +463,7 @@ subtest 'template() tests' => sub {
 
 subtest 'is_sensitive(), can_be_printed() and mark_as_printed() tests' => sub {
 
-    plan tests => 16;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -520,28 +519,16 @@ subtest 'is_sensitive(), can_be_printed() and mark_as_printed() tests' => sub {
     );
 
     # mark_as_printed
-    t::lib::Mocks::mock_preference( 'NoticesLog', 1 );
     my $to_print = $message->( { letter_code => 'HOLD_SLIP', message_transport_type => 'email', status => 'sent' } );
     $to_print->mark_as_printed;
     is( $to_print->get_from_storage->status, 'printed', 'The status is set to printed' );
-    is(
-        Koha::ActionLogs->search( { module => 'NOTICES', action => 'PRINT', object => $to_print->message_id } )->count,
-        1, 'It is logged when the notices are logged'
-    );
-    t::lib::Mocks::mock_preference( 'NoticesLog', 0 );
-    my $unlogged = $message->( { letter_code => 'HOLD_SLIP', status => 'sent' } );
-    $unlogged->mark_as_printed;
-    is(
-        Koha::ActionLogs->search( { module => 'NOTICES', action => 'PRINT', object => $unlogged->message_id } )->count,
-        0, 'It is not logged when the notices are not logged'
-    );
 
     $schema->storage->txn_rollback;
 };
 
 subtest 'convert_to_print() tests' => sub {
 
-    plan tests => 21;
+    plan tests => 20;
 
     $schema->storage->txn_begin;
 
@@ -622,7 +609,6 @@ subtest 'convert_to_print() tests' => sub {
     );
 
     # convert_to_print
-    t::lib::Mocks::mock_preference( 'NoticesLog', 1 );
     my $original = $message->( { status => 'failed' } );
     my $print    = $original->convert_to_print;
     is( ref($print),                    'Koha::Notice::Message', 'The print notice is returned' );
@@ -634,11 +620,6 @@ subtest 'convert_to_print() tests' => sub {
         'It has the address and the original content'
     );
     is( $original->get_from_storage->status, 'converted', 'The original is converted' );
-    is(
-        Koha::ActionLogs->search( { module => 'NOTICES', action => 'CONVERT', object => $original->message_id } )
-            ->count,
-        1, 'It is logged'
-    );
 
     throws_ok { $original->convert_to_print } 'Koha::Exceptions::Notice::CannotConvertToPrint',
         'A converted notice cannot be converted again';
