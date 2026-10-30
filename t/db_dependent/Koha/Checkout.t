@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 7;
+use Test::More tests => 8;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
@@ -353,6 +353,103 @@ subtest 'mark_returned' => sub {
         $borrower->borrowernumber,
         'a lower privacy leaves the archived borrower intact'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'processing_fee() tests' => sub {
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );
+
+    my $patron_library   = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $checkout_library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $itemtype         = $builder->build_object( { class => 'Koha::ItemTypes' } );
+    my $other_itemtype   = $builder->build_object( { class => 'Koha::ItemTypes' } );
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $patron_library->branchcode },
+        }
+    );
+    my $item     = $builder->build_sample_item( { itype => $itemtype->itemtype } );
+    my $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                borrowernumber => $patron->borrowernumber,
+                itemnumber     => $item->itemnumber,
+                branchcode     => $checkout_library->branchcode,
+            },
+        }
+    );
+
+    Koha::CirculationRules->search( { rule_name => 'lost_item_processing_fee' } )->delete;
+
+    #no processing fee configured should return 0
+    is( $checkout->processing_fee, 0, 'Returns 0 when no processing fee rule exists' );
+
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode => $patron_library->branchcode,
+            itemtype   => $itemtype->itemtype,
+            rule_name  => 'lost_item_processing_fee',
+            rule_value => '1.00',
+        }
+    );
+
+    #test with LostChargesControl set to PatronLibrary
+    t::lib::Mocks::mock_preference( 'LostChargesControl', 'PatronLibrary' );
+
+    is( $checkout->processing_fee, '1.00', 'PatronLibrary uses the patron home library rule' );
+
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode => $checkout_library->branchcode,
+            itemtype   => $itemtype->itemtype,
+            rule_name  => 'lost_item_processing_fee',
+            rule_value => '2.00',
+        }
+    );
+
+    #test with LostChargesControl set to PickupLibrary
+    t::lib::Mocks::mock_preference( 'LostChargesControl', 'PickupLibrary' );
+    is( $checkout->processing_fee, '2.00', 'PickupLibrary uses the checkout library rule' );
+
+    #delete the branch specific rule
+    Koha::CirculationRules->search(
+        {
+            rule_name  => 'lost_item_processing_fee',
+            branchcode => $checkout_library->branchcode,
+        }
+    )->delete;
+
+    #set an all library rule
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode => undef,
+            itemtype   => $itemtype->itemtype,
+            rule_name  => 'lost_item_processing_fee',
+            rule_value => '3.00',
+        }
+    );
+
+    #test with only an all library rule
+    is( $checkout->processing_fee, '3.00', 'Falls back to the all libraries rule when the branch has none' );
+
+    #test with a differently configured item type
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode => $checkout_library->branchcode,
+            itemtype   => $other_itemtype->itemtype,
+            rule_name  => 'lost_item_processing_fee',
+            rule_value => '4.00',
+        }
+    );
+    is( $checkout->processing_fee, '3.00', 'Ignores rules for other item types' );
 
     $schema->storage->txn_rollback;
 };
