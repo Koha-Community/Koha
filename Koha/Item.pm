@@ -3111,6 +3111,19 @@ sub z3950_status {
 
 }
 
+sub effective_replacement_price {
+    my ($self) = @_;
+
+    my $item_replacementprice = $self->replacementprice // 0;
+
+    if ( $item_replacementprice == 0 && C4::Context->preference('useDefaultReplacementCost') ) {
+        my $itype_replacementprice = $self->itemtype->defaultreplacecost;
+        $item_replacementprice = $itype_replacementprice if $itype_replacementprice;
+    }
+
+    return $item_replacementprice;
+}
+
 =head3 _type
 
 =cut
