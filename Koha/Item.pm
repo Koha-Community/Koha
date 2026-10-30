@@ -3111,6 +3111,18 @@ sub z3950_status {
 
 }
 
+=head3 effective_replacement_price
+
+    my $price = $item->effective_replacement_price;
+
+Returns the effective replacement price. Usually the item's replacementprice.
+If useDefaultReplacementCost is enabled it can fallback to the item type's
+default replacement cost when the replaceprice is empty or 0
+
+Returns 0 if no price can be determined
+
+=cut
+
 sub effective_replacement_price {
     my ($self) = @_;
 
