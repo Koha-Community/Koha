@@ -928,7 +928,7 @@
                             <li>
                                 <span property="keywords">
                                     <a>
-                                        <xsl:attribute name="class">subject</xsl:attribute>
+                                        <xsl:attribute name="class"><xsl:value-of select="'subject'" /></xsl:attribute>
                                         <xsl:choose>
                                             <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
                                                 <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=an:<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
@@ -2018,7 +2018,7 @@
                         </xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
-                <xsl:attribute name="class">contributors</xsl:attribute>
+                <xsl:attribute name="class"><xsl:value-of select="'contributors'" /></xsl:attribute>
                 <span resource="#record"><span>
                     <xsl:choose>
                         <xsl:when test="substring(@tag, 1, 1)='1'">
