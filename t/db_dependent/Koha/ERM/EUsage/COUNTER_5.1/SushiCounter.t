@@ -138,15 +138,15 @@ subtest 'TR_J1 _COUNTER_report_column_headings' => sub {
     is( $report_column_headings[0][10], 'Reporting_Period_Total', '11th column heading is reporting period total' );
 
     # Months column headings
-    is( $report_column_headings[0][11], 'Sep 2021', '12th column is month column heading' );
-    is( $report_column_headings[0][12], 'Oct 2021', '13th column is month column heading' );
-    is( $report_column_headings[0][13], 'Nov 2021', '14th column is month column heading' );
-    is( $report_column_headings[0][14], 'Dec 2021', '15th column is month column heading' );
-    is( $report_column_headings[0][15], 'Jan 2022', '16th column is month column heading' );
-    is( $report_column_headings[0][16], 'Feb 2022', '17th column is month column heading' );
+    is( $report_column_headings[0][11], 'Sep-2021', '12th column is month column heading' );
+    is( $report_column_headings[0][12], 'Oct-2021', '13th column is month column heading' );
+    is( $report_column_headings[0][13], 'Nov-2021', '14th column is month column heading' );
+    is( $report_column_headings[0][14], 'Dec-2021', '15th column is month column heading' );
+    is( $report_column_headings[0][15], 'Jan-2022', '16th column is month column heading' );
+    is( $report_column_headings[0][16], 'Feb-2022', '17th column is month column heading' );
 
     # ... period is september 2021 to september 2022, i.e. 13 months
-    is( $report_column_headings[0][23], 'Sep 2022', '23rd column is the last month column heading' );
+    is( $report_column_headings[0][23], 'Sep-2022', '23rd column is the last month column heading' );
     is( $report_column_headings[0][24], undef,      '24th column is empty, no more months' );
 };
 
@@ -288,9 +288,9 @@ subtest 'TR_J2 _COUNTER_report_column_headings' => sub {
     is( $report_column_headings[0][10], 'Reporting_Period_Total', '11th column heading is reporting period total' );
 
     # Months column headings
-    is( $report_column_headings[0][11], 'Jan 2022', '12th column is month column heading' );
-    is( $report_column_headings[0][12], 'Feb 2022', '13th column is another month column heading' );
-    is( $report_column_headings[0][13], 'Mar 2022', '14th column is the last month column heading' );
+    is( $report_column_headings[0][11], 'Jan-2022', '12th column is month column heading' );
+    is( $report_column_headings[0][12], 'Feb-2022', '13th column is another month column heading' );
+    is( $report_column_headings[0][13], 'Mar-2022', '14th column is the last month column heading' );
     is( $report_column_headings[0][14], undef,      '15th column is empty, no more months' );
 };
 
@@ -442,9 +442,9 @@ subtest 'TR_J3 _COUNTER_report_column_headings' => sub {
     is( $report_column_headings[0][11], 'Reporting_Period_Total', '12th column heading is reporting period total' );
 
     # Months column headings
-    is( $report_column_headings[0][12], 'Jan 2022', '12th column is month column heading' );
-    is( $report_column_headings[0][13], 'Feb 2022', '13th column is another month column heading' );
-    is( $report_column_headings[0][14], 'Mar 2022', '13th column is the last month column heading' );
+    is( $report_column_headings[0][12], 'Jan-2022', '12th column is month column heading' );
+    is( $report_column_headings[0][13], 'Feb-2022', '13th column is another month column heading' );
+    is( $report_column_headings[0][14], 'Mar-2022', '13th column is the last month column heading' );
     is( $report_column_headings[0][25], undef,      '14th column is empty, no more months' );
 };
 
@@ -601,9 +601,9 @@ subtest 'TR_J4 _COUNTER_report_column_headings' => sub {
     is( $report_column_headings[0][11], 'Reporting_Period_Total', '12th column heading is reporting period total' );
 
     # Months column headings
-    is( $report_column_headings[0][12], 'Jan 2022', '13th column is month column heading' );
-    is( $report_column_headings[0][13], 'Feb 2022', '14th column is another month column heading' );
-    is( $report_column_headings[0][14], 'Mar 2022', '15th column is the last month column heading' );
+    is( $report_column_headings[0][12], 'Jan-2022', '13th column is month column heading' );
+    is( $report_column_headings[0][13], 'Feb-2022', '14th column is another month column heading' );
+    is( $report_column_headings[0][14], 'Mar-2022', '15th column is the last month column heading' );
     is( $report_column_headings[0][15], undef,      '16th column is empty, no more months' );
 };
 
@@ -768,9 +768,9 @@ subtest 'TR_B3 _COUNTER_report_column_headings' => sub {
     is( $report_column_headings[0][14], 'Reporting_Period_Total', '15th column heading is reporting period total' );
 
     # Months column headings
-    is( $report_column_headings[0][15], 'Jan 2022', '16th column is month column heading' );
-    is( $report_column_headings[0][16], 'Feb 2022', '17th column another month column heading' );
-    is( $report_column_headings[0][17], 'Mar 2022', '18th column is the last month column heading' );
+    is( $report_column_headings[0][15], 'Jan-2022', '16th column is month column heading' );
+    is( $report_column_headings[0][16], 'Feb-2022', '17th column another month column heading' );
+    is( $report_column_headings[0][17], 'Mar-2022', '18th column is the last month column heading' );
     is( $report_column_headings[0][18], undef,      '19th column is empty, no more months' );
 };
 
@@ -979,9 +979,9 @@ subtest 'TR_B2 _COUNTER_report_column_headings' => sub {
     is( $report_column_headings[0][13], 'Reporting_Period_Total', '14th column heading is reporting period total' );
 
     # Months column headings
-    is( $report_column_headings[0][14], 'Jan 2022', '14th column is month column heading' );
-    is( $report_column_headings[0][15], 'Feb 2022', '15th column is another column heading' );
-    is( $report_column_headings[0][16], 'Mar 2022', '16th column is the last month column heading' );
+    is( $report_column_headings[0][14], 'Jan-2022', '14th column is month column heading' );
+    is( $report_column_headings[0][15], 'Feb-2022', '15th column is another column heading' );
+    is( $report_column_headings[0][16], 'Mar-2022', '16th column is the last month column heading' );
     is( $report_column_headings[0][17], undef,      '17th column is empty, no more months' );
 };
 
