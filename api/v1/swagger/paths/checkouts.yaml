@@ -207,9 +207,12 @@
       the item. When the checkout is linked to a booking, the booking end
       date is kept in sync with the renewed due date.
 
-      The `renewal_limit` override skips the renewal count limits when the
-      AllowRenewalLimitOverride system preference is enabled, allowing staff
-      to explicitly authorise an extension of a booked loan.
+      The `renewal_limit` override applies when the AllowRenewalLimitOverride
+      system preference is enabled. Like the staff interface override, it
+      skips the renewal and unseen renewal limits, the "No renewal before"
+      date, the automatic renewal checks, and patron blocks from
+      restrictions, overdues and fines. Holds, recalls and bookings on the
+      item still prevent the renewal.
     parameters:
       - $ref: "../swagger.yaml#/parameters/checkout_id_pp"
       - $ref: "../swagger.yaml#/parameters/seen_pp"
@@ -308,9 +311,12 @@
       the item. When the checkout is linked to a booking, the booking end
       date is kept in sync with the renewed due date.
 
-      The `renewal_limit` override skips the renewal count limits when the
-      AllowRenewalLimitOverride system preference is enabled, allowing staff
-      to explicitly authorise an extension of a booked loan.
+      The `renewal_limit` override applies when the AllowRenewalLimitOverride
+      system preference is enabled. Like the staff interface override, it
+      skips the renewal and unseen renewal limits, the "No renewal before"
+      date, the automatic renewal checks, and patron blocks from
+      restrictions, overdues and fines. Holds, recalls and bookings on the
+      item still prevent the renewal.
     parameters:
       - $ref: "../swagger.yaml#/parameters/checkout_id_pp"
       - $ref: "../swagger.yaml#/parameters/seen_pp"
