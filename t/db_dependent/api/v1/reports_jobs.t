@@ -154,12 +154,12 @@ subtest 'list endpoint, job whose report was deleted' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'list endpoint, LimitReportsByLibrary' => sub {
+subtest 'list endpoint, LimitReportsBy' => sub {
     plan tests => 16;
     $schema->storage->txn_begin;
 
     Koha::BackgroundJobs->delete;
-    t::lib::Mocks::mock_preference( 'LimitReportsByLibrary', 1 );
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'library' );
 
     my $my_library    = $builder->build_object( { class => 'Koha::Libraries' } );
     my $other_library = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -203,7 +203,7 @@ subtest 'list endpoint, LimitReportsByLibrary' => sub {
         ->header_is( 'X-Total-Count', 4, 'superlibrarian sees all jobs' );
 
     # With the preference off, nothing is hidden
-    t::lib::Mocks::mock_preference( 'LimitReportsByLibrary', 0 );
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'none' );
     my $all =
         $t->get_ok("//${\$runner->userid}:$password@/api/v1/reports/jobs")
         ->status_is(200)

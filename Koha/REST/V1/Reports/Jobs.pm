@@ -62,12 +62,16 @@ sub list {
 
         # Only list jobs for reports the logged in user is allowed to see. This is done
         # in the query, before paging, so the pagination headers match what is returned.
-        my $patron = $c->stash('koha.user');
-        if ( C4::Context->preference('LimitReportsByLibrary') && !Koha::Report->can_manage_limits($patron) ) {
+        my $patron     = $c->stash('koha.user');
+        my $limit_pref = C4::Context->preference('LimitReportsBy') // 'none';
+        if ( $limit_pref ne 'none' && !Koha::Report->can_manage_limits($patron) ) {
+            my $branchcode = C4::Context::mybranch();
             my $allowed_reports =
-                C4::Context::mybranch()
-                ? Koha::Reports->search_with_library_limits( {}, {}, C4::Context::mybranch() )
-                : Koha::Reports->search( { 'reports_branches.branchcode' => undef }, { join => 'reports_branches' } );
+                !$branchcode
+                ? Koha::Reports->search( { 'reports_branches.branchcode' => undef }, { join => 'reports_branches' } )
+                : $limit_pref eq 'library_group'
+                ? Koha::Reports->search_with_library_group_limits( {}, {}, $branchcode, 'ft_reports' )
+                : Koha::Reports->search_with_library_limits( {}, {}, $branchcode );
             $rs = $rs->search(
                 {
                     -or => [
