@@ -467,7 +467,7 @@ sub _get_usage_months {
         push(
             @month_headings,
             $column_headings_formatting
-            ? $months[ $begin_month - 1 ] . " " . $begin_year
+            ? $months[ $begin_month - 1 ] . "-" . $begin_year
             : $begin_year . "-" . $begin_month
         );
         $begin_month++;
