@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 115;
+use Test::More tests => 116;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::Mocks;
@@ -29,12 +29,13 @@ use DateTime;
 use C4::Context;
 use C4::Circulation qw( AddIssue AddReturn CanBookBeIssued );
 
+use Koha::ActionLogs;
 use Koha::CirculationRules;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Token;
 
-use JSON qw(encode_json );
+use JSON qw( encode_json from_json );
 
 my $schema  = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -954,6 +955,69 @@ subtest 'renew() with requested due_date and bookings' => sub {
     is(
         dt_from_string( $booking->end_date )->compare($plural_renewal_due), 0,
         'Booking end_date synced by a renewal through the plural endpoint'
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'renew() records the renewal_limit override in the action log' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'AllowRenewalLimitOverride', 1 );
+    t::lib::Mocks::mock_preference( 'RenewalLog',                1 );
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2 }     # circulate
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item    = $builder->build_sample_item( { library => $library->branchcode } );
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => $library->branchcode,
+            categorycode => $patron->categorycode,
+            itemtype     => $item->effective_itemtype,
+            rules        => {
+                renewalsallowed => 5,
+                renewalperiod   => 7,
+                issuelength     => 7,
+            }
+        }
+    );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
+    my $checkout_id = AddIssue( $patron, $item->barcode )->issue_id;
+
+    my $last_renewal_confirmations = sub {
+        my $log = Koha::ActionLogs->search(
+            { module   => 'CIRCULATION', action => 'RENEWAL', object => $patron->borrowernumber },
+            { order_by => { -desc => 'action_id' } }
+        )->next;
+        return from_json( $log->info )->{confirmations};
+    };
+
+    $t->post_ok("//$userid:$password@/api/v1/checkouts/$checkout_id/renewal")->status_is(201);
+    ok(
+        !grep( { $_ eq 'RENEWAL_LIMIT' } @{ $last_renewal_confirmations->() } ),
+        'No RENEWAL_LIMIT without the override'
+    );
+
+    $t->post_ok(
+        "//$userid:$password@/api/v1/checkouts/$checkout_id/renewal" => { 'x-koha-override' => 'renewal_limit' } )
+        ->status_is(201);
+    ok(
+        grep( { $_ eq 'RENEWAL_LIMIT' } @{ $last_renewal_confirmations->() } ),
+        'RENEWAL_LIMIT logged with the override'
     );
 
     $schema->storage->txn_rollback;

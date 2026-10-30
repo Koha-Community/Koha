@@ -404,6 +404,9 @@ sub renew {
 
         my ( $can_renew, $error ) = CanBookBeRenewed( $checkout->patron, $checkout, $override_limit, undef, $due_date );
 
+        my $confirmations = [];
+        push @{$confirmations}, 'RENEWAL_LIMIT' if $override_limit;
+
         # Check if error is due to excessive fines and override is requested
         if ( !$can_renew && ( $error eq 'too_much_owing' or $error eq 'auto_too_much_owing' ) ) {
             if ( $overrides->{debt_limit} && C4::Context->preference("AllowFineOverrideRenewing") ) {
@@ -431,6 +434,7 @@ sub renew {
                 branch         => $checkout->branchcode,
                 seen           => $seen,
                 datedue        => $due_date,
+                confirmations  => $confirmations,
             }
         );
         $checkout = Koha::Checkouts->find($checkout_id);
