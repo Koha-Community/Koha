@@ -80,7 +80,7 @@ if ( $op eq 'cud-convert_to_print' ) {
     my $message =
         $message_id
         ? Koha::Notice::Messages->search_limited(
-        { 'me.message_id' => $message_id, borrowernumber => $borrowernumber } )->next
+        { 'me.message_id' => $message_id, 'me.borrowernumber' => $borrowernumber } )->next
         : undef;
     my $converted = $message && $message->can_be_converted_to_print && eval { $message->convert_to_print };
 

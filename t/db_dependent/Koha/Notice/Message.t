@@ -697,7 +697,7 @@ subtest 'scoped_style() tests' => sub {
 };
 
 subtest 'search_limited' => sub {
-    plan tests => 9;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -771,6 +771,35 @@ subtest 'search_limited' => sub {
 
     t::lib::Mocks::mock_preference( 'IndependentBranches', 1 );
     is_deeply( $visible->($patron_a), $ids->('a'), 'IndependentBranches restricts to the own library' );
+
+    # With IndependentBranches, the own library is all that can be seen, whatever the permissions
+    is_deeply(
+        $visible->($patron_any), $ids->('c'),
+        'A patron with view_borrower_infos_from_any_libraries is restricted to their library by IndependentBranches'
+    );
+    is_deeply(
+        $visible->( $patron_any, { 'me.borrowernumber' => $patron_a->borrowernumber } ), [],
+        'And does not see the notices of the patrons of other libraries, also when asking for them'
+    );
+
+    # The patrons table is joined to restrict the notices: a column of the notices that is also
+    # a column of the patrons, such as borrowernumber, must not be ambiguous. Used here whether there is a
+    # restriction or not, selecting a column of the patrons so that the join is not dropped as unused
+    is_deeply(
+        eval {
+            $visible->(
+                $super, { borrowernumber => $patron_c->borrowernumber },
+                { join => ['borrowernumber'], '+columns' => { patron_library => 'borrowernumber.branchcode' } }
+            );
+        } // "died: $@",
+        $ids->('c'),
+        'A column of the notices that is also one of the patrons can be used without its table name'
+    );
+    is_deeply(
+        eval { $visible->( $patron_any, { borrowernumber => $patron_c->borrowernumber } ) } // "died: $@",
+        $ids->('c'),
+        'Also when the notices are restricted, as the table of the patrons is then joined'
+    );
     t::lib::Mocks::mock_preference( 'IndependentBranches', 0 );
 
     # The restriction is combined with, not replaced by, the passed conditions

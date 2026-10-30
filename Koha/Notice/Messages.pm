@@ -67,7 +67,9 @@ patrons from those libraries are returned.
 The restriction is added to, not a replacement for, any condition on the patron's
 library passed in C<$params>. Notices that are not linked to a patron are only
 returned when there is no restriction. The passed C<$params> and C<$attributes>
-are not modified.
+are not modified. The names of the columns of the notices in C<$params> do not need
+the name of their table, C<borrowernumber> is the same as C<me.borrowernumber>, as the table of
+the patrons is joined and has columns with the same names.
 
 When there is no logged in user (cronjobs, scripts) no restriction is applied, but when the
 logged in patron cannot be found nothing is returned.
@@ -93,6 +95,11 @@ sub search_limited {
             $restriction = \['1 = 0'];
         }
     }
+
+    # The patrons are joined, to restrict the notices to the libraries of the patrons: the columns
+    # of the notices need the name of their table to not be ambiguous with those of the patrons
+    $params = { map { ( /^-|\./ ? $_ : "me.$_" ) => $params->{$_} } keys %{$params} }
+        if ref($params) eq 'HASH';
 
     my $where =
          !$restriction ? $params
