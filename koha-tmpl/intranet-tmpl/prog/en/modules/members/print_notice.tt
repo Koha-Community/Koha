@@ -16,32 +16,21 @@
 >
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/print.css") | $raw %]
-[% IF ( stylesheet ) %]
-    <link rel="stylesheet" type="text/css" href="[% stylesheet | html %]" />
-[% END %]
-<!-- prettier-ignore-start -->
-[% IF ( Koha.Preference('AllNoticeCSS') ) %]
-    <style nonce="[% Koha.CSPNonce | $raw %]">[% Koha.Preference('AllNoticeCSS') | $raw %]</style>
-[% END %]
-[% FOR style IN styles %]
-    <style nonce="[% Koha.CSPNonce | $raw %]">[% style | $raw %]</style>
-[% END %]
-[% FOR notice IN notices %]
-    [% IF notice.style %]<style nonce="[% Koha.CSPNonce | $raw %]">[% notice.style | $raw %]</style>[% END %]
-[% END %]
-<!-- prettier-ignore-end -->
+<style nonce="[% Koha.CSPNonce | $raw %]">
+    iframe.notice-frame {
+        display: block;
+        width: 100%;
+        border: 0;
+        overflow: hidden;
+    }
+</style>
 </head>
 
 <body id="tools_print_notice" class="tools">
 [% IF notices.size %]
     [% FOR notice IN notices %]
-        <div id="notice_[% notice.id | html %]" class="type_[% notice.type | html %]">
-            [% IF notice.is_html %]
-                [% IF ( notice.content ) %][% notice.content | $raw %][% ELSE %][% t("No notice template found") | html %][% END %]
-            [% ELSE %]
-                <pre>[% IF ( notice.content ) %][% notice.content | html %][% ELSE %][% t("No notice template found") | html %][% END %]</pre>
-            [% END %]
-        </div>
+        [%# The notice is not trusted: no scripts can run in its frame, it is only allowed to be the same origin so that the frame can be sized to its content %]
+        <iframe class="notice-frame type_[% notice.type | html %]" id="notice_[% notice.id | html %]" title="[% t("Notice content") | html %]" sandbox="allow-same-origin" srcdoc="[% notice.html_content | html %]"></iframe>
         [% IF notices.size > 1 && !loop.last %]<div class="pagebreak"></div>[% END %]
     [% END %]
 [% ELSE %]
@@ -50,6 +39,20 @@
 
 [% MACRO jsinclude BLOCK %]
     [% IF notices.size %]
+        <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+            // Show the whole of each notice, before it is printed
+            document.querySelectorAll("iframe.notice-frame").forEach(function (frame) {
+                function resize() {
+                    var doc = frame.contentDocument;
+                    if (!doc || !doc.documentElement) return;
+                    // The height of the content, which the height of the frame would otherwise be the minimum of
+                    frame.style.height = "0";
+                    frame.style.height = doc.documentElement.scrollHeight + "px";
+                }
+                frame.addEventListener("load", resize);
+                resize();
+            });
+        </script>
         [% INCLUDE 'slip-print.inc' #printThenClose %]
     [% END %]
 [% END %]

@@ -52,30 +52,17 @@ my @messages = grep { $_->can_be_printed } Koha::Notice::Messages->search_limite
     { order_by        => 'me.message_id' }
 )->as_list;
 
-my $types_seen = {};
-my @scoped_styles;
-my @notices;
-foreach my $message (@messages) {
-    push @notices, {
-        content => $message->content,
-        is_html => $message->is_html,
-        style   => $message->scoped_template_style( '#notice_' . $message->message_id ),
-        id      => $message->message_id,
-        type    => $message->message_transport_type,
-    };
-
-    unless ( $types_seen->{ $message->message_transport_type } ) {
-        push @scoped_styles, $message->scoped_style;
-        $types_seen->{ $message->message_transport_type } = 1;
+# Every notice is shown in a sandboxed frame, see print_notice.tt
+my @notices = map {
+    {
+        id           => $_->message_id,
+        type         => $_->message_transport_type,
+        html_content => $_->html_content,
     }
-}
+} @messages;
 
 $_->mark_as_printed for grep { $op eq 'cud-print' } @messages;
 
-$template->param(
-    notices    => \@notices,
-    stylesheet => C4::Context->preference("AllNoticeStylesheet"),
-    styles     => \@scoped_styles,
-);
+$template->param( notices => \@notices );
 
 output_html_with_http_headers $input, $cookie, $template->output;

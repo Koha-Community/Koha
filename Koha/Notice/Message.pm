@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use C4::Context;
 use C4::Log qw( logaction );
+use HTML::Entities;
 use Koha::Database;
 use Koha::Exceptions::Notice;
 use Koha::I18N qw( __ );
@@ -62,16 +63,25 @@ sub is_html {
 The content of messages that can carry a secret (see L</is_sensitive>) is replaced by a notice.
 
 This method returns the message content appropriately wrapped
-with HTML headers and CSS includes for HTML formatted notices.
+with HTML headers and CSS includes, and the style of the template of the notice, for HTML
+formatted notices. The content of plain text notices is escaped.
 
 =cut
 
 sub html_content {
     my ($self) = @_;
 
-    my $title       = $self->subject;
-    my $content     = $self->content;
-    my $stylesheets = $self->stylesheets;
+    my $title   = $self->subject;
+    my $content = $self->content;
+
+    # The style of the template belongs to the notice, which is shown on its own
+    my $template    = $self->template;
+    my $stylesheets = join(
+        "\n    ", grep { length } $self->stylesheets,
+        $template && length( $template->style // '' )
+        ? qq{<style type="text/css">} . $template->style . qq{</style>}
+        : ()
+    );
 
     my $is_html = $self->is_html;
     if ( $self->is_sensitive ) {
@@ -101,7 +111,7 @@ sub html_content {
 EOS
     } else {
         $wrapped = "<div style=\"white-space: pre-wrap;\">";
-        $wrapped .= $content;
+        $wrapped .= HTML::Entities::encode_entities( $content, '<>&"' );
         $wrapped .= "</div>";
     }
     return $wrapped;
@@ -357,149 +367,6 @@ sub template {
     my $template_rs = $self->_result->letter;
     return unless $template_rs;
     return Koha::Notice::Template->_new_from_dbic($template_rs);
-}
-
-=head3 scoped_style
-
-  my $scoped_style = $message->scoped_style;
-
-Returns a string of all the scoped styles for the message: the styles defined for its
-transport type, with every selector prefixed by a class for the transport type so they
-only apply to notices of that type.
-
-=cut
-
-sub scoped_style {
-    my ($self) = @_;
-    my $type = $self->message_transport_type;
-    my $css_content;
-
-    if ( $type eq 'email' ) {
-        $css_content = C4::Context->preference("EmailNoticeCSS");
-    } elsif ( $type eq 'print' ) {
-        $css_content = C4::Context->preference("PrintNoticeCSS");
-    }
-
-    # No styles are defined for other transport types, or for an empty preference
-    return q{} unless $css_content;
-
-    return _scope_css( $css_content, ".type_$type" );
-}
-
-=head3 scoped_template_style
-
-  my $style = $message->scoped_template_style('#notice_123');
-
-Returns the styles of the notice template the message was generated from, with every selector
-prefixed by the given scope, or an empty string if the message has no template or the template
-has no styles.
-
-=cut
-
-sub scoped_template_style {
-    my ( $self, $scope ) = @_;
-
-    my $template = $self->template;
-    return q{} unless $template && $template->style;
-
-    return _scope_css( $template->style, $scope );
-}
-
-=head3 _split_selectors
-
-  my @selectors = _split_selectors('a, :is(b, c), [data-x="1,2"]');
-
-Split a selector list on its top level commas, commas in parentheses, brackets and strings are kept.
-
-=cut
-
-sub _split_selectors {
-    my ($list) = @_;
-
-    my @selectors;
-    my ( $current, $depth, $quote ) = ( q{}, 0, undef );
-    for my $char ( split //, $list ) {
-        if ($quote) {
-            $quote = undef if $char eq $quote;
-        } elsif ( $char eq '"' or $char eq "'" ) {
-            $quote = $char;
-        } elsif ( $char eq '(' or $char eq '[' ) {
-            $depth++;
-        } elsif ( $char eq ')' or $char eq ']' ) {
-            $depth-- if $depth;
-        } elsif ( $char eq ',' and !$depth ) {
-            push @selectors, $current;
-            $current = q{};
-            next;
-        }
-        $current .= $char;
-    }
-    push @selectors, $current;
-
-    return @selectors;
-}
-
-=head3 _scope_css
-
-  my $scoped_css = _scope_css( $css, '.scope' );
-
-Prefix every selector of the given CSS with the given scope. Rules nested in conditional
-group at-rules (@media, @supports, @document, @layer, @container) are scoped too, other at-rules
-(@font-face, @keyframes, @import...) and comments are left alone.
-
-=cut
-
-sub _scope_css {
-    my ( $css, $scope ) = @_;
-
-    my $scoped = q{};
-    while (
-        $css =~ m{
-            \G
-            (?: (?<comment> /\*.*?\*/ )
-              | (?<space> \s+ )
-              | (?<atrule> \@(?<name>[\w-]+) (?<prelude>[^{};]*)
-                    (?: ; | (?<block> \{ (?: [^{}]++ | (?&block) )* \} ) ) )
-              | (?<selector> [^{}\@;]+? ) (?<declarations> \{ [^{}]* \} )
-            )
-        }gcsx
-        )
-    {
-        # Copy what we need, the recursive call below resets the match variables
-        my %match = ( %+, all => $& );
-
-        if ( defined $match{comment} or defined $match{space} ) {
-            $scoped .= $match{all};
-        } elsif ( defined $match{atrule} ) {
-            if ( defined $match{block}
-                and $match{name} =~ m/^(?:media|supports|-moz-document|document|layer|container)$/ )
-            {
-                my $inner = substr( $match{block}, 1, -1 );
-                $scoped .= '@' . $match{name} . $match{prelude} . '{' . _scope_css( $inner, $scope ) . '}';
-            } else {
-                $scoped .= $match{all};
-            }
-        } else {
-            my ($leading) = $match{selector} =~ m/^(\s*)/;
-            my @selectors = grep { length } map { s/^\s+|\s+$//gr } _split_selectors( $match{selector} );
-
-            # The notice replaces the document, so the document selectors apply to its container
-            my @scoped_selectors;
-            for my $selector (@selectors) {
-                if ( $selector =~ s/^(?:html|body|:root)(?=$|[\s>+~])/$scope/ ) {
-                    push @scoped_selectors, $selector;
-                } else {
-                    push @scoped_selectors, "$scope $selector";
-                }
-            }
-            $scoped .= $leading . join( ', ', @scoped_selectors ) . ' ' . $match{declarations};
-        }
-    }
-
-    # Anything we could not make sense of is kept as it was
-    $scoped .= substr( $css, pos($css) // 0 );
-
-    return $scoped;
 }
 
 =head3 _type

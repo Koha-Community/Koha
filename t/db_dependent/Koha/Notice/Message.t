@@ -22,7 +22,7 @@ use Modern::Perl;
 use Test::Exception;
 use Test::Warn;
 use Test::NoWarnings;
-use Test::More tests => 10;
+use Test::More tests => 9;
 
 use C4::Letters qw( GetPreparedLetter EnqueueLetter );
 
@@ -112,7 +112,7 @@ subtest 'is_html() tests' => sub {
 };
 
 subtest 'html_content() tests' => sub {
-    plan tests => 3;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -127,6 +127,7 @@ subtest 'html_content() tests' => sub {
                 name                   => 'test notice template',
                 title                  => '[% borrower.firstname %]',
                 content                => 'This is a test template using borrower [% borrower.id %]',
+                style                  => '',
                 branchcode             => "",
                 lang                   => 'default',
             }
@@ -241,6 +242,26 @@ WRAPPED
         $message->html_content, $wrapped_compare,
         "html_content returned the correct html wrapped letter for a plaintext template"
     );
+
+    # What looks like markup in the content of a plain text notice is shown, not interpreted
+    $message->content(q{<script>alert("x")</script> 1 < 2 & 3})->store;
+    is(
+        $message->html_content,
+        q{<div style="white-space: pre-wrap;">&lt;script&gt;alert(&quot;x&quot;)&lt;/script&gt; 1 &lt; 2 &amp; 3</div>},
+        'The content of a plain text notice is escaped'
+    );
+
+    # The style of the template is part of the notice, which is shown on its own
+    $template->is_html(1)->store;
+    $template->style('p { color: red; }')->store;
+    $message->set( { content => '<p>Hello</p>', content_type => 'text/html; charset="UTF-8"' } )->store;
+    $message = Koha::Notice::Messages->find( $message->message_id );    # Not the cached template
+    like(
+        $message->html_content, qr{<head>.*<style type="text/css">p \{ color: red; \}</style>.*</head>}s,
+        'The style of the template of an HTML notice is included'
+    );
+    $message->update( { letter_id => undef, letter_code => undef } );
+    unlike( $message->html_content, qr/color: red/, 'No style for a notice without a template' );
 
     $schema->storage->txn_rollback;
 };
@@ -630,68 +651,6 @@ subtest 'convert_to_print() tests' => sub {
         'There must be a notice to convert with'
     } qr/No members CONVERTED_TO_PRINT letter transported by print/, 'Koha warns that the notice is missing';
     is( $another->get_from_storage->status, 'sent', 'The notice is not changed' );
-
-    $schema->storage->txn_rollback;
-};
-
-subtest 'scoped_style() tests' => sub {
-
-    plan tests => 9;
-
-    $schema->storage->txn_begin;
-
-    t::lib::Mocks::mock_preference( 'EmailNoticeCSS', 'p { color: red; }' );
-    t::lib::Mocks::mock_preference( 'PrintNoticeCSS', '@media print { p { color: blue; } }' );
-
-    my $email =
-        $builder->build_object( { class => 'Koha::Notice::Messages', value => { message_transport_type => 'email' } } );
-    like( $email->scoped_style, qr/\.type_email\s+p\s*\{/, 'Email styles are scoped to the transport type' );
-
-    my $print =
-        $builder->build_object( { class => 'Koha::Notice::Messages', value => { message_transport_type => 'print' } } );
-    like(
-        $print->scoped_style, qr/\@media print\s*\{\s*\.type_print\s+p\s*\{/,
-        'Rules inside an at-rule are scoped'
-    );
-
-    t::lib::Mocks::mock_preference(
-        'PrintNoticeCSS',
-        "\@media print {\n    p { color: blue; }\n    h1 { color: red; }\n}\n"
-    );
-    like(
-        $print->scoped_style, qr/\.type_print\s+p\s*\{.*\.type_print\s+h1\s*\{/s,
-        'Rules inside a formatted at-rule are scoped'
-    );
-
-    t::lib::Mocks::mock_preference(
-        'PrintNoticeCSS',
-        'body { color: red; } h1, :is(a, b), [data-x="1,2"] { margin: 0 }'
-    );
-    my $scoped = $print->scoped_style;
-    like( $scoped, qr/^\.type_print\s*\{ color: red; \}/, 'The document selectors apply to the container' );
-    like(
-        $scoped, qr/\.type_print h1, \.type_print :is\(a, b\), \.type_print \[data-x="1,2"\] \{/,
-        'Only top level commas separate selectors'
-    );
-
-    t::lib::Mocks::mock_preference( 'PrintNoticeCSS', '@layer base { p { color: blue; } }' );
-    like( $print->scoped_style, qr/\@layer base \{ \.type_print p/, 'Rules in layers are scoped' );
-
-    my $template = $builder->build_object(
-        { class => 'Koha::Notice::Templates', value => { style => '@media print { p { a: b; } } p { c: d; }' } } );
-    my $templated =
-        $builder->build_object( { class => 'Koha::Notice::Messages', value => { letter_id => $template->id } } );
-    is(
-        $templated->scoped_template_style('#notice_1'), '@media print { #notice_1 p { a: b; } } #notice_1 p { c: d; }',
-        'The style of the template is scoped'
-    );
-
-    my $sms =
-        $builder->build_object( { class => 'Koha::Notice::Messages', value => { message_transport_type => 'sms' } } );
-    is( $sms->scoped_style, q{}, 'No styles for transport types without styles, and no warnings' );
-
-    t::lib::Mocks::mock_preference( 'EmailNoticeCSS', '' );
-    is( $email->scoped_style, q{}, 'No styles when the preference is empty, and no warnings' );
 
     $schema->storage->txn_rollback;
 };
