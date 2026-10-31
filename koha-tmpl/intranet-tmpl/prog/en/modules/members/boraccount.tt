@@ -211,7 +211,7 @@
                                         <a target="_blank" href="printfeercpt.pl?action=print&amp;accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs receipt-print-action"><i class="fa fa-print"></i> Print</a>
                                     [% END %]
                                 [% ELSIF ( account.debit_type_code == 'PAYOUT' ) %]
-                                    <a target="_blank" href="/cgi-bin/koha/pos/printreceipt.pl?action=print&amp;accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs receipt-print-action"
+                                    <a target="_blank" href="/cgi-bin/koha/pos/printreceipt.pl?action=print&amp;autoprint=1&amp;accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs receipt-print-action"
                                         ><i class="fa fa-print"></i> Print</a
                                     >
                                 [% ELSE %]
