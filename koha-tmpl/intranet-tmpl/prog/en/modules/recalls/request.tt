@@ -6,6 +6,7 @@
 [% USE Categories %]
 [% USE AuthorisedValues %]
 [% USE ItemTypes %]
+[% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -119,18 +120,16 @@
                 <table id="items">
                     <thead>
                         <tr>
-                            <th>&nbsp;</th>
-                            <th>Item type</th>
-                            <th>Barcode</th>
-                            [% UNLESS ( singleBranchMode ) %]
-                                <th>Home library</th>
-                                <th>Holding library</th>
-                            [% END %]
-                            <th>Collection</th>
-                            <th>Call number</th>
-                            <th>Copy number</th>
-                            <th>Vol no.</th>
-                            <th>Information</th>
+                            <th data-colname="select">&nbsp;</th>
+                            <th data-colname="item_type">Item type</th>
+                            <th data-colname="barcode">Barcode</th>
+                            <th data-colname="home_library">Home library</th>
+                            <th data-colname="holding_library">Holding library</th>
+                            <th data-colname="collection">Collection</th>
+                            <th data-colname="call_number">Call number</th>
+                            <th data-colname="copy_number">Copy number</th>
+                            <th data-colname="vol_no">Vol no.</th>
+                            <th data-colname="information">Information</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -147,10 +146,16 @@
                                 </td>
                                 <td>[% ItemTypes.GetDescription( item.effective_itemtype ) | html %]</td>
                                 <td>[% item.barcode | html %]</td>
-                                [% UNLESS ( singleBranchMode ) %]
-                                    <td>[% Branches.GetName( item.homebranch ) | html %]</td>
-                                    <td>[% Branches.GetName( item.holdingbranch) | html %]</td>
-                                [% END %]
+                                <td>
+                                    [% UNLESS singleBranchMode %]
+                                        [% Branches.GetName( item.homebranch ) | html %]
+                                    [% END %]
+                                </td>
+                                <td>
+                                    [% UNLESS singleBranchMode %]
+                                        [% Branches.GetName( item.holdingbranch) | html %]
+                                    [% END %]
+                                </td>
                                 <td>[% AuthorisedValues.GetByCode( 'CCODE', item.ccode, 1 ) | html %]</td>
                                 <td>[% item.itemcallnumber | html %]</td>
                                 <td>[% item.copynumber | html %]</td>
@@ -272,6 +277,11 @@
     <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         const apply_patron_autocomplete = [% !patron && PatronAutoComplete ? 1 : 0 | html %];
         const url_biblio_params = '[% url_biblio_params | url %]';
+        var items_table_settings = [% TablesSettings.GetTableSettings( 'circ', 'recalls', 'items', 'json' ) | $raw %];
+        let library_columns = items_table_settings.columns.filter(c => ["home_library", "holding_library"].includes(c.columnname));
+        library_columns.forEach(c => {
+            c.visibility_condition = [% singleBranchMode ? 'false' : 'true' | html %];
+        });
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $.fn.select2.defaults.set("width", "100%");
@@ -280,7 +290,14 @@
             if (apply_patron_autocomplete) {
                 patron_autocomplete($(".search_patron_filter"), { "link-to": "recall", "url-params": url_biblio_params });
             }
-            $("#items").kohaTable();
+            $("#items")?.kohaTable(
+                {
+                    paginate: false,
+                    dom: '<"top pager"ilf>t',
+                    bKohaColumnsUseNames: true,
+                },
+                items_table_settings
+            );
 
             //Override fieldset styling for dataTables search box
             $("div.top.pager").css("margin-left", "1em");
