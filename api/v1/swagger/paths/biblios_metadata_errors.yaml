@@ -23,6 +23,10 @@
     responses:
       '204':
         description: Metadata error deleted
+      '400':
+        description: Bad request
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
       '401':
         description: Authentication required
         schema:
