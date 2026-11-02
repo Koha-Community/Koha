@@ -129,6 +129,38 @@ sub list_running {
     return try {
         my @threads = Koha::Reports->_active_report_runs;
 
+        # threads needs to be limited to the ones the logged in user can actually see
+        # get the patron and the LimitReportsBy sys pref value
+        my $patron     = $c->stash('koha.user');
+        my $limit_pref = C4::Context->preference('LimitReportsBy') // 'none';
+
+        #we can skip this and just give the user all reports IF the LimitReportsBy pref is off OR the user can manage report limits
+        if ( $limit_pref ne 'none' && !Koha::Report->can_manage_limits($patron) ) {
+            my $branchcode = C4::Context::mybranch();
+            my $allowed_reports;
+            if ( !$branchcode ) {
+
+                # No loggedinlibrary, only reports without library limits are allowed
+                $allowed_reports = Koha::Reports->search(
+                    { 'reports_branches.branchcode' => undef },
+                    { join                          => 'reports_branches' }
+                );
+            } elsif ( $limit_pref eq 'library_group' ) {
+
+                #get all allowed reports in the library group
+                $allowed_reports =
+                    Koha::Reports->search_with_library_group_limits( {}, {}, $branchcode, 'ft_reports' );
+            } else {
+
+                #only get reports allowed for this branch
+                $allowed_reports = Koha::Reports->search_with_library_limits( {}, {}, $branchcode );
+            }
+
+            #map each of the report_ids the user is allowed to see
+            my %allowed_ids = map { $_ => 1 } $allowed_reports->get_column('me.id');
+            @threads = grep { $allowed_ids{ $_->{report_id} } } @threads;
+        }
+
         my %report_ids = map { $_->{report_id} => 1 } grep { $_->{report_id} } @threads;
         my %user_ids   = map { $_->{user_id}   => 1 } grep { $_->{user_id} } @threads;
 
