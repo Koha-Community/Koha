@@ -6,6 +6,11 @@
 // the conflict-error path in a single test against one persistent DOM/module
 // instance, mirroring what circulation.tt's Extend button drives.
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const LIBRARY_TZ = "Australia/Brisbane"; // Fixed UTC+10 offset, no DST.
 
@@ -56,6 +61,7 @@ describe("extend_booking_modal.js bridge", () => {
         `
         );
 
+        window["dayjs"] = dayjs;
         window["__"] = s => s;
         window["$timezone"] = () => LIBRARY_TZ;
         window["$date"] = d => dayjs(d).tz(LIBRARY_TZ).format("YYYY-MM-DD");
