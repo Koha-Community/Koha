@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Mojo;
 
 use JSON qw( encode_json );
@@ -30,6 +30,7 @@ use t::lib::Mocks;
 use Koha::BackgroundJobs;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Library::Group;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -305,6 +306,77 @@ subtest 'running endpoint' => sub {
     is( $by_pid[0]{seconds},  12,           'seconds surfaced from processlist' );
     is( $by_pid[1]{run_type}, 'background', 'second row is background' );
     is( $by_pid[1]{seconds},  30,           'seconds for the BG worker thread' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'running endpoint, LimitReportsBy' => sub {
+    plan tests => 15;
+
+    $schema->storage->txn_begin;
+
+    my $runner = make_patron(0);
+    grant_reports_perm( $runner, 'execute_reports_foreground' );
+    my $super = make_patron(1);
+    my $other = make_patron(0);
+
+    # The runner's library and a sibling library are in the same reports group
+    my $library_sibling = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_outside = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $root  = Koha::Library::Group->new( { title     => 'reports root', ft_reports => 1 } )->store;
+    my $group = Koha::Library::Group->new( { parent_id => $root->id, title => 'reports group' } )->store;
+    Koha::Library::Group->new( { parent_id => $group->id, branchcode => $runner->branchcode } )->store;
+    Koha::Library::Group->new( { parent_id => $group->id, branchcode => $library_sibling->branchcode } )->store;
+
+    my $report_open    = $builder->build_object( { class => 'Koha::Reports' } );
+    my $report_sibling = $builder->build_object( { class => 'Koha::Reports' } );
+    my $report_outside = $builder->build_object( { class => 'Koha::Reports' } );
+    $report_sibling->replace_library_limits( [ $library_sibling->branchcode ] );
+    $report_outside->replace_library_limits( [ $library_outside->branchcode ] );
+
+    my $reports_mock = Test::MockModule->new('Koha::Reports');
+    $reports_mock->mock(
+        '_active_report_runs',
+        sub {
+            return (
+                {
+                    report_id  => $report_open->id, user_id => $other->borrowernumber, run_type => 'foreground',
+                    process_id => 1, seconds => 5
+                },
+                {
+                    report_id  => $report_sibling->id, user_id => $other->borrowernumber, run_type => 'foreground',
+                    process_id => 2, seconds => 5
+                },
+                {
+                    report_id  => $report_outside->id, user_id => $other->borrowernumber, run_type => 'foreground',
+                    process_id => 3, seconds => 5
+                },
+            );
+        }
+    );
+
+    my $runner_url = "//${\$runner->userid}:$password@/api/v1/reports/jobs/running";
+    my $super_url  = "//${\$super->userid}:$password@/api/v1/reports/jobs/running";
+    my $rows;
+
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'library' );
+    $rows = $t->get_ok($runner_url)->status_is(200)->tx->res->json;
+    is( scalar @$rows,           1,                'library: only one report is shown' );
+    is( $rows->[0]->{report_id}, $report_open->id, 'library: it is the unlimited report' );
+
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'library_group' );
+    $rows = $t->get_ok($runner_url)->status_is(200)->tx->res->json;
+    is( scalar @$rows,           2,                   'library_group: two reports are shown' );
+    is( $rows->[0]->{report_id}, $report_open->id,    'library_group: the unlimited report is shown' );
+    is( $rows->[1]->{report_id}, $report_sibling->id, 'library_group: the report limited to the same group is shown' );
+
+    $rows = $t->get_ok($super_url)->status_is(200)->tx->res->json;
+    is( scalar @$rows, 3, 'superlibrarian: all reports are shown' );
+
+    t::lib::Mocks::mock_preference( 'LimitReportsBy', 'none' );
+    $rows = $t->get_ok($runner_url)->status_is(200)->tx->res->json;
+    is( scalar @$rows, 3, 'none: all reports are shown' );
 
     $schema->storage->txn_rollback;
 };
