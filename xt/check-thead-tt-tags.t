@@ -90,6 +90,8 @@ my @vue_tables = (
     [qw(erm yearly_usages yearly_usages)],
     [qw(sip2 system_preference_overrides system_preference_overrides)],
     [qw(illrequests ill-supply ill-supply)],
+    [qw(item_lists lists lists)],
+    [qw(item_lists shares shares)],
 );
 
 my $table_id_mapping = {
