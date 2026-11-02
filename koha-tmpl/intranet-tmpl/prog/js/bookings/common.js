@@ -17,7 +17,7 @@ window.BookingsTable = (function () {
         const statusMap = {
             new: () => __("New"),
             cancelled: () =>
-                [__("Cancelled"), row.cancellation_reason]
+                [__("Cancelled"), escape_str(row.cancellation_reason)]
                     .filter(Boolean)
                     .join(": "),
             issued: () => __("Issued"),
