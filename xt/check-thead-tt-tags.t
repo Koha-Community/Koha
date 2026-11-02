@@ -76,23 +76,30 @@ my @exceptions = (
     "opac/biblio-detail/holdingst",
     "opac/biblio-detail/subscriptionst",
 );
-my @vue_tables = (
-    [qw(sip2 institutions institutions)],
-    [qw(acqui vendors vendors)],
-    [qw(erm agreements agreements)],
-    [qw(erm counter_logs counter_logs)],
-    [qw(erm eholdings packages)],
-    [qw(erm eholdings titles)],
-    [qw(erm licenses licenses)],
-    [qw(erm monthly_usages monthly_usages)],
-    [qw(erm titles titles)],
-    [qw(erm usage_data_providers usage_data_providers)],
-    [qw(erm yearly_usages yearly_usages)],
-    [qw(sip2 system_preference_overrides system_preference_overrides)],
-    [qw(illrequests ill-supply ill-supply)],
-    [qw(item_lists lists lists)],
-    [qw(item_lists shares shares)],
-);
+
+# Tables rendered by Vue components do not have a <table> in a .tt file.
+# Their settings are passed to the Vue app from the TT wrapper (only TT files
+# including a Vue bundle with [% Asset.js("js/vue/dist/<name>.js") | $raw %] are considered, islands.esm.js excluded), for instance:
+#   const institutions_table_settings = [% TablesSettings.GetTableSettings( 'sip2', 'institutions', 'institutions', 'json' ) | $raw %];
+# Detect them automatically, no need to list them here.
+my $quoted     = qr{['"]([\w-]+)['"]};
+my $vue_bundle = qr{
+    \[%\s*                                    # [% opening tag
+    Asset\.js\( \s*                           # Asset.js(
+    ['"] js/vue/dist/                         #   quoted path to the Vue bundles
+    (?!islands\.esm\.js) [^'"]+ ['"]          #   any bundle but islands.esm.js
+    \s* \)                                    # )
+    \s* \| \s* \$raw \s*                      # | $raw
+    %\]                                       # %] closing tag
+}x;
+my %vue_tables;
+for my $file (@tt_files) {
+    my $content = read_file($file);
+    next unless $content =~ $vue_bundle;
+    while ( $content =~ m{GetTableSettings\(\s*$quoted\s*,\s*$quoted\s*,\s*$quoted\s*,\s*'json'}g ) {
+        $vue_tables{"$1/$2/$3"} = 1;
+    }
+}
 
 my $table_id_mapping = {
     'catalogue/detail/acquisitiondetails-table'     => [qw( catalogue detail orders)],
@@ -118,8 +125,8 @@ foreach my $table (@tables) {
         pass("Table '$id' is an exception");
         next;
     }
-    if ( grep { $_->[0] eq $module && $_->[1] eq $page && $_->[2] eq $table_id } @vue_tables ) {
-        pass("Table '$id' is in .vue files");
+    if ( $vue_tables{$id} ) {
+        pass("Table '$id' is rendered by a Vue component");
         next;
     }
 
