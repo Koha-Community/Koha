@@ -193,15 +193,24 @@ describe("Booking Modal Date Picker Tests", () => {
         setupModalForDateTesting();
 
         cy.get(".flatpickr-calendar.open").should("be.visible");
+        // A late availability response or month-count change rebuilds the
+        // day grid; focus and dispatch synchronously so no redraw lands
+        // between.
         cy.get(".flatpickr-day:not(.hidden):not(.flatpickr-disabled)")
             .first()
-            .focus()
-            .should("have.focus")
-            .trigger("keydown", {
-                key: "Escape",
-                code: "Escape",
-                keyCode: 27,
-                which: 27,
+            .then($day => {
+                $day[0].focus();
+                const event = new KeyboardEvent("keydown", {
+                    key: "Escape",
+                    code: "Escape",
+                    bubbles: true,
+                    cancelable: true,
+                });
+                Object.defineProperties(event, {
+                    keyCode: { value: 27 },
+                    which: { value: 27 },
+                });
+                $day[0].dispatchEvent(event);
             });
         cy.focused().should("have.attr", "id", "booking_period");
         cy.get(".flatpickr-calendar.open").should("be.visible");
