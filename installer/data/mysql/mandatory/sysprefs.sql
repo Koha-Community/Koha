@@ -724,7 +724,7 @@ INSERT INTO systempreferences ( `variable`, `value` ) VALUES
 ('ReportsExportFormatODS','1'),
 ('ReportsExportLimit',''),
 ('ReportsLog','0'),
-('ReportsRunInBackground','user_choice'),
+('ReportsRunInBackground','never'),
 ('RequireCashRegister','0'),
 ('RequireChoosingExistingAuthority','0'),
 ('RequirePaymentType','0'),

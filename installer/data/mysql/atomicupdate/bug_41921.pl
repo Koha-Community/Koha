@@ -13,7 +13,7 @@ return {
         $dbh->do(
             q{
             INSERT IGNORE INTO systempreferences (variable, value, explanation, options, type)
-            VALUES ('ReportsRunInBackground', 'user_choice',
+            VALUES ('ReportsRunInBackground', 'never',
                     'Control whether saved SQL reports run as a background job, in the foreground, or let the user choose.',
                     'always|never|user_choice', 'Choice')
         }
