@@ -51,9 +51,13 @@
         <div id="receipt_sent_dialog" class="alert alert-warning"> Receipt not sent, failed to find template. </div>
     [% END %]
 
-    [% IF payment_id && !Koha.Preference('FinePaymentAutoPopup') %]
+    [% IF payment_credit_type && !Koha.Preference('FinePaymentAutoPopup') %]
         <div class="alert alert-info audio-alert-action">
-            <p>Payment received</p>
+            [% IF payment_credit_type == 'WRITEOFF' %]
+                <p>Fee written off</p>
+            [% ELSE %]
+                <p>Payment received</p>
+            [% END %]
             <p>
                 <a id="print-payment-receipt-button" target="_blank" href="/cgi-bin/koha/members/printfeercpt.pl?action=print&amp;accountlines_id=[% payment_id | uri %]&amp;change=[% change_given | uri %]" class="btn btn-default"
                     ><i class="fa fa-print"></i> Print receipt</a

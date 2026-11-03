@@ -44,9 +44,13 @@
 
     <h1>Make a payment</h1>
 
-    [% IF payment_id && !Koha.Preference('FinePaymentAutoPopup') %]
+    [% IF payment_credit_type && !Koha.Preference('FinePaymentAutoPopup') %]
         <div class="alert alert-info audio-alert-action">
-            <p>Payment received</p>
+            [% IF payment_credit_type == 'WRITEOFF' %]
+                <p>Fee written off</p>
+            [% ELSE %]
+                <p>Payment received</p>
+            [% END %]
             <p>
                 <a
                     id="print-payment-receipt-button"

@@ -29,6 +29,7 @@ use CGI        qw ( -utf8 );
 use C4::Members;
 use C4::Accounts;
 use C4::Letters;
+use Koha::Account::Lines;
 use Koha::Cash::Registers;
 use Koha::Patrons;
 use Koha::Patron::Categories;
@@ -53,8 +54,14 @@ my $schema         = Koha::Database->new->schema;
 my $borrowernumber = $input->param('borrowernumber');
 my $payment_id     = $input->param('payment_id');
 my $change_given   = $input->param('change_given');
-my $op             = $input->param('op') || '';
-my @renew_results  = $input->multi_param('renew_result');
+my $payment_credit_type;
+if ($payment_id) {
+    my $payment =
+        Koha::Account::Lines->search( { accountlines_id => $payment_id, borrowernumber => $borrowernumber } )->next;
+    $payment_credit_type = $payment->credit_type_code if $payment;
+}
+my $op            = $input->param('op') || '';
+my @renew_results = $input->multi_param('renew_result');
 
 my $logged_in_user = Koha::Patrons->find($loggedinuser);
 my $library_id     = C4::Context->userenv->{'branch'};
@@ -273,15 +280,16 @@ foreach my $renew_result (@renew_results) {
 }
 
 $template->param(
-    patron        => $patron,
-    finesview     => 1,
-    total         => sprintf( "%.2f", $total ),
-    totalcredit   => $totalcredit,
-    accounts      => $accountlines,
-    payment_id    => $payment_id,
-    change_given  => $change_given,
-    renew_results => $renew_results_display,
-    receipt_sent  => $receipt_sent,
+    patron              => $patron,
+    finesview           => 1,
+    total               => sprintf( "%.2f", $total ),
+    totalcredit         => $totalcredit,
+    accounts            => $accountlines,
+    payment_id          => $payment_id,
+    payment_credit_type => $payment_credit_type,
+    change_given        => $change_given,
+    renew_results       => $renew_results_display,
+    receipt_sent        => $receipt_sent,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

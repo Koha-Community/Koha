@@ -63,7 +63,13 @@ if ( !$borrowernumber ) {
 }
 
 my $payment_id = $input->param('payment_id');
-our $change_given  = $input->param('change_given');
+our $change_given = $input->param('change_given');
+my $payment_credit_type;
+if ($payment_id) {
+    my $payment =
+        Koha::Account::Lines->search( { accountlines_id => $payment_id, borrowernumber => $borrowernumber } )->next;
+    $payment_credit_type = $payment->credit_type_code if $payment;
+}
 our @renew_results = $input->multi_param('renew_result');
 
 # get borrower details
@@ -125,10 +131,11 @@ foreach my $renew_result (@renew_results) {
 }
 
 $template->param(
-    finesview     => 1,
-    payment_id    => $payment_id,
-    change_given  => $change_given,
-    renew_results => $renew_results_display
+    finesview           => 1,
+    payment_id          => $payment_id,
+    payment_credit_type => $payment_credit_type,
+    change_given        => $change_given,
+    renew_results       => $renew_results_display
 );
 
 add_accounts_to_template();
