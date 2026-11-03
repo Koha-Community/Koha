@@ -1,0 +1,678 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Written by: Ed Davidson (OCLC), Schema validated using XMLPad v3.0.2.1 (Build 07/05/2008) -->
+<!-- Updated by: Abhijeet Roy (OCLC), Version 2021-2 June 2022, Schema validated using Eclipse IDE Version: 2021-09 (4.21.0) -->
+<!-- Updated by: Allen Jones (The New School), Version 2021-3 December 2025 -->
+<!-- Koha copy of https://illtransactions.org/schemas/ISO-18626-2021-3.xsd, used to validate -->
+<!-- generated messages in tests. Local changes: the sentToPatron type is corrected from -->
+<!-- "xs:type_yesNo" to "type_yesNo" (the published file does not compile without it), -->
+<!-- line endings are converted to LF, tabs to spaces and trailing whitespace is removed. -->
+<!-- ...................................... -->
+<!-- ISO 18626 "Inter Library Loan Protocol -->
+<!-- ...................................... -->
+<!--
+    Purpose: XML schema for ILL protocol ISO 18626
+    Dependencies: None
+    Change History:
+        Version 2021-3 Dec 2025
+            Corrections to errors in 2021-1 XSD for the sentToPatron (typeYesNo vs. Boolean).
+            Correction for timezone in dateTime format.
+
+        Version 2021-2 June 2022
+            Corrections to errors in 2021-1 XSD for the 2021 revision of standard.
+            Request
+                Updated requestHeader to header of type type_requestHeader
+                Changed serviceInfo/serviceType to type to type_serviceType
+            SupplyingAgencyMessage
+                Updated requestHeader to header of type type_supplyingAgencyMessageHeader
+                Added name attribute to retryInfo/serviceType and changed the type to type_serviceType
+                Added name attribute to deliveryInfo/serviceType and changed the type to type_serviceType
+            RequestingAgencyMessage
+                Updated requestHeader to header of type type_requestingAgencyMessageHeader
+
+        Version 2021-1 January 2021 (aka version 1.3)
+            Changes for the 2021 Revision of the standard
+            NOTE: We now name XSDs after the publication year of the Revision of the standard plus a version number for minor revision of the schema for that version of the standard
+            thus what would have been XSD Version "1_3_2021" is now named "2021-1"
+            Request
+                DIS: Updated Header
+                    Added ConsortialId
+                    Made SupplyingAgencyId optional (for transfer requests that don't require a supplier)
+                    Made MultipleItemRequestId optional (erroneously mandatory in previous XSD)
+                FINAL: Replaced generic message Header structure with message specific headers as the headers have diverged since initial version of protocol
+                    requestHeader
+                    supplyingAgencyMessageHeader
+                    requestingAgencyMessageHeader
+                BibliographicInfo
+                    Changed field sequence of BibliographicItemId to match the order of elements in the document
+                    Added AuthorId (to hold an ISNI (ISO-27729))
+                    Made Volume repeatable
+                Updated SupplierInfo
+                    Restricted sortOrder to a non-negative value (0 ->)
+                Updated RequestedDeliveryInfo
+                    Restricted sortOrder to a non-negative value (0 ->)
+                    Added deliveryMethod
+                    Added courierName
+                Added Action=HoldReturn
+            SupplyingAgencyMessage
+                Added RetryInfo structure
+                Moved OfferedCosts, RetryBefore, RetryAfter from MessageInfo to RetryInfo
+                Updated  DeliveryInfo
+                    Renamed sentVia to deliveryMethod
+                    Renamed deliveredFormat to itemFormat
+                    Added URL
+                    Added address
+                    Added serviceType
+                    Added paymentMethod
+                Added ShippingInfo structure
+                Added Status=HoldReturn
+                Added Status=ReleaseHoldReturn
+            RequestingAgencyMessage
+                Added Action = HoldReturn
+                PhysicalAddress/Region changed from scheme/value pair to plain string
+        Version 1.2 November 2017
+            Changed in order to describe the 2017 Minor revision of the standard
+            Added the following four new data elements
+                header
+                    multipleItemRequestId
+                serviceType
+                    requestSubType
+                    startDate
+                    endDate
+        Version 1.1 March 2014
+            Changed the way enumerations were defined so that they would build correctly when using JAXB
+            This file describes 2014 version of the standard
+        Version 1.0 2014
+            First Cut
+ -->
+
+ <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://illtransactions.org/2013/iso18626" targetNamespace="http://illtransactions.org/2013/iso18626" elementFormDefault="qualified" attributeFormDefault="qualified">
+    <xs:element name="ISO18626Message">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice>
+                    <xs:element ref="request"/>
+                    <xs:element ref="requestConfirmation"/>
+                    <xs:element ref="supplyingAgencyMessage"/>
+                    <xs:element ref="supplyingAgencyMessageConfirmation"/>
+                    <xs:element ref="requestingAgencyMessage"/>
+                    <xs:element ref="requestingAgencyMessageConfirmation"/>
+                </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="version" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+<!-- ............................ -->
+<!-- Top Level Message Structures -->
+<!-- ............................ -->
+
+    <xs:element name="request">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="header" type="type_requestHeader"/>
+                <xs:element ref="bibliographicInfo"/>
+                <xs:element ref="publicationInfo" minOccurs="0"/>
+                <xs:element ref="serviceInfo"/>
+                <xs:element ref="supplierInfo" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="requestedDeliveryInfo" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="requestingAgencyInfo" minOccurs="0"/>
+                <xs:element ref="patronInfo" minOccurs="0"/>
+                <xs:element ref="billingInfo" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="requestConfirmation">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="confirmationHeader"/>
+                <xs:element ref="errorData" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="supplyingAgencyMessage">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="header" type="type_supplyingAgencyMessageHeader"/>
+                <xs:element ref="messageInfo"/>
+                <xs:element ref="statusInfo"/>
+                <xs:element ref="retryInfo" minOccurs="0"/>
+                <xs:element ref="deliveryInfo" minOccurs="0"/>
+                <xs:element ref="shippingInfo" minOccurs="0"/>
+                <xs:element ref="returnInfo" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="supplyingAgencyMessageConfirmation">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="confirmationHeader"/>
+                <xs:element name="reasonForMessage" type="type_reasonForMessage" minOccurs="0"/>
+                <xs:element ref="errorData" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="requestingAgencyMessage">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="header" type="type_requestingAgencyMessageHeader"/>
+                <xs:element ref="action"/>
+                <xs:element name="note" type="xs:string" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="requestingAgencyMessageConfirmation">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="confirmationHeader"/>
+                <xs:element ref="action" minOccurs="0"/>
+                <xs:element ref="errorData" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+<!-- ................... -->
+<!-- Local Data Elements -->
+<!-- ................... -->
+
+    <xs:element name="action" type="type_action"/>
+
+    <xs:element name="address">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice>
+                    <xs:element ref="electronicAddress"/>
+                    <xs:element ref="physicalAddress"/>
+                </xs:choice>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="bibliographicItemId">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="bibliographicItemIdentifierCode" type="type_schemeValuePair"/>
+                <xs:element name="bibliographicItemIdentifier" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="bibliographicInfo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="supplierUniqueRecordId" type="xs:string" minOccurs="0"/>
+                <xs:element name="title" type="xs:string" minOccurs="0"/>
+                <xs:element name="author" type="xs:string" minOccurs="0"/>
+                <xs:element name="authorId" type="xs:string" minOccurs="0"/>
+                <xs:element name="subtitle" type="xs:string" minOccurs="0"/>
+                <xs:element name="seriesTitle" type="xs:string" minOccurs="0"/>
+                <xs:element ref="edition" minOccurs="0"/>
+                <xs:element name="titleOfComponent" type="xs:string" minOccurs="0"/>
+                <xs:element name="authorOfComponent" type="xs:string" minOccurs="0"/>
+                <xs:element ref="volume" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="issue" type="xs:string" minOccurs="0"/>
+                <xs:element name="pagesRequested" type="xs:string" minOccurs="0"/>
+                <xs:element name="estimatedNoPages" type="xs:string" minOccurs="0"/>
+                <xs:element ref="bibliographicItemId" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="sponsor" type="xs:string" minOccurs="0"/>
+                <xs:element name="informationSource" type="xs:string" minOccurs="0"/>
+                <xs:element ref="bibliographicRecordId" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="bibliographicRecordId">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="bibliographicRecordIdentifierCode" type="type_schemeValuePair"/>
+                <xs:element name="bibliographicRecordIdentifier" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="billingInfo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="paymentMethod" minOccurs="0"/>
+                <xs:element name="maximumCosts" type="type_costs" minOccurs="0"/>
+                <xs:element name="billingMethod" type="type_schemeValuePair" minOccurs="0"/>
+                <xs:element name="billingName" type="xs:string" minOccurs="0"/>
+                <xs:element ref="address" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="confirmationHeader">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="supplyingAgencyId" minOccurs="0"/>
+                <xs:element ref="requestingAgencyId" minOccurs="0"/>
+                <xs:element ref="timestamp"/>
+                <xs:element ref="requestingAgencyRequestId" minOccurs="0"/>
+                <xs:element ref="timestampReceived"/>
+                <xs:element name="messageStatus" type="type_messageStatus"/>
+        </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="consortialId" type="type_agencyId"/>
+
+    <xs:element name="courierName" type="type_schemeValuePair"/>
+
+    <xs:element name="deliveryInfo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="dateSent" type="type_utcDateTime"/>
+                <xs:element name="itemId" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="URL" type="xs:string" minOccurs="0"/>
+                <xs:element ref="deliveryMethod" minOccurs="0" />
+                <xs:element ref="address" minOccurs="0"/>
+                <xs:element name="sentToPatron" type="type_yesNo" minOccurs="0"/>
+                <xs:element ref="loanCondition" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="itemFormat" minOccurs="0"/>
+                <xs:element name="serviceType" type="type_serviceType" minOccurs="0"/>
+                <xs:element name="deliveryCosts" type="type_costs" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="paymentMethod" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="deliveryMethod" type="type_schemeValuePair"/>
+
+    <xs:element name="edition" type="xs:string"/>
+
+    <xs:element name="electronicAddress">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="electronicAddressType" type="type_schemeValuePair"/>
+                <xs:element name="electronicAddressData" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="errorData">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="errorType" type="type_errorType"/>
+                <xs:element name="errorValue" type="xs:string" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="itemFormat" type="type_schemeValuePair"/>
+
+    <xs:element name="loanCondition" type="type_schemeValuePair"/>
+
+    <xs:element name="messageInfo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="reasonForMessage" type="type_reasonForMessage"/>
+                <xs:element name="answerYesNo" type="type_yesNo" minOccurs="0"/>
+                <xs:element name="note" type="xs:string" minOccurs="0"/>
+                <xs:element name="reasonUnfilled" type="type_schemeValuePair" minOccurs="0"/>
+                <xs:element name="reasonRetry" type="type_schemeValuePair" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="multipleItemRequestId" type="xs:string"/>
+
+    <xs:element name="patronInfo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="patronId" type="xs:string" minOccurs="0"/>
+                <xs:element name="surname" type="xs:string" minOccurs="0"/>
+                <xs:element name="givenName" type="xs:string" minOccurs="0"/>
+                <xs:element name="patronType" type="type_schemeValuePair" minOccurs="0"/>
+                <xs:element name="sendToPatron" type="type_yesNo" minOccurs="0"/>
+                <xs:element ref="address" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="paymentMethod" type="type_schemeValuePair"/>
+
+    <xs:element name="physicalAddress">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="line1" type="xs:string" minOccurs="0"/>
+                <xs:element name="line2" type="xs:string" minOccurs="0"/>
+                <xs:element name="locality" type="xs:string" minOccurs="0"/>
+                <xs:element name="postalCode" type="xs:string" minOccurs="0"/>
+                <xs:element name="region" type="xs:string" minOccurs="0"/>
+                <xs:element name="country" type="type_schemeValuePair" minOccurs="0"/>  <!-- ISO 3166-1 -->
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="publicationInfo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="publisher" type="xs:string" minOccurs="0"/>
+                <xs:element name="publisherId" type="xs:string" minOccurs="0"/> <!-- ISNI ISO-27729 -->
+                <xs:element name="publicationType" type="type_schemeValuePair" minOccurs="0"/>
+                <xs:element name="publicationDate" type="xs:string" minOccurs="0"/>
+                <xs:element name="placeOfPublication" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="requestedDeliveryInfo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="sortOrder" minOccurs="0"/>
+                <xs:element ref="address" minOccurs="0"/>
+                <xs:element ref="deliveryMethod" minOccurs="0"/>
+                <xs:element ref="courierName" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="type_requestHeader">
+        <xs:sequence>
+            <xs:element ref="supplyingAgencyId" minOccurs="0"/>
+            <xs:element ref="requestingAgencyId"/>
+            <xs:element ref="consortialId" minOccurs="0"/>
+            <xs:element ref="multipleItemRequestId" minOccurs="0"/>
+            <xs:element ref="timestamp"/>
+            <xs:element ref="requestingAgencyRequestId"/>
+            <xs:element ref="requestingAgencyAuthentication" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="requestingAgencyAuthentication">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="accountId" type="xs:string" minOccurs="0"/>
+                <xs:element name="securityCode" type="xs:string" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="requestingAgencyId" type="type_agencyId"/>
+
+    <xs:element name="requestingAgencyInfo">
+    <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="xs:string" minOccurs="0"/>
+                <xs:element name="contactName" type="xs:string" minOccurs="0"/>
+                <xs:element ref="address" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="type_requestingAgencyMessageHeader">
+        <xs:sequence>
+            <xs:element ref="supplyingAgencyId"/>
+            <xs:element ref="requestingAgencyId"/>
+            <xs:element ref="consortialId" minOccurs="0"/>
+            <xs:element ref="timestamp"/>
+            <xs:element ref="requestingAgencyRequestId"/>
+            <xs:element ref="supplyingAgencyRequestId" minOccurs="0"/>
+            <xs:element ref="requestingAgencyAuthentication" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="requestingAgencyRequestId" type="xs:string"/>
+
+    <xs:element name="returnInfo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="returnAgencyId" type="type_agencyId" minOccurs="0"/>
+                <xs:element name="name" type="xs:string" minOccurs="0"/>
+                <xs:element ref="physicalAddress" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="retryInfo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="loanCondition" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="edition" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="itemFormat" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="volume" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="serviceType" type="type_serviceType" minOccurs="0"/>
+                <xs:element ref="serviceLevel" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="deliveryMethod" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="courierName" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="offeredCosts" type="type_costs" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="paymentMethod" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="retryBefore" type="type_utcDateTime" minOccurs="0"/>
+                <xs:element name="retryAfter" type="type_utcDateTime" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="serviceInfo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="requestType" type="type_requestType" minOccurs="0"/>
+                <xs:element name="requestSubType" type="type_requestSubType" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="requestingAgencyPreviousRequestId" type="xs:string" minOccurs="0"/>
+                <xs:element name="serviceType" type="type_serviceType"/>
+                <xs:element ref="serviceLevel" minOccurs="0"/>
+                <xs:element ref="itemFormat" minOccurs="0"/>
+                <xs:element name="needBeforeDate" type="type_utcDateTime" minOccurs="0"/>
+                <xs:element name="copyrightCompliance" type="type_schemeValuePair" minOccurs="0"/>
+                <xs:element name="anyEdition" type="type_yesNo" minOccurs="0"/> <!-- Deprecated -->
+                <xs:element name="preferredEdition" type="type_preferredEdition" minOccurs="0"/> <!-- Recommended -->
+                <xs:element ref="loanCondition" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="startDate" type="type_utcDateTime" minOccurs="0"/>
+                <xs:element name="endDate" type="type_utcDateTime" minOccurs="0"/>
+                <xs:element name="note" type="xs:string" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="serviceLevel" type="type_schemeValuePair"/>
+
+    <xs:element name="shippingInfo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="courierName" minOccurs="0"/>
+                <xs:element name="trackingId" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="insurance" type="type_yesNo" minOccurs="0"/>
+                <xs:element name="insuranceThirdParty" type="type_yesNo" minOccurs="0"/>
+                <xs:element name="thirdPartyName" type="xs:string" minOccurs="0"/>
+                <xs:element name="insuranceCosts" type="type_costs" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="sortOrder">
+        <xs:simpleType>
+            <xs:restriction base="xs:integer">
+                <xs:minInclusive value="0"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+
+    <xs:element name="statusInfo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="status" type="type_status"/>
+                <xs:element name="expectedDeliveryDate" type="type_utcDateTime" minOccurs="0"/>
+                <xs:element name="dueDate" type="type_utcDateTime" minOccurs="0"/>
+                <xs:element name="lastChange" type="type_utcDateTime"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="supplierInfo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="sortOrder" minOccurs="0"/>
+                <xs:element name="supplierCode" type="type_agencyId" minOccurs="0"/>
+                <xs:element name="supplierDescription" type="xs:string" minOccurs="0"/>
+                <xs:element ref="bibliographicRecordId" minOccurs="0"/>
+                <xs:element name="callNumber" type="xs:string" minOccurs="0"/>
+                <xs:element name="summaryHoldings" type="xs:string" minOccurs="0"/>
+                <xs:element name="availabilityNote" type="xs:string" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="supplyingAgencyId" type="type_agencyId"/>
+
+    <xs:complexType name="type_supplyingAgencyMessageHeader">
+        <xs:sequence>
+            <xs:element ref="supplyingAgencyId"/>
+            <xs:element ref="requestingAgencyId"/>
+            <xs:element ref="timestamp"/>
+            <xs:element ref="requestingAgencyRequestId"/>
+            <xs:element ref="supplyingAgencyRequestId" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="supplyingAgencyRequestId" type="xs:string"/>
+
+    <xs:element name="timestamp" type="type_utcDateTime"/>
+
+    <xs:element name="timestampReceived" type="type_utcDateTime"/>
+
+    <xs:element name="volume" type="xs:string"/>
+
+<!-- ..................... -->
+<!-- Locally defined Types -->
+<!-- ..................... -->
+
+    <xs:complexType name="type_agencyId">
+        <xs:sequence>
+            <xs:element name="agencyIdType" type="type_schemeValuePair"/>
+            <xs:element name="agencyIdValue" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="type_costs">
+        <xs:sequence>
+            <xs:element name="currencyCode" type="type_schemeValuePair"/><!--ISO 4217 -->
+            <xs:element name="monetaryValue" type="xs:decimal"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="type_schemeValuePair">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="scheme" type="xs:anyURI"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+<!-- .......................... -->
+<!-- "Closed Code" Enumerations -->
+<!-- .......................... -->
+
+    <xs:simpleType name="type_action">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="StatusRequest"/>
+            <xs:enumeration value="Received"/>
+            <xs:enumeration value="Cancel"/>
+            <xs:enumeration value="Renew"/>
+            <xs:enumeration value="HoldReturn"/>
+            <xs:enumeration value="ShippedReturn"/>
+            <xs:enumeration value="ShippedForward"/>
+            <xs:enumeration value="Notification"/>
+            <xs:enumeration value="Lost"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="type_errorType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="UnsupportedActionType"/>
+            <xs:enumeration value="UnsupportedReasonForMessageType"/>
+            <xs:enumeration value="UnrecognisedDataElement"/>
+            <xs:enumeration value="UnrecognisedDataValue"/>
+            <xs:enumeration value="BadlyFormedMessage"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="type_messageStatus">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="OK"/>
+            <xs:enumeration value="ERROR"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="type_preferredEdition">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="MostRecentEdition"/>
+            <xs:enumeration value="ThisEdition"/>
+            <xs:enumeration value="AnyEdition"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="type_reasonForMessage">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="RequestResponse"/>
+            <xs:enumeration value="StatusRequestResponse"/>
+            <xs:enumeration value="RenewResponse"/>
+            <xs:enumeration value="CancelResponse"/>
+            <xs:enumeration value="StatusChange"/>
+            <xs:enumeration value="Notification"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="type_requestType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="New"/>
+            <xs:enumeration value="Retry"/>
+            <xs:enumeration value="Reminder"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="type_requestSubType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="BookingRequest"/>
+            <xs:enumeration value="MultipleItemRequest"/>
+            <xs:enumeration value="PatronRequest"/>
+            <xs:enumeration value="TransferRequest"/>
+            <xs:enumeration value="SupplyingLibrarysChoice"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="type_serviceType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Copy"/>
+            <xs:enumeration value="Loan"/>
+            <xs:enumeration value="CopyOrLoan"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="type_status">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="RequestReceived"/>
+            <xs:enumeration value="ExpectToSupply"/>
+            <xs:enumeration value="WillSupply"/>
+            <xs:enumeration value="Loaned"/>
+            <xs:enumeration value="Overdue"/>
+            <xs:enumeration value="Recalled"/>
+            <xs:enumeration value="RetryPossible"/>
+            <xs:enumeration value="Unfilled"/>
+            <xs:enumeration value="HoldReturn"/>
+            <xs:enumeration value="ReleaseHoldReturn"/>
+            <xs:enumeration value="CopyCompleted"/>
+            <xs:enumeration value="LoanCompleted"/>
+            <xs:enumeration value="CompletedWithoutReturn"/>
+            <xs:enumeration value="Cancelled"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="type_yesNo">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Y"/>
+            <xs:enumeration value="N"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="type_utcDateTime">
+        <xs:restriction base="xs:dateTime">
+            <xs:pattern value="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

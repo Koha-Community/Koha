@@ -18,8 +18,10 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
+use Test::Exception;
 
+use File::Basename qw( dirname );
 use XML::LibXML;
 
 use Koha::ILL::ISO18626;
@@ -122,6 +124,103 @@ subtest 'xml_with_envelope() element order tests' => sub {
         $children->( $error_data[0] ), [qw( errorType errorValue )],
         'Repeated element children follow the schema order'
     );
+};
+
+subtest 'xml_with_envelope() schema validation tests' => sub {
+
+    plan tests => 6;
+
+    my $schema =
+        XML::LibXML::Schema->new( location => dirname(__FILE__) . '/../../data/iso18626/ISO-18626-2021-3.xsd' );
+
+    my $timestamp            = '2026-09-30T00:00:00Z';
+    my $supplying_agency_id  = { agencyIdValue => 'X', agencyIdType => 'ISIL' };
+    my $requesting_agency_id = { agencyIdValue => 'Y', agencyIdType => 'ISIL' };
+    my $confirmation_header  = {
+        messageStatus             => 'OK',
+        timestampReceived         => $timestamp,
+        requestingAgencyRequestId => '1',
+        timestamp                 => $timestamp,
+        requestingAgencyId        => $requesting_agency_id,
+        supplyingAgencyId         => $supplying_agency_id,
+    };
+
+    my $messages = {
+        request => {
+            billingInfo => { billingName => 'Library Y', paymentMethod => 'Invoice' },
+            patronInfo  => { givenName   => 'Jane', surname => 'Doe', patronId => '42' },
+            serviceInfo => {
+                note           => 'A note',
+                needBeforeDate => $timestamp,
+                serviceLevel   => 'Normal',
+                serviceType    => 'Loan',
+                requestType    => 'New',
+            },
+            publicationInfo   => { publicationDate => '2001', publisher => 'Publisher' },
+            bibliographicInfo => {
+                bibliographicItemId => {
+                    bibliographicItemIdentifier     => '9780000000000',
+                    bibliographicItemIdentifierCode => 'ISBN',
+                },
+                edition => '2nd',
+                author  => 'Author',
+                title   => 'Title',
+            },
+            header => {
+                requestingAgencyRequestId => '1',
+                timestamp                 => $timestamp,
+                requestingAgencyId        => $requesting_agency_id,
+                supplyingAgencyId         => $supplying_agency_id,
+            },
+        },
+        requestConfirmation => {
+            errorData => [
+                { errorValue => 'first',  errorType => 'BadlyFormedMessage' },
+                { errorValue => 'second', errorType => 'UnrecognisedDataValue' },
+            ],
+            confirmationHeader => { %$confirmation_header, messageStatus => 'ERROR' },
+        },
+        supplyingAgencyMessage => {
+            returnInfo   => { name       => 'Library X', returnAgencyId => $supplying_agency_id },
+            shippingInfo => { trackingId => 'T1',        courierName    => 'DHL' },
+            deliveryInfo =>
+                { itemFormat => 'Printed', deliveryMethod => 'Mail', itemId => 'I1', dateSent => $timestamp },
+            statusInfo  => { lastChange => $timestamp, dueDate => $timestamp, status => 'Loaned' },
+            messageInfo => { note => 'A note', reasonForMessage => 'StatusChange' },
+            header      => {
+                supplyingAgencyRequestId  => '2',
+                requestingAgencyRequestId => '1',
+                timestamp                 => $timestamp,
+                requestingAgencyId        => $requesting_agency_id,
+                supplyingAgencyId         => $supplying_agency_id,
+            },
+        },
+        supplyingAgencyMessageConfirmation => {
+            reasonForMessage   => 'StatusChange',
+            confirmationHeader => $confirmation_header,
+        },
+        requestingAgencyMessage => {
+            note   => 'A note',
+            action => 'Received',
+            header => {
+                supplyingAgencyRequestId  => '2',
+                requestingAgencyRequestId => '1',
+                timestamp                 => $timestamp,
+                requestingAgencyId        => $requesting_agency_id,
+                supplyingAgencyId         => $supplying_agency_id,
+            },
+        },
+        requestingAgencyMessageConfirmation => {
+            action             => 'Received',
+            confirmationHeader => $confirmation_header,
+        },
+    };
+
+    foreach my $type ( sort keys %$messages ) {
+        my $xml = Koha::ILL::ISO18626::xml_with_envelope( { $type => $messages->{$type} } );
+        lives_ok { $schema->validate( XML::LibXML->load_xml( string => $xml ) ) }
+        "$type validates against the ISO 18626 schema";
+    }
 };
 
 subtest 'message_without_envelope() tests' => sub {
