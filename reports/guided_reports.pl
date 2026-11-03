@@ -860,6 +860,25 @@ if ( !$op ) {
                     my $ods_filepath = $ods_fh->filename;
                     my $ods_content;
 
+                    # Determine whether each ODS column can have numeric cells
+                    # based on the type of the SQL column
+                    my $numeric_columns;
+                    while ( my ( $i, $column_type ) = each @{ $sth->{TYPE} } ) {
+
+                        # SQL standard type codes, sourced from ODBC headers
+
+                        $numeric_columns->{$i} = 1
+                            if $column_type == 2 ||    # NUMERIC
+                            $column_type == 3    ||    # DECIMAL
+                            $column_type == 4    ||    # INTEGER
+                            $column_type == 5    ||    # SMALLINT
+                            $column_type == 6    ||    # FLOAT
+                            $column_type == 7    ||    # REAL
+                            $column_type == 8    ||    # DOUBLE
+                            $column_type == -5   ||    # BIGINT
+                            $column_type == -6;        # TINYINT
+                    }
+
                     # First line is headers
                     my @headers = header_cell_values($sth);
                     push @$ods_content, \@headers;
@@ -876,7 +895,7 @@ if ( !$op ) {
                     }
 
                     # Process
-                    generate_ods( $ods_filepath, $ods_content );
+                    generate_ods( $ods_filepath, $ods_content, $numeric_columns );
 
                     # Output
                     binmode(STDOUT);
