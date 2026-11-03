@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Exception;
 use Test::MockModule;
 use t::lib::Mocks;
@@ -146,6 +146,46 @@ subtest 'generate_password for category' => sub {
     'Koha::Exceptions::Password::NoCategoryProvided',
         'Category should always be provided';
 
+};
+
+subtest 'get_script_name' => sub {
+    plan tests => 7;
+
+    my $psgi_env = 1;
+    my $context  = Test::MockModule->new('C4::Context');
+    $context->mock( psgi_env => sub { $psgi_env } );
+
+    local $ENV{SCRIPT_NAME} = '/intranet/members/member.pl';
+    local $ENV{PATH_INFO}   = '';
+    is( Koha::AuthUtils::get_script_name(), '/cgi-bin/koha/members/member.pl', 'The Plack prefix is replaced' );
+
+    local $ENV{PATH_INFO};
+    is( Koha::AuthUtils::get_script_name(), '/cgi-bin/koha/members/member.pl', 'No path info' );
+
+    local $ENV{SCRIPT_NAME} = '/intranet/admin/record_sources.pl';
+    local $ENV{PATH_INFO}   = '/edit/3';
+    is(
+        Koha::AuthUtils::get_script_name(), '/cgi-bin/koha/admin/record_sources.pl/edit/3',
+        'The path info is kept, so that the route is'
+    );
+
+    local $ENV{PATH_INFO} = '/edit/a b?c#d';
+    is(
+        Koha::AuthUtils::get_script_name(), '/cgi-bin/koha/admin/record_sources.pl/edit/a%20b%3Fc%23d',
+        'The path info is escaped'
+    );
+
+    $psgi_env = 0;
+    local $ENV{SCRIPT_NAME} = '/cgi-bin/koha/admin/record_sources.pl';
+    local $ENV{PATH_INFO}   = '/add';
+    is( Koha::AuthUtils::get_script_name(), '/cgi-bin/koha/admin/record_sources.pl/add', 'Without Plack too' );
+
+    local $ENV{PATH_INFO} = '';
+    is( Koha::AuthUtils::get_script_name(), '/cgi-bin/koha/admin/record_sources.pl', 'Without path info' );
+
+    local $ENV{SCRIPT_NAME} = undef;
+    local $ENV{PATH_INFO}   = '/add';
+    is( Koha::AuthUtils::get_script_name(), undef, 'Nothing without a script name' );
 };
 
 $schema->storage->txn_rollback;

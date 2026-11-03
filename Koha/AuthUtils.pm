@@ -26,9 +26,10 @@ BEGIN {
 
 use Crypt::Eksblowfish::Bcrypt qw( bcrypt en_base64 );
 use Encode;
-use Fcntl           qw( O_RDONLY );        # O_RDONLY is used in generate_salt
+use Fcntl           qw( O_RDONLY );          # O_RDONLY is used in generate_salt
 use List::MoreUtils qw( any );
 use String::Random  qw( random_string );
+use URI::Escape     qw( uri_escape_utf8 );
 use Koha::Exceptions::Password;
 
 use C4::Context;
@@ -201,18 +202,23 @@ sub generate_password {
 
 =head2 get_script_name
 
-This returns the correct script name, for use in redirecting back to the correct page after showing
-the login screen. It depends on details of the package Plack configuration, and should not be used
-outside this context.
+This returns the correct script name, followed by the path info if there is any, for use in redirecting back
+to the correct page after showing the login screen. It depends on details of the package Plack configuration,
+and should not be used outside this context.
 
 =cut
 
 sub get_script_name {
-    if ( ( C4::Context->psgi_env ) && $ENV{SCRIPT_NAME} && $ENV{SCRIPT_NAME} =~ m,^/(intranet|opac)(.*), ) {
-        return '/cgi-bin/koha' . $2;
-    } else {
-        return $ENV{SCRIPT_NAME};
-    }
+    my $script_name = $ENV{SCRIPT_NAME};
+    $script_name = '/cgi-bin/koha' . $2
+        if C4::Context->psgi_env && $script_name && $script_name =~ m,^/(intranet|opac)(.*),;
+
+    # Pages that are routed on the client side, such as the Vue ones, have their route in the path info
+    my $path_info = $ENV{PATH_INFO};
+    $script_name .= uri_escape_utf8( $path_info, '^A-Za-z0-9\-\._~/' )
+        if $script_name && defined $path_info && length $path_info;
+
+    return $script_name;
 }
 
 1;

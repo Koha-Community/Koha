@@ -14,6 +14,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import vSelect from "vue-select";
+import { removeScriptExtension } from "../../utils/url";
 import { useNavigationStore } from "../../stores/navigation";
 import { useMainStore } from "../../stores/main";
 import routesDef from "../../routes/admin/record_sources";
@@ -26,6 +27,8 @@ const mainStore = useMainStore(pinia);
 const { removeMessages } = mainStore;
 const { setRoutes } = navigationStore;
 const routes = setRoutes(routesDef);
+
+removeScriptExtension();
 
 const router = createRouter({
     history: createWebHistory(),
