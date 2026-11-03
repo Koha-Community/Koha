@@ -39,12 +39,14 @@ Koha::Util::OpenDocument - utility class to manage filed in Open Document Format
 
 Generate an Open Document Sheet
 
-Arguments are file path and content as an arrayref of lines containing arrayrefs of cells.
+Arguments are file path, content as an arrayref of lines containing arrayrefs of
+cells, and an optional hashref of column indexes that can safely be made into
+numeric cells.
 
 =cut
 
 sub generate_ods {
-    my ( $filepath, $content ) = @_;
+    my ( $filepath, $content, $numeric_columns ) = @_;
 
     unless ( $filepath && $content ) {
         return;
@@ -71,7 +73,8 @@ sub generate_ods {
         for ( my $i = 0 ; $i < $nb_rows ; $i++ ) {
             for ( my $j = 0 ; $j < $nb_cols ; $j++ ) {
                 my $cellval = $input_rows[$i][$j];
-                $odf_doc->cellValueType( $odf_rows[$i], $j, 'float' ) if looks_like_number($cellval);
+                $odf_doc->cellValueType( $odf_rows[$i], $j, 'float' )
+                    if exists $numeric_columns->{$j} && looks_like_number($cellval);
                 $odf_doc->cellValue( $odf_rows[$i], $j, $cellval );
             }
         }

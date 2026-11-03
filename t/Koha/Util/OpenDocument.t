@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use File::Temp qw/tempfile/;
 use Test::NoWarnings;
-use Test::More tests => 7;
+use Test::More tests => 10;
 
 BEGIN { use_ok('Koha::Util::OpenDocument'); }
 
@@ -40,6 +40,15 @@ $filepath = $fh2->filename;
 my $content2 = [ [ 'A', 'B' ], [ '1', '2' ] ];
 $ret = generate_ods( $filepath, $content2 );
 ok( defined $ret, 'Call generate_ods with 2x2 content' );
-is( $ret->cellValueType( 0, 0, 0 ), 'string', 'Text cells have string type' );
-is( $ret->cellValueType( 0, 1, 0 ), 'float',  'Number cells have float type' );
+is( $ret->cellValueType( 0, 0, 0 ), 'string', 'Text cells have string type in non-numeric column' );
+is( $ret->cellValueType( 0, 1, 0 ), 'string', 'Number cells have string type in non-numeric column' );
 close $fh2;
+
+my $fh3 = File::Temp->new( UNLINK => 1 );
+$filepath = $fh3->filename;
+my $content3 = [ [ 'A', 'B' ], [ '1', '2' ] ];
+$ret = generate_ods( $filepath, $content3, { 0 => 1, 1 => 1 } );
+ok( defined $ret, 'Call generate_ods with 2x2 content and numeric columns' );
+is( $ret->cellValueType( 0, 0, 0 ), 'string', 'Text cells have string type in numeric column' );
+is( $ret->cellValueType( 0, 1, 0 ), 'float',  'Number cells have float type in numeric column' );
+close $fh3;
