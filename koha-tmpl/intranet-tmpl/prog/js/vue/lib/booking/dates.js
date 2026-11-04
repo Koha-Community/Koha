@@ -89,19 +89,23 @@ export function addMonths(input, months) {
  * Serialize a local calendar date as a start-of-day instant anchored to the
  * library's configured timezone for the bookings API.
  *
+ * The boundary is parsed in the library timezone rather than derived with
+ * startOf("day"): the dayjs timezone plugin rounds through the browser's
+ * local time, which lands on the wrong instant around DST changes.
+ *
  * @param {import("dayjs").ConfigType|null|undefined} input
  * @returns {string}
  */
 export function toStartOfDayISO(input) {
     const ymd = formatYMD(input);
-    return ymd
-        ? dayjs.tz(ymd, window.$timezone()).startOf("day").toISOString()
-        : "";
+    return ymd ? dayjs.tz(ymd, window.$timezone()).toISOString() : "";
 }
 
 /**
  * Serialize a local calendar date as an end-of-day instant anchored to the
  * library's configured timezone for the bookings API.
+ *
+ * Parsed in the library timezone for the same reason as toStartOfDayISO.
  *
  * @param {import("dayjs").ConfigType|null|undefined} input
  * @returns {string}
@@ -109,7 +113,7 @@ export function toStartOfDayISO(input) {
 export function toEndOfDayISO(input) {
     const ymd = formatYMD(input);
     return ymd
-        ? dayjs.tz(ymd, window.$timezone()).endOf("day").toISOString()
+        ? dayjs.tz(`${ymd}T23:59:59.999`, window.$timezone()).toISOString()
         : "";
 }
 
