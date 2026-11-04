@@ -151,24 +151,25 @@
     [% INCLUDE 'js-date-format.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         const loggedinusernumber = [% logged_in_user.borrowernumber | html %];
         const can_see_all = [% CAN_user_superlibrarian ? 1 : 0 | html %];
         const new_job_id  = [% new_job_id ? new_job_id : 'null' | html %];
-
+    </script>
+    <script nonce="[% Koha.CSPNonce | $raw %]">
         const job_status_labels = {
-            'new':       _("Queued"),
-            'started':   _("Running"),
-            'running':   _("Running"),
-            'finished':  _("Finished"),
-            'cancelled': _("Cancelled"),
-            'failed':    _("Failed"),
+            new: _("Queued"),
+            started: _("Running"),
+            running: _("Running"),
+            finished: _("Finished"),
+            cancelled: _("Cancelled"),
+            failed: _("Failed"),
         };
 
         const error_code_labels = {
-            'report_not_found': _("The saved report this job referenced no longer exists"),
-            'execute_error':    _("The report's SQL could not be executed"),
-            'internal_error':   _("The worker encountered an unexpected error"),
+            report_not_found: _("The saved report this job referenced no longer exists"),
+            execute_error: _("The report's SQL could not be executed"),
+            internal_error: _("The worker encountered an unexpected error"),
         };
 
         function rfc3339(d) {
@@ -176,9 +177,7 @@
             const off = -d.getTimezoneOffset();
             const sign = off >= 0 ? "+" : "-";
             const abs = Math.abs(off);
-            return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) +
-                "T" + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds()) +
-                sign + pad(Math.floor(abs / 60)) + ":" + pad(abs % 60);
+            return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + "T" + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds()) + sign + pad(Math.floor(abs / 60)) + ":" + pad(abs % 60);
         }
 
         function flatpickr_to_rfc3339(s) {
@@ -244,8 +243,7 @@
                             render: function (data, type, row) {
                                 if (!row.report_id) return _("(report deleted)").escapeHtml();
                                 const name = (row.report_name || _("Report #%s").format(row.report_id)).escapeHtml();
-                                return '<a href="/cgi-bin/koha/reports/guided_reports.pl?op=show&id=' +
-                                    encodeURIComponent(row.report_id) + '">' + name + '</a>';
+                                return '<a href="/cgi-bin/koha/reports/guided_reports.pl?op=show&id=' + encodeURIComponent(row.report_id) + '">' + name + "</a>";
                             },
                         },
                         {
@@ -263,8 +261,7 @@
                             render: function (data, type, row) {
                                 if (!row.patron_id) return "";
                                 const name = (row.patron_name || _("Patron #%s").format(row.patron_id)).escapeHtml();
-                                return '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' +
-                                    encodeURIComponent(row.patron_id) + '">' + name + '</a>';
+                                return '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' + encodeURIComponent(row.patron_id) + '">' + name + "</a>";
                             },
                         },
                         {
@@ -299,25 +296,28 @@
                                 if (row.status === "finished" && row.saved_report_id) {
                                     actions.push(
                                         '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/reports/guided_reports.pl?op=view_stored_results&id=' +
-                                        encodeURIComponent(row.saved_report_id) +
-                                        '"><i class="fa fa-eye" aria-hidden="true"></i> ' + _("View results") + '</a>'
+                                            encodeURIComponent(row.saved_report_id) +
+                                            '"><i class="fa fa-eye" aria-hidden="true"></i> ' +
+                                            _("View results") +
+                                            "</a>"
                                     );
                                 } else if (row.status === "failed" && row.error_message) {
                                     actions.push(
                                         '<button type="button" class="btn btn-outline-danger btn-xs view-error" ' +
-                                        'data-error="' + row.error_message.escapeHtml() + '" ' +
-                                        'data-error-code="' + (row.error_code || "").escapeHtml() + '">' +
-                                        '<i class="fa fa-triangle-exclamation" aria-hidden="true"></i> ' +
-                                        _("View error") + '</button>'
+                                            'data-error="' +
+                                            row.error_message.escapeHtml() +
+                                            '" ' +
+                                            'data-error-code="' +
+                                            (row.error_code || "").escapeHtml() +
+                                            '">' +
+                                            '<i class="fa fa-triangle-exclamation" aria-hidden="true"></i> ' +
+                                            _("View error") +
+                                            "</button>"
                                     );
                                 }
 
                                 if (row.status === "new" && (is_mine || can_see_all)) {
-                                    actions.push(
-                                        '<button class="btn btn-default btn-xs cancel-job" data-job-id="' +
-                                        encodeURIComponent(row.job_id) +
-                                        '"><i class="fa fa-trash-can" aria-hidden="true"></i> ' + _("Cancel") + '</button>'
-                                    );
+                                    actions.push('<button class="btn btn-default btn-xs cancel-job" data-job-id="' + encodeURIComponent(row.job_id) + '"><i class="fa fa-trash-can" aria-hidden="true"></i> ' + _("Cancel") + "</button>");
                                 }
 
                                 return actions.join(" ");
@@ -332,8 +332,8 @@
             );
 
             $("#time_range").on("change", function () {
-                $(".custom_range").toggle( $(this).val() === "custom" );
-                if ( $(this).val() !== "custom" ) {
+                $(".custom_range").toggle($(this).val() === "custom");
+                if ($(this).val() !== "custom") {
                     jobs_table.DataTable().ajax.url(api_url()).load();
                 }
             });
@@ -349,24 +349,26 @@
                 $.ajax({
                     url: "/api/v1/reports/jobs/" + encodeURIComponent(job_id) + "/cancel",
                     method: "POST",
-                }).done(function () {
-                    jobs_table.DataTable().ajax.reload(null, false);
-                }).fail(function (xhr) {
-                    alert(_("Could not cancel the job: %s").format(xhr.responseJSON && xhr.responseJSON.error || xhr.statusText));
-                });
+                })
+                    .done(function () {
+                        jobs_table.DataTable().ajax.reload(null, false);
+                    })
+                    .fail(function (xhr) {
+                        alert(_("Could not cancel the job: %s").format((xhr.responseJSON && xhr.responseJSON.error) || xhr.statusText));
+                    });
             });
 
             const errorModal = new bootstrap.Modal(document.getElementById("errorModal"));
             $("#table_report_jobs").on("click", ".view-error", function () {
                 const code = $(this).data("error-code");
-                $("#errorModalCode").text(code ? (error_code_labels[code] || code) : "");
+                $("#errorModalCode").text(code ? error_code_labels[code] || code : "");
                 $("#errorModalMessage").text($(this).data("error"));
                 errorModal.show();
             });
 
             function format_seconds(s) {
                 if (s == null) return "";
-                if (s < 60)   return _("%s sec").format(s);
+                if (s < 60) return _("%s sec").format(s);
                 if (s < 3600) return _("%sm %ss").format(Math.floor(s / 60), s % 60);
                 return _("%sh %sm").format(Math.floor(s / 3600), Math.floor((s % 3600) / 60));
             }
@@ -382,16 +384,13 @@
                             render: function (data, type, row) {
                                 if (!row.report_id) return _("(report deleted)").escapeHtml();
                                 const name = (row.report_name || _("Report #%s").format(row.report_id)).escapeHtml();
-                                return '<a href="/cgi-bin/koha/reports/guided_reports.pl?op=show&id=' +
-                                    encodeURIComponent(row.report_id) + '">' + name + '</a>';
+                                return '<a href="/cgi-bin/koha/reports/guided_reports.pl?op=show&id=' + encodeURIComponent(row.report_id) + '">' + name + "</a>";
                             },
                         },
                         {
                             data: "run_type",
                             render: function (data) {
-                                return data === "background"
-                                    ? _("Background").escapeHtml()
-                                    : _("Foreground").escapeHtml();
+                                return data === "background" ? _("Background").escapeHtml() : _("Foreground").escapeHtml();
                             },
                         },
                         {
@@ -399,8 +398,7 @@
                             render: function (data, type, row) {
                                 if (!row.patron_id) return "";
                                 const name = (row.patron_name || _("Patron #%s").format(row.patron_id)).escapeHtml();
-                                return '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' +
-                                    encodeURIComponent(row.patron_id) + '">' + name + '</a>';
+                                return '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' + encodeURIComponent(row.patron_id) + '">' + name + "</a>";
                             },
                         },
                         {
@@ -430,11 +428,17 @@
 
             reload_running();
 
-            let refresh_timer  = null;
+            let refresh_timer = null;
             let countdown_timer = null;
             function clear_timers() {
-                if (refresh_timer)  { clearInterval(refresh_timer);  refresh_timer  = null; }
-                if (countdown_timer) { clearInterval(countdown_timer); countdown_timer = null; }
+                if (refresh_timer) {
+                    clearInterval(refresh_timer);
+                    refresh_timer = null;
+                }
+                if (countdown_timer) {
+                    clearInterval(countdown_timer);
+                    countdown_timer = null;
+                }
                 $("#refresh_info").text("");
             }
             function start_refresh() {
