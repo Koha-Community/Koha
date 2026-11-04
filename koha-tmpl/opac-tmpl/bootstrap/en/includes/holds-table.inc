@@ -108,37 +108,6 @@
                         [% HOLD.branch.branchname | html %]
                         [% IF ( HOLD.can_update_pickup_location_opac ) %]
                             <button type="button" class="btn btn-sm btn-link" data-bs-toggle="modal" data-bs-target="#changePickup[% HOLD.reserve_id | html %]"> <i class="fa fa-pencil-alt" aria-hidden="true"></i> Change </button>
-                            <!-- Change pickup location modal -->
-                            <div class="modal" id="changePickup[% HOLD.reserve_id | html %]" tabindex="-1" aria-labelledby="changePickup[% HOLD.reserve_id | html %]Label" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <form id="change_branch_form[% HOLD.reserve_id | html %]" action="/cgi-bin/koha/opac-modrequest.pl" method="post">
-                                        [% INCLUDE 'csrf-token.inc' %]
-                                        <input type="hidden" name="op" value="cud-change_branch" />
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title" id="changePickup[% HOLD.reserve_id | html %]Label">Change pickup location for <em>[% INCLUDE 'biblio-title.inc' biblio=HOLD.biblio %]</em></h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="form-group">
-                                                    <label for="new_branch[% HOLD.reserve_id | html %]">New pickup location:</label>
-                                                    <select name="new_pickup_location" id="new_branch[% HOLD.reserve_id | html %]" class="form-select">
-                                                        [% PROCESS options_for_libraries libraries = Branches.pickup_locations({ search_params => { biblio => HOLD.biblionumber, patron => HOLD.borrower }, selected => HOLD.branchcode }) %]
-                                                    </select>
-                                                </div>
-                                                <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="submit" name="change_branch" value="1" class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Save</button>
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
-                                            </div>
-                                        </div>
-                                        <!-- /.modal-content -->
-                                    </form>
-                                </div>
-                                <!-- /.modal-dialog -->
-                            </div>
-                            <!-- /.modal -->
                         [% END %]
                     </td>
                 [% END %]
@@ -254,6 +223,45 @@
         [% END # /FOREACH HOLDS %]
     </tbody>
 </table>
+
+[%# Pickup location modals live outside the table: DataTables Responsive hides columns (display:none) and clones their markup into a child row, which would leave the modal in a hidden cell with a duplicate id %]
+[% UNLESS ( singleBranchMode ) %]
+    [% FOREACH HOLD IN HOLDS %]
+        [% IF ( HOLD.can_update_pickup_location_opac ) %]
+            <!-- Change pickup location modal -->
+            <div class="modal" id="changePickup[% HOLD.reserve_id | html %]" tabindex="-1" aria-labelledby="changePickup[% HOLD.reserve_id | html %]Label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form id="change_branch_form[% HOLD.reserve_id | html %]" action="/cgi-bin/koha/opac-modrequest.pl" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="op" value="cud-change_branch" />
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title" id="changePickup[% HOLD.reserve_id | html %]Label">Change pickup location for <em>[% INCLUDE 'biblio-title.inc' biblio=HOLD.biblio %]</em></h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="new_branch[% HOLD.reserve_id | html %]">New pickup location:</label>
+                                    <select name="new_pickup_location" id="new_branch[% HOLD.reserve_id | html %]" class="form-select">
+                                        [% PROCESS options_for_libraries libraries = Branches.pickup_locations({ search_params => { biblio => HOLD.biblionumber, patron => HOLD.borrower }, selected => HOLD.branchcode }) %]
+                                    </select>
+                                </div>
+                                <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" name="change_branch" value="1" class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Save</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </form>
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+        [% END %]
+    [% END %]
+[% END %]
 
 [% IF SuspendHoldsOpac and ! onlyinfo %]
     [% UNLESS ( all_holds_waiting ) %]
