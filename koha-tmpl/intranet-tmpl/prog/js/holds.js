@@ -105,7 +105,7 @@ function display_pickup_location(state) {
     };
 })(jQuery);
 
-/* global __ borrowernumber SuspendHoldsIntranet */
+/* global __ borrowernumber SuspendHoldsIntranet updateTabCount */
 $(document).ready(function () {
     window.coded_values = {
         library: new Map(all_libraries.map(l => [l.branchname, l.branchcode])),
@@ -145,6 +145,22 @@ $(document).ready(function () {
     // If the holds tab is preselected on load, we need to load the table
     if ($("#holds-tab").hasClass("active")) {
         load_holds_table();
+    }
+
+    // Same definition as Koha::Holds->count_holds: a hold group counts as one hold.
+    // The table loads all of the patron's holds at once (no server-side paging),
+    // so its rows are all of the holds.
+    function count_holds(holds) {
+        const groups = new Set();
+        let count = 0;
+        holds.forEach(hold => {
+            if (hold.hold_group_id) {
+                groups.add(hold.hold_group_id);
+            } else {
+                count++;
+            }
+        });
+        return count + groups.size;
     }
 
     function load_holds_table() {
@@ -558,6 +574,13 @@ $(document).ready(function () {
             );
 
             $("#holds-table").on("draw.dt", function () {
+                if (patron_page) {
+                    updateTabCount(
+                        ".patron_holds_count",
+                        count_holds(holdsTable.api().rows().data().toArray())
+                    );
+                }
+
                 $(".hold-suspend").on("click", function () {
                     var hold_id = $(this).data("hold-id");
                     var hold_title = $(this).data("hold-title");

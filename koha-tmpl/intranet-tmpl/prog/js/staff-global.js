@@ -593,6 +593,20 @@ function confirmClone(message) {
     return confirm(message) ? true : false;
 }
 
+/**
+ * Update the count badge of a tab after an in-place action changed the number
+ * of things listed in it. The badge is hidden when the count is 0, as it is
+ * when the page is rendered by the server.
+ *
+ * @param {string} selector CSS selector of the badge, e.g. ".patron_holds_count"
+ * @param {number} count    The new count
+ */
+function updateTabCount(selector, count) {
+    $(selector)
+        .text(count)
+        .toggleClass("d-none", count < 1);
+}
+
 function playSound(sound) {
     if (!(sound.indexOf("http://") === 0 || sound.indexOf("https://") === 0)) {
         sound = AUDIO_ALERT_PATH + sound;

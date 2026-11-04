@@ -34,7 +34,7 @@
             [% WRAPPER tab_item tabname= "holds" %]
                 <span>Holds</span>
                 [% IF ( holds_count ) %]
-                    <span class="badge text-bg-info">[% holds_count | html %]</span>
+                    <span class="patron_holds_count badge text-bg-info">[% holds_count | html %]</span>
                 [% END %]
             [% END %]
             [% IF Koha.Preference('EnableBooking') %]
