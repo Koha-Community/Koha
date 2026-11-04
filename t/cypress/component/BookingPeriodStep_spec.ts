@@ -263,7 +263,10 @@ describe("BookingPeriodStep — accessibility", () => {
                     },
                     itemtypeId: "BK",
                     pickupLibraryId: "CPL",
-                    selectedDateRange: ["2026-03-10", "2026-03-11"],
+                    selectedDateRange: [
+                        new Date(2026, 2, 10).toISOString(),
+                        new Date(2026, 2, 11).toISOString(),
+                    ],
                 },
             }
         );
@@ -376,7 +379,10 @@ describe("BookingPeriodStep — accessibility", () => {
                     },
                     itemtypeId: "BK",
                     pickupLibraryId: "CPL",
-                    selectedDateRange: ["2026-03-10", "2026-03-11"],
+                    selectedDateRange: [
+                        new Date(2026, 2, 10).toISOString(),
+                        new Date(2026, 2, 11).toISOString(),
+                    ],
                 },
             }
         );
@@ -421,8 +427,8 @@ describe("BookingPeriodStep — clear button", () => {
         mountStep(
             {
                 selectedDateRange: [
-                    "2026-03-10T00:00:00.000Z",
-                    "2026-03-14T00:00:00.000Z",
+                    new Date(2026, 2, 10).toISOString(),
+                    new Date(2026, 2, 14).toISOString(),
                 ],
             },
             { "onClear-dates": onClear }

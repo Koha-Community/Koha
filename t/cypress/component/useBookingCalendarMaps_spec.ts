@@ -403,7 +403,7 @@ describe("useBookingCalendarMaps (disabledByDate by item availability)", () => {
                 availability: availabilityOf({
                     "2026-03-15": { "1": ["booking"] },
                 }),
-                modelValue: [new Date("2026-03-10")],
+                modelValue: [new Date(2026, 2, 10)],
                 circulationRules: [{ bookings_trail_period: 2 }],
             }),
         }).then(({ wrapper }) => {
@@ -1068,7 +1068,7 @@ describe("useBookingCalendarMaps (DOM smoke tests)", () => {
                 bookableItems: [item("1")],
                 availability: availabilityOf({}),
                 holidays: [],
-                modelValue: [new Date("2026-03-10"), null],
+                modelValue: [new Date(2026, 2, 10), null],
                 maxBookingPeriod: 10,
                 circulationRules: [
                     {

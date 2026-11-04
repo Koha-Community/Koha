@@ -58,8 +58,8 @@ describe("BookingForm", () => {
             Cypress.sinon.match({
                 biblionumber: 1,
                 selectedDateRange: [
-                    "2026-03-10T00:00:00.000Z",
-                    "2026-03-12T00:00:00.000Z",
+                    new Date(2026, 2, 10).toISOString(),
+                    new Date(2026, 2, 12).toISOString(),
                 ],
             })
         );

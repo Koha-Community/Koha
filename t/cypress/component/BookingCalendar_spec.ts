@@ -55,7 +55,7 @@ describe("BookingCalendar", () => {
         it("applies an external committed range without re-emitting it", () => {
             const onUpdate = cy.stub().as("onUpdate");
             mountCalendar({
-                modelValue: [new Date("2026-03-10"), new Date("2026-03-14")],
+                modelValue: [new Date(2026, 2, 10), new Date(2026, 2, 14)],
                 "onUpdate:modelValue": onUpdate,
             });
             openCalendar();
@@ -66,7 +66,7 @@ describe("BookingCalendar", () => {
         });
 
         it("starts fixed-anchor selection from an external one-day range", () => {
-            mountCalendar({ modelValue: [new Date("2026-03-10")] });
+            mountCalendar({ modelValue: [new Date(2026, 2, 10)] });
             openCalendar();
 
             day("March 10, 2026").should("have.class", "selected");
@@ -76,7 +76,7 @@ describe("BookingCalendar", () => {
 
         it("preserves an edit range when disable rules refresh", () => {
             mountCalendar({
-                modelValue: [new Date("2026-03-10"), new Date("2026-03-14")],
+                modelValue: [new Date(2026, 2, 10), new Date(2026, 2, 14)],
             }).then(({ wrapper }) => {
                 openCalendar();
                 day("March 10, 2026").should("have.class", "startRange");
@@ -153,7 +153,7 @@ describe("BookingCalendar", () => {
         it("rebuilds with the month count that fits when the width changes, keeping the selection", () => {
             cy.viewport(1000, 800);
             mountCalendar({
-                modelValue: [new Date("2026-03-10"), new Date("2026-03-14")],
+                modelValue: [new Date(2026, 2, 10), new Date(2026, 2, 14)],
             });
             cy.get(".flatpickr-calendar .dayContainer").should(
                 "have.length",
@@ -399,7 +399,7 @@ describe("BookingCalendar", () => {
 
         it("applies updated calendar classes without losing the anchor", () => {
             mountCalendar({
-                modelValue: [new Date("2026-03-10")],
+                modelValue: [new Date(2026, 2, 10)],
                 classByDate: new Map([["2026-03-15", "preview-initial"]]),
             }).then(({ wrapper }) => {
                 openCalendar();
@@ -473,8 +473,8 @@ describe("BookingCalendar", () => {
                 setup() {
                     const calendar = ref(null);
                     const modelValue = [
-                        new Date("2026-03-10"),
-                        new Date("2026-03-14"),
+                        new Date(2026, 2, 10),
+                        new Date(2026, 2, 14),
                     ];
                     return { calendar, modelValue, viewport: MARCH_2026 };
                 },

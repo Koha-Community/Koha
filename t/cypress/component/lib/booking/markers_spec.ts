@@ -27,7 +27,7 @@ describe("getDateFeedbackMessage - effective maxPeriod", () => {
         // 9 days after start, nowhere near 30 - but createDisableFunction
         // still disabled it, because its trail window would conflict
         // with another booking's lead-tagged window.
-        const feedback = getDateFeedbackMessage(new Date("2026-10-09"), {
+        const feedback = getDateFeedbackMessage(new Date(2026, 9, 9), {
             isDisabled: true,
             selectedDateRange: ["2026-09-30"],
             leadDays: 2,
@@ -47,7 +47,7 @@ describe("getDateFeedbackMessage - effective maxPeriod", () => {
     });
 
     it("still reports exceeding the maximum booking period when the candidate genuinely does", () => {
-        const feedback = getDateFeedbackMessage(new Date("2026-10-31"), {
+        const feedback = getDateFeedbackMessage(new Date(2026, 9, 31), {
             isDisabled: true,
             selectedDateRange: ["2026-09-30"],
             leadDays: 2,
@@ -81,7 +81,7 @@ describe("getDateFeedbackMessage - effective maxPeriod", () => {
     });
 
     it("defaults maxPeriod/leadDays/trailDays to 0 when the caller omits them, rather than throwing", () => {
-        const feedback = getDateFeedbackMessage(new Date("2026-10-09"), {
+        const feedback = getDateFeedbackMessage(new Date(2026, 9, 9), {
             isDisabled: true,
             selectedDateRange: ["2026-09-30"],
             unavailableByDate: {},
