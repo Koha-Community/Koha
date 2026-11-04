@@ -156,7 +156,7 @@ export default {
                     escape_str(resource.external_id) +
                     "<br/>";
                 result +=
-                    "<strong>Item Number</strong>: " +
+                    "<strong>Item number</strong>: " +
                     escape_str(resource.item_id) +
                     "<br/>";
                 result +=
@@ -164,11 +164,11 @@ export default {
                     escape_str(resource._strings.collection_code.str) +
                     "<br/>";
                 result +=
-                    "<strong>Holding Library</strong>: " +
+                    "<strong>Holding library</strong>: " +
                     escape_str(resource.holding_library.name) +
                     "<br/>";
                 result +=
-                    "<strong>Home Library</strong>: " +
+                    "<strong>Home library</strong>: " +
                     escape_str(resource.home_library.name) +
                     "<br/>";
                 return result;
@@ -330,14 +330,14 @@ export default {
                     name: "callnumber",
                     required: true,
                     type: "text",
-                    label: $__("Call Number"),
+                    label: $__("Call number"),
                     hideIn: ["Form"],
                 },
                 {
                     name: "serial_issue_number",
                     required: true,
                     type: "text",
-                    label: $__("Serial Issue Number"),
+                    label: $__("Serial issue number"),
                     hideIn: ["Form"],
                 },
                 {
@@ -352,14 +352,14 @@ export default {
                     name: "holding_library.name",
                     required: true,
                     type: "text",
-                    label: $__("Holding Library"),
+                    label: $__("Holding library"),
                     hideIn: ["Form"],
                 },
                 {
                     name: "home_library.name",
                     required: true,
                     type: "text",
-                    label: $__("Home Library"),
+                    label: $__("Home library"),
                     hideIn: ["Form"],
                 },
                 {
@@ -374,10 +374,10 @@ export default {
                     name: "item_type_id",
                     required: true,
                     type: "text",
-                    label: $__("Item Type"),
+                    label: $__("Item type"),
                     hideIn: ["Form"],
                     tableColumnDefinition: {
-                        title: $__("Item Type"),
+                        title: $__("Item type"),
                         data: "item_type_id",
                         searchable: true,
                         orderable: true,

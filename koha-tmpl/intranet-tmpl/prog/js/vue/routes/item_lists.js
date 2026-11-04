@@ -5,7 +5,7 @@ import ResourceWrapper from "../components/ResourceWrapper.vue";
 import { $__ } from "@koha-vue/i18n";
 
 export default {
-    title: $__("Item Lists"),
+    title: $__("Item lists"),
     path: "/cgi-bin/koha/lists/items",
     resource: "ItemLists/ItemListsResource.vue",
     is_base: true,

@@ -1,7 +1,7 @@
 <template>
     <BaseResource :routeAction="routeAction" :instancedResource="this">
         <template v-slot:list-header>
-            <h1>{{ $__("Item Lists") }}</h1>
+            <h1>{{ $__("Item lists") }}</h1>
         </template>
     </BaseResource>
 </template>
@@ -156,14 +156,14 @@ export default {
                 {
                     name: "created_date",
                     type: "date",
-                    label: $__("Created Date"),
+                    label: $__("Created date"),
                     required: false,
                     hideIn: ["Form"],
                 },
                 {
                     name: "updated_date",
                     type: "date",
-                    label: $__("Updated Date"),
+                    label: $__("Updated date"),
                     required: false,
                     hideIn: ["Form"],
                 },
@@ -188,14 +188,14 @@ export default {
                     },
                     {
                         add_items: {
-                            text: $__("Add Items"),
+                            text: $__("Add items"),
                             icon: "fa fa-plus",
                             should_display: row => row?.can_manage ?? true,
                         },
                     },
                     {
                         add_shares: {
-                            text: $__("Add Shares"),
+                            text: $__("Add shares"),
                             icon: "fa fa-plus",
                             should_display: row => row?.can_update ?? true,
                         },
