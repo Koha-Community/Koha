@@ -279,6 +279,38 @@ describe("bookings store workflow", () => {
             });
     });
 
+    it("reloads bookable items when a patron is picked before they arrive", () => {
+        const itemsStarted = deferred();
+        let firstRequest = true;
+        cy.intercept("GET", "**/api/v1/biblios/1/items*", req => {
+            if (firstRequest) {
+                firstRequest = false;
+                itemsStarted.resolve();
+                req.reply({ delay: 250, body: [ITEM] });
+                return;
+            }
+            req.reply({ body: [ITEM] });
+        }).as("bookableItems");
+
+        const store = makeStore();
+        let openRequest;
+        cy.then(() => {
+            openRequest = store.openForCreate({ biblionumber: 1 });
+            return itemsStarted.promise;
+        })
+            .then(() => Promise.all([openRequest, store.changePatron(PATRON)]))
+            .then(() => {
+                expect(store.bookableItems.map(item => item.item_id)).to.eql([
+                    101,
+                ]);
+                expect(store.itemTypes.map(type => type.item_type_id)).to.eql([
+                    "BK",
+                ]);
+                expect(store.pickupLibraryId).to.equal("CPL");
+            });
+        expectRequestCount("bookableItems", 2);
+    });
+
     it("publishes only the latest circulation-rules response", () => {
         const oldRulesStarted = deferred();
         cy.intercept("GET", "**/api/v1/biblios/1/pickup_locations*", {

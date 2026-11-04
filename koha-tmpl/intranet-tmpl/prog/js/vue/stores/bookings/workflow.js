@@ -45,6 +45,8 @@ export function useBookingWorkflow({
 }) {
     const sessionActive = ref(false);
     const sessionBiblionumber = ref(null);
+    /** @type {Id|null} Assigned item an edit retains even if unbookable. */
+    let sessionAssignedItemId = null;
 
     let transitionGeneration = 0;
     /** @type {AbortController|null} */
@@ -331,6 +333,25 @@ export function useBookingWorkflow({
     }
 
     /**
+     * Fetch the session's bookable items and derive the options built
+     * from them.
+     *
+     * @param {Transition} transition Transition token.
+     * @returns {Promise<boolean>} Whether the transition is still current.
+     */
+    async function loadBookableItems(transition) {
+        await data.fetchBookableItems(
+            sessionBiblionumber.value,
+            sessionAssignedItemId,
+            { signal: transition.signal }
+        );
+        if (!isCurrentTransition(transition)) return false;
+        normalizeSelectedItemId();
+        data.deriveItemTypesFromBookableItems();
+        return true;
+    }
+
+    /**
      * Retry all contextual resources for the current draft.
      *
      * @returns {Promise<boolean>} Whether the refreshed snapshot is current.
@@ -352,6 +373,7 @@ export function useBookingWorkflow({
         sessionBiblionumber.value = input.biblionumber
             ? String(input.biblionumber)
             : null;
+        sessionAssignedItemId = input.itemId ?? null;
         availability.configureConstraints({
             dateRangeConstraint: input.dateRangeConstraint ?? null,
             customDateRangeFormula: input.customDateRangeFormula ?? null,
@@ -381,11 +403,7 @@ export function useBookingWorkflow({
 
         return runTransition(transition, async () => {
             const patronId = input.patronId ?? input.patron?.patron_id ?? null;
-            const requests = [
-                data.fetchBookableItems(biblionumber, input.itemId, {
-                    signal: transition.signal,
-                }),
-            ];
+            const requests = [loadBookableItems(transition)];
             if (patronId) {
                 if (!input.patron) {
                     requests.push(
@@ -404,8 +422,6 @@ export function useBookingWorkflow({
             const results = await Promise.all(requests);
             if (!isCurrentTransition(transition)) return false;
 
-            normalizeSelectedItemId();
-            data.deriveItemTypesFromBookableItems();
             if (patronId && !input.patron) {
                 draft.bookingPatron.value = results[1];
             }
@@ -471,11 +487,18 @@ export function useBookingWorkflow({
         }
 
         return runTransition(transition, async () => {
-            await data.fetchPickupLocations(
-                sessionBiblionumber.value,
-                patron.patron_id,
-                { signal: transition.signal }
-            );
+            const requests = [
+                data.fetchPickupLocations(
+                    sessionBiblionumber.value,
+                    patron.patron_id,
+                    { signal: transition.signal }
+                ),
+            ];
+            // This transition aborted any session load still in flight
+            if (!data.bookableItems.value.length) {
+                requests.push(loadBookableItems(transition));
+            }
+            await Promise.all(requests);
             if (!isCurrentTransition(transition)) return false;
             applyPickupLibraryDefault();
             applyItemTypeDefault();
@@ -548,6 +571,7 @@ export function useBookingWorkflow({
         transitionController = null;
         sessionActive.value = false;
         sessionBiblionumber.value = null;
+        sessionAssignedItemId = null;
         data.invalidateRequests(
             "bookableItems",
             "bookingPatron",
