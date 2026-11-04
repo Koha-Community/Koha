@@ -8,10 +8,15 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        my @tables     = qw/ items deleteditems pending_offline_operations tmp_holdsqueue /;
+        my @tables   = qw/ items deleteditems pending_offline_operations tmp_holdsqueue /;
+        my %comments = (
+            items        => q{ COMMENT 'item barcode (MARC21 952$p)'},
+            deleteditems => q{ COMMENT 'item barcode (MARC21 952$p)'},
+        );
         my $new_length = 32;
         for my $table (@tables) {
-            $dbh->do(qq{ALTER TABLE $table MODIFY barcode VARCHAR($new_length)});
+            my $comment = $comments{$table} // '';
+            $dbh->do(qq{ALTER TABLE $table MODIFY barcode VARCHAR($new_length)$comment});
         }
 
         say_success( $out, "barcode column length set to VARCHAR($new_length) in tables: " . join( ", ", @tables ) );
