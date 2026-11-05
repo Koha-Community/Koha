@@ -24,6 +24,9 @@ export class RecordSourcesAPIClient {
             get: id =>
                 this.httpClient.get({
                     endpoint: "/" + id,
+                    headers: {
+                        "x-koha-embed": "library_groups",
+                    },
                 }),
             getAll: (query, params) =>
                 this.httpClient.getAll({

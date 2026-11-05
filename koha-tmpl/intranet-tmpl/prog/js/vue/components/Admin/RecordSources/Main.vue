@@ -11,6 +11,7 @@
 <script>
 import Breadcrumbs from "../../Breadcrumbs.vue";
 import Dialog from "../../Dialog.vue";
+import "vue-select/dist/vue-select.css";
 
 export default {
     components: {

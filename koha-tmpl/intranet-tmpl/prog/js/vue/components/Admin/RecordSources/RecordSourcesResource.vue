@@ -61,6 +61,18 @@ export default {
                     label: $__("Can be edited"),
                     defaultValue: false,
                 },
+                {
+                    name: "library_groups",
+                    type: "relationshipSelect",
+                    label: $__("Editable by library groups"),
+                    relationshipAPIClient:
+                        APIClient.library_groups.library_groups,
+                    relationshipOptionLabelAttr: "title",
+                    relationshipRequiredKey: "library_group_id",
+                    allowMultipleChoices: true,
+                    query: { is_record_source_editing_group: true },
+                    hideIn: ["List"],
+                },
             ],
         });
 
@@ -81,12 +93,21 @@ export default {
             },
         };
 
+        const afterResourceFetch = (componentData, resource, caller) => {
+            componentData.resource.value.library_groups = (
+                resource.library_groups || []
+            ).map(group => group.library_group_id);
+        };
+
         const onFormSave = (e, recordSourceToSave) => {
             e.preventDefault();
             const recordSource = JSON.parse(JSON.stringify(recordSourceToSave)); // copy
             const recordSourceId = recordSource.record_source_id;
 
             delete recordSource.record_source_id;
+            recordSource.library_groups = (
+                recordSource.library_groups || []
+            ).map(library_group_id => ({ library_group_id }));
 
             if (recordSourceId) {
                 // update
@@ -115,6 +136,7 @@ export default {
         return {
             ...baseResource,
             tableOptions,
+            afterResourceFetch,
             onFormSave,
         };
     },

@@ -13,6 +13,7 @@ import AdditionalFieldsAPIClient from "@fetch/additional-fields-api-client";
 import AVAPIClient from "@fetch/authorised-values-api-client";
 import CashAPIClient from "@fetch/cash-api-client";
 import ItemAPIClient from "@fetch/item-api-client";
+import LibraryGroupsAPIClient from "@fetch/library-groups-api-client";
 import RecordSourcesAPIClient from "@fetch/record-sources-api-client";
 import SysprefAPIClient from "@fetch/system-preferences-api-client";
 import SIP2APIClient from "@fetch/sip2-api-client";
@@ -36,6 +37,7 @@ export const APIClient = {
     cash: new CashAPIClient(HttpClient),
     circulation_rules: new CircRuleAPIClient(HttpClient),
     item: new ItemAPIClient(HttpClient),
+    library_groups: new LibraryGroupsAPIClient(HttpClient),
     sysprefs: new SysprefAPIClient(HttpClient),
     sip2: new SIP2APIClient(HttpClient),
     preservation: new PreservationAPIClient(HttpClient),
