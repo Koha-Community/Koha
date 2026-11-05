@@ -85,15 +85,8 @@ RECORD_IDS: for my $biblionumber ( sort { $a <=> $b } @record_ids ) {
 
         my $biblio           = Koha::Biblios->find($biblionumber);
         my $source_is_locked = $patron && $biblio && !$biblio->metadata->source_allows_editing;
-        if ( $source_is_locked && !$biblio->can_be_edited($patron) ) {
-            push @messages, {
-                type         => 'error',
-                code         => 'biblio_locked',
-                biblionumber => $biblionumber,
-            };
-            $self->step;
-            next RECORD_IDS;
-        }
+        my $biblio_is_locked = $source_is_locked && !$biblio->can_be_edited($patron);
+        my $items_added      = 0;
 
         # Modify the biblio
         my $error = eval {
@@ -107,7 +100,10 @@ RECORD_IDS: for my $biblionumber ( sort { $a <=> $b } @record_ids ) {
 
                 my $biblioitemnumber = $biblio->biblioitem->biblioitemnumber;
                 C4::Items::AddItemFromMarc( $record, $biblionumber, { biblioitemnumber => $biblioitemnumber } );
+                $items_added = 1;
             }
+
+            return 1 if $biblio_is_locked;
 
             C4::Biblio::ModBiblio(
                 $record,
@@ -125,6 +121,12 @@ RECORD_IDS: for my $biblionumber ( sort { $a <=> $b } @record_ids ) {
                 code         => 'biblio_not_modified',
                 biblionumber => $biblionumber,
                 error        => ( $@ ? "$@" : $error ),
+            };
+        } elsif ($biblio_is_locked) {
+            push @messages, {
+                type         => $items_added ? 'warning'                   : 'error',
+                code         => $items_added ? 'biblio_locked_items_added' : 'biblio_locked',
+                biblionumber => $biblionumber,
             };
         } else {
             push @messages, {
