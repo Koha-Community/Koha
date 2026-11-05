@@ -22,6 +22,9 @@ use Modern::Perl;
 
 use base qw(Koha::Object);
 
+use C4::Context;
+use C4::Log qw( logaction );
+
 use Koha::RecordSource;
 
 =head1 NAME
@@ -31,6 +34,57 @@ Koha::MarcModificationTemplate - Koha MarcModificationTemplate Object class
 =head1 API
 
 =head2 Class methods
+
+=head3 store
+
+    $template->store;
+
+Stores the template. Creations and modifications are recorded in the
+action logs when the C<MarcModificationTemplatesLog> system preference
+is enabled.
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    my $log_enabled = C4::Context->preference('MarcModificationTemplatesLog');
+    my $is_new      = !$self->in_storage;
+    my $original    = $log_enabled && !$is_new ? $self->get_from_storage : undef;
+
+    $self = $self->SUPER::store;
+
+    if ($log_enabled) {
+        if ($is_new) {
+            logaction( 'MARC_MOD_TEMPLATES', 'CREATE', $self->id, $self );
+        } else {
+            logaction( 'MARC_MOD_TEMPLATES', 'MODIFY', $self->id, $self, undef, $original );
+        }
+    }
+
+    return $self;
+}
+
+=head3 delete
+
+    $template->delete;
+
+Deletes the template. The deletion is recorded in the action logs when
+the C<MarcModificationTemplatesLog> system preference is enabled.
+
+=cut
+
+sub delete {
+    my ($self) = @_;
+
+    my $template_id = $self->id;
+    my $deleted     = $self->SUPER::delete;
+
+    logaction( 'MARC_MOD_TEMPLATES', 'DELETE', $template_id, $self )
+        if C4::Context->preference('MarcModificationTemplatesLog');
+
+    return $deleted;
+}
 
 =head3 record_source
 

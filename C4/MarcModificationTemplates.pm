@@ -32,6 +32,8 @@ use Koha::SimpleMARC qw(
     move_field
     update_field
 );
+use Koha::MarcModificationTemplate;
+use Koha::MarcModificationTemplates;
 use Koha::MoreUtils;
 use Koha::DateUtils qw( dt_from_string );
 use JSON            qw( encode_json decode_json );
@@ -112,14 +114,8 @@ sub GetModificationTemplates {
 sub AddModificationTemplate {
     my ( $template_name, $template_id_copy ) = @_;
 
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("INSERT INTO marc_modification_templates ( name ) VALUES ( ? )");
-    $sth->execute($template_name);
-
-    $sth = $dbh->prepare("SELECT * FROM marc_modification_templates WHERE name = ?");
-    $sth->execute($template_name);
-    my $row         = $sth->fetchrow_hashref();
-    my $template_id = $row->{'template_id'};
+    my $template    = Koha::MarcModificationTemplate->new( { name => $template_name } )->store;
+    my $template_id = $template->id;
 
     if ($template_id_copy) {
         my @actions = GetModificationTemplateActions($template_id_copy);
@@ -167,9 +163,11 @@ sub AddModificationTemplate {
 sub DelModificationTemplate {
     my ($template_id) = @_;
 
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("DELETE FROM marc_modification_templates WHERE template_id = ?");
-    $sth->execute($template_id);
+    my $template = Koha::MarcModificationTemplates->find($template_id);
+    return 0 unless $template;
+
+    $template->delete;
+    return 1;
 }
 
 =head2

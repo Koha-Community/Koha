@@ -27,6 +27,7 @@
         SUGGESTION: _("Suggestions"),
         TRANSFERS: _("Transfers"),
         ITEM_LISTS: _("Item lists"),
+        MARC_MOD_TEMPLATES: _("MARC modification templates"),
     };
 
     var action_labels = {
