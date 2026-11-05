@@ -4742,6 +4742,7 @@ CREATE TABLE `library_groups` (
   `ft_local_hold_group` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Use this group to identify libraries as pick up location for holds',
   `ft_local_float_group` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Use this group to identify libraries as part of float group',
   `ft_reports` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Use this group to limit report access by library group',
+  `ft_record_source_editing` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Use this group to identify libraries allowed to edit records from locked record sources',
   `created_on` timestamp NULL DEFAULT NULL COMMENT 'Date and time of creation',
   `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Date and time of last',
   PRIMARY KEY (`id`),
@@ -5909,6 +5910,23 @@ CREATE TABLE `record_sources` (
   `is_system` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'If this record source is system-defined and cannot be deleted',
   PRIMARY KEY (`record_source_id`),
   UNIQUE KEY `name` (`name`(191))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `record_sources_library_groups`
+--
+
+DROP TABLE IF EXISTS `record_sources_library_groups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `record_sources_library_groups` (
+  `record_source_id` int(11) NOT NULL COMMENT 'link to the record source',
+  `library_group_id` int(11) NOT NULL COMMENT 'link to the library group exempt from the record source lock',
+  PRIMARY KEY (`record_source_id`,`library_group_id`),
+  KEY `record_sources_library_groups_ibfk_2` (`library_group_id`),
+  CONSTRAINT `record_sources_library_groups_ibfk_1` FOREIGN KEY (`record_source_id`) REFERENCES `record_sources` (`record_source_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `record_sources_library_groups_ibfk_2` FOREIGN KEY (`library_group_id`) REFERENCES `library_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
