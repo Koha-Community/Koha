@@ -348,8 +348,10 @@ sub can_be_edited {
         ? [ 'fast_cataloging', 'edit_catalogue' ]
         : 'edit_catalogue';
 
-    return (
-        ( $self->metadata->source_allows_editing && $patron->has_permission( { editcatalogue => $editcatalogue } ) )
+    my $source_allows_editing = $self->metadata->source_allows_editing
+        || $patron->can_edit_records_from( $self->metadata->record_source );
+
+    return ( ( $source_allows_editing && $patron->has_permission( { editcatalogue => $editcatalogue } ) )
             || $patron->has_permission( { editcatalogue => 'edit_locked_records' } ) ) ? 1 : 0;
 }
 
