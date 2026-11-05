@@ -184,6 +184,7 @@ sub to_api_mapping {
         branchcode             => 'library_id',
         ft_hide_patron_info    => 'hide_patron_info',
         ft_limit_item_editing  => 'limit_item_editing',
+        ft_reports             => 'limit_report_access',
         ft_search_groups_opac  => 'is_opac_search_group',
         ft_search_groups_staff => 'is_staff_search_group',
         ft_local_hold_group    => 'is_local_hold_group',

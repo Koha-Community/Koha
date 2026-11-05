@@ -31,6 +31,9 @@ properties:
   limit_item_editing:
     type: boolean
     description: If item editing is limited to staff within the group
+  limit_report_access:
+    type: boolean
+    description: If report access is limited to the libraries in the group
   is_opac_search_group:
     type: boolean
     description: If the group is used as an OPAC search group
@@ -58,6 +61,7 @@ required:
   - library_group_id
   - title
   - limit_item_editing
+  - limit_report_access
   - is_opac_search_group
   - is_staff_search_group
   - is_local_hold_group
