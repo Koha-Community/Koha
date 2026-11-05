@@ -36,6 +36,7 @@ use C4::MarcModificationTemplates qw(
 );
 
 use Koha::MarcModificationTemplates;
+use Koha::Patrons;
 use Koha::RecordSources;
 
 my $cgi = CGI->new;
@@ -64,8 +65,12 @@ if ( $op eq "cud-create_template" ) {
 
 } elsif ( $op eq "cud-update_record_source" ) {
 
+    my $patron                = Koha::Patrons->find($loggedinuser);
+    my $can_set_record_source = $patron && $patron->has_permission( { editcatalogue => 'set_record_sources' } );
+    $template->param( error => 'set_record_source_not_allowed' ) unless $can_set_record_source;
+
     my $record_source_id = $cgi->param('record_source_id') || undef;
-    my $mm_template      = Koha::MarcModificationTemplates->find($template_id);
+    my $mm_template      = $can_set_record_source ? Koha::MarcModificationTemplates->find($template_id) : undef;
     $mm_template->set( { record_source_id => $record_source_id } )->store if $mm_template;
 
 } elsif ( $op eq "cud-add_action" ) {

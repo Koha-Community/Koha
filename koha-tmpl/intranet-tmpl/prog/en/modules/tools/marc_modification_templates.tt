@@ -96,6 +96,8 @@
     [% IF error %]
         [% IF error == 'no_from_field' %]
             <div class="alert alert-info">Error: no field value specified.</div>
+        [% ELSIF error == 'set_record_source_not_allowed' %]
+            <div class="alert alert-warning">Error: you do not have permission to set record sources.</div>
         [% END %]
     [% END %]
 
@@ -142,7 +144,7 @@
         [% ELSE %]
             <h1>[% tx("Actions for template '{template_name}'", template_name = template_name ) | html %]</h1>
 
-            [% IF record_sources.count %]
+            [% IF record_sources.count && CAN_user_editcatalogue_set_record_sources %]
                 <form method="post" action="/cgi-bin/koha/tools/marc_modification_templates.pl" id="set_record_source">
                     [% INCLUDE 'csrf-token.inc' %]
                     <fieldset class="rows">
@@ -170,6 +172,15 @@
                         <input type="submit" class="btn btn-primary" value="Save" />
                     </fieldset>
                 </form>
+            [% ELSIF template_record_source_id %]
+                <div class="page-section" id="template_record_source">
+                    <h2>Record source</h2>
+                    [% FOREACH record_source IN record_sources %]
+                        [% IF record_source.record_source_id == template_record_source_id %]
+                            <p>Bibliographic records modified with this template get the record source <strong>[% record_source.name | html %]</strong>. You need the "Set record source" permission to change it.</p>
+                        [% END %]
+                    [% END %]
+                </div>
             [% END %]
 
             [% IF ( ActionsLoop ) %]
