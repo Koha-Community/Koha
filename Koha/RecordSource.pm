@@ -22,6 +22,8 @@ use Modern::Perl;
 
 use base qw(Koha::Object);
 
+use Koha::Exceptions;
+use Koha::Library::Groups;
 use Koha::Patrons;
 use Koha::Token;
 
@@ -44,6 +46,60 @@ This method returns the count for records using this record source.
 sub usage_count {
     my ($self) = @_;
     return $self->_result->biblio_metadatas->count();
+}
+
+=head3 library_groups
+
+    my $library_groups = $source->library_groups;
+    $source->library_groups( [ { library_group_id => $group_id }, ... ] );
+
+Accessor for the library groups exempt from this source's lock.
+
+=cut
+
+sub library_groups {
+    my ( $self, $library_groups ) = @_;
+
+    return $self->_linked_library_groups unless $library_groups;
+
+    my @group_ids      = map { $_->{library_group_id} } @$library_groups;
+    my $eligible_count = Koha::Library::Groups->search(
+        {
+            id                       => \@group_ids,
+            parent_id                => undef,
+            ft_record_source_editing => 1,
+        }
+    )->count;
+    Koha::Exceptions::BadParameter->throw( parameter => 'library_group_id' )
+        unless $eligible_count == @group_ids;
+
+    my $schema = $self->_result->result_source->schema;
+    $schema->txn_do(
+        sub {
+            $self->_result->record_sources_library_groups->delete;
+
+            for my $group_id (@group_ids) {
+                $self->_result->add_to_record_sources_library_groups( { library_group_id => $group_id } );
+            }
+        }
+    );
+
+    return $self->_linked_library_groups;
+}
+
+=head3 _linked_library_groups
+
+    my $library_groups = $source->_linked_library_groups;
+
+Returns the library groups linked to this source as a I<Koha::Library::Groups> set.
+
+=cut
+
+sub _linked_library_groups {
+    my ($self) = @_;
+
+    my $library_groups_rs = $self->_result->library_groups;
+    return Koha::Library::Groups->_new_from_dbic($library_groups_rs);
 }
 
 =head3 store
