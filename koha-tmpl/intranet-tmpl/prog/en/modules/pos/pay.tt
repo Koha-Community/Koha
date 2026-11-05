@@ -472,6 +472,9 @@
             var checked = false;
             $("#modal_submit").click(function () {
                 checked = true;
+                // With FinePaymentAutoPopup the form posts to a new tab, so this
+                // page stays put: close the modal or it stays on screen.
+                $("#confirm_change_form").modal("hide");
                 $("#payForm").submit();
             });
 
