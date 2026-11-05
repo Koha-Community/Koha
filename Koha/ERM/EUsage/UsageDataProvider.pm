@@ -385,6 +385,9 @@ sub erm_usage_databases {
 
 Build the URL query params for COUNTER 5 SUSHI request
 
+The master reports (PR, DR, TR and IR) ask for the Regular access method only: the usage for text and data
+mining (TDM) is not stored. The standard views are preset to Regular.
+
 =cut
 
 sub _build_url_query {
@@ -405,6 +408,9 @@ sub _build_url_query {
     $url .= '&begin_date=' . substr $self->{begin_date}, 0, 7 if $self->{begin_date};
     $url .= '&end_date=' . substr $self->{end_date},     0, 7 if $self->{end_date};
     $url .= '&platform=' . $self->service_platform if $self->service_platform;
+
+    # A master report includes all access methods by default, Koha only stores the Regular usage
+    $url .= '&access_method=Regular' if $self->{report_type} =~ /^(?:PR|DR|TR|IR)$/i;
 
     return $url;
 }

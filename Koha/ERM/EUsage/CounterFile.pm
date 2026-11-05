@@ -128,6 +128,10 @@ A usage object may be a erm_usage_title, erm_usage_platform, erm_usage_item or e
 Only monthly usage is stored by the rows. The yearly usage in erm_usage_yus is rebuilt from the monthly usage
 for each year of the file when all rows are done.
 
+Only the Regular usage is stored. A row whose Access_Method is not Regular (the usage for text and data
+mining, TDM) is skipped: it adds no usage object and no usage, and one C<access_method_skipped> warning
+with the number of skipped rows is added to the job. A row without an Access_Method is Regular.
+
 =cut
 
 sub _add_usage_objects {
@@ -141,11 +145,20 @@ sub _add_usage_objects {
     # The years of the months that were written, to rebuild their yearly usage
     my %years;
 
+    # The rows of an Access_Method other than Regular, they are not imported
+    my $skipped_rows = 0;
+
     # Set job size to the amount of rows we're processing
     $self->{job_callbacks}->{set_size_callback}->( scalar( @{$rows} ) )
         if $self->{job_callbacks};
     foreach my $row ( @{$rows} ) {
         try {
+            if ( !Koha::ERM::EUsage::SushiCounter->is_regular_access_method( $row->{Access_Method} ) ) {
+                $skipped_rows++;
+                $self->{job_callbacks}->{step_callback}->() if $self->{job_callbacks};
+                return;
+            }
+
             # INFO: A single row may have multiple instances in the COUNTER report, one for each metric_type or access_type or yop
             # If we're on a row that we've already gone through, use the same usage object
             # and add usage statistics for the different metric_type or access_type or yop
@@ -215,6 +228,14 @@ sub _add_usage_objects {
             warn $_;
         }
     }
+
+    $self->{job_callbacks}->{add_message_callback}->(
+        {
+            type    => 'warning',
+            code    => 'access_method_skipped',
+            message => $skipped_rows,
+        }
+    ) if $skipped_rows && $self->{job_callbacks};
 
     # erm_usage_yus is derived from erm_usage_mus: a new or changed month changes the total of its year
     Koha::ERM::EUsage::YearlyUsages->rebuild(

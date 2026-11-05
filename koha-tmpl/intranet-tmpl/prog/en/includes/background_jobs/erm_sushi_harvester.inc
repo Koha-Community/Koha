@@ -89,6 +89,9 @@
             [% CASE 'no_items' %]
                 <span>SUSHI response returned no items.</span><br />
                 <span>Please try a different harvest period.</span>
+            [% CASE 'access_method_skipped' %]
+                <span>[% tnx("{count} row with an Access_Method other than Regular was not imported.", "{count} rows with an Access_Method other than Regular were not imported.", m.message, { count = m.message }) | html %]</span><br />
+                <span>Only the Regular usage is stored, the usage for text and data mining (TDM) is not.</span>
             [% CASE %]
                 <span>SUSHI returned: [% m.message | html %] [% m.code | html %]</span>
             [% END %]

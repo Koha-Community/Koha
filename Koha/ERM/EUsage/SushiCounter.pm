@@ -55,12 +55,31 @@ sub new {
 
     $counter_release->{sushi} = {
         header => $params->{response}->{Report_Header},
-        body   => $params->{response}->{Report_Items}
+        body   => _without_other_access_methods( $params->{response}->{Report_Items} ),
     };
 
     #TODO: Handle empty $self->{sushi}->{body} here!
 
     return $counter_release;
+}
+
+=head3 is_regular_access_method
+
+    my $is_regular = Koha::ERM::EUsage::SushiCounter->is_regular_access_method($access_method);
+
+Returns true when the Access_Method is missing or empty (the standard views have no such
+column) or is Regular, in any case and with spaces ignored. Koha stores the Regular usage
+only, not the usage for text and data mining (TDM).
+
+=cut
+
+sub is_regular_access_method {
+    my ( $class, $access_method ) = @_;
+
+    return 1 unless defined $access_method && $access_method =~ /\S/;
+
+    $access_method =~ s/^\s+|\s+$//g;
+    return lc($access_method) eq 'regular' ? 1 : 0;
 }
 
 =head3 get_COUNTER_from_SUSHI
@@ -83,6 +102,50 @@ sub get_COUNTER_from_SUSHI {
 }
 
 =head2 Internal methods
+
+=head3 _without_other_access_methods
+
+    my $report_items = _without_other_access_methods( $response->{Report_Items} );
+
+Returns the report items without the usage of an Access_Method other than Regular (the
+usage for text and data mining is not stored). Koha asks for the Regular usage only, but a
+provider can ignore the filter. See L</is_regular_access_method> for the rule.
+
+=over
+
+=item * Release 5: an item holds one combination of attributes, an item with another
+Access_Method is dropped.
+
+=item * Release 5.1: an item holds an C<Attribute_Performance> entry for each combination of
+attributes, the entries with another Access_Method are dropped, and so is an item that has
+no entry left.
+
+=back
+
+=cut
+
+sub _without_other_access_methods {
+    my ($report_items) = @_;
+
+    return $report_items unless ref($report_items) eq 'ARRAY';
+
+    my @regular_items;
+    foreach my $item ( @{$report_items} ) {
+        if ( ref($item) eq 'HASH' && ref( $item->{Attribute_Performance} ) eq 'ARRAY' ) {
+            my @attribute_performance =
+                grep { ref($_) ne 'HASH' || __PACKAGE__->is_regular_access_method( $_->{Access_Method} ) }
+                @{ $item->{Attribute_Performance} };
+            next unless @attribute_performance;
+            push @regular_items, { %{$item}, Attribute_Performance => \@attribute_performance };
+        } elsif ( ref($item) eq 'HASH' ) {
+            push @regular_items, $item if __PACKAGE__->is_regular_access_method( $item->{Access_Method} );
+        } else {
+            push @regular_items, $item;
+        }
+    }
+
+    return \@regular_items;
+}
 
 =head3 _build_COUNTER_report_file
 
