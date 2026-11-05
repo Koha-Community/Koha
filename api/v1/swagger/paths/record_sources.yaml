@@ -22,6 +22,7 @@
           type: string
           enum:
             - usage_count
+            - library_groups
         collectionFormat: csv
     consumes:
       - application/json
@@ -127,6 +128,17 @@
       - record_sources
     parameters:
       - $ref: "../swagger.yaml#/parameters/record_source_id_pp"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - usage_count
+            - library_groups
+        collectionFormat: csv
     consumes:
       - application/json
     produces:

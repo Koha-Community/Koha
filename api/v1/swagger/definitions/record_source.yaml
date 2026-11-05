@@ -14,6 +14,11 @@ properties:
   usage_count:
     description: Record source usage count (x-koha-embed)
     type: integer
+  library_groups:
+    description: Library groups whose member libraries can edit records from this source when locked (x-koha-embed). On update, omit the key to keep the current links or send an empty array to clear them.
+    type: array
+    items:
+      $ref: record_source_library_group.yaml
   is_system:
     description: Is this record source system or not
     type: boolean

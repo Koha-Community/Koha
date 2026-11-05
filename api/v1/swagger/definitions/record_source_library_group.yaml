@@ -1,0 +1,14 @@
+---
+type: object
+description: Library group linked to a record source. Only the library_group_id is required on updates; responses embed the full library group object, so additional properties stay allowed.
+properties:
+  library_group_id:
+    type: integer
+    description: Internal identifier for the library group
+  title:
+    type:
+      - string
+      - "null"
+    description: Library group title
+required:
+  - library_group_id

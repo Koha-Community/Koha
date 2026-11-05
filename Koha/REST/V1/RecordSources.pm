@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
+use Koha::Database;
 use Koha::RecordSources;
 
 use Scalar::Util qw( blessed );
@@ -73,12 +74,21 @@ sub add {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $source = Koha::RecordSource->new_from_api( $c->req->json );
-        $source->store;
-        $c->res->headers->location( $c->req->url->to_string . '/' . $source->record_source_id );
-        return $c->render(
-            status  => 201,
-            openapi => $c->objects->to_api($source)
+        Koha::Database->new->schema->txn_do(
+            sub {
+                my $body           = $c->req->json;
+                my $library_groups = exists $body->{library_groups} ? delete $body->{library_groups} : undef;
+
+                my $source = Koha::RecordSource->new_from_api($body);
+                $source->store;
+                $source->library_groups( $library_groups || [] ) if defined $library_groups;
+
+                $c->res->headers->location( $c->req->url->to_string . '/' . $source->record_source_id );
+                return $c->render(
+                    status  => 201,
+                    openapi => $c->objects->to_api($source)
+                );
+            }
         );
     } catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
@@ -87,6 +97,8 @@ sub add {
                 openapi => { error => 'Duplicate name.' }
             );
         } elsif ( blessed $_ and $_->isa('Koha::Exceptions::BadParameter') ) {
+            return $c->render_invalid_parameter_value( { path => '/body/library_groups' } )
+                if $_->parameter and $_->parameter eq 'library_group_id';
             return $c->render(
                 status  => 409,
                 openapi => { error => 'Name not allowed.' }
@@ -116,9 +128,17 @@ sub update {
     }
 
     return try {
-        $source->set_from_api( $c->req->json )->store;
-        $source->discard_changes;
-        return $c->render( status => 200, openapi => $c->objects->to_api($source) );
+        Koha::Database->new->schema->txn_do(
+            sub {
+                my $body           = $c->req->json;
+                my $library_groups = exists $body->{library_groups} ? delete $body->{library_groups} : undef;
+
+                $source->set_from_api($body)->store;
+                $source->library_groups( $library_groups || [] ) if defined $library_groups;
+                $source->discard_changes;
+                return $c->render( status => 200, openapi => $c->objects->to_api($source) );
+            }
+        );
     } catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
             return $c->render(
@@ -126,6 +146,8 @@ sub update {
                 openapi => { error => 'Duplicate name.' }
             );
         } elsif ( blessed $_ and $_->isa('Koha::Exceptions::BadParameter') ) {
+            return $c->render_invalid_parameter_value( { path => '/body/library_groups' } )
+                if $_->parameter and $_->parameter eq 'library_group_id';
             return $c->render(
                 status  => 409,
                 openapi => { error => 'Name not allowed.' }
