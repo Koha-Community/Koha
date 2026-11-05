@@ -180,15 +180,16 @@ on the API.
 
 sub to_api_mapping {
     return {
-        id                     => 'library_group_id',
-        branchcode             => 'library_id',
-        ft_hide_patron_info    => 'hide_patron_info',
-        ft_limit_item_editing  => 'limit_item_editing',
-        ft_reports             => 'limit_report_access',
-        ft_search_groups_opac  => 'is_opac_search_group',
-        ft_search_groups_staff => 'is_staff_search_group',
-        ft_local_hold_group    => 'is_local_hold_group',
-        ft_local_float_group   => 'is_local_float_group',
+        id                       => 'library_group_id',
+        branchcode               => 'library_id',
+        ft_hide_patron_info      => 'hide_patron_info',
+        ft_limit_item_editing    => 'limit_item_editing',
+        ft_reports               => 'limit_report_access',
+        ft_search_groups_opac    => 'is_opac_search_group',
+        ft_search_groups_staff   => 'is_staff_search_group',
+        ft_local_hold_group      => 'is_local_hold_group',
+        ft_local_float_group     => 'is_local_float_group',
+        ft_record_source_editing => 'is_record_source_editing_group',
     };
 }
 

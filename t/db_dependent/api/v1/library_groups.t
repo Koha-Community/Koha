@@ -93,13 +93,14 @@ subtest 'list() tests' => sub {
 
 subtest 'list() q filter tests' => sub {
     my %flags = (
-        hide_patron_info      => 'ft_hide_patron_info',
-        limit_item_editing    => 'ft_limit_item_editing',
-        limit_report_access   => 'ft_reports',
-        is_opac_search_group  => 'ft_search_groups_opac',
-        is_staff_search_group => 'ft_search_groups_staff',
-        is_local_hold_group   => 'ft_local_hold_group',
-        is_local_float_group  => 'ft_local_float_group',
+        hide_patron_info               => 'ft_hide_patron_info',
+        limit_item_editing             => 'ft_limit_item_editing',
+        limit_report_access            => 'ft_reports',
+        is_opac_search_group           => 'ft_search_groups_opac',
+        is_staff_search_group          => 'ft_search_groups_staff',
+        is_local_hold_group            => 'ft_local_hold_group',
+        is_local_float_group           => 'ft_local_float_group',
+        is_record_source_editing_group => 'ft_record_source_editing',
     );
 
     plan tests => 3 * 2 * scalar( keys %flags ) + 3;
