@@ -125,6 +125,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 marc_modification_templates
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::MarcModificationTemplate>
+
+=cut
+
+__PACKAGE__->has_many(
+  "marc_modification_templates",
+  "Koha::Schema::Result::MarcModificationTemplate",
+  { "foreign.record_source_id" => "self.record_source_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 record_sources_library_groups
 
 Type: has_many
@@ -155,8 +170,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-10-23 13:16:09
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3AaWDTfuMFO/gCC/XxwNEQ
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-10-23 13:24:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Py6ZAQjYXzDdr/2tyObzJA
 
 __PACKAGE__->add_columns(
     '+can_be_edited' => { is_boolean => 1 },
