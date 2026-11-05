@@ -4904,7 +4904,10 @@ DROP TABLE IF EXISTS `marc_modification_templates`;
 CREATE TABLE `marc_modification_templates` (
   `template_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` mediumtext NOT NULL,
-  PRIMARY KEY (`template_id`)
+  `record_source_id` int(11) DEFAULT NULL COMMENT 'record source to set on bibliographic records modified with this template',
+  PRIMARY KEY (`template_id`),
+  KEY `marc_modification_templates_ibfk_1` (`record_source_id`),
+  CONSTRAINT `marc_modification_templates_ibfk_1` FOREIGN KEY (`record_source_id`) REFERENCES `record_sources` (`record_source_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
