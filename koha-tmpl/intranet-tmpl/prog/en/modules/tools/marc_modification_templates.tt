@@ -10,6 +10,7 @@
     [% FOREACH TemplatesLoo IN TemplatesLoop %]
         [% IF ( TemplatesLoo.selected ) %]
             [% SET template_name = TemplatesLoo.name %]
+            [% SET template_record_source_id = TemplatesLoo.record_source_id %]
         [% END %]
     [% END %]
 [% END %]
@@ -140,6 +141,36 @@
             <!-- /.page-section -->
         [% ELSE %]
             <h1>[% tx("Actions for template '{template_name}'", template_name = template_name ) | html %]</h1>
+
+            [% IF record_sources.count %]
+                <form method="post" action="/cgi-bin/koha/tools/marc_modification_templates.pl" id="set_record_source">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <fieldset class="rows">
+                        <legend>Record source</legend>
+                        <ol>
+                            <li>
+                                <label for="record_source_id">Set record source: </label>
+                                <select name="record_source_id" id="record_source_id">
+                                    <option value="">Keep current record source</option>
+                                    [% FOREACH record_source IN record_sources %]
+                                        [% IF record_source.record_source_id == template_record_source_id %]
+                                            <option value="[% record_source.record_source_id | html %]" selected="selected">[% record_source.name | html %]</option>
+                                        [% ELSE %]
+                                            <option value="[% record_source.record_source_id | html %]">[% record_source.name | html %]</option>
+                                        [% END %]
+                                    [% END %]
+                                </select>
+                                <div class="hint">The record source is set on bibliographic records modified with this template. It is ignored for authority records.</div>
+                            </li>
+                        </ol>
+                    </fieldset>
+                    <fieldset class="action">
+                        <input type="hidden" name="template_id" value="[% template_id | html %]" />
+                        <input type="hidden" name="op" value="cud-update_record_source" />
+                        <input type="submit" class="btn btn-primary" value="Save" />
+                    </fieldset>
+                </form>
+            [% END %]
 
             [% IF ( ActionsLoop ) %]
                 <div class="page-section">

@@ -35,6 +35,9 @@ use C4::MarcModificationTemplates qw(
     MoveModificationTemplateAction
 );
 
+use Koha::MarcModificationTemplates;
+use Koha::RecordSources;
+
 my $cgi = CGI->new;
 
 my $op          = $cgi->param('op') || q{};
@@ -58,6 +61,12 @@ if ( $op eq "cud-create_template" ) {
 
     DelModificationTemplate($template_id);
     $template_id = '';
+
+} elsif ( $op eq "cud-update_record_source" ) {
+
+    my $record_source_id = $cgi->param('record_source_id') || undef;
+    my $mm_template      = Koha::MarcModificationTemplates->find($template_id);
+    $mm_template->set( { record_source_id => $record_source_id } )->store if $mm_template;
 
 } elsif ( $op eq "cud-add_action" ) {
 
@@ -238,8 +247,9 @@ foreach my $action (@actions) {
 }
 
 $template->param(
-    TemplatesLoop => \@templates,
-    ActionsLoop   => \@actions,
+    TemplatesLoop  => \@templates,
+    ActionsLoop    => \@actions,
+    record_sources => scalar Koha::RecordSources->search( {}, { order_by => 'name' } ),
 
     template_id => $template_id,
 );
