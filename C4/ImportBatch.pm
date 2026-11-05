@@ -89,6 +89,7 @@ use C4::AuthoritiesMarc
 use C4::MarcModificationTemplates qw( ModifyRecordWithTemplate );
 use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::Items;
+use Koha::MarcModificationTemplates;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Indexer;
 use Koha::Plugins::Handler;
@@ -211,7 +212,8 @@ sub AddImportBatch {
     foreach (
         qw( matcher_id template_id branchcode
         overlay_action nomatch_action item_action
-        import_status batch_type file_name comments record_type )
+        import_status batch_type file_name comments record_type
+        record_source_id )
         )
     {
         if ( exists $params->{$_} ) {
@@ -335,14 +337,17 @@ sub BatchStageMarcRecords {
         $progress_interval = 0 unless 'CODE' eq ref $progress_callback;
     }
 
+    my $record_source_id = Koha::MarcModificationTemplates->record_source_id_for($marc_modification_template);
+
     my $batch_id = AddImportBatch(
         {
-            overlay_action => 'create_new',
-            import_status  => 'staging',
-            batch_type     => 'batch',
-            file_name      => $file_name,
-            comments       => $comments,
-            record_type    => $record_type,
+            overlay_action   => 'create_new',
+            import_status    => 'staging',
+            batch_type       => 'batch',
+            file_name        => $file_name,
+            comments         => $comments,
+            record_type      => $record_type,
+            record_source_id => $record_source_id,
         }
     );
     if ($parse_items) {
@@ -554,6 +559,9 @@ sub BatchCommitRecords {
     my $overlay_action = GetImportBatchOverlayAction($batch_id);
     my $nomatch_action = GetImportBatchNoMatchAction($batch_id);
     my $item_action    = GetImportBatchItemAction($batch_id);
+
+    my $record_source_id     = GetImportBatch($batch_id)->{record_source_id};
+    my @record_source_option = defined $record_source_id ? ( record_source_id => $record_source_id ) : ();
     my $item_tag;
     my $item_subfield;
     my $dbh = C4::Context->dbh;
@@ -627,7 +635,8 @@ sub BatchCommitRecords {
             $num_added++;
             if ( $record_type eq 'biblio' ) {
                 my $biblioitemnumber;
-                ( $recordid, $biblioitemnumber ) = AddBiblio( $marc_record, $framework, { skip_record_index => 1 } );
+                ( $recordid, $biblioitemnumber ) =
+                    AddBiblio( $marc_record, $framework, { skip_record_index => 1, @record_source_option } );
                 push @biblio_ids, $recordid if $recordid;
                 $query = "UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?"
                     ;    # FIXME call SetMatchedBiblionumber instead
@@ -678,6 +687,7 @@ sub BatchCommitRecords {
                         overlay_context   => $context,
                         skip_record_index => 1,
                         skip_holds_queue  => 1,
+                        @record_source_option,
                     }
                 );
                 push @biblio_ids,  $recordid;
