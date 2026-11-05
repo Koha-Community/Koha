@@ -619,6 +619,7 @@ sub BatchCommitRecords {
 
         my $overlay_is_locked =
             $record_result eq 'replace' && _overlay_is_locked( $record_type, $record_match, $logged_in_patron );
+        $record_result = 'ignore' if $overlay_is_locked;
 
         my $recordid;
         my $query;
@@ -645,9 +646,6 @@ sub BatchCommitRecords {
             $sth->execute( $recordid, $rowref->{'import_record_id'} );
             $sth->finish();
             SetImportRecordStatus( $rowref->{'import_record_id'}, 'imported' );
-        } elsif ($overlay_is_locked) {
-            $num_locked++;
-            SetImportRecordStatus( $rowref->{'import_record_id'}, 'ignored' );
         } elsif ( $record_result eq 'replace' ) {
             $num_updated++;
             $recordid = $record_match;
@@ -711,7 +709,8 @@ sub BatchCommitRecords {
             $sth2->finish();
         } elsif ( $record_result eq 'ignore' ) {
             $recordid = $record_match;
-            $num_ignored++;
+            $num_locked++ if $overlay_is_locked;
+            $num_ignored++ unless $overlay_is_locked;
             if (    $record_type eq 'biblio'
                 and defined $recordid
                 and ( $item_result eq 'create_new' || $item_result eq 'replace' ) )
