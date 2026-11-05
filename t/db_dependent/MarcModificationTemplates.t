@@ -3,7 +3,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 156;
+use Test::More tests => 157;
 
 use Koha::Database;
 use Koha::SimpleMARC;
@@ -2025,4 +2025,33 @@ subtest 'Import with skip_existing=1 skips existing templates' => sub {
 
     # Clean up
     DelModificationTemplate($template_id);
+};
+
+subtest 'duplicate template copies the record source' => sub {
+    plan tests => 2;
+
+    $dbh->do(q|DELETE FROM marc_modification_templates|);
+    $dbh->do(q|INSERT INTO record_sources (name, can_be_edited) VALUES ('C4 duplicate source', 1)|);
+    my $record_source_id = $dbh->last_insert_id( undef, undef, 'record_sources', undef );
+
+    my $original_id = AddModificationTemplate("with_source");
+    $dbh->do(
+        q|UPDATE marc_modification_templates SET record_source_id = ? WHERE template_id = ?|, undef,
+        $record_source_id,                                                                    $original_id
+    );
+
+    my $duplicate_id = AddModificationTemplate( "copied_template", $original_id );
+    my ($copied_source_id) = $dbh->selectrow_array(
+        q|SELECT record_source_id FROM marc_modification_templates WHERE template_id = ?|, undef,
+        $duplicate_id
+    );
+    is( $copied_source_id, $record_source_id, "Duplicating a template copies its record source" );
+
+    my $plain_id          = AddModificationTemplate("plain_template");
+    my $plain_copy_id     = AddModificationTemplate( "plain_copy", $plain_id );
+    my ($plain_source_id) = $dbh->selectrow_array(
+        q|SELECT record_source_id FROM marc_modification_templates WHERE template_id = ?|, undef,
+        $plain_copy_id
+    );
+    is( $plain_source_id, undef, "Duplicating a template without a source keeps none" );
 };
