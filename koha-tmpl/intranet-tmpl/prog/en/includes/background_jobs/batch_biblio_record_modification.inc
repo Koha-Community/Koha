@@ -44,6 +44,8 @@
                 [% IF m.error %]([% m.error | html %])[% END %].
             [% CASE 'biblio_modified' %]
                 <span>Bibliographic record [% biblio_link | $raw %] has successfully been modified.</span>
+            [% CASE 'biblio_locked' %]
+                <span>Bibliographic record [% biblio_link | $raw %] has not been modified. Its record source is locked and you do not have permission to edit it.</span>
             [% END %]
         </div>
     [% END %]

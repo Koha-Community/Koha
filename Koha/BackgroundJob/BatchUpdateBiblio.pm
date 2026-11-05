@@ -18,6 +18,7 @@ package Koha::BackgroundJob::BatchUpdateBiblio;
 use Modern::Perl;
 
 use Koha::Biblios;
+use Koha::Patrons;
 use Koha::Virtualshelves;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Indexer;
@@ -75,15 +76,27 @@ sub process {
         total_success => 0,
     };
     my @messages;
+    my $patron = $self->borrowernumber ? Koha::Patrons->find( $self->borrowernumber ) : undef;
 RECORD_IDS: for my $biblionumber ( sort { $a <=> $b } @record_ids ) {
 
         last if $self->get_from_storage->status eq 'cancelled';
 
         next unless $biblionumber;
 
+        my $biblio           = Koha::Biblios->find($biblionumber);
+        my $source_is_locked = $patron && $biblio && !$biblio->metadata->source_allows_editing;
+        if ( $source_is_locked && !$biblio->can_be_edited($patron) ) {
+            push @messages, {
+                type         => 'error',
+                code         => 'biblio_locked',
+                biblionumber => $biblionumber,
+            };
+            $self->step;
+            next RECORD_IDS;
+        }
+
         # Modify the biblio
         my $error = eval {
-            my $biblio = Koha::Biblios->find($biblionumber);
             my $record = $biblio->metadata->record;
             C4::MarcModificationTemplates::ModifyRecordWithTemplate( $mmtid, $record );
             my $frameworkcode = C4::Biblio::GetFrameworkCode($biblionumber);
