@@ -42,17 +42,18 @@ my $op = $cgi->param('op') || q{};
 my @messages;
 
 if ( $op eq 'cud-add' ) {
-    my $parent_id              = $cgi->param('parent_id')              || undef;
-    my $title                  = $cgi->param('title')                  || undef;
-    my $description            = $cgi->param('description')            || undef;
-    my $branchcode             = $cgi->param('branchcode')             || undef;
-    my $ft_hide_patron_info    = $cgi->param('ft_hide_patron_info')    || 0;
-    my $ft_limit_item_editing  = $cgi->param('ft_limit_item_editing')  || 0;
-    my $ft_search_groups_opac  = $cgi->param('ft_search_groups_opac')  || 0;
-    my $ft_search_groups_staff = $cgi->param('ft_search_groups_staff') || 0;
-    my $ft_local_hold_group    = $cgi->param('ft_local_hold_group')    || 0;
-    my $ft_local_float_group   = $cgi->param('ft_local_float_group')   || 0;
-    my $ft_reports             = $cgi->param('ft_reports')             || 0;
+    my $parent_id                = $cgi->param('parent_id')                || undef;
+    my $title                    = $cgi->param('title')                    || undef;
+    my $description              = $cgi->param('description')              || undef;
+    my $branchcode               = $cgi->param('branchcode')               || undef;
+    my $ft_hide_patron_info      = $cgi->param('ft_hide_patron_info')      || 0;
+    my $ft_limit_item_editing    = $cgi->param('ft_limit_item_editing')    || 0;
+    my $ft_search_groups_opac    = $cgi->param('ft_search_groups_opac')    || 0;
+    my $ft_search_groups_staff   = $cgi->param('ft_search_groups_staff')   || 0;
+    my $ft_local_hold_group      = $cgi->param('ft_local_hold_group')      || 0;
+    my $ft_local_float_group     = $cgi->param('ft_local_float_group')     || 0;
+    my $ft_reports               = $cgi->param('ft_reports')               || 0;
+    my $ft_record_source_editing = $cgi->param('ft_record_source_editing') || 0;
 
     if ( !$branchcode && Koha::Library::Groups->search( { title => $title } )->count() ) {
         $template->param( error_duplicate_title => $title );
@@ -60,17 +61,18 @@ if ( $op eq 'cud-add' ) {
         my $group = eval {
             Koha::Library::Group->new(
                 {
-                    parent_id              => $parent_id,
-                    title                  => $title,
-                    description            => $description,
-                    ft_hide_patron_info    => $ft_hide_patron_info,
-                    ft_search_groups_opac  => $ft_search_groups_opac,
-                    ft_search_groups_staff => $ft_search_groups_staff,
-                    ft_local_hold_group    => $ft_local_hold_group,
-                    ft_limit_item_editing  => $ft_limit_item_editing,
-                    ft_local_float_group   => $ft_local_float_group,
-                    ft_reports             => $ft_reports,
-                    branchcode             => $branchcode,
+                    parent_id                => $parent_id,
+                    title                    => $title,
+                    description              => $description,
+                    ft_hide_patron_info      => $ft_hide_patron_info,
+                    ft_search_groups_opac    => $ft_search_groups_opac,
+                    ft_search_groups_staff   => $ft_search_groups_staff,
+                    ft_local_hold_group      => $ft_local_hold_group,
+                    ft_limit_item_editing    => $ft_limit_item_editing,
+                    ft_local_float_group     => $ft_local_float_group,
+                    ft_reports               => $ft_reports,
+                    ft_record_source_editing => $ft_record_source_editing,
+                    branchcode               => $branchcode,
                 }
             )->store();
         };
@@ -81,31 +83,33 @@ if ( $op eq 'cud-add' ) {
         }
     }
 } elsif ( $op eq 'cud-edit' ) {
-    my $id                     = $cgi->param('id')                     || undef;
-    my $title                  = $cgi->param('title')                  || undef;
-    my $description            = $cgi->param('description')            || undef;
-    my $ft_hide_patron_info    = $cgi->param('ft_hide_patron_info')    || 0;
-    my $ft_limit_item_editing  = $cgi->param('ft_limit_item_editing')  || 0;
-    my $ft_search_groups_opac  = $cgi->param('ft_search_groups_opac')  || 0;
-    my $ft_search_groups_staff = $cgi->param('ft_search_groups_staff') || 0;
-    my $ft_local_hold_group    = $cgi->param('ft_local_hold_group')    || 0;
-    my $ft_local_float_group   = $cgi->param('ft_local_float_group')   || 0;
-    my $ft_reports             = $cgi->param('ft_reports')             || 0;
+    my $id                       = $cgi->param('id')                       || undef;
+    my $title                    = $cgi->param('title')                    || undef;
+    my $description              = $cgi->param('description')              || undef;
+    my $ft_hide_patron_info      = $cgi->param('ft_hide_patron_info')      || 0;
+    my $ft_limit_item_editing    = $cgi->param('ft_limit_item_editing')    || 0;
+    my $ft_search_groups_opac    = $cgi->param('ft_search_groups_opac')    || 0;
+    my $ft_search_groups_staff   = $cgi->param('ft_search_groups_staff')   || 0;
+    my $ft_local_hold_group      = $cgi->param('ft_local_hold_group')      || 0;
+    my $ft_local_float_group     = $cgi->param('ft_local_float_group')     || 0;
+    my $ft_reports               = $cgi->param('ft_reports')               || 0;
+    my $ft_record_source_editing = $cgi->param('ft_record_source_editing') || 0;
 
     if ($id) {
         my $group = Koha::Library::Groups->find($id);
 
         $group->set(
             {
-                title                  => $title,
-                description            => $description,
-                ft_hide_patron_info    => $ft_hide_patron_info,
-                ft_limit_item_editing  => $ft_limit_item_editing,
-                ft_search_groups_opac  => $ft_search_groups_opac,
-                ft_search_groups_staff => $ft_search_groups_staff,
-                ft_local_hold_group    => $ft_local_hold_group,
-                ft_local_float_group   => $ft_local_float_group,
-                ft_reports             => $ft_reports,
+                title                    => $title,
+                description              => $description,
+                ft_hide_patron_info      => $ft_hide_patron_info,
+                ft_limit_item_editing    => $ft_limit_item_editing,
+                ft_search_groups_opac    => $ft_search_groups_opac,
+                ft_search_groups_staff   => $ft_search_groups_staff,
+                ft_local_hold_group      => $ft_local_hold_group,
+                ft_local_float_group     => $ft_local_float_group,
+                ft_reports               => $ft_reports,
+                ft_record_source_editing => $ft_record_source_editing,
             }
         )->store();
 
