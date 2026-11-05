@@ -119,6 +119,14 @@ Use this group to identify libraries as part of float group
 
 Use this group to limit report access by library group
 
+=head2 ft_record_source_editing
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+Use this group to identify libraries allowed to edit records from locked record sources
+
 =head2 created_on
 
   data_type: 'timestamp'
@@ -162,6 +170,8 @@ __PACKAGE__->add_columns(
   "ft_local_float_group",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "ft_reports",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "ft_record_source_editing",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "created_on",
   {
@@ -275,9 +285,38 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 record_sources_library_groups
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-06-10 12:26:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:svpZAHGLTmg9wVQFY6Ddcg
+Type: has_many
+
+Related object: L<Koha::Schema::Result::RecordSourcesLibraryGroup>
+
+=cut
+
+__PACKAGE__->has_many(
+  "record_sources_library_groups",
+  "Koha::Schema::Result::RecordSourcesLibraryGroup",
+  { "foreign.library_group_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 record_sources
+
+Type: many_to_many
+
+Composing rels: L</record_sources_library_groups> -> record_source
+
+=cut
+
+__PACKAGE__->many_to_many(
+  "record_sources",
+  "record_sources_library_groups",
+  "record_source",
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-11-05 13:12:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9pt7JDTMO7b/Y2D7KD21YA
 
 =head2 koha_object_class
 

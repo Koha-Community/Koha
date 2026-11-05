@@ -125,9 +125,38 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 record_sources_library_groups
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-03-26 08:48:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vUBTwdxkGhnSy3w0UrEIJw
+Type: has_many
+
+Related object: L<Koha::Schema::Result::RecordSourcesLibraryGroup>
+
+=cut
+
+__PACKAGE__->has_many(
+  "record_sources_library_groups",
+  "Koha::Schema::Result::RecordSourcesLibraryGroup",
+  { "foreign.record_source_id" => "self.record_source_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 library_groups
+
+Type: many_to_many
+
+Composing rels: L</record_sources_library_groups> -> library_group
+
+=cut
+
+__PACKAGE__->many_to_many(
+  "library_groups",
+  "record_sources_library_groups",
+  "library_group",
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-10-23 13:16:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3AaWDTfuMFO/gCC/XxwNEQ
 
 __PACKAGE__->add_columns(
     '+can_be_edited' => { is_boolean => 1 },
