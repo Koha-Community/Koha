@@ -170,6 +170,12 @@ sub GetWebserviceBatchId {
             push @args, $val;
         }
     }
+    if ( my $record_source_id = $params->{record_source_id} ) {
+        $sql .= " AND record_source_id = ?";
+        push @args, $record_source_id;
+    } else {
+        $sql .= " AND record_source_id IS NULL";
+    }
     my $id = $dbh->selectrow_array( $sql, undef, @args );
     return $id if $id;
 
