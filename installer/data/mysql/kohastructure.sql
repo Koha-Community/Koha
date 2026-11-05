@@ -3997,10 +3997,13 @@ CREATE TABLE `import_batches` (
   `file_name` varchar(100) DEFAULT NULL COMMENT 'the name of the file uploaded',
   `comments` longtext DEFAULT NULL COMMENT 'any comments added when the file was uploaded',
   `profile_id` int(11) DEFAULT NULL,
+  `record_source_id` int(11) DEFAULT NULL COMMENT 'record source to set on bibliographic records committed from this batch',
   PRIMARY KEY (`import_batch_id`),
   KEY `branchcode` (`branchcode`),
   KEY `import_batches_ibfk_1` (`profile_id`),
-  CONSTRAINT `import_batches_ibfk_1` FOREIGN KEY (`profile_id`) REFERENCES `import_batch_profiles` (`id`) ON DELETE SET NULL ON UPDATE SET NULL
+  KEY `import_batches_ibfk_2` (`record_source_id`),
+  CONSTRAINT `import_batches_ibfk_1` FOREIGN KEY (`profile_id`) REFERENCES `import_batch_profiles` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  CONSTRAINT `import_batches_ibfk_2` FOREIGN KEY (`record_source_id`) REFERENCES `record_sources` (`record_source_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
