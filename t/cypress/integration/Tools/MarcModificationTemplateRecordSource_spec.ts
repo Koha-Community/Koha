@@ -1,5 +1,6 @@
 describe("MARC modification template record source", () => {
     const templateName = "Cypress record source template";
+    const plainTemplateName = "Cypress plain template";
     const sourceName = "Cypress vendor";
 
     beforeEach(() => {
@@ -7,7 +8,7 @@ describe("MARC modification template record source", () => {
             sql: `INSERT INTO record_sources (name, can_be_edited, is_system) VALUES ('${sourceName}', 1, 0)`,
         });
         cy.task("query", {
-            sql: `INSERT INTO marc_modification_templates (name) VALUES ('${templateName}')`,
+            sql: `INSERT INTO marc_modification_templates (name) VALUES ('${templateName}'), ('${plainTemplateName}')`,
         });
         cy.login();
     });
@@ -17,7 +18,7 @@ describe("MARC modification template record source", () => {
             sql: "UPDATE borrowers SET flags=1 WHERE borrowernumber=51",
         });
         cy.task("query", {
-            sql: `DELETE FROM marc_modification_templates WHERE name='${templateName}'`,
+            sql: `DELETE FROM marc_modification_templates WHERE name IN ('${templateName}', '${plainTemplateName}')`,
         });
         cy.task("query", {
             sql: `DELETE FROM record_sources WHERE name='${sourceName}'`,
@@ -52,5 +53,25 @@ describe("MARC modification template record source", () => {
         openTemplate();
         cy.get("#set_record_source").should("not.exist");
         cy.get("#template_record_source").contains(sourceName);
+    });
+
+    it("Hides source templates in batch modification without the permission", () => {
+        cy.task("query", {
+            sql: `UPDATE marc_modification_templates SET record_source_id=(SELECT record_source_id FROM record_sources WHERE name='${sourceName}') WHERE name='${templateName}'`,
+        });
+
+        cy.visit("/cgi-bin/koha/tools/batch_record_modification.pl");
+        cy.get("#marc_modification_template_id").contains(templateName);
+        cy.get("#marc_modification_template_id").contains(plainTemplateName);
+
+        cy.task("query", {
+            sql: "UPDATE borrowers SET flags=8196 WHERE borrowernumber=51",
+        });
+        cy.visit("/cgi-bin/koha/tools/batch_record_modification.pl");
+        cy.get("#marc_modification_template_id").contains(plainTemplateName);
+        cy.get("#marc_modification_template_id").should(
+            "not.contain.text",
+            templateName
+        );
     });
 });
