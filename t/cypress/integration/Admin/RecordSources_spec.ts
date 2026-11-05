@@ -181,6 +181,55 @@ describe("Record sources CRUD tests", () => {
         cy.get("#record_sources_add").contains("Save").click();
     });
 
+    it("Group selector", () => {
+        cy.intercept("GET", "/api/v1/library_groups*", req => {
+            expect(req.query.q).to.contain("is_record_source_editing_group");
+            req.reply({
+                statusCode: 200,
+                body: [
+                    { library_group_id: 1, title: "Editors" },
+                    { library_group_id: 2, title: "Maintainers" },
+                ],
+                headers: {
+                    "X-Base-Total-Count": "2",
+                    "X-Total-Count": "2",
+                },
+            });
+        });
+        cy.intercept("GET", "/api/v1/record_sources/1", {
+            statusCode: 200,
+            body: {
+                record_source_id: 1,
+                name: "Source 1",
+                can_be_edited: true,
+                library_groups: [{ library_group_id: 2, title: "Maintainers" }],
+            },
+        });
+        cy.visit("/cgi-bin/koha/admin/record_sources/edit/1");
+        cy.get("#library_groups .vs__selected").contains("Maintainers");
+        cy.get("#library_groups .vs__search").click();
+        cy.get("#library_groups .vs__dropdown-menu").contains("Editors");
+
+        cy.intercept("PUT", "/api/v1/record_sources/1", req => {
+            expect(req.body.library_groups).to.deep.equal([
+                { library_group_id: 2 },
+            ]);
+            req.reply({
+                statusCode: 200,
+                body: {
+                    record_source_id: 1,
+                    name: "Source 1",
+                    can_be_edited: true,
+                },
+            });
+        }).as("update");
+        cy.get("#record_sources_add").contains("Save").click();
+        cy.wait("@update");
+        cy.get("main div[class='alert alert-info']").contains(
+            "Record source updated!"
+        );
+    });
+
     it("Delete", () => {
         cy.intercept("GET", "/api/v1/record_sources*", {
             statusCode: 200,
