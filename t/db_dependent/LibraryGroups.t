@@ -5,7 +5,7 @@ use Modern::Perl;
 use List::MoreUtils 'any';
 
 use Test::NoWarnings;
-use Test::More tests => 22;
+use Test::More tests => 23;
 
 use t::lib::TestBuilder;
 use Koha::Database;
@@ -185,4 +185,25 @@ subtest 'Koha::Library::Groups->get_root_ancestor' => sub {
 
     is( $ancestor1->id, $groupY->id, "Get root ancestor should return group's root ancestor" );
     ok( $ancestor1->id ne $ancestor2->id, "Both root groups should have different ids" );
+};
+
+subtest 'ft_record_source_editing unlink tests' => sub {
+    plan tests => 3;
+
+    my $group = $builder->build_object(
+        {
+            class => 'Koha::Library::Groups',
+            value => { parent_id => undef, branchcode => undef, ft_record_source_editing => 1 }
+        }
+    );
+    my $source = $builder->build_object( { class => 'Koha::RecordSources' } );
+    $source->library_groups( [ { library_group_id => $group->id } ] );
+
+    is( $source->library_groups->count, 1, 'Flagged group can be linked to a record source' );
+
+    $group->set( { ft_record_source_editing => 0 } )->store();
+    is( $source->library_groups->count, 0, 'Unchecking the flag removes the source links' );
+
+    $group->set( { ft_record_source_editing => 1 } )->store();
+    is( $source->library_groups->count, 0, 'Re-checking the flag does not restore them' );
 };
