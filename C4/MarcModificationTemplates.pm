@@ -114,7 +114,14 @@ sub GetModificationTemplates {
 sub AddModificationTemplate {
     my ( $template_name, $template_id_copy ) = @_;
 
-    my $template    = Koha::MarcModificationTemplate->new( { name => $template_name } )->store;
+    my $template_to_copy = $template_id_copy ? Koha::MarcModificationTemplates->find($template_id_copy) : undef;
+
+    my $template = Koha::MarcModificationTemplate->new(
+        {
+            name => $template_name,
+            ( $template_to_copy ? ( record_source_id => $template_to_copy->record_source_id ) : () ),
+        }
+    )->store;
     my $template_id = $template->id;
 
     if ($template_id_copy) {
