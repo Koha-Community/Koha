@@ -2443,6 +2443,32 @@ sub can_edit_items_from {
     );
 }
 
+=head3 can_edit_records_from
+
+    my $can_edit = $patron->can_edit_records_from( $record_source );
+
+Return true if the I<Koha::Patron>'s home library belongs to one of the
+library groups allowed to edit records from the given I<Koha::RecordSource>.
+
+=cut
+
+sub can_edit_records_from {
+    my ( $self, $record_source ) = @_;
+
+    return 0 unless $record_source;
+
+    my @exempt_group_ids = $record_source->library_groups->get_column('id');
+    return 0 unless @exempt_group_ids;
+
+    my $memberships = $self->library->library_groups;
+    while ( my $membership = $memberships->next ) {
+        my $root = Koha::Library::Groups->get_root_ancestor( { id => $membership->id } );
+        return 1 if any { $_ == $root->id } @exempt_group_ids;
+    }
+
+    return 0;
+}
+
 =head3 libraries_where_can_edit_items
 
     my $libraries = $patron->libraries_where_can_edit_items;
