@@ -66,14 +66,16 @@ sub process {
 
     my (
         $num_added,          $num_updated,       $num_items_added,
-        $num_items_replaced, $num_items_errored, $num_ignored
+        $num_items_replaced, $num_items_errored, $num_ignored,
+        $num_locked
     );
     try {
         my $size = Koha::Import::Records->search( { import_batch_id => $import_batch_id } )->count;
         $self->size($size)->store;
         (
             $num_added,          $num_updated,       $num_items_added,
-            $num_items_replaced, $num_items_errored, $num_ignored
+            $num_items_replaced, $num_items_errored, $num_ignored,
+            $num_locked
             )
             = BatchCommitRecords(
             {
@@ -84,7 +86,7 @@ sub process {
                 progress_callback => sub { my $job_progress = shift; $self->progress($job_progress)->store },
             }
             );
-        my $count = $num_added + $num_updated + $num_ignored;
+        my $count = $num_added + $num_updated + $num_ignored + $num_locked;
         $self->set( { progress => $count } );
         if ( $count != $size ) {
             $self->set( { status => 'failed' } );
@@ -104,6 +106,7 @@ sub process {
         num_items_replaced => $num_items_replaced,
         num_items_errored  => $num_items_errored,
         num_ignored        => $num_ignored,
+        num_locked         => $num_locked,
         import_batch_id    => $import_batch_id,
     };
     my $data = $self->decoded_data;

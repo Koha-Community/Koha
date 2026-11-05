@@ -548,6 +548,7 @@ sub BatchCommitRecords {
     my $num_items_replaced = 0;
     my $num_items_errored  = 0;
     my $num_ignored        = 0;
+    my $num_locked         = 0;
 
     # commit (i.e., save, all records in the batch)
     my $overlay_action = GetImportBatchOverlayAction($batch_id);
@@ -616,6 +617,9 @@ sub BatchCommitRecords {
             $rowref->{'overlay_status'}, $rowref->{'import_record_id'}, $record_type
         );
 
+        my $overlay_is_locked =
+            $record_result eq 'replace' && _overlay_is_locked( $record_type, $record_match, $logged_in_patron );
+
         my $recordid;
         my $query;
         if ( $record_result eq 'create_new' ) {
@@ -641,6 +645,9 @@ sub BatchCommitRecords {
             $sth->execute( $recordid, $rowref->{'import_record_id'} );
             $sth->finish();
             SetImportRecordStatus( $rowref->{'import_record_id'}, 'imported' );
+        } elsif ($overlay_is_locked) {
+            $num_locked++;
+            SetImportRecordStatus( $rowref->{'import_record_id'}, 'ignored' );
         } elsif ( $record_result eq 'replace' ) {
             $num_updated++;
             $recordid = $record_match;
@@ -744,7 +751,33 @@ sub BatchCommitRecords {
     Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue( { biblio_ids => \@updated_ids } )
         if ( @updated_ids && C4::Context->preference('RealTimeHoldsQueue') );
 
-    return ( $num_added, $num_updated, $num_items_added, $num_items_replaced, $num_items_errored, $num_ignored );
+    return (
+        $num_added, $num_updated, $num_items_added, $num_items_replaced, $num_items_errored, $num_ignored,
+        $num_locked
+    );
+}
+
+=head2 _overlay_is_locked
+
+  my $locked = _overlay_is_locked($record_type, $biblionumber, $patron);
+
+Returns true when the matched bibliographic record has a locked record
+source that the committing patron is not allowed to edit. Authority
+records and commits without a logged in patron are never locked.
+
+=cut
+
+sub _overlay_is_locked {
+    my ( $record_type, $biblionumber, $patron ) = @_;
+
+    return 0 unless $patron;
+    return 0 unless $record_type eq 'biblio';
+
+    my $biblio = Koha::Biblios->find($biblionumber);
+    return 0 unless $biblio;
+    return 0 if $biblio->metadata->source_allows_editing;
+
+    return $biblio->can_be_edited($patron) ? 0 : 1;
 }
 
 =head2 _batchCommitItems

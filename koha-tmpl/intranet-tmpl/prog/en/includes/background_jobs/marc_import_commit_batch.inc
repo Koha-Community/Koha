@@ -19,6 +19,12 @@
                 <td>Number of records ignored</td>
                 <td>[% report.num_ignored | html %]</td>
             </tr>
+            [% IF report.num_locked %]
+                <tr>
+                    <td>Number of records not overlaid because their record source is locked</td>
+                    <td>[% report.num_locked | html %]</td>
+                </tr>
+            [% END %]
             <tr>
                 <td>Number of items added</td>
                 <td>[% report.num_items_added | html %]</td>
