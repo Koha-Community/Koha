@@ -23,6 +23,7 @@ use Test::More tests => 5;
 use Koha::Database;
 use Koha::BackgroundJobs;
 use Koha::BackgroundJob::BatchUpdateBiblio;
+use Koha::MarcModificationTemplates;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -58,20 +59,19 @@ subtest 'enqueue() tests' => sub {
 
 subtest 'process() record source tests' => sub {
 
-    plan tests => 3;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
-    my $template = $builder->build( { source => 'MarcModificationTemplate' } );
+    my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1 } } );
+    t::lib::Mocks::mock_userenv( { patron => $patron } );
+
+    my $original_source = $builder->build_object( { class => 'Koha::RecordSources' } );
+    my $new_source      = $builder->build_object( { class => 'Koha::RecordSources' } );
+    my $template = $builder->build( { source => 'MarcModificationTemplate', value => { record_source_id => undef } } );
 
     my $biblio = $builder->build_sample_biblio;
-
-    my $locked_source =
-        $builder->build_object( { class => 'Koha::RecordSources', value => { can_be_edited => 0 } } );
-    $biblio->metadata->record_source_id( $locked_source->id )->store;
-
-    my $unprivileged = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
-    t::lib::Mocks::mock_userenv( { patron => $unprivileged } );
+    $biblio->metadata->record_source_id( $original_source->id )->store;
 
     my $job_id = Koha::BackgroundJob::BatchUpdateBiblio->new->enqueue(
         {
@@ -80,6 +80,60 @@ subtest 'process() record source tests' => sub {
         }
     );
     my $job = Koha::BackgroundJobs->find($job_id)->_derived_class;
+    $job->process( $job->decoded_data );
+
+    is(
+        $biblio->get_from_storage->metadata->record_source_id,
+        $original_source->id, 'Record source kept when the template has no record source'
+    );
+
+    $job_id = Koha::BackgroundJob::BatchUpdateBiblio->new->enqueue(
+        {
+            mmtid            => $template->{template_id},
+            record_ids       => [ $biblio->biblionumber ],
+            record_source_id => $new_source->id,
+        }
+    );
+    $job = Koha::BackgroundJobs->find($job_id)->_derived_class;
+    $job->process( $job->decoded_data );
+
+    is(
+        $biblio->get_from_storage->metadata->record_source_id,
+        $original_source->id, 'Legacy record_source_id job argument is ignored'
+    );
+
+    Koha::MarcModificationTemplates->find( $template->{template_id} )
+        ->set( { record_source_id => $new_source->id } )
+        ->store;
+
+    $job_id = Koha::BackgroundJob::BatchUpdateBiblio->new->enqueue(
+        {
+            mmtid      => $template->{template_id},
+            record_ids => [ $biblio->biblionumber ],
+        }
+    );
+    $job = Koha::BackgroundJobs->find($job_id)->_derived_class;
+    $job->process( $job->decoded_data );
+
+    is(
+        $biblio->get_from_storage->metadata->record_source_id,
+        $new_source->id, 'Record source taken from the template record source'
+    );
+
+    my $locked_source =
+        $builder->build_object( { class => 'Koha::RecordSources', value => { can_be_edited => 0 } } );
+    $biblio->metadata->record_source_id( $locked_source->id )->store;
+
+    my $unprivileged = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+    t::lib::Mocks::mock_userenv( { patron => $unprivileged } );
+
+    $job_id = Koha::BackgroundJob::BatchUpdateBiblio->new->enqueue(
+        {
+            mmtid      => $template->{template_id},
+            record_ids => [ $biblio->biblionumber ],
+        }
+    );
+    $job = Koha::BackgroundJobs->find($job_id)->_derived_class;
     $job->process( $job->decoded_data );
 
     is(
