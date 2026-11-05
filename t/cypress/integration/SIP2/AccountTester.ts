@@ -20,6 +20,12 @@ function get_account() {
     };
 }
 
+// Picks an option of a v-select by its text
+function choose(id: string, text: string) {
+    cy.get(`#${id} .vs__search`).click();
+    cy.get(`#${id} .vs__dropdown-menu li`).contains(text).click();
+}
+
 describe("Account tester", () => {
     beforeEach(() => {
         cy.login();
@@ -55,8 +61,7 @@ describe("Account tester", () => {
             .invoke("val")
             .should("contain", "AA23529000000001|");
 
-        // The labels sit above their content and line up with it, the hint of the
-        // password is under the choice it explains
+        // The label of the raw request sits above it and lines up with it
         cy.get("label[for=raw_request]").then($label => {
             cy.get("#raw_request").then($request => {
                 expect(left($label[0]), "raw request label").to.equal(
@@ -64,41 +69,38 @@ describe("Account tester", () => {
                 );
             });
         });
-        cy.get("#patron_password").then($select => {
-            const hint = $select[0].parentElement.querySelector(".hint");
-            expect(left(hint), "password hint").to.equal(left($select[0]));
-        });
-
         // The patron password is a choice of outcome, a real one is never typed
-        cy.get("#patron_password").should("have.prop", "tagName", "SELECT");
+        cy.get("#patron_password").should("have.class", "v-select");
+        cy.get("#patron_password input[type=password]").should("not.exist");
+        cy.get("#patron_password").siblings(".tooltip_helper").should("exist");
         cy.get("#raw_request").invoke("val").should("not.contain", "AD");
-        cy.get("#patron_password").select("GOOD");
+        choose("patron_password", "Valid password");
         cy.get("#raw_request").invoke("val").should("contain", "ADGOOD|");
-        cy.get("#patron_password").select("BAD");
+        choose("patron_password", "Invalid password");
         cy.get("#raw_request").invoke("val").should("contain", "ADBAD|");
-        cy.get("#patron_password").select("");
+        choose("patron_password", "Not sent");
         cy.get("#raw_request").invoke("val").should("not.contain", "AD");
 
         // A patron information request asks for one list of items with the summary
-        cy.get("#summary").should("have.value", "");
+        cy.get("#summary .vs__selected").should("contain", "None");
         cy.get("#raw_request")
             .invoke("val")
             .should("match", /^63001.{18} {10}AO/);
-        cy.get("#summary").select("fine_items");
+        choose("summary", "Fine items");
         cy.get("#raw_request")
             .invoke("val")
             .should("match", /^63001.{18} {3}Y {6}AO/);
-        cy.get("#summary").select("hold_items");
+        choose("summary", "Hold items");
         cy.get("#raw_request")
             .invoke("val")
             .should("match", /^63001.{18}Y {9}AO/);
-        cy.get("#summary").select("");
+        choose("summary", "None");
         cy.get("#raw_request")
             .invoke("val")
             .should("match", /^63001.{18} {10}AO/);
 
         // Switching message type changes the fields and the request
-        cy.get("#message").select("item_information");
+        choose("message", "Item information");
         cy.get("#patron_id").should("not.exist");
         cy.get("#summary").should("not.exist");
         cy.get("#item_id").type("39999000001234");

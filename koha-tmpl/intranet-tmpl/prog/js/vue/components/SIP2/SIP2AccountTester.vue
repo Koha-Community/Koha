@@ -28,88 +28,34 @@
                             <legend>{{ $__("Message") }}</legend>
                             <ol>
                                 <li>
-                                    <label for="message">{{
-                                        $__("Message type")
-                                    }}</label>
-                                    <select id="message" v-model="form.message">
-                                        <option
-                                            v-for="option in messageOptions"
-                                            :key="option.value"
-                                            :value="option.value"
-                                        >
-                                            {{ option.label }}
-                                        </option>
-                                    </select>
+                                    <FormElement
+                                        :resource="form"
+                                        :attr="attrs.message"
+                                    />
                                 </li>
                                 <li v-if="needsPatron">
-                                    <label for="patron_id">{{
-                                        $__("Patron barcode")
-                                    }}</label>
-                                    <input
-                                        id="patron_id"
-                                        v-model="form.patron_id"
-                                        type="text"
+                                    <FormElement
+                                        :resource="form"
+                                        :attr="attrs.patron_id"
                                     />
                                 </li>
                                 <li v-if="needsItem">
-                                    <label for="item_id">{{
-                                        $__("Item barcode")
-                                    }}</label>
-                                    <input
-                                        id="item_id"
-                                        v-model="form.item_id"
-                                        type="text"
+                                    <FormElement
+                                        :resource="form"
+                                        :attr="attrs.item_id"
                                     />
                                 </li>
                                 <li v-if="needsPatron">
-                                    <label for="patron_password">{{
-                                        $__("Patron password")
-                                    }}</label>
-                                    <span class="with-hint">
-                                        <select
-                                            id="patron_password"
-                                            v-model="form.patron_password"
-                                        >
-                                            <option value="">
-                                                {{ $__("Not sent") }}
-                                            </option>
-                                            <option value="GOOD">
-                                                {{ $__("Valid password") }}
-                                            </option>
-                                            <option value="BAD">
-                                                {{ $__("Invalid password") }}
-                                            </option>
-                                        </select>
-                                        <span class="hint">{{
-                                            $__(
-                                                "The patron's password is never checked, this chooses the outcome."
-                                            )
-                                        }}</span>
-                                    </span>
+                                    <FormElement
+                                        :resource="form"
+                                        :attr="attrs.patron_password"
+                                    />
                                 </li>
                                 <li v-if="needsSummary">
-                                    <label for="summary">{{
-                                        $__("Detail")
-                                    }}</label>
-                                    <span class="with-hint">
-                                        <select
-                                            id="summary"
-                                            v-model="form.summary"
-                                        >
-                                            <option
-                                                v-for="option in summaryOptions"
-                                                :key="option.value"
-                                                :value="option.value"
-                                            >
-                                                {{ option.label }}
-                                            </option>
-                                        </select>
-                                        <span class="hint">{{
-                                            $__(
-                                                "The list of items to include in the response."
-                                            )
-                                        }}</span>
-                                    </span>
+                                    <FormElement
+                                        :resource="form"
+                                        :attr="attrs.summary"
+                                    />
                                 </li>
                             </ol>
                             <p v-if="hasDelimiter" class="error" role="alert">
@@ -125,9 +71,9 @@
                             <legend>{{ $__("Request message") }}</legend>
                             <ol>
                                 <li class="stacked">
-                                    <label for="raw_request">{{
-                                        $__("Raw request")
-                                    }}</label>
+                                    <label for="raw_request"
+                                        >{{ $__("Raw request") }}:</label
+                                    >
                                     <textarea
                                         id="raw_request"
                                         v-model="rawRequest"
@@ -233,11 +179,13 @@
 import { computed, reactive, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { APIClient } from "../../fetch/api-client.js";
+import FormElement from "../FormElement.vue";
 import { getSIPFields } from "../../composables/sip2-fields.js";
 import { $__ } from "@koha-vue/i18n";
 
 export default {
     name: "SIP2AccountTester",
+    components: { FormElement },
     setup() {
         const route = useRoute();
         const sip_account_id = route.params.sip_account_id;
@@ -256,11 +204,14 @@ export default {
         });
 
         const messageOptions = [
-            { value: "patron_status", label: $__("Patron status") },
-            { value: "patron_information", label: $__("Patron information") },
-            { value: "item_information", label: $__("Item information") },
-            { value: "checkout", label: $__("Checkout") },
-            { value: "checkin", label: $__("Check-in") },
+            { value: "patron_status", description: $__("Patron status") },
+            {
+                value: "patron_information",
+                description: $__("Patron information"),
+            },
+            { value: "item_information", description: $__("Item information") },
+            { value: "checkout", description: $__("Checkout") },
+            { value: "checkin", description: $__("Check-in") },
         ];
 
         // A delimiter in a value would add fields to the generated request
@@ -276,13 +227,16 @@ export default {
         // order of the positions of the summary field of the request, the server
         // reads the first Y only.
         const summaryOptions = [
-            { value: "", label: $__("None") },
-            { value: "hold_items", label: $__("Hold items") },
-            { value: "overdue_items", label: $__("Overdue items") },
-            { value: "charged_items", label: $__("Charged items") },
-            { value: "fine_items", label: $__("Fine items") },
-            { value: "recall_items", label: $__("Recall items") },
-            { value: "unavailable_holds", label: $__("Unavailable holds") },
+            { value: "", description: $__("None") },
+            { value: "hold_items", description: $__("Hold items") },
+            { value: "overdue_items", description: $__("Overdue items") },
+            { value: "charged_items", description: $__("Charged items") },
+            { value: "fine_items", description: $__("Fine items") },
+            { value: "recall_items", description: $__("Recall items") },
+            {
+                value: "unavailable_holds",
+                description: $__("Unavailable holds"),
+            },
         ];
 
         // The ten character summary field: spaces, or a Y at the position of the
@@ -308,6 +262,54 @@ export default {
         const needsItem = computed(() =>
             ["item_information", "checkout", "checkin"].includes(form.message)
         );
+
+        const passwordOptions = [
+            { value: "", description: $__("Not sent") },
+            { value: "GOOD", description: $__("Valid password") },
+            { value: "BAD", description: $__("Invalid password") },
+        ];
+
+        const attrs = {
+            message: {
+                name: "message",
+                type: "select",
+                label: $__("Message type"),
+                options: messageOptions,
+                requiredKey: "value",
+                selectLabel: "description",
+                required: true,
+            },
+            patron_id: {
+                name: "patron_id",
+                type: "text",
+                label: $__("Patron barcode"),
+            },
+            item_id: {
+                name: "item_id",
+                type: "text",
+                label: $__("Item barcode"),
+            },
+            patron_password: {
+                name: "patron_password",
+                type: "select",
+                label: $__("Patron password"),
+                options: passwordOptions,
+                requiredKey: "value",
+                selectLabel: "description",
+                toolTip: $__(
+                    "The patron's password is never checked, this chooses the outcome."
+                ),
+            },
+            summary: {
+                name: "summary",
+                type: "select",
+                label: $__("Detail"),
+                options: summaryOptions,
+                requiredKey: "value",
+                selectLabel: "description",
+                toolTip: $__("The list of items to include in the response."),
+            },
+        };
 
         // A code => "AA - Patron identifier" lookup for the response breakdown.
         const fieldLabels = Object.fromEntries(
@@ -465,11 +467,10 @@ export default {
         return {
             account,
             form,
-            messageOptions,
+            attrs,
             needsPatron,
             needsItem,
             needsSummary,
-            summaryOptions,
             hasDelimiter,
             rawRequest,
             rawEdited,
@@ -512,16 +513,11 @@ li.stacked > pre {
     width: 100%;
 }
 
-/* A hint under the field it explains, lined up with it and not wrapping back
-   under the label */
-.with-hint {
-    display: inline-block;
-    vertical-align: top;
-}
-
-.with-hint > .hint {
-    display: block;
-    max-width: 20em;
+/* The form sits in a half width column, where the 30% the SIP2 module gives a
+   select is too narrow for its choices */
+form :deep(.v-select) {
+    min-width: 14em;
+    width: 50%;
 }
 
 table.sip-fields {
