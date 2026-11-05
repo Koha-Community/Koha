@@ -2490,6 +2490,8 @@ subtest 'FixPriority() bulk tests' => sub {
     is( Koha::Holds->find( $reserve_ids[99] )->priority, 1,   'Priority changed successfully' );
     is( Koha::Holds->find( $reserve_ids[0] )->priority,  2,   'Priority propagated successfully' );
     is( Koha::Holds->find( $reserve_ids[98] )->priority, 100, 'Priority propagated successfully' );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'Hold limit rules count grouped holds as a single unit' => sub {
