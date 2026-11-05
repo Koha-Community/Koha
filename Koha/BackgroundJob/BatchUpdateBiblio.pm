@@ -18,6 +18,7 @@ package Koha::BackgroundJob::BatchUpdateBiblio;
 use Modern::Perl;
 
 use Koha::Biblios;
+use Koha::MarcModificationTemplates;
 use Koha::Patrons;
 use Koha::Virtualshelves;
 use Koha::SearchEngine;
@@ -71,6 +72,8 @@ sub process {
     my $mmtid      = $args->{mmtid};
     my @record_ids = @{ $args->{record_ids} };
 
+    my $record_source_id = Koha::MarcModificationTemplates->record_source_id_for($mmtid);
+
     my $report = {
         total_records => scalar @record_ids,
         total_success => 0,
@@ -91,7 +94,7 @@ RECORD_IDS: for my $biblionumber ( sort { $a <=> $b } @record_ids ) {
         # Modify the biblio
         my $error = eval {
             my $record = $biblio->metadata->record;
-            C4::MarcModificationTemplates::ModifyRecordWithTemplate( $mmtid, $record );
+            C4::MarcModificationTemplates::ModifyRecordWithTemplate( $mmtid, $record ) if $mmtid;
             my $frameworkcode = C4::Biblio::GetFrameworkCode($biblionumber);
 
             if ( marc_record_contains_item_data($record) ) {
@@ -112,6 +115,11 @@ RECORD_IDS: for my $biblionumber ( sort { $a <=> $b } @record_ids ) {
                 {
                     overlay_context   => $args->{overlay_context},
                     skip_record_index => 1,
+                    (
+                        defined $record_source_id
+                        ? ( record_source_id => $record_source_id )
+                        : ()
+                    ),
                 }
             );
         };

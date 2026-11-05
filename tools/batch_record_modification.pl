@@ -35,6 +35,7 @@ use C4::MarcModificationTemplates qw(
 use Koha::Biblios;
 use Koha::BackgroundJob::BatchUpdateBiblio;
 use Koha::BackgroundJob::BatchUpdateAuthority;
+use Koha::MarcModificationTemplates;
 use Koha::MetadataRecord::Authority;
 use Koha::Virtualshelves;
 
@@ -69,8 +70,10 @@ unless (@templates) {
 }
 
 if ($mmtid) {
-    my @actions = GetModificationTemplateActions($mmtid);
-    unless (@actions) {
+    my @actions            = GetModificationTemplateActions($mmtid);
+    my $sets_record_source = $recordtype eq 'biblio'
+        && Koha::MarcModificationTemplates->record_source_id_for($mmtid);
+    unless ( @actions || $sets_record_source ) {
         $op = 'form';
         push @messages, {
             type  => 'error',
