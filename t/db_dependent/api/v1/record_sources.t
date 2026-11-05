@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -335,6 +335,91 @@ subtest 'update() tests' => sub {
 
     $t->post_ok( "//$userid:$password@/api/v1/record_sources/$source_id" => json => $source_with_updated_field )
         ->status_is(404);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'library_groups handling tests' => sub {
+
+    plan tests => 20;
+
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**3 }
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $group = $builder->build_object(
+        {
+            class => 'Koha::Library::Groups',
+            value => { parent_id => undef, branchcode => undef, ft_record_source_editing => 1 }
+        }
+    );
+    my $unflagged_group = $builder->build_object(
+        {
+            class => 'Koha::Library::Groups',
+            value => { parent_id => undef, branchcode => undef, ft_record_source_editing => 0 }
+        }
+    );
+
+    my $source_id = $t->post_ok(
+        "//$userid:$password@/api/v1/record_sources" => json => {
+            name           => 'linked',
+            library_groups => [ { library_group_id => $group->id } ]
+        }
+    )->status_is(201)->tx->res->json->{record_source_id};
+
+    is(
+        Koha::RecordSources->find($source_id)->library_groups->next->id,
+        $group->id, 'POST links the given library groups'
+    );
+
+    $t->get_ok( "//$userid:$password@/api/v1/record_sources/$source_id" => { 'x-koha-embed' => 'library_groups' } )
+        ->status_is(200)
+        ->json_is( '/library_groups/0/library_group_id' => $group->id )
+        ->json_is( '/library_groups/0/title'            => $group->title );
+
+    $t->post_ok(
+        "//$userid:$password@/api/v1/record_sources" => json => {
+            name           => 'bad link',
+            library_groups => [ { library_group_id => $unflagged_group->id } ]
+        }
+    )->status_is(400)->json_is( '/error_code' => 'invalid_parameter_value' );
+
+    $t->put_ok(
+        "//$userid:$password@/api/v1/record_sources/$source_id" => json => {
+            name           => 'linked',
+            library_groups => [ { library_group_id => $unflagged_group->id } ]
+        }
+    )->status_is(400)->json_is( '/error_code' => 'invalid_parameter_value' );
+
+    is(
+        Koha::RecordSources->find($source_id)->library_groups->count,
+        1, 'Failed update leaves the links untouched'
+    );
+
+    $t->put_ok( "//$userid:$password@/api/v1/record_sources/$source_id" => json => { name => 'linked' } )
+        ->status_is(200);
+
+    is(
+        Koha::RecordSources->find($source_id)->library_groups->count,
+        1, 'PUT without library_groups keeps the links'
+    );
+
+    $t->put_ok(
+        "//$userid:$password@/api/v1/record_sources/$source_id" => json => { name => 'linked', library_groups => [] } )
+        ->status_is(200);
+
+    is(
+        Koha::RecordSources->find($source_id)->library_groups->count,
+        0, 'PUT with an empty library_groups clears the links'
+    );
 
     $schema->storage->txn_rollback;
 };
