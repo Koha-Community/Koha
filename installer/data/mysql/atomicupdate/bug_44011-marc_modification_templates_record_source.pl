@@ -20,5 +20,14 @@ return {
 
             say $out "Added column 'marc_modification_templates.record_source_id'";
         }
+
+        $dbh->do(
+            q{
+            INSERT IGNORE INTO systempreferences (variable, value)
+            VALUES ('MarcModificationTemplatesLog', '0')
+        }
+        );
+
+        say $out "Added new system preference 'MarcModificationTemplatesLog'";
     },
 };

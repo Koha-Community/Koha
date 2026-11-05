@@ -449,6 +449,7 @@ INSERT INTO systempreferences ( `variable`, `value` ) VALUES
 ('MarcFieldForModifierName',''),
 ('MarcFieldsToOrder',''),
 ('MarcItemFieldsToOrder',''),
+('MarcModificationTemplatesLog','0'),
 ('MarcOrderingAutomation','0'),
 ('MARCOrgCode','OSt'),
 ('MARCOverlayRules','0'),
