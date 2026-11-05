@@ -53,7 +53,7 @@ foreign key from the biblioitems table to link to item to additional information
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 20
+  size: 32
 
 item barcode (MARC21 952$p)
 
@@ -416,7 +416,7 @@ __PACKAGE__->add_columns(
     is_nullable    => 0,
   },
   "barcode",
-  { data_type => "varchar", is_nullable => 1, size => 20 },
+  { data_type => "varchar", is_nullable => 1, size => 32 },
   "bookable",
   { data_type => "tinyint", is_nullable => 1 },
   "dateaccessioned",
@@ -1021,8 +1021,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-10-29 15:02:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VP3m4Uj0YaMyTy/aRKNm2Q
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-11-05 09:17:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Bzl+upI/bu9aMtBm6/r2SQ
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 

@@ -39,7 +39,7 @@ __PACKAGE__->table("tmp_holdsqueue");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 20
+  size: 32
 
 =head2 surname
 
@@ -172,7 +172,7 @@ __PACKAGE__->add_columns(
   "itemnumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "barcode",
-  { data_type => "varchar", is_nullable => 1, size => 20 },
+  { data_type => "varchar", is_nullable => 1, size => 32 },
   "surname",
   { data_type => "longtext", is_nullable => 0 },
   "firstname",
@@ -303,8 +303,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-10-15 03:07:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0gHma5VawdGTo0ZMgJVV5A
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-11-05 09:17:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:866wGIZpCrlrebz5ACbmVg
 
 __PACKAGE__->add_columns(
     '+item_level_request'    => { is_boolean => 1 },

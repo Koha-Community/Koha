@@ -58,7 +58,7 @@ __PACKAGE__->table("pending_offline_operations");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 20
+  size: 32
 
 =head2 cardnumber
 
@@ -91,7 +91,7 @@ __PACKAGE__->add_columns(
   "action",
   { data_type => "varchar", is_nullable => 0, size => 10 },
   "barcode",
-  { data_type => "varchar", is_nullable => 1, size => 20 },
+  { data_type => "varchar", is_nullable => 1, size => 32 },
   "cardnumber",
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "amount",
@@ -111,8 +111,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("operationid");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-10-27 13:24:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EA2gwvRWvFVCPyIB94jCdw
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-11-05 09:17:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PqP05w/ZTRUJCixfmOkJCg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

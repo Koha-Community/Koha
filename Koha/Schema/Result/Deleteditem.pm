@@ -51,7 +51,7 @@ foreign key from the biblioitems table to link to item to additional information
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 20
+  size: 32
 
 item barcode (MARC21 952$p)
 
@@ -402,7 +402,7 @@ __PACKAGE__->add_columns(
   "biblioitemnumber",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "barcode",
-  { data_type => "varchar", is_nullable => 1, size => 20 },
+  { data_type => "varchar", is_nullable => 1, size => 32 },
   "bookable",
   { data_type => "tinyint", is_nullable => 1 },
   "dateaccessioned",
@@ -531,8 +531,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("itemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-04-28 16:41:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HKee88cG4WAK2dbWrPNrLg
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-11-05 09:17:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KUBKwDQDKWy39bvsS5353Q
 
 __PACKAGE__->add_columns(
     '+bookable'                          => { is_boolean => 1 },
