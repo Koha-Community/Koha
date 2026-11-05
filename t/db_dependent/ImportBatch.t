@@ -3,7 +3,7 @@
 use Modern::Perl;
 use Test::NoWarnings;
 use Test::MockModule;
-use Test::More tests => 22;
+use Test::More tests => 23;
 use utf8;
 use File::Basename;
 use File::Temp qw/tempfile/;
@@ -11,6 +11,7 @@ use File::Temp qw/tempfile/;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
+use Koha::Biblios;
 use Koha::Database;
 use Koha::Import::Records;
 
@@ -463,6 +464,101 @@ subtest "Do not adjust biblionumber when replacing items during import" => sub {
     is( $item1->biblionumber,     $original_biblionumber,     "Item's biblionumber has not changed" );
     is( $item1->biblioitemnumber, $original_biblioitemnumber, "Item's biblioitemnumber has not changed" );
     is( $item1->homebranch,       $library->branchcode,       "Item was overlaid successfully" );
+};
+
+subtest "record source tests" => sub {
+    plan tests => 6;
+
+    t::lib::Mocks::mock_config( 'enable_plugins', 0 );
+
+    my $source = $builder->build_object( { class => 'Koha::RecordSources' } );
+    my $template =
+        $builder->build( { source => 'MarcModificationTemplate', value => { record_source_id => $source->id } } );
+
+    my $staged_record = $builder->build_sample_biblio->metadata->record;
+    my ($batch_id) = C4::ImportBatch::BatchStageMarcRecords(
+        'biblio', 'UTF-8', [$staged_record], 'test.mrc',
+        $template->{template_id},
+        'test', '', 0, 0
+    );
+
+    is(
+        GetImportBatch($batch_id)->{record_source_id},
+        $source->id, 'Staged batch stores the template record source'
+    );
+
+    BatchCommitRecords( { batch_id => $batch_id, framework => '' } );
+
+    my $created_biblionumber = $dbh->selectrow_array(
+        'SELECT matched_biblionumber FROM import_biblios
+         JOIN import_records USING (import_record_id) WHERE import_batch_id = ?',
+        undef, $batch_id
+    );
+
+    is(
+        Koha::Biblios->find($created_biblionumber)->metadata->record_source_id,
+        $source->id, 'Committed new record gets the batch record source'
+    );
+
+    my $mock_import = Test::MockModule->new('C4::ImportBatch');
+
+    my $overlaid = $builder->build_sample_biblio;
+    $mock_import->mock( _get_commit_action => sub { return ( 'replace', 'ignore', $overlaid->biblionumber ); } );
+
+    my $overlay_batch_id = C4::ImportBatch::AddImportBatch(
+        {
+            overlay_action   => 'replace',
+            nomatch_action   => 'ignore',
+            item_action      => 'ignore',
+            import_status    => 'staged',
+            batch_type       => 'batch',
+            record_type      => 'biblio',
+            file_name        => 'test.mrc',
+            comments         => 'test',
+            record_source_id => $source->id,
+        }
+    );
+    AddBiblioToBatch( $overlay_batch_id, 0, $overlaid->metadata->record, 'utf8', 0 );
+    BatchCommitRecords( { batch_id => $overlay_batch_id, framework => '' } );
+
+    is(
+        $overlaid->get_from_storage->metadata->record_source_id,
+        $source->id, 'Overlaid record gets the batch record source'
+    );
+
+    my $presourced = $builder->build_sample_biblio;
+    $presourced->metadata->record_source_id( $source->id )->store;
+    $mock_import->mock( _get_commit_action => sub { return ( 'replace', 'ignore', $presourced->biblionumber ); } );
+
+    my $unsourced_batch_id = C4::ImportBatch::AddImportBatch(
+        {
+            overlay_action => 'replace',
+            nomatch_action => 'ignore',
+            item_action    => 'ignore',
+            import_status  => 'staged',
+            batch_type     => 'batch',
+            record_type    => 'biblio',
+            file_name      => 'test.mrc',
+            comments       => 'test',
+        }
+    );
+    AddBiblioToBatch( $unsourced_batch_id, 0, $presourced->metadata->record, 'utf8', 0 );
+    BatchCommitRecords( { batch_id => $unsourced_batch_id, framework => '' } );
+
+    is(
+        $presourced->get_from_storage->metadata->record_source_id,
+        $source->id, 'Batch without a record source keeps the overlaid record source'
+    );
+
+    my $webservice_batch_id = C4::ImportBatch::GetWebserviceBatchId( { record_source_id => $source->id } );
+    is(
+        C4::ImportBatch::GetWebserviceBatchId( { record_source_id => $source->id } ),
+        $webservice_batch_id, 'Webservice batch reused for the same record source'
+    );
+    isnt(
+        C4::ImportBatch::GetWebserviceBatchId( {} ),
+        $webservice_batch_id, 'Webservice batch without a record source is a separate batch'
+    );
 };
 
 subtest "BatchCommitRecords honours the record source lock" => sub {
