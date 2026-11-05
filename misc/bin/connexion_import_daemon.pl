@@ -215,6 +215,15 @@ Config file format:
           `overlay_framework: my_framework`.
           The new record will use the specified framework.
 
+    marc_modification_template_id
+      The numeric id of the MARC modification template to apply to each
+      incoming record before it is staged.
+      The id is shown in the ID column at
+      /cgi-bin/koha/tools/marc_modification_templates.pl
+      If the template sets a record source, each record imported through
+      this daemon gets that record source.
+      If omitted, no template is applied.
+
 Explanation of `import_mode`:
 - When using `direct`, each request will create a new batch and import the
   batch immediately.
@@ -233,6 +242,7 @@ Explanation of `import_mode`:
   - `item_action`
   - `framework`
   - `overlay_framework`
+  - the record source of the `marc_modification_template_id` template
 - If one or more of these parameters are changed, a new batch is created with
   the new settings, and any new records are added to that batch instead of to
   the old one.
@@ -554,14 +564,15 @@ exit;
 
         my $base_url  = $self->{koha};
         my $post_body = {
-            'nomatch_action'    => $self->{params}->{nomatch_action},
-            'overlay_action'    => $self->{params}->{overlay_action},
-            'match'             => $self->{params}->{match},
-            'import_mode'       => $self->{params}->{import_mode},
-            'framework'         => $self->{params}->{framework},
-            'overlay_framework' => $self->{params}->{overlay_framework},
-            'item_action'       => $self->{params}->{item_action},
-            'xml'               => $data
+            'nomatch_action'                => $self->{params}->{nomatch_action},
+            'overlay_action'                => $self->{params}->{overlay_action},
+            'match'                         => $self->{params}->{match},
+            'import_mode'                   => $self->{params}->{import_mode},
+            'framework'                     => $self->{params}->{framework},
+            'overlay_framework'             => $self->{params}->{overlay_framework},
+            'item_action'                   => $self->{params}->{item_action},
+            'marc_modification_template_id' => $self->{params}->{marc_modification_template_id},
+            'xml'                           => $data
         };
 
         # If we have a token, try it, else, authenticate for the first time.
