@@ -34,6 +34,7 @@
     [% END %]
 
     [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items || CAN_user_tools_items_batchmod || CAN_user_tools_items_batchdel ) || ( CAN_user_editcatalogue_fast_cataloging && is_fast_add ) %]
+        [% SET biblio_locked = !biblio.metadata.source_allows_editing && !biblio.can_be_edited(logged_in_user) %]
         <div class="btn-group">
             <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</button>
             <ul class="dropdown-menu">
@@ -46,15 +47,19 @@
                 [% END %]
 
                 [% IF CAN_user_tools_records_batchmod %]
-                    <li>
-                        <form action="/cgi-bin/koha/tools/batch_record_modification.pl" method="post">
-                            [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="recordtype" value="biblio" />
-                            <input type="hidden" name="op" value="cud-list" />
-                            <input type="hidden" name="bib_list" value="[% biblionumber | html %]" />
-                            <button type="submit" class="dropdown-item" id="modifybiblio">Modify record using template</button>
-                        </form>
-                    </li>
+                    [% IF biblio_locked %]
+                        <li data-bs-toggle="tooltip" data-bs-placement="left" title="This record is locked"><a class="dropdown-item disabled" aria-disabled="true" id="modifybiblio" href="#">Modify record using template</a></li>
+                    [% ELSE %]
+                        <li>
+                            <form action="/cgi-bin/koha/tools/batch_record_modification.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="recordtype" value="biblio" />
+                                <input type="hidden" name="op" value="cud-list" />
+                                <input type="hidden" name="bib_list" value="[% biblionumber | html %]" />
+                                <button type="submit" class="dropdown-item" id="modifybiblio">Modify record using template</button>
+                            </form>
+                        </li>
+                    [% END %]
                 [% END %]
 
                 [% IF CAN_user_editcatalogue_edit_items || ( CAN_user_editcatalogue_fast_cataloging && is_fast_add ) %]
@@ -123,11 +128,19 @@
                     <li>
                         <a class="dropdown-item" id="duplicatebiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber | html %]&amp;op=duplicate">Edit as new (duplicate)</a>
                     </li>
-                    <li><a class="dropdown-item" href="#" id="z3950copy">Replace record via Z39.50/SRU</a></li>
+                    [% IF biblio_locked %]
+                        <li data-bs-toggle="tooltip" data-bs-placement="left" title="This record is locked"><a class="dropdown-item disabled" aria-disabled="true" id="z3950copy-disabled" href="#">Replace record via Z39.50/SRU</a></li>
+                    [% ELSE %]
+                        <li><a class="dropdown-item" href="#" id="z3950copy">Replace record via Z39.50/SRU</a></li>
+                    [% END %]
                 [% END %]
 
                 [% IF CAN_user_editcatalogue_edit_catalogue || ( CAN_user_editcatalogue_fast_cataloging && is_fast_add ) %]
-                    [% IF ( count ) %]
+                    [% IF biblio_locked %]
+                        <li data-bs-toggle="tooltip" data-bs-placement="left" title="This record is locked">
+                            <a class="dropdown-item disabled" aria-disabled="true" id="deletebiblio" href="#">Delete record</a>
+                        </li>
+                    [% ELSIF ( count ) %]
                         <li
                             data-bs-toggle="tooltip"
                             data-bs-placement="left"
