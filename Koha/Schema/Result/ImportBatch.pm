@@ -149,6 +149,14 @@ any comments added when the file was uploaded
   is_foreign_key: 1
   is_nullable: 1
 
+=head2 record_source_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+record source to set on bibliographic records committed from this batch
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -237,6 +245,8 @@ __PACKAGE__->add_columns(
   { data_type => "longtext", is_nullable => 1 },
   "profile_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "record_source_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -288,9 +298,29 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 record_source
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+/u1tQQzT5ygzGwVgWxxwg
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::RecordSource>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "record_source",
+  "Koha::Schema::Result::RecordSource",
+  { record_source_id => "record_source_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-10-23 13:25:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FfWG0nG04771a+rdqCxXog
 
 =head2 koha_object_class
 
