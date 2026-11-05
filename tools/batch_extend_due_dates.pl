@@ -103,8 +103,16 @@ if ( $op eq 'form' || $op eq 'cud-form' ) {
         my @itemnumbers      = map  { exists $itemdata{ lc $_ } ? $itemdata{ lc $_ } : () } @barcodelist;
         my @notfoundbarcodes = grep { !exists $itemdata{ lc $_ } } @barcodelist;
 
+        my %checkedout = map { $_ => 1 }
+            Koha::Checkouts->search( { itemnumber => { -in => \@itemnumbers } } )->get_column('itemnumber');
+        my @notcheckedoutbarcodes =
+            grep { exists $itemdata{ lc $_ } && !$checkedout{ $itemdata{ lc $_ } } } @barcodelist;
+
         $search_params->{'itemnumber'} = { -in => \@itemnumbers };
-        $template->param( notfoundbarcodes => \@notfoundbarcodes );
+        $template->param(
+            notfoundbarcodes      => \@notfoundbarcodes,
+            notcheckedoutbarcodes => \@notcheckedoutbarcodes,
+        );
     }
 
     if ( $from_due_date and $to_due_date ) {

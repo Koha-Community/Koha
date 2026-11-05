@@ -97,6 +97,23 @@
         </div>
     [% END # /IF notfoundbarcodes.size %]
 
+    [% IF ( notcheckedoutbarcodes.size ) %]
+        <div class="alert alert-warning">
+            <p>Warning, the following barcodes are not checked out:</p>
+            <br />
+            <table style="margin:auto;">
+                <thead>
+                    <tr><th>Barcodes not checked out</th></tr>
+                </thead>
+                <tbody>
+                    [% FOREACH notcheckedoutbarcode IN notcheckedoutbarcodes %]
+                        <tr><td>[% notcheckedoutbarcode | html %]</td></tr>
+                    [% END %]
+                </tbody>
+            </table>
+        </div>
+    [% END # /IF notcheckedoutbarcodes.size %]
+
     [% IF view == 'form' %]
         <form method="post" action="/cgi-bin/koha/tools/batch_extend_due_dates.pl" id="extend_due_dates_form">
             [% INCLUDE 'csrf-token.inc' %]
