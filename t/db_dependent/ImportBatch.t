@@ -2,7 +2,8 @@
 
 use Modern::Perl;
 use Test::NoWarnings;
-use Test::More tests => 21;
+use Test::MockModule;
+use Test::More tests => 22;
 use utf8;
 use File::Basename;
 use File::Temp qw/tempfile/;
@@ -460,6 +461,87 @@ subtest "Do not adjust biblionumber when replacing items during import" => sub {
     is( $item1->biblionumber,     $original_biblionumber,     "Item's biblionumber has not changed" );
     is( $item1->biblioitemnumber, $original_biblioitemnumber, "Item's biblioitemnumber has not changed" );
     is( $item1->homebranch,       $library->branchcode,       "Item was overlaid successfully" );
+};
+
+subtest "BatchCommitRecords honours the record source lock" => sub {
+    plan tests => 6;
+
+    t::lib::Mocks::mock_config( 'enable_plugins', 0 );
+
+    my $member_library  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $outside_library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $group           = $builder->build_object(
+        {
+            class => 'Koha::Library::Groups',
+            value => { parent_id => undef, branchcode => undef, ft_record_source_editing => 1 }
+        }
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::Library::Groups',
+            value => { parent_id => $group->id, branchcode => $member_library->branchcode, title => undef }
+        }
+    );
+
+    my $locked_source =
+        $builder->build_object( { class => 'Koha::RecordSources', value => { can_be_edited => 0 } } );
+    $locked_source->library_groups( [ { library_group_id => $group->id } ] );
+
+    my $locked = $builder->build_sample_biblio( { title => 'Locked title' } );
+    $locked->metadata->record_source_id( $locked_source->id )->store;
+    my $incoming = $builder->build_sample_biblio( { title => 'Incoming title' } )->metadata->record;
+
+    my $mock_import = Test::MockModule->new('C4::ImportBatch');
+    $mock_import->mock( _get_commit_action => sub { return ( 'replace', 'ignore', $locked->biblionumber ); } );
+
+    my $overlay_batch = sub {
+        my $batch_id = C4::ImportBatch::AddImportBatch(
+            {
+                overlay_action => 'replace',
+                nomatch_action => 'ignore',
+                item_action    => 'ignore',
+                import_status  => 'staged',
+                batch_type     => 'batch',
+                record_type    => 'biblio',
+                file_name      => 'test.mrc',
+                comments       => 'test',
+            }
+        );
+        AddBiblioToBatch( $batch_id, 0, $incoming, 'utf8', 0 );
+        return $batch_id;
+    };
+
+    my $outsider = $builder->build_object(
+        { class => 'Koha::Patrons', value => { branchcode => $outside_library->branchcode, flags => 0 } } );
+    my $member = $builder->build_object(
+        { class => 'Koha::Patrons', value => { branchcode => $member_library->branchcode, flags => 0 } } );
+    for my $patron ( $outsider, $member ) {
+        $builder->build(
+            {
+                source => 'UserPermission',
+                value  => { borrowernumber => $patron->id, module_bit => 9, code => 'edit_catalogue' },
+            }
+        );
+    }
+
+    t::lib::Mocks::mock_userenv( { patron => $outsider } );
+    my $batch_id = $overlay_batch->();
+    my @result   = BatchCommitRecords( { batch_id => $batch_id, framework => '' } );
+
+    is( $result[6],                       1,              'One record counted as locked' );
+    is( $locked->get_from_storage->title, 'Locked title', 'Locked record not overlaid by an outsider' );
+    is(
+        Koha::Import::Records->search( { import_batch_id => $batch_id } )->next->status,
+        'ignored', 'Skipped import record marked as ignored'
+    );
+
+    t::lib::Mocks::mock_userenv( { patron => $member } );
+    $batch_id = $overlay_batch->();
+    @result   = BatchCommitRecords( { batch_id => $batch_id, framework => '' } );
+
+    is( $result[6],                       0,                'No record counted as locked for a group member' );
+    is( $result[1],                       1,                'Record counted as updated for a group member' );
+    is( $locked->get_from_storage->title, 'Incoming title', 'Group member overlays the locked record' );
 };
 
 sub get_import_record {
