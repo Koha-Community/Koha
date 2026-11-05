@@ -1,9 +1,22 @@
 import dayjs from "dayjs";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 // Pin for cy.clock(..., ["Date"]): the 10th of next month at 09:00 local,
 // derived from the real date so created bookings stay in the future.
 const pinnedToday = () =>
     dayjs().add(1, "month").date(10).hour(9).minute(0).second(0).millisecond(0);
+
+// The library's configured timezone (window.$timezone()), read from a live
+// staff page in beforeEach. Booking fixtures follow the modal's day-boundary
+// contract: calendar dates anchored in this zone, not the browser's.
+let libraryTz = "UTC";
+const libraryDayStart = d =>
+    dayjs.tz(d.format("YYYY-MM-DD"), libraryTz).toISOString();
+const libraryDayEnd = d =>
+    dayjs.tz(`${d.format("YYYY-MM-DD")}T23:59:59.999`, libraryTz).toISOString();
 
 describe("Booking Modal Basic Tests", () => {
     let testData = {};
@@ -19,6 +32,9 @@ describe("Booking Modal Basic Tests", () => {
         cy.viewport(1280, 1600);
         cy.login();
         cy.title().should("eq", "Koha staff interface");
+        cy.window().then(win => {
+            libraryTz = win.$timezone();
+        });
 
         // Create fresh test data for each test using upstream pattern;
         // items are born bookable with distinct item types via the builder.
@@ -446,11 +462,14 @@ describe("Booking Modal Basic Tests", () => {
                 testData.items[1].item_id,
             ]);
 
-            // Verify booking dates match what we selected
-            expect(booking.start_date).to.include(
+            // Verify booking dates match what we selected. The driver reads
+            // the stored wall time as local time, so compare local dates.
+            expect(dayjs(booking.start_date).format("YYYY-MM-DD")).to.eq(
                 startDate.format("YYYY-MM-DD")
             );
-            expect(booking.end_date).to.include(endDate.format("YYYY-MM-DD"));
+            expect(dayjs(booking.end_date).format("YYYY-MM-DD")).to.eq(
+                endDate.format("YYYY-MM-DD")
+            );
 
             // Clean up the test booking
             cy.task("query", {
@@ -609,16 +628,16 @@ describe("Booking Modal Basic Tests", () => {
                 item: testData.items[0],
                 patron: testData.patron,
                 pickup_library_id: testData.libraries[0].library_id,
-                start_date: originalStartDate.toISOString(),
-                end_date: originalEndDate.toISOString(),
+                start_date: libraryDayStart(originalStartDate),
+                end_date: libraryDayEnd(originalEndDate),
             });
         }).then(({ booking }) => {
             // Store the booking for editing; the `booking` key is picked up
             // by deleteSampleObjects for cleanup.
             testData.existingBooking = {
                 booking_id: booking.booking_id,
-                start_date: originalStartDate.startOf("day").toISOString(),
-                end_date: originalEndDate.endOf("day").toISOString(),
+                start_date: libraryDayStart(originalStartDate),
+                end_date: libraryDayEnd(originalEndDate),
             };
             testData.booking = booking;
         });
@@ -715,8 +734,8 @@ describe("Booking Modal Basic Tests", () => {
                     item: testData.items[0],
                     patron: testData.patron,
                     pickup_library_id: testData.libraries[0].library_id,
-                    start_date: firstBooking.start.toISOString(),
-                    end_date: firstBooking.end.toISOString(),
+                    start_date: libraryDayStart(firstBooking.start),
+                    end_date: libraryDayEnd(firstBooking.end),
                 })
                 .then(({ booking }) => {
                     firstBookingId = booking.booking_id;
@@ -738,8 +757,8 @@ describe("Booking Modal Basic Tests", () => {
                     item: testData.items[1],
                     patron: secondPatron,
                     pickup_library_id: testData.libraries[0].library_id,
-                    start_date: secondBooking.start.toISOString(),
-                    end_date: secondBooking.end.toISOString(),
+                    start_date: libraryDayStart(secondBooking.start),
+                    end_date: libraryDayEnd(secondBooking.end),
                 })
                 .then(({ booking }) => {
                     secondBookingId = booking.booking_id;
@@ -763,8 +782,8 @@ describe("Booking Modal Basic Tests", () => {
                     patron: String(firstBooking.patron_id),
                     itemnumber: String(testData.items[0].item_id),
                     pickup_library: testData.libraries[0].library_id,
-                    start_date: firstBooking.start.startOf("day").toISOString(),
-                    end_date: firstBooking.end.endOf("day").toISOString(),
+                    start_date: libraryDayStart(firstBooking.start),
+                    end_date: libraryDayEnd(firstBooking.end),
                     biblionumber: String(testData.biblio.biblio_id),
                 });
             });
@@ -789,10 +808,8 @@ describe("Booking Modal Basic Tests", () => {
                     patron: String(secondBooking.patron_id),
                     itemnumber: String(testData.items[1].item_id),
                     pickup_library: testData.libraries[0].library_id,
-                    start_date: secondBooking.start
-                        .startOf("day")
-                        .toISOString(),
-                    end_date: secondBooking.end.endOf("day").toISOString(),
+                    start_date: libraryDayStart(secondBooking.start),
+                    end_date: libraryDayEnd(secondBooking.end),
                     biblionumber: String(testData.biblio.biblio_id),
                 });
             });
@@ -918,8 +935,8 @@ describe("Booking Modal Basic Tests", () => {
                 patron_id: testData.patron.patron_id.toString(),
                 item_id: testData.items[0].item_id.toString(),
                 pickup_library_id: testData.libraries[0].library_id,
-                start_date: startDate.startOf("day").toISOString(),
-                end_date: endDate.endOf("day").toISOString(),
+                start_date: libraryDayStart(startDate),
+                end_date: libraryDayEnd(endDate),
                 biblio_id: testData.biblio.biblio_id,
             },
         }).as("successfulRetry");

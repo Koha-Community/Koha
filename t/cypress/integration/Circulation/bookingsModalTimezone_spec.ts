@@ -24,9 +24,9 @@ let libraryTz = "UTC";
 // library timezone. Fixtures below store bookings under this contract so the
 // specs exercise the same data shape production bookings have.
 const libraryDayStart = d =>
-    dayjs.tz(d.format("YYYY-MM-DD"), libraryTz).startOf("day").toISOString();
+    dayjs.tz(d.format("YYYY-MM-DD"), libraryTz).toISOString();
 const libraryDayEnd = d =>
-    dayjs.tz(d.format("YYYY-MM-DD"), libraryTz).endOf("day").toISOString();
+    dayjs.tz(`${d.format("YYYY-MM-DD")}T23:59:59.999`, libraryTz).toISOString();
 
 describe("Booking Modal Timezone Tests", () => {
     let testData = {};

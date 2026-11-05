@@ -1,6 +1,10 @@
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
 dayjs.extend(isSameOrBefore);
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 // Pin for cy.clock(..., ["Date"]): the 10th of next month at 09:00 local.
 // Anchoring "today" to a fixed day-of-month keeps every relative offset
@@ -11,6 +15,15 @@ dayjs.extend(isSameOrBefore);
 // bookings these tests create in the future.
 const pinnedToday = () =>
     dayjs().add(1, "month").date(10).hour(9).minute(0).second(0).millisecond(0);
+
+// The library's configured timezone (window.$timezone()), read from a live
+// staff page in beforeEach. Booking fixtures follow the modal's day-boundary
+// contract: calendar dates anchored in this zone, not the browser's.
+let libraryTz = "UTC";
+const libraryDayStart = d =>
+    dayjs.tz(d.format("YYYY-MM-DD"), libraryTz).toISOString();
+const libraryDayEnd = d =>
+    dayjs.tz(`${d.format("YYYY-MM-DD")}T23:59:59.999`, libraryTz).toISOString();
 
 describe("Booking Modal Date Picker Tests", () => {
     let testData = {};
@@ -26,6 +39,9 @@ describe("Booking Modal Date Picker Tests", () => {
         cy.viewport(1280, 1600);
         cy.login();
         cy.title().should("eq", "Koha staff interface");
+        cy.window().then(win => {
+            libraryTz = win.$timezone();
+        });
 
         // Create fresh test data for each test using upstream pattern;
         // items are born bookable with predictable item types via the builder.
@@ -273,8 +289,8 @@ describe("Booking Modal Date Picker Tests", () => {
                 item: testData.items[0],
                 patron: testData.patron,
                 pickup_library_id: testData.libraries[0].library_id,
-                start_date: booking.start.toISOString(),
-                end_date: booking.end.toISOString(),
+                start_date: libraryDayStart(booking.start),
+                end_date: libraryDayEnd(booking.end),
             });
         });
 
@@ -378,8 +394,8 @@ describe("Booking Modal Date Picker Tests", () => {
             item: testData.items[1],
             patron: testData.patron,
             pickup_library_id: testData.libraries[0].library_id,
-            start_date: differentItemBooking.start.toISOString(),
-            end_date: differentItemBooking.end.toISOString(),
+            start_date: libraryDayStart(differentItemBooking.start),
+            end_date: libraryDayEnd(differentItemBooking.end),
         });
 
         // Test dates that are booked for different item - should be available for our item
@@ -429,8 +445,8 @@ describe("Booking Modal Date Picker Tests", () => {
             item: testData.items[0],
             patron: testData.patron,
             pickup_library_id: testData.libraries[0].library_id,
-            start_date: bookingStart.toISOString(),
-            end_date: bookingEnd.toISOString(),
+            start_date: libraryDayStart(bookingStart),
+            end_date: libraryDayEnd(bookingEnd),
         });
 
         setupModalForDateTesting({ skipItemSelection: true });
@@ -790,8 +806,8 @@ describe("Booking Modal Date Picker Tests", () => {
             item: testData.items[0],
             patron: testData.patron,
             pickup_library_id: testData.libraries[0].library_id,
-            start_date: dayjs(isoDay(15)).startOf("day").toISOString(),
-            end_date: dayjs(isoDay(17)).endOf("day").toISOString(),
+            start_date: libraryDayStart(dayjs(isoDay(15))),
+            end_date: libraryDayEnd(dayjs(isoDay(17))),
         });
 
         // Setup modal
@@ -886,8 +902,7 @@ describe("Booking Modal Date Picker Tests", () => {
                 .then($el => $el[0].click());
         };
         const getDateByISO = (isoDate: string) => {
-            const date = new Date(isoDate);
-            return cy.get("@fp").getFlatpickrDate(date);
+            return cy.get("@fp").getFlatpickrDate(dayjs(isoDate).toDate());
         };
 
         // T+17 is a Saturday: its outward band half is the 2.5px to the
@@ -1139,8 +1154,8 @@ describe("Booking Modal Date Picker Tests", () => {
                 },
                 patron: testData.patron,
                 pickup_library_id: testData.libraries[0].library_id,
-                start_date: booking.start.toISOString(),
-                end_date: booking.end.toISOString(),
+                start_date: libraryDayStart(booking.start),
+                end_date: libraryDayEnd(booking.end),
             });
         });
 
@@ -1290,14 +1305,10 @@ describe("Booking Modal Date Picker Tests", () => {
                             item: b.item,
                             patron: testPatron,
                             pickup_library_id: testLibrary.library_id,
-                            start_date: today
-                                .add(b.start, "day")
-                                .startOf("day")
-                                .toISOString(),
-                            end_date: today
-                                .add(b.end, "day")
-                                .endOf("day")
-                                .toISOString(),
+                            start_date: libraryDayStart(
+                                today.add(b.start, "day")
+                            ),
+                            end_date: libraryDayEnd(today.add(b.end, "day")),
                         })
                     );
                 });
@@ -1482,28 +1493,16 @@ describe("Booking Modal Date Picker Tests", () => {
                         item: testItems[0],
                         patron: testPatron,
                         pickup_library_id: testLibraries[0].library_id,
-                        start_date: today
-                            .add(10, "day")
-                            .startOf("day")
-                            .toISOString(),
-                        end_date: today
-                            .add(12, "day")
-                            .endOf("day")
-                            .toISOString(),
+                        start_date: libraryDayStart(today.add(10, "day")),
+                        end_date: libraryDayEnd(today.add(12, "day")),
                     })
                     .then(() =>
                         cy.task("insertSampleBooking", {
                             item: testItems[1],
                             patron: testPatron,
                             pickup_library_id: testLibraries[0].library_id,
-                            start_date: today
-                                .add(10, "day")
-                                .startOf("day")
-                                .toISOString(),
-                            end_date: today
-                                .add(12, "day")
-                                .endOf("day")
-                                .toISOString(),
+                            start_date: libraryDayStart(today.add(10, "day")),
+                            end_date: libraryDayEnd(today.add(12, "day")),
                         })
                     );
             })
@@ -1645,11 +1644,8 @@ describe("Booking Modal Date Picker Tests", () => {
                     item: testItems[2],
                     patron: testPatron,
                     pickup_library_id: testLibraries[0].library_id,
-                    start_date: today
-                        .add(10, "day")
-                        .startOf("day")
-                        .toISOString(),
-                    end_date: today.add(12, "day").endOf("day").toISOString(),
+                    start_date: libraryDayStart(today.add(10, "day")),
+                    end_date: libraryDayEnd(today.add(12, "day")),
                 }).then(() => {
                     // Use phase-specific aliases so queued requests from the
                     // first modal cannot satisfy the post-update waits.
