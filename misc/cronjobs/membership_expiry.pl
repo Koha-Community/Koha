@@ -24,7 +24,7 @@ membership_expiry.pl - cron script to put membership expiry reminders into the m
 
 =head1 SYNOPSIS
 
-./membership_expiry.pl -c [-v] [-n] [-branch CODE] [-before DAYS] [-after DAYS] [-where COND] [-renew] [-letter X] [-letter-renew Y] [-active|-inactive]
+./membership_expiry.pl -c [-v] [-n] [--branch CODE] [--before DAYS] [--after DAYS] [--where COND] [--renew] [--letter X] [--letter_renew Y] [--active|--inactive]
 
 or, in crontab:
 
@@ -68,21 +68,21 @@ Note that this flag cannot be used in combination with -n
 Confirm flag: Add this option. The script will only print a usage
 statement otherwise.
 
-=item B<-branch>
+=item B<--branch>
 
 Optional branchcode to restrict the cronjob to that branch.
 
-=item B<-before>
+=item B<--before>
 
 Optional parameter to extend the selection with a number of days BEFORE
 the date set by the preference.
 
-=item B<-after>
+=item B<--after>
 
 Optional parameter to extend the selection with a number of days AFTER
 the date set by the preference.
 
-=item B<-where>
+=item B<--where>
 
 Use this option to specify a condition built with columns from the borrowers table
 
@@ -90,15 +90,15 @@ e.g.
 --where 'lastseen IS NOT NULL'
 will only notify patrons who have been seen.
 
-=item B<-letter>
+=item B<--letter>
 
 Optional parameter to use another expiry notice than the default: MEMBERSHIP_EXPIRY
 
-=item B<-letter_renew>
+=item B<--letter_renew>
 
 Optional parameter to use another renewal notice than the default: MEMBERSHIP_RENEWED
 
-=item B<-active>
+=item B<--active>
 
 Optional parameter to include active patrons only (active within passed number of months).
 This parameter needs the preference TrackLastPatronActivityTriggers.
@@ -106,7 +106,7 @@ This parameter needs the preference TrackLastPatronActivityTriggers.
 IMPORTANT: You should be using those triggers already for the period that you
 consider a user to be (in)active.
 
-=item B<-inactive>
+=item B<--inactive>
 
 Optional parameter to include inactive patrons only (inactive within passed number of months).
 This allows you to e.g. send expiry warnings only to inactive patrons.
@@ -115,7 +115,7 @@ This parameter needs the preference TrackLastPatronActivityTriggers.
 IMPORTANT: You should be using those triggers already for the period that you
 consider a user to be (in)active.
 
-=item B<-renew>
+=item B<--renew>
 
 Optional parameter to automatically renew patrons instead of sending them an expiry notice.
 They will be informed by a patron renewal notice.
