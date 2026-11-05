@@ -161,14 +161,28 @@ sub libraries_not_direct_children {
 
 =head3 store
 
+Overloaded store method. Removes any record source links when the group
+is stored without the C<ft_record_source_editing> flag.
+
 =cut
 
 sub store {
-    my ($self) = @_;
+    my ( $self, @args ) = @_;
 
     $self->created_on( dt_from_string() ) unless $self->in_storage();
 
-    return $self->SUPER::store(@_);
+    my $schema = $self->_result->result_source->schema;
+
+    return $schema->txn_do(
+        sub {
+            my $result = $self->SUPER::store(@args);
+
+            $self->_result->record_sources_library_groups->delete
+                unless $self->ft_record_source_editing;
+
+            return $result;
+        }
+    );
 }
 
 =head3 to_api_mapping

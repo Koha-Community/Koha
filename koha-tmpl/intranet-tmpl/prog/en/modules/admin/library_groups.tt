@@ -420,6 +420,14 @@
             $("#edit-group-modal").on("shown.bs.modal", function () {
                 $("#edit-group-modal-title").focus();
             });
+            $("#edit-group-form").on("submit", function () {
+                var had_flag = $(this).data("initialRecordSourceEditing");
+                var flag_removed = had_flag && !$("#edit-group-modal-ft_record_source_editing").prop("checked");
+                if (!flag_removed) {
+                    return true;
+                }
+                return confirm(_("This group will be unlinked from all record sources. Continue?"));
+            });
         });
 
         function add_group(parent_id) {
@@ -448,6 +456,7 @@
             $("#edit-group-modal-id").val(id);
             $("#edit-group-modal-title").val(title);
             $("#edit-group-modal-description").val(description);
+            $("#edit-group-form").data("initialRecordSourceEditing", ft_record_source_editing ? true : false);
             if (parent_id) {
                 $("#edit-group-modal-ft_hide_patron_info").prop("checked", false);
                 $("#edit-group-modal-ft_limit_item_editing").prop("checked", false);
