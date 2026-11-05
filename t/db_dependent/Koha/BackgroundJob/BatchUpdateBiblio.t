@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use Koha::Database;
 use Koha::BackgroundJobs;
@@ -52,6 +52,56 @@ subtest 'enqueue() tests' => sub {
     is( $job->size,   scalar @{$record_ids}, 'Size is correct' );
     is( $job->status, 'new',                 'Initial status set correctly' );
     is( $job->queue,  'long_tasks',          'BatchUpdateItem should use the long_tasks queue' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'process() record source tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $template = $builder->build( { source => 'MarcModificationTemplate' } );
+
+    my $biblio = $builder->build_sample_biblio;
+
+    my $locked_source =
+        $builder->build_object( { class => 'Koha::RecordSources', value => { can_be_edited => 0 } } );
+    $biblio->metadata->record_source_id( $locked_source->id )->store;
+
+    my $unprivileged = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+    t::lib::Mocks::mock_userenv( { patron => $unprivileged } );
+
+    my $job_id = Koha::BackgroundJob::BatchUpdateBiblio->new->enqueue(
+        {
+            mmtid      => $template->{template_id},
+            record_ids => [ $biblio->biblionumber ],
+        }
+    );
+    my $job = Koha::BackgroundJobs->find($job_id)->_derived_class;
+    $job->process( $job->decoded_data );
+
+    is(
+        $biblio->get_from_storage->metadata->record_source_id,
+        $locked_source->id, 'Locked record left untouched when the user cannot edit it'
+    );
+
+    my $messages = Koha::BackgroundJobs->find($job_id)->decoded_data->{messages};
+    is( $messages->[0]->{code}, 'biblio_locked', 'Skipped locked record reports the biblio_locked code' );
+
+    my $unsourced = $builder->build_sample_biblio;
+    $job_id = Koha::BackgroundJob::BatchUpdateBiblio->new->enqueue(
+        {
+            mmtid      => $template->{template_id},
+            record_ids => [ $unsourced->biblionumber ],
+        }
+    );
+    $job = Koha::BackgroundJobs->find($job_id)->_derived_class;
+    $job->process( $job->decoded_data );
+
+    my $report = Koha::BackgroundJobs->find($job_id)->decoded_data->{report};
+    is( $report->{total_success}, 1, 'Unsourced record modified by a patron without edit_catalogue' );
 
     $schema->storage->txn_rollback;
 };
