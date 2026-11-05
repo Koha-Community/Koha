@@ -37,6 +37,7 @@ use Koha::BackgroundJob::BatchUpdateBiblio;
 use Koha::BackgroundJob::BatchUpdateAuthority;
 use Koha::MarcModificationTemplates;
 use Koha::MetadataRecord::Authority;
+use Koha::Patrons;
 use Koha::Virtualshelves;
 
 my $input = CGI->new;
@@ -58,7 +59,12 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $sessionID = $input->cookie("CGISESSID");
 
+my $logged_in_patron = Koha::Patrons->find($loggedinuser);
+my $can_set_record_sources =
+    $logged_in_patron && $logged_in_patron->has_permission( { editcatalogue => 'set_record_sources' } );
+
 my @templates = GetModificationTemplates($mmtid);
+@templates = grep { !$_->{record_source_id} } @templates unless $can_set_record_sources;
 unless (@templates) {
     $op = 'error';
     $template->param(
@@ -70,8 +76,10 @@ unless (@templates) {
 }
 
 if ($mmtid) {
-    my @actions            = GetModificationTemplateActions($mmtid);
-    my $sets_record_source = $recordtype eq 'biblio'
+    my @actions = GetModificationTemplateActions($mmtid);
+    my $sets_record_source =
+           $recordtype eq 'biblio'
+        && $can_set_record_sources
         && Koha::MarcModificationTemplates->record_source_id_for($mmtid);
     unless ( @actions || $sets_record_source ) {
         $op = 'form';
@@ -169,15 +177,25 @@ if ( $op eq 'form' ) {
     # We want to modify selected records!
     my @record_ids = $input->multi_param('record_id');
 
+    my $template_sets_source = $recordtype eq 'biblio'
+        && Koha::MarcModificationTemplates->record_source_id_for($mmtid);
+    if ( $template_sets_source && !$can_set_record_sources ) {
+        $template->param(
+            view   => 'errors',
+            errors => ['set_record_source_not_allowed'],
+        );
+        output_html_with_http_headers $input, $cookie, $template->output;
+        exit;
+    }
+
     try {
-        my $patron = Koha::Patrons->find($loggedinuser);
         my $params = {
             mmtid           => $mmtid,
             record_ids      => \@record_ids,
             overlay_context => {
                 source       => 'batchmod',
-                categorycode => $patron->categorycode,
-                userid       => $patron->userid
+                categorycode => $logged_in_patron->categorycode,
+                userid       => $logged_in_patron->userid
             }
         };
 
