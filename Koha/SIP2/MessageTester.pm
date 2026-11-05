@@ -17,9 +17,9 @@ package Koha::SIP2::MessageTester;
 
 use Modern::Perl;
 
-use Encode    qw( decode );
-use Try::Tiny qw( catch try );
-use UNIVERSAL::require;
+use Encode                    qw( decode );
+use Module::Load::Conditional qw( can_load );
+use Try::Tiny                 qw( catch try );
 
 use C4::Circulation qw( barcodedecode );
 use C4::Context;
@@ -405,9 +405,9 @@ sub _build_server {
 
     my $module = $server->{institution}->{implementation};
     $module = 'C4::SIP::ILS' if $module eq 'ILS';
-    $module->use
-        or
-        Koha::Exception->throw( error => "Cannot load the SIP implementation '$module': $UNIVERSAL::require::ERROR" );
+    can_load( modules => { $module => undef } )
+        or Koha::Exception->throw(
+        error => "Cannot load the SIP implementation '$module': $Module::Load::Conditional::ERROR" );
     $server->{ils} = $module->new( $server->{institution}, $server->{account} );
 
     return $server;
