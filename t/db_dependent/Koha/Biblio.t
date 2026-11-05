@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 46;
+use Test::More tests => 47;
 use Test::Exception;
 use Test::Warn;
 
@@ -2327,6 +2327,65 @@ subtest 'can_be_edited() tests' => sub {
     throws_ok { $biblio->can_be_edited($potato) }
     'Koha::Exceptions::MissingParameter',
         'Exception thrown if parameter not a Koha::Patron reference';
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'can_be_edited() library group exemption tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $member_library  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $outside_library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $group = $builder->build_object(
+        {
+            class => 'Koha::Library::Groups',
+            value => { parent_id => undef, branchcode => undef, ft_record_source_editing => 1 }
+        }
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::Library::Groups',
+            value => { parent_id => $group->id, branchcode => $member_library->branchcode, title => undef }
+        }
+    );
+
+    my $source = $builder->build_object( { class => 'Koha::RecordSources', value => { can_be_edited => 0 } } );
+    $source->library_groups( [ { library_group_id => $group->id } ] );
+
+    my $biblio = $builder->build_sample_biblio;
+    $biblio->metadata->record_source_id( $source->id )->store;
+
+    my $member_patron = $builder->build_object(
+        { class => 'Koha::Patrons', value => { branchcode => $member_library->branchcode, flags => 0 } } );
+    my $outside_patron = $builder->build_object(
+        { class => 'Koha::Patrons', value => { branchcode => $outside_library->branchcode, flags => 0 } } );
+
+    for my $patron ( $member_patron, $outside_patron ) {
+        $builder->build(
+            {
+                source => 'UserPermission',
+                value  => {
+                    borrowernumber => $patron->id,
+                    module_bit     => 9,
+                    code           => 'edit_catalogue',
+                },
+            }
+        );
+    }
+
+    ok( $biblio->can_be_edited($member_patron),   'Patron from a linked group can edit the locked record' );
+    ok( !$biblio->can_be_edited($outside_patron), 'Patron outside the linked groups cannot edit the locked record' );
+
+    $source->library_groups( [] );
+
+    ok( !$biblio->can_be_edited($member_patron), 'Removing the group link locks the record again' );
+
+    my $superlibrarian = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1 } } );
+    ok( $biblio->can_be_edited($superlibrarian), 'Superlibrarian is never blocked' );
 
     $schema->storage->txn_rollback;
 };
