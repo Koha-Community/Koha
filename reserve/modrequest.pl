@@ -34,7 +34,7 @@ use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 
 my $query = CGI->new;
 
-my $userid = checkauth( $query, 0, { reserveforothers => '*' }, 'intranet' );
+my ($userid) = checkauth( $query, 0, { reserveforothers => '*' }, 'intranet' );
 
 my $op              = $query->param('op') || 'cud-modifyall';
 my @reserve_id      = $query->multi_param('reserve_id');
