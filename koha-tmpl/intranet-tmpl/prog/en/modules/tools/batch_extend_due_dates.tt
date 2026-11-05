@@ -145,7 +145,8 @@
                         <label for="barcodelist">Barcode list (one barcode per line): </label>
                         <textarea rows="10" cols="30" id="barcodelist" name="barcodelist">
                             [%~ FOREACH item IN items %]
-                                [%- item.barcode | html -%]
+                                [%~ item.barcode | html ~%]
+                                [%~ UNLESS loop.last %]&#10;[% END ~%]
                             [% END ~%]
                         </textarea
                         >
