@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use Koha::ERM::EUsage::UsageDataProvider;
 use Koha::Database;
@@ -143,6 +143,37 @@ subtest '_build_url_query' => sub {
 
     $schema->storage->txn_rollback;
 
+};
+
+subtest '_build_url_query access_method' => sub {
+
+    plan tests => 7;
+
+    $schema->storage->txn_begin;
+
+    my $usage_data_provider = $builder->build_object(
+        {
+            class => 'Koha::ERM::EUsage::UsageDataProviders',
+            value => {
+                service_url    => 'https://service_url.com', customer_id => 'ID123', service_platform => undef,
+                report_release => 5
+            }
+        }
+    );
+
+    # Only the usage for the Regular access method is stored. A master report includes all access methods by
+    # default, the standard views are preset to Regular
+    foreach my $report_type (qw( PR DR TR IR )) {
+        $usage_data_provider->{report_type} = $report_type;
+        like( $usage_data_provider->_build_url_query, qr/&access_method=Regular$/, "$report_type asks for Regular" );
+    }
+
+    foreach my $report_type (qw( PR_P1 TR_J1 IR_A1 )) {
+        $usage_data_provider->{report_type} = $report_type;
+        unlike( $usage_data_provider->_build_url_query, qr/access_method/, "$report_type does not ask for it" );
+    }
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'test_connection() tests' => sub {

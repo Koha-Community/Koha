@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use Koha::Database;
 use Koha::ERM::EUsage::CounterFile;
@@ -139,6 +139,130 @@ subtest 'store month column separator' => sub {
             { usage_data_provider_id => $usage_data_provider->erm_usage_data_provider_id } );
         is( $mus_rs->count, 10, "10 monthly usages were added with $test->{label} columns" );
     }
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'only the Regular access method is imported' => sub {
+
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    my $patron = Koha::Patrons->search()->last;
+    t::lib::Mocks::mock_userenv( { number => $patron->borrowernumber } );    # Is superlibrarian
+
+    my $usage_data_provider = $builder->build_object( { class => 'Koha::ERM::EUsage::UsageDataProviders' } );
+    my $provider_id         = $usage_data_provider->erm_usage_data_provider_id;
+
+    # A COUNTER file of release 5.1, Title Master Report, with an Access_Method column.
+    # Each row is [ title, Access_Method, usage ] for the month
+    my $counter_file_content = sub {
+        my ( $month, @rows ) = @_;
+
+        my @header = (
+            'Report_Name,"Title Master Report"',
+            'Report_ID,TR',
+            'Release,5.1',
+            'Institution_Name,"Test Institution"',
+            'Institution_ID,',
+            'Metric_Types,"Total_Item_Requests"',
+            'Report_Filters,',
+            'Report_Attributes,"Attributes_To_Show=Access_Method"',
+            'Exceptions,""',
+            'Reporting_Period,""',
+            'Created,2026-10-30T02:13:31Z',
+            'Created_By,"Test Systems Inc."',
+            'Registry_Record,"https://registry.example.org"',
+            '',
+        );
+        my $columns = qq{Title,Publisher,Access_Method,Metric_Type,Reporting_Period_Total,"$month"};
+        my @lines   = map { qq{"$_->[0]",Publisher,"$_->[1]",Total_Item_Requests,$_->[2],$_->[2]} } @rows;
+
+        return join( "\r\n", @header, $columns, @lines, '' );
+    };
+
+    my @messages;
+    my $callbacks = {
+        report_info_callback => sub { },
+        step_callback        => sub { },
+        set_size_callback    => sub { },
+        add_message_callback => sub { push @messages, @_ },
+    };
+    my $skipped_messages = sub {
+        [ grep { ( $_->{code} // q{} ) eq q{access_method_skipped} } @messages ]
+    };
+
+    my $store_file = sub {
+        my ( $month, @rows ) = @_;
+
+        return Koha::ERM::EUsage::CounterFile->new(
+            {
+                usage_data_provider_id => $provider_id,
+                file_content           => $counter_file_content->( $month, @rows ),
+                date_uploaded          => POSIX::strftime( "%Y%m%d%H%M%S", localtime ),
+                filename               => 'upload',
+            }
+        )->store($callbacks);
+    };
+
+    # A title with Regular and TDM usage, a title with TDM usage only, a title without an access method
+    # and a title with the Regular access method in lower case
+    $store_file->(
+        'Oct-2026',
+        [ 'Title A', 'Regular', 5 ],
+        [ 'Title A', 'TDM',     50 ],
+        [ 'Title B', 'TDM',     30 ],
+        [ 'Title C', q{},       7 ],
+        [ 'Title D', 'regular', 3 ],
+    );
+
+    is(
+        Koha::ERM::EUsage::UsageTitles->search( { usage_data_provider_id => $provider_id } )->count,
+        3, 'A title with TDM usage only is not added'
+    );
+    is(
+        Koha::ERM::EUsage::UsageTitles->search( { usage_data_provider_id => $provider_id, title => 'Title B' } )->count,
+        0, 'Title B is not added'
+    );
+    is_deeply(
+        [
+            sort { $a <=> $b }
+            map  { $_->usage_count }
+                Koha::ERM::EUsage::MonthlyUsages->search( { usage_data_provider_id => $provider_id } )->as_list
+        ],
+        [ 3, 5, 7 ],
+        'Only the usage of the Regular access method, of no access method and of regular is stored'
+    );
+
+    my $title_a =
+        Koha::ERM::EUsage::UsageTitles->search( { usage_data_provider_id => $provider_id, title => 'Title A' } )->next;
+    is(
+        Koha::ERM::EUsage::YearlyUsages->search( { title_id => $title_a->title_id } )->next->totalcount, 5,
+        'The TDM usage is not in the yearly usage'
+    );
+
+    is_deeply(
+        [ map { $_->{type} . q{ } . $_->{message} } @{ $skipped_messages->() } ],
+        ['warning 2'],
+        'One warning gives the number of rows that were not imported'
+    );
+
+    # A file with TDM usage only
+    @messages = ();
+    $store_file->( 'Nov-2026', [ 'Title E', 'TDM', 40 ], [ 'Title F', 'TDM', 60 ] );
+    is(
+        Koha::ERM::EUsage::MonthlyUsages->search( { usage_data_provider_id => $provider_id, month => 11 } )->count, 0,
+        'A file with TDM usage only adds no usage'
+    );
+    is_deeply(
+        [ map { $_->{message} } @{ $skipped_messages->() } ],
+        [2], 'The warning gives the two rows that were not imported'
+    );
+    is(
+        Koha::ERM::EUsage::UsageTitles->search( { usage_data_provider_id => $provider_id } )->count,
+        3, 'No title is added by a file with TDM usage only'
+    );
 
     $schema->storage->txn_rollback;
 };

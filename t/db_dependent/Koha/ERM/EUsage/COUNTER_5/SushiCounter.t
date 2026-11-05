@@ -18,13 +18,14 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 19;
+use Test::More tests => 21;
 
 use Koha::ERM::EUsage::SushiCounter;
 use Koha::Database;
 use JSON           qw( decode_json );
 use File::Basename qw( dirname );
 use File::Slurp;
+use Storable qw( dclone );
 
 use t::lib::TestBuilder;
 
@@ -982,4 +983,58 @@ subtest 'TR_B2 _COUNTER_report_body' => sub {
         $report_body[0][13], $stats_total,
         'Reporting period total matches the sum of all the monthly usage statistics'
     );
+};
+
+subtest 'TDM usage is not imported from a SUSHI response' => sub {
+
+    plan tests => 4;
+
+    my $response_file = dirname(__FILE__) . $test_data_base_dir . "/TR_J3.json";
+    my $read_response = sub { decode_json( read_file($response_file) ) };
+    my $body          = sub {
+        my ($response) = @_;
+        return Koha::ERM::EUsage::SushiCounter->new( { response => $response } )->_COUNTER_report_body;
+    };
+
+    my @regular_body = $body->( $read_response->() );
+    ok( scalar @regular_body, 'The report has rows' );
+
+    # The Regular and the TDM usage of a title are separate items. A TDM item of the same title, and a title
+    # with TDM usage only, are added
+    my $response = $read_response->();
+    my @items    = @{ $response->{Report_Items} };
+    my $tdm_item = dclone( $items[0] );
+    $tdm_item->{Access_Method} = 'TDM';
+    my $tdm_only_item = dclone( $items[-1] );
+    $tdm_only_item->{Title}         = 'A title that is only used for text and data mining';
+    $tdm_only_item->{Access_Method} = 'TDM';
+    push @{ $response->{Report_Items} }, $tdm_item, $tdm_only_item;
+    is_deeply( [ $body->($response) ], \@regular_body, 'The TDM items are not in the report body' );
+
+    # An Access_Method of Regular, in any case, is kept
+    $response = $read_response->();
+    $response->{Report_Items}->[0]->{Access_Method} = ' regular ';
+    is_deeply( [ $body->($response) ], \@regular_body, 'An item with the Regular access method is kept' );
+
+    $response = $read_response->();
+    $_->{Access_Method} = 'TDM' for @{ $response->{Report_Items} };
+    is( scalar( $body->($response) ), 0, 'A report with TDM usage only has no rows' );
+};
+
+subtest 'is_regular_access_method' => sub {
+
+    plan tests => 9;
+
+    # No Access_Method column (the standard views), an empty value and Regular are stored
+    foreach my $regular ( undef, q{}, '   ', 'Regular', 'regular', ' REGULAR ' ) {
+        ok(
+            Koha::ERM::EUsage::SushiCounter->is_regular_access_method($regular),
+            '"' . ( $regular // 'undef' ) . '" is Regular'
+        );
+    }
+
+    # The usage for text and data mining (TDM), or any other value, is not
+    foreach my $other (qw( TDM tdm Other )) {
+        ok( !Koha::ERM::EUsage::SushiCounter->is_regular_access_method($other), "$other is not Regular" );
+    }
 };
