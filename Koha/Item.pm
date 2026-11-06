@@ -3116,8 +3116,8 @@ sub z3950_status {
     my $price = $item->effective_replacement_price;
 
 Returns the effective replacement price. Usually the item's replacementprice.
-If useDefaultReplacementCost is enabled it can fallback to the item type's
-default replacement cost when the replaceprice is empty or 0
+If useDefaultReplacementCost is enabled it can fall back to the item type's
+default replacement cost when the replacementprice is empty or 0
 
 Returns 0 if no price can be determined
 
