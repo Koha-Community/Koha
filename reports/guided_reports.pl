@@ -23,6 +23,7 @@ use Text::CSV::Encoded;
 use Encode qw( decode );
 use URI::Escape;
 use File::Temp;
+use DBI qw( :sql_types );
 use C4::Reports::Guided
     qw( delete_report get_report_areas convert_sql update_sql get_saved_reports get_results ValidateSQLParameters format_results get_report_types get_columns get_from_dictionary get_criteria build_query save_report execute_query nb_rows get_report_groups );
 use Koha::BackgroundJob::RunReport;
@@ -862,21 +863,14 @@ if ( !$op ) {
 
                     # Determine whether each ODS column can have numeric cells
                     # based on the type of the SQL column
+                    my %numeric_sql_types = map { $_ => 1 } (
+                        SQL_NUMERIC, SQL_DECIMAL, SQL_INTEGER, SQL_SMALLINT, SQL_FLOAT,
+                        SQL_REAL,    SQL_DOUBLE,  SQL_BIGINT,  SQL_TINYINT,
+                    );
                     my $numeric_columns;
                     while ( my ( $i, $column_type ) = each @{ $sth->{TYPE} } ) {
-
-                        # SQL standard type codes, sourced from ODBC headers
-
                         $numeric_columns->{$i} = 1
-                            if $column_type == 2 ||    # NUMERIC
-                            $column_type == 3    ||    # DECIMAL
-                            $column_type == 4    ||    # INTEGER
-                            $column_type == 5    ||    # SMALLINT
-                            $column_type == 6    ||    # FLOAT
-                            $column_type == 7    ||    # REAL
-                            $column_type == 8    ||    # DOUBLE
-                            $column_type == -5   ||    # BIGINT
-                            $column_type == -6;        # TINYINT
+                            if defined $column_type && $numeric_sql_types{$column_type};
                     }
 
                     # First line is headers
