@@ -4182,7 +4182,7 @@ subtest 'holds_fee() tests' => sub {
 };
 
 subtest 'effective_replacement_price() tests' => sub {
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -4220,6 +4220,14 @@ subtest 'effective_replacement_price() tests' => sub {
     #test when an item has a replacementprice set
     $item->replacementprice(11.00)->store;
     cmp_ok( $item->effective_replacement_price, '==', 11, 'Uses the item price when it has one' );
+
+    #test when the item type has no default replacement cost
+    $itemtype->defaultreplacecost(undef)->store;
+    $item->replacementprice(undef)->store;
+    cmp_ok(
+        $item->effective_replacement_price, '==', 0,
+        'Returns 0 when neither the item nor the item type has a price and the preference is on'
+    );
 
     $schema->storage->txn_rollback;
 };
