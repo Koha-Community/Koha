@@ -951,10 +951,9 @@ sub list {
     my $embed       = $c->stash('koha.embed') // {};
     my $embed_items = exists $embed->{items} ? 1 : 0;
 
-    my %collection_params = (
-        embed_items => $embed_items,
-        interface   => 'intranet',
-    );
+    # No interface: like GET /biblios/{biblio_id}, the staff endpoint returns
+    # the whole record, without applying the framework visibility rules
+    my %collection_params = ( embed_items => $embed_items );
 
     my @prefetch = qw(biblioitem);
     push @prefetch, 'items' if $embed_items;

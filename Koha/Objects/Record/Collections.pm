@@ -64,7 +64,10 @@ When I<embed_items> is set, each element's record is obtained through
 C<< $element->metadata_record({ embed_items => 1, interface => ..., patron => ... }) >>
 so item data (952 fields) is embedded. The I<interface> ('opac' or 'intranet')
 and I<patron> parameters are forwarded so item visibility is scoped
-accordingly (e.g. OpacHiddenItems rules for the 'opac' interface). Elements that
+accordingly (e.g. OpacHiddenItems rules for the 'opac' interface). Note that
+passing an I<interface> also applies the ViewPolicy filter, which removes the
+fields hidden on that interface by the framework. Without it, all the items
+are embedded and the rest of the record is returned as stored. Elements that
 do not implement I<metadata_record> fall back to their raw record.
 
 =cut
