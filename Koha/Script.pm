@@ -347,7 +347,8 @@ warning is printed to STDERR (cron mails it to the administrator). Only an
 argument that is a single dash followed by at least two characters is
 considered, and only if it is a declared long option name or the unique
 prefix of one and is not a bundle of declared one-character flags (C<-vc>
-is still C<-v -c>). The values given to options, and anything after C<-->,
+is still C<-v -c>). A negatable option (e.g. C<send!>) is also accepted as
+C<-nosend> or C<-no-send>, rewritten as C<--no-send>. The values given to options, and anything after C<-->,
 are left alone. This is a compatibility shim and will be removed in a future
 release; use C<--long> in new command lines and documentation.
 
@@ -537,21 +538,36 @@ sub _translate_legacy_options {
 
     # name => 0 (flag), 1 (mandatory value) or 2 (optional value)
     my ( %takes_value, %is_short, @long_names );
+
+    # Every accepted spelling of a long option => the standard --long form to rewrite it as.
+    # A negatable option (e.g. 'send!') is also accepted as -nosend and -no-send, rewritten
+    # as --no-send, as plain Getopt::Long did.
+    my %standard;
     for my $spec (@$opt_specs) {
         next unless ref $spec eq 'ARRAY' && defined $spec->[0];
         my ( $names, $type ) = $spec->[0] =~ /^([\w|?-]+)([=:].*)?/ or next;
-        my $arity = !defined $type ? 0 : $type =~ /^=/ ? 1 : 2;
+        my $negatable = $spec->[0]                 =~ /^[\w|?-]+!$/;
+        my $arity     = !defined $type ? 0 : $type =~ /^=/ ? 1 : 2;
         for my $name ( split /\|/, $names ) {
             $takes_value{$name} = $arity;
             if ( length $name == 1 ) { $is_short{$name} = 1 }
-            else                     { push @long_names, $name }
+            else {
+                push @long_names, $name;
+                $standard{$name} = $name;
+                if ($negatable) {
+                    $standard{"no$name"}     = "no-$name";
+                    $standard{"no-$name"}    = "no-$name";
+                    $takes_value{"no-$name"} = 0;
+                }
+            }
         }
     }
 
-    # A declared long option name, or the unique prefix of one
+    # A declared long option name or the negated form of a negatable one, or the unique
+    # prefix of a declared long option name, resolved to the standard long form
     my $resolve = sub {
         my ($name) = @_;
-        return $name if grep { $_ eq $name } @long_names;
+        return $standard{$name} if exists $standard{$name};
         my @matches = grep { index( $_, $name ) == 0 } @long_names;
         return @matches == 1 ? $matches[0] : undef;
     };

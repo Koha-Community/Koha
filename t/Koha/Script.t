@@ -200,7 +200,7 @@ subtest 'describe_options() exclusive group names tests' => sub {
 
 subtest 'describe_options() legacy single-dash long options tests' => sub {
 
-    plan tests => 24;
+    plan tests => 35;
 
     my $describe = sub {
         local @ARGV = @_;
@@ -212,6 +212,7 @@ subtest 'describe_options() legacy single-dash long options tests' => sub {
             [ 'verbose|v',    'verbose' ],
             [ 'confirm|c',    'confirm' ],
             [ 'name:s',       'optional value' ],
+            [ 'send!',        'negatable flag' ],
         );
         return ( $opt, [@ARGV] );
     };
@@ -254,8 +255,38 @@ subtest 'describe_options() legacy single-dash long options tests' => sub {
     warnings_are { ( $opt, $rest ) = $describe->( '--days', '1', '--', '-days' ) } [], 'Nothing is rewritten after --';
     is_deeply( $rest, ['-days'], '-days after -- is left as a positional argument' );
 
+    # Negatable options: -nosend and -no-send were accepted by plain Getopt::Long
+    warnings_like { ( $opt, $rest ) = $describe->('-nosend') }
+    [qr/-nosend is deprecated, use --no-send instead/], '-nosend is accepted with a deprecation warning';
+    is( $opt->send, 0, '-nosend turns the negatable option off' );
+
+    warnings_like { ( $opt, $rest ) = $describe->('-no-send') }
+    [qr/-no-send is deprecated, use --no-send instead/], '-no-send is accepted with a deprecation warning';
+    is( $opt->send, 0, '-no-send turns the negatable option off' );
+
+    warnings_like { ( $opt, $rest ) = $describe->('-send') }
+    [qr/-send is deprecated, use --send instead/], 'The positive form of a negatable option is translated too';
+    is( $opt->send, 1, '-send turns the negatable option on' );
+
+    warnings_are { ( $opt, $rest ) = $describe->('--nosend') } [], 'The standard --nosend does not warn';
+    is( $opt->send, 0, '--nosend turns the negatable option off' );
+
+    warnings_are { ( $opt, $rest ) = $describe->( '--lettercode', '-nosend' ) } [],
+        'The value of an option is not rewritten, whether it looks like a negated option';
+    is_deeply(
+        [ $opt->lettercode, $opt->send ], [ '-nosend', undef ],
+        '--lettercode -nosend keeps -nosend as the value'
+    );
+
     my @warnings;
     my $died;
+    {
+        local $SIG{__WARN__} = sub { push @warnings, @_ };
+        $died = !eval { $describe->('-nodays'); 1 };
+    }
+    ok( $died, 'A negated form of an option that is not negatable is still an error' );
+
+    @warnings = ();
     {
         local $SIG{__WARN__} = sub { push @warnings, @_ };
         $died = !eval { $describe->('-bogus'); 1 };
