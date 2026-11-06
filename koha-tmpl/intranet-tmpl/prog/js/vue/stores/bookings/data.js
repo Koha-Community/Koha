@@ -475,9 +475,11 @@ export function useDataSection({ status }) {
         // extends past `to` by the threshold so coverage is renewed
         // before the visible range reaches the fetched edge.
         const wantFrom = formatYMD(from);
-        const wantTo = formatYMD(addDays(to, HOLIDAY_PREFETCH_THRESHOLD_DAYS));
+        const wantUntil = formatYMD(
+            addDays(to, HOLIDAY_PREFETCH_THRESHOLD_DAYS)
+        );
         const { from: haveFrom, to: haveTo } = holidaysCovered;
-        if (haveFrom && haveFrom <= wantFrom && haveTo >= wantTo) {
+        if (haveFrom && haveFrom <= wantFrom && haveTo >= wantUntil) {
             return holidays.value;
         }
 
