@@ -358,7 +358,7 @@ subtest 'mark_returned' => sub {
 };
 
 subtest 'processing_fee() tests' => sub {
-    plan tests => 5;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -366,6 +366,8 @@ subtest 'processing_fee() tests' => sub {
 
     my $patron_library   = $builder->build_object( { class => 'Koha::Libraries' } );
     my $checkout_library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $home_library     = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $holding_library  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $itemtype         = $builder->build_object( { class => 'Koha::ItemTypes' } );
     my $other_itemtype   = $builder->build_object( { class => 'Koha::ItemTypes' } );
 
@@ -375,7 +377,13 @@ subtest 'processing_fee() tests' => sub {
             value => { branchcode => $patron_library->branchcode },
         }
     );
-    my $item     = $builder->build_sample_item( { itype => $itemtype->itemtype } );
+    my $item = $builder->build_sample_item(
+        {
+            itype         => $itemtype->itemtype,
+            homebranch    => $home_library->branchcode,
+            holdingbranch => $holding_library->branchcode,
+        }
+    );
     my $checkout = $builder->build_object(
         {
             class => 'Koha::Checkouts',
@@ -450,6 +458,32 @@ subtest 'processing_fee() tests' => sub {
         }
     );
     is( $checkout->processing_fee, '3.00', 'Ignores rules for other item types' );
+
+    #test with LostChargesControl set to ItemHomeLibrary
+    t::lib::Mocks::mock_preference( 'LostChargesControl', 'ItemHomeLibrary' );
+
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode => $home_library->branchcode,
+            itemtype   => $itemtype->itemtype,
+            rule_name  => 'lost_item_processing_fee',
+            rule_value => '5.00',
+        }
+    );
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode => $holding_library->branchcode,
+            itemtype   => $itemtype->itemtype,
+            rule_name  => 'lost_item_processing_fee',
+            rule_value => '6.00',
+        }
+    );
+
+    t::lib::Mocks::mock_preference( 'HomeOrHoldingBranch', 'homebranch' );
+    is( $checkout->processing_fee, '5.00', 'ItemHomeLibrary with homebranch uses the item home library rule' );
+
+    t::lib::Mocks::mock_preference( 'HomeOrHoldingBranch', 'holdingbranch' );
+    is( $checkout->processing_fee, '6.00', 'ItemHomeLibrary with holdingbranch uses the item holding library rule' );
 
     $schema->storage->txn_rollback;
 };
