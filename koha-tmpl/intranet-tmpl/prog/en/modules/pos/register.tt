@@ -7,6 +7,7 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% PROCESS 'accounts.inc' %]
+[% BLOCK transaction_label %][% account.timestamp | $KohaDates with_hours => 1 %] ([% IF account.credit_number %][% account.credit_number | html %][% ELSE %][% account.accountlines_id | html %][% END %])[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title
     >[% FILTER collapse %]
@@ -175,7 +176,7 @@
                                 <tr class="credit dtrg-group dtrg-start dtrg-level-0">
                                     <td></td>
                                     <td>{}</td>
-                                    <td>[% accountline.timestamp | $KohaDates with_hours => 1 %] ([% IF accountline.credit_number %][%- accountline.credit_number | html -%][% ELSE %][% accountline.accountlines_id | html %][% END %])</td>
+                                    <td>[%- PROCESS transaction_label account=accountline -%]</td>
                                     <td>[%- PROCESS account_type_description account=accountline -%] ([% AuthorisedValues.GetByCode( 'PAYMENT_TYPE', accountline.payment_type ) | html %])</td>
                                     <td></td>
                                     <td>[% accountline.amount * -1 | $Price %]</td>
@@ -193,12 +194,7 @@
                                                 ([% AuthorisedValues.GetByCode( 'PAYMENT_TYPE', accountline.payment_type ) | html %])", "amount": "[% accountline.amount * -1 | $Price %]", "timestamp":
                                                 "[% accountline.timestamp | $KohaDates with_hours => 1 %]" }</td
                                             >
-                                            <td
-                                                ><span class="visually-hidden"
-                                                    >[% accountline.timestamp | $KohaDates with_hours => 1 %]
-                                                    ([% IF accountline.credit_number %][%- accountline.credit_number | html -%][% ELSE %][% accountline.accountlines_id | html %][% END %])</span
-                                                ></td
-                                            >
+                                            <td><span class="visually-hidden" aria-hidden="true">[%- PROCESS transaction_label account=accountline -%]</span></td>
                                             <td>
                                                 [%- PROCESS account_type_description account=credit.debit -%]
                                                 [%- IF credit.debit.description -%]([% credit.debit.description | html %])[%- END -%]
@@ -253,12 +249,7 @@
                                             ([% AuthorisedValues.GetByCode( 'PAYMENT_TYPE', accountline.payment_type ) | html %])", "amount": "[% accountline.amount * -1 | $Price %]", "timestamp":
                                             "[% accountline.timestamp | $KohaDates with_hours => 1 %]" }</td
                                         >
-                                        <td
-                                            ><span class="visually-hidden"
-                                                >[% accountline.timestamp | $KohaDates with_hours => 1 %]
-                                                ([% IF accountline.credit_number %][%- accountline.credit_number | html -%][% ELSE %][% accountline.accountlines_id | html %][% END %])</span
-                                            ></td
-                                        >
+                                        <td><span class="visually-hidden" aria-hidden="true">[%- PROCESS transaction_label account=accountline -%]</span></td>
                                         <td>
                                             [%- PROCESS account_type_description account=debit.credit -%]
                                             [%- IF debit.credit.description %][% debit.credit.description | html %][%- END -%]
@@ -338,12 +329,7 @@
                                                 ([% AuthorisedValues.GetByCode( 'PAYMENT_TYPE', accountline.payment_type ) | html %])", "amount": "[% accountline.amount * -1 | $Price %]", "timestamp":
                                                 "[% accountline.timestamp | $KohaDates with_hours => 1 %]" }</td
                                             >
-                                            <td
-                                                ><span class="visually-hidden"
-                                                    >[% accountline.timestamp | $KohaDates with_hours => 1 %]
-                                                    ([% IF accountline.credit_number %][%- accountline.credit_number | html -%][% ELSE %][% accountline.accountlines_id | html %][% END %])</span
-                                                ></td
-                                            >
+                                            <td><span class="visually-hidden" aria-hidden="true">[%- PROCESS transaction_label account=accountline -%]</span></td>
                                             <td>
                                                 [%- PROCESS account_type_description account=credit.debit -%]
                                                 [%- IF credit.debit.description -%]([% credit.debit.description | html %])[%- END -%]
@@ -397,12 +383,7 @@
                                                 ([% AuthorisedValues.GetByCode( 'PAYMENT_TYPE', accountline.payment_type ) | html %])", "amount": "[% accountline.amount * -1 | $Price %]", "timestamp":
                                                 "[% accountline.timestamp | $KohaDates with_hours => 1 %]" }</td
                                             >
-                                            <td
-                                                ><span class="visually-hidden"
-                                                    >[% accountline.timestamp | $KohaDates with_hours => 1 %]
-                                                    ([% IF accountline.credit_number %][%- accountline.credit_number | html -%][% ELSE %][% accountline.accountlines_id | html %][% END %])</span
-                                                ></td
-                                            >
+                                            <td><span class="visually-hidden" aria-hidden="true">[%- PROCESS transaction_label account=accountline -%]</span></td>
                                             <td>
                                                 [%- PROCESS account_type_description account=debit.credit -%]
                                                 [%- IF debit.credit.description %][% debit.credit.description | html %][%- END -%]
