@@ -1264,7 +1264,7 @@ subtest "CanBookBeRenewed tests" => sub {
     };
 
     subtest "auto_too_much_owing | FineNoRenewalsBlockAutoRenew & FineNoRenewalsIncludeCredits" => sub {
-        plan tests => 10;
+        plan tests => 14;
         my $item_to_auto_renew = $builder->build_sample_item(
             {
                 biblionumber => $biblio->biblionumber,
@@ -1355,6 +1355,33 @@ subtest "CanBookBeRenewed tests" => sub {
         is(
             $error, 'auto_too_much_owing',
             'Cannot auto renew, FineNoRenewals=10, FineNoRenewalsIncludeCredits=0, patron has 15 debt, 5 credit'
+        );
+
+        C4::Context->set_preference( 'FineNoRenewalsBlockAutoRenew', '0' );
+
+        # Due in 10 days: make sure the cron does not find it too soon
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => undef,
+                branchcode   => undef,
+                itemtype     => undef,
+                rules        => { noautorenewalbefore => '11' }
+            }
+        );
+        ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrower_obj, $issue, undef, 1 );
+        is( $renewokay, 1,            'FineNoRenewalsBlockAutoRenew=allow: the cron renews' );
+        is( $error,     'auto_renew', 'Can auto renew, FineNoRenewalsBlockAutoRenew=allow, patron has 15 debt' );
+        ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrower_obj, $issue );
+        is( $renewokay, 0,                'A renewal that is not the cron is still checked against FineNoRenewals' );
+        is( $error,     'too_much_owing', 'Cannot renew by hand, FineNoRenewals=10, patron has 15 debt' );
+        C4::Context->set_preference( 'FineNoRenewalsBlockAutoRenew', '1' );
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => undef,
+                branchcode   => undef,
+                itemtype     => undef,
+                rules        => { noautorenewalbefore => undef }
+            }
         );
 
         $dbh->do( 'DELETE FROM accountlines WHERE borrowernumber=?', undef, $renewing_borrowernumber );

@@ -3480,7 +3480,10 @@ sub CanBookBeRenewed {
         {
             return ( 0, 'overdue' );
         } elsif ( $finesblockrenewing && $amountoutstanding_for_renewal > $finesblockrenewing ) {
-            return ( 0, 'too_much_owing' );
+
+            # For an automatic renewal FineNoRenewalsBlockAutoRenew decides, and
+            # _CanBookBeAutoRenewed has already refused it when that is set to block
+            return ( 0, 'too_much_owing' ) unless $cron && $auto_renew eq 'ok';
         }
 
     }
