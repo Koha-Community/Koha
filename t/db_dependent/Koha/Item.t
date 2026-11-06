@@ -4202,7 +4202,7 @@ subtest 'effective_replacement_price() tests' => sub {
     #item with no replacementprice should inherit 199.99 itemtype default replacement cost, only when useDefaultReplacementCost is on
     t::lib::Mocks::mock_preference( 'useDefaultReplacementCost', 0 );
 
-    #cmp_ok() insted of is() for dealing with price comparison
+    #cmp_ok() instead of is() for dealing with price comparison
     cmp_ok( $item->effective_replacement_price, '==', 0, 'Returns 0 when item has no price and the preference is off' );
 
     t::lib::Mocks::mock_preference( 'useDefaultReplacementCost', 1 );
