@@ -746,6 +746,18 @@ div {
     }
 }
 
+// DataTables' own "div.dt-layout-table > div { display: block }" is less specific
+// than "div.dt-layout-row div.dt-layout-cell { display: flex }", so the cell holding
+// the table ends up as a flex container. This shrinks the temporary table used by
+// autoWidth to its content and produces inconsistent column widths.
+div.dt-container {
+    div.dt-layout-row.dt-layout-table {
+        div.dt-layout-cell {
+            display: block;
+        }
+    }
+}
+
 @media only screen and ( min-width: 950px ) and ( max-width: 1525px ) {
     .dt-button-text {
         display: none;
