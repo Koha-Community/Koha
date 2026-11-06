@@ -2372,7 +2372,7 @@ subtest 'put() malformed body tests' => sub {
 
 subtest 'list() tests' => sub {
 
-    plan tests => 22;
+    plan tests => 23;
 
     $schema->storage->txn_begin;
 
@@ -2521,6 +2521,48 @@ subtest 'list() tests' => sub {
         $t->get_ok( $url => { Accept => 'application/marc', } )->status_is(200);
         my $no_embed = MARC::Record->new_from_usmarc( $t->tx->res->body );
         is( scalar( () = $no_embed->field('952') ), 0, 'marc: no 952 fields without x-koha-embed' );
+    };
+
+    subtest 'x-koha-embed: items does not hide fields' => sub {
+
+        plan tests => 9;
+
+        my $biblio_with_items = $builder->build_sample_biblio;
+        $builder->build_sample_item( { biblionumber => $biblio_with_items->biblionumber } );
+
+        my $record = $biblio_with_items->metadata->record;
+        $record->append_fields( MARC::Field->new( '500', '', '', a => 'Hidden in the staff interface' ) );
+        C4::Biblio::ModBiblio( $record, $biblio_with_items->biblionumber, $biblio_with_items->frameworkcode );
+
+        # !OPAC !Intranet !Editor
+        Koha::MarcSubfieldStructures->find(
+            { tagfield => '500', tagsubfield => 'a', frameworkcode => $biblio_with_items->frameworkcode } )
+            ->update( { hidden => 5 } );
+        Koha::Caches->get_instance->flush_all;
+
+        my $embed_query = encode_json( { biblio_id => $biblio_with_items->biblionumber } );
+        my $url         = "//$userid:$password@/api/v1/biblios?q=$embed_query";
+
+        my $marcxml =
+            $t->get_ok( $url => { Accept => 'application/marcxml+xml', 'x-koha-embed' => 'items' } )
+            ->status_is(200)
+            ->tx->res->body;
+        like( $marcxml, qr{tag="500"}, 'marcxml: the hidden field is kept' );
+
+        my $mij =
+            $t->get_ok( $url => { Accept => 'application/marc-in-json', 'x-koha-embed' => 'items' } )
+            ->status_is(200)
+            ->tx->res->json;
+        is(
+            scalar( grep { exists $_->{'500'} } @{ $mij->[0]->{fields} } ), 1,
+            'marc-in-json: the hidden field is kept'
+        );
+
+        my $txt =
+            $t->get_ok( $url => { Accept => 'text/plain', 'x-koha-embed' => 'items' } )->status_is(200)->tx->res->body;
+        like( $txt, qr{^500 }m, 'text/plain: the hidden field is kept' );
+
+        Koha::Caches->get_instance->flush_all;
     };
 
     $schema->storage->txn_rollback;
