@@ -42,6 +42,7 @@ import { routes as routesDef } from "../routes/acquisitions";
 import { useMainStore } from "../stores/main";
 import { useVendorStore } from "../stores/vendors";
 import { useNavigationStore } from "../stores/navigation";
+import { removeScriptExtension } from "../utils/url";
 import i18n from "@koha-vue/i18n";
 
 const pinia = createPinia();
@@ -50,6 +51,12 @@ const mainStore = useMainStore(pinia);
 const navigationStore = useNavigationStore(pinia);
 
 const routes = navigationStore.setRoutes(routesDef);
+
+// The vendors are served by acqui/vendors.pl, on the URL acquisition/vendors
+removeScriptExtension({
+    script: "/acqui/vendors.pl",
+    route: "/acquisition/vendors",
+});
 
 const router = createRouter({
     history: createWebHistory(),
