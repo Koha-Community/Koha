@@ -43,11 +43,11 @@ my $opt = Koha::Script->describe_options(
 
 %c %o',
     [ 'lost|l=s%',  'DAYS=LOST_CODE mapping of days overdue to lost value to set, repeatable (see --man)' ],
-    [ 'charge|c:s', 'lost value that triggers a charge to the patron account' ],
+    [ 'charge|c=s', 'lost value that triggers a charge to the patron account' ],
     [ 'confirm',    'apply changes (without this, the script reports affected item counts without modifying records)' ],
     [ 'verbose|v',  'verbose' ],
     [ 'quiet',      'suppress summary output' ],
-    [ 'maxdays:s',  'end of the range of overdue days to deal with', { default => 366 } ],
+    [ 'maxdays=s',  'end of the range of overdue days to deal with', { default => 366 } ],
     [
         'mark-returned',
         "when an item is marked lost, remove it from the borrower's issued items "
