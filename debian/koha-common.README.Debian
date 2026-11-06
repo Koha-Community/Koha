@@ -26,6 +26,45 @@ package:
   - koha-create --create-db name
 
 
+Background job notifications
+============================
+
+New installations use JobsNotificationMethod=polling. Background workers
+check the database for new jobs every ten seconds and do not require a
+message broker. The workers must continue to run in either mode.
+
+Existing settings are preserved on upgrade, including STOMP. Koha's
+maintainer scripts do not remove or stop RabbitMQ. Koha package upgrades
+configure and restart a local broker only if an instance uses STOMP with a
+local broker hostname; remote brokers are managed on their own host.
+
+If you keep a local broker that was installed automatically as a dependency,
+protect it from apt autoremove by marking it manually installed:
+
+  apt-mark manual rabbitmq-server
+
+To use a local RabbitMQ broker on a new installation:
+
+* Install rabbitmq-server explicitly.
+* Enable its STOMP plugin: rabbitmq-plugins enable --offline rabbitmq_stomp
+* Restart the broker: service rabbitmq-server restart
+* Configure the message_broker section in the instance's koha-conf.xml.
+* Select STOMP in JobsNotificationMethod and restart the background workers.
+
+A remote broker only needs its connection settings in koha-conf.xml and
+STOMP selected in JobsNotificationMethod; no local rabbitmq-server package
+is required.
+
+To switch an existing instance to polling, select polling and restart both
+worker queues, replacing INSTANCE with its Koha instance name:
+
+  koha-worker --restart --queue default INSTANCE
+  koha-worker --restart --queue long_tasks INSTANCE
+
+Check all Koha instances and other broker users before stopping or removing
+a broker that is no longer needed by this instance.
+
+
 Koha filesystem layout on Debian
 ================================
 

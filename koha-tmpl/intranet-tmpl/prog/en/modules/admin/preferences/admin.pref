@@ -193,11 +193,11 @@ Administration:
         -
             - "Use "
             - pref: JobsNotificationMethod
-              default: STOMP
+              default: polling
               choices:
                 STOMP: "STOMP"
                 polling: "polling"
-            - as the preferred job worker notification method. STOMP (default) requires RabbitMQ running. Polling will be used as a fallback if RabbitMQ is not accessible.
+            - as the preferred job worker notification method. Polling is the default. STOMP requires a running message broker such as RabbitMQ. Polling will be used as a fallback if the broker is not accessible.
     Google OpenID Connect:
         -
             - "Use Google OpenID Connect login in the OPAC: "

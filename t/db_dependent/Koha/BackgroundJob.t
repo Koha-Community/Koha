@@ -22,6 +22,7 @@ use Encode;
 use Test::More tests => 7;
 use Test::NoWarnings;
 use Test::MockModule;
+use Test::MockObject;
 use Test::Exception;
 use Test::Warn;
 
@@ -86,12 +87,14 @@ subtest 'enqueue() tests' => sub {
         'Enqueue BatchUpdateItem without data throws exception';
 
     # The following test needs a mock to trigger the exception
-    my $mock = Test::MockModule->new('Net::Stomp');
-    $mock->mock( 'send_with_receipt', sub { 0 } );
+    my $connection = Test::MockObject->new;
+    my $mock       = Test::MockModule->new('Koha::BackgroundJob');
+    $mock->mock( 'connect', sub { $connection } );
+    $connection->mock( 'send_with_receipt', sub { 0 } );
     throws_ok { Koha::BackgroundJob::MARCImportCommitBatch->new->enqueue }
     'Koha::Exceptions::BackgroundJob',
         'Enqueue MARCImportCommitBatch with mock throws exception';
-    $mock->unmock('send_with_receipt');
+    $connection->mock( 'send_with_receipt', sub { 1 } );
 
     # FIXME: This all feels we need to do it better...
     my $job_id = Koha::BackgroundJob::BatchUpdateItem->new->enqueue( { record_ids => [ 1, 2 ] } );
@@ -314,27 +317,53 @@ subtest 'connect' => sub {
     plan tests => 2;
 
     subtest 'JobsNotificationMethod' => sub {
-        plan tests => 3;
+        plan tests => 9;
         t::lib::Mocks::mock_config( 'message_broker', { hostname => 'not_localhost', port => '99999' } );
+        my $stomp = Test::MockModule->new('Net::Stomp');
+        $stomp->mock( 'new', sub { die 'Broker unavailable' } );
 
         t::lib::Mocks::mock_preference( 'JobsNotificationMethod', 'STOMP' );
         my $job;
         warning_like { $job = Koha::BackgroundJob->connect() } qr{Cannot connect to broker};
         is( $job, undef, "Return undef if unable to connect when using stomp" );
 
-        t::lib::Mocks::mock_preference( 'JobsNotificationMethod', 'polling' );
-        $job = Koha::BackgroundJob->connect();
-        is( $job, undef, "Return undef if using polling" );
+        my $connection_attempts = 0;
+        $stomp->mock( 'new', sub { $connection_attempts++; die 'Unexpected broker connection' } );
+        for my $method ( 'polling', undef, '' ) {
+            t::lib::Mocks::mock_preference( 'JobsNotificationMethod', $method );
+            warnings_are { $job = Koha::BackgroundJob->connect() } [],
+                'Polling, a missing preference and an empty preference do not contact a broker';
+            is( $job, undef, 'No broker connection is required' );
+        }
+        is( $connection_attempts, 0, 'STOMP is only attempted when explicitly selected' );
     };
 
     subtest 'wrong credentials' => sub {
-        plan tests => 2;
+        plan tests => 3;
         t::lib::Mocks::mock_preference( 'JobsNotificationMethod', 'STOMP' );
 
         t::lib::Mocks::mock_config(
             'message_broker',
             { hostname => 'localhost', port => '61613', username => 'guest', password => 'wrong_password' }
         );
+
+        my $frame = Test::MockObject->new;
+        $frame->mock( 'command', sub { 'ERROR' } );
+        $frame->mock( 'body',    sub { "Access refused for user 'guest'\n" } );
+        my $connection = Test::MockObject->new;
+        $connection->mock(
+            'connect',
+            sub {
+                my ( $self, $credentials ) = @_;
+                is_deeply(
+                    $credentials, { login => 'guest', passcode => 'wrong_password' },
+                    'Configured credentials are passed to the broker'
+                );
+                return $frame;
+            }
+        );
+        my $stomp = Test::MockModule->new('Net::Stomp');
+        $stomp->mock( 'new', sub { $connection } );
 
         my $job;
         warning_is { $job = Koha::BackgroundJob->connect() }

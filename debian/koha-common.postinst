@@ -5,14 +5,27 @@ set -e
 #DEBHELPER#
 
 if [ "$1" = "configure" ]; then
-    # koha-common is the package that pulls in RabbitMQ and memcached, so
-    # it keeps the service-level steps the monolithic package used to run.
-
-    # Koha's background jobs reach RabbitMQ over STOMP: make sure the plugin
-    # is enabled and the broker has picked it up.
+    # RabbitMQ is optional. Only configure a local broker if an instance
+    # explicitly uses STOMP; polling and remote brokers need no local service.
     if command -v rabbitmq-plugins >/dev/null 2>&1; then
-        rabbitmq-plugins enable rabbitmq_stomp
-        service rabbitmq-server restart || true
+        for instance in $(koha-list); do
+            if ! notification_method=$(koha-mysql "$instance" --batch --skip-column-names \
+                -e "SELECT value FROM systempreferences WHERE variable = 'JobsNotificationMethod'" 2>/dev/null); then
+                echo "Cannot read JobsNotificationMethod for $instance; leaving RabbitMQ unchanged." >&2
+                continue
+            fi
+            [ "$notification_method" = "STOMP" ] || continue
+
+            broker_host=$(xmlstarlet sel -t -v 'yazgfs/config/message_broker/hostname' \
+                "/etc/koha/sites/$instance/koha-conf.xml" 2>/dev/null || true)
+            case "$broker_host" in
+                ""|localhost|127.0.0.1|::1|"$(hostname)"|"$(hostname -f 2>/dev/null || true)")
+                    rabbitmq-plugins enable --offline rabbitmq_stomp
+                    service rabbitmq-server restart || true
+                    break
+                    ;;
+            esac
+        done
     fi
 
     # Bug 35242: Force memcache restart after koha install/upgrade

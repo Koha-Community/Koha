@@ -1,0 +1,28 @@
+koha (26.06.00~1) unstable; urgency=medium
+
+  New Koha installations use SQL polling for background job notifications.
+  RabbitMQ is now suggested rather than required by koha-common and
+  koha-deps, so it is not installed automatically with these packages.
+
+  Existing JobsNotificationMethod settings are preserved. Sites already
+  using STOMP continue to use their configured broker. Koha's maintainer
+  scripts do not remove or stop RabbitMQ. Koha package upgrades configure
+  and restart a local RabbitMQ broker only when an instance uses STOMP
+  with a local broker hostname.
+
+  If RabbitMQ was installed automatically as a dependency and you still
+  need it, mark it as manually installed before using apt autoremove:
+
+    apt-mark manual rabbitmq-server
+
+  To switch an existing instance to polling, change JobsNotificationMethod
+  and restart its background workers. The workers remain necessary in both
+  modes. Polling checks for new jobs every ten seconds. Before stopping or
+  removing RabbitMQ, check all Koha instances and other broker users.
+
+  To use STOMP on a new installation, install and configure a local broker
+  or configure a remote broker, enable its STOMP support, select STOMP in
+  JobsNotificationMethod and restart the background workers. See the
+  background job section of README.Debian for details.
+
+ -- Koha Development Team <koha-devel@lists.koha-community.org>  Fri, 06 Nov 2026 07:00:00 +0000

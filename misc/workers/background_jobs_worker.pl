@@ -25,8 +25,9 @@ background_jobs_worker.pl - Worker script that will process background jobs
 
 =head1 DESCRIPTION
 
-This script will connect to the Stomp server (RabbitMQ) and subscribe to the queues passed in parameter (or the 'default' queue),
-or if a Stomp server is not active it will poll the database every 10s for new jobs in the passed queue.
+This script polls the database every 10s for new jobs in the queues passed in parameter (or the 'default' queue).
+If JobsNotificationMethod is set to STOMP, it subscribes to the configured message broker instead,
+falling back to polling if it cannot connect.
 
 You can specify some queues only (using --queue, which is repeatable) if you want to run several workers that will handle their own jobs.
 
@@ -90,7 +91,7 @@ unless (@queues) {
     push @queues, 'default';
 }
 
-my $notification_method = C4::Context->preference('JobsNotificationMethod') // 'STOMP';
+my $notification_method = C4::Context->preference('JobsNotificationMethod') // 'polling';
 
 my ( $conn, $error );
 if ( $notification_method eq 'STOMP' ) {

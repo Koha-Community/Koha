@@ -64,7 +64,7 @@ Connect to the message broker using default guest/guest credential
 sub connect {
     my ($self);
 
-    my $notification_method = C4::Context->preference('JobsNotificationMethod') // 'STOMP';
+    my $notification_method = C4::Context->preference('JobsNotificationMethod') // 'polling';
 
     return
         unless $notification_method eq 'STOMP';
