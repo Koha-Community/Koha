@@ -25,8 +25,6 @@ use Test::NoWarnings;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use List::Util qw(min);
-
 use Koha::Library::Groups;
 use Koha::Database;
 

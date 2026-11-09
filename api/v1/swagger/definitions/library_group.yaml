@@ -47,19 +47,22 @@ properties:
     type: boolean
     description: If the group is used as a local float group
   created_on:
-    description: date of creation
+    description: Date and time of creation
     type:
       - string
       - "null"
+    format: date-time
+    readOnly: true
   updated_on:
-    description: date of update
-    type:
-      - string
-      - "null"
+    description: Date and time of the last update
+    type: string
+    format: date-time
+    readOnly: true
 additionalProperties: false
 required:
   - library_group_id
   - title
+  - hide_patron_info
   - limit_item_editing
   - limit_report_access
   - is_opac_search_group
