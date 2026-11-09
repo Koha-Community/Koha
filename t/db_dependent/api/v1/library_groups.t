@@ -38,19 +38,28 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'list() tests' => sub {
-    plan tests => 3;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { flags => 4 }
+            value => { flags => 1 }
         }
     );
     my $password = 'thePassword123';
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $patron->userid;
+
+    my $unauthorized_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 4 }
+        }
+    );
+    $unauthorized_patron->set_password( { password => $password, skip_validation => 1 } );
+    my $unauth_userid = $unauthorized_patron->userid;
 
     my $root_group1 = Koha::Library::Group->new(
         {
@@ -66,6 +75,10 @@ subtest 'list() tests' => sub {
         Koha::Library::Group->new( { parent_id => $lg1groupA->id, title => 'LibGroup1 SubGroupA SubGroup2' } )->store();
     my $lg1groupB =
         Koha::Library::Group->new( { parent_id => $root_group1->id, title => 'LibGroup1 SubGroupB' } )->store();
+
+    ## Unauthorized user tests
+    # catalogue permission is not enough, manage_libraries is required (as in admin/library_groups.pl)
+    $t->get_ok("//$unauth_userid:$password@/api/v1/library_groups")->status_is(403);
 
     ## Authorized user tests
     # Make sure we are returned with the correct amount of libraries

@@ -85,6 +85,10 @@
             * `invalid_query`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
@@ -98,4 +102,4 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        catalogue: "1"
+        parameters: manage_libraries
