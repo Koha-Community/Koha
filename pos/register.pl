@@ -58,10 +58,7 @@ if ( !$registers->count ) {
     }
     $registerid = $registers->next->id if !$registerid;
 
-    $template->param(
-        registerid => $registerid,
-        registers  => $registers,
-    );
+    $template->param( registerid => $registerid );
 
     my $cash_register      = Koha::Cash::Registers->find( { id => $registerid } );
     my $accountlines       = $cash_register->outstanding_accountlines();
