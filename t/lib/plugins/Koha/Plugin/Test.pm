@@ -246,10 +246,12 @@ sub after_authority_action {
     my $payload   = $params->{payload};
     my $authority = $payload->{authority};
     my $id        = $payload->{authority_id} // 0;
-    my $record    = $payload->{record};
     my $type      = $authority ? $authority->authtypecode : q{};
 
-    Koha::Exception->throw("after_authority_action called with action: $action, id: $id, type: $type");
+    my $payload_keys = join ',', sort keys %{$payload};
+
+    Koha::Exception->throw(
+        "after_authority_action called with action: $action, id: $id, type: $type, payload: $payload_keys");
 }
 
 sub after_circ_action {

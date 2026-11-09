@@ -83,15 +83,15 @@ subtest 'after_authority_action hook' => sub {
     my $type = $builder->build( { source => 'AuthType', value => { auth_tag_to_report => '100' } } );
 
     warnings_exist { ($id) = C4::AuthoritiesMarc::AddAuthority( $record, undef, $type->{authtypecode} ); }
-    qr/after_authority_action called with action: create, id: \d+, type: $type->{authtypecode}/,
-        'AddAuthority calls the hook with action=create, id and type passed';
+    qr/after_authority_action called with action: create, id: \d+, type: $type->{authtypecode}, payload: authority,authority_id(?![,\w])/,
+        'AddAuthority calls the hook with action=create, id and type passed, and a payload matching after_biblio_action (no record)';
 
     warnings_exist { C4::AuthoritiesMarc::ModAuthority( $id, $record, $type->{authtypecode}, { skip_merge => 1 } ); }
-    qr/after_authority_action called with action: modify, id: $id, type: $type->{authtypecode}/,
+    qr/after_authority_action called with action: modify, id: $id, type: $type->{authtypecode}, payload: authority,authority_id(?![,\w])/,
         'ModAuthority calls the hook with action=modify, id and type passed';
 
     warnings_exist { C4::AuthoritiesMarc::DelAuthority( { authid => $id, skip_merge => 1 } ); }
-    qr/after_authority_action called with action: delete, id: $id, type: $type->{authtypecode}/,
+    qr/after_authority_action called with action: delete, id: $id, type: $type->{authtypecode}, payload: authority,authority_id(?![,\w])/,
         'DelAuthority calls the hook with action=delete, id and the type of the deleted authority passed';
 
     Koha::Plugins->RemovePlugins;

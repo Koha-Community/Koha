@@ -2024,9 +2024,6 @@ sub _after_authority_action_hooks {
     my $authority    = $args->{authority};
     my $action       = $args->{action} // q{};
 
-    # A record that cannot be built must not stop the hooks being called
-    my $record = $authority ? eval { $authority->record } : undef;
-
     Koha::Plugins->call(
         'after_authority_action',
         {
@@ -2034,7 +2031,6 @@ sub _after_authority_action_hooks {
             payload => {
                 authority    => $authority,
                 authority_id => $authority_id,
-                record       => $record,
             },
 
             # NOTE: Deprecated parameters, will be removed in a future release
