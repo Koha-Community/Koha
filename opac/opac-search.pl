@@ -641,7 +641,7 @@ for ( my $i = 0 ; $i < @servers ; $i++ ) {
                     suppress                => $suppress,
                     is_opac                 => 1,
                     weighted_fields         => $weight_search,
-                    weight_search_submitted => $cgi->param('weight_search_submitted')
+                    weight_search_submitted => scalar $cgi->param('weight_search_submitted'),
                 }
                 );
             my $quoted_results_hashref;
