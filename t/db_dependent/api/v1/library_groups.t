@@ -17,8 +17,10 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Mojo;
+use Mojo::JSON qw( encode_json false true );
+use Mojo::Parameters;
 use Test::Warn;
 use Test::NoWarnings;
 
@@ -85,6 +87,52 @@ subtest 'list() tests' => sub {
     my $response_count = scalar @{ $t->tx->res->json };
     my $expected_count = Koha::Library::Groups->count;
     is( $response_count, $expected_count, 'Results count is as expected' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'list() q filter tests' => sub {
+    my %flags = (
+        hide_patron_info      => 'ft_hide_patron_info',
+        limit_item_editing    => 'ft_limit_item_editing',
+        limit_report_access   => 'ft_reports',
+        is_opac_search_group  => 'ft_search_groups_opac',
+        is_staff_search_group => 'ft_search_groups_staff',
+        is_local_hold_group   => 'ft_local_hold_group',
+        is_local_float_group  => 'ft_local_float_group',
+    );
+
+    plan tests => 3 * 2 * scalar( keys %flags ) + 3;
+
+    $schema->storage->txn_begin;
+
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1 } } );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+
+    my $search = sub {
+        my ($query) = @_;
+        my $q = Mojo::Parameters->new( q => encode_json($query) )->to_string;
+        $t->get_ok("//$userid:$password@/api/v1/library_groups?$q")->status_is(200);
+        return [ map { $_->{title} } @{ $t->tx->res->json // [] } ];
+    };
+
+    # The attributes are filtered with q, including the booleans: the values read back from the
+    # API (true and false) can be used as they are
+    foreach my $api_name ( sort keys %flags ) {
+        my $column = $flags{$api_name};
+
+        Koha::Library::Groups->search->delete;
+        Koha::Library::Group->new( { title => 'on',  $column => 1 } )->store;
+        Koha::Library::Group->new( { title => 'off', $column => 0 } )->store;
+
+        is_deeply( $search->( { $api_name => true } ),  ['on'],  "q $api_name true lists the 'on' group" );
+        is_deeply( $search->( { $api_name => false } ), ['off'], "q $api_name false lists the 'off' group" );
+    }
+
+    $t->get_ok("//$userid:$password@/api/v1/library_groups?_per_page=1")->status_is(200);
+    is( scalar @{ $t->tx->res->json }, 1, '_per_page is honoured' );
 
     $schema->storage->txn_rollback;
 };
