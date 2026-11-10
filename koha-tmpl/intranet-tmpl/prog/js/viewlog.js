@@ -594,16 +594,16 @@ function buildApiFilters(params) {
 
     // Flatpickr always submits dates in YYYY-MM-DD format (dateFormat: "Y-m-d")
     if (params.datefrom && params.dateto) {
-        filters.timestamp = {
+        filters["me.timestamp"] = {
             ">=": params.datefrom + "T00:00:00Z",
             "<=": params.dateto + "T23:59:59Z",
         };
     } else if (params.datefrom) {
-        filters.timestamp = {
+        filters["me.timestamp"] = {
             ">=": params.datefrom + "T00:00:00Z",
         };
     } else if (params.dateto) {
-        filters.timestamp = {
+        filters["me.timestamp"] = {
             "<=": params.dateto + "T23:59:59Z",
         };
     }
