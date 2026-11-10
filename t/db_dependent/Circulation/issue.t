@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 71;
+use Test::More tests => 73;
 use DateTime::Duration;
 
 use t::lib::Mocks;
@@ -581,11 +581,17 @@ ok(
 # Change the returning item to an item type without a rule
 Koha::Items->find($itemnumber)->itype($itemtype2)->store;
 Koha::Items->find($itemnumber)->notforloan(1)->store;
-AddReturn( 'barcode_3', $branchcode_1 );
+my ( undef, undef, undef, undef, $nfl_checkin ) = AddReturn( 'barcode_3', $branchcode_1 );
 $item = Koha::Items->find($itemnumber);
 ok(
     $item->notforloan eq 0,
     q{UpdateNotForLoanStatusOnCheckin _ALL_ rules are applied if there are no specific item type rule matching the returned item}
+);
+my ($nfl_message) = grep { $_->message =~ /^not_for_loan_status/ } @{ $nfl_checkin->object_messages };
+is_deeply(
+    [ $nfl_message->message,         $nfl_message->payload ],
+    [ 'not_for_loan_status_updated', { from => 1, to => 0 } ],
+    'The checkin reports the not for loan status change'
 );
 
 t::lib::Mocks::mock_preference(
@@ -594,11 +600,17 @@ t::lib::Mocks::mock_preference(
 }
 );
 $item->notforloan(1)->store;
-AddReturn( 'barcode_3', $branchcode_1 );
+( undef, undef, undef, undef, $nfl_checkin ) = AddReturn( 'barcode_3', $branchcode_1 );
 $item->discard_changes;
 is(
     $item->notforloan, 1,
     q{UpdateNotForLoanStatusOnCheckin does not update notforloan value from 1 for _ALL_ with setting "1: ONLYMESSAGE"}
+);
+($nfl_message) = grep { $_->message =~ /^not_for_loan_status/ } @{ $nfl_checkin->object_messages };
+is_deeply(
+    [ $nfl_message->message,        $nfl_message->payload ],
+    [ 'not_for_loan_status_notice', { status => 1 } ],
+    'ONLYMESSAGE is reported as a notice, without the keyword'
 );
 
 t::lib::Mocks::mock_preference(

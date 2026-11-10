@@ -164,7 +164,7 @@ subtest 'to_api() with confirmations generates token' => sub {
     plan tests => 2;
 
     my $result = Koha::Item::Availability::Checkin::Result->new();
-    $result->add_confirmation( NotIssued => 'ABC123' );
+    $result->add_confirmation( not_issued => 'ABC123' );
 
     # Need context for token generation
     my $mock_item = Test::MockObject->new();
@@ -186,7 +186,7 @@ subtest 'as_token() / check_token() round-trip' => sub {
     plan tests => 3;
 
     my $result = Koha::Item::Availability::Checkin::Result->new();
-    $result->add_confirmation( NotIssued => 'ABC123' );
+    $result->add_confirmation( not_issued => 'ABC123' );
 
     my $mock_item = Test::MockObject->new();
     $mock_item->mock( 'id', sub { 99 } );
@@ -214,13 +214,13 @@ subtest 'check_token() rejects mismatched context and expired tokens' => sub {
     $mock_user->mock( 'id', sub { 5 } );
 
     my $result = Koha::Item::Availability::Checkin::Result->new();
-    $result->add_confirmation( NotIssued => 'ABC123' );
+    $result->add_confirmation( not_issued => 'ABC123' );
     $result->set_context( item => $mock_item );
     $result->set_context( user => $mock_user );
     my $token = $result->as_token;
 
     my $other_result = Koha::Item::Availability::Checkin::Result->new();
-    $other_result->add_confirmation( NotIssued => 'ABC123' );
+    $other_result->add_confirmation( not_issued => 'ABC123' );
     $other_result->set_context( item => $mock_other_item );
     $other_result->set_context( user => $mock_user );
     ok(

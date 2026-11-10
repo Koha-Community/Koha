@@ -2496,7 +2496,7 @@ sub AddReturn {
 
     # Handle BlockedWithdrawn blocker first - this was the earliest early
     # return in the original code, before any status updates ran
-    if ( !$availability->available && $availability->blockers->{BlockedWithdrawn} ) {
+    if ( !$availability->available && $availability->blockers->{blocked_withdrawn} ) {
         $messages->{'withdrawn'} = 1;
 
         # Record local use even when blocked, if preference is on
@@ -2508,7 +2508,7 @@ sub AddReturn {
             $checkin_record->local_use(1)->store;
         }
 
-        _attach_messages_to_checkin( $checkin_record, $messages );
+        _attach_messages_to_checkin( $checkin_record, $messages, { patron => $patron } );
 
         return ( 0, $messages, $issue, ( $patron ? $patron->unblessed : {} ), $checkin_record );
     }
@@ -2575,15 +2575,21 @@ sub AddReturn {
     if ( !$availability->available ) {
         my $blockers = $availability->blockers;
 
-        if ( $blockers->{Wrongbranch} ) {
-            $messages->{'Wrongbranch'} = $blockers->{Wrongbranch};
+        if ( $blockers->{wrong_branch} ) {
+
+            # Preserve AddReturn's legacy $messages->{Wrongbranch} structure
+            # (consumed by SIP) while the availability object uses snake_case.
+            $messages->{'Wrongbranch'} = {
+                Wrongbranch => $blockers->{wrong_branch}->{wrong_branch},
+                Rightbranch => $blockers->{wrong_branch}->{right_branch},
+            };
             $doreturn = 0;
             my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
             $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
-            _attach_messages_to_checkin( $checkin_record, $messages );
+            _attach_messages_to_checkin( $checkin_record, $messages, { patron => $patron } );
             return ( $doreturn, $messages, $issue, $patron_unblessed, $checkin_record );
         }
-        if ( $blockers->{BlockedLost} ) {
+        if ( $blockers->{blocked_lost} ) {
             $doreturn = 0;
         }
     }
@@ -2634,7 +2640,7 @@ sub AddReturn {
                 $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
 
                 my $error_messages = { WasReturned => 0, DataCorrupted => $error };
-                _attach_messages_to_checkin( $checkin_record, $error_messages );
+                _attach_messages_to_checkin( $checkin_record, $error_messages, { patron => $patron } );
 
                 return (
                     0, $error_messages, $issue,
@@ -3017,7 +3023,7 @@ sub AddReturn {
     }
 
     # Attach messages to the checkin object for API consumers
-    _attach_messages_to_checkin( $checkin_record, $messages );
+    _attach_messages_to_checkin( $checkin_record, $messages, { patron => $patron } );
 
     return ( $doreturn, $messages, $issue, ( $patron ? $patron->unblessed : {} ), $checkin_record );
 }
@@ -5338,16 +5344,21 @@ sub _CanBookBeAutoRenewed {
 
 =head2 _attach_messages_to_checkin
 
-    _attach_messages_to_checkin( $checkin, $messages );
+    _attach_messages_to_checkin( $checkin, $messages, { patron => $patron } );
 
 Translates the legacy C<$messages> hashref from C<AddReturn> into
 structured C<Koha::Object::Message> instances on the given
 C<Koha::Checkin> object using lower_snake_case coded values.
 
+The optional I<patron> parameter is the L<Koha::Patron> the item was
+checked out to. It needs to be captured by the caller before the checkout
+is marked as returned, as the returned checkout may point to the
+anonymous patron after that.
+
 =cut
 
 sub _attach_messages_to_checkin {
-    my ( $checkin, $messages ) = @_;
+    my ( $checkin, $messages, $params ) = @_;
 
     return unless $checkin && $messages && ref $messages eq 'HASH';
 
@@ -5460,6 +5471,21 @@ sub _attach_messages_to_checkin {
         $checkin->add_message( { message => 'processing_fee_refunded', type => 'info' } );
     }
 
+    # When the item was lost but its charges were not otherwise resolved,
+    # warn that the fees remain (mirrors the legacy returns.pl messages).
+    if ( $messages->{WasLost} && !C4::Context->preference('BlockReturnOfLostItems') ) {
+        unless ( $messages->{LostItemFeeRefunded}
+            || $messages->{LostItemFeeCharged}
+            || $messages->{LostItemFeeRestored}
+            || $messages->{LostItemPaymentNotRefunded} )
+        {
+            $checkin->add_message( { message => 'lost_item_fee_remains', type => 'warning' } );
+        }
+        unless ( $messages->{ProcessingFeeRefunded} ) {
+            $checkin->add_message( { message => 'processing_fee_remains', type => 'warning' } );
+        }
+    }
+
     # Item status messages
     if ( $messages->{NotIssued} ) {
         $checkin->add_message( { message => 'not_issued', type => 'info' } );
@@ -5493,13 +5519,27 @@ sub _attach_messages_to_checkin {
 
     # Item update messages
     if ( defined $messages->{NotForLoanStatusUpdated} ) {
-        $checkin->add_message(
-            {
-                message => 'not_for_loan_status_updated',
-                type    => 'info',
-                payload => $messages->{NotForLoanStatusUpdated},
-            }
-        );
+        my $update = $messages->{NotForLoanStatusUpdated};
+
+        # ONLYMESSAGE is an UpdateNotForLoanStatusOnCheckin keyword: the status
+        # is only displayed, not changed. Keep it out of the API contract.
+        if ( $update->{to} eq 'ONLYMESSAGE' ) {
+            $checkin->add_message(
+                {
+                    message => 'not_for_loan_status_notice',
+                    type    => 'info',
+                    payload => { status => $update->{from} },
+                }
+            );
+        } else {
+            $checkin->add_message(
+                {
+                    message => 'not_for_loan_status_updated',
+                    type    => 'info',
+                    payload => { from => $update->{from}, to => $update->{to} },
+                }
+            );
+        }
     }
     if ( defined $messages->{ItemLocationUpdated} ) {
         $checkin->add_message(
@@ -5556,9 +5596,67 @@ sub _attach_messages_to_checkin {
             {
                 message => 'in_bundle',
                 type    => 'info',
-                payload => { host_item_id => $messages->{InBundle}->itemnumber },
+                payload => {
+                    host_item_id     => $messages->{InBundle}->itemnumber,
+                    host_biblio_id   => $messages->{InBundle}->biblionumber,
+                    host_external_id => $messages->{InBundle}->barcode,
+                },
             }
         );
+    }
+
+    # Item type checkin message
+    if ( $checkin->item ) {
+        my $itemtype = Koha::ItemTypes->find( $checkin->item->effective_itemtype );
+        if ( $itemtype && $itemtype->checkinmsg ) {
+            $checkin->add_message(
+                {
+                    message => 'item_type_checkinmsg',
+                    type    => $itemtype->checkinmsgtype || 'message',
+                    payload => { text => $itemtype->checkinmsg },
+                }
+            );
+        }
+    }
+
+    # Patron fines notification (FineNotifyAtCheckin)
+    if ( C4::Context->preference('FineNotifyAtCheckin') && $checkin->checkout_id ) {
+        my $patron = $params->{patron};
+        if ($patron) {
+            my $balance = $patron->account->balance;
+            if ( $balance > 0 ) {
+                $checkin->add_message(
+                    {
+                        message => 'patron_has_fines',
+                        type    => 'warning',
+                        payload => {
+                            patron_id => $patron->borrowernumber,
+                            balance   => sprintf( "%.2f", $balance ),
+                        },
+                    }
+                );
+            }
+        }
+    }
+
+    # Patron waiting holds notification (WaitingNotifyAtCheckin)
+    if ( C4::Context->preference('WaitingNotifyAtCheckin') && $checkin->checkout_id ) {
+        my $patron = $params->{patron};
+        if ($patron) {
+            my $waiting = $patron->holds->search( { found => q{W}, branchcode => $checkin->library_id } )->count;
+            if ( $waiting > 0 ) {
+                $checkin->add_message(
+                    {
+                        message => 'patron_has_waiting_holds',
+                        type    => 'info',
+                        payload => {
+                            patron_id     => $patron->borrowernumber,
+                            waiting_count => $waiting,
+                        },
+                    }
+                );
+            }
+        }
     }
 
     return;

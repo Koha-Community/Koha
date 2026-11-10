@@ -33,8 +33,8 @@ Koha::Result::Availability - Base class for availability check results
 
     my $result = Koha::Result::Availability->new();
 
-    $result->add_blocker( BadBarcode => $barcode );
-    $result->add_confirmation( NotIssued => $barcode );
+    $result->add_blocker( bad_barcode => $barcode );
+    $result->add_confirmation( not_issued => $barcode );
     $result->add_warning( withdrawn => 1 );
 
     if ( $result->available ) {

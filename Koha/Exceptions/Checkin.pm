@@ -27,6 +27,23 @@ use Exception::Class (
         isa         => 'Koha::Exceptions::Checkin',
         description => "Checkin failed"
     },
+    'Koha::Exceptions::Checkin::HoldNotFound' => {
+        isa         => 'Koha::Exceptions::Checkin',
+        description => "The hold found during the checkin no longer exists"
+    },
+    'Koha::Exceptions::Checkin::ItemCheckedOut' => {
+        isa         => 'Koha::Exceptions::Checkin',
+        description => "The item has been checked out since it was checked in"
+    },
+    'Koha::Exceptions::Checkin::TransferFinished' => {
+        isa         => 'Koha::Exceptions::Checkin',
+        description => "The transfer has already arrived or has been cancelled"
+    },
+    'Koha::Exceptions::Checkin::TransferNotStarted' => {
+        isa         => 'Koha::Exceptions::Checkin',
+        description => "The transfer could not be started",
+        fields      => ['messages'],
+    },
 );
 
 1;

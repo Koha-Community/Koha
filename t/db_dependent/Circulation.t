@@ -19,7 +19,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 83;
+use Test::More tests => 85;
 use Test::Exception;
 use Test::MockModule;
 use Test::MockObject;
@@ -8207,12 +8207,17 @@ subtest 'Tests for Wrongbranch blocker (AllowReturnToBranch)' => sub {
 };
 subtest '_attach_messages_to_checkin() tests' => sub {
 
-    plan tests => 34;
+    plan tests => 40;
 
     $schema->storage->txn_begin;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $item    = $builder->build_sample_item( { library => $library->branchcode } );
+
+    # This test exercises the $messages -> object_messages translation only;
+    # ensure the itemtype has no checkinmsg so the independent
+    # item_type_checkinmsg message does not fire and skew the count.
+    Koha::ItemTypes->find( $item->effective_itemtype )->checkinmsg(undef)->store;
 
     my $checkin = Koha::Checkin->new(
         {
@@ -8229,7 +8234,9 @@ subtest '_attach_messages_to_checkin() tests' => sub {
     my $mock_auto_claim = Test::MockObject->new();
     $mock_auto_claim->mock( 'id', sub { 333 } );
     my $mock_host_item = Test::MockObject->new();
-    $mock_host_item->mock( 'itemnumber', sub { 444 } );
+    $mock_host_item->mock( 'itemnumber',   sub { 444 } );
+    $mock_host_item->mock( 'biblionumber', sub { 555 } );
+    $mock_host_item->mock( 'barcode',      sub { 'HOST_BC' } );
 
     # Exercise every message key _attach_messages_to_checkin recognises in
     # a single pass. Some combinations (e.g. Debarred + PrevDebarred +
@@ -8310,7 +8317,11 @@ subtest '_attach_messages_to_checkin() tests' => sub {
     ok( $by_code{indefinitely_debarred}, 'indefinitely_debarred attached' );
 
     ok( $by_code{not_for_loan_status_updated}, 'not_for_loan_status_updated attached' );
-    ok( $by_code{item_location_updated},       'item_location_updated attached' );
+    is_deeply(
+        $by_code{not_for_loan_status_updated}->payload, { from => 0, to => 1 },
+        'not_for_loan_status_updated payload'
+    );
+    ok( $by_code{item_location_updated}, 'item_location_updated attached' );
 
     ok( $by_code{return_claim},        'return_claim attached' );
     ok( $by_code{claim_auto_resolved}, 'claim_auto_resolved attached' );
@@ -8321,7 +8332,26 @@ subtest '_attach_messages_to_checkin() tests' => sub {
     ok( $by_code{recall_placed_at_holding_branch}, 'recall_placed_at_holding_branch attached' );
 
     ok( $by_code{in_bundle}, 'in_bundle attached' );
-    is( $by_code{in_bundle}->payload->{host_item_id}, 444, 'in_bundle payload host_item_id' );
+    is( $by_code{in_bundle}->payload->{host_item_id},     444,       'in_bundle payload host_item_id' );
+    is( $by_code{in_bundle}->payload->{host_biblio_id},   555,       'in_bundle payload host_biblio_id' );
+    is( $by_code{in_bundle}->payload->{host_external_id}, 'HOST_BC', 'in_bundle payload host_external_id' );
+
+    # UpdateNotForLoanStatusOnCheckin with ONLYMESSAGE: the keyword is not exposed
+    my $notice_checkin = Koha::Checkin->new(
+        {
+            item_id    => $item->itemnumber,
+            library_id => $library->branchcode,
+            interface  => 'commandline',
+        }
+    )->store;
+    C4::Circulation::_attach_messages_to_checkin(
+        $notice_checkin,
+        { NotForLoanStatusUpdated => { from => -1, to => 'ONLYMESSAGE' } }
+    );
+    my @notice = @{ $notice_checkin->object_messages };
+    is( scalar(@notice),     1,                            'One message attached for ONLYMESSAGE' );
+    is( $notice[0]->message, 'not_for_loan_status_notice', 'not_for_loan_status_notice attached' );
+    is_deeply( $notice[0]->payload, { status => -1 }, 'not_for_loan_status_notice payload has the status only' );
 
     $schema->storage->txn_rollback;
 };
@@ -9347,6 +9377,112 @@ subtest 'AddReturn populates checkin_id on accountlines' => sub {
 
     ok( $processing_found, q{Scenario 4: PROCESSING_FOUND credit was created} );
     is( $processing_found->checkin_id, $checkin->id, q{Scenario 4: PROCESSING_FOUND credit has checkin_id} );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'AddReturn checkin messages use the returning patron when anonymised' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $library   = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $anonymous = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron    = $builder->build_object(
+        { class => 'Koha::Patrons', value => { privacy => 2, branchcode => $library->branchcode } } );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
+    t::lib::Mocks::mock_preference( 'AnonymousPatron',        $anonymous->borrowernumber );
+    t::lib::Mocks::mock_preference( 'FineNotifyAtCheckin',    1 );
+    t::lib::Mocks::mock_preference( 'WaitingNotifyAtCheckin', 1 );
+
+    # The patron owes money and has a hold waiting at the library
+    $patron->account->add_debit( { amount => 5, interface => 'commandline', type => 'MANUAL' } );
+    $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                borrowernumber => $patron->borrowernumber,
+                branchcode     => $library->branchcode,
+                found          => 'W',
+            }
+        }
+    );
+
+    my $item = $builder->build_sample_item( { library => $library->branchcode } );
+    AddIssue( $patron, $item->barcode );
+
+    my ( undef, undef, undef, undef, $checkin ) = AddReturn( $item->barcode, $library->branchcode );
+
+    is(
+        $checkin->checkout->borrowernumber, $anonymous->borrowernumber,
+        'The returned checkout has been anonymised'
+    );
+
+    my %messages = map { $_->message => $_ } @{ $checkin->object_messages };
+
+    ok( $messages{patron_has_fines}, 'patron_has_fines message attached' );
+    is(
+        $messages{patron_has_fines} && $messages{patron_has_fines}->payload->{patron_id},
+        $patron->borrowernumber, 'patron_has_fines refers to the patron who returned the item'
+    );
+    is(
+        $messages{patron_has_waiting_holds} && $messages{patron_has_waiting_holds}->payload->{patron_id},
+        $patron->borrowernumber, 'patron_has_waiting_holds refers to the patron who returned the item'
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest q{AddReturn waiting holds notice uses the check-in library} => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $checkin_library = $builder->build_object( { class => q{Koha::Libraries} } );
+    my $staff_library   = $builder->build_object( { class => q{Koha::Libraries} } );
+    my $patron          = $builder->build_object( { class => q{Koha::Patrons} } );
+
+    t::lib::Mocks::mock_preference( q{WaitingNotifyAtCheckin}, 1 );
+
+    # The patron has a hold waiting at the check-in library
+    $builder->build_object(
+        {
+            class => q{Koha::Holds},
+            value => {
+                borrowernumber => $patron->borrowernumber,
+                branchcode     => $checkin_library->branchcode,
+                found          => q{W},
+            }
+        }
+    );
+
+    my $item = $builder->build_sample_item( { library => $checkin_library->branchcode } );
+
+    # The logged in library is not the check-in library
+    t::lib::Mocks::mock_userenv( { branchcode => $checkin_library->branchcode } );
+    AddIssue( $patron, $item->barcode );
+    t::lib::Mocks::mock_userenv( { branchcode => $staff_library->branchcode } );
+
+    my ( undef, undef, undef, undef, $checkin ) = AddReturn( $item->barcode, $checkin_library->branchcode );
+    my %messages = map { $_->message => $_ } @{ $checkin->object_messages };
+    ok(
+        $messages{patron_has_waiting_holds},
+        q{patron_has_waiting_holds counts the holds waiting at the check-in library}
+    );
+
+    # No logged in user (e.g. automatic check-in from a cron job)
+    t::lib::Mocks::mock_userenv( { branchcode => $checkin_library->branchcode } );
+    AddIssue( $patron, $item->barcode );
+    C4::Context->unset_userenv;
+
+    lives_ok { ( undef, undef, undef, undef, $checkin ) = AddReturn( $item->barcode, $checkin_library->branchcode ) }
+    q{AddReturn does not die without a logged in user};
+
+    %messages = map { $_->message => $_ } @{ $checkin->object_messages };
+    ok( $messages{patron_has_waiting_holds}, q{patron_has_waiting_holds is attached without a logged in user} );
 
     $schema->storage->txn_rollback;
 };
