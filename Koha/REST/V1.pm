@@ -217,6 +217,7 @@ sub startup {
     $self->plugin('Koha::REST::Plugin::Objects');
     $self->plugin('Koha::REST::Plugin::Exceptions');
     $self->plugin('Koha::REST::Plugin::Responses');
+    $self->plugin('Koha::REST::Plugin::Policy');
     $self->plugin('Koha::REST::Plugin::Auth::IdP');
     $self->plugin('Koha::REST::Plugin::Auth::PublicRoutes');
     $self->plugin( 'OAuth2' => $oauth_configuration );
