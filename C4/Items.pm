@@ -842,7 +842,10 @@ sub Item2Marc {
     my $itemmarc  = C4::Biblio::TransformKohaToMarc( $mungeditem, { framework => $framework } );
     my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField('items.itemnumber');
 
-    my $unlinked_item_subfields = _parse_unlinked_item_subfields_from_xml( $mungeditem->{'items.more_subfields_xml'} );
+    my $unlinked_item_subfields = _parse_unlinked_item_subfields_from_xml(
+        $mungeditem->{'items.more_subfields_xml'},
+        $mungeditem->{'items.itemnumber'}
+    );
     if ( defined $unlinked_item_subfields and $#$unlinked_item_subfields > -1 ) {
         foreach my $field ( $itemmarc->field($itemtag) ) {
             $field->add_subfields(@$unlinked_item_subfields);
@@ -1001,15 +1004,26 @@ sub _get_unlinked_subfields_xml {
 
 =head2 _parse_unlinked_item_subfields_from_xml
 
-  my $unlinked_item_subfields = _parse_unlinked_item_subfields_from_xml($whole_item->{'more_subfields_xml'}):
+  my $unlinked_item_subfields = _parse_unlinked_item_subfields_from_xml($whole_item->{'more_subfields_xml'}, $whole_item->{'itemnumber'});
+
+Returns undef, and logs a warning, if the XML cannot be decoded.
 
 =cut
 
 sub _parse_unlinked_item_subfields_from_xml {
-    my $xml = shift;
+    my ( $xml, $itemnumber ) = @_;
     require C4::Charset;
     return unless defined $xml and $xml ne "";
-    my $marc               = MARC::Record->new_from_xml( C4::Charset::StripNonXmlChars($xml), 'UTF-8' );
+    my $marc = eval { MARC::Record->new_from_xml( C4::Charset::StripNonXmlChars($xml), 'UTF-8' ) };
+    if ( my $error = $@ ) {
+        chomp $error;
+        Koha::Logger->get->warn(
+            sprintf(
+                "Ignoring undecodable more_subfields_xml for item (itemnumber=%s): %s", $itemnumber // 'N/A', $error
+            )
+        );
+        return;
+    }
     my $unlinked_subfields = [];
     my @fields             = $marc->fields();
     if ( $#fields > -1 ) {
@@ -1042,6 +1056,14 @@ sub GetAnalyticsCount {
     my ( $err, $res, $result ) = $searcher->simple_search_compat( $query, 0, 10 );
     return ($result);
 }
+
+=head2 _SearchItems_build_where_fragment
+
+  my $where_fragment = _SearchItems_build_where_fragment($filter);
+
+Builds the SQL WHERE fragment for a SearchItems filter, recursing into nested filters.
+
+=cut
 
 sub _SearchItems_build_where_fragment {
     my ($filter) = @_;

@@ -34,6 +34,7 @@ use Encode;
 use Template;
 use Text::CSV::Encoded;                          #marc2csv
 use Koha::Items;
+use Koha::Logger;
 use Koha::SimpleMARC qw( read_field );
 use Koha::XSLT::Base;
 use Koha::CsvProfiles;
@@ -363,13 +364,29 @@ sub _transformWithStylesheet {
 
 =head2 marc2endnote
 
-Missing POD for marc2endnote.
+  my ( $error, $endnote ) = marc2endnote($marc);
+
+Converts a record (a MARC::Record object or an ISO2709 string) to EndNote format.
+Returns an error message and no output if the record cannot be decoded.
 
 =cut
 
 sub marc2endnote {
     my ($marc) = @_;
-    my $marc_rec_obj = MARC::Record->new_from_usmarc($marc);
+    my $marc_rec_obj;
+    if ( ref $marc && $marc->isa('MARC::Record') ) {    # it's already a MARC::Record object
+        $marc_rec_obj = $marc;
+    } else {
+        eval { $marc_rec_obj = MARC::Record->new_from_usmarc($marc) };    # handle exceptions
+        if ( my $err = $@ ) {
+            chomp $err;
+            Koha::Logger->get->warn("EndNote export failed, MARC record could not be decoded: $err");
+            return (
+                'The record could not be exported to EndNote format because its MARC data could not be decoded.',
+                undef
+            );
+        }
+    }
     my ( $abstract, $f260a, $f710a );
     my $f260 = $marc_rec_obj->field('260');
     if ($f260) {
@@ -402,7 +419,7 @@ sub marc2endnote {
     $template .= "Y1 - Year\n"      if $marc_rec_obj->publication_date;
     $template .= "AB - Abstract\n"  if $abstract;
     my ( $text, $errmsg ) = $style->format( $template, $fields );
-    return ($text);
+    return ( undef, $text );
 
 }
 

@@ -40,7 +40,7 @@ if ( $op eq "export" ) {
         }
 
         if ( $format =~ /endnote/ ) {
-            $marc   = marc2endnote($marc);
+            ( $error, $marc ) = marc2endnote($marc);
             $format = 'endnote';
         } elsif ( $format =~ /marcxml/ ) {
             $marc   = marc2marcxml($marc);
@@ -69,6 +69,11 @@ if ( $op eq "export" ) {
             C4::Charset::SetUTF8Flag( $marc, 1 );
             ( $error, $marc ) = marc2marc( $marc, 'marcstd', C4::Context->preference('marcflavour') );
             $format = "marcstd";
+        }
+        if ($error) {
+            print $query->header( -type => 'text/plain', -charset => 'UTF-8' );
+            print $error;
+            exit;
         }
         if ( $format ne 'marc8' ) {
             binmode STDOUT, ':encoding(UTF-8)';

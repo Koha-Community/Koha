@@ -3,7 +3,8 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 18;
+use Test::More tests => 19;
+use Test::MockModule;
 use MARC::Record;
 
 use t::lib::Mocks;
@@ -11,7 +12,10 @@ use C4::Context;
 use Koha::Database;
 
 BEGIN {
-    use_ok( 'C4::Record', qw( marc2marc marc2marcxml marcxml2marc marc2dcxml marc2modsxml marc2bibtex marc2cites ) );
+    use_ok(
+        'C4::Record',
+        qw( marc2marc marc2marcxml marcxml2marc marc2dcxml marc2modsxml marc2bibtex marc2cites marc2endnote )
+    );
 }
 
 my $schema = Koha::Database->new->schema;
@@ -167,4 +171,24 @@ subtest 'prevent warnings in marc2cites' => sub {
     $marc_record->append_fields( MARC::Field->new( '100', ' ', ' ', a => 'Aristotle.' ) );
     marc2cites($marc_record);
     pass("Test should not have generated a warning");
+};
+
+subtest 'marc2endnote and undecodable MARC (Bug 43024)' => sub {
+    plan tests => 4;
+
+    my $record = MARC::Record->new;
+    $record->append_fields( MARC::Field->new( '245', '', '', a => 'Harry potter' ) );
+
+    my ( $error, $text ) = marc2endnote($record);
+    ok( !$error, 'MARC::Record object is exported without error' );
+    like( $text, qr/T1 - Harry potter/, 'EndNote output contains the title' );
+
+    ( $error, $text ) = marc2endnote( $record->as_usmarc );
+    ok( !$error && $text =~ /T1 - Harry potter/, 'USMARC string is exported without error' );
+
+    my $mock = Test::MockModule->new('MARC::Record');
+    $mock->mock( 'new_from_usmarc', sub { die "invalid leader\n" } );
+    my @result;
+    eval { @result = marc2endnote('not marc') };
+    ok( !$@ && $result[0] && !defined $result[1], 'Undecodable MARC returns an error instead of dying' );
 };

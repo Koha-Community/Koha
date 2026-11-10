@@ -37,7 +37,7 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use Test::NoWarnings;
-use Test::More tests => 16;
+use Test::More tests => 17;
 
 use Test::Warn;
 
@@ -989,6 +989,24 @@ subtest 'Split subfields in Item2Marc (Bug 21774)' => sub {
     is( @subs,    2,   'Expect two subfields' );
     is( $subs[0], 'A', 'First subfield matches' );
     is( $subs[1], 'B', 'Second subfield matches' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Undecodable more_subfields_xml (Bug 43024)' => sub {
+    plan tests => 3;
+    $schema->storage->txn_begin;
+
+    my $builder = t::lib::TestBuilder->new;
+    my $item    = $builder->build_sample_item( { more_subfields_xml => '<record><leader>truncated' } );
+
+    my $unlinked;
+    eval { $unlinked = C4::Items::_parse_unlinked_item_subfields_from_xml( $item->more_subfields_xml ) };
+    is( $@, q{}, '_parse_unlinked_item_subfields_from_xml does not die on undecodable XML' );
+    ok( !defined $unlinked, 'No unlinked subfields are returned for undecodable XML' );
+
+    eval { C4::Items::Item2Marc( $item->unblessed, $item->biblionumber ) };
+    is( $@, q{}, 'Item2Marc does not die on undecodable more_subfields_xml' );
 
     $schema->storage->txn_rollback;
 };

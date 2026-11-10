@@ -116,7 +116,7 @@ my $record_processor = Koha::RecordProcessor->new(
 $record_processor->process($marc);
 
 if ( $format =~ /endnote/ ) {
-    $marc   = marc2endnote($marc);
+    ( $error, $marc ) = marc2endnote($marc);
     $format = 'endnote';
 } elsif ( $format =~ /marcxml/ ) {
     $marc   = marc2marcxml($marc);
