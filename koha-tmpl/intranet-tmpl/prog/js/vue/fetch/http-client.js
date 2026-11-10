@@ -32,7 +32,8 @@ class HttpClient {
      * @param {boolean} [config.suppressDefaultErrorDialog] - Skip the
      *     page-level error message; for callers that present errors
      *     themselves. The error is still thrown, with the response status
-     *     and Koha error_code attached.
+     *     and Koha error_code attached, and the parsed
+     *     response body as `body`.
      * @param {AbortSignal} [config.signal] - Cancels the underlying fetch.
      */
     async _fetchJSON(
@@ -55,9 +56,11 @@ class HttpClient {
                     return response.text().then(text => {
                         let message = response.statusText;
                         let code;
+                        let body;
                         if (text) {
                             try {
                                 const json = JSON.parse(text);
+                                body = json;
                                 message =
                                     json.error ||
                                     json.errors
@@ -78,6 +81,7 @@ class HttpClient {
                         const err = new Error(message);
                         err.status = response.status;
                         err.code = code;
+                        err.body = body;
                         throw err;
                     });
                 }

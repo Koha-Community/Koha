@@ -26,6 +26,21 @@ export class ItemAPIClient {
 
     get bundled_items() {
         return {
+            getAll: (item_id, params = {}) =>
+                this.httpClient.getAll({
+                    endpoint: "items/" + item_id + "/bundled_items",
+                    headers: { "x-koha-embed": "biblio" },
+                    ...params,
+                }),
+            remove: (item_id, bundled_item_id, params = {}) =>
+                this.httpClient.delete({
+                    endpoint:
+                        "items/" +
+                        item_id +
+                        "/bundled_items/" +
+                        bundled_item_id,
+                    ...params,
+                }),
             add: (item_id, body, params = {}) =>
                 this.httpClient.post({
                     endpoint: "items/" + item_id + "/bundled_items",

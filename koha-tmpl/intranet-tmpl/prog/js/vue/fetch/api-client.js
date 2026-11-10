@@ -6,6 +6,7 @@ import ERMAPIClient from "@fetch/erm-api-client";
 import ILLAPIClient from "@fetch/ill-api-client";
 import BiblioAPIClient from "@fetch/biblio-api-client";
 import CheckoutAPIClient from "@fetch/checkout-api-client";
+import CheckinAPIClient from "@fetch/checkin-api-client";
 import PatronAPIClient from "@fetch/patron-api-client";
 import LibraryAPIClient from "@fetch/library-api-client";
 import AcquisitionAPIClient from "@fetch/acquisition-api-client";
@@ -29,6 +30,7 @@ export const APIClient = {
     ill: new ILLAPIClient(HttpClient),
     biblio: new BiblioAPIClient(HttpClient),
     checkout: new CheckoutAPIClient(HttpClient),
+    checkin: new CheckinAPIClient(HttpClient),
     patron: new PatronAPIClient(HttpClient),
     library: new LibraryAPIClient(HttpClient),
     acquisition: new AcquisitionAPIClient(HttpClient),

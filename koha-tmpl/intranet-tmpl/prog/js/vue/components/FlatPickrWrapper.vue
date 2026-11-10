@@ -39,6 +39,11 @@ export default {
             type: Boolean,
             default: true,
         },
+        // Options added to (or overriding) the Koha flatpickr defaults
+        config: {
+            type: Object,
+            default: () => ({}),
+        },
     },
     emits: ["update:modelValue"],
     setup(props, { emit }) {
@@ -60,7 +65,11 @@ export default {
             .filter(Boolean)
             .join(" ");
         return {
-            fp_config: { ...flatpickr_defaults, altInputClass },
+            fp_config: {
+                ...flatpickr_defaults,
+                altInputClass,
+                ...props.config,
+            },
             model,
         };
     },

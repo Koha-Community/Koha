@@ -12,6 +12,14 @@ export class ClaimAPIClient {
                     endpoint: "/return_claims",
                     body: claim,
                 }),
+            resolve: (claim_id, { resolution, new_lost_status } = {}) =>
+                this.httpClient.put({
+                    endpoint: `/return_claims/${claim_id}/resolve`,
+                    body: {
+                        resolution,
+                        ...(new_lost_status ? { new_lost_status } : {}),
+                    },
+                }),
         };
     }
 }
