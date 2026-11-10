@@ -243,7 +243,7 @@ subtest 'TO_JSON tests' => sub {
 
 subtest "to_api() tests" => sub {
 
-    plan tests => 32;
+    plan tests => 36;
 
     $schema->storage->txn_begin;
 
@@ -343,6 +343,15 @@ subtest "to_api() tests" => sub {
         $_strings,
         '_strings correctly added to nested embed'
     );
+
+    # The strings flag on one embed must not leak into sibling embeds,
+    # regardless of hash iteration order
+    $hold_api = $hold->to_api( { embed => { 'item' => { strings => 1 }, 'pickup_library' => {} } } );
+    ok( exists $hold_api->{item}->{_strings},            '_strings added to the embed that requested it' );
+    ok( !exists $hold_api->{pickup_library}->{_strings}, '_strings not leaked into sibling embed' );
+    $hold_api = $hold->to_api( { embed => { 'item' => {}, 'pickup_library' => { strings => 1 } } } );
+    ok( exists $hold_api->{pickup_library}->{_strings}, '_strings added to the embed that requested it' );
+    ok( !exists $hold_api->{item}->{_strings},          '_strings not leaked into sibling embed' );
 
     # biblio with no items
     my $new_biblio     = $builder->build_sample_biblio;
