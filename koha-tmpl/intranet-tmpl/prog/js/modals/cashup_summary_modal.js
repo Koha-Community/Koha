@@ -164,85 +164,97 @@ $(document).ready(function () {
                     "<tr class='reconciliation-separator'><td colspan='2'><hr></td></tr>"
                 );
 
-                // cashCollected = expected cash from session transactions (excludes
-                // CASHUP_SURPLUS/DEFICIT). actualCash = cash actually recorded at
-                // cashup, derived below from the CASH-specific discrepancy (if
-                // any) rather than the cashup's all-payment-types total. When
-                // they differ we display both so the surplus/deficit row below is
-                // the visible difference.
-                var cashCollected = null;
+                // 2. Payment types, in two groups that together make up the
+                // total: those held in the register and reconciled at cashup
+                // (CashupPaymentTypes) and everything else that was collected.
+                // Each group is a heading row carrying the group total, with
+                // the per-type rows indented beneath it.
+                var cashedUpRows = [];
+                var otherRows = [];
                 for (type of data.summary.total_grouped) {
-                    if (type.payment_type === "CASH") {
-                        cashCollected = type.total;
-                        break;
+                    var typeLabel = type.label || type.payment_type;
+                    if (type.cashed_up) {
+                        var expected = type.total;
+                        var actual = hasReconciliation
+                            ? actualForPaymentType(expected, type.payment_type)
+                            : expected;
+                        var hasEntry = grouped.some(function (g) {
+                            return g.payment_type === type.payment_type;
+                        });
+                        if (expected === 0 && actual === 0 && !hasEntry) {
+                            continue;
+                        }
+                        cashedUpRows.push({
+                            label: typeLabel,
+                            amount: actual,
+                            expected:
+                                hasReconciliation && !inProgress
+                                    ? expected
+                                    : null,
+                        });
+                    } else if (type.total !== 0) {
+                        otherRows.push({
+                            label: typeLabel,
+                            amount: type.total,
+                            expected: null,
+                        });
                     }
                 }
-                if (cashCollected !== null) {
-                    var actualCash = actualForPaymentType(
-                        cashCollected,
-                        "CASH"
+
+                function appendGroup(rows, headings, showDetail) {
+                    var groupTotal = rows.reduce(function (sum, r) {
+                        return sum + r.amount;
+                    }, 0);
+                    var heading = groupTotal >= 0 ? headings[0] : headings[1];
+                    var detail = showDetail || rows.length > 1;
+                    if (rows.length === 1 && !detail) {
+                        heading = __x("{heading} ({payment_type})", {
+                            heading: heading,
+                            payment_type: escape_str(rows[0].label),
+                        });
+                    }
+                    tfoot.append(
+                        "<tr class='payment-group'><td><strong>" +
+                            heading +
+                            "</strong></td><td><strong>" +
+                            groupTotal.format_price() +
+                            "</strong></td></tr>"
                     );
-                    if (hasReconciliation && !inProgress) {
-                        var expectedLabel =
-                            cashCollected >= 0
-                                ? __("Expected cash total")
-                                : __("Expected cash to add to register");
-                        tfoot.append(
-                            "<tr><td><strong>" +
-                                expectedLabel +
-                                "</strong></td><td><strong>" +
-                                cashCollected.format_price() +
-                                "</strong></td></tr>"
-                        );
-
-                        var actualLabel =
-                            actualCash >= 0
-                                ? __("Cash removed from register")
-                                : __("Cash added to register");
-                        tfoot.append(
-                            "<tr><td><strong>" +
-                                actualLabel +
-                                "</strong></td><td><strong>" +
-                                actualCash.format_price() +
-                                "</strong></td></tr>"
-                        );
-                    } else {
-                        var cashLabel =
-                            cashCollected >= 0
-                                ? __("Cash removed from register")
-                                : __("Cash added to register");
-
-                        tfoot.append(
-                            "<tr><td><strong>" +
-                                cashLabel +
-                                "</strong></td><td><strong>" +
-                                cashCollected.format_price() +
-                                "</strong></td></tr>"
-                        );
+                    if (!detail) {
+                        return;
                     }
+                    rows.forEach(function (r) {
+                        var rowLabel = escape_str(r.label);
+                        if (r.expected !== null && r.expected !== r.amount) {
+                            rowLabel = __x(
+                                "{payment_type}, expected {amount}",
+                                {
+                                    payment_type: rowLabel,
+                                    amount: r.expected.format_price(),
+                                }
+                            );
+                        }
+                        tfoot.append(
+                            "<tr class='payment-group-row'><td><span class='ms-4 fw-normal'>" +
+                                rowLabel +
+                                "</span></td><td><span class='fw-normal'>" +
+                                r.amount.format_price() +
+                                "</span></td></tr>"
+                        );
+                    });
                 }
 
-                // 3. Other payment types collected (excluding CASH)
-                for (type of data.summary.total_grouped) {
-                    if (type.total !== 0 && type.payment_type !== "CASH") {
-                        var label = type.label || type.payment_type;
-                        var paymentTypeLabel =
-                            type.total >= 0
-                                ? __x("{payment_type} collected", {
-                                      payment_type: escape_str(label),
-                                  })
-                                : __x("{payment_type} to add", {
-                                      payment_type: escape_str(label),
-                                  });
-
-                        tfoot.append(
-                            "<tr><td><strong>" +
-                                paymentTypeLabel +
-                                "</strong></td><td><strong>" +
-                                type.total.format_price() +
-                                "</strong></td></tr>"
-                        );
-                    }
+                appendGroup(
+                    cashedUpRows,
+                    [__("Held in register"), __("Paid out of register")],
+                    hasReconciliation && !inProgress
+                );
+                if (otherRows.length > 0) {
+                    appendGroup(
+                        otherRows,
+                        [__("Taken elsewhere"), __("Paid out elsewhere")],
+                        false
+                    );
                 }
 
                 // 4. Per-payment-type cashup surplus / deficit rows.
@@ -254,7 +266,10 @@ $(document).ready(function () {
                     grouped.forEach(function (entry) {
                         var entrySurplus = entry.surplus_total;
                         var entryDeficit = entry.deficit_total;
-                        var pt = entry.payment_type || "";
+                        var pt =
+                            cashupPaymentTypeLabels.get(entry.payment_type) ||
+                            entry.payment_type ||
+                            "";
                         var label;
                         var amountText;
                         var rowClass;

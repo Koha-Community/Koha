@@ -408,9 +408,9 @@
         $(document).ready(function () {
             [%# js used here as we don't have access to these template variables where we need them #%]
             $("#bankable").text('[% bankable | $Price %]');
-            $("#income").text('[% ctotal | $Price %] (bankable: [% cctotal | $Price %])')
+            $("#income").text('[% ctotal | $Price %] (' + _("bankable") + ': [% cctotal | $Price %])')
                 .attr('title', _("Bankable payment types: ") + $("#income").data('bankable-types'));
-            $("#outgoing").text('[% dtotal | $Price %] (bankable: [% cdtotal | $Price %])')
+            $("#outgoing").text('[% dtotal | $Price %] (' + _("bankable") + ': [% cdtotal | $Price %])')
                 .attr('title', _("Bankable payment types: ") + $("#outgoing").data('bankable-types'));
         });
         const cashupModalData = {

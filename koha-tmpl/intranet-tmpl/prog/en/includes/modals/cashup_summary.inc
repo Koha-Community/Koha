@@ -1,4 +1,6 @@
 [% USE raw %]
+[% USE To %]
+[% USE AuthorisedValues %]
 <!-- Cashup summary modal -->
 <div class="modal printable" id="cashupSummaryModal" tabindex="-1" role="dialog" aria-labelledby="cashupSummaryLabel">
     <div class="modal-dialog modal-lg">
@@ -61,3 +63,7 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /#cashupSummaryModal -->
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+    // PAYMENT_TYPE authorised value descriptions by code, used by the summary modal
+    const cashupPaymentTypeLabels = new Map([% To.json(AuthorisedValues.Get('PAYMENT_TYPE')) | $raw %].map( av => [av.authorised_value, av.lib]));
+</script>

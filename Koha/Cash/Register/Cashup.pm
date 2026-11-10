@@ -56,6 +56,11 @@ sub search {
 
 Return a hashref containing a summary of transactions that make up this cashup.
 
+C<total_grouped> splits C<total> by payment type, so its rows always add up to
+it. Payment types listed in the CashupPaymentTypes preference come first, in
+preference order, with C<cashed_up> set to 1. Any other payment type with
+takings follows with C<cashed_up> set to 0.
+
 =cut
 
 sub summary {
@@ -196,11 +201,22 @@ sub summary {
     my $av_labels = { map { $_->authorised_value => $_->lib }
             Koha::AuthorisedValues->search( { category => 'PAYMENT_TYPE' } )->as_list };
 
-    # Scoped to CashupPaymentTypes (not every PAYMENT_TYPE authorised value)
-    # so this matches the set the register's expected/actual breakdown and
-    # the confirm-cashup modal are built from.
+    # total_grouped is a complete split of `total` by payment type, so the
+    # per-type rows always add up to it. Types listed in CashupPaymentTypes
+    # come first, in preference order, and are flagged cashed_up: they are the
+    # ones reconciled when completing the cashup. Any other payment type that
+    # had takings follows (e.g. card payments that never go through the
+    # register), so it is still visible rather than silently missing from the
+    # summary while remaining part of `total`.
+    my $configured    = $self->register->cashup_payment_types;
+    my %is_configured = map { $_ => 1 } @{$configured};
+    my @other_codes =
+        sort { lc( $av_labels->{$a} // $a ) cmp lc( $av_labels->{$b} // $b ) }
+        grep { $_ ne '' && !$is_configured{$_} && ( $income_by_type->{$_} || $payout_by_type->{$_} ) }
+        keys %{ { %{$income_by_type}, %{$payout_by_type} } };
+
     my @total_grouped;
-    for my $code ( @{ $self->register->cashup_payment_types } ) {
+    for my $code ( @{$configured}, @other_codes ) {
         my $typed_total = ( $income_by_type->{$code} // 0 ) + ( $payout_by_type->{$code} // 0 );
 
         # Flip sign to match the convention used for `total` above:
@@ -211,6 +227,7 @@ sub summary {
             payment_type => $code,
             label        => $av_labels->{$code} // $code,
             total        => $typed_total * -1,
+            cashed_up    => $is_configured{$code} ? 1 : 0,
             };
     }
 

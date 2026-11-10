@@ -820,7 +820,7 @@ subtest 'reconciliations_grouped' => sub {
 };
 
 subtest 'total_grouped' => sub {
-    plan tests => 6;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
@@ -835,7 +835,8 @@ subtest 'total_grouped' => sub {
     my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
 
     # CASH 10.00, CHEQUE 5.00, and SIP00 3.00 — SIP00 isn't in
-    # CashupPaymentTypes and should be excluded from total_grouped.
+    # CashupPaymentTypes so it is not cashed up, but it is still part of the
+    # total and must therefore still appear in total_grouped.
     for my $line ( [ 'CASH', -10.00 ], [ 'CHEQUE', -5.00 ], [ 'SIP00', -3.00 ] ) {
         $builder->build_object(
             {
@@ -866,13 +867,38 @@ subtest 'total_grouped' => sub {
 
     my $summary = $cashup->summary;
     ok( $summary->{total_grouped}, 'total_grouped present in summary' );
-    is( scalar @{ $summary->{total_grouped} }, 2, 'Only configured payment types are included (SIP00 excluded)' );
+    is( scalar @{ $summary->{total_grouped} }, 3, 'Types outside CashupPaymentTypes with takings are still included' );
+    is_deeply(
+        [ map { $_->{payment_type} } @{ $summary->{total_grouped} } ],
+        [ 'CASH', 'CHEQUE', 'SIP00' ],
+        'Configured types come first, in preference order, then the others'
+    );
 
     my %by_pt = map { $_->{payment_type} => $_ } @{ $summary->{total_grouped} };
     ok( $by_pt{CASH}, 'Grouped by authorised_value code, not label' );
     is( $by_pt{CASH}->{label}, 'Till cash', 'Label reflects the (relabelled) authorised value description' );
     is( sprintf( '%.2f', $by_pt{CASH}->{total} ),   '10.00', 'CASH total is correct' );
     is( sprintf( '%.2f', $by_pt{CHEQUE}->{total} ), '5.00',  'CHEQUE total is correct' );
+    is( sprintf( '%.2f', $by_pt{SIP00}->{total} ),  '3.00',  'SIP00 total is correct' );
+    is_deeply(
+        [ map { $by_pt{$_}->{cashed_up} } qw(CASH CHEQUE SIP00) ],
+        [ 1, 1, 0 ],
+        'Only types in CashupPaymentTypes are flagged cashed_up'
+    );
+
+    my $grouped_sum = 0;
+    $grouped_sum += $_->{total} for @{ $summary->{total_grouped} };
+    is( sprintf( '%.2f', $grouped_sum ), sprintf( '%.2f', $summary->{total} ), 'total_grouped rows add up to total' );
+
+    # Preference order drives the order of configured types, and a type that
+    # is not configured is flagged as not cashed up even when it is CASH.
+    t::lib::Mocks::mock_preference( 'CashupPaymentTypes', 'CHEQUE' );
+    $summary = $cashup->summary;
+    is_deeply(
+        [ map { $_->{payment_type} . ':' . $_->{cashed_up} } @{ $summary->{total_grouped} } ],
+        [ 'CHEQUE:1', 'SIP00:0', 'CASH:0' ],    # 'Cash via SIP2' sorts before the relabelled 'Till cash'
+        'Unconfigured types follow configured ones, sorted by label, and are not cashed up'
+    );
 
     $schema->storage->txn_rollback;
 };
