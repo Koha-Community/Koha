@@ -54,17 +54,19 @@
         <div class="btn-group">
             <a class="btn btn-default" href="add-modify.pl"><i class="fa fa-plus"></i> New patron list</a>
         </div>
-        <div class="btn-group">
-            <a class="btn btn-default" href="/cgi-bin/koha/patron_lists/add-modify.pl?patron_list_id=[% list.patron_list_id | uri %]"><i class="fa fa-pencil"></i> Edit list</a>
-        </div>
-        <div class="btn-group">
-            <form action="/cgi-bin/koha/patron_lists/delete.pl" method="post">
-                [% INCLUDE 'csrf-token.inc' %]
-                <input type="hidden" name="patron_list_id" value="[% list.patron_list_id | html %]" />
-                <input type="hidden" name="op" value="cud-delete" />
-                <button type="submit" class="btn btn-default delete_patron" data-list-name="[% list.name | html %]"><i class="fa fa-trash"></i> Delete list</button>
-            </form>
-        </div>
+        [% UNLESS list.owner.id != logged_in_user.id %]
+            <div class="btn-group">
+                <a class="btn btn-default" href="/cgi-bin/koha/patron_lists/add-modify.pl?patron_list_id=[% list.patron_list_id | uri %]"><i class="fa fa-pencil"></i> Edit list</a>
+            </div>
+            <div class="btn-group">
+                <form action="/cgi-bin/koha/patron_lists/delete.pl" method="post">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="patron_list_id" value="[% list.patron_list_id | html %]" />
+                    <input type="hidden" name="op" value="cud-delete" />
+                    <button type="submit" class="btn btn-default delete_patron" data-list-name="[% list.name | html %]"><i class="fa fa-trash"></i> Delete list</button>
+                </form>
+            </div>
+        [% END %]
     </div>
 
     <h1>[% list.name | html %]</h1>
