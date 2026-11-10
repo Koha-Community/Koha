@@ -38,7 +38,7 @@ eval { require Selenium::Remote::Driver; };
 if ($@) {
     plan skip_all => "Selenium::Remote::Driver is needed for selenium tests.";
 } else {
-    plan tests => 10;
+    plan tests => 11;
 }
 
 my $s = t::lib::Selenium->new;
@@ -141,8 +141,8 @@ subtest 'OPAC - Bibliographic record detail page must contain the data-biblionum
     push @cleanup, $biblio;
 };
 
-subtest 'Bibliographic record detail page must not explode even with invalid metadata' => sub {
-    plan tests => 2;
+subtest 'Bibliographic record detail page shows the repair warning for recoverable invalid metadata' => sub {
+    plan tests => 4;
 
     my $builder = t::lib::TestBuilder->new;
     my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
@@ -170,8 +170,50 @@ subtest 'Bibliographic record detail page must not explode even with invalid met
 
     $driver->get( $base_url . "/catalogue/detail.pl?biblionumber=$biblionumber" );
 
+    # The control field faults are repaired on read (bug 43777) and reported with the repair warning (bug 43026)
+    my $repairs = $driver->find_element('//div[contains(@class,"metadata-repairs")]')->get_text();
+    like( $repairs, qr/automatically repaired/, 'The repair warning is shown' );
+    ok(
+        scalar @{ $driver->find_elements('//table[contains(@class,"metadata-repairs-table")]/tbody/tr') },
+        'The repaired faults are listed'
+    );
+    ok(
+        !@{ $driver->find_elements('//p[@class="biberror"]') },
+        'The encoding error is not shown for a repaired record'
+    );
+    push @cleanup, $biblio;
+};
+
+subtest 'Bibliographic record detail page shows the encoding error for unrepairable invalid metadata' => sub {
+    plan tests => 3;
+
+    my $builder = t::lib::TestBuilder->new;
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+
+    my $mainpage = $s->base_url . q|mainpage.pl|;
+    $driver->get( $mainpage . q|?logout.x=1| );
+    like( $driver->get_title(), qr(Log in to Koha), );
+    $s->auth;
+
+    my ( $biblionumber, $biblioitemnumber ) = add_biblio();
+    my $biblio = Koha::Biblios->find($biblionumber);
+
+    # Truncated MARCXML (the closing record tag is missing) cannot be repaired, so the record cannot be read
+    my $invalid_data = qq{<?xml version="1.0" encoding="UTF-8"?>
+    <record>
+    <leader>00772nam0a2200277   4500</leader>
+    <controlfield tag="001">00aD000015937</controlfield>
+    <controlfield tag="008">00ar19881981bdkldan</controlfield>};
+    $biblio->metadata->_result->update( { metadata => $invalid_data } );
+
+    $driver->get( $base_url . "/catalogue/detail.pl?biblionumber=$biblionumber" );
+
     my $biberror = $driver->find_element('//p[@class="biberror"]')->get_text();
     is( $biberror, "There is at least one encoding error with this bibliographic record, the view may be degraded." );
+    ok(
+        !@{ $driver->find_elements('//div[contains(@class,"metadata-repairs")]') },
+        'Nothing was repaired, so no repair warning is shown'
+    );
     push @cleanup, $biblio;
 };
 

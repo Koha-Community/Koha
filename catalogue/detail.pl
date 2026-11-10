@@ -120,8 +120,10 @@ my $decoding_exception  = $@;
 my $invalid_marc_record = !$marc_record;
 if ($invalid_marc_record) {
 
-    # Metadata that cannot be repaired at all
+    # Metadata that cannot be repaired at all: report it and carry on with an empty
+    # record so the rest of the page can still render
     $template->param( decoding_error => $decoding_exception );
+    $marc_record = MARC::Record->new;
 }
 
 my $op = $query->param('op') || q{};
