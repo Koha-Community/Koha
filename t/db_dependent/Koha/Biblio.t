@@ -938,6 +938,34 @@ subtest 'get_marc_components() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'get_marc_components() uses the component sort preferences' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my ($host_bibnum) = C4::Biblio::AddBiblio( host_record(), '' );
+    my $host_biblio = Koha::Biblios->find($host_bibnum);
+
+    foreach my $engine ( 'Zebra', 'Elasticsearch' ) {
+        t::lib::Mocks::mock_preference( 'SearchEngine',       $engine );
+        t::lib::Mocks::mock_preference( 'ComponentSortField', 'title' );
+        t::lib::Mocks::mock_preference( 'ComponentSortOrder', 'za' );
+
+        my @search_args;
+        my $search_mod = Test::MockModule->new("Koha::SearchEngine::${engine}::Search");
+        $search_mod->mock( 'search_compat', sub { shift; @search_args = @_; return; } );
+
+        $host_biblio->get_marc_components;
+
+        my ( $query, $query_str, $sort ) = $host_biblio->get_components_query;
+        is( $sort, 'title_za', "$engine: The sort of the component query is built from the preferences" );
+        is_deeply( $search_args[2], ['title_za'], "$engine: The component search is sorted by the preferences" );
+        is_deeply( $search_args[0], $query,       "$engine: The component search is run with the component query" );
+    }
+
+    $schema->storage->txn_rollback;
+};
+
 subtest 'get_components_query' => sub {
     plan tests => 12;
 

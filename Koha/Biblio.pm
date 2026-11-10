@@ -958,7 +958,7 @@ sub get_marc_components {
 
     return [] if ( C4::Context->preference('marcflavour') ne 'MARC21' );
 
-    my ( $searchstr, $sort ) = $self->get_components_query;
+    my ( $searchstr, undef, $sort ) = $self->get_components_query;
 
     my $components;
     if ( defined($searchstr) ) {
