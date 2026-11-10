@@ -7,4 +7,10 @@ properties:
   error_code:
     description: Error code
     type: string
+  policy:
+    description: |
+      Current module policy for the user. Returned when the request was
+      refused because of it, so clients can refresh their view of it.
+    allOf:
+      - $ref: module_policy.yaml
 additionalProperties: true

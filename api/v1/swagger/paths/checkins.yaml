@@ -106,10 +106,21 @@
               description: Exempt fines on this return
             return_date:
               type: string
-              description: Override return date (ISO 8601 date-time). Requires SpecifyReturnDate
+              format: date-time
+              description: |
+                Override return date. If no time zone offset is given, the
+                time is in the Koha time zone. Cannot be in the future.
+                Requires the SpecifyReturnDate preference.
             dropbox_mode:
               type: boolean
               description: Use book drop mode (calculate return date as last open day)
+            verified_bundle_barcodes:
+              type:
+                - array
+                - "null"
+              items:
+                type: string
+              description: Barcodes of items verified as present in the bundle (only for bundle items)
           additionalProperties: false
       - name: confirmation
         in: query
@@ -125,18 +136,37 @@
           type: string
           enum:
             - checkout
+            - checkout.patron
+            - checkout.patron.checkouts+count
             - claim
             - credits
             - debits
             - desk
             - hold
+            - hold.patron
+            - hold.patron+strings
+            - hold.patron.notification_summary
             - item
+            - item+strings
             - item.biblio
             - library
             - recall
+            - recall.patron
+            - recall.patron+strings
+            - recall.patron.notification_summary
             - restriction
             - transfer
             - user
+        collectionFormat: csv
+      - name: x-koha-override
+        in: header
+        required: false
+        description: Overrides list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - not_issued
         collectionFormat: csv
     consumes:
       - application/json
@@ -154,6 +184,7 @@
           * `missing_item_identifier` - Neither item_id nor external_id provided
           * `mutually_exclusive_parameters` - Both item_id and external_id provided
           * `invalid_parameter_value` - Unknown library_id, or return_date that cannot be parsed
+          * `return_date_in_future` - The return date is in the future
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -170,9 +201,15 @@
             - `blocked_lost` - Item is lost (BlockReturnOfLostItems enabled)
             - `wrong_branch` - Item cannot be returned at this branch (AllowReturnToBranch policy).
               Value is an object with `wrong_branch` and `right_branch` keys.
+            The item is not returned, but the check-in is recorded (as are the local
+            use, the date last seen and the location and not for loan updates):
+            its identifier is in the `checkin_id` attribute.
           * `no_permission_for_exempt_fine` - updatecharges.writeoff permission required
           * `return_date_not_allowed` - Return date override requires the SpecifyReturnDate preference
           * `library_not_allowed` - The user cannot act on library_id (IndependentBranches)
+
+          The `no_permission_for_exempt_fine` and `return_date_not_allowed` errors
+          include the current check-in module policy in the `policy` attribute.
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "404":
@@ -191,18 +228,397 @@
           Confirmation required. Possible `error_code` attribute values:
 
           * `confirmation_required` - Staff must confirm before checkin proceeds.
+            Possible keys in the `confirms` object:
+            - `item_parts` - Item has accompanying materials (CircConfirmItemParts enabled).
+              Value is the materials description string.
             Response includes a `confirmation_token` JWT to pass back on retry.
         schema:
-          $ref: "../swagger.yaml#/definitions/error"
+          $ref: "../swagger.yaml#/definitions/checkin_availability"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
+          * `checkin_failed` - The item could not be checked in because of a
+            problem in the system (e.g. data problems). Details are logged
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        circulate: circulate_remaining_permissions
+"/checkins/{checkin_id}/hold_confirmation":
+  post:
+    x-mojo-to: Checkins#hold_confirmation
+    operationId: confirmCheckinHold
+    tags:
+      - checkins
+    summary: Confirm the hold found during checkin
+    description: |
+      EXPERIMENTAL - DO NOT RELY on this, it is subject to change!
+
+      Sets the trapped hold to waiting (or initiates transfer to pickup
+      branch if different from checkin library).
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/checkin_id_pp"
+      - $ref: "../swagger.yaml#/parameters/checkin_action_token_qp"
+      - $ref: "../swagger.yaml#/parameters/checkin_embed_header"
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: Hold confirmed
+        headers:
+          Location:
+            description: URI of the action performed on the checkin (the request path)
+            type: string
+        schema:
+          $ref: "../swagger.yaml#/definitions/checkin"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+          * `no_hold_associated` - No hold associated with this checkin
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: |
+          Access forbidden. Possible `error_code` attribute values:
+
+          * `invalid_action_token` - The action token is invalid or expired
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Checkin not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: |
+          Conflict. Possible `error_code` attribute values:
+
+          * `stale_checkin` - The item has been checked in again since
+          * `item_checked_out` - The item has been checked out since the
+            checkin, the hold has not been set aside and remains pending
+          * `hold_not_found` - The hold no longer exists
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal server error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        circulate: circulate_remaining_permissions
+"/checkins/{checkin_id}/hold_cancellation":
+  post:
+    x-mojo-to: Checkins#hold_cancellation
+    operationId: cancelCheckinHold
+    tags:
+      - checkins
+    summary: Cancel the hold found during checkin
+    description: |
+      EXPERIMENTAL - DO NOT RELY on this, it is subject to change!
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/checkin_id_pp"
+      - $ref: "../swagger.yaml#/parameters/checkin_action_token_qp"
+      - name: body
+        in: body
+        required: false
+        schema:
+          type: object
+          properties:
+            reason:
+              type:
+                - string
+                - "null"
+              description: Cancellation reason (authorised value from HOLD_CANCELLATION)
+            forgive_hold_fees:
+              type: boolean
+              description: Do not charge the expired hold fee (requires the updatecharges.writeoff permission)
+          additionalProperties: false
+      - $ref: "../swagger.yaml#/parameters/checkin_embed_header"
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: Hold cancelled
+        headers:
+          Location:
+            description: URI of the action performed on the checkin (the request path)
+            type: string
+        schema:
+          $ref: "../swagger.yaml#/definitions/checkin"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+          * `no_hold_associated` - No hold associated with this checkin
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: |
+          Access forbidden. Possible `error_code` attribute values:
+
+          * `invalid_action_token` - The action token is invalid or expired
+          * `no_permission_for_forgive_hold_fees` - updatecharges.writeoff permission
+            required to forgive the hold fees. The error includes the current
+            check-in module policy in the `policy` attribute.
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Checkin not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: |
+          Conflict. Possible `error_code` attribute values:
+
+          * `stale_checkin` - The item has been checked in again since
+          * `item_checked_out` - The item has been checked out again since the checkin
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal server error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        circulate: circulate_remaining_permissions
+"/checkins/{checkin_id}/transfer_confirmation":
+  post:
+    x-mojo-to: Checkins#transfer_confirmation
+    operationId: confirmCheckinTransfer
+    tags:
+      - checkins
+    summary: Confirm the transfer and set it in transit
+    description: |
+      EXPERIMENTAL - DO NOT RELY on this, it is subject to change!
+
+      Sets the transfer triggered by the checkin in transit. If the checkin
+      did not create a transfer (the item needs one but AutomaticItemReturn
+      is disabled), pass the destination library to request one.
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/checkin_id_pp"
+      - $ref: "../swagger.yaml#/parameters/checkin_action_token_qp"
+      - name: body
+        in: body
+        required: false
+        schema:
+          type: object
+          properties:
+            to_library_id:
+              type: string
+              description: Library to transfer the item to, when the checkin has no transfer yet
+            reason:
+              type:
+                - string
+                - "null"
+              enum:
+                - Manual
+                - StockrotationAdvance
+                - StockrotationRepatriation
+                - ReturnToHome
+                - ReturnToHolding
+                - RotatingCollection
+                - Reserve
+                - LostReserve
+                - CancelReserve
+                - TransferCancellation
+                - Recall
+                - RecallCancellation
+                - LibraryFloatLimit
+                - null
+              description: What triggered the transfer (defaults to Manual)
+          additionalProperties: false
+      - $ref: "../swagger.yaml#/parameters/checkin_embed_header"
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: Transfer confirmed
+        headers:
+          Location:
+            description: URI of the action performed on the checkin (the request path)
+            type: string
+        schema:
+          $ref: "../swagger.yaml#/definitions/checkin"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+          * `no_transfer_associated` - No transfer associated with this checkin, and no
+            to_library_id passed
+          * `invalid_parameter_value` - Unknown to_library_id
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: |
+          Access forbidden. Possible `error_code` attribute values:
+
+          * `invalid_action_token` - The action token is invalid or expired
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Checkin not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: |
+          Conflict. Possible `error_code` attribute values:
+
+          * `stale_checkin` - The item has been checked in again since
+          * `item_checked_out` - The item has been checked out again since the checkin
+          * `transfer_finished` - The transfer has already arrived or has been cancelled
+          * `transfer_limit` - The transfer is not allowed by the branch transfer limits
+          * `transfer_in_queue` - The item already has a pending transfer
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal server error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        circulate: circulate_remaining_permissions
+"/checkins/{checkin_id}/transfer_cancellation":
+  post:
+    x-mojo-to: Checkins#transfer_cancellation
+    operationId: cancelCheckinTransfer
+    tags:
+      - checkins
+    summary: Cancel the pending transfer
+    description: |
+      EXPERIMENTAL - DO NOT RELY on this, it is subject to change!
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/checkin_id_pp"
+      - $ref: "../swagger.yaml#/parameters/checkin_action_token_qp"
+      - $ref: "../swagger.yaml#/parameters/checkin_embed_header"
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: Transfer cancelled
+        headers:
+          Location:
+            description: URI of the action performed on the checkin (the request path)
+            type: string
+        schema:
+          $ref: "../swagger.yaml#/definitions/checkin"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+          * `no_transfer_associated` - No transfer associated with this checkin
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: |
+          Access forbidden. Possible `error_code` attribute values:
+
+          * `invalid_action_token` - The action token is invalid or expired
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Checkin not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: |
+          Conflict. Possible `error_code` attribute values:
+
+          * `stale_checkin` - The item has been checked in again since
+          * `item_checked_out` - The item has been checked out again since the checkin
+          * `transfer_finished` - The transfer has already arrived or has been cancelled
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal server error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        circulate: circulate_remaining_permissions
+"/checkins/{checkin_id}/recall_confirmation":
+  post:
+    x-mojo-to: Checkins#recall_confirmation
+    operationId: confirmCheckinRecall
+    tags:
+      - checkins
+    summary: Confirm the recall (set waiting or start transfer)
+    description: |
+      EXPERIMENTAL - DO NOT RELY on this, it is subject to change!
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/checkin_id_pp"
+      - $ref: "../swagger.yaml#/parameters/checkin_action_token_qp"
+      - $ref: "../swagger.yaml#/parameters/checkin_embed_header"
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: Recall confirmed
+        headers:
+          Location:
+            description: URI of the action performed on the checkin (the request path)
+            type: string
+        schema:
+          $ref: "../swagger.yaml#/definitions/checkin"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+          * `no_recall_associated` - No recall associated with this checkin
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: |
+          Access forbidden. Possible `error_code` attribute values:
+
+          * `invalid_action_token` - The action token is invalid or expired
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Checkin not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: |
+          Conflict. Possible `error_code` attribute values:
+
+          * `stale_checkin` - The item has been checked in again since
+          * `item_checked_out` - The item has been checked out again since the checkin
+          * `transfer_not_started` - The transfer to the pickup library could not be
+            started. The `reasons` attribute lists why
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal server error
         schema:
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:

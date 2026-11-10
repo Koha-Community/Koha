@@ -1,0 +1,21 @@
+---
+type: object
+description: |
+  Policy of a Koha module for the current user and library: what the module
+  UI should offer, as the intersection of system preferences, user permissions
+  and library context. It is informational, for clients to adapt the UI to it.
+  The server enforces every action regardless of it.
+properties:
+  module:
+    type: string
+    enum:
+      - checkin
+    description: Module the policy applies to. The module-specific policy is returned in the attribute named after it.
+  global:
+    $ref: module_policy_global.yaml
+  checkin:
+    $ref: checkin_policy.yaml
+required:
+  - module
+  - global
+additionalProperties: false

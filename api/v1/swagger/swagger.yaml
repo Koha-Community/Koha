@@ -48,6 +48,8 @@ definitions:
     $ref: ./definitions/checkin.yaml
   checkin_availability:
     $ref: ./definitions/checkin_availability.yaml
+  checkin_policy:
+    $ref: ./definitions/checkin_policy.yaml
   circ-rule-kind:
     $ref: ./definitions/circ-rule-kind.yaml
   city:
@@ -186,6 +188,10 @@ definitions:
     $ref: ./definitions/message.yaml
   message_patch:
     $ref: ./definitions/message_patch.yaml
+  module_policy:
+    $ref: ./definitions/module_policy.yaml
+  module_policy_global:
+    $ref: ./definitions/module_policy_global.yaml
   order:
     $ref: ./definitions/order.yaml
   order_claim:
@@ -373,6 +379,16 @@ paths:
     $ref: ./paths/checkins.yaml#/~1checkins
   "/checkins/availability":
     $ref: "./paths/checkins.yaml#/~1checkins~1availability"
+  "/checkins/{checkin_id}/hold_confirmation":
+    $ref: "./paths/checkins.yaml#/~1checkins~1{checkin_id}~1hold_confirmation"
+  "/checkins/{checkin_id}/hold_cancellation":
+    $ref: "./paths/checkins.yaml#/~1checkins~1{checkin_id}~1hold_cancellation"
+  "/checkins/{checkin_id}/transfer_confirmation":
+    $ref: "./paths/checkins.yaml#/~1checkins~1{checkin_id}~1transfer_confirmation"
+  "/checkins/{checkin_id}/transfer_cancellation":
+    $ref: "./paths/checkins.yaml#/~1checkins~1{checkin_id}~1transfer_cancellation"
+  "/checkins/{checkin_id}/recall_confirmation":
+    $ref: "./paths/checkins.yaml#/~1checkins~1{checkin_id}~1recall_confirmation"
   /checkouts:
     $ref: ./paths/checkouts.yaml#/~1checkouts
   "/checkouts/{checkout_id}":
@@ -873,6 +889,49 @@ parameters:
     description: Cashup internal identifier
     in: path
     name: cashup_id
+    required: true
+    type: integer
+  checkin_action_token_qp:
+    description: |
+      Token for the action, as returned in the `action_tokens` attribute of
+      the checkin response
+    in: query
+    name: action_token
+    required: true
+    type: string
+  checkin_embed_header:
+    collectionFormat: csv
+    description: Embed list sent as a request header
+    in: header
+    items:
+      enum:
+        - checkout
+        - checkout.patron
+        - claim
+        - credits
+        - debits
+        - desk
+        - hold
+        - hold.patron
+        - hold.patron.notification_summary
+        - item
+        - item.biblio
+        - library
+        - recall
+        - recall.patron
+        - recall.patron.notification_summary
+        - restriction
+        - transfer
+        - transfer.to_library
+        - user
+      type: string
+    name: x-koha-embed
+    required: false
+    type: array
+  checkin_id_pp:
+    description: Internal checkin identifier
+    in: path
+    name: checkin_id
     required: true
     type: integer
   checkout_id_pp:

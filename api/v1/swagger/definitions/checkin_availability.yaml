@@ -1,18 +1,42 @@
 ---
 type: object
 properties:
+  error:
+    type: string
+    description: Error message
+  error_code:
+    type: string
+    description: Error code identifier
   blockers:
     type: object
-    description: Blocking issues that prevent checkin
+    description: |
+      Conditions that prevent the checkin. Possible keys:
+
+      * `blocked_withdrawn` - Item is withdrawn (BlockReturnOfWithdrawnItems)
+      * `blocked_lost` - Item is lost (BlockReturnOfLostItems)
+      * `wrong_branch` - Item cannot be returned here (AllowReturnToBranch).
+        Value is an object with `wrong_branch` and `right_branch` keys.
   confirms:
     type: object
-    description: Issues requiring confirmation
+    description: |
+      Conditions requiring staff confirmation before checkin. Possible keys:
+
+      * `not_issued` - Item is not checked out (value is the barcode)
+      * `item_parts` - Multi-part item (CircConfirmItemParts); value is the
+        accompanying materials description
+      * `items_bundle` - Bundle item requiring content verification
   warnings:
     type: object
-    description: Informational issues
+    description: |
+      Informational conditions that do not prevent checkin. Possible keys:
+
+      * `withdrawn` - Item is withdrawn (BlockReturnOfWithdrawnItems off)
   confirmation_token:
     type:
       - string
       - "null"
     description: JWT token for confirming the checkin
+  item:
+    type: object
+    description: The item requiring confirmation
 additionalProperties: false

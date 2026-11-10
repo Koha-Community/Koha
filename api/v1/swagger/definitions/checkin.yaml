@@ -124,13 +124,73 @@ properties:
       - array
       - "null"
     description: Credit account lines (embeddable)
+  action_tokens:
+    type:
+      - object
+      - "null"
+    additionalProperties:
+      type: string
+    description: |
+      Signed, short-lived tokens for the follow-up actions offered for this
+      checkin, keyed by action name (`hold_confirmation`, `hold_cancellation`,
+      `transfer_confirmation`, `transfer_cancellation`, `recall_confirmation`).
+      The matching token must be passed as the `action_token` query parameter
+      to the `/checkins/{checkin_id}/<action>` endpoint. Only returned when
+      checking in.
   messages:
     type:
       - array
       - "null"
     description: |
       Post-checkin messages indicating events that occurred during processing.
-      Each entry has `message` (lower_snake_case identifier), `type`
-      (info/warning/error), and optional `payload` (object with additional
-      context).
+      Each entry has `message` (lower_snake_case identifier), `type` (info/warning/error),
+      and optional `payload` (object with additional context).
+
+      Possible message identifiers include:
+
+      * `transferred` - Item was transferred (payload: to_library, trigger)
+      * `needs_transfer` - Item needs to be transferred (payload: to_library, trigger)
+      * `wrong_transfer` - Item arrived at wrong branch (payload: to_library, item_id, trigger)
+      * `transfer_arrived` - A pending transfer arrived (payload: from_library)
+      * `hold_found` - A hold was found for this item (payload: status, reserve_id, patron_id, library_id)
+      * `hold_auto_filled` - The hold found was filled automatically, as HoldsAutoFill is enabled (payload: reserve_id, library_id)
+      * `hold_auto_fill_failed` - The hold found could not be filled automatically, the item has been checked in (payload: reserve_id, error_code: hold_not_found or item_checked_out)
+      * `recall_found` - A recall was found (payload: recall_id, needs_transfer)
+      * `lost_item_fee_refunded` - Lost item fee was refunded to patron
+      * `lost_item_fee_charged` - Lost item fee was charged to patron
+      * `lost_item_fee_restored` - Lost item fee was restored
+      * `lost_item_payment_not_refunded` - Payment was not refunded (too old)
+      * `processing_fee_refunded` - Processing fee was refunded
+      * `not_issued` - Item was not checked out
+      * `local_use` - Recorded as local use
+      * `was_returned` - A checkout was cleared (item was actually returned)
+      * `was_lost` - Item was previously marked lost
+      * `withdrawn` - Item is withdrawn
+      * `debarred` - Patron was restricted (payload: until)
+      * `previously_debarred` - Patron was already restricted (payload: until)
+      * `indefinitely_debarred` - Patron has indefinite restriction
+      * `not_for_loan_status_updated` - Item not-for-loan status was changed (payload: from, to)
+      * `not_for_loan_status_notice` - Item not-for-loan status to display, it was not changed (payload: status)
+      * `item_location_updated` - Item location was updated
+      * `return_claim` - A return claim was resolved (payload: claim_id)
+      * `claim_auto_resolved` - A return claim was auto-resolved (payload: claim_id)
+      * `wrong_branch` - Item cannot be returned at this branch (payload: wrong_branch, right_branch)
+      * `recall_placed_at_holding_branch` - Recall placed at the holding branch
+      * `in_bundle` - Item belongs to a bundle (payload: host_item_id, host_biblio_id, host_external_id)
+      * `bundle_missing_items` - Bundle items not verified, now marked lost (payload: items)
+      * `bundle_unexpected_items` - Verified items not in the bundle, now removed from it (payload: items)
+    items:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Message identifier (lower_snake_case)
+        type:
+          type: string
+          description: Message severity (info, warning, error)
+        payload:
+          type:
+            - object
+            - "null"
+          description: Additional context for the message
 additionalProperties: false

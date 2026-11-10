@@ -1,0 +1,85 @@
+---
+type: object
+description: Policy of the check-in module, present when the policy `module` is `checkin`
+properties:
+  exempt_fine:
+    type: boolean
+    description: Overdue fines can be forgiven on return (fines are charged and the user can write them off)
+  fine_notify_at_checkin:
+    type: boolean
+    description: The patron balance is shown after the check-in
+  forgive_hold_fees:
+    type: boolean
+    description: Charges for manually expired holds can be forgiven (a charge is configured and the user can write it off)
+  specify_return_date:
+    type: boolean
+    description: A return date can be specified for the check-in
+  dropbox_mode:
+    type: boolean
+    description: Book drop mode is available
+  dropbox_date:
+    type: string
+    format: date
+    description: Effective return date used in book drop mode
+  anonymous_patron_id:
+    type:
+      - integer
+      - "null"
+    description: Internal identifier of the anonymous patron, used to recognise anonymized checkouts
+  confirm_item_parts:
+    type: boolean
+    description: Items with accompanying materials require a confirmation
+  holds_auto_fill:
+    type: boolean
+    description: Holds are automatically filled on check-in
+  holds_auto_fill_print_slip:
+    type: boolean
+    description: The hold slip is printed when a hold is automatically filled
+  waiting_notify_at_checkin:
+    type: boolean
+    description: Other holds waiting for the patron are shown after the check-in
+  display_hold_groups:
+    type: boolean
+    description: Hold group information is shown for holds found on check-in
+  recalls_enabled:
+    type: boolean
+    description: Recalls are enabled
+  transfers_block:
+    type: boolean
+    description: Transfers must be acted on before checking in other items
+  auto_confirm_transfer:
+    type: boolean
+    description: Transfers are confirmed without asking
+  show_all_checkins:
+    type: boolean
+    description: Items that were not checked out are listed too
+  max_returned_items:
+    type: integer
+    description: Maximum number of checked in items to list
+  block_return_withdrawn:
+    type: boolean
+    description: Withdrawn items cannot be checked in
+  block_return_lost:
+    type: boolean
+    description: Lost items cannot be checked in
+required:
+  - exempt_fine
+  - fine_notify_at_checkin
+  - forgive_hold_fees
+  - specify_return_date
+  - dropbox_mode
+  - dropbox_date
+  - anonymous_patron_id
+  - confirm_item_parts
+  - holds_auto_fill
+  - holds_auto_fill_print_slip
+  - waiting_notify_at_checkin
+  - display_hold_groups
+  - recalls_enabled
+  - transfers_block
+  - auto_confirm_transfer
+  - show_all_checkins
+  - max_returned_items
+  - block_return_withdrawn
+  - block_return_lost
+additionalProperties: false
