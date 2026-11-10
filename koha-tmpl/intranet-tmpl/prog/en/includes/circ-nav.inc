@@ -8,7 +8,7 @@
             <a href="/cgi-bin/koha/circ/circulation.pl">Check out</a>
         </li>
         <li>
-            <a href="/cgi-bin/koha/circ/returns.pl">Check in</a>
+            <a href="/cgi-bin/koha/circ/checkin.pl">Check in</a>
         </li>
         <li>
             <a href="/cgi-bin/koha/circ/renew.pl">Renew</a>

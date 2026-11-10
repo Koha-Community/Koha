@@ -98,7 +98,7 @@ $(document).ready(function () {
         });
     } else {
         shortcut.add("Alt+r", function () {
-            location.href = "/cgi-bin/koha/circ/returns.pl";
+            location.href = "/cgi-bin/koha/circ/checkin.pl";
         });
     }
     if ($("#header_search #circ_search_panel").length > 0) {

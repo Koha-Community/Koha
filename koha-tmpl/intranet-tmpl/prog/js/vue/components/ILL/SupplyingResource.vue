@@ -849,7 +849,7 @@ export default {
         const getCheckinParams = barcode => {
             const csrfMeta = document.querySelector('meta[name="csrf-token"]');
             return {
-                url: "/cgi-bin/koha/circ/returns.pl",
+                url: "/cgi-bin/koha/circ/checkin.pl",
                 params: {
                     barcode: barcode,
                     op: "cud-checkin",

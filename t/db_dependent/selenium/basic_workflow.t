@@ -32,7 +32,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 23;
+use Test::More tests => 24;
 use Test::NoWarnings;
 
 use Time::HiRes qw(gettimeofday);
@@ -40,6 +40,7 @@ use POSIX       qw(strftime);
 use C4::Context;
 use C4::Biblio qw( AddBiblio );
 
+use Koha::Checkouts;
 use Koha::CirculationRules;
 
 use MARC::Record;
@@ -87,7 +88,7 @@ our ( $borrowernumber, $start, $prev_time, $cleanup_needed );
 
 SKIP: {
     eval { require Selenium::Remote::Driver; };
-    skip "Selenium::Remote::Driver is needed for selenium tests.", 22 if $@;
+    skip "Selenium::Remote::Driver is needed for selenium tests.", 23 if $@;
 
     $cleanup_needed = 1;
 
@@ -270,12 +271,24 @@ SKIP: {
 
     time_diff("checkout");
 
+    $driver->get( $base_url . "/circ/checkin.pl" );
     for my $biblionumber (@biblionumbers) {
-        $driver->get( $base_url . "/circ/returns.pl" );
-        $driver->find_element('//input[@id="barcode"]')->send_keys( 't_value_bib' . $biblionumber );
-        $driver->find_element('//*[@id="circ_returns_checkin"]//button[@type="submit"]')->click;
-        like( $driver->get_title(), qr(Check in test biblio \d+) );
+        my $barcode = 't_value_bib' . $biblionumber;
+
+        # The check-in page is a Vue app: wait for it to be mounted
+        $s->wait_for_element_visible('//div[@id="checkin-app"]//input[@id="barcode-input"]')->send_keys($barcode);
+        $driver->find_element('//form[contains(@class,"checkin-form")]//button[@type="submit"]')->click;
+
+        # The item is listed as checked in once the API call returned
+        my $barcode_link =
+            $s->wait_for_element_visible(qq{//table[\@id="checkins-table"]//td/a[normalize-space(text())="$barcode"]});
+        my $row = $driver->find_child_element( $barcode_link, './ancestor::tr' );
+        like( $row->get_text(), qr(test biblio \d+), "$barcode is listed as checked in" );
     }
+    is(
+        Koha::Checkouts->search( { borrowernumber => $borrowernumber } )->count, 0,
+        'All the items have been checked in'
+    );
 
     time_diff("checkin");
 
