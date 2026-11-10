@@ -657,7 +657,9 @@ sub to_api {
                 my $curr = $embed;
                 my $next = $embeds->{$curr}->{children};
 
-                $params->{strings} = 1
+                # Copy $params so the strings flag doesn't leak into sibling embeds
+                my $embed_params = {%$params};
+                $embed_params->{strings} = 1
                     if $embeds->{$embed}->{strings};
 
                 my $children = $self->$curr;
@@ -669,7 +671,7 @@ sub to_api {
                                 child  => $_,
                                 next   => $next,
                                 curr   => $curr,
-                                params => $params
+                                params => $embed_params
                             }
                         )
                     } @{$children};
@@ -680,7 +682,7 @@ sub to_api {
                             child  => $children,
                             next   => $next,
                             curr   => $curr,
-                            params => $params
+                            params => $embed_params
                         }
                     );
                 }
