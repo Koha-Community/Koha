@@ -501,9 +501,9 @@
                             if (pattern) {
                                 let field = patron_search_form.find(".searchfieldstype_filter").find("option:selected").text();
                                 if (patron_search_form.find(".searchtype_filter").val() == "starts_with") {
-                                    searched += _("%s starting with '%s'".format(field, pattern));
+                                    searched += _("%s starting with '%s'").format(field, pattern);
                                 } else {
-                                    searched += _("%s containing '%s'".format(field, pattern));
+                                    searched += _("%s containing '%s'").format(field, pattern);
                                 }
                             }
 
