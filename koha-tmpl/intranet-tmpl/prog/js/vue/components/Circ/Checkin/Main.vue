@@ -1,7 +1,5 @@
 <template>
     <div id="checkin-app">
-        <h1>{{ $__("Check in") }}</h1>
-
         <div
             v-if="lastError"
             class="alert alert-danger audio-alert-warning"
@@ -10,55 +8,58 @@
             {{ lastError }}
         </div>
 
-        <BarcodeInput
-            ref="barcodeInputRef"
-            :disabled="isInputBlocked"
-            :dropbox-mode="checkinOptions.dropbox_mode"
-            :exempt-fine="checkinOptions.exempt_fine"
-            @submit="onBarcodeScan"
-            @toggle-options="showOptions = !showOptions"
-        />
+        <div class="page-section checkin-card">
+            <h1>{{ $__("Check in") }}</h1>
 
-        <!-- Active settings indicators (visible when panel is collapsed) -->
-        <div
-            v-if="!showOptions && hasActiveSettings"
-            class="checkin-active-settings mt-1"
-        >
-            <span
-                v-if="checkinOptions.exempt_fine"
-                class="badge text-bg-warning me-1"
+            <BarcodeInput
+                ref="barcodeInputRef"
+                :disabled="isInputBlocked"
+                :dropbox-mode="checkinOptions.dropbox_mode"
+                :exempt-fine="checkinOptions.exempt_fine"
+                @submit="onBarcodeScan"
+                @toggle-options="showOptions = !showOptions"
+            />
+
+            <!-- Active settings indicators (visible when panel is collapsed) -->
+            <div
+                v-if="!showOptions && hasActiveSettings"
+                class="checkin-active-settings mt-1"
             >
-                <i class="fa fa-check"></i> {{ $__("Fines forgiven") }}
-            </span>
-            <span
-                v-if="checkinOptions.dropbox_mode"
-                class="badge text-bg-warning me-1"
-            >
-                <i class="fa fa-check"></i> {{ $__("Book drop mode") }}
-                <span v-if="dropboxDate">
-                    ({{
-                        $__("Effective checkin date is %s").replace(
-                            "%s",
-                            dropboxDate
-                        )
-                    }})
+                <span
+                    v-if="checkinOptions.exempt_fine"
+                    class="badge text-bg-warning me-1"
+                >
+                    <i class="fa fa-check"></i> {{ $__("Fines forgiven") }}
                 </span>
-            </span>
-            <span
-                v-if="checkinOptions.return_date"
-                class="badge text-bg-warning me-1"
-            >
-                <i class="fa fa-check"></i> {{ $__("Return date:") }}
-                {{ formatDateTime(checkinOptions.return_date) }}
-            </span>
-        </div>
+                <span
+                    v-if="checkinOptions.dropbox_mode"
+                    class="badge text-bg-warning me-1"
+                >
+                    <i class="fa fa-check"></i> {{ $__("Book drop mode") }}
+                    <span v-if="dropboxDate">
+                        ({{
+                            $__("Effective checkin date is %s").replace(
+                                "%s",
+                                dropboxDate
+                            )
+                        }})
+                    </span>
+                </span>
+                <span
+                    v-if="checkinOptions.return_date"
+                    class="badge text-bg-warning me-1"
+                >
+                    <i class="fa fa-check"></i> {{ $__("Return date:") }}
+                    {{ formatDateTime(checkinOptions.return_date) }}
+                </span>
+            </div>
 
-        <CheckinOptions
-            v-show="showOptions"
-            ref="checkinOptionsRef"
-            class="mt-2"
-            @update:options="onOptionsUpdate"
-        />
+            <CheckinOptions
+                v-show="showOptions"
+                ref="checkinOptionsRef"
+                @update:options="onOptionsUpdate"
+            />
+        </div>
 
         <!-- Detailed messages for the last checkin -->
         <div
@@ -91,12 +92,14 @@
             }}
         </div>
 
-        <CheckedInItems
-            :checkins="checkins"
-            class="mt-4"
-            @show-modal="showModalFor"
-            @resolve-claim="onResolveClaim"
-        />
+        <div class="mt-3" :class="{ 'page-section': checkins.length }">
+            <h2 v-if="checkins.length">{{ $__("Checked-in items") }}</h2>
+            <CheckedInItems
+                :checkins="checkins"
+                @show-modal="showModalFor"
+                @resolve-claim="onResolveClaim"
+            />
+        </div>
 
         <!-- Confirmation panel - shows one pending item at a time -->
         <ConfirmationModal
@@ -949,3 +952,32 @@ export default {
     },
 };
 </script>
+
+<style>
+/* The form and its settings share one card, as on the legacy page */
+#checkin-app .checkin-card {
+    padding: 1rem;
+}
+
+#checkin-app .checkin-card h1 {
+    margin-bottom: 1rem;
+}
+
+#checkin-app .checkin-card fieldset {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+}
+
+#checkin-app .checkin-card .circ-settings {
+    margin: 1rem -1rem 0;
+    padding: 1rem 1rem 0;
+}
+
+#checkin-app #return_date_override_fields input.flatpickr-input {
+    max-width: 16em;
+    min-width: 0;
+}
+</style>

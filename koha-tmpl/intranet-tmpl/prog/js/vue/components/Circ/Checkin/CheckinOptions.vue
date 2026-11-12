@@ -2,8 +2,8 @@
     <div class="circ-settings" style="display: block">
         <div
             v-if="policy.specify_return_date"
-            class="date-select"
             id="return_date_override_fields"
+            class="date-select"
         >
             <label for="return-date-override" class="hint d-block">
                 {{

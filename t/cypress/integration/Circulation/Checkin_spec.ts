@@ -204,6 +204,35 @@ describe("Circulation - Check in", () => {
             });
         });
 
+        it("keeps the form, its settings and the results in white cards", () => {
+            createCheckout({ stay_home: true }).then(objects => {
+                visitCheckin();
+
+                // The settings expand inside the card of the form
+                cy.get("#checkin-app .page-section.checkin-card")
+                    .should(
+                        "have.css",
+                        "background-color",
+                        "rgb(255, 255, 255)"
+                    )
+                    .within(() => {
+                        cy.get("#barcode-input").should("be.visible");
+                        cy.get(".circ-settings").should("not.be.visible");
+                        cy.get("[aria-label='Checkin settings']").click();
+                        cy.get(".circ-settings").should("be.visible");
+                    });
+
+                checkin(objects.items[0].external_id);
+
+                // The checked-in items have a card and a heading
+                cy.get("#checkin-app .page-section")
+                    .contains("h2", "Checked-in items")
+                    .parent()
+                    .find("table#checkins-table")
+                    .should("be.visible");
+            });
+        });
+
         it("shows an error for an unknown barcode", () => {
             const barcode = `UNKNOWN-${Date.now()}`;
 
