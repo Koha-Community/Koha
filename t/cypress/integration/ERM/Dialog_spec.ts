@@ -242,7 +242,7 @@ describe("Dialog operations", () => {
         cy.get("#accept_modal").click();
         cy.get("main div[class='alert alert-info']").should(
             "have.text",
-            "2 jobs queued for report type TR_J1 (2025-01 to 2025-02). Check job progress."
+            "2 jobs queued for report type TR_J1: 2025-01, 2025-02"
         );
     });
 });
