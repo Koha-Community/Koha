@@ -660,6 +660,9 @@ describe("Circulation - Check in", () => {
                 cy.get("body").type("{esc}");
                 checkinModal().should("be.visible");
 
+                // Ignoring is not possible either: a choice must be made
+                checkinModal().should("not.contain", "Ignore (I)");
+
                 checkinModal().contains("button", "OK (Y)").click();
                 checkinModal().should("not.exist");
             });
@@ -688,6 +691,29 @@ describe("Circulation - Check in", () => {
                     expect(rows).to.have.length(1);
                     expect(rows[0].datecancelled).to.not.eq(null);
                     expect(rows[0].cancellation_reason).to.eq("Manual");
+                });
+            });
+        });
+
+        it("leaves the existing transfer as it is when ignored", () => {
+            createCheckout({ stay_home: true }).then(objects => {
+                const item = objects.items[0];
+                visitCheckin();
+                checkin(item.external_id);
+
+                checkinModal()
+                    .contains("button", "Ignore (I)")
+                    .should("have.attr", "accesskey", "i")
+                    .click();
+                checkinModal().should("not.exist");
+
+                // Neither confirmed nor cancelled: the transfer is untouched
+                dbQuery(
+                    "SELECT datesent, datecancelled FROM branchtransfers WHERE itemnumber=?",
+                    [item.item_id]
+                ).then(rows => {
+                    expect(rows).to.have.length(1);
+                    expect(rows[0].datecancelled).to.eq(null);
                 });
             });
         });

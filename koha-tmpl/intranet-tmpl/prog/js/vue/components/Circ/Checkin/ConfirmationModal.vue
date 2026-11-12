@@ -244,7 +244,7 @@
                         <p v-if="hasExistingTransfer" class="text-muted">
                             {{
                                 $__(
-                                    'The transfer has already been created. "Cancel transfer" cancels it and records the cancellation in the item\'s transfer history.'
+                                    'The transfer has already been created. "Cancel transfer" cancels it and records the cancellation in the item\'s transfer history. "Ignore" leaves it exactly as it is.'
                                 )
                             }}
                         </p>
@@ -568,6 +568,17 @@
                                     ? $__("Cancel transfer (X)")
                                     : $__("No, don't transfer (N)")
                             }}
+                        </button>
+                        <button
+                            v-if="hasExistingTransfer && isNonBlockingTransfer"
+                            type="button"
+                            class="btn btn-default deny"
+                            :disabled="confirming"
+                            accesskey="i"
+                            @click="$emit('ignore', item)"
+                        >
+                            <i class="fa fa-times"></i>
+                            {{ $__("Ignore (I)") }}
                         </button>
                     </template>
 
