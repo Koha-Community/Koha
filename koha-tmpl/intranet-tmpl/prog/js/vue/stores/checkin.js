@@ -246,15 +246,80 @@ export const useCheckinStore = defineStore("checkin", () => {
     }
 
     /**
-     * Ignore a post-checkin action (hold, recall, claim). The item was
-     * checked in, so the row is marked as a successful checkin.
+     * What a row needs to bring back an action that was declined, ignored or
+     * cancelled: the row says so, and the action can be reopened.
+     */
+    function _declined(entry, kind) {
+        return {
+            type: entry._action_type,
+            kind,
+            snapshot: {
+                transfer_id: entry.transfer_id ?? null,
+                messages: entry.messages || [],
+            },
+        };
+    }
+
+    /**
+     * Ignore a post-checkin action (hold, recall, claim, existing transfer).
+     * The item was checked in, so the row is marked as a successful
+     * checkin. It remembers that the action was ignored.
      */
     function ignoreAction(entry) {
         _replaceEntry(entry, {
             ...entry,
             _status: "success",
             _action_type: null,
+            _declined: entry._action_type ? _declined(entry, "ignored") : null,
         });
+    }
+
+    /**
+     * Bring back an action that was declined, ignored or cancelled, to
+     * decide again (a mis-click, a change of mind). The row is replaced with
+     * the one that is waiting for the action.
+     *
+     * @returns the reopened entry, or null if there is nothing to reopen
+     */
+    function reopenAction(entry) {
+        const idx = _findIndex(entry);
+        if (idx === -1) return null;
+        const existing = checkins.value[idx];
+        const declined = existing._declined;
+        if (!declined) return null;
+
+        let { transfer_id, messages } = declined.snapshot;
+        if (declined.type === "transfer" && declined.kind === "cancelled") {
+            // The transfer was cancelled: it can be requested again, as when
+            // the item needs a transfer that was not created
+            const was = messages.find(m =>
+                ["needs_transfer", "transferred", "wrong_transfer"].includes(
+                    m.message
+                )
+            );
+            transfer_id = null;
+            messages = [
+                ...messages.filter(m => m !== was),
+                {
+                    message: "needs_transfer",
+                    type: "warning",
+                    payload: {
+                        to_library: was?.payload?.to_library,
+                        trigger: was?.payload?.trigger,
+                    },
+                },
+            ];
+        }
+
+        _replaceEntry(existing, {
+            ...existing,
+            transfer_id,
+            messages,
+            _status: "needs_action",
+            _action_type: declined.type,
+            _declined: null,
+        });
+        return checkins.value[_findIndex(existing)];
     }
 
     /**
@@ -409,8 +474,13 @@ export const useCheckinStore = defineStore("checkin", () => {
                         : m
                 );
             }
-            // The transfer was cancelled: stop showing it on the row
+            // The transfer was cancelled, or not created: stop showing it on
+            // the row, which remembers it so the action can be reopened
             if (action === "cancel_transfer") {
+                resolved._declined = _declined(
+                    existing,
+                    existing.transfer_id ? "cancelled" : "declined"
+                );
                 resolved.transfer_id = null;
                 resolved.messages = (existing.messages || []).filter(
                     m =>
@@ -647,6 +717,7 @@ export const useCheckinStore = defineStore("checkin", () => {
         confirmPending,
         dismissPending,
         ignoreAction,
+        reopenAction,
         resolveAction,
         cancelHoldGroup,
         applyPolicy,

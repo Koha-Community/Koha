@@ -104,6 +104,7 @@
                 :checkins="checkins"
                 @show-modal="showModalFor"
                 @resolve-claim="showModalFor"
+                @reopen="onReopen"
             />
         </div>
 
@@ -727,6 +728,12 @@ export default {
             activeModalItem.value = item;
         }
 
+        // Decide again about an action that was declined, ignored or cancelled
+        function onReopen(item) {
+            const reopened = store.reopenAction(item);
+            if (reopened) activeModalItem.value = reopened;
+        }
+
         function onMessagesClick(e) {
             const slipBtn = e.target.closest(".print-hold-slip");
             if (slipBtn) {
@@ -967,6 +974,7 @@ export default {
             onOptionsUpdate,
             onBarcodeScan,
             showModalFor,
+            onReopen,
             onMessagesClick,
             onClaimResolved,
             onBundleConfirm,

@@ -248,6 +248,24 @@
                         {{ $__("Not checked in") }}
                     </span>
 
+                    <!-- An action that was declined, ignored or cancelled: the
+                         row says so, and it can be reopened to decide again -->
+                    <template v-if="checkin._declined">
+                        <span class="badge text-bg-warning declined-badge">
+                            <i class="fa fa-times"></i>
+                            {{ declinedLabel(checkin._declined) }}
+                        </span>
+                        <button
+                            type="button"
+                            class="btn btn-xs btn-outline-primary ms-1 reopen-action"
+                            :title="$__('Decide again')"
+                            @click="$emit('reopen', checkin)"
+                        >
+                            <i class="fa-solid fa-rotate-left"></i>
+                            {{ $__("Reopen") }}
+                        </button>
+                    </template>
+
                     <!-- Confirmation details for pending items -->
                     <template v-if="checkin._status === 'pending_confirmation'">
                         <span
@@ -336,7 +354,7 @@ export default {
             required: true,
         },
     },
-    emits: ["show-modal", "resolve-claim"],
+    emits: ["show-modal", "resolve-claim", "reopen"],
     setup() {
         const store = useCheckinStore();
 
@@ -583,7 +601,23 @@ export default {
             return labels[msg.message] || msg.message.replace(/_/g, " ");
         }
 
+        // What the row says when an action was declined, ignored or cancelled
+        function declinedLabel(declined) {
+            const labels = {
+                transfer: {
+                    declined: $__("Transfer declined"),
+                    cancelled: $__("Transfer cancelled"),
+                    ignored: $__("Transfer left as it is"),
+                },
+                hold: { ignored: $__("Hold ignored") },
+                recall: { ignored: $__("Recall ignored") },
+                claim: { ignored: $__("Claim not resolved") },
+            };
+            return labels[declined.type]?.[declined.kind] || $__("Declined");
+        }
+
         return {
+            declinedLabel,
             isColumnVisible,
             formatDueDate,
             formatDate,

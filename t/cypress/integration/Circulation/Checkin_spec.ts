@@ -1091,6 +1091,193 @@ describe("Circulation - Check in", () => {
             });
         });
     });
+    describe("Declined actions", () => {
+        // The row of the item says what was declined, and the action can be
+        // reopened to decide again
+        const firstRow = () => cy.get("#checkins-table tbody tr").first();
+        const transfers = item =>
+            dbQuery(
+                "SELECT datesent, datecancelled FROM branchtransfers WHERE itemnumber=? ORDER BY branchtransfer_id",
+                [item.item_id]
+            );
+
+        it("lets a declined transfer be requested after all", () => {
+            cy.set_syspref("AutomaticItemReturn", "0");
+            createCheckout({ stay_home: true }).then(objects => {
+                const item = objects.items[0];
+                visitCheckin();
+                checkin(item.external_id);
+
+                checkinModal()
+                    .contains("button", "No, don't transfer (N)")
+                    .click();
+                checkinModal().should("not.exist");
+                firstRow()
+                    .should("contain", "Transfer declined")
+                    .find("button.reopen-action")
+                    .click();
+                transfers(item).should("have.length", 0);
+
+                // The question is asked again
+                checkinModal()
+                    .should("contain", "Transfer now?")
+                    .contains("button", "Yes, transfer (Y)")
+                    .click();
+                checkinModal().should("not.exist");
+                firstRow().should("not.contain", "Transfer declined");
+                transfers(item).then(rows => {
+                    expect(rows).to.have.length(1);
+                    expect(rows[0].datesent).to.not.eq(null);
+                });
+            });
+        });
+
+        it("lets a cancelled transfer be requested again", () => {
+            createCheckout({ stay_home: true }).then(objects => {
+                const item = objects.items[0];
+                visitCheckin();
+                checkin(item.external_id);
+
+                checkinModal()
+                    .contains("button", "Cancel transfer (X)")
+                    .click();
+                checkinModal().should("not.exist");
+                firstRow()
+                    .should("contain", "Transfer cancelled")
+                    .find("button.reopen-action")
+                    .click();
+                transfers(item).then(rows => {
+                    expect(rows).to.have.length(1);
+                    expect(rows[0].datecancelled).to.not.eq(null);
+                });
+
+                checkinModal()
+                    .should("contain", "Transfer now?")
+                    .contains("button", "Yes, transfer (Y)")
+                    .click();
+                checkinModal().should("not.exist");
+                // The cancelled transfer is kept, and a new one was sent
+                transfers(item).then(rows => {
+                    expect(rows).to.have.length(2);
+                    expect(rows[1].datesent).to.not.eq(null);
+                    expect(rows[1].datecancelled).to.eq(null);
+                });
+            });
+        });
+
+        it("lets an ignored hold be confirmed after all", () => {
+            createCheckout().then(objects => {
+                const item = objects.items[0];
+                createHold(item, LOGGED_IN_LIBRARY).then(({ hold }) => {
+                    visitCheckin();
+                    checkin(item.external_id);
+
+                    checkinModal().contains("button", "Ignore (I)").click();
+                    checkinModal().should("not.exist");
+                    firstRow()
+                        .should("contain", "Hold ignored")
+                        .find("button.reopen-action")
+                        .click();
+
+                    checkinModal()
+                        .should("contain", "Hold found")
+                        .contains("button", "Confirm hold (Y)")
+                        .click();
+                    checkinModal().should("not.exist");
+                    dbQuery("SELECT found FROM reserves WHERE reserve_id=?", [
+                        hold.hold_id,
+                    ]).then(rows => expect(rows[0].found).to.eq("W"));
+                });
+            });
+        });
+
+        it("lets an ignored recall be confirmed after all", () => {
+            cy.set_syspref("UseRecalls", "staff");
+            createCheckout().then(objects => {
+                const item = objects.items[0];
+                dbQuery(
+                    "INSERT INTO circulation_rules (branchcode, categorycode, itemtype, rule_name, rule_value) VALUES (NULL, NULL, ?, 'recalls_allowed', '1')",
+                    [objects.item_type.item_type_id]
+                );
+                cleanupQueryLater(
+                    "DELETE FROM circulation_rules WHERE itemtype=?",
+                    [objects.item_type.item_type_id]
+                );
+                cy.task("insertSamplePatron", {
+                    library: { library_id: LOGGED_IN_LIBRARY },
+                }).then(({ patron, patron_category }) => {
+                    cleanupLater({ patron, category: patron_category });
+                    dbQuery(
+                        "INSERT INTO recalls (patron_id, created_date, biblio_id, pickup_library_id, priority, status, item_id, item_level) VALUES (?, NOW(), ?, ?, 1, 'requested', ?, 1)",
+                        [
+                            patron.patron_id,
+                            objects.biblio.biblio_id,
+                            LOGGED_IN_LIBRARY,
+                            item.item_id,
+                        ]
+                    ).then(result => {
+                        const recall_id = result.insertId;
+                        cleanupQueryLater(
+                            "DELETE FROM recalls WHERE recall_id=?",
+                            [recall_id]
+                        );
+                        visitCheckin();
+                        checkin(item.external_id);
+
+                        checkinModal().contains("button", "Ignore (I)").click();
+                        checkinModal().should("not.exist");
+                        firstRow()
+                            .should("contain", "Recall ignored")
+                            .find("button.reopen-action")
+                            .click();
+
+                        checkinModal()
+                            .should("contain", "Recall found")
+                            .contains("button", "Confirm recall (Y)")
+                            .click();
+                        checkinModal().should("not.exist");
+                        dbQuery(
+                            "SELECT status FROM recalls WHERE recall_id=?",
+                            [recall_id]
+                        ).then(rows => expect(rows[0].status).to.eq("waiting"));
+                    });
+                });
+            });
+        });
+
+        it("leaves a return claim open when it is resolved later, and can be reopened", () => {
+            cy.set_syspref("ClaimReturnedLostValue", "1");
+            createCheckout().then(objects => {
+                const item = objects.items[0];
+                dbQuery(
+                    "INSERT INTO return_claims (itemnumber, borrowernumber, created_on) VALUES (?, ?, NOW())",
+                    [item.item_id, objects.patron.patron_id]
+                ).then(result => {
+                    visitCheckin();
+                    checkin(item.external_id);
+
+                    checkinModal()
+                        .contains("button", "Resolve later (L)")
+                        .should("have.attr", "accesskey", "l")
+                        .click();
+                    checkinModal().should("not.exist");
+                    dbQuery("SELECT resolution FROM return_claims WHERE id=?", [
+                        result.insertId,
+                    ]).then(rows => expect(rows[0].resolution).to.eq(null));
+
+                    firstRow()
+                        .should("contain", "Claim not resolved")
+                        .find("button.reopen-action")
+                        .click();
+                    checkinModal().should(
+                        "contain",
+                        "Item was claimed returned"
+                    );
+                });
+            });
+        });
+    });
+
     describe("Return date", () => {
         it("can be cleared with the clear control of the date field", () => {
             createCheckout().then(() => {
