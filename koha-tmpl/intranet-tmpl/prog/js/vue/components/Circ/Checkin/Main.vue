@@ -97,7 +97,7 @@
             <CheckedInItems
                 :checkins="checkins"
                 @show-modal="showModalFor"
-                @resolve-claim="onResolveClaim"
+                @resolve-claim="showModalFor"
             />
         </div>
 
@@ -110,7 +110,7 @@
             @dismiss="onDismiss"
             @ignore="onIgnore"
             @resolve="onResolve"
-            @resolve-claim="onResolveClaim"
+            @claim-resolved="onClaimResolved"
             @open-cancel-hold="onOpenCancelHold"
         />
 
@@ -120,13 +120,6 @@
             :cancelling="processing"
             @confirm="onConfirmHoldCancellation"
             @close="showHoldCancellationModal = false"
-        />
-
-        <ResolveClaimModal
-            :claim-id="activeClaimId"
-            :visible="showClaimModal"
-            @resolved="onClaimResolved"
-            @close="onClaimModalClose"
         />
 
         <BundleVerificationModal
@@ -155,7 +148,6 @@ import CheckedInItems from "./CheckedInItems.vue";
 import CheckinOptions from "./CheckinOptions.vue";
 import ConfirmationModal from "./ConfirmationModal.vue";
 import HoldCancellationModal from "./HoldCancellationModal.vue";
-import ResolveClaimModal from "./ResolveClaimModal.vue";
 import BundleVerificationModal from "./BundleVerificationModal.vue";
 import { printTable } from "./table-export.js";
 import { $__ } from "@koha-vue/i18n";
@@ -190,7 +182,6 @@ export default {
         CheckinOptions,
         ConfirmationModal,
         HoldCancellationModal,
-        ResolveClaimModal,
         BundleVerificationModal,
     },
     setup() {
@@ -207,8 +198,6 @@ export default {
         const checkinOptionsRef = ref(null);
         const activeModalItem = ref(null);
         const showOptions = ref(false);
-        const showClaimModal = ref(false);
-        const activeClaimId = ref(null);
         // A bundle to check in is confirmed in its own modal, which also asks
         // for the contents: there is no confirmation before it
         const bundleModalItem = computed(() => {
@@ -644,7 +633,7 @@ export default {
 
         // Watch for new pending items - auto-show panel for the first one
         watch(nextModalItem, newItem => {
-            if (newItem && !activeModalItem.value && !showClaimModal.value) {
+            if (newItem && !activeModalItem.value) {
                 activeModalItem.value = newItem;
                 nextTick(() => refocusInput());
             }
@@ -750,29 +739,6 @@ export default {
         }
 
         // From the checkins table or the confirmation modal
-        function onResolveClaim(checkin) {
-            const claimMsg = (checkin.messages || []).find(
-                m => m.message === "return_claim"
-            );
-            if (claimMsg && claimMsg.payload) {
-                openClaimModal(claimMsg.payload.claim_id);
-            }
-        }
-
-        // Only one modal at a time: the confirmation modal is hidden while
-        // the resolve claim modal is open, and comes back when it is closed
-        function openClaimModal(claimId) {
-            activeModalItem.value = null;
-            activeClaimId.value = claimId;
-            showClaimModal.value = true;
-        }
-
-        function onClaimModalClose() {
-            showClaimModal.value = false;
-            activeClaimId.value = null;
-            _advanceModal();
-        }
-
         function onClaimResolved(claimId) {
             // Mark the row of the resolved claim as resolved
             const idx = checkins.value.findIndex(
@@ -792,7 +758,7 @@ export default {
                     _action_type: null,
                 };
             }
-            onClaimModalClose();
+            _advanceModal();
         }
 
         async function onConfirm(item) {
@@ -947,8 +913,6 @@ export default {
             formatDateTime,
             lastCheckinMessages,
             showOptions,
-            showClaimModal,
-            activeClaimId,
             bundleModalItem,
             confirmationModalItem,
             showHoldCancellationModal,
@@ -962,8 +926,6 @@ export default {
             onBarcodeScan,
             showModalFor,
             onMessagesClick,
-            onResolveClaim,
-            onClaimModalClose,
             onClaimResolved,
             onBundleConfirm,
             onBundleCancel,

@@ -398,6 +398,62 @@
                         >
                             {{ box.text }}
                         </div>
+
+                        <!-- The claim is resolved from this modal -->
+                        <div
+                            v-if="claimError"
+                            class="alert alert-danger"
+                            role="alert"
+                        >
+                            {{ claimError }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="claim-resolution" class="form-label">
+                                {{ $__("Resolution:") }}
+                            </label>
+                            <select
+                                id="claim-resolution"
+                                v-model="claimResolution"
+                                class="form-select"
+                            >
+                                <option value="">
+                                    {{ $__("Select a resolution") }}
+                                </option>
+                                <option
+                                    v-for="r in claimResolutions"
+                                    :key="r.value"
+                                    :value="r.value"
+                                >
+                                    {{ r.description }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="claim-lost-status" class="form-label">
+                                {{ $__("New lost status (optional):") }}
+                            </label>
+                            <select
+                                id="claim-lost-status"
+                                v-model="claimNewLostStatus"
+                                class="form-select"
+                            >
+                                <option value="">{{ $__("No change") }}</option>
+                                <option
+                                    v-for="st in claimLostStatuses"
+                                    :key="st.value"
+                                    :value="st.value"
+                                >
+                                    {{ st.description }}
+                                </option>
+                            </select>
+                            <div class="form-text">
+                                {{
+                                    $__(
+                                        "This only sets the status of the item. Fees are not charged or refunded when it changes."
+                                    )
+                                }}
+                            </div>
+                        </div>
                     </template>
 
                     <!-- Warnings -->
@@ -622,7 +678,8 @@
                             type="button"
                             class="btn btn-primary approve"
                             accesskey="y"
-                            @click="$emit('resolve-claim', item)"
+                            :disabled="!claimResolution || resolvingClaim"
+                            @click="resolveClaim"
                         >
                             <i class="fa fa-gavel"></i>
                             {{ $__("Resolve claim (Y)") }}
@@ -630,11 +687,12 @@
                         <button
                             type="button"
                             class="btn btn-default deny"
-                            accesskey="i"
+                            :disabled="resolvingClaim"
+                            accesskey="l"
                             @click="$emit('ignore', item)"
                         >
-                            <i class="fa fa-times"></i>
-                            {{ $__("Ignore (I)") }}
+                            <i class="fa-regular fa-clock"></i>
+                            {{ $__("Resolve later (L)") }}
                         </button>
                     </template>
                 </div>
@@ -655,6 +713,7 @@ import {
 import { storeToRefs } from "pinia";
 import { useCheckinStore } from "../../../stores/checkin.js";
 import { $__ } from "@koha-vue/i18n";
+import { APIClient } from "../../../fetch/api-client.js";
 import {
     holdSlipUrl,
     openSlipWindow,
@@ -679,7 +738,7 @@ export default {
         "dismiss",
         "ignore",
         "resolve",
-        "resolve-claim",
+        "claim-resolved",
         "open-cancel-hold",
     ],
     setup(props, { emit }) {
@@ -1031,6 +1090,64 @@ export default {
 
         // Check-in messages shown inside the return-claim modal (a claim
         // checkin actually returns the item, so lost/fee messages apply).
+        // Resolving the claim: the resolutions and lost statuses to choose from
+        const claimResolutions = ref([]);
+        const claimLostStatuses = ref([]);
+        const claimResolution = ref("");
+        const claimNewLostStatus = ref("");
+        const claimError = ref(null);
+        const resolvingClaim = ref(false);
+
+        onMounted(() => {
+            APIClient.authorised_values.values
+                .get("RETURN_CLAIM_RESOLUTION")
+                .then(values => {
+                    claimResolutions.value = values || [];
+                })
+                .catch(() => {});
+            APIClient.authorised_values.values
+                .get("LOST")
+                .then(values => {
+                    claimLostStatuses.value = values || [];
+                })
+                .catch(() => {});
+        });
+
+        // Start from a blank form for each claim
+        watch(
+            () => props.item,
+            (item, previous) => {
+                if (item !== previous) {
+                    claimResolution.value = "";
+                    claimNewLostStatus.value = "";
+                    claimError.value = null;
+                }
+            }
+        );
+
+        async function resolveClaim() {
+            const claimMsg = (props.item?.messages || []).find(
+                m => m.message === "return_claim"
+            );
+            const claimId = claimMsg?.payload?.claim_id;
+            if (!claimId || !claimResolution.value) return;
+            resolvingClaim.value = true;
+            claimError.value = null;
+            try {
+                await APIClient.claim.return_claims.resolve(claimId, {
+                    resolution: claimResolution.value,
+                    new_lost_status: claimNewLostStatus.value,
+                });
+                emit("claim-resolved", claimId);
+            } catch (e) {
+                claimError.value = $__(
+                    "Unable to resolve the return claim: %s"
+                ).replace("%s", () => e.message.replace(/^Error: /, ""));
+            } finally {
+                resolvingClaim.value = false;
+            }
+        }
+
         const claimCheckinMessages = computed(() => {
             const labels = {
                 was_lost: {
@@ -1134,6 +1251,13 @@ export default {
             formatTransferTrigger,
             formatMessage,
             claimCheckinMessages,
+            claimResolutions,
+            claimLostStatuses,
+            claimResolution,
+            claimNewLostStatus,
+            claimError,
+            resolvingClaim,
+            resolveClaim,
             printAndResolveHold,
             printAndResolveTransfer,
             printAndResolveRecall,

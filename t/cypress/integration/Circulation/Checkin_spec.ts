@@ -1018,13 +1018,18 @@ describe("Circulation - Check in", () => {
                     row(first.item.external_id)
                         .contains("button", "Resolve claim")
                         .click();
-                    // The confirmation modal is hidden while resolving
-                    checkinModal().should("not.exist");
+                    // The claim is resolved in this same modal: the
+                    // resolution is chosen in it, and is required
+                    checkinModal()
+                        .should("contain", "Item was claimed returned")
+                        .and("contain", first.item.external_id);
+                    checkinModal()
+                        .contains("button", "Resolve claim (Y)")
+                        .should("be.disabled");
                     cy.get("#claim-resolution").select("FOUND_IN_LIB");
-                    cy.get("#claim-resolution")
-                        .closest(".modal-content")
-                        .find(".modal-footer")
-                        .contains("button", "Resolve claim")
+                    checkinModal()
+                        .contains("button", "Resolve claim (Y)")
+                        .should("be.enabled")
                         .click();
                     cy.wait("@resolveClaim")
                         .its("response.statusCode")
