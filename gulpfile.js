@@ -180,7 +180,28 @@ function getPoTasks() {
 const poTypes = getPoTasks();
 
 function po_extract_marc(type) {
-    return src(`koha-tmpl/*-tmpl/*/en/**/*${type}*`, {
+    const globs = [
+        `koha-tmpl/*-tmpl/*/en/**/*${type}*`,
+
+        // Stylesheets used to export records (unAPI, OAI-PMH, Z39.50/SRU,
+        // C4::Record) are always loaded from prog/en, never from a translated
+        // directory. Their literals are controlled vocabularies (MODS, MADS,
+        // DC...) that must not be translated anyway.
+        ...[
+            "slim2ATOM",
+            "slim2DC",
+            "slim2MADS",
+            "slim2MODS",
+            "slim2OAIDC",
+            "slim2RDFDC",
+            "slim2RSS2",
+            "slim2SRWDC",
+            "slimUtils-MODS31",
+            "slimUtils2",
+        ].map(name => `!koha-tmpl/intranet-tmpl/prog/en/xslt/${type}${name}*`),
+    ];
+
+    return src(globs, {
         read: false,
         nocase: true,
     })
