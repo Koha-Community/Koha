@@ -209,6 +209,16 @@ describe("Circulation - Check in", () => {
                 visitCheckin();
 
                 // The settings expand inside the card of the form
+                // Password managers must not offer to fill the barcode box:
+                // their icon covers the settings icon
+                cy.get("#barcode-input").should($input => {
+                    expect($input).to.have.attr("autocomplete", "off");
+                    expect($input).to.have.attr("data-1p-ignore");
+                    expect($input).to.have.attr("data-lpignore", "true");
+                    expect($input).to.have.attr("data-bwignore", "true");
+                    expect($input).to.have.attr("data-form-type", "other");
+                });
+
                 cy.get("#checkin-app .page-section.checkin-card")
                     .should(
                         "have.css",

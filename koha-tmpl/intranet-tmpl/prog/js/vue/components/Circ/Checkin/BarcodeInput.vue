@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="onSubmit" class="checkin-form">
+    <form class="checkin-form" autocomplete="off" @submit.prevent="onSubmit">
         <fieldset id="circ_returns_checkin">
             <div class="form-control-group">
                 <label for="barcode-input" class="visually-hidden">{{
@@ -16,6 +16,10 @@
                     :placeholder="$__('Enter item barcode')"
                     :disabled="disabled"
                     autocomplete="off"
+                    data-1p-ignore
+                    data-lpignore="true"
+                    data-bwignore="true"
+                    data-form-type="other"
                     @focus="$emit('focus')"
                 />
 
