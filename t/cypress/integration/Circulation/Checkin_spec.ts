@@ -123,7 +123,9 @@ function checkoutCount(item) {
 }
 
 function checkinModal() {
-    return cy.get("#checkin-app .modal.non-blocking .modal-content");
+    return cy.get(
+        "#checkin-app .modal.non-blocking .modal-content, #checkin-app .modal.blocking .modal-content"
+    );
 }
 
 describe("Circulation - Check in", () => {
@@ -629,7 +631,40 @@ describe("Circulation - Check in", () => {
         });
     });
 
-    describe("Transfers: cancelling", () => {
+    describe("Transfers: blocking and cancelling", () => {
+        it("dims the page and blocks everything outside the dialog when blocking", () => {
+            cy.set_syspref("TransfersBlockCirc", "1");
+            createCheckout({ stay_home: true }).then(objects => {
+                visitCheckin();
+                checkin(objects.items[0].external_id);
+
+                checkinModal().should("be.visible");
+                cy.get("#checkin-app .modal.blocking")
+                    .should("have.attr", "aria-modal", "true")
+                    .and("have.css", "background-color", "rgba(0, 0, 0, 0.5)");
+
+                // The dialog covers the menu: a click outside it cannot
+                // reach a link
+                cy.get("#sidebar-container a")
+                    .first()
+                    .then($link => {
+                        const rect = $link[0].getBoundingClientRect();
+                        const top = $link[0].ownerDocument.elementFromPoint(
+                            rect.left + 4,
+                            rect.top + 4
+                        );
+                        expect(top.closest(".modal.blocking")).to.not.eq(null);
+                    });
+
+                // Escape does not dismiss it either
+                cy.get("body").type("{esc}");
+                checkinModal().should("be.visible");
+
+                checkinModal().contains("button", "OK (Y)").click();
+                checkinModal().should("not.exist");
+            });
+        });
+
         it("cancels the transfer created by AutomaticItemReturn, leaving a trace in the transfer history", () => {
             createCheckout({ stay_home: true }).then(objects => {
                 const item = objects.items[0];

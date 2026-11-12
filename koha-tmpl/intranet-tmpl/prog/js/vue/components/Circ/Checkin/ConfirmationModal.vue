@@ -1,10 +1,12 @@
 <template>
     <div
         v-if="item"
-        class="modal modal-lg show d-block audio-alert-action non-blocking"
+        ref="modalEl"
+        class="modal modal-lg show d-block audio-alert-action"
+        :class="blocksPage ? 'blocking' : 'non-blocking'"
         tabindex="-1"
         role="dialog"
-        aria-modal="false"
+        :aria-modal="blocksPage ? 'true' : 'false'"
         aria-labelledby="checkin-confirmation-title"
     >
         <div class="modal-dialog">
@@ -631,7 +633,14 @@
 </template>
 
 <script>
-import { computed, onBeforeUnmount, onMounted } from "vue";
+import {
+    computed,
+    nextTick,
+    onBeforeUnmount,
+    onMounted,
+    ref,
+    watch,
+} from "vue";
 import { storeToRefs } from "pinia";
 import { useCheckinStore } from "../../../stores/checkin.js";
 import { $__ } from "@koha-vue/i18n";
@@ -717,6 +726,37 @@ export default {
                 !policy.value.transfers_block
         );
 
+        // TransfersBlockCirc: the transfer prompt takes over the page. The
+        // page behind it is dimmed and cannot be used until one of the
+        // actions is picked, as on the legacy check-in page.
+        const modalEl = ref(null);
+        const blocksPage = computed(
+            () =>
+                !!props.item &&
+                props.item._action_type === "transfer" &&
+                !!policy.value.transfers_block
+        );
+
+        // Keep the keyboard focus inside the dialog while it blocks the page
+        function onDocumentFocusin(e) {
+            const el = modalEl.value;
+            if (!blocksPage.value || !el || el.contains(e.target)) return;
+            const target =
+                el.querySelector(".approve") || el.querySelector("button");
+            if (target) target.focus();
+        }
+
+        watch(
+            blocksPage,
+            blocking => {
+                if (blocking)
+                    nextTick(() =>
+                        onDocumentFocusin({ target: document.body })
+                    );
+            },
+            { immediate: true }
+        );
+
         // The transfer already exists (created by AutomaticItemReturn, or
         // replacing a wrong one): the dialog only asks to acknowledge it and
         // the last button cancels it after the fact, which is recorded in the
@@ -740,10 +780,12 @@ export default {
 
         onMounted(() => {
             document.addEventListener("keydown", onDocumentKeydown);
+            document.addEventListener("focusin", onDocumentFocusin);
         });
 
         onBeforeUnmount(() => {
             document.removeEventListener("keydown", onDocumentKeydown);
+            document.removeEventListener("focusin", onDocumentFocusin);
         });
 
         // The item needs a transfer that was not created (AutomaticItemReturn
@@ -1051,6 +1093,8 @@ export default {
         }
 
         return {
+            modalEl,
+            blocksPage,
             hasExistingTransfer,
             isNonBlockingTransfer,
             isTransferQuestion,
@@ -1098,6 +1142,11 @@ export default {
 
 .non-blocking .modal-dialog {
     pointer-events: auto;
+}
+
+/* TransfersBlockCirc: dim the page and swallow clicks outside the dialog */
+.blocking {
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 /* Match the legacy returns.pl notification boxes */
