@@ -15,20 +15,22 @@
 
     <div class="patroninfo [% patron_type_class | html %]">
         <h5>
-            [% IF ( patron_is_staff ) %]
-                <i class="fa-solid fa-shield fa-fw" title="Staff patron"></i>
-            [% END %]
             [% IF ( patron_is_superlibrarian ) %]
                 <i class="fa fa-bolt fa-fw" title="Superlibrarian patron"></i>
             [% END %]
             [% IF ( patron.protected ) %]
                 <i class="fa fa-lock fa-fw" title="Protected patron"></i>
             [% END %]
-            [% IF ( patron_is_sco ) %]
-                <i class="fa-solid fa-upload fa-fw" title="Self checkout patron"></i>
-            [% END %]
-            [% IF ( patron_is_sci ) %]
-                <i class="fa-solid fa-download fa-fw" title="Self check-in patron"></i>
+            [% UNLESS patron_is_superlibrarian %]
+                [% IF ( patron_is_staff ) %]
+                    <i class="fa-solid fa-shield fa-fw" title="Staff patron"></i>
+                [% END %]
+                [% IF ( patron_is_sco ) %]
+                    <i class="fa-solid fa-upload fa-fw" title="Self checkout patron"></i>
+                [% END %]
+                [% IF ( patron_is_sci ) %]
+                    <i class="fa-solid fa-download fa-fw" title="Self check-in patron"></i>
+                [% END %]
             [% END %]
             [% INCLUDE 'patron-title.inc' no_html => 1 %]
         </h5>
