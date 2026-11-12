@@ -97,6 +97,10 @@ function visitCheckin(params = "") {
     cy.visit(`/cgi-bin/koha/circ/checkin.pl${params}`);
     // The Vue app is mounted
     cy.get("#checkin-app #barcode-input").should("be.visible");
+    // The page focuses the barcode box a moment after it is mounted: wait for
+    // it, so it does not take the focus from what a test does next (it
+    // closes an open date picker, for example)
+    cy.get("#checkin-app #barcode-input").should("have.focus");
 }
 
 function checkin(barcode) {
