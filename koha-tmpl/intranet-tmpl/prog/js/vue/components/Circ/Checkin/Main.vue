@@ -103,7 +103,7 @@
 
         <!-- Confirmation panel - shows one pending item at a time -->
         <ConfirmationModal
-            :item="activeModalItem"
+            :item="confirmationModalItem"
             :confirming="processing"
             @close="onClose"
             @confirm="onConfirm"
@@ -130,9 +130,7 @@
         />
 
         <BundleVerificationModal
-            :visible="showBundleModal"
-            :item-id="bundleItemId"
-            :barcode="bundleBarcode"
+            :item="bundleModalItem"
             @confirm="onBundleConfirm"
             @cancel="onBundleCancel"
         />
@@ -159,6 +157,7 @@ import ConfirmationModal from "./ConfirmationModal.vue";
 import HoldCancellationModal from "./HoldCancellationModal.vue";
 import ResolveClaimModal from "./ResolveClaimModal.vue";
 import BundleVerificationModal from "./BundleVerificationModal.vue";
+import { printTable } from "./table-export.js";
 import { $__ } from "@koha-vue/i18n";
 import { printHoldSlip } from "./slip-printer.js";
 
@@ -210,9 +209,19 @@ export default {
         const showOptions = ref(false);
         const showClaimModal = ref(false);
         const activeClaimId = ref(null);
-        const showBundleModal = ref(false);
-        const bundleItemId = ref(null);
-        const bundleBarcode = ref("");
+        // A bundle to check in is confirmed in its own modal, which also asks
+        // for the contents: there is no confirmation before it
+        const bundleModalItem = computed(() => {
+            const active = activeModalItem.value;
+            return active &&
+                active._status === "pending_confirmation" &&
+                active._confirms?.items_bundle
+                ? active
+                : null;
+        });
+        const confirmationModalItem = computed(() =>
+            bundleModalItem.value ? null : activeModalItem.value
+        );
         const showHoldCancellationModal = ref(false);
         const holdCancellationItem = ref(null);
         const holdCancellationGroup = ref(false);
@@ -413,8 +422,14 @@ export default {
                                 `<li>${escapeHtml(i.title)} - ${escapeHtml(i.external_id)}</li>`
                         )
                         .join("");
+                    // The list of the missing items can be printed, to look for
+                    // them: legacy offered it in a printable modal
+                    const printButton =
+                        msg.message === "bundle_missing_items"
+                            ? `<button type="button" class="btn btn-default btn-xs print-missing-items" data-checkin-id="${escapeHtml(latest.checkin_id)}"><i class="fa fa-print" aria-hidden="true"></i> ${escapeHtml($__("Print list"))}</button>`
+                            : "";
                     detailed.push({
-                        text: `<strong>${escapeHtml(heading)}</strong><ul>${items}</ul>`,
+                        text: `<strong>${escapeHtml(heading)}</strong><ul>${items}</ul>${printButton}`,
                         alertClass: "alert-warning",
                     });
                 }
@@ -686,10 +701,35 @@ export default {
             if (slipBtn) {
                 printHoldSlip(slipBtn.dataset.reserveId);
             }
+            const printMissingBtn = e.target.closest(".print-missing-items");
+            if (printMissingBtn) {
+                printMissingItems(printMissingBtn.dataset.checkinId);
+            }
             const bundleBtn = e.target.closest(".remove-from-bundle");
             if (bundleBtn) {
                 removeFromBundle(bundleBtn.dataset);
             }
+        }
+
+        function printMissingItems(checkinId) {
+            const entry = checkins.value.find(
+                c => String(c.checkin_id) === String(checkinId)
+            );
+            const msg = (entry?.messages || []).find(
+                m => m.message === "bundle_missing_items"
+            );
+            if (!entry || !msg) return;
+            const barcode = entry._barcode || entry.item?.external_id || "";
+            printTable({
+                title: $__(
+                    "Items missing from bundle at checkin for %s"
+                ).replace("%s", () => barcode),
+                headers: [$__("Barcode"), $__("Title")],
+                rows: (msg.payload?.items || []).map(i => [
+                    i.external_id,
+                    i.title,
+                ]),
+            });
         }
 
         async function removeFromBundle({ checkinId, itemId, hostItemId }) {
@@ -756,46 +796,31 @@ export default {
         }
 
         async function onConfirm(item) {
-            // For bundle items, show the verification modal instead of confirming directly
-            if (item._confirms && item._confirms.items_bundle) {
-                activeModalItem.value = null;
-                bundleItemId.value = item.item?.item_id || null;
-                bundleBarcode.value =
-                    item._barcode || item.item?.external_id || "";
-                showBundleModal.value = true;
-                // Store the item for later confirmation
-                _pendingBundleItem = item;
-                return;
-            }
             await store.confirmPending(item);
             _advanceModal();
         }
 
-        let _pendingBundleItem = null;
-
         async function onBundleConfirm(result) {
-            showBundleModal.value = false;
-            if (_pendingBundleItem) {
+            const item = bundleModalItem.value;
+            if (item) {
                 // Pass verified barcodes through options - they will be
                 // included in the POST /checkins body alongside the JWT
                 if (result.verify) {
-                    _pendingBundleItem._options.verified_bundle_barcodes =
+                    item._options.verified_bundle_barcodes =
                         result.scanned || [];
                 }
-                await store.confirmPending(_pendingBundleItem);
-                _pendingBundleItem = null;
+                await store.confirmPending(item);
             }
             _advanceModal();
         }
 
-        // Cancelling the bundle verification does not check the item in, like
+        // Cancelling the bundle confirmation does not check the item in, like
         // "No, don't check in": the confirmation is dismissed and the next
         // pending item is shown
         function onBundleCancel() {
-            showBundleModal.value = false;
-            if (_pendingBundleItem) {
-                store.dismissPending(_pendingBundleItem);
-                _pendingBundleItem = null;
+            const item = bundleModalItem.value;
+            if (item) {
+                store.dismissPending(item);
             }
             _advanceModal();
         }
@@ -924,9 +949,8 @@ export default {
             showOptions,
             showClaimModal,
             activeClaimId,
-            showBundleModal,
-            bundleItemId,
-            bundleBarcode,
+            bundleModalItem,
+            confirmationModalItem,
             showHoldCancellationModal,
             holdCancellationGroup,
             onOpenCancelHold,

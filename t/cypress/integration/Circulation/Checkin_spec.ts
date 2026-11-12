@@ -847,6 +847,133 @@ describe("Circulation - Check in", () => {
             });
         });
     });
+    describe("Bundles", () => {
+        // A checked out bundle with two parts
+        function createBundle() {
+            return createCheckout().then(objects => {
+                const host = objects.items[0];
+                return cy
+                    .task("insertSampleBiblio", { item_count: 2 })
+                    .then(parts => {
+                        cleanupLater(parts);
+                        cleanupQueryLater(
+                            "DELETE FROM item_bundles WHERE host=?",
+                            [host.item_id]
+                        );
+                        const queries = parts.items.map(part =>
+                            dbQuery(
+                                "INSERT INTO item_bundles (item, host) VALUES (?, ?)",
+                                [part.item_id, host.item_id]
+                            )
+                        );
+                        return cy
+                            .wrap(queries)
+                            .then(() => ({ host, parts: parts.items }));
+                    });
+            });
+        }
+
+        const bundleModal = () => cy.get("#checkin-app .modal.show");
+
+        it("is confirmed in a single modal that asks for the contents", () => {
+            createBundle().then(({ host, parts }) => {
+                visitCheckin();
+                checkin(host.external_id);
+
+                // No confirmation before the contents are asked for
+                bundleModal()
+                    .should("be.visible")
+                    .and("contain", "Please confirm bundle contents")
+                    .and("not.contain", "Please confirm check in");
+                bundleModal()
+                    .find("p.bundle-host")
+                    .should("contain", host.external_id);
+
+                // The explanation is above the table of the expected items
+                bundleModal()
+                    .contains(".alert", "Missing items will be marked as lost")
+                    .should("be.visible");
+                bundleModal()
+                    .find("table tbody tr")
+                    .should("have.length", parts.length);
+                cy.focused().should("have.id", "bundle-barcodes");
+
+                // The table can be exported, without its status column
+                bundleModal().contains("button", "Export").click();
+                bundleModal()
+                    .find(
+                        ".bundle-export-copy, .bundle-export-csv, .bundle-export-print"
+                    )
+                    .should("have.length", 3)
+                    .and("be.visible");
+
+                // The actions are named for what they do, with shortcuts
+                bundleModal()
+                    .contains("button", "Check in, mark missing lost (Y)")
+                    .should("have.attr", "accesskey", "y");
+                bundleModal()
+                    .contains("button", "Check in, verify later (L)")
+                    .should("have.attr", "accesskey", "l");
+                bundleModal()
+                    .contains("button", "Cancel (X)")
+                    .should("have.attr", "accesskey", "x");
+            });
+        });
+
+        it("is not checked in when cancelled", () => {
+            createBundle().then(({ host }) => {
+                visitCheckin();
+                checkin(host.external_id);
+                bundleModal().contains("button", "Cancel (X)").click();
+                bundleModal().should("not.exist");
+                checkoutCount(host).should("eq", 1);
+            });
+        });
+
+        it("marks the missing parts as lost and offers to print their list", () => {
+            createBundle().then(({ host, parts }) => {
+                visitCheckin();
+                checkin(host.external_id);
+
+                bundleModal()
+                    .find("#bundle-barcodes")
+                    .type(parts[0].external_id);
+                bundleModal()
+                    .find("#verify-progress")
+                    .should("contain", "1 of 2 verified");
+                bundleModal()
+                    .contains("button", "Check in, mark missing lost (Y)")
+                    .click();
+                cy.wait("@checkin")
+                    .its("response.statusCode")
+                    .should("eq", 200);
+
+                // The part that was not scanned is lost, the other one is not
+                dbQuery(
+                    "SELECT itemnumber, itemlost FROM items WHERE itemnumber IN (?, ?)",
+                    [parts[0].item_id, parts[1].item_id]
+                ).then(rows => {
+                    const lost = Object.fromEntries(
+                        rows.map(r => [r.itemnumber, r.itemlost])
+                    );
+                    expect(lost[parts[0].item_id]).to.eq(0);
+                    expect(lost[parts[1].item_id]).to.not.eq(0);
+                });
+
+                // The alert lists the missing part, and its list can be printed
+                cy.get("#checkin-app .alert-warning")
+                    .contains("Bundle had missing items")
+                    .parents(".alert")
+                    .within(() => {
+                        cy.contains(parts[1].external_id);
+                        cy.contains("button", "Print list").should(
+                            "be.visible"
+                        );
+                    });
+            });
+        });
+    });
+
     describe("Return claims", () => {
         it("marks the row of the resolved claim as resolved", () => {
             cy.set_syspref("ClaimReturnedLostValue", "1");
