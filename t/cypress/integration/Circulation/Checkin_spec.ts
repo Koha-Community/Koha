@@ -916,6 +916,33 @@ describe("Circulation - Check in", () => {
         });
     });
     describe("Return date", () => {
+        it("can be cleared with the clear control of the date field", () => {
+            createCheckout().then(() => {
+                visitCheckin();
+                cy.get("#show-circ-settings a").click();
+
+                const twoDaysAgo = new Date();
+                twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+                setReturnDate(twoDaysAgo);
+                cy.get("#return_date_override_fields input[type='text']")
+                    .invoke("val")
+                    .should("not.be.empty");
+
+                cy.get(
+                    "#return_date_override_fields button.koha-datepicker-clear"
+                )
+                    .should("have.attr", "aria-label", "Clear date")
+                    .click();
+                cy.get("#return_date_override_fields input[type='text']")
+                    .invoke("val")
+                    .should("be.empty");
+
+                // No return date is active any more
+                cy.get("#show-circ-settings a").click();
+                cy.get("#checkin-app").should("not.contain", "Return date:");
+            });
+        });
+
         it("takes a time and does not allow a future date", () => {
             createCheckout().then(objects => {
                 const item = objects.items[0];
