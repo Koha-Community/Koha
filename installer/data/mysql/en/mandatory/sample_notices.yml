@@ -926,7 +926,7 @@ tables:
             - "Checked out to [% borrower.title | html %] [% borrower.firstname | html %] [% borrower.initials | html %] [% borrower.surname | html %] <br>"
             - "([% borrower.cardnumber | html %]) <br>"
             - "<br>"
-            - "[% today | $KohaDates %]<br>"
+            - "[% today | $KohaDates with_hours => 1 %]<br>"
             - "<br>"
             - "<h4>Checked out today</h4>"
             - "[% FOREACH checkout IN checkouts %]"

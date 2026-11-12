@@ -480,8 +480,8 @@ subtest 'Default ISSUEQSLIP notice' => sub {
     like( $slip->{content}, qr/Checked out to .*Ada.*Lovelace/, 'The patron name is displayed' );
     like( $slip->{content}, qr/\(CARD15283\)/,                  'The card number is displayed' );
     like(
-        $slip->{content}, qr/\Q@{[ output_pref( { dt => $today, dateonly => 1 } ) ]}\E/,
-        "Today's date is displayed"
+        $slip->{content}, qr/<br>\s*\Q@{[ output_pref( { dt => $today, dateonly => 1 } ) ]}\E\s+\d{1,2}:\d{2}/,
+        "Today's date is displayed with the time"
     );
     like( $slip->{content}, qr/\Q$title1\E/,            'The title of the item checked out today is displayed' );
     like( $slip->{content}, qr/Barcode: \Q$barcode1\E/, 'The barcode of the item checked out today is displayed' );
