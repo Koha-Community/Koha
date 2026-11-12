@@ -791,7 +791,7 @@ Circulation:
               choices:
                   1: "Do"
                   0: "Don't"
-            - automatically confirm a transfer when the modal is dismissed without clicking 'Yes'.
+            - 'automatically confirm (send) a transfer that already exists when its check-in dialog is dismissed without choosing an option, for example the replacement transfer of a wrong transfer. This only applies when <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=TransfersBlockCirc">TransfersBlockCirc</a> is set to "Don''t block". A transfer that was not created yet is never created by dismissing the dialog, and the options of the dialog (OK, Print slip, Cancel transfer, Ignore, No) are not affected.'
         -
             - Store the last
             - pref: StoreLastBorrower
