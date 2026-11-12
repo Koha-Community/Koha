@@ -387,6 +387,63 @@ describe("Agreement CRUD operations", () => {
         ).type(related_agreement.relationship + "{enter}", { force: true });
     });
 
+    it("Clear a date with the clear control of the date field", () => {
+        let vendors = cy.get_vendors_to_relate();
+        let av_cat_values = cy.get_ERM_av_cats_values();
+        cy.intercept("GET", "/api/v1/erm/agreements*", {
+            statusCode: 200,
+            body: [],
+        });
+        cy.intercept("GET", "/api/v1/erm/licenses*", {
+            statusCode: 200,
+            body: [],
+            headers: {
+                "X-Base-Total-Count": "0",
+                "X-Total-Count": "0",
+            },
+        });
+        cy.intercept("GET", "/api/v1/acquisitions/vendors*", {
+            statusCode: 200,
+            body: vendors,
+        });
+        cy.intercept("GET", "/api/v1/authorised_value_categories*", {
+            statusCode: 200,
+            body: av_cat_values,
+        });
+
+        cy.visit("/cgi-bin/koha/erm/agreements/add");
+        cy.contains("Add new period").click();
+
+        // The clear control is inside the field, and only shown with a value
+        const clear =
+            "#periods_ended_on_0 + input + button.koha-datepicker-clear";
+        cy.get(clear).should("not.be.visible");
+
+        cy.get("#periods_ended_on_0+input").click();
+        cy.get(".flatpickr-calendar")
+            .eq(1)
+            .find("span.today")
+            .click({ force: true });
+        cy.get("#periods_ended_on_0").should("have.value", dates["today_iso"]);
+        cy.get("#periods_ended_on_0 + input").should(
+            "have.value",
+            dates["today_us"]
+        );
+
+        // The other dates of the period are still empty
+        cy.get(
+            "#periods_cancellation_deadline_0 + input + button.koha-datepicker-clear"
+        ).should("not.be.visible");
+
+        cy.get(clear)
+            .should("be.visible")
+            .and("have.attr", "aria-label", "Clear date")
+            .click();
+        cy.get("#periods_ended_on_0").should("have.value", "");
+        cy.get("#periods_ended_on_0 + input").should("have.value", "");
+        cy.get(clear).should("not.be.visible");
+    });
+
     it("Edit agreement", () => {
         let licenses_to_relate = cy.get_licenses_to_relate();
         let agreement = cy.get_agreement();
