@@ -239,6 +239,13 @@
                         <h4 v-if="isTransferQuestion">
                             {{ $__("Transfer now?") }}
                         </h4>
+                        <p v-if="hasExistingTransfer" class="text-muted">
+                            {{
+                                $__(
+                                    'The transfer has already been created. "Cancel transfer" cancels it and records the cancellation in the item\'s transfer history.'
+                                )
+                            }}
+                        </p>
 
                         <!-- Reason for transfer -->
                         <div
@@ -525,7 +532,11 @@
                             @click="$emit('resolve', item, 'confirm_transfer')"
                         >
                             <i class="fa fa-check"></i>
-                            {{ $__("Yes, transfer (Y)") }}
+                            {{
+                                hasExistingTransfer
+                                    ? $__("OK (Y)")
+                                    : $__("Yes, transfer (Y)")
+                            }}
                         </button>
                         <button
                             type="button"
@@ -535,18 +546,26 @@
                             @click="printAndResolveTransfer"
                         >
                             <i class="fa fa-print"></i>
-                            {{ $__("Print slip and transfer (P)") }}
+                            {{
+                                hasExistingTransfer
+                                    ? $__("Print slip (P)")
+                                    : $__("Yes, print slip and transfer (P)")
+                            }}
                         </button>
                         <button
                             v-if="isNonBlockingTransfer || isTransferQuestion"
                             type="button"
                             class="btn btn-default deny"
                             :disabled="confirming"
-                            accesskey="n"
+                            :accesskey="hasExistingTransfer ? 'x' : 'n'"
                             @click="$emit('resolve', item, 'cancel_transfer')"
                         >
                             <i class="fa fa-times"></i>
-                            {{ $__("No, don't transfer (N)") }}
+                            {{
+                                hasExistingTransfer
+                                    ? $__("Cancel transfer (X)")
+                                    : $__("No, don't transfer (N)")
+                            }}
                         </button>
                     </template>
 
@@ -696,6 +715,17 @@ export default {
                 props.item &&
                 props.item._action_type === "transfer" &&
                 !policy.value.transfers_block
+        );
+
+        // The transfer already exists (created by AutomaticItemReturn, or
+        // replacing a wrong one): the dialog only asks to acknowledge it and
+        // the last button cancels it after the fact, which is recorded in the
+        // transfer history. Without one, "No" simply does not create it.
+        const hasExistingTransfer = computed(
+            () =>
+                !!props.item &&
+                props.item._action_type === "transfer" &&
+                !!props.item.transfer_id
         );
 
         // A non-blocking transfer modal can be closed by pressing Escape. It
@@ -1021,6 +1051,7 @@ export default {
         }
 
         return {
+            hasExistingTransfer,
             isNonBlockingTransfer,
             isTransferQuestion,
             isPreCheckin,

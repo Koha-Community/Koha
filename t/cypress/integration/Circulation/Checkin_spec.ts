@@ -607,7 +607,9 @@ describe("Circulation - Check in", () => {
                 // TransfersBlockCirc: the transfer must be acted on first
                 cy.get("#barcode-input").should("be.disabled");
 
-                checkinModal().contains("button", "Yes, transfer (Y)").click();
+                // The transfer already exists (AutomaticItemReturn): the
+                // dialog only asks to acknowledge it
+                checkinModal().contains("button", "OK (Y)").click();
                 cy.wait("@transferConfirmation")
                     .its("response.statusCode")
                     .should("eq", 201);
@@ -623,6 +625,58 @@ describe("Circulation - Check in", () => {
                     expect(rows[0].tobranch).to.eq(home_library.library_id);
                     expect(rows[0].datesent).to.not.eq(null);
                 });
+            });
+        });
+    });
+
+    describe("Transfers: cancelling", () => {
+        it("cancels the transfer created by AutomaticItemReturn, leaving a trace in the transfer history", () => {
+            createCheckout({ stay_home: true }).then(objects => {
+                const item = objects.items[0];
+                visitCheckin();
+                checkin(item.external_id);
+
+                checkinModal()
+                    .should("be.visible")
+                    .and("contain", "The transfer has already been created");
+                checkinModal()
+                    .contains("button", "Cancel transfer (X)")
+                    .should("have.attr", "accesskey", "x")
+                    .click();
+                checkinModal().should("not.exist");
+
+                // The transfer is kept, as cancelled
+                dbQuery(
+                    "SELECT datecancelled, cancellation_reason FROM branchtransfers WHERE itemnumber=?",
+                    [item.item_id]
+                ).then(rows => {
+                    expect(rows).to.have.length(1);
+                    expect(rows[0].datecancelled).to.not.eq(null);
+                    expect(rows[0].cancellation_reason).to.eq("Manual");
+                });
+            });
+        });
+
+        it("only offers to not create the transfer when none exists yet", () => {
+            cy.set_syspref("AutomaticItemReturn", "0");
+            createCheckout({ stay_home: true }).then(objects => {
+                const item = objects.items[0];
+                visitCheckin();
+                checkin(item.external_id);
+
+                checkinModal().should("contain", "Transfer now?");
+                checkinModal().contains("button", "Yes, transfer (Y)");
+                checkinModal()
+                    .contains("button", "No, don't transfer (N)")
+                    .should("have.attr", "accesskey", "n")
+                    .click();
+                checkinModal().should("not.exist");
+
+                // Nothing was created
+                dbQuery(
+                    "SELECT COUNT(*) AS count FROM branchtransfers WHERE itemnumber=?",
+                    [item.item_id]
+                ).then(rows => expect(rows[0].count).to.eq(0));
             });
         });
     });
