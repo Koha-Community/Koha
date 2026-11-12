@@ -71,7 +71,13 @@
                 v-for="msg in lastCheckinMessages"
                 :key="msg.message"
                 class="alert"
-                :class="msg.alertClass"
+                :class="[
+                    msg.alertClass,
+                    msg.alertClass === 'alert-danger'
+                        ? 'audio-alert-warning'
+                        : '',
+                ]"
+                :role="msg.alertClass === 'alert-danger' ? 'alert' : null"
             >
                 <p class="mb-0" v-html="msg.text"></p>
             </div>
@@ -190,6 +196,7 @@ export default {
             checkins,
             processing,
             lastError,
+            libraries,
             pendingItems,
             nextModalItem,
             policy,
@@ -255,9 +262,44 @@ export default {
         );
 
         // Detailed messages for the most recent checkin (shown as alert boxes)
+        // A check-in refused by the module policy (wrong library, withdrawn
+        // or lost item) is reported in an alert: there is nothing to decide
+        function blockedMessages(entry) {
+            const blockers = entry.blockers || {};
+            const libraryName = id => libraries.value?.[id] || id;
+            let reason = "";
+            if (blockers.wrong_branch) {
+                reason = $__(
+                    "This item must be checked in at following library: %s"
+                ).replace("%s", () =>
+                    libraryName(blockers.wrong_branch.right_branch)
+                );
+            } else if (blockers.blocked_withdrawn) {
+                reason = $__(
+                    "This item is withdrawn and cannot be checked in."
+                );
+            } else if (blockers.blocked_lost) {
+                reason = $__("This item is lost and cannot be checked in.");
+            }
+            const detailed = [
+                {
+                    text: `<strong>${escapeHtml($__("NOT CHECKED IN"))}</strong> ${escapeHtml(reason)}`,
+                    alertClass: "alert-danger",
+                },
+            ];
+            if (entry.item?.materials_notes) {
+                detailed.push({
+                    text: `<strong>${escapeHtml($__("Note about the accompanying materials:"))}</strong> ${escapeHtml(entry.item.materials_notes)}`,
+                    alertClass: "alert-info",
+                });
+            }
+            return detailed;
+        }
+
         const lastCheckinMessages = computed(() => {
             if (!checkins.value.length) return [];
             const latest = checkins.value[0];
+            if (latest._status === "blocked") return blockedMessages(latest);
             if (latest._status !== "success") return [];
             const messages = latest.messages || [];
             const detailed = [];

@@ -56,14 +56,14 @@ export const useCheckinStore = defineStore("checkin", () => {
 
     /**
      * Items in the queue that need staff attention (modal or inline action).
+     * A blocked check-in does not: it is reported in an alert.
      * Computed from checkins with pending statuses.
      */
     const pendingItems = computed(() =>
         checkins.value.filter(
             c =>
                 c._status === "pending_confirmation" ||
-                c._status === "needs_action" ||
-                c._status === "blocked"
+                c._status === "needs_action"
         )
     );
 
@@ -586,8 +586,7 @@ export const useCheckinStore = defineStore("checkin", () => {
     function _needsAttention(entry) {
         return (
             entry._status === "pending_confirmation" ||
-            entry._status === "needs_action" ||
-            entry._status === "blocked"
+            entry._status === "needs_action"
         );
     }
 

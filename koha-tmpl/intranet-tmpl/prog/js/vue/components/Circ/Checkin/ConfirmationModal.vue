@@ -44,28 +44,6 @@
                         <p>{{ patronNote }}</p>
                     </div>
 
-                    <!-- Blocked: item cannot be checked in (e.g. wrong branch) -->
-                    <template v-if="isBlocked">
-                        <p>
-                            <strong>{{ $__("NOT CHECKED IN") }}</strong>
-                        </p>
-                        <p v-if="blockedReason">{{ blockedReason }}</p>
-
-                        <!-- Note about accompanying materials -->
-                        <div
-                            v-if="item.item && item.item.materials_notes"
-                            id="materials"
-                            class="alert alert-info"
-                        >
-                            <span class="mats_spec_label">{{
-                                $__("Note about the accompanying materials:")
-                            }}</span>
-                            <span class="mats_spec_message">{{
-                                item.item.materials_notes
-                            }}</span>
-                        </div>
-                    </template>
-
                     <!-- Pre-checkin confirmation: CircConfirmItemParts -->
                     <template v-if="isPreCheckin">
                         <div
@@ -467,19 +445,6 @@
                 </div>
 
                 <div class="modal-footer">
-                    <!-- Blocked: only an acknowledge button -->
-                    <template v-if="isBlocked">
-                        <button
-                            type="button"
-                            class="btn btn-primary approve"
-                            accesskey="o"
-                            @click="$emit('dismiss', item)"
-                        >
-                            <i class="fa fa-check"></i>
-                            {{ $__("OK") }}
-                        </button>
-                    </template>
-
                     <!-- Pre-checkin confirmation buttons -->
                     <template v-if="isPreCheckin">
                         <button
@@ -874,31 +839,6 @@ export default {
             () => props.item && props.item._status === "pending_confirmation"
         );
 
-        const isBlocked = computed(
-            () => props.item && props.item._status === "blocked"
-        );
-
-        // Human-readable explanation for a blocked check-in, mirroring the
-        // legacy returns.pl wrong-branch / blocked-item modal body.
-        const blockedReason = computed(() => {
-            const blockers = (props.item && props.item.blockers) || {};
-            if (blockers.wrong_branch) {
-                return $__(
-                    "This item must be checked in at following library: %s"
-                ).replace(
-                    "%s",
-                    libraryName(blockers.wrong_branch.right_branch)
-                );
-            }
-            if (blockers.blocked_withdrawn) {
-                return $__("This item is withdrawn and cannot be checked in.");
-            }
-            if (blockers.blocked_lost) {
-                return $__("This item is lost and cannot be checked in.");
-            }
-            return "";
-        });
-
         const itemBarcode = computed(
             () => props.item?.item?.external_id || props.item?._barcode || ""
         );
@@ -913,7 +853,6 @@ export default {
 
         const modalTitle = computed(() => {
             if (!props.item) return "";
-            if (isBlocked.value) return $__("Cannot check in");
             if (isPreCheckin.value) return $__("Please confirm check in");
             if (props.item._action_type === "hold") {
                 return holdInfo.value?.status === "waiting"
@@ -1227,8 +1166,6 @@ export default {
             isNonBlockingTransfer,
             isTransferQuestion,
             isPreCheckin,
-            isBlocked,
-            blockedReason,
             itemBarcode,
             itemTitle,
             biblioId,

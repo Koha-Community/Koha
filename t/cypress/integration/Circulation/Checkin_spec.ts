@@ -351,24 +351,54 @@ describe("Circulation - Check in", () => {
                     .its("response.statusCode")
                     .should("eq", 403);
 
-                checkinModal()
+                // The refusal is a red alert under the form, not a modal
+                cy.get("#checkin-app .modal.show").should("not.exist");
+                cy.get("#checkin-app .alert-danger")
                     .should("be.visible")
-                    .and("contain", "Cannot check in")
+                    .and("have.attr", "role", "alert")
+                    .and("contain", "NOT CHECKED IN")
                     .and(
                         "contain",
                         "This item is withdrawn and cannot be checked in."
                     );
+                cy.get("#checkin-app .checkin-card")
+                    .nextAll()
+                    .find(".alert-danger")
+                    .should("exist");
                 cy.get("#checkins-table tbody tr")
                     .first()
                     .should("have.class", "table-danger")
                     .and("contain", "Blocked");
 
-                checkinModal().contains("button", "OK").click();
-                checkinModal().should("not.exist");
-                cy.get("#checkins-table tbody tr")
-                    .first()
-                    .should("contain", "Not checked in");
+                // Nothing to acknowledge: the next item can be scanned
+                cy.get("#barcode-input").should("not.be.disabled");
 
+                checkoutCount(item).should("eq", 1);
+            });
+        });
+
+        it("does not check in a lost item with BlockReturnOfLostItems", () => {
+            cy.set_syspref("BlockReturnOfLostItems", "1");
+            createCheckout().then(objects => {
+                const item = objects.items[0];
+                dbQuery(
+                    "UPDATE items SET itemlost=1, itemlost_on=NOW() WHERE itemnumber=?",
+                    [item.item_id]
+                );
+
+                visitCheckin();
+                checkin(item.external_id)
+                    .its("response.statusCode")
+                    .should("eq", 403);
+
+                cy.get("#checkin-app .modal.show").should("not.exist");
+                cy.get("#checkin-app .alert-danger")
+                    .should("be.visible")
+                    .and("contain", "NOT CHECKED IN")
+                    .and(
+                        "contain",
+                        "This item is lost and cannot be checked in."
+                    );
                 checkoutCount(item).should("eq", 1);
             });
         });
