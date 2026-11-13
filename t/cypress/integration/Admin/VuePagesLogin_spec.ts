@@ -33,7 +33,7 @@ const pages: Array<{
         name: "Item lists",
         path: "/cgi-bin/koha/lists/items",
         route: "/add",
-        title: "Item Lists",
+        title: "Item lists",
     },
 ];
 
