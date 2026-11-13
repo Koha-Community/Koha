@@ -644,6 +644,19 @@
                         </button>
                     </template>
 
+                    <!-- Patron note: to be read, nothing to decide -->
+                    <template v-if="item._action_type === 'note'">
+                        <button
+                            type="button"
+                            class="btn btn-primary approve"
+                            accesskey="y"
+                            @click="$emit('acknowledge', item)"
+                        >
+                            <i class="fa fa-check"></i>
+                            {{ $__("Acknowledge (Y)") }}
+                        </button>
+                    </template>
+
                     <!-- Claim action buttons -->
                     <template v-if="item._action_type === 'claim'">
                         <button
@@ -709,6 +722,7 @@ export default {
         "confirm",
         "dismiss",
         "ignore",
+        "acknowledge",
         "resolve",
         "claim-resolved",
         "open-cancel-hold",
@@ -775,8 +789,9 @@ export default {
         const blocksPage = computed(
             () =>
                 !!props.item &&
-                props.item._action_type === "transfer" &&
-                !!policy.value.transfers_block
+                ((props.item._action_type === "transfer" &&
+                    !!policy.value.transfers_block) ||
+                    props.item._action_type === "note")
         );
 
         // Keep the keyboard focus inside the dialog while it blocks the page
@@ -903,6 +918,8 @@ export default {
             if (props.item._action_type === "recall")
                 return $__("Recall found");
             if (props.item._action_type === "claim") return $__("Return claim");
+            if (props.item._action_type === "note")
+                return $__("Note from the patron");
             return $__("Action required");
         });
 

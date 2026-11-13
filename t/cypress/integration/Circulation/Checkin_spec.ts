@@ -477,7 +477,7 @@ describe("Circulation - Check in", () => {
             );
         }
 
-        it("shows the note the patron left on the checkout", () => {
+        it("makes the librarian read the note the patron left on the checkout", () => {
             createCheckout().then(objects => {
                 const note = `Please renew it for me, ${Date.now()}`;
                 dbQuery(
@@ -487,10 +487,24 @@ describe("Circulation - Check in", () => {
                     visitCheckin();
                     checkin(objects.items[0].external_id);
 
-                    cy.get("#checkin-app .alert-info.issue-note")
+                    // The page waits until the note is read
+                    checkinModal()
                         .should("be.visible")
-                        .and("contain", "Patron note")
+                        .and("contain", "Note from the patron")
                         .and("contain", note);
+                    cy.get("#checkin-app .modal.show.blocking").should("exist");
+                    cy.get("#barcode-input").should("be.disabled");
+
+                    checkinModal()
+                        .contains("button", "Acknowledge (Y)")
+                        .click();
+                    checkinModal().should("not.exist");
+                    cy.get("#barcode-input").should("not.be.disabled");
+                    // The row keeps the note
+                    cy.get("#checkins-table tbody tr")
+                        .first()
+                        .should("contain", note)
+                        .and("not.have.class", "table-warning");
                 });
             });
         });

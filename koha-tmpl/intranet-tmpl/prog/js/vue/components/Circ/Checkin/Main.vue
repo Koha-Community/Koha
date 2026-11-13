@@ -116,6 +116,7 @@
             @confirm="onConfirm"
             @dismiss="onDismiss"
             @ignore="onIgnore"
+            @acknowledge="onAcknowledge"
             @resolve="onResolve"
             @claim-resolved="onClaimResolved"
             @open-cancel-hold="onOpenCancelHold"
@@ -245,10 +246,12 @@ export default {
         // Items needing attention queue as yellow rows and modals show
         // one at a time. The exception is a transfer modal when
         // TransfersBlockCirc is set: it must be acted on first.
+        // A note left by the patron blocks it as well, until it is read.
         const isInputBlocked = computed(
             () =>
-                activeModalItem.value?._action_type === "transfer" &&
-                !!policy.value.transfers_block
+                (activeModalItem.value?._action_type === "transfer" &&
+                    !!policy.value.transfers_block) ||
+                activeModalItem.value?._action_type === "note"
         );
 
         watch(isInputBlocked, blocked => {
@@ -370,18 +373,6 @@ export default {
             const lostFeeOutcome = lostFeeOutcomes.find(code =>
                 messages.some(m => m.message === code)
             );
-            // Patron note recorded on the checkout (issues.note)
-            if (latest.checkout?.note) {
-                detailed.push({
-                    text:
-                        `<h4>${escapeHtml($__("Patron note"))}</h4>` +
-                        (latest.checkout.note_date
-                            ? `<p>${escapeHtml(formatDate(latest.checkout.note_date))}</p>`
-                            : "") +
-                        `<p>${escapeHtml(latest.checkout.note)}</p>`,
-                    alertClass: "alert-info issue-note",
-                });
-            }
             // Restriction end dates, formatted like the legacy page
             const restrictionMessages = {
                 debarred: [
@@ -865,6 +856,11 @@ export default {
             _advanceModal();
         }
 
+        function onAcknowledge(item) {
+            store.acknowledgeNote(item);
+            _advanceModal();
+        }
+
         function onIgnore(item) {
             store.ignoreAction(item);
             _advanceModal();
@@ -1003,6 +999,7 @@ export default {
             onClose,
             onDismiss,
             onIgnore,
+            onAcknowledge,
             onResolve,
         };
     },

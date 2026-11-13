@@ -217,6 +217,12 @@
                             {{ checkin.checkout.patron.staff_notes }}
                         </span>
                     </p>
+                    <p v-if="checkin.checkout?.note">
+                        <span class="circ-hlt checkout-note">
+                            {{ $__("Patron note") }}:
+                            {{ checkin.checkout.note }}
+                        </span>
+                    </p>
                     <p v-if="checkin.item?.public_notes">
                         <span class="circ-hlt item-note-public">
                             {{ checkin.item.public_notes }}

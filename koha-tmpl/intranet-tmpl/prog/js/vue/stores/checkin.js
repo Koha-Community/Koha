@@ -261,6 +261,18 @@ export const useCheckinStore = defineStore("checkin", () => {
     }
 
     /**
+     * The librarian has read the patron's note on the checkout: the row is
+     * a successful checkin, which keeps the note.
+     */
+    function acknowledgeNote(entry) {
+        _replaceEntry(entry, {
+            ...entry,
+            _status: "success",
+            _action_type: null,
+        });
+    }
+
+    /**
      * Ignore a post-checkin action (hold, recall, claim, existing transfer).
      * The item was checked in, so the row is marked as a successful
      * checkin. It remembers that the action was ignored.
@@ -553,6 +565,10 @@ export const useCheckinStore = defineStore("checkin", () => {
         if (messages.some(m => m.message === "return_claim")) {
             return "claim";
         }
+        // Nothing to decide, but a note left by the patron that has to be read
+        if (data.checkout?.note) {
+            return "note";
+        }
         return null;
     }
 
@@ -717,6 +733,7 @@ export const useCheckinStore = defineStore("checkin", () => {
         confirmPending,
         dismissPending,
         ignoreAction,
+        acknowledgeNote,
         reopenAction,
         resolveAction,
         cancelHoldGroup,
