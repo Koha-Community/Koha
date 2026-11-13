@@ -1,8 +1,21 @@
 <template>
-    <!-- TODO: Wire TablesSettings column visibility toggle -->
-    <!-- TODO: Add DataTables export buttons (CSV/Copy/Print) -->
+    <TableControls
+        v-if="checkins.length"
+        :columns="columnList"
+        :is-visible="isColumnVisible"
+        :export-data="tableData"
+        export-name="checked-in-items"
+        :export-title="$__('Checked-in items')"
+        :configure="{
+            module: 'circ',
+            page: 'returns',
+            table: 'checkedintable',
+        }"
+        @toggle-column="setColumnVisible"
+    />
     <table
         v-if="checkins.length"
+        ref="tableEl"
         class="table table-striped"
         id="checkins-table"
     >
@@ -343,11 +356,14 @@
 </template>
 
 <script>
+import { ref } from "vue";
+import TableControls from "../../TableControls.vue";
 import { $__ } from "@koha-vue/i18n";
 import { printCheckinSlip } from "./slip-printer.js";
 import { useCheckinStore } from "../../../stores/checkin.js";
 
 export default {
+    components: { TableControls },
     props: {
         checkins: {
             type: Array,
@@ -362,12 +378,75 @@ export default {
          * Check if a column is visible based on tableSettings.
          * Columns default to visible if not found in settings.
          */
+        const columnList = [
+            { name: "due_date", label: $__("Due date") },
+            { name: "title", label: $__("Title") },
+            { name: "author", label: $__("Author") },
+            { name: "barcode", label: $__("Barcode") },
+            { name: "homelibrary", label: $__("Home library") },
+            { name: "transferlibrary", label: $__("Transfer to") },
+            { name: "transferreason", label: $__("Transfer reason") },
+            { name: "location", label: $__("Shelving location") },
+            { name: "itemcallnumber", label: $__("Call number") },
+            { name: "dateaccessioned", label: $__("Date acquired") },
+            { name: "record_type", label: $__("Record-level itemtype") },
+            { name: "itype", label: $__("Item type") },
+            { name: "ccode", label: $__("Collection") },
+            { name: "borrower", label: $__("Patron") },
+            { name: "itemnote", label: $__("Note") },
+        ];
+
+        // The columns the librarian shows or hides for now, over the
+        // defaults of the table settings; remembered in this browser
+        const STORAGE_KEY = "koha_checkin_columns";
+        const overrides = ref({});
+        try {
+            overrides.value =
+                JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+        } catch (e) {
+            overrides.value = {};
+        }
+
         function isColumnVisible(columnname) {
+            if (columnname in overrides.value) {
+                return !!overrides.value[columnname];
+            }
             const columns = store.tableSettings?.columns;
             if (!columns || !Array.isArray(columns)) return true;
             const col = columns.find(c => c.columnname === columnname);
             if (!col) return true;
             return !col.is_hidden || col.is_hidden === "0";
+        }
+
+        function setColumnVisible(columnname, visible) {
+            overrides.value = { ...overrides.value, [columnname]: visible };
+            try {
+                localStorage.setItem(
+                    STORAGE_KEY,
+                    JSON.stringify(overrides.value)
+                );
+            } catch (e) {
+                // Not remembered, still applies to this page
+            }
+        }
+
+        const tableEl = ref(null);
+
+        // The table as shown: visible columns, without the controls
+        function tableData() {
+            const table = tableEl.value;
+            const text = cell => {
+                const node = cell.cloneNode(true);
+                node.querySelectorAll(".no-export, button, .btn").forEach(n =>
+                    n.remove()
+                );
+                return node.textContent.replace(/\s+/g, " ").trim();
+            };
+            const headers = [...table.querySelectorAll("thead th")].map(text);
+            const rows = [...table.querySelectorAll("tbody tr")].map(tr =>
+                [...tr.children].map(text)
+            );
+            return { headers, rows };
         }
 
         function libraryName(branchcode) {
@@ -619,6 +698,10 @@ export default {
         return {
             declinedLabel,
             isColumnVisible,
+            setColumnVisible,
+            columnList,
+            tableData,
+            tableEl,
             formatDueDate,
             formatDate,
             itemString,

@@ -222,7 +222,11 @@
 import { computed, nextTick, ref, watch } from "vue";
 import { $__ } from "@koha-vue/i18n";
 import { APIClient } from "../../../fetch/api-client.js";
-import { copyTable, downloadCsv, printTable } from "./table-export.js";
+import {
+    copyTable,
+    downloadCsv,
+    printTable,
+} from "../../../utils/table-export.js";
 
 export default {
     props: {

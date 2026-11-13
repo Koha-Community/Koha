@@ -156,7 +156,7 @@ import CheckinOptions from "./CheckinOptions.vue";
 import ConfirmationModal from "./ConfirmationModal.vue";
 import HoldCancellationModal from "./HoldCancellationModal.vue";
 import BundleVerificationModal from "./BundleVerificationModal.vue";
-import { printTable } from "./table-export.js";
+import { printTable } from "../../../utils/table-export.js";
 import { $__ } from "@koha-vue/i18n";
 import { printHoldSlip } from "./slip-printer.js";
 

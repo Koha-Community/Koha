@@ -208,6 +208,64 @@ describe("Circulation - Check in", () => {
             });
         });
 
+        it("lets the librarian show, hide, export and configure the columns", () => {
+            createCheckout().then(objects => {
+                const item = objects.items[0];
+
+                visitCheckin();
+                cy.clearLocalStorage();
+                checkin(item.external_id);
+                cy.get("#checkins-table tbody tr").should("have.length", 1);
+
+                // Shown by default, and hidden by the table settings
+                cy.get("#checkins-table thead").should(
+                    "contain",
+                    "Call number"
+                );
+                cy.get("#checkins-table thead").should(
+                    "not.contain",
+                    "Date acquired"
+                );
+
+                cy.get(".koha-table-controls .columns_controls").click();
+                cy.get(".columns-menu").should("be.visible");
+                cy.get(".column-toggle[data-colname='itemcallnumber']").click();
+                cy.get(
+                    ".column-toggle[data-colname='dateaccessioned']"
+                ).click();
+                cy.get("#checkins-table thead")
+                    .should("not.contain", "Call number")
+                    .and("contain", "Date acquired");
+                // The cells follow the headings
+                cy.get("#checkins-table thead th").then($th => {
+                    cy.get("#checkins-table tbody tr td").should(
+                        "have.length",
+                        $th.length
+                    );
+                });
+
+                // Remembered when the page is loaded again
+                visitCheckin();
+                checkin(item.external_id);
+                cy.get("#checkins-table thead")
+                    .should("not.contain", "Call number")
+                    .and("contain", "Date acquired");
+
+                cy.get(".koha-table-controls .export_controls").click();
+                cy.get(".export-csv").should("be.visible");
+                cy.get(".export-copy").should("be.visible");
+                cy.get(".export-print").should("be.visible");
+
+                cy.get(".dt_button_configure_table")
+                    .should("have.attr", "href")
+                    .and(
+                        "contain",
+                        "columns_settings.pl?module=circ&page=returns&table=checkedintable"
+                    );
+                cy.clearLocalStorage();
+            });
+        });
+
         it("keeps the form, its settings and the results in white cards", () => {
             createCheckout({ stay_home: true }).then(objects => {
                 visitCheckin();
