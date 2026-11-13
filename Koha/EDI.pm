@@ -54,7 +54,7 @@ use Koha::Plugins;    # Adds plugin dirs to @INC
 use Koha::Plugins::Handler;
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Booksellers;
-use Koha::Acquisition::Orders;
+use Koha::AuthorisedValues;
 use Koha::Util::FrameworkPlugin qw( biblio_008 );
 
 our $VERSION = 1.1;
@@ -216,26 +216,14 @@ sub process_ordrsp {
                 my $action = $line->action_notification();
                 if ( $action eq 'cancelled' ) {
                     my $reason = $line->coded_orderline_text();
-                    my $order  = Koha::Acquisition::Orders->find($ordernumber);
-                    if ($order) {
-                        $order->cancel( { reason => $reason } );
-
-                        # cancel() records item deletion failures ( e.g. an item still has holds )
-                        # as object messages instead of dying; log any such messages so they are
-                        # not lost in the automated flow
-                        for my $message ( @{ $order->object_messages } ) {
-                            my $item = $message->payload->{item};
-                            $logger->warn(
-                                sprintf(
-                                    'EDI ORDRSP: order %s cancellation issue: %s%s',
-                                    $ordernumber, $message->message,
-                                    $item ? ' for itemnumber ' . $item->itemnumber : q{}
-                                )
-                            );
+                    ModOrder(
+                        {
+                            ordernumber             => $ordernumber,
+                            cancellationreason      => $reason,
+                            orderstatus             => 'cancelled',
+                            datecancellationprinted => dt_from_string()->ymd(),
                         }
-                    } else {
-                        $logger->error("EDI ORDRSP: ordernumber $ordernumber not found, cannot process cancellation");
-                    }
+                    );
                 } else {    # record order as due with possible further info
 
                     my $report     = $line->coded_orderline_text();
@@ -1574,20 +1562,6 @@ Koha::EDI
      Checks whether an 008 field exists on the record and adds a default field it does not
 
      Returns the bib_record
-
-=head2 _validate_location_code
-
-     ok = _validate_location_code($location_code, $quote_message)
-
-     Returns 1 if $location_code is empty or matches an authorised value in
-     category LOC. Returns 0 and records an error on $quote_message otherwise.
-
-=head2 _validate_collection_code
-
-     ok = _validate_collection_code($ccode, $quote_message)
-
-     Returns 1 if $ccode is empty or matches an authorised value in category
-     CCODE. Returns 0 and records an error on $quote_message otherwise.
 
 =head1 AUTHOR
 
