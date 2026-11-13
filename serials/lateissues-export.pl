@@ -91,8 +91,10 @@ for my $serialid (@serialids) {
     updateClaim($serialid);
 }
 
+binmode STDOUT, ':encoding(UTF-8)';
 print $query->header(
-    -type       => 'plain/text',
+    -type       => 'text/csv',
+    -charset    => 'UTF-8',
     -attachment => "serials-claims.csv",
 );
 
