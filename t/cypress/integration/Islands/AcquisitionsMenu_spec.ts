@@ -36,12 +36,15 @@ describe("Acquisitions menu", () => {
     it("Should correctly apply the 'current' class", () => {
         cy.get(".sidebar_menu").should("be.visible");
 
-        cy.get(".sidebar_menu a")
-            .contains("Acquisitions home")
-            .should("have.class", "current");
-        cy.get(".sidebar_menu a").contains("Budgets").click();
-        cy.get(".sidebar_menu a")
-            .contains("Budgets")
-            .should("have.class", "current");
+        // The label is wrapped in a span, so ask for the link containing it
+        cy.contains(".sidebar_menu a", "Acquisitions home").should(
+            "have.class",
+            "current"
+        );
+        cy.contains(".sidebar_menu a", "Budgets").click();
+        cy.contains(".sidebar_menu a", "Budgets").should(
+            "have.class",
+            "current"
+        );
     });
 });
