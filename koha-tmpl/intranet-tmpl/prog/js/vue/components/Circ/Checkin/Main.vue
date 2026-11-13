@@ -300,6 +300,52 @@ export default {
             return detailed;
         }
 
+        // What the librarian chose in a dialog, said once the dialog is gone
+        function outcomeText(entry) {
+            // The text of the alerts is HTML: the names are escaped
+            const libName = id => escapeHtml(libraries.value?.[id] || id);
+            const messages = entry.messages || [];
+            const transferred = messages.find(m => m.message === "transferred");
+            const toLibrary = transferred?.payload?.to_library;
+            switch (entry._outcome) {
+                case "confirm_hold": {
+                    const hold = messages.find(m => m.message === "hold_found");
+                    if (toLibrary) {
+                        return $__(
+                            "Hold confirmed: the item is being sent to %s."
+                        ).replace("%s", () => libName(toLibrary));
+                    }
+                    return hold?.payload?.library_id
+                        ? $__(
+                              "Hold confirmed: the item is waiting at %s."
+                          ).replace("%s", () =>
+                              libName(hold.payload.library_id)
+                          )
+                        : $__("Hold confirmed.");
+                }
+                case "cancel_hold":
+                case "cancel_hold_group":
+                    return $__("The hold was cancelled.");
+                case "confirm_transfer":
+                    return toLibrary
+                        ? $__("The item is being sent to %s.").replace(
+                              "%s",
+                              () => libName(toLibrary)
+                          )
+                        : $__("Transfer confirmed.");
+                case "cancel_transfer":
+                    return entry._declined?.kind === "cancelled"
+                        ? $__("The transfer was cancelled.")
+                        : $__("The item was not transferred.");
+                case "confirm_recall":
+                    return $__("Recall confirmed.");
+                case "resolve_claim":
+                    return $__("The return claim was resolved.");
+                default:
+                    return "";
+            }
+        }
+
         const lastCheckinMessages = computed(() => {
             if (!checkins.value.length) return [];
             const latest = checkins.value[0];
@@ -307,6 +353,15 @@ export default {
             if (latest._status !== "success") return [];
             const messages = latest.messages || [];
             const detailed = [];
+            // The result of what was chosen in the dialog of this check-in
+            const outcome = outcomeText(latest);
+            if (outcome) {
+                detailed.push({
+                    text: outcome,
+                    alertClass: "alert-info checkin-outcome",
+                    priority: 20,
+                });
+            }
             const feeMessages = {
                 lost_item_fee_refunded: {
                     text: $__(
@@ -816,6 +871,7 @@ export default {
                     ...checkins.value[idx],
                     _status: "success",
                     _action_type: null,
+                    _outcome: "resolve_claim",
                 };
             }
             _advanceModal();

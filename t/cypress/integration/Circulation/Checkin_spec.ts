@@ -710,6 +710,11 @@ describe("Circulation - Check in", () => {
                         .should("eq", 201);
 
                     checkinModal().should("not.exist");
+                    // The result is said once, in an alert, not in the dialog
+                    cy.get("#checkin-app .checkin-outcome").should(
+                        "contain",
+                        "Hold confirmed"
+                    );
                     cy.get("#checkins-table tbody tr")
                         .first()
                         .should("not.have.class", "table-warning");
@@ -859,6 +864,10 @@ describe("Circulation - Check in", () => {
                     .should("eq", 201);
                 checkinModal().should("not.exist");
                 cy.get("#barcode-input").should("not.be.disabled");
+                cy.get("#checkin-app .checkin-outcome").should(
+                    "contain",
+                    `The item is being sent to ${home_library.name}`
+                );
 
                 dbQuery(
                     "SELECT frombranch, tobranch, datesent FROM branchtransfers WHERE itemnumber=? AND datearrived IS NULL AND datecancelled IS NULL",
@@ -970,6 +979,10 @@ describe("Circulation - Check in", () => {
                     .should("have.attr", "accesskey", "x")
                     .click();
                 checkinModal().should("not.exist");
+                cy.get("#checkin-app .checkin-outcome").should(
+                    "contain",
+                    "The transfer was cancelled."
+                );
 
                 // The transfer is kept, as cancelled
                 dbQuery(

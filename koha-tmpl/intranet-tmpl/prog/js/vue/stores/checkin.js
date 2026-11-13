@@ -330,6 +330,7 @@ export const useCheckinStore = defineStore("checkin", () => {
             _status: "needs_action",
             _action_type: declined.type,
             _declined: null,
+            _outcome: null,
         });
         return checkins.value[_findIndex(existing)];
     }
@@ -359,6 +360,7 @@ export const useCheckinStore = defineStore("checkin", () => {
                     ...current,
                     _status: "success",
                     _action_type: null,
+                    _outcome: "cancel_hold_group",
                 });
             }
             return { status: "ok" };
@@ -448,6 +450,8 @@ export const useCheckinStore = defineStore("checkin", () => {
                 ...existing,
                 _status: "success",
                 _action_type: null,
+                // What was chosen in the dialog, for the alert that says it
+                _outcome: action,
             };
             // Confirming the hold started a transfer to the pickup library:
             // show it on the row

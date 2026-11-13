@@ -246,21 +246,6 @@
                                 }}
                             </p>
                         </div>
-
-                        <!-- Check in messages -->
-                        <div
-                            v-if="transferCheckinMessages.length"
-                            class="alert alert-warning"
-                        >
-                            <h5>{{ $__("Check in message") }}</h5>
-                            <p
-                                v-for="msg in transferCheckinMessages"
-                                :key="msg.message"
-                                class="text-danger"
-                            >
-                                {{ formatMessage(msg) }}
-                            </p>
-                        </div>
                     </template>
 
                     <!-- Post-checkin: Recall found -->
@@ -375,15 +360,6 @@
                                 )
                             }}
                         </p>
-                        <div
-                            v-for="(box, idx) in claimCheckinMessages"
-                            :key="idx"
-                            class="alert"
-                            :class="box.alertClass"
-                        >
-                            {{ box.text }}
-                        </div>
-
                         <!-- The claim is resolved from this modal -->
                         <div
                             v-if="claimError"
@@ -996,18 +972,6 @@ export default {
 
         // Check-in messages shown in the transfer modal: the transfer ones
         // have their own section, and was_returned is set on every return
-        const transferCheckinMessages = computed(() =>
-            (props.item?.messages || []).filter(
-                m =>
-                    ![
-                        "wrong_transfer",
-                        "needs_transfer",
-                        "transferred",
-                        "was_returned",
-                    ].includes(m.message)
-            )
-        );
-
         const transferInfo = computed(() => {
             if (!props.item) return null;
             const msg = (props.item.messages || []).find(
@@ -1129,43 +1093,6 @@ export default {
             }
         }
 
-        const claimCheckinMessages = computed(() => {
-            const labels = {
-                was_lost: {
-                    text: $__("Item was lost, now found."),
-                    alertClass: "alert-info",
-                },
-                lost_item_fee_remains: {
-                    text: $__(
-                        "Any lost item fees for this item will remain on the patron's account."
-                    ),
-                    alertClass: "alert-warning",
-                },
-                processing_fee_remains: {
-                    text: $__(
-                        "Any processing fees for this item will remain on the patron's account."
-                    ),
-                    alertClass: "alert-warning",
-                },
-                lost_item_fee_refunded: {
-                    text: $__(
-                        "A refund for the lost item charge has been applied to the borrowing patron's account."
-                    ),
-                    alertClass: "alert-info",
-                },
-                processing_fee_refunded: {
-                    text: $__(
-                        "A refund for the lost item processing charge has been applied to the borrowing patron's account."
-                    ),
-                    alertClass: "alert-info",
-                },
-            };
-            const messages = (props.item && props.item.messages) || [];
-            return messages
-                .filter(m => labels[m.message])
-                .map(m => labels[m.message]);
-        });
-
         function printAndResolveHold() {
             const reserveId = holdInfo.value?.reserve_id || props.item?.hold_id;
             emit("resolve", props.item, "confirm_hold", {
@@ -1215,7 +1142,6 @@ export default {
             itemId,
             modalTitle,
             holdInfo,
-            transferCheckinMessages,
             holdPatronDescription,
             holdGroupId,
             patronName,
@@ -1230,7 +1156,6 @@ export default {
             formatWarning,
             formatTransferTrigger,
             formatMessage,
-            claimCheckinMessages,
             claimResolutions,
             claimLostStatuses,
             claimResolution,
