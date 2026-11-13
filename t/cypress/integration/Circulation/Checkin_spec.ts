@@ -859,6 +859,52 @@ describe("Circulation - Check in", () => {
         });
     });
 
+    describe("Transfers: what closing the dialog does", () => {
+        const hint = () => checkinModal().find(".dismiss-hint");
+
+        it("says that closing leaves an existing transfer as it is", () => {
+            createCheckout({ stay_home: true }).then(objects => {
+                visitCheckin();
+                checkin(objects.items[0].external_id);
+                hint()
+                    .should("be.visible")
+                    .and("contain", "leaves the transfer as it is");
+            });
+        });
+
+        it("says that closing confirms the transfer with AutomaticConfirmTransfer", () => {
+            cy.set_syspref("AutomaticConfirmTransfer", "1");
+            createCheckout({ stay_home: true }).then(objects => {
+                visitCheckin();
+                checkin(objects.items[0].external_id);
+                hint()
+                    .should("be.visible")
+                    .and("contain", "confirms the transfer");
+            });
+        });
+
+        it("says that closing does not transfer the item when none was created", () => {
+            cy.set_syspref("AutomaticItemReturn", "0");
+            createCheckout({ stay_home: true }).then(objects => {
+                visitCheckin();
+                checkin(objects.items[0].external_id);
+                hint()
+                    .should("be.visible")
+                    .and("contain", "does not transfer the item");
+            });
+        });
+
+        it("has no hint when the dialog blocks the page", () => {
+            cy.set_syspref("TransfersBlockCirc", "1");
+            createCheckout({ stay_home: true }).then(objects => {
+                visitCheckin();
+                checkin(objects.items[0].external_id);
+                checkinModal().should("be.visible");
+                hint().should("not.exist");
+            });
+        });
+    });
+
     describe("Transfers: blocking and cancelling", () => {
         it("dims the page and blocks everything outside the dialog when blocking", () => {
             cy.set_syspref("TransfersBlockCirc", "1");

@@ -227,6 +227,13 @@
                             }}
                         </p>
 
+                        <p
+                            v-if="dismissHint"
+                            class="text-muted small dismiss-hint"
+                        >
+                            {{ dismissHint }}
+                        </p>
+
                         <!-- Reason for transfer -->
                         <div
                             v-if="transferInfo && transferInfo.trigger"
@@ -803,6 +810,24 @@ export default {
                 !!props.item.transfer_id
         );
 
+        // What closing the dialog without a button does: it depends on
+        // whether the transfer exists and on AutomaticConfirmTransfer
+        const dismissHint = computed(() => {
+            if (!isNonBlockingTransfer.value) return "";
+            if (!hasExistingTransfer.value) {
+                return $__(
+                    "Closing this dialog (Esc) does not transfer the item."
+                );
+            }
+            return policy.value.auto_confirm_transfer
+                ? $__(
+                      "Closing this dialog (Esc) or scanning the next item confirms the transfer (AutomaticConfirmTransfer)."
+                  )
+                : $__(
+                      "Closing this dialog (Esc) leaves the transfer as it is."
+                  );
+        });
+
         // A non-blocking transfer modal can be closed by pressing Escape. It
         // does not block the page (staff keep scanning items), so clicks on
         // the page do not close it: a stray click must not cancel or confirm
@@ -1164,6 +1189,7 @@ export default {
             blocksPage,
             hasExistingTransfer,
             isNonBlockingTransfer,
+            dismissHint,
             isTransferQuestion,
             isPreCheckin,
             itemBarcode,
