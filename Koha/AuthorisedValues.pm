@@ -226,33 +226,6 @@ sub categories {
     return map $_->get_column('category'), $rs->all;
 }
 
-=head3 add_current_value
-
-    $loop = Koha::AuthorisedValues->add_current_value( $loop, $category, $value );
-
-Given an arrayref of authorised value hashrefs.
-
-=cut
-
-sub add_current_value {
-    my ( $class, $loop, $category, $value ) = @_;
-
-    return $loop unless defined $value && $value ne '';
-    return $loop if grep { $_->{authorised_value} eq $value } @$loop;
-
-    my $av = $class->search( { category => $category, authorised_value => $value } )->next;
-    return $loop unless $av;
-
-    return [
-        @$loop,
-        {
-            authorised_value => $av->authorised_value,
-            lib              => $av->lib,
-            restricted       => 1,
-        }
-    ];
-}
-
 =head3 type
 
 =cut

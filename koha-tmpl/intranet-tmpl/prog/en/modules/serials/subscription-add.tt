@@ -211,13 +211,12 @@
                                 [% FOREACH locations_loo IN locations_loop %]
                                     [% IF locations_loo.authorised_value == location %]
                                         [% IF locations_loo.restricted %]
-                                            <option value="[% locations_loo.authorised_value | html %]" selected="selected" title="This value ([% locations_loo.lib | html %]) is limited to other libraries"
-                                                >[% locations_loo.lib | html %] &#9888;</option
-                                            >
+                                            [% restricted_title = tx("This value ({lib}) is limited to other libraries", { lib = locations_loo.lib }) %]
+                                            <option value="[% locations_loo.authorised_value | html %]" selected="selected" title="[% restricted_title | html %]">[% locations_loo.lib | html %] &#9888;</option>
                                         [% ELSE %]
                                             <option value="[% locations_loo.authorised_value | html %]" selected="selected">[% locations_loo.lib | html %]</option>
                                         [% END %]
-                                    [% ELSE %]
+                                    [% ELSIF NOT locations_loo.restricted %]
                                         <option value="[% locations_loo.authorised_value | html %]">[% locations_loo.lib | html %]</option>
                                     [% END %]
                                 [% END %]
@@ -229,8 +228,13 @@
                                 <option value="">None</option>
                                 [% FOREACH ccode_loo IN ccodes_loop %]
                                     [% IF ccode_loo.authorised_value == ccode %]
-                                        <option value="[% ccode_loo.authorised_value | html %]" selected="selected">[% ccode_loo.lib | html %]</option>
-                                    [% ELSE %]
+                                        [% IF ccode_loo.restricted %]
+                                            [% restricted_title = tx("This value ({lib}) is limited to other libraries", { lib = ccode_loo.lib }) %]
+                                            <option value="[% ccode_loo.authorised_value | html %]" selected="selected" title="[% restricted_title | html %]">[% ccode_loo.lib | html %] &#9888;</option>
+                                        [% ELSE %]
+                                            <option value="[% ccode_loo.authorised_value | html %]" selected="selected">[% ccode_loo.lib | html %]</option>
+                                        [% END %]
+                                    [% ELSIF NOT ccode_loo.restricted %]
                                         <option value="[% ccode_loo.authorised_value | html %]">[% ccode_loo.lib | html %]</option>
                                     [% END %]
                                 [% END %]

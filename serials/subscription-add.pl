@@ -29,7 +29,6 @@ use C4::Serials::Frequency;
 use C4::Serials::Numberpattern;
 use C4::Letters qw( GetLetters );
 use Koha::AdditionalFields;
-use Koha::AuthorisedValues;
 use Koha::Biblios;
 use Koha::DateUtils qw( output_pref );
 use Koha::ItemTypes;
@@ -122,10 +121,10 @@ if ( $op eq 'modify' || $op eq 'dup' || $op eq 'cud-modsubscription' ) {
 
 }
 
-my $locations_loop = GetAuthorisedValues("LOC");
-my $ccodes_loop    = GetAuthorisedValues("CCODE");
-
-$locations_loop = Koha::AuthorisedValues->add_current_value( $locations_loop, 'LOC', $subs->{location} );
+# no_limit returns values restricted to other libraries too, flagged as 'restricted',
+# so the template can keep the stored value selectable instead of wiping it on save
+my $locations_loop = GetAuthorisedValues( "LOC",   undef, { no_limit => 1 } );
+my $ccodes_loop    = GetAuthorisedValues( "CCODE", undef, { no_limit => 1 } );
 
 $template->param(
     branchcode     => $subs->{branchcode},

@@ -1,21 +1,18 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 19;
+use Test::More tests => 18;
 use Test::NoWarnings;
 use Test::Exception;
 use Try::Tiny;
 
 use t::lib::TestBuilder;
-use t::lib::Mocks;
 
-use C4::Koha;
 use Koha::Database;
 use C4::Context;
 use Koha::AuthorisedValue;
 use Koha::AuthorisedValues;
 use Koha::AuthorisedValueCategories;
-use Koha::Caches;
 use Koha::Exceptions;
 use Koha::MarcSubfieldStructures;
 
@@ -410,72 +407,6 @@ subtest 'is_integer_only' => sub {
         'Exception expected for preceding space';
     throws_ok { $avval2->authorised_value('12 ')->store } 'Koha::Exceptions::NoInteger',
         'Exception expected for trailing space';
-
-    $schema->storage->txn_rollback;
-};
-
-subtest 'add_current_value() tests' => sub {
-    plan tests => 8;
-    $schema->storage->txn_begin;
-
-    my $category  = $builder->build_object( { class => 'Koha::AuthorisedValueCategories' } )->category_name;
-    my $library_a = $builder->build_object( { class => 'Koha::Libraries' } )->branchcode;
-    my $library_b = $builder->build_object( { class => 'Koha::Libraries' } )->branchcode;
-
-    $builder->build_object(
-        {
-            class => 'Koha::AuthorisedValues',
-            value => { category => $category, authorised_value => 'AV_UNLIMITED', lib => 'Unlimited' },
-        }
-    );
-    my $restricted = $builder->build_object(
-        {
-            class => 'Koha::AuthorisedValues',
-            value => { category => $category, authorised_value => 'AV_RESTRICTED', lib => 'Restricted' },
-        }
-    );
-    $restricted->add_library_limit($library_a);
-
-    # Same code, different category: must not be picked up
-    my $other_category = $builder->build_object( { class => 'Koha::AuthorisedValueCategories' } )->category_name;
-    $builder->build_object(
-        {
-            class => 'Koha::AuthorisedValues',
-            value => { category => $other_category, authorised_value => 'AV_RESTRICTED', lib => 'Wrong category' },
-        }
-    );
-
-    t::lib::Mocks::mock_userenv( { branchcode => $library_b } );
-    Koha::Caches->get_instance->flush_all;
-
-    my $loop = C4::Koha::GetAuthorisedValues($category);
-    is(
-        scalar( grep { $_->{authorised_value} eq 'AV_RESTRICTED' } @$loop ),
-        0, 'restricted value is filtered out for a library that cannot use it'
-    );
-
-    my $augmented = Koha::AuthorisedValues->add_current_value( $loop, $category, 'AV_RESTRICTED' );
-    my ($added) = grep { $_->{authorised_value} eq 'AV_RESTRICTED' } @$augmented;
-    ok( $added, 'restricted current value is added back to the loop' );
-    is( $added->{lib},        'Restricted', 'added entry carries the lib from the right category' );
-    is( $added->{restricted}, 1,            'added entry is flagged as restricted' );
-    is(
-        scalar( grep { $_->{authorised_value} eq 'AV_RESTRICTED' } @$loop ),
-        0, 'the passed loop is not modified'
-    );
-
-    is_deeply(
-        Koha::AuthorisedValues->add_current_value( $loop, $category, 'AV_UNLIMITED' ),
-        $loop, 'loop returned unchanged when the value is already present'
-    );
-    is_deeply(
-        Koha::AuthorisedValues->add_current_value( $loop, $category, undef ),
-        $loop, 'loop returned unchanged for an undefined value'
-    );
-    is_deeply(
-        Koha::AuthorisedValues->add_current_value( $loop, $category, 'DOES_NOT_EXIST' ),
-        $loop, 'loop returned unchanged for an unknown value'
-    );
 
     $schema->storage->txn_rollback;
 };
