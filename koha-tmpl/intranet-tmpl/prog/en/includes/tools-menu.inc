@@ -37,7 +37,9 @@
                 >
             [% END %]
             [% IF ( CAN_user_tools_view_generated_notices && Koha.Preference('NoticesManagement') ) %]
-                <li><a href="/cgi-bin/koha/tools/notices.pl">Notices management</a></li>
+                <li
+                    ><a href="/cgi-bin/koha/tools/notices.pl" title="Notices management"><i class="fa-solid fa-envelopes-bulk fa-fw" aria-hidden="true"></i><span class="menu-label">Notices management</span></a></li
+                >
             [% END %]
             [% IF ( CAN_user_tools_label_creator ) %]
                 <li

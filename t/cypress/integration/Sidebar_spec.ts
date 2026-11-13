@@ -125,3 +125,49 @@ describe("Sidebar toggle on Vue pages", () => {
         });
     });
 });
+
+describe("Sidebar menu entries", () => {
+    beforeEach(() => {
+        cy.login();
+        cy.title().should("eq", "Koha staff interface");
+        cy.set_syspref("NoticesManagement", "1");
+        window.localStorage.removeItem("sidebar-collapsed");
+    });
+
+    afterEach(() => {
+        cy.set_syspref("NoticesManagement", "0");
+        window.localStorage.removeItem("sidebar-collapsed");
+    });
+
+    it("Should give the Tools menu 'Notices management' entry an icon and a label", () => {
+        cy.visit("/cgi-bin/koha/tools/letter.pl");
+
+        cy.get('#sidebar-container a[href="/cgi-bin/koha/tools/notices.pl"]')
+            .should("have.attr", "title", "Notices management")
+            .within(() => {
+                cy.get("i.fa-fw").should("exist");
+                cy.get("span.menu-label").should(
+                    "have.text",
+                    "Notices management"
+                );
+            });
+    });
+
+    it("Should keep that entry inside the collapsed sidebar", () => {
+        cy.visit("/cgi-bin/koha/tools/notices.pl");
+        cy.get("#toggle-sidebar").click();
+        cy.get("#sidebar-container").should("have.class", "collapsed");
+
+        cy.get(
+            '#sidebar-container a[href="/cgi-bin/koha/tools/notices.pl"]'
+        ).should($link => {
+            const link = $link[0].getBoundingClientRect();
+            const sidebar =
+                Cypress.$("#sidebar-container")[0].getBoundingClientRect();
+            expect(link.right, "link right edge").to.be.at.most(
+                sidebar.right + 1
+            );
+            expect(link.width, "link width").to.be.greaterThan(0);
+        });
+    });
+});
