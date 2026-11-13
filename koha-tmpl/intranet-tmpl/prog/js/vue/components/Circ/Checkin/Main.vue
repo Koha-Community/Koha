@@ -592,6 +592,26 @@ export default {
                 }
                 // return_claim is handled by the row (yellow + resolve button)
                 // No alert needed
+                if (msg.message === "not_issued") {
+                    detailed.push({
+                        text: $__("Not checked out."),
+                        alertClass: "alert-warning",
+                    });
+                }
+                if (msg.message === "local_use") {
+                    detailed.push({
+                        text: $__("Local use recorded."),
+                        alertClass: "alert-info",
+                    });
+                }
+                if (msg.message === "hold_cancelled") {
+                    detailed.push({
+                        text: $__(
+                            "The hold waiting for this item was cancelled: the patron asked for it to be cancelled."
+                        ),
+                        alertClass: "alert-info",
+                    });
+                }
                 if (msg.message === "claim_auto_resolved") {
                     detailed.push({
                         text: $__(

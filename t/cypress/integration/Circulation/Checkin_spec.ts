@@ -12,6 +12,7 @@ const LOGGED_IN_LIBRARY = "CPL";
 const PREFS = {
     AutomaticItemReturn: "1",
     AutomaticConfirmTransfer: "0",
+    RecordLocalUseOnReturn: "0",
     BlockReturnOfLostItems: "0",
     BlockReturnOfWithdrawnItems: "1",
     CircConfirmItemParts: "0",
@@ -462,6 +463,102 @@ describe("Circulation - Check in", () => {
                         "This item is lost and cannot be checked in."
                     );
                 checkoutCount(item).should("eq", 1);
+            });
+        });
+    });
+
+    describe("Results of the check-in", () => {
+        // An item that is on the shelf, as if its checkout had ended
+        function createItemOnShelf() {
+            return createCheckout().then(objects =>
+                dbQuery("DELETE FROM issues WHERE itemnumber=?", [
+                    objects.items[0].item_id,
+                ]).then(() => objects)
+            );
+        }
+
+        it("shows the note the patron left on the checkout", () => {
+            createCheckout().then(objects => {
+                const note = `Please renew it for me, ${Date.now()}`;
+                dbQuery(
+                    "UPDATE issues SET note=?, notedate=NOW() WHERE issue_id=?",
+                    [note, objects.checkout.checkout_id]
+                ).then(() => {
+                    visitCheckin();
+                    checkin(objects.items[0].external_id);
+
+                    cy.get("#checkin-app .alert-info.issue-note")
+                        .should("be.visible")
+                        .and("contain", "Patron note")
+                        .and("contain", note);
+                });
+            });
+        });
+
+        it("says in a yellow alert that the item was not checked out", () => {
+            cy.set_syspref("RecordLocalUseOnReturn", "0");
+            createItemOnShelf().then(objects => {
+                visitCheckin();
+                checkin(objects.items[0].external_id);
+
+                cy.get("#checkin-app .alert-warning")
+                    .should("be.visible")
+                    .and("contain", "Not checked out.");
+                cy.get("#checkin-app").should(
+                    "not.contain",
+                    "Local use recorded."
+                );
+            });
+        });
+
+        it("says in a blue alert that a local use was recorded", () => {
+            cy.set_syspref("RecordLocalUseOnReturn", "1");
+            createItemOnShelf().then(objects => {
+                visitCheckin();
+                checkin(objects.items[0].external_id);
+
+                cy.get("#checkin-app .alert-info")
+                    .should("be.visible")
+                    .and("contain", "Local use recorded.");
+            });
+        });
+
+        it("says that the waiting hold with a cancellation request was cancelled", () => {
+            createItemOnShelf().then(objects => {
+                const item = objects.items[0];
+                createHold(item, LOGGED_IN_LIBRARY).then(({ hold }) => {
+                    dbQuery(
+                        "UPDATE reserves SET found='W', priority=0, itemnumber=? WHERE reserve_id=?",
+                        [item.item_id, hold.hold_id]
+                    );
+                    dbQuery(
+                        "INSERT INTO hold_cancellation_requests (hold_id) VALUES (?)",
+                        [hold.hold_id]
+                    );
+                    cleanupQueryLater(
+                        "DELETE FROM hold_cancellation_requests WHERE hold_id=?",
+                        [hold.hold_id]
+                    );
+
+                    visitCheckin();
+                    checkin(item.external_id);
+
+                    cy.get("#checkin-app .alert-info")
+                        .should("be.visible")
+                        .and(
+                            "contain",
+                            "The hold waiting for this item was cancelled"
+                        );
+                    cy.get("#checkins-table tbody tr")
+                        .first()
+                        .should("contain", "Hold cancelled");
+                    dbQuery(
+                        "SELECT COUNT(*) AS count FROM reserves WHERE reserve_id=?",
+                        [hold.hold_id]
+                    )
+                        .its("0.count")
+                        .should("eq", 0);
+                });
             });
         });
     });

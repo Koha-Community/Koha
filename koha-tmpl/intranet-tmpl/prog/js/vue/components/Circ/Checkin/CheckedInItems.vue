@@ -654,6 +654,7 @@ export default {
             const labels = {
                 not_issued: $__("Not checked out"),
                 local_use: $__("Local use"),
+                hold_cancelled: $__("Hold cancelled"),
                 was_lost: $__("Was lost"),
                 withdrawn: $__("Withdrawn"),
                 transferred: $__("Transferred"),

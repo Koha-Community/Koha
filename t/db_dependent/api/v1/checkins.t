@@ -1225,7 +1225,7 @@ subtest q{sub-resource endpoints reject checkins of items checked out again} => 
 
 subtest q{add() cancels the waiting holds with a cancellation request} => sub {
 
-    plan tests => 3;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -1266,6 +1266,11 @@ subtest q{add() cancels the waiting holds with a cancellation request} => sub {
     )->status_is(200);
 
     ok( !Koha::Holds->find( $hold->id ), q{The hold with a cancellation request has been cancelled} );
+    my ($cancelled_message) = grep { $_->{message} eq 'hold_cancelled' } @{ $t->tx->res->json('/messages') // [] };
+    ok( $cancelled_message, 'The check-in says that the hold was cancelled' );
+    is( $cancelled_message->{type},                  'info',      'It is an information' );
+    is( $cancelled_message->{payload}->{reserve_id}, $hold->id,   'It names the hold' );
+    is( $cancelled_message->{payload}->{patron_id},  $patron->id, 'It names the patron of the hold' );
 
     $schema->storage->txn_rollback;
 };

@@ -277,7 +277,9 @@ sub add {
         # Cancel the waiting holds for which cancellation has been requested, as
         # the legacy returns page did, so the return does not set them aside again
         my $holds_to_cancel = $item->holds->waiting->filter_by_has_cancellation_requests;
+        my @cancelled_holds;
         while ( my $hold = $holds_to_cancel->next ) {
+            push @cancelled_holds, { reserve_id => $hold->id, patron_id => $hold->borrowernumber };
             $hold->cancel;
         }
 
@@ -397,6 +399,9 @@ sub add {
                 );
             }
         }
+
+        # Say that the waiting holds were cancelled: nothing else shows it
+        $checkin->add_message( { message => 'hold_cancelled', type => 'info', payload => $_ } ) for @cancelled_holds;
 
         # Serialize outcome messages from the checkin object so API consumers
         # see the full result, not just the subset with a dedicated FK column

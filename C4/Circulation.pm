@@ -5488,7 +5488,7 @@ sub _attach_messages_to_checkin {
 
     # Item status messages
     if ( $messages->{NotIssued} ) {
-        $checkin->add_message( { message => 'not_issued', type => 'info' } );
+        $checkin->add_message( { message => 'not_issued', type => 'warning' } );
     }
     if ( $messages->{LocalUse} ) {
         $checkin->add_message( { message => 'local_use', type => 'info' } );
