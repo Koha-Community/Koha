@@ -4,6 +4,7 @@
             <a
                 v-if="item.is_external && item.path && !item.disabled"
                 :href="item.path"
+                :title="item.title ? $__(item.title) : null"
             >
                 <template v-if="item.icon">
                     <i :class="`${item.icon}`"></i>&nbsp;
@@ -22,6 +23,7 @@
             <router-link
                 v-else-if="item.name && !item.disabled"
                 :to="{ name: item.name, params: item.is_base ? {} : params }"
+                :title="item.title ? $__(item.title) : null"
             >
                 <template v-if="item.icon">
                     <i :class="`${item.icon}`"></i>&nbsp;
@@ -33,6 +35,7 @@
             <router-link
                 v-else-if="item.path && !item.disabled"
                 :to="item.path"
+                :title="item.title ? $__(item.title) : null"
             >
                 <template v-if="item.icon">
                     <i :class="`${item.icon}`"></i>&nbsp;
@@ -41,7 +44,11 @@
                     $__(item.title)
                 }}</span>
             </router-link>
-            <a v-else-if="item.href && !item.disabled" :href="item.href">
+            <a
+                v-else-if="item.href && !item.disabled"
+                :href="item.href"
+                :title="item.title ? $__(item.title) : null"
+            >
                 <template v-if="item.icon">
                     <i :class="`${item.icon}`"></i>&nbsp;
                 </template>
@@ -54,6 +61,7 @@
                 href="#"
                 aria-current="page"
                 :class="{ disabled: item.disabled }"
+                :title="item.title ? $__(item.title) : null"
             >
                 <template v-if="item.icon">
                     <i :class="`${item.icon}`"></i>&nbsp;

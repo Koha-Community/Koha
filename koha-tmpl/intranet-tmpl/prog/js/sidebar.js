@@ -28,7 +28,12 @@
     }
 
     window.$toggle_sidebar = function () {
-        setSidebarState(!$("#sidebar-container").hasClass("collapsed"));
+        // The class on <html> is the source of truth: it is set before first
+        // paint, whereas a sidebar rendered later (the Vue pages) has not yet
+        // been given its own .collapsed class when the page is restored
+        setSidebarState(
+            !document.documentElement.classList.contains("sidebar-collapsed")
+        );
     };
 
     window.$restore_sidebar_state = function () {

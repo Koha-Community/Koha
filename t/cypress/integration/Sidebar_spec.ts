@@ -75,3 +75,53 @@ describe("Sidebar toggle", () => {
         );
     });
 });
+
+describe("Sidebar toggle on Vue pages", () => {
+    beforeEach(() => {
+        cy.login();
+        cy.title().should("eq", "Koha staff interface");
+        window.localStorage.removeItem("sidebar-collapsed");
+    });
+
+    afterEach(() => {
+        window.localStorage.removeItem("sidebar-collapsed");
+    });
+
+    it("Should let the content fill the space when the sidebar is collapsed", () => {
+        cy.visit("/cgi-bin/koha/acquisition/vendors");
+        cy.get("#toggle-sidebar").should("be.visible");
+
+        cy.get(".sidebar-main").then($main => {
+            const expanded_width = $main.outerWidth();
+            cy.get("#toggle-sidebar").click();
+            cy.get("html").should("have.class", "sidebar-collapsed");
+            cy.get(".sidebar-main").should($collapsed => {
+                expect($collapsed.outerWidth()).to.be.greaterThan(
+                    expanded_width + 100
+                );
+            });
+        });
+    });
+
+    it("Should expand on the first click after a reload while collapsed", () => {
+        cy.visit("/cgi-bin/koha/acquisition/vendors");
+        cy.get("#toggle-sidebar").click();
+        cy.get("html").should("have.class", "sidebar-collapsed");
+
+        cy.reload();
+        cy.get("html").should("have.class", "sidebar-collapsed");
+        cy.get("#toggle-sidebar").click();
+
+        cy.get("html").should("not.have.class", "sidebar-collapsed");
+        cy.get("#sidebar-container").should("not.have.class", "collapsed");
+    });
+
+    it("Should label the icons of a collapsed Vue sidebar", () => {
+        cy.visit("/cgi-bin/koha/sip2/sip2.pl");
+        cy.get("#toggle-sidebar").click();
+        cy.get("#sidebar-container .sidebar_menu a").each($link => {
+            expect($link.attr("title"), "title of the link").to.be.a("string")
+                .and.not.be.empty;
+        });
+    });
+});

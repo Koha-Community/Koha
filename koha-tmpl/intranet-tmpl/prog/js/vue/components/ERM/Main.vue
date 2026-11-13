@@ -6,7 +6,7 @@
         </div>
         <div class="main container-fluid">
             <div class="row">
-                <div class="col-md-10 order-md-2 order-sm-1">
+                <div class="col-md-10 order-md-2 order-sm-1 sidebar-main">
                     <main>
                         <Dialog />
                         <router-view />
