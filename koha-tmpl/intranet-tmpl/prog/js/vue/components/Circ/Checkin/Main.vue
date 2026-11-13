@@ -960,6 +960,15 @@ export default {
         }
 
         function refocusInput() {
+            // Do not take the focus from a field of a dialog that is open:
+            // the barcodes of a bundle, the resolution of a claim
+            const active = document.activeElement;
+            if (
+                active?.closest?.("#checkin-app .modal.show") &&
+                ["INPUT", "TEXTAREA", "SELECT"].includes(active.tagName)
+            ) {
+                return;
+            }
             if (barcodeInputRef.value) {
                 barcodeInputRef.value.focus();
             }
