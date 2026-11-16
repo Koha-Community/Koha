@@ -4182,7 +4182,7 @@ subtest 'holds_fee() tests' => sub {
 };
 
 subtest 'effective_replacement_price() tests' => sub {
-    plan tests => 5;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
@@ -4228,6 +4228,28 @@ subtest 'effective_replacement_price() tests' => sub {
         $item->effective_replacement_price, '==', 0,
         'Returns 0 when neither the item nor the item type has a price and the preference is on'
     );
+
+    #an item whose item type cannot be resolved must not make the method die
+    t::lib::Mocks::mock_preference( 'useDefaultReplacementCost', 1 );
+    my $untyped = $builder->build_sample_item( { replacementprice => undef } );
+
+    #a code that is not in the itemtypes table
+    $untyped->itype('NOSUCHTYPE')->store;
+    my $price;
+    lives_ok { $price = $untyped->effective_replacement_price } 'Does not die when the item type code does not exist';
+    is( $price, 0, 'Returns 0 when the item type code does not exist' );
+
+    #no item type on the item nor on its biblio, set on the rows as Koha::Item->store would refill the item type
+    $schema->resultset('Item')->find( $untyped->itemnumber )->update( { itype => undef } );
+    $schema->resultset('Biblioitem')->find( $untyped->biblioitemnumber )->update( { itemtype => undef } );
+    $untyped = Koha::Items->find( $untyped->itemnumber );
+    $price   = undef;
+    warning_like {
+        lives_ok { $price = $untyped->effective_replacement_price }
+        'Does not die when the item has no item type at all';
+    }
+    qr/item-level_itypes set but no itemtype set/, 'The missing item type is warned about by effective_itemtype';
+    is( $price, 0, 'Returns 0 when the item has no item type at all' );
 
     $schema->storage->txn_rollback;
 };

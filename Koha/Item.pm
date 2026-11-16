@@ -3119,7 +3119,7 @@ Returns the effective replacement price. Usually the item's replacementprice.
 If useDefaultReplacementCost is enabled it can fall back to the item type's
 default replacement cost when the replacementprice is empty or 0
 
-Returns 0 if no price can be determined
+Returns 0 if no price can be determined, including when the item type cannot be resolved
 
 =cut
 
@@ -3129,8 +3129,13 @@ sub effective_replacement_price {
     my $item_replacementprice = $self->replacementprice // 0;
 
     if ( $item_replacementprice == 0 && C4::Context->preference('useDefaultReplacementCost') ) {
-        my $itype_replacementprice = $self->itemtype->defaultreplacecost;
-        $item_replacementprice = $itype_replacementprice if $itype_replacementprice;
+
+        # The item type can be unresolvable on legacy data: no item type, or a code that is not in itemtypes
+        my $itemtype = $self->itemtype;
+        if ($itemtype) {
+            my $itype_replacementprice = $itemtype->defaultreplacecost;
+            $item_replacementprice = $itype_replacementprice if $itype_replacementprice;
+        }
     }
 
     return $item_replacementprice;
