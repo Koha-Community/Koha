@@ -84,7 +84,7 @@ if ( $op eq 'form' || $op eq 'cud-form' ) {
     if (@branchcodes) {
         $search_params->{'me.branchcode'} = { -in => \@branchcodes };
     }
-    if ($list) {
+    if ( defined $list && length $list ) {
         my $split_chars = C4::Context->preference('BarcodeSeparators');
         my @barcodelist = grep /\S/, ( split /[$split_chars]/, $list );
         @barcodelist = uniq @barcodelist;
