@@ -252,17 +252,21 @@ if ( $op eq "" ) {
             subfields                 => \@subfields,
             field_values              => \@field_values,
             serials                   => \@serials,
-            c_quantity                => $input->param( 'quantity_' . $import_record->import_record_id )
+            c_quantity                => scalar $input->param( 'quantity_' . $import_record->import_record_id )
                 || GetMarcQuantity( $marcrecord, C4::Context->preference('marcflavour') )
                 || 1,
-            c_budget_id => $input->param( 'budget_id_' . $import_record->import_record_id )
-                || $input->param('all_budget_id')
+            c_budget_id => scalar $input->param( 'budget_id_' . $import_record->import_record_id )
+                || scalar $input->param('all_budget_id')
                 || $budget_id,
-            c_discount => $input->param( 'discount_' . $import_record->import_record_id ),
-            c_sort1 => $input->param( 'sort1_' . $import_record->import_record_id ) || $input->param('all_sort1') || '',
-            c_sort2 => $input->param( 'sort2_' . $import_record->import_record_id ) || $input->param('all_sort2') || '',
-            c_replacement_price => $input->param( 'replacementprice_' . $import_record->import_record_id ),
-            c_price             => $input->param( 'price_' . $import_record->import_record_id )
+            c_discount => scalar $input->param( 'discount_' . $import_record->import_record_id ),
+            c_sort1    => scalar $input->param( 'sort1_' . $import_record->import_record_id )
+                || scalar $input->param('all_sort1')
+                || '',
+            c_sort2 => scalar $input->param( 'sort2_' . $import_record->import_record_id )
+                || scalar $input->param('all_sort2')
+                || '',
+            c_replacement_price => scalar $input->param( 'replacementprice_' . $import_record->import_record_id ),
+            c_price             => scalar $input->param( 'price_' . $import_record->import_record_id )
                 || GetMarcPrice( $marcrecord, C4::Context->preference('marcflavour') ),
             order_internalnote => $order_internalnote,
             order_vendornote   => $order_vendornote,
