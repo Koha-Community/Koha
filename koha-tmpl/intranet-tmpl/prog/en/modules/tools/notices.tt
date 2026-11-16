@@ -45,266 +45,252 @@
     [% END %]
 [% END %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
-
-                [% IF conversion == 'converted' %]
-                    <div class="alert alert-success">The notice was converted to a print notice, which is waiting to be printed.</div>
-                [% ELSIF conversion == 'no_template' %]
-                    <div class="alert alert-danger"
-                        >The notice cannot be converted to a print notice because the CONVERTED_TO_PRINT notice does not exist. Create it in <a href="/cgi-bin/koha/tools/letter.pl">Notices and slips</a>, as a print notice of the Patrons
-                        module.</div
-                    >
-                [% ELSIF conversion == 'template_error' %]
-                    <div class="alert alert-danger"
-                        >The notice cannot be converted to a print notice because the CONVERTED_TO_PRINT notice has an error. Check it in <a href="/cgi-bin/koha/tools/letter.pl">Notices and slips</a>, the error is also in the error
-                        log.</div
-                    >
-                [% ELSIF conversion == 'failed' %]
-                    <div class="alert alert-danger">The notice could not be converted to a print notice.</div>
-                [% END %]
-
-                <h1>Notices management</h1>
-
-                <div class="alert alert-warning">Printing a notice will mark it as printed.</div>
-
-                [% IF truncated %]
-                    <div class="alert alert-info">Only the most recent [% limit | html %] notices matching the search are shown, use the search filters to narrow the results.</div>
-                [% END %]
-
-                [% IF notices.count == 0 %]
-                    <div class="page-section bg-info"> No notices were found with those search parameters. </div>
-                [% ELSE %]
-                    <div class="page-section">
-                        <span id="checkbox_actions"
-                            ><a href="#" class="select_all"><i class="fa fa-check"></i> Select all</a> | <a href="#" class="clear_all"><i class="fa fa-remove"></i> Clear all</a></span
-                        >
-                        <form id="print_multiple" action="/cgi-bin/koha/members/print_notice.pl" method="post" target="_blank">
-                            [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="op" value="cud-print" />
-                            <table id="notices">
-                                <thead>
-                                    <tr>
-                                        <th class="no-sort">&nbsp;</th>
-                                        <th>Time created</th>
-                                        <th>Patron</th>
-                                        <th>Notice</th>
-                                        <th>Type</th>
-                                        <th>Status</th>
-                                        <th>Updated on</th>
-                                        <th>Delivery note</th>
-                                        <th class="no-sort">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    [% FOREACH notice IN notices %]
-                                        <tr>
-                                            <td>
-                                                [% IF notice.can_be_printed %]
-                                                    <input type="checkbox" name="message_ids" value="[% notice.message_id | html %]" />
-                                                [% ELSE %]
-                                                    <input type="checkbox" name="message_ids" value="[% notice.message_id | html %]" disabled="disabled" title="This notice cannot be printed" />
-                                                [% END %]
-                                            </td>
-                                            <td data-order="[% notice.time_queued | html %]">[% notice.time_queued | $KohaDates with_hours = 1 %]</td>
-                                            <td>[% INCLUDE 'patron-title.inc' patron=notice.patron hide_patron_infos_if_needed=1 %]</td>
-                                            <td>
-                                                <a
-                                                    class="notice-title"
-                                                    data-noticeid="[% notice.message_id | html %]"
-                                                    data-status="[% notice.status | html %]"
-                                                    data-printable="[% IF notice.can_be_printed %]1[% ELSE %]0[% END %]"
-                                                    data-convertible="[% IF conversion_template_exists && notice.can_be_converted_to_print %]1[% ELSE %]0[% END %]"
-                                                    data-borrowernumber="[% notice.borrowernumber | html %]"
-                                                    href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% notice.borrowernumber | uri %]&amp;noticeid=[% notice.message_id | uri %]"
-                                                    >[% notice.subject | html %]</a
-                                                >
-                                                <iframe class="notice" id="notice[% notice.message_id | html %]" title="Notice content" sandbox="" srcdoc="[% notice.html_content | html %]"></iframe>
-                                            </td>
-                                            <td>
-                                                [% IF ( notice.message_transport_type == 'email' ) %]
-                                                    <span>email</span>
-                                                [% ELSIF ( notice.message_transport_type == 'print' ) %]
-                                                    <span>print</span>
-                                                [% ELSIF ( notice.message_transport_type == 'feed' ) %]
-                                                    <span>feed</span>
-                                                [% ELSIF ( notice.message_transport_type == 'sms' ) %]
-                                                    <span>sms</span>
-                                                [% ELSE %]
-                                                    [% notice.message_transport_type | html %]
-                                                [% END %]
-                                            </td>
-                                            <td>
-                                                [% IF ( notice.status == 'sent' ) %]
-                                                    <span>sent</span>
-                                                [% ELSIF ( notice.status == 'pending' ) %]
-                                                    <span>pending</span>
-                                                [% ELSIF ( notice.status == 'failed' ) %]
-                                                    <span>failed</span>
-                                                [% ELSIF ( notice.status == 'deleted' ) %]
-                                                    <span>deleted</span>
-                                                [% ELSIF ( notice.status == 'printed' ) %]
-                                                    <span>printed</span>
-                                                [% ELSIF ( notice.status == 'converted' ) %]
-                                                    <span>converted</span>
-                                                [% ELSE %]
-                                                    [% notice.status | html %]
-                                                [% END %]
-                                            </td>
-                                            <td data-order="[% notice.updated_on | html %]">[% notice.updated_on | $KohaDates with_hours = 1 %]</td>
-                                            <td>
-                                                [% IF ( notice.failure_code ) %]
-                                                    [% IF ( notice.failure_code == "INVALID_BORNUMBER" ) %]
-                                                        <span class="clearfix">Invalid borrowernumber [% notice.borrowernumber | html %]</span>
-                                                    [% ELSIF ( notice.failure_code == 'NO_EMAIL' ) %]
-                                                        <span class="clearfix">Unable to find an email address for this patron</span>
-                                                    [% ELSIF ( matches = notice.failure_code.match('INVALID_EMAIL:(\w+)') ) %]
-                                                        <span class="clearfix">Invalid [% matches.0 | html %] email address found [% notice.borrowernumber | html %]</span>
-                                                    [% ELSIF ( notice.failure_code == 'NO_FROM' ) %]
-                                                        <span class="clearfix">Missing from email address</span>
-                                                    [% ELSIF ( notice.failure_code == 'MISSING_SMS' ) %]
-                                                        <span class="clearfix">Missing SMS number</span>
-                                                    [% ELSIF ( notice.failure_code == 'DUPLICATE_MESSAGE' ) %]
-                                                        <span class="clearfix">Message is duplicate</span>
-                                                    [% ELSIF ( notice.failure_code == 'NO_NOTES' ) %]
-                                                        <span class="clearfix">No notes from SMS driver</span>
-                                                    [% ELSIF ( notice.failure_code == 'SMS_SEND_DRIVER_MISSING' ) %]
-                                                        <span class="clearfix">The SMS driver could not be loaded</span>
-                                                    [% ELSIF ( notice.failure_code == 'SENDMAIL' ) %]
-                                                        <span class="clearfix">Unhandled email failure, check the logs for further details</span>
-                                                    [% ELSIF ( notice.failure_code == "UNKNOWN_ERROR" ) %]
-                                                        <span class="clearfix">Unknown error</span>
-                                                    [% ELSIF ( matches = notice.failure_code.match('^CONVERTED_TO_PRINT:(\d+)$') ) %]
-                                                        <span class="clearfix">Converted to print notice [% matches.0 | html %]</span>
-                                                    [% ELSIF ( matches = notice.failure_code.match('^CONVERTED_FROM:(\d+)$') ) %]
-                                                        <span class="clearfix">Converted from notice [% matches.0 | html %]</span>
-                                                    [% ELSE %]
-                                                        <span class="clearfix">Message failed to send with the following error: [% notice.failure_code | html %]</span>
-                                                    [% END %]
-                                                [% END %]
-                                                [% IF ( notice.status == 'sent' ) %]
-                                                    [% IF ( notice.from_address ) %]
-                                                        <span class="clearfix"><span class="label">From:</span> [% notice.from_address | html %]</span>
-                                                    [% END %]
-                                                    [% IF ( notice.to_address ) %]
-                                                        <span class="clearfix"><span class="label">To:</span> [% notice.to_address | html %]</span>
-                                                    [% END %]
-                                                    [% IF ( notice.cc_address ) %]
-                                                        <span class="clearfix"><span class="label">CC:</span> [% notice.cc_address | html %]</span>
-                                                    [% END %]
-                                                [% END %]
-                                            </td>
-                                            <td class="actions"
-                                                >[% IF notice.can_be_printed %]<button type="button" class="btn btn-default btn-xs print" data-noticeid="[% notice.message_id | html %]"><i class="fa fa-print"></i> Print</button>[% END %]
-                                                [% IF conversion_template_exists && notice.can_be_converted_to_print %]
-                                                    <button type="button" class="btn btn-default btn-xs convert" data-noticeid="[% notice.message_id | html %]"><i class="fa fa-envelope"></i> Convert to print</button>
-                                                [% END %]</td
-                                            >
-                                        </tr>
-                                    [% END %]
-                                </tbody>
-                            </table>
-                            <fieldset class="action">
-                                <input type="submit" class="btn btn-primary" value="Print selected notices" id="print_multiple_button" />
-                            </fieldset>
-                        </form>
-                    </div>
-                [% END %]
-            </main>
-        </div>
-        <!-- /.col-sm-10.col-sm-push-2 -->
-
-        <div class="col-md-2 order-md-1 order-sm-1">
-            <aside>
-                <fieldset class="sidebar brief">
-                    <form id="notices-search" action="/cgi-bin/koha/tools/notices.pl" method="get">
-                        <h3>Search filters</h3>
-                        <ol>
-                            [% IF show_library_filter %]
-                                <li>
-                                    <label for="branchcode">Patron library:</label>
-                                    <select id="branchcode" name="branchcode">
-                                        <option value="">All libraries</option>
-                                        [% FOREACH branch IN Branches.all( selected => branchcode ) %]
-                                            [% IF ( branch.selected ) %]
-                                                <option selected="selected" value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
-                                            [% ELSE %]
-                                                <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
-                                            [% END %]
-                                        [% END %]
-                                    </select>
-                                </li>
+[% aside = BLOCK %]
+    <fieldset class="sidebar brief">
+        <form id="notices-search" action="/cgi-bin/koha/tools/notices.pl" method="get">
+            <h3>Search filters</h3>
+            <ol>
+                [% IF show_library_filter %]
+                    <li>
+                        <label for="branchcode">Patron library:</label>
+                        <select id="branchcode" name="branchcode">
+                            <option value="">All libraries</option>
+                            [% FOREACH branch IN Branches.all( selected => branchcode ) %]
+                                [% IF ( branch.selected ) %]
+                                    <option selected="selected" value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
+                                [% ELSE %]
+                                    <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
+                                [% END %]
                             [% END %]
+                        </select>
+                    </li>
+                [% END %]
+                <li>
+                    <label for="letter_code">Notice:</label>
+                    <select id="letter_code" name="letter_code">
+                        <option value="">All notices</option>
+                        [% FOREACH letter IN letters %]
+                            [% IF ( letter.code == letter_code ) %]
+                                <option selected="selected" value="[% letter.code | html %]">[% letter.name | html %] ([% letter.code | html %])</option>
+                            [% ELSE %]
+                                <option value="[% letter.code | html %]">[% letter.name | html %] ([% letter.code | html %])</option>
+                            [% END %]
+                        [% END %]
+                    </select>
+                </li>
+                <li>
+                    <label for="status">Notice status:</label>
+                    <select id="status" name="status">
+                        <option value="">All statuses</option>
+                        <option value="sent" [% IF status == 'sent' %]selected="selected"[% END %]>Sent</option>
+                        <option value="pending" [% IF status == 'pending' %]selected="selected"[% END %]>Pending</option>
+                        <option value="failed" [% IF status == 'failed' %]selected="selected"[% END %]>Failed</option>
+                        <option value="deleted" [% IF status == 'deleted' %]selected="selected"[% END %]>Deleted</option>
+                        <option value="printed" [% IF status == 'printed' %]selected="selected"[% END %]>Printed</option>
+                        <option value="converted" [% IF status == 'converted' %]selected="selected"[% END %]>Converted to print</option>
+                    </select>
+                </li>
+                <li>
+                    <fieldset class="brief">
+                        <legend>Date queued</legend>
+                        <ol>
                             <li>
-                                <label for="letter_code">Notice:</label>
-                                <select id="letter_code" name="letter_code">
-                                    <option value="">All notices</option>
-                                    [% FOREACH letter IN letters %]
-                                        [% IF ( letter.code == letter_code ) %]
-                                            <option selected="selected" value="[% letter.code | html %]">[% letter.name | html %] ([% letter.code | html %])</option>
-                                        [% ELSE %]
-                                            <option value="[% letter.code | html %]">[% letter.name | html %] ([% letter.code | html %])</option>
-                                        [% END %]
-                                    [% END %]
-                                </select>
+                                <label for="from">From:</label>
+                                <input type="text" id="from" name="from" size="10" value="[% from | html %]" class="flatpickr" data-date_to="to" />
+                                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                             </li>
                             <li>
-                                <label for="status">Notice status:</label>
-                                <select id="status" name="status">
-                                    <option value="">All statuses</option>
-                                    <option value="sent" [% IF status == 'sent' %]selected="selected"[% END %]>Sent</option>
-                                    <option value="pending" [% IF status == 'pending' %]selected="selected"[% END %]>Pending</option>
-                                    <option value="failed" [% IF status == 'failed' %]selected="selected"[% END %]>Failed</option>
-                                    <option value="deleted" [% IF status == 'deleted' %]selected="selected"[% END %]>Deleted</option>
-                                    <option value="printed" [% IF status == 'printed' %]selected="selected"[% END %]>Printed</option>
-                                    <option value="converted" [% IF status == 'converted' %]selected="selected"[% END %]>Converted to print</option>
-                                </select>
-                            </li>
-                            <li>
-                                <fieldset class="brief">
-                                    <legend>Date queued</legend>
-                                    <ol>
-                                        <li>
-                                            <label for="from">From:</label>
-                                            <input type="text" id="from" name="from" size="10" value="[% from | html %]" class="flatpickr" data-date_to="to" />
-                                            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                                        </li>
-                                        <li>
-                                            <label for="to">To:</label>
-                                            <input type="text" id="to" name="to" size="10" value="[% to | html %]" class="flatpickr" />
-                                            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                                        </li>
-                                    </ol>
-                                </fieldset>
-                            </li>
-                            <li>
-                                <label for="categorycode">Patron category:</label>
-                                <select id="categorycode" name="categorycode">
-                                    <option value="">All patron categories</option>
-                                    [% FOREACH category IN Categories.all %]
-                                        [% IF ( category.categorycode == categorycode ) %]
-                                            <option selected="selected" value="[% category.categorycode | html %]">[% category.description | html %]</option>
-                                        [% ELSE %]
-                                            <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
-                                        [% END %]
-                                    [% END %]
-                                </select>
+                                <label for="to">To:</label>
+                                <input type="text" id="to" name="to" size="10" value="[% to | html %]" class="flatpickr" />
+                                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                             </li>
                         </ol>
-                        <fieldset class="action">
-                            <input type="submit" class="btn btn-default" value="Search" />
-                        </fieldset>
-                    </form>
+                    </fieldset>
+                </li>
+                <li>
+                    <label for="categorycode">Patron category:</label>
+                    <select id="categorycode" name="categorycode">
+                        <option value="">All patron categories</option>
+                        [% FOREACH category IN Categories.all %]
+                            [% IF ( category.categorycode == categorycode ) %]
+                                <option selected="selected" value="[% category.categorycode | html %]">[% category.description | html %]</option>
+                            [% ELSE %]
+                                <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
+                            [% END %]
+                        [% END %]
+                    </select>
+                </li>
+            </ol>
+            <fieldset class="action">
+                <input type="submit" class="btn btn-default" value="Search" />
+            </fieldset>
+        </form>
+    </fieldset>
+    [% INCLUDE 'tools-menu.inc' %]
+[% END %]
+
+[% WRAPPER 'main-container.inc' aside_block=aside %]
+
+    [% IF conversion == 'converted' %]
+        <div class="alert alert-success">The notice was converted to a print notice, which is waiting to be printed.</div>
+    [% ELSIF conversion == 'no_template' %]
+        <div class="alert alert-danger"
+            >The notice cannot be converted to a print notice because the CONVERTED_TO_PRINT notice does not exist. Create it in <a href="/cgi-bin/koha/tools/letter.pl">Notices and slips</a>, as a print notice of the Patrons module.</div
+        >
+    [% ELSIF conversion == 'template_error' %]
+        <div class="alert alert-danger"
+            >The notice cannot be converted to a print notice because the CONVERTED_TO_PRINT notice has an error. Check it in <a href="/cgi-bin/koha/tools/letter.pl">Notices and slips</a>, the error is also in the error log.</div
+        >
+    [% ELSIF conversion == 'failed' %]
+        <div class="alert alert-danger">The notice could not be converted to a print notice.</div>
+    [% END %]
+
+    <h1>Notices management</h1>
+
+    <div class="alert alert-warning">Printing a notice will mark it as printed.</div>
+
+    [% IF truncated %]
+        <div class="alert alert-info">Only the most recent [% limit | html %] notices matching the search are shown, use the search filters to narrow the results.</div>
+    [% END %]
+
+    [% IF notices.count == 0 %]
+        <div class="page-section bg-info"> No notices were found with those search parameters. </div>
+    [% ELSE %]
+        <div class="page-section">
+            <span id="checkbox_actions"
+                ><a href="#" class="select_all"><i class="fa fa-check"></i> Select all</a> | <a href="#" class="clear_all"><i class="fa fa-remove"></i> Clear all</a></span
+            >
+            <form id="print_multiple" action="/cgi-bin/koha/members/print_notice.pl" method="post" target="_blank">
+                [% INCLUDE 'csrf-token.inc' %]
+                <input type="hidden" name="op" value="cud-print" />
+                <table id="notices">
+                    <thead>
+                        <tr>
+                            <th class="no-sort">&nbsp;</th>
+                            <th>Time created</th>
+                            <th>Patron</th>
+                            <th>Notice</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Updated on</th>
+                            <th>Delivery note</th>
+                            <th class="no-sort">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [% FOREACH notice IN notices %]
+                            <tr>
+                                <td>
+                                    [% IF notice.can_be_printed %]
+                                        <input type="checkbox" name="message_ids" value="[% notice.message_id | html %]" />
+                                    [% ELSE %]
+                                        <input type="checkbox" name="message_ids" value="[% notice.message_id | html %]" disabled="disabled" title="This notice cannot be printed" />
+                                    [% END %]
+                                </td>
+                                <td data-order="[% notice.time_queued | html %]">[% notice.time_queued | $KohaDates with_hours = 1 %]</td>
+                                <td>[% INCLUDE 'patron-title.inc' patron=notice.patron hide_patron_infos_if_needed=1 %]</td>
+                                <td>
+                                    <a
+                                        class="notice-title"
+                                        data-noticeid="[% notice.message_id | html %]"
+                                        data-status="[% notice.status | html %]"
+                                        data-printable="[% IF notice.can_be_printed %]1[% ELSE %]0[% END %]"
+                                        data-convertible="[% IF conversion_template_exists && notice.can_be_converted_to_print %]1[% ELSE %]0[% END %]"
+                                        data-borrowernumber="[% notice.borrowernumber | html %]"
+                                        href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% notice.borrowernumber | uri %]&amp;noticeid=[% notice.message_id | uri %]"
+                                        >[% notice.subject | html %]</a
+                                    >
+                                    <iframe class="notice" id="notice[% notice.message_id | html %]" title="Notice content" sandbox="" srcdoc="[% notice.html_content | html %]"></iframe>
+                                </td>
+                                <td>
+                                    [% IF ( notice.message_transport_type == 'email' ) %]
+                                        <span>email</span>
+                                    [% ELSIF ( notice.message_transport_type == 'print' ) %]
+                                        <span>print</span>
+                                    [% ELSIF ( notice.message_transport_type == 'feed' ) %]
+                                        <span>feed</span>
+                                    [% ELSIF ( notice.message_transport_type == 'sms' ) %]
+                                        <span>sms</span>
+                                    [% ELSE %]
+                                        [% notice.message_transport_type | html %]
+                                    [% END %]
+                                </td>
+                                <td>
+                                    [% IF ( notice.status == 'sent' ) %]
+                                        <span>sent</span>
+                                    [% ELSIF ( notice.status == 'pending' ) %]
+                                        <span>pending</span>
+                                    [% ELSIF ( notice.status == 'failed' ) %]
+                                        <span>failed</span>
+                                    [% ELSIF ( notice.status == 'deleted' ) %]
+                                        <span>deleted</span>
+                                    [% ELSIF ( notice.status == 'printed' ) %]
+                                        <span>printed</span>
+                                    [% ELSIF ( notice.status == 'converted' ) %]
+                                        <span>converted</span>
+                                    [% ELSE %]
+                                        [% notice.status | html %]
+                                    [% END %]
+                                </td>
+                                <td data-order="[% notice.updated_on | html %]">[% notice.updated_on | $KohaDates with_hours = 1 %]</td>
+                                <td>
+                                    [% IF ( notice.failure_code ) %]
+                                        [% IF ( notice.failure_code == "INVALID_BORNUMBER" ) %]
+                                            <span class="clearfix">Invalid borrowernumber [% notice.borrowernumber | html %]</span>
+                                        [% ELSIF ( notice.failure_code == 'NO_EMAIL' ) %]
+                                            <span class="clearfix">Unable to find an email address for this patron</span>
+                                        [% ELSIF ( matches = notice.failure_code.match('INVALID_EMAIL:(\w+)') ) %]
+                                            <span class="clearfix">Invalid [% matches.0 | html %] email address found [% notice.borrowernumber | html %]</span>
+                                        [% ELSIF ( notice.failure_code == 'NO_FROM' ) %]
+                                            <span class="clearfix">Missing from email address</span>
+                                        [% ELSIF ( notice.failure_code == 'MISSING_SMS' ) %]
+                                            <span class="clearfix">Missing SMS number</span>
+                                        [% ELSIF ( notice.failure_code == 'DUPLICATE_MESSAGE' ) %]
+                                            <span class="clearfix">Message is duplicate</span>
+                                        [% ELSIF ( notice.failure_code == 'NO_NOTES' ) %]
+                                            <span class="clearfix">No notes from SMS driver</span>
+                                        [% ELSIF ( notice.failure_code == 'SMS_SEND_DRIVER_MISSING' ) %]
+                                            <span class="clearfix">The SMS driver could not be loaded</span>
+                                        [% ELSIF ( notice.failure_code == 'SENDMAIL' ) %]
+                                            <span class="clearfix">Unhandled email failure, check the logs for further details</span>
+                                        [% ELSIF ( notice.failure_code == "UNKNOWN_ERROR" ) %]
+                                            <span class="clearfix">Unknown error</span>
+                                        [% ELSIF ( matches = notice.failure_code.match('^CONVERTED_TO_PRINT:(\d+)$') ) %]
+                                            <span class="clearfix">Converted to print notice [% matches.0 | html %]</span>
+                                        [% ELSIF ( matches = notice.failure_code.match('^CONVERTED_FROM:(\d+)$') ) %]
+                                            <span class="clearfix">Converted from notice [% matches.0 | html %]</span>
+                                        [% ELSE %]
+                                            <span class="clearfix">Message failed to send with the following error: [% notice.failure_code | html %]</span>
+                                        [% END %]
+                                    [% END %]
+                                    [% IF ( notice.status == 'sent' ) %]
+                                        [% IF ( notice.from_address ) %]
+                                            <span class="clearfix"><span class="label">From:</span> [% notice.from_address | html %]</span>
+                                        [% END %]
+                                        [% IF ( notice.to_address ) %]
+                                            <span class="clearfix"><span class="label">To:</span> [% notice.to_address | html %]</span>
+                                        [% END %]
+                                        [% IF ( notice.cc_address ) %]
+                                            <span class="clearfix"><span class="label">CC:</span> [% notice.cc_address | html %]</span>
+                                        [% END %]
+                                    [% END %]
+                                </td>
+                                <td class="actions"
+                                    >[% IF notice.can_be_printed %]<button type="button" class="btn btn-default btn-xs print" data-noticeid="[% notice.message_id | html %]"><i class="fa fa-print"></i> Print</button>[% END %]
+                                    [% IF conversion_template_exists && notice.can_be_converted_to_print %]
+                                        <button type="button" class="btn btn-default btn-xs convert" data-noticeid="[% notice.message_id | html %]"><i class="fa fa-envelope"></i> Convert to print</button>
+                                    [% END %]</td
+                                >
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+                <fieldset class="action">
+                    <input type="submit" class="btn btn-primary" value="Print selected notices" id="print_multiple_button" />
                 </fieldset>
-                [% INCLUDE 'tools-menu.inc' %]
-            </aside>
+            </form>
         </div>
-        <!-- /.col-md-2.order-md-1 -->
-    </div>
-    <!-- /.row -->
+    [% END %]
 
     <form id="print_single" action="/cgi-bin/koha/members/print_notice.pl" method="post" target="_blank">
         [% INCLUDE 'csrf-token.inc' %]
@@ -347,101 +333,101 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+[% END %]
 
-    [% MACRO jsinclude BLOCK %]
-        [% Asset.js("js/tools-menu.js") | $raw %]
-        [% INCLUDE 'calendar.inc' %]
-        [% INCLUDE 'datatables.inc' %]
-        <script nonce="[% Koha.CSPNonce | $raw %]">
-            $(document).ready(function () {
-                $("#notices").kohaTable({
-                    order: [[1, "desc"]],
-                });
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    <script nonce="[% Koha.CSPNonce | $raw %]">
+        $(document).ready(function () {
+            $("#notices").kohaTable({
+                order: [[1, "desc"]],
+            });
 
-                function print_notice(noticeid) {
-                    $("#print_single input[name='message_ids']").val(noticeid);
-                    $("#print_single").trigger("submit");
+            function print_notice(noticeid) {
+                $("#print_single input[name='message_ids']").val(noticeid);
+                $("#print_single").trigger("submit");
+            }
+
+            $("#notices").on("click", ".print", function (e) {
+                e.preventDefault();
+                print_notice($(this).data("noticeid"));
+            });
+
+            $("#notices").on("click", ".notice-title", function (e) {
+                e.preventDefault();
+                var title = $(this).text();
+                var noticeid = $(this).data("noticeid");
+                var body = $("#notice" + noticeid).attr("srcdoc");
+                if ($(this).data("status") !== "pending") {
+                    let borrowerNumber = $(this).data("borrowernumber");
+                    $('#resend_notice input[name="borrowernumber"]').val(borrowerNumber);
+                    $('#resend_notice input[name="message_id"]').val(noticeid);
+                    $("#resend_notice").removeClass("d-none");
                 }
+                $("#noticeModal .print-notice-modal").toggleClass("d-none", $(this).data("printable") !== 1);
+                $("#noticeModal .convert-notice-modal").toggleClass("d-none", $(this).data("convertible") !== 1);
+                $("#noticeModal").data("noticeid", noticeid);
+                $("#noticeModalLabel").text(title);
 
-                $("#notices").on("click", ".print", function (e) {
+                // The notice content is shown in a sandboxed frame so that nothing in it can run
+                $("#noticeModal .modal-body").html($('<iframe class="notice-preview" sandbox=""></iframe>').attr("title", _("Notice content")).attr("srcdoc", body));
+                $("#noticeModal").modal("show");
+            });
+
+            $("#noticeModal .print-notice-modal").on("click", function () {
+                print_notice($("#noticeModal").data("noticeid"));
+            });
+
+            function convert_to_print(noticeid) {
+                $("#convert_to_print input[name='message_id']").val(noticeid);
+                $("#convert_to_print").trigger("submit");
+            }
+
+            $("#notices").on("click", ".convert", function (e) {
+                e.preventDefault();
+                convert_to_print($(this).data("noticeid"));
+            });
+
+            $("#noticeModal .convert-notice-modal").on("click", function () {
+                convert_to_print($("#noticeModal").data("noticeid"));
+            });
+
+            $("#noticeModal").on("hide.bs.modal", function () {
+                $('#resend_notice input[name="borrowernumber"]').val("");
+                $('#resend_notice input[name="message_id"]').val("");
+                $("#resend_notice").addClass("d-none");
+                $("#noticeModal .print-notice-modal").addClass("d-none");
+                $("#noticeModal .convert-notice-modal").addClass("d-none");
+                $("#noticeModalLabel").text("");
+                $("#noticeModal .modal-body").html("");
+            });
+
+            $("#print_multiple_button").click(function (e) {
+                var selected_notices = $("#notices").find("input[name='message_ids']:checked");
+                if (selected_notices.length == 0) {
+                    alert(_("Please select at least one notice."));
                     e.preventDefault();
-                    print_notice($(this).data("noticeid"));
-                });
-
-                $("#notices").on("click", ".notice-title", function (e) {
-                    e.preventDefault();
-                    var title = $(this).text();
-                    var noticeid = $(this).data("noticeid");
-                    var body = $("#notice" + noticeid).attr("srcdoc");
-                    if ($(this).data("status") !== "pending") {
-                        let borrowerNumber = $(this).data("borrowernumber");
-                        $('#resend_notice input[name="borrowernumber"]').val(borrowerNumber);
-                        $('#resend_notice input[name="message_id"]').val(noticeid);
-                        $("#resend_notice").removeClass("d-none");
-                    }
-                    $("#noticeModal .print-notice-modal").toggleClass("d-none", $(this).data("printable") !== 1);
-                    $("#noticeModal .convert-notice-modal").toggleClass("d-none", $(this).data("convertible") !== 1);
-                    $("#noticeModal").data("noticeid", noticeid);
-                    $("#noticeModalLabel").text(title);
-
-                    // The notice content is shown in a sandboxed frame so that nothing in it can run
-                    $("#noticeModal .modal-body").html($('<iframe class="notice-preview" sandbox=""></iframe>').attr("title", _("Notice content")).attr("srcdoc", body));
-                    $("#noticeModal").modal("show");
-                });
-
-                $("#noticeModal .print-notice-modal").on("click", function () {
-                    print_notice($("#noticeModal").data("noticeid"));
-                });
-
-                function convert_to_print(noticeid) {
-                    $("#convert_to_print input[name='message_id']").val(noticeid);
-                    $("#convert_to_print").trigger("submit");
+                    return false;
                 }
+            });
 
-                $("#notices").on("click", ".convert", function (e) {
-                    e.preventDefault();
-                    convert_to_print($(this).data("noticeid"));
-                });
-
-                $("#noticeModal .convert-notice-modal").on("click", function () {
-                    convert_to_print($("#noticeModal").data("noticeid"));
-                });
-
-                $("#noticeModal").on("hide.bs.modal", function () {
-                    $('#resend_notice input[name="borrowernumber"]').val("");
-                    $('#resend_notice input[name="message_id"]').val("");
-                    $("#resend_notice").addClass("d-none");
-                    $("#noticeModal .print-notice-modal").addClass("d-none");
-                    $("#noticeModal .convert-notice-modal").addClass("d-none");
-                    $("#noticeModalLabel").text("");
-                    $("#noticeModal .modal-body").html("");
-                });
-
-                $("#print_multiple_button").click(function (e) {
-                    var selected_notices = $("#notices").find("input[name='message_ids']:checked");
-                    if (selected_notices.length == 0) {
-                        alert(_("Please select at least one notice."));
-                        e.preventDefault();
-                        return false;
-                    }
-                });
-
-                $(".select_all").click(function (e) {
-                    e.preventDefault();
-                    $("input[name='message_ids']:not(:disabled)").each(function () {
-                        $(this).prop("checked", true);
-                    });
-                });
-
-                $(".clear_all").click(function (e) {
-                    e.preventDefault();
-                    $("input[name='message_ids']").each(function () {
-                        $(this).prop("checked", false);
-                    });
+            $(".select_all").click(function (e) {
+                e.preventDefault();
+                $("input[name='message_ids']:not(:disabled)").each(function () {
+                    $(this).prop("checked", true);
                 });
             });
-        </script>
-    [% END %]
 
-    [% INCLUDE 'intranet-bottom.inc' %]</div
->
+            $(".clear_all").click(function (e) {
+                e.preventDefault();
+                $("input[name='message_ids']").each(function () {
+                    $(this).prop("checked", false);
+                });
+            });
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

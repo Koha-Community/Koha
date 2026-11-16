@@ -39,7 +39,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% IF notices.size %]
-        <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+        <script nonce="[% Koha.CSPNonce | $raw %]">
             // Show the whole of each notice, before it is printed
             document.querySelectorAll("iframe.notice-frame").forEach(function (frame) {
                 function resize() {
