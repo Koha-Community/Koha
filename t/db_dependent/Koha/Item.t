@@ -4182,7 +4182,7 @@ subtest 'holds_fee() tests' => sub {
 };
 
 subtest 'effective_replacement_price() tests' => sub {
-    plan tests => 10;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -4250,6 +4250,42 @@ subtest 'effective_replacement_price() tests' => sub {
     }
     qr/item-level_itypes set but no itemtype set/, 'The missing item type is warned about by effective_itemtype';
     is( $price, 0, 'Returns 0 when the item has no item type at all' );
+
+    #a price on the item is used whatever the preference says
+    t::lib::Mocks::mock_preference( 'useDefaultReplacementCost', 0 );
+    $item->replacementprice(11.00)->store;
+    cmp_ok(
+        $item->effective_replacement_price, '==', 11,
+        'Uses the item price when it has one and the preference is off'
+    );
+
+    #an item type default of 0 is no price
+    t::lib::Mocks::mock_preference( 'useDefaultReplacementCost', 1 );
+    $itemtype->defaultreplacecost(0)->store;
+    $item->replacementprice(undef)->store;
+    cmp_ok(
+        $item->effective_replacement_price, '==', 0,
+        'Returns 0 when the item type default is 0 and the preference is on'
+    );
+
+    #item-level_itypes decides which item type gives the default: the item's own, or the one of its biblio
+    my $item_level_type =
+        $builder->build_object( { class => 'Koha::ItemTypes', value => { defaultreplacecost => 5.00 } } );
+    my $biblio_level_type =
+        $builder->build_object( { class => 'Koha::ItemTypes', value => { defaultreplacecost => 9.00 } } );
+    my $typed = $builder->build_sample_item( { itype => $item_level_type->itemtype, replacementprice => undef } );
+    $typed->biblioitem->itemtype( $biblio_level_type->itemtype )->store;
+
+    t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );
+    cmp_ok(
+        Koha::Items->find( $typed->itemnumber )->effective_replacement_price, '==', 5,
+        'Uses the default of the item type of the item when item-level_itypes is on'
+    );
+    t::lib::Mocks::mock_preference( 'item-level_itypes', 0 );
+    cmp_ok(
+        Koha::Items->find( $typed->itemnumber )->effective_replacement_price, '==', 9,
+        'Uses the default of the item type of the biblio when item-level_itypes is off'
+    );
 
     $schema->storage->txn_rollback;
 };
