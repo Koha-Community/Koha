@@ -532,6 +532,16 @@
             noteRequired: [% reconciliation_note_required ? 'true' : 'false' | html %],
             isInProgress: [% cashup_in_progress ? 'true' : 'false' | html %],
         };
+        // Per-payment-type expected amounts for the cashup modal (in CashupPaymentTypes order)
+        const cashupPaymentTypes = [
+            [% FOREACH row IN cashup_payment_types_breakdown %]
+                {
+                    payment_type: "[% row.payment_type | html %]",
+                    label: "[% row.label | html %]",
+                    expected: [% row.expected | html %]
+                }[% UNLESS loop.last %],[% END %]
+            [% END %]
+        ];
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         var sales_table = $("#sales").kohaTable({
@@ -688,17 +698,6 @@
                 }
             }
         });
-
-        // Per-payment-type expected amounts for the cashup modal (in CashupPaymentTypes order)
-        const cashupPaymentTypes = [
-            [% FOREACH row IN cashup_payment_types_breakdown %]
-                {
-                    payment_type: "[% row.payment_type | html %]",
-                    label: "[% row.label | html %]",
-                    expected: [% row.expected | html %]
-                }[% UNLESS loop.last %],[% END %]
-            [% END %]
-        ];
 
         // Initialize cashup modals
         initTriggerCashupModal("#triggerCashupModal", {
