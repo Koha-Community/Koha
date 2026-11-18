@@ -300,7 +300,7 @@
                                 .replace(regex, "")
                                 .trim()
                                 .split(/\n/gi)
-                                .map(s => s.trim())
+                                .map(s => $("<textarea>").html(s).text().trim())
                                 .flat()
                         )
                         .flat()
