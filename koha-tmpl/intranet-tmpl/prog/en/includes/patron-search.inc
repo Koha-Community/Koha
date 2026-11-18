@@ -529,7 +529,7 @@
                             let parent_block = $(`#${search_results_block_id}`);
                             let start_with = parent_block.find(".firstletter_filter").val();
                             if (!start_with) return "";
-                            return _("Surname begins with '%s'".format(start_with));
+                            return _("Surname begins with '%s'").format(start_with);
                         },
                     };
                 }
