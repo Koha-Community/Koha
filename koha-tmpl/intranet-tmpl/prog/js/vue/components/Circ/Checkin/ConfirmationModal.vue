@@ -1015,6 +1015,7 @@ export default {
                 ),
                 Recall: $__("Recall"),
                 RecallCancellation: $__("Cancelled recall"),
+                LibraryFloatLimit: $__("Float limit reached"),
             };
             return triggers[trigger] || trigger;
         }
