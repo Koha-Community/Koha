@@ -3483,7 +3483,7 @@ sub CanBookBeRenewed {
 
             # For an automatic renewal FineNoRenewalsBlockAutoRenew decides, and
             # _CanBookBeAutoRenewed has already refused it when that is set to block
-            return ( 0, 'too_much_owing' ) unless $cron && $auto_renew eq 'ok';
+            return ( 0, 'too_much_owing' ) unless $cron;
         }
 
     }
