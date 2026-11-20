@@ -93,13 +93,6 @@ export default {
             },
             embedded: props.embedded,
             extendedAttributesResourceType,
-            groupLabels: {
-                documents: $__("Documents"),
-                licenses: $__("Licenses"),
-                periods: $__("Periods"),
-                related_agreements: $__("Related agreements"),
-                users: $__("Users"),
-            },
             resourceAttrs: [
                 {
                     name: "agreement_id",
@@ -198,7 +191,7 @@ export default {
                             },
                         ],
                     },
-                    group: "periods",
+                    group: $__("Periods"),
                     componentProps: {
                         resourceRelationships: {
                             resourceProperty: "periods",
@@ -267,7 +260,7 @@ export default {
                 {
                     name: "user_roles",
                     type: "relationshipWidget",
-                    group: "users",
+                    group: $__("Users"),
                     showElement: {
                         type: "table",
                         columnData: "user_roles",
@@ -348,7 +341,7 @@ export default {
                 {
                     name: "agreement_licenses",
                     type: "relationshipWidget",
-                    group: "licenses",
+                    group: $__("Licenses"),
                     showElement: {
                         type: "table",
                         columnData: "agreement_licenses",
@@ -481,7 +474,7 @@ export default {
                 {
                     name: "agreement_relationships",
                     type: "relationshipWidget",
-                    group: "related_agreements",
+                    group: $__("Related agreements"),
                     showElement: {
                         type: "component",
                         hidden: agreement =>
@@ -582,7 +575,7 @@ export default {
                 {
                     name: "documents",
                     type: "relationshipWidget",
-                    group: "documents",
+                    group: $__("Documents"),
                     showElement: {
                         type: "component",
                         label: $__("Agreement users"),

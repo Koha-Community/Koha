@@ -68,9 +68,6 @@ export default {
             props,
             additionalToolbarButtons,
             moduleStore: "ERMStore",
-            groupLabels: {
-                packages: $__("Packages"),
-            },
             resourceAttrs: [
                 {
                     name: "publication_title",
@@ -309,7 +306,7 @@ export default {
                 {
                     name: "resources",
                     type: "relationshipWidget",
-                    group: "packages",
+                    group: $__("Packages"),
                     apiClient: APIClient.erm.localPackages,
                     showElement: {
                         type: "component",
