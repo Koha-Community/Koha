@@ -61,8 +61,9 @@ unless ($hours) {
     die "ERROR: No --hours (-h) option defined";
 }
 
-my $query = "SELECT itemnumber FROM items WHERE location = 'CART' AND TIMESTAMPDIFF(HOUR, items.timestamp, NOW() ) > ?";
-my $sth   = C4::Context->dbh->prepare($query);
+my $query =
+    "SELECT itemnumber FROM items WHERE location = 'CART' AND TIMESTAMPDIFF(HOUR, items.timestamp, NOW() ) >= ?";
+my $sth = C4::Context->dbh->prepare($query);
 $sth->execute($hours);
 while ( my ($itemnumber) = $sth->fetchrow_array ) {
     CartToShelf($itemnumber);
