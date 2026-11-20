@@ -341,7 +341,7 @@ if ( $op eq 'view' ) {
             } else {
                 $rows = C4::Context->preference('OPACnumSearchResults') || 20;
             }
-            my $order_by = $sortfield eq 'itemcallnumber' ? 'items.cn_sort' : $sortfield;
+            my $order_by       = $sortfield eq 'itemcallnumber' ? 'items.cn_sort' : $sortfield;
             my $shelf_contents = $shelf->get_contents;
 
             if ( C4::Context->preference('OpacSuppression') ) {
