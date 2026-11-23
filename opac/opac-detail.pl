@@ -1240,8 +1240,8 @@ if ( C4::Context->preference('OPACAuthorIdentifiersAndInformation') ) {
         my $information = $authority->get_identifiers_and_information;
         next unless $information;
         my $heading = $authority->heading_object;
-        next unless $heading;
-        my ($name) = $heading->display_form;
+        next if !$heading || !%$heading;
+        my $name = $heading->display_form;
         push @author_information,
             { authid => $authid, name => $name, information => $information };
     }
