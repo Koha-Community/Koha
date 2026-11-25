@@ -618,10 +618,8 @@ if ( $biblio && !$breedingid ) {
     if ($@) {
         my $exception = $@;
         $exception->rethrow unless ( $exception->isa('Koha::Exceptions::Metadata::Invalid') );
-        $record = undef;
+        $record = $biblio->metadata->record_strip_nonxml;
         $template->param( INVALID_METADATA => $exception );
-    } elsif ( my @repairs = @{ $biblio->metadata->object_messages } ) {
-        $template->param( INVALID_METADATA => join( "\n", map { $_->payload } @repairs ) );
     }
 }
 if ($breedingid) {

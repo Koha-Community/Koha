@@ -383,9 +383,9 @@ subtest 'record() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'record() repairs recoverable faults on read' => sub {
+subtest 'record_strip_nonxml() tests' => sub {
 
-    plan tests => 15;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -393,13 +393,13 @@ subtest 'record() repairs recoverable faults on read' => sub {
 
     # Create a valid record
     my $record = MARC::Record->new();
-    $record->append_fields( MARC::Field->new( '245', '', '', 'a' => $title ) );
+    my $field  = MARC::Field->new( '245', '', '', 'a' => $title );
+    $record->append_fields($field);
     my ($biblio_id) = C4::Biblio::AddBiblio( $record, '' );
 
-    my $biblio   = Koha::Biblios->find($biblio_id);
-    my $metadata = $biblio->metadata;
+    my $metadata = Koha::Biblios->find($biblio_id)->metadata;
 
-    # Update the record in the database directly, bypassing store(), to include our error character
+    # Update the record in the database directly to include our error character
     my $bad_title = 'Oranges and' . chr(31) . ' Peaches';
     $record = $metadata->record;
     $record->delete_fields( $record->field('245') );
@@ -407,36 +407,13 @@ subtest 'record() repairs recoverable faults on read' => sub {
     $metadata->_result->update( { metadata => $record->as_xml_record } );
     $metadata->discard_changes;
 
-    my $record2 = $metadata->record;
+    my $record2 = $metadata->record_strip_nonxml;
 
-    is( ref $record2,                          'MARC::Record', 'record() returned a MARC::Record object' );
-    is( $record2->field('245')->subfield("a"), $title,         'Title in 245$a has the control character removed' );
-
-    my $messages = $metadata->object_messages;
-    is( scalar @$messages,       1,                 'The repair is reported through object_messages' );
-    is( $messages->[0]->message, 'nonxml_stripped', 'Message names the repaired fault' );
-    is( $messages->[0]->type,    'warning',         'Message is a warning' );
-    like( $messages->[0]->payload, qr/245\$a/, 'Message payload identifies the field' );
-
-    $metadata->record;
-    is( scalar @{ $metadata->object_messages }, 1, 'Repeated calls do not duplicate the message' );
-
-    is( $metadata->metadata_errors->count, 1, 'The repair on read writes an error row' );
-    unlike( $metadata->metadata, qr/\x{1F}/, 'The repair on read is written back to the database' );
-
+    is( ref $record2, 'MARC::Record', 'Method record() returned a MARC::Record object' );
     is(
-        $biblio->metadata->object_messages->[0]->message, 'nonxml_stripped',
-        'Biblio->metadata hands back the same object'
+        $record2->field('245')->subfield("a"),
+        "Oranges and Peaches", 'Title in 245$a matches title with control character removed'
     );
-
-    # Empty datafield
-    my ($empty_biblio_id) = C4::Biblio::AddBiblio( MARC::Record->new, '' );
-    my $empty = Koha::Biblios->find($empty_biblio_id)->metadata;
-    ( my $xml = $empty->metadata ) =~ s{</record>}{<datafield tag="500" ind1=" " ind2=" "></datafield></record>};
-    $empty->_result->update( { metadata => $xml } );
-    $empty->discard_changes;
-    $empty->record;
-    is( $empty->object_messages->[0]->message, 'empty_datafield_stripped', 'Empty datafield is repaired and reported' );
 
     my $bad_data = $builder->build_object(
         {
@@ -445,13 +422,14 @@ subtest 'record() repairs recoverable faults on read' => sub {
         }
     );
 
-    warning_like {
-        throws_ok { $bad_data->record } 'Koha::Exceptions::Metadata::Invalid',
-            'Unrecoverable metadata still throws';
-    }
+    warning_like { $record2 = $bad_data->record_strip_nonxml; }
     qr/parser error : Start tag expected, '<' not found/,
         'Warning thrown explicitly';
-    is( scalar @{ $bad_data->object_messages }, 0, 'No repair reported for unrecoverable metadata' );
+
+    is(
+        $record2, undef,
+        "record_strip_nonxml returns undef when the record cannot be parsed after removing nonxml characters"
+    );
 
     my $item = $builder->build_sample_item( { biblionumber => $metadata->biblionumber } );
 
@@ -459,9 +437,11 @@ subtest 'record() repairs recoverable faults on read' => sub {
     t::lib::Mocks::mock_preference( 'OpacHiddenItems', '' );
     my ($itemfield) = C4::Biblio::GetMarcFromKohaField('items.itemnumber');
 
-    $record2 = $metadata->record( { embed_items => 1 } );
+    $record2 = $metadata->record_strip_nonxml( { embed_items => 1 } );
+
     my @items = $record2->field($itemfield);
-    is( scalar @items, 1, "We got back our item from a repaired record" );
+
+    is( scalar @items, 1, "We got back our item" );
 
     $schema->storage->txn_rollback;
 };
