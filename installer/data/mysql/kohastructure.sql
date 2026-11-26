@@ -3,7 +3,7 @@
 --
 -- Host: db    Database: koha_kohadev
 -- ------------------------------------------------------
--- Server version	12.3.2-MariaDB-ubu2404
+-- Server version	13.0.2-MariaDB-ubu2604
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -704,7 +704,7 @@ CREATE TABLE `aqinvoices` (
   KEY `aqinvoices_fk_aqbooksellerid` (`booksellerid`),
   KEY `edifact_msg_fk` (`message_id`),
   KEY `aqinvoices_fk_shipmentcost_budgetid` (`shipmentcost_budgetid`),
-  KEY `idx_invoicenumber_booksellerid` (`invoicenumber`(100), `booksellerid`),
+  KEY `idx_invoicenumber_booksellerid` (`invoicenumber`(100),`booksellerid`),
   CONSTRAINT `aqinvoices_fk_aqbooksellerid` FOREIGN KEY (`booksellerid`) REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `aqinvoices_fk_shipmentcost_budgetid` FOREIGN KEY (`shipmentcost_budgetid`) REFERENCES `aqbudgets` (`budget_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `edifact_msg_fk` FOREIGN KEY (`message_id`) REFERENCES `edifact_messages` (`id`) ON DELETE SET NULL
@@ -1153,7 +1153,7 @@ CREATE TABLE `biblio_framework` (
 
 DROP TABLE IF EXISTS `biblio_framework_marc_matcher`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `biblio_framework_marc_matcher` (
   `frameworkcode` varchar(4) NOT NULL COMMENT 'MARC framework code',
   `marc_matcher_id` int(11) NOT NULL COMMENT 'MARC matcher id',
@@ -4405,12 +4405,12 @@ CREATE TABLE `item_lists` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique id for the item list',
   `name` varchar(255) NOT NULL COMMENT 'name of the item list',
   `owner` int(11) DEFAULT NULL COMMENT 'borrowernumber of the item list owner',
-  `branchcode` VARCHAR(10)  NOT NULL COMMENT 'branchcode of the item list owner',
+  `branchcode` varchar(10) NOT NULL COMMENT 'branchcode of the item list owner',
   `visibility` enum('private','group','public') NOT NULL DEFAULT 'private' COMMENT 'visibility determining ability to read the item list',
   `created_on` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'when the item list was created',
   `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'when the item list was last updated',
   PRIMARY KEY (`id`),
-  UNIQUE (`name`),
+  UNIQUE KEY `name` (`name`),
   KEY `il_owner` (`owner`),
   CONSTRAINT `il_owner` FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -4708,6 +4708,25 @@ CREATE TABLE `letter` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `library_closure_exceptions`
+--
+
+DROP TABLE IF EXISTS `library_closure_exceptions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `library_closure_exceptions` (
+  `library_closure_exception_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier',
+  `library_id` varchar(10) NOT NULL COMMENT 'foreign key from the branches table',
+  `date` date NOT NULL COMMENT 'date of the exception (library is open despite a closure rule)',
+  `title` varchar(50) NOT NULL DEFAULT '' COMMENT 'title for this exception',
+  `description` mediumtext NOT NULL COMMENT 'description of this exception',
+  PRIMARY KEY (`library_closure_exception_id`),
+  UNIQUE KEY `library_id_date` (`library_id`,`date`),
+  CONSTRAINT `library_closure_exceptions_ibfk_1` FOREIGN KEY (`library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `library_float_limits`
 --
 
@@ -4775,6 +4794,45 @@ CREATE TABLE `library_hours` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `library_repeating_closures`
+--
+
+DROP TABLE IF EXISTS `library_repeating_closures`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `library_repeating_closures` (
+  `library_repeating_closure_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier',
+  `library_id` varchar(10) NOT NULL COMMENT 'foreign key from the branches table',
+  `day` smallint(6) NOT NULL COMMENT 'day of the month this closing is on',
+  `month` smallint(6) NOT NULL COMMENT 'month this closing is in',
+  `title` varchar(50) NOT NULL DEFAULT '' COMMENT 'title of this closing',
+  `description` mediumtext NOT NULL COMMENT 'description for this closing',
+  PRIMARY KEY (`library_repeating_closure_id`),
+  UNIQUE KEY `library_id_day_month` (`library_id`,`day`,`month`),
+  CONSTRAINT `library_repeating_closures_ibfk_1` FOREIGN KEY (`library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `library_single_closures`
+--
+
+DROP TABLE IF EXISTS `library_single_closures`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `library_single_closures` (
+  `library_single_closure_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier',
+  `library_id` varchar(10) NOT NULL COMMENT 'foreign key from the branches table',
+  `date` date NOT NULL COMMENT 'date of the closure',
+  `title` varchar(50) NOT NULL DEFAULT '' COMMENT 'title for this closing',
+  `description` mediumtext NOT NULL COMMENT 'description of this closing',
+  PRIMARY KEY (`library_single_closure_id`),
+  UNIQUE KEY `library_id_date` (`library_id`,`date`),
+  CONSTRAINT `library_single_closures_ibfk_1` FOREIGN KEY (`library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `library_smtp_servers`
 --
 
@@ -4790,6 +4848,25 @@ CREATE TABLE `library_smtp_servers` (
   KEY `smtp_server_id_idx` (`smtp_server_id`),
   CONSTRAINT `library_smtp_servers_library_fk` FOREIGN KEY (`library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `library_smtp_servers_smtp_servers_fk` FOREIGN KEY (`smtp_server_id`) REFERENCES `smtp_servers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `library_weekly_closures`
+--
+
+DROP TABLE IF EXISTS `library_weekly_closures`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `library_weekly_closures` (
+  `library_weekly_closure_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier',
+  `library_id` varchar(10) NOT NULL COMMENT 'foreign key from the branches table',
+  `weekday` smallint(6) NOT NULL COMMENT 'day of the week (0=Sunday, 1=Monday, etc)',
+  `title` varchar(50) NOT NULL DEFAULT '' COMMENT 'title of this closing',
+  `description` mediumtext NOT NULL COMMENT 'description for this closing',
+  PRIMARY KEY (`library_weekly_closure_id`),
+  UNIQUE KEY `library_id_weekday` (`library_id`,`weekday`),
+  CONSTRAINT `library_weekly_closures_ibfk_1` FOREIGN KEY (`library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -5937,45 +6014,6 @@ CREATE TABLE `record_sources_library_groups` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `library_repeating_closures`
---
-
-DROP TABLE IF EXISTS `library_repeating_closures`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
-CREATE TABLE `library_repeating_closures` (
-  `library_repeating_closure_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier',
-  `library_id` varchar(10) NOT NULL COMMENT 'foreign key from the branches table',
-  `day` smallint(6) NOT NULL COMMENT 'day of the month this closing is on',
-  `month` smallint(6) NOT NULL COMMENT 'month this closing is in',
-  `title` varchar(50) NOT NULL DEFAULT '' COMMENT 'title of this closing',
-  `description` mediumtext NOT NULL COMMENT 'description for this closing',
-  PRIMARY KEY (`library_repeating_closure_id`),
-  UNIQUE KEY `library_id_day_month` (`library_id`, `day`, `month`),
-  CONSTRAINT `library_repeating_closures_ibfk_1` FOREIGN KEY (`library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `library_weekly_closures`
---
-
-DROP TABLE IF EXISTS `library_weekly_closures`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
-CREATE TABLE `library_weekly_closures` (
-  `library_weekly_closure_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier',
-  `library_id` varchar(10) NOT NULL COMMENT 'foreign key from the branches table',
-  `weekday` smallint(6) NOT NULL COMMENT 'day of the week (0=Sunday, 1=Monday, etc)',
-  `title` varchar(50) NOT NULL DEFAULT '' COMMENT 'title of this closing',
-  `description` mediumtext NOT NULL COMMENT 'description for this closing',
-  PRIMARY KEY (`library_weekly_closure_id`),
-  UNIQUE KEY `library_id_weekday` (`library_id`, `weekday`),
-  CONSTRAINT `library_weekly_closures_ibfk_1` FOREIGN KEY (`library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `reports_branches`
 --
 
@@ -6636,44 +6674,6 @@ CREATE TABLE `social_data` (
   `score_avg` decimal(5,2) DEFAULT NULL,
   `num_scores` int(11) DEFAULT NULL,
   PRIMARY KEY (`isbn`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `library_closure_exceptions`
---
-
-DROP TABLE IF EXISTS `library_closure_exceptions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
-CREATE TABLE `library_closure_exceptions` (
-  `library_closure_exception_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier',
-  `library_id` varchar(10) NOT NULL COMMENT 'foreign key from the branches table',
-  `date` date NOT NULL COMMENT 'date of the exception (library is open despite a closure rule)',
-  `title` varchar(50) NOT NULL DEFAULT '' COMMENT 'title for this exception',
-  `description` mediumtext NOT NULL COMMENT 'description of this exception',
-  PRIMARY KEY (`library_closure_exception_id`),
-  UNIQUE KEY `library_id_date` (`library_id`, `date`),
-  CONSTRAINT `library_closure_exceptions_ibfk_1` FOREIGN KEY (`library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `library_single_closures`
---
-
-DROP TABLE IF EXISTS `library_single_closures`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
-CREATE TABLE `library_single_closures` (
-  `library_single_closure_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier',
-  `library_id` varchar(10) NOT NULL COMMENT 'foreign key from the branches table',
-  `date` date NOT NULL COMMENT 'date of the closure',
-  `title` varchar(50) NOT NULL DEFAULT '' COMMENT 'title for this closing',
-  `description` mediumtext NOT NULL COMMENT 'description of this closing',
-  PRIMARY KEY (`library_single_closure_id`),
-  UNIQUE KEY `library_id_date` (`library_id`, `date`),
-  CONSTRAINT `library_single_closures_ibfk_1` FOREIGN KEY (`library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -7453,4 +7453,4 @@ CREATE TABLE `zebraqueue` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-06-09 12:44:09
+-- Dump completed on 2026-11-26 11:04:11
