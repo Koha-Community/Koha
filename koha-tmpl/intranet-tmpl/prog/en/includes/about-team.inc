@@ -84,6 +84,30 @@
     [% IF p.openhub %]<a href="[% p.openhub | url %]">[% p.name | html %]</a>[% ELSE %][% p.name | html %][% END %]
 [%- END -%]
 
+[%- BLOCK people_role -%]
+    [%# Accept either a single person ( name: ... ) or a list of people %]
+    [% IF items.name.defined %]
+        [% people = [ items ] %]
+    [% ELSE %]
+        [% people = items %]
+    [% END %]
+    [% IF people.size == 1 %]
+        <li
+            ><strong>[% singular | html %]:</strong>
+            [% INCLUDE person p=people.0 %]
+        </li>
+    [% ELSE %]
+        <li
+            ><strong>[% plural | html %]:</strong>
+            <ul>
+                [% FOREACH pe IN people %]
+                    <li>[% INCLUDE person p=pe %]</li>
+                [% END %]
+            </ul>
+        </li>
+    [% END %]
+[%- END -%]
+
 [%- BLOCK contributions -%]
     [%- IF p.roles || p.notes -%]
         <ul>
@@ -343,42 +367,19 @@
         [% END %]
 
         [% IF t.website %]
-            <li
-                ><strong>Website maintainer:</strong>
-                [% INCLUDE person p=t.website %]
-            </li>
+            [% INCLUDE people_role items=t.website singular='Website maintainer' plural='Website maintainers' %]
         [% END %]
 
         [% IF t.social_media %]
-            <li
-                ><strong>Social media manager:</strong>
-                [% INCLUDE person p=t.social_media %]
-            </li>
+            [% INCLUDE people_role items=t.social_media singular='Social media manager' plural='Social media managers' %]
         [% END %]
 
         [% IF t.wiki %]
-            [% IF t.wiki.size == 1 %]
-                <li
-                    ><strong>Wiki manager:</strong>
-                    [% INCLUDE person p=t.wiki %]
-                </li>
-            [% ELSE %]
-                <li
-                    ><strong>Wiki team:</strong>
-                    <ul>
-                        [% FOREACH wi IN t.wiki %]
-                            <li>[% INCLUDE person p = wi %]</li>
-                        [% END %]
-                    </ul>
-                </li>
-            [% END %]
+            [% INCLUDE people_role items=t.wiki singular='Wiki manager' plural='Wiki team' %]
         [% END %]
 
         [% IF t.meeting_facilitator %]
-            <li
-                ><strong>Meeting facilitator:</strong>
-                [% INCLUDE person p=t.meeting_facilitator %]
-            </li>
+            [% INCLUDE people_role items=t.meeting_facilitator singular='Meeting facilitator' plural='Meeting facilitators' %]
         [% END %]
 
         [% IF t.chairperson %]
